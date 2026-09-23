@@ -227,6 +227,13 @@ void TelemetryModel::parseUpdateGroup(const QJsonObject& update, QList<Group>* g
     if (last_check_time.isDouble())
         group.parameters.append({ tr("Last update check"), timeToString(last_check_time.toInteger()) });
 
+    const QJsonValue last_check_result = update.value("last_check_result");
+    if (last_check_result.isString())
+    {
+        group.parameters.append(
+            { tr("Last update check result"), checkResultName(last_check_result.toString()) });
+    }
+
     if (!group.parameters.isEmpty())
         groups->append(group);
 }
@@ -243,6 +250,30 @@ QString TelemetryModel::updateChannelName(const QString& channel)
         return tr("Alpha");
 
     return channel;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString TelemetryModel::checkResultName(const QString& result)
+{
+    if (result == "no_update")
+        return tr("No updates");
+    else if (result == "check_failed")
+        return tr("Check failed");
+    else if (result == "unsupported_package")
+        return tr("Unsupported package");
+    else if (result == "download_failed")
+        return tr("Download failed");
+    else if (result == "damaged_package")
+        return tr("Damaged package");
+    else if (result == "install_failed")
+        return tr("Installation failed");
+    else if (result == "install_started")
+        return tr("Installation started");
+    else if (result == "install_succeeded")
+        return tr("Installation succeeded");
+
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------

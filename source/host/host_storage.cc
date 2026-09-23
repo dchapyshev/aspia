@@ -73,6 +73,30 @@ void HostStorage::setUpdateRetryTime(qint64 timepoint)
 }
 
 //--------------------------------------------------------------------------------------------------
+QString HostStorage::updateCheckResult() const
+{
+    return impl_.value("update_check_result").toString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::setUpdateCheckResult(const QString& result)
+{
+    impl_.setValue("update_check_result", result);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString HostStorage::updateInstallVersion() const
+{
+    return impl_.value("update_install_version").toString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::setUpdateInstallVersion(const QString& version)
+{
+    impl_.setValue("update_install_version", version);
+}
+
+//--------------------------------------------------------------------------------------------------
 bool HostStorage::isBootToSafeMode() const
 {
     return impl_.value("boot_to_safe_mode").toBool();

@@ -38,6 +38,12 @@ public:
     qint64 updateRetryTime() const;
     void setUpdateRetryTime(qint64 timepoint);
 
+    QString updateCheckResult() const;
+    void setUpdateCheckResult(const QString& result);
+
+    QString updateInstallVersion() const;
+    void setUpdateInstallVersion(const QString& version);
+
     bool isBootToSafeMode() const;
     void setBootToSafeMode(bool enable);
 

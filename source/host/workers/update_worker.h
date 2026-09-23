@@ -40,7 +40,7 @@ public slots:
     void onCheckUpdates();
 
 signals:
-    void sig_updateCheckStarted();
+    void sig_updateCheckFinished();
 
 protected:
     // Worker implementation.
@@ -57,6 +57,7 @@ private slots:
 
 private:
     void checkForUpdates();
+    void setCheckResult(const char* result);
 
     ScopedQPointer<UpdateChecker> update_checker_;
     ScopedQPointer<HttpFileDownloader> update_downloader_;

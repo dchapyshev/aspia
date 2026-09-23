@@ -159,7 +159,7 @@ void RouterManager::onUserSessionAttached()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManager::onUpdateCheckStarted()
+void RouterManager::onUpdateCheckFinished()
 {
     markTelemetryOutdated();
 }
@@ -462,7 +462,13 @@ void RouterManager::sendTelemetry()
     // The mobile host checks for updates only on request.
     update.insert("auto_update", settings.isAutoUpdateEnabled());
     update.insert("check_frequency", settings.updateCheckFrequency());
-    update.insert("last_check_time", HostStorage().lastUpdateCheck());
+
+    HostStorage storage;
+    update.insert("last_check_time", storage.lastUpdateCheck());
+
+    const QString check_result = storage.updateCheckResult();
+    if (!check_result.isEmpty())
+        update.insert("last_check_result", check_result);
 #endif
 
     QJsonObject telemetry;

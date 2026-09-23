@@ -69,7 +69,7 @@ public slots:
     void onOneTimeSessionsChanged(quint32 one_time_sessions);
     void onNewOneTimePassword();
     void onUserSessionAttached();
-    void onUpdateCheckStarted();
+    void onUpdateCheckFinished();
 
 signals:
     void sig_routerStateChanged(const proto::user::RouterState& state);

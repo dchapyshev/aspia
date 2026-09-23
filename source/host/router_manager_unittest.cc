@@ -720,7 +720,9 @@ TEST_F(RouterManagerTest, TelemetryIsSentWithTheIdAndOnSettingsChanges)
     settings.setUpdateCheckFrequency(3);
     settings.sync();
 
-    HostStorage().setLastUpdateCheck(1000);
+    HostStorage storage;
+    storage.setLastUpdateCheck(1000);
+    storage.setUpdateCheckResult("no_update");
 
     startManager();
 
@@ -738,6 +740,7 @@ TEST_F(RouterManagerTest, TelemetryIsSentWithTheIdAndOnSettingsChanges)
     EXPECT_FALSE(telemetry.value("update").toObject().value("auto_update").toBool(true));
     EXPECT_EQ(telemetry.value("update").toObject().value("check_frequency").toInt(), 3);
     EXPECT_EQ(telemetry.value("update").toObject().value("last_check_time").toInteger(), 1000);
+    EXPECT_EQ(telemetry.value("update").toObject().value("last_check_result").toString(), "no_update");
 
     settings.setUpdateChannel("stable");
     settings.sync();
@@ -759,7 +762,7 @@ TEST_F(RouterManagerTest, TelemetryIsSentWithTheIdAndOnSettingsChanges)
 }
 
 //--------------------------------------------------------------------------------------------------
-// An update check marks the telemetry outdated, and the next report carries the time of the check.
+// An update check marks the telemetry outdated, and the next report carries its time and result.
 TEST_F(RouterManagerTest, TelemetryIsSentAfterAnUpdateCheck)
 {
     startManager();
@@ -771,9 +774,11 @@ TEST_F(RouterManagerTest, TelemetryIsSentAfterAnUpdateCheck)
     RouterManagerTestPeer timer(host_worker_, manager_);
     const TimePoint now = Clock::now();
 
-    // What the update worker does when it starts a check.
-    HostStorage().setLastUpdateCheck(2000);
-    host_worker_->invoke([this]() { manager_->onUpdateCheckStarted(); });
+    // What the update worker does when a check finishes.
+    HostStorage storage;
+    storage.setLastUpdateCheck(2000);
+    storage.setUpdateCheckResult("check_failed");
+    host_worker_->invoke([this]() { manager_->onUpdateCheckFinished(); });
 
     timer.fireTimer(now + Minutes(1));
     ASSERT_TRUE(waitFor([this]() { return telemetry_received_.load() >= 2; }));
@@ -781,6 +786,7 @@ TEST_F(RouterManagerTest, TelemetryIsSentAfterAnUpdateCheck)
     const QJsonObject telemetry =
         QJsonDocument::fromJson(QByteArray::fromStdString(last_telemetry_.json())).object();
     EXPECT_EQ(telemetry.value("update").toObject().value("last_check_time").toInteger(), 2000);
+    EXPECT_EQ(telemetry.value("update").toObject().value("last_check_result").toString(), "check_failed");
 }
 
 //--------------------------------------------------------------------------------------------------

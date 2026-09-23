@@ -22,6 +22,7 @@
 
 #include "base/build_config.h"
 #include "base/logging.h"
+#include "base/version_constants.h"
 #include "base/net/http_file_downloader.h"
 #include "base/update/update_checker.h"
 #include "base/update/update_info.h"
@@ -33,6 +34,15 @@ namespace {
 
 const qint64 kSecondsPerDay = 24 * 60 * 60;
 const qint64 kRetryInterval = 60 * 60; // Seconds.
+
+const char kResultNoUpdate[] = "no_update";
+const char kResultCheckFailed[] = "check_failed";
+const char kResultUnsupportedPackage[] = "unsupported_package";
+const char kResultDownloadFailed[] = "download_failed";
+const char kResultDamagedPackage[] = "damaged_package";
+const char kResultInstallFailed[] = "install_failed";
+const char kResultInstallStarted[] = "install_started";
+const char kResultInstallSucceeded[] = "install_succeeded";
 
 //--------------------------------------------------------------------------------------------------
 void retryCheckLater()
@@ -67,6 +77,8 @@ void UpdateWorker::onCheckUpdates()
     HostStorage storage;
     storage.setLastUpdateCheck(std::time(nullptr));
     storage.setUpdateRetryTime(0);
+    storage.setUpdateCheckResult(QString());
+    storage.setUpdateInstallVersion(QString());
 
     update_checker_ = new UpdateChecker(SystemSettings().updateChannel(), kHostUpdatePackage, this);
 
@@ -77,14 +89,28 @@ void UpdateWorker::onCheckUpdates()
 
     LOG(INFO) << "Start checking for updates";
     update_checker_->start();
-
-    emit sig_updateCheckStarted();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UpdateWorker::onStart()
 {
-    // Nothing
+    HostStorage storage;
+    if (storage.updateCheckResult() != kResultInstallStarted)
+        return;
+
+    const QString version = storage.updateInstallVersion();
+    storage.setUpdateInstallVersion(QString());
+
+    if (QVersionNumber::fromString(version) == kCurrentVersion)
+    {
+        LOG(INFO) << "Update to version" << version << "is installed";
+        setCheckResult(kResultInstallSucceeded);
+    }
+    else
+    {
+        LOG(ERROR) << "Update to version" << version << "is not installed";
+        setCheckResult(kResultInstallFailed);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -123,6 +149,7 @@ void UpdateWorker::onUpdateCheckFinished(const UpdateInfo& update_info)
         if (!update_info.isValid())
         {
             LOG(INFO) << "No updates available";
+            setCheckResult(kResultNoUpdate);
             break;
         }
 
@@ -131,6 +158,7 @@ void UpdateWorker::onUpdateCheckFinished(const UpdateInfo& update_info)
         if (!UpdateInstaller::isSupported(update_info.format()))
         {
             LOG(ERROR) << "Package of format" << update_info.format() << "cannot be installed here";
+            setCheckResult(kResultUnsupportedPackage);
             break;
         }
 
@@ -140,8 +168,11 @@ void UpdateWorker::onUpdateCheckFinished(const UpdateInfo& update_info)
         if (file_path.isEmpty())
         {
             update_installer_.reset();
+            setCheckResult(kResultInstallFailed);
             break;
         }
+
+        HostStorage().setUpdateInstallVersion(update_info.version().toString());
 
         update_downloader_ = new HttpFileDownloader(update_info.url(), file_path, this);
 
@@ -171,6 +202,7 @@ void UpdateWorker::onUpdateCheckFailed()
     update_checker_.reset();
 
     retryCheckLater();
+    setCheckResult(kResultCheckFailed);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -184,6 +216,7 @@ void UpdateWorker::onFileDownloaderError(const QString& error)
     update_installer_.reset();
 
     retryCheckLater();
+    setCheckResult(kResultDownloadFailed);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -192,13 +225,21 @@ void UpdateWorker::onFileDownloaderCompleted()
     CHECK(update_downloader_);
     CHECK(update_installer_);
 
+    setCheckResult(kResultInstallStarted);
+
     // Nothing waits for the installer here. The package restarts the service that started it.
     UpdateInstaller::Result result = update_installer_->install();
 
     if (result == UpdateInstaller::Result::DAMAGED)
+    {
         LOG(ERROR) << "Update package does not match the manifest";
+        setCheckResult(kResultDamagedPackage);
+    }
     else if (result == UpdateInstaller::Result::FAILED)
+    {
         LOG(ERROR) << "Unable to start the installation of the update";
+        setCheckResult(kResultInstallFailed);
+    }
 
     update_installer_.reset();
 
@@ -246,4 +287,11 @@ void UpdateWorker::checkForUpdates()
         return;
 
     onCheckUpdates();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateWorker::setCheckResult(const char* result)
+{
+    HostStorage().setUpdateCheckResult(result);
+    emit sig_updateCheckFinished();
 }
