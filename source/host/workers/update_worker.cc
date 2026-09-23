@@ -18,19 +18,30 @@
 
 #include "host/workers/update_worker.h"
 
+#include <ctime>
+
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/net/http_file_downloader.h"
 #include "base/update/update_checker.h"
 #include "base/update/update_info.h"
 #include "base/update/update_installer.h"
-
-#if !defined(Q_OS_ANDROID)
-#include <ctime>
-
 #include "host/host_storage.h"
 #include "host/system_settings.h"
-#endif // !defined(Q_OS_ANDROID)
+
+namespace {
+
+const qint64 kSecondsPerDay = 24 * 60 * 60;
+const qint64 kRetryInterval = 60 * 60; // Seconds.
+
+//--------------------------------------------------------------------------------------------------
+void retryCheckLater()
+{
+    qint64 period = SystemSettings().updateCheckFrequency() * kSecondsPerDay;
+    HostStorage().setLastUpdateCheck(std::time(nullptr) - period + kRetryInterval);
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 UpdateWorker::UpdateWorker()
@@ -48,7 +59,6 @@ UpdateWorker::~UpdateWorker()
 //--------------------------------------------------------------------------------------------------
 void UpdateWorker::onCheckUpdates()
 {
-#if !defined(Q_OS_ANDROID)
     if (update_checker_ || update_downloader_ || update_installer_)
     {
         LOG(INFO) << "Update already in progress";
@@ -64,7 +74,6 @@ void UpdateWorker::onCheckUpdates()
 
     LOG(INFO) << "Start checking for updates";
     update_checker_->start();
-#endif // !defined(Q_OS_ANDROID)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -155,6 +164,8 @@ void UpdateWorker::onUpdateCheckFailed()
 
     update_checker_->disconnect(this);
     update_checker_.reset();
+
+    retryCheckLater();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -166,14 +177,14 @@ void UpdateWorker::onFileDownloaderError(const QString& error)
     update_downloader_->disconnect(this);
     update_downloader_.reset();
     update_installer_.reset();
+
+    retryCheckLater();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UpdateWorker::onFileDownloaderCompleted()
 {
     CHECK(update_downloader_);
-
-#if !defined(Q_OS_ANDROID)
     CHECK(update_installer_);
 
     // Nothing waits for the installer here. The package restarts the service that started it.
@@ -185,7 +196,6 @@ void UpdateWorker::onFileDownloaderCompleted()
         LOG(ERROR) << "Unable to start the installation of the update";
 
     update_installer_.reset();
-#endif // !defined(Q_OS_ANDROID)
 
     update_downloader_->disconnect(this);
     update_downloader_.reset();
@@ -200,7 +210,6 @@ void UpdateWorker::onFileDownloaderProgress(int percentage)
 //--------------------------------------------------------------------------------------------------
 void UpdateWorker::checkForUpdates()
 {
-#if defined(Q_OS_WINDOWS)
     SystemSettings settings;
     if (!settings.isAutoUpdateEnabled())
         return;
@@ -217,11 +226,7 @@ void UpdateWorker::checkForUpdates()
         return;
     }
 
-    static const qint64 kSecondsPerMinute = 60;
-    static const qint64 kMinutesPerHour = 60;
-    static const qint64 kHoursPerDay = 24;
-
-    qint64 days = time_diff / kSecondsPerMinute / kMinutesPerHour / kHoursPerDay;
+    qint64 days = time_diff / kSecondsPerDay;
     if (days < 1)
         return;
 
@@ -231,5 +236,4 @@ void UpdateWorker::checkForUpdates()
     storage.setLastUpdateCheck(current_timepoint);
 
     onCheckUpdates();
-#endif // defined(Q_OS_WINDOWS)
 }

@@ -249,6 +249,7 @@ QByteArray UpdateChecker::download(const QString& unicode_url)
     LOG(INFO) << "Reading" << unicode_url;
 
     QByteArray url = unicode_url.toUtf8();
+    char error_buffer[CURL_ERROR_SIZE] = { 0 };
 
     ScopedCURL curl;
     curl_easy_setopt(curl.get(), CURLOPT_URL, url.data());
@@ -273,6 +274,7 @@ QByteArray UpdateChecker::download(const QString& unicode_url)
     QByteArray response;
 
     curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, verify_peer);
+    curl_easy_setopt(curl.get(), CURLOPT_ERRORBUFFER, error_buffer);
     curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, writeDataFunc);
     curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &response);
 
@@ -322,7 +324,7 @@ QByteArray UpdateChecker::download(const QString& unicode_url)
 
     if (result != CURLE_OK)
     {
-        LOG(ERROR) << "Transfer failed:" << curl_easy_strerror(result);
+        LOG(ERROR) << "Transfer failed:" << curl_easy_strerror(result) << "(" << error_buffer << ")";
         response.clear();
     }
     else if (response_code != 200)

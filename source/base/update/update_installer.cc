@@ -500,9 +500,14 @@ bool UpdateInstaller::startInstaller()
     // of one machine can be updated at the same moment, and a name already taken is a refusal.
     if (!QStandardPaths::findExecutable("systemd-run").isEmpty())
     {
-        arguments = QStringList() << "systemd-run" << "--collect" << "--quiet"
-                                  << ("--unit=aspia-update-" + QString::number(getpid()))
-                                  << arguments;
+        QStringList unit_arguments = QStringList() << "systemd-run" << "--collect" << "--quiet"
+                                                   << ("--unit=aspia-update-" + QString::number(getpid()));
+
+        // The unit does not inherit the environment of this process.
+        if (update_info_.format() == "deb")
+            unit_arguments << "--setenv=DEBIAN_FRONTEND=noninteractive";
+
+        arguments = unit_arguments + arguments;
     }
 #endif // defined(Q_OS_LINUX)
 
