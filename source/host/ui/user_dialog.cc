@@ -27,8 +27,8 @@
 #include "common/desktop/password_edit.h"
 #include "common/desktop/session_type.h"
 #include "host/database.h"
+#include "host/ui/ui_user_dialog.h"
 #include "proto/peer.h"
-#include "ui_user_dialog.h"
 
 namespace {
 

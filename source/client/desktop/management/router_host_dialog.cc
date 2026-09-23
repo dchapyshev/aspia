@@ -34,12 +34,12 @@
 #include "client/router_controller.h"
 #include "client/settings.h"
 #include "client/desktop/management/group_combo_box.h"
+#include "client/desktop/management/ui_router_host_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "common/desktop/password_edit.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
-#include "ui_router_host_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_name,

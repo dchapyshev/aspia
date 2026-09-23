@@ -38,9 +38,9 @@
 #include "client/router_controller.h"
 #include "client/desktop/management/drag_and_drop.h"
 #include "client/desktop/management/router_host_dialog.h"
+#include "client/desktop/management/ui_router_group_widget.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
-#include "ui_router_group_widget.h"
 
 namespace {
 

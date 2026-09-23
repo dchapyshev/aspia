@@ -43,7 +43,7 @@
 #include "common/desktop/chat_outgoing_message.h"
 #include "common/desktop/chat_status_message.h"
 #include "common/desktop/msg_box.h"
-#include "ui_chat_widget.h"
+#include "common/desktop/ui_chat_widget.h"
 
 namespace {
 

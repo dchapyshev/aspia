@@ -27,8 +27,8 @@
 #include "client/database.h"
 #include "client/settings.h"
 #include "client/desktop/management/group_combo_box.h"
+#include "client/desktop/management/ui_local_group_dialog.h"
 #include "common/desktop/msg_box.h"
-#include "ui_local_group_dialog.h"
 
 namespace {
 

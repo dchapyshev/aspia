@@ -23,8 +23,8 @@
 #include "common/system_info_constants.h"
 #include "common/desktop/formatter.h"
 #include "common/sys_info/sys_info_report.h"
+#include "common/sys_info/ui_sys_info_widget_dmi.h"
 #include "proto/system_info.h"
-#include "ui_sys_info_widget_dmi.h"
 
 namespace {
 

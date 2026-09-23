@@ -60,8 +60,8 @@
 #include "common/sys_info/sys_info_widget_smart.h"
 #include "common/sys_info/sys_info_widget_summary.h"
 #include "common/sys_info/sys_info_widget_video_adapters.h"
+#include "common/sys_info/ui_sys_info_view.h"
 #include "proto/system_info.h"
-#include "ui_sys_info_view.h"
 
 namespace {
 

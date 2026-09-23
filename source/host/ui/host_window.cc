@@ -50,9 +50,9 @@
 #include "host/ui/connect_confirm_dialog.h"
 #include "host/ui/notifier_window.h"
 #include "host/ui/security_log_dialog.h"
+#include "host/ui/ui_host_window.h"
 #include "proto/desktop_clipboard.h"
 #include "proto/user.h"
-#include "ui_host_window.h"
 
 #if defined(Q_OS_MACOS)
 #include "host/ui/permission_dialog.h"

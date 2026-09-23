@@ -39,11 +39,11 @@
 #include "base/logging.h"
 #include "client/router_controller.h"
 #include "client/desktop/file_dialog.h"
+#include "client/desktop/management/ui_router_clients_widget.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
-#include "ui_router_clients_widget.h"
 
 namespace {
 

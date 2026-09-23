@@ -27,7 +27,7 @@
 #include "common/desktop/msg_box.h"
 #include "common/desktop/password_edit.h"
 #include "host/database.h"
-#include "ui_check_password_dialog.h"
+#include "host/ui/ui_check_password_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 CheckPasswordDialog::CheckPasswordDialog(QWidget* parent)

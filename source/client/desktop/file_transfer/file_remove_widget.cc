@@ -22,8 +22,8 @@
 
 #include "base/logging.h"
 #include "client/file_error_code.h"
+#include "client/desktop/file_transfer/ui_file_remove_widget.h"
 #include "common/desktop/msg_box.h"
-#include "ui_file_remove_widget.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "common/desktop/taskbar_button.h"

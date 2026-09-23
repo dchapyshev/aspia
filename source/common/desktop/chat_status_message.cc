@@ -20,7 +20,7 @@
 
 #include <QLocale>
 
-#include "ui_chat_status_message.h"
+#include "common/desktop/ui_chat_status_message.h"
 
 //--------------------------------------------------------------------------------------------------
 ChatStatusMessage::ChatStatusMessage(QWidget* parent)

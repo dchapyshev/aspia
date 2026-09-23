@@ -25,8 +25,8 @@
 
 #include "base/logging.h"
 #include "common/desktop/session_type.h"
+#include "host/ui/ui_connect_confirm_dialog.h"
 #include "proto/user.h"
-#include "ui_connect_confirm_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 ConnectConfirmDialog::ConnectConfirmDialog(

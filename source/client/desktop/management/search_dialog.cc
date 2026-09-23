@@ -23,7 +23,7 @@
 #include <QSignalBlocker>
 
 #include "base/logging.h"
-#include "ui_search_dialog.h"
+#include "client/desktop/management/ui_search_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 SearchDialog::SearchDialog(QWidget* parent)

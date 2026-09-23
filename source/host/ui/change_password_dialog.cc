@@ -27,7 +27,7 @@
 #include "common/desktop/msg_box.h"
 #include "common/desktop/password_edit.h"
 #include "host/database.h"
-#include "ui_change_password_dialog.h"
+#include "host/ui/ui_change_password_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 ChangePasswordDialog::ChangePasswordDialog(Mode mode, QWidget* parent)

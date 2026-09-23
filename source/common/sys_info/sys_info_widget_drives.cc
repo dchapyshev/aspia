@@ -22,8 +22,8 @@
 
 #include "common/system_info_constants.h"
 #include "common/desktop/formatter.h"
+#include "common/sys_info/ui_sys_info_widget_drives.h"
 #include "proto/system_info.h"
-#include "ui_sys_info_widget_drives.h"
 
 namespace {
 

@@ -25,8 +25,8 @@
 #include "base/logging.h"
 #include "base/peer/user.h"
 #include "client/database.h"
+#include "client/desktop/ui_credential_dialog.h"
 #include "common/desktop/msg_box.h"
-#include "ui_credential_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 CredentialDialog::CredentialDialog(qint64 credential_id, QWidget* parent)

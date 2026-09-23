@@ -26,8 +26,8 @@
 #include "client/database.h"
 #include "client/desktop/credential_dialog.h"
 #include "client/desktop/credential_list_model.h"
+#include "client/desktop/ui_credentials_tab.h"
 #include "common/desktop/msg_box.h"
-#include "ui_credentials_tab.h"
 
 //--------------------------------------------------------------------------------------------------
 CredentialsTab::CredentialsTab(QWidget* parent)

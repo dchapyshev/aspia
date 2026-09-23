@@ -32,13 +32,13 @@
 #include "base/logging.h"
 #include "base/time_types.h"
 #include "client/desktop/desktop/select_screen_action.h"
+#include "client/desktop/desktop/ui_desktop_toolbar.h"
 #include "common/desktop/msg_box.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_power.h"
 #include "proto/desktop_screen.h"
 #include "proto/desktop_tools.h"
 #include "proto/peer.h"
-#include "ui_desktop_toolbar.h"
 
 namespace {
 

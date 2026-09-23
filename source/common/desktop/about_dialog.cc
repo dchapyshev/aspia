@@ -23,7 +23,7 @@
 
 #include "version.h"
 #include "base/logging.h"
-#include "ui_about_dialog.h"
+#include "common/desktop/ui_about_dialog.h"
 
 #include <asio/version.hpp>
 #include <curl/curl.h>

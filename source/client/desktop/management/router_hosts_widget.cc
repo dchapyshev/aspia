@@ -45,12 +45,12 @@
 #include "client/desktop/management/drag_and_drop.h"
 #include "client/desktop/management/host_telemetry_dialog.h"
 #include "client/desktop/management/router_host_dialog.h"
+#include "client/desktop/management/ui_router_hosts_widget.h"
 #include "common/desktop/icon_text_button.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
-#include "ui_router_hosts_widget.h"
 
 namespace {
 

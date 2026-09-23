@@ -30,7 +30,7 @@
 #include "base/update/update_installer.h"
 #include "common/desktop/elevate_util.h"
 #include "common/desktop/msg_box.h"
-#include "ui_update_dialog.h"
+#include "common/desktop/ui_update_dialog.h"
 
 namespace {
 

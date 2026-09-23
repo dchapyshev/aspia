@@ -34,8 +34,8 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "common/desktop/session_type.h"
+#include "host/ui/ui_notifier_window.h"
 #include "proto/peer.h"
-#include "ui_notifier_window.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>

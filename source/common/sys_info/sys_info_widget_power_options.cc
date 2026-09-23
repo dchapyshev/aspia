@@ -22,7 +22,7 @@
 
 #include "common/system_info_constants.h"
 #include "common/desktop/formatter.h"
-#include "ui_sys_info_widget_power_options.h"
+#include "common/sys_info/ui_sys_info_widget_power_options.h"
 
 namespace {
 

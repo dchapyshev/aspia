@@ -24,7 +24,7 @@
 #include <limits>
 
 #include "common/system_info_constants.h"
-#include "ui_sys_info_widget_monitors.h"
+#include "common/sys_info/ui_sys_info_widget_monitors.h"
 
 namespace {
 

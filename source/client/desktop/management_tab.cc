@@ -40,6 +40,7 @@
 #include "client/router_controller.h"
 #include "client/settings.h"
 #include "client/desktop/file_dialog.h"
+#include "client/desktop/ui_management_tab.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/local_group_widget.h"
 #include "client/desktop/management/local_host_dialog.h"
@@ -61,7 +62,6 @@
 #include "proto/peer.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
-#include "ui_management_tab.h"
 
 namespace {
 

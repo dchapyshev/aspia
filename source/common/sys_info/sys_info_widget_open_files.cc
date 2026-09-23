@@ -21,8 +21,8 @@
 #include <QMenu>
 
 #include "common/system_info_constants.h"
+#include "common/sys_info/ui_sys_info_widget_open_files.h"
 #include "proto/system_info.h"
-#include "ui_sys_info_widget_open_files.h"
 
 //--------------------------------------------------------------------------------------------------
 SysInfoWidgetOpenFiles::SysInfoWidgetOpenFiles(QWidget* parent)

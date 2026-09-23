@@ -21,7 +21,7 @@
 #include <QMenu>
 
 #include "common/system_info_constants.h"
-#include "ui_sys_info_widget_services.h"
+#include "common/sys_info/ui_sys_info_widget_services.h"
 
 //--------------------------------------------------------------------------------------------------
 SysInfoWidgetServices::SysInfoWidgetServices(QWidget* parent)

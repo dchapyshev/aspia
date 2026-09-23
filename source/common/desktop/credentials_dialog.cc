@@ -27,7 +27,7 @@
 #include "base/crypto/secure_string.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/password_edit.h"
-#include "ui_credentials_dialog.h"
+#include "common/desktop/ui_credentials_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 CredentialsDialog::CredentialsDialog(Type type, QWidget* parent)

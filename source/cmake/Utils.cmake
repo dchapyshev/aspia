@@ -28,3 +28,20 @@ macro(collect_sources var)
         list(APPEND ${var} "${CMAKE_CURRENT_LIST_DIR}/${_collect_sources_file}")
     endforeach()
 endmacro()
+
+# Generates the headers of the .ui files among the sources of |target|. The header of
+# source/<dir>/<name>.ui is included as "<dir>/ui_<name>.h", like any other header of the
+# project. AUTOUIC cannot do it: it tells the build system a header path relative to the
+# directory of the target, so a header included by another path is rebuilt only by the second
+# build after a change to the .ui file.
+function(add_ui_headers target)
+    get_target_property(sources ${target} SOURCES)
+    foreach(source ${sources})
+        if (source MATCHES "\\.ui$")
+            get_filename_component(source ${source} ABSOLUTE)
+            get_filename_component(dir ${source} DIRECTORY)
+            file(RELATIVE_PATH prefix ${PROJECT_SOURCE_DIR}/source ${dir})
+            qt_add_ui(${target} SOURCES ${source} INCLUDE_PREFIX ${prefix})
+        endif()
+    endforeach()
+endfunction()

@@ -46,6 +46,7 @@
 #include "client/desktop/settings_tab.h"
 #include "client/desktop/tab_bar.h"
 #include "client/desktop/tab_widget.h"
+#include "client/desktop/ui_main_window.h"
 #include "client/desktop/chat/chat_window.h"
 #include "client/desktop/desktop/desktop_window.h"
 #include "client/desktop/file_transfer/file_transfer_window.h"
@@ -59,7 +60,6 @@
 #include "common/desktop/update_dialog.h"
 #include "proto/peer.h"
 #include "proto/router_constants.h"
-#include "ui_main_window.h"
 
 namespace {
 

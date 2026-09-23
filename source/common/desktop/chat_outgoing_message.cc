@@ -21,7 +21,7 @@
 #include <QDateTime>
 #include <QLocale>
 
-#include "ui_chat_outgoing_message.h"
+#include "common/desktop/ui_chat_outgoing_message.h"
 
 //--------------------------------------------------------------------------------------------------
 ChatOutgoingMessage::ChatOutgoingMessage(QWidget* parent)

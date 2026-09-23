@@ -215,8 +215,9 @@ target_link_libraries(aspia_client_core
     ${THIRD_PARTY_LIBS})
 
 set_property(TARGET aspia_client_core PROPERTY AUTOMOC ON)
-set_property(TARGET aspia_client_core PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_client_core PROPERTY AUTORCC ON)
+
+add_ui_headers(aspia_client_core)
 
 if (ANDROID)
     qt_add_executable(aspia_client ${SOURCE_CLIENT})

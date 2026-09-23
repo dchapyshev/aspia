@@ -21,8 +21,8 @@
 #include <QMenu>
 
 #include "common/system_info_constants.h"
+#include "common/sys_info/ui_sys_info_widget_env_vars.h"
 #include "proto/system_info.h"
-#include "ui_sys_info_widget_env_vars.h"
 
 //--------------------------------------------------------------------------------------------------
 SysInfoWidgetEnvVars::SysInfoWidgetEnvVars(QWidget* parent)

@@ -27,9 +27,9 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "client/desktop/desktop/task_manager_settings.h"
+#include "client/desktop/desktop/ui_task_manager_window.h"
 #include "common/desktop/msg_box.h"
 #include "proto/desktop_channel.h"
-#include "ui_task_manager_window.h"
 
 namespace {
 

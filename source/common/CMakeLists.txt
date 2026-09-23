@@ -123,8 +123,9 @@ target_link_libraries(aspia_common PRIVATE
     ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
 set_property(TARGET aspia_common PROPERTY AUTOMOC ON)
-set_property(TARGET aspia_common PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_common PROPERTY AUTORCC ON)
+
+add_ui_headers(aspia_common)
 
 if (WIN32)
     set(COMMON_TESTS_PLATFORM_LIBS avrt crypt32 dbghelp iphlpapi ws2_32)

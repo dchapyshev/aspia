@@ -24,11 +24,11 @@
 #include "client/router_controller.h"
 #include "client/settings.h"
 #include "client/telemetry_model.h"
+#include "client/desktop/management/ui_host_telemetry_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
-#include "ui_host_telemetry_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 HostTelemetryDialog::HostTelemetryDialog(qint64 router_id, const RouterHost& host, QWidget* parent)

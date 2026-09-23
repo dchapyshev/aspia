@@ -23,8 +23,8 @@
 #include "base/logging.h"
 #include "common/system_info_constants.h"
 #include "common/desktop/formatter.h"
+#include "common/sys_info/ui_sys_info_widget_net_adapters.h"
 #include "proto/system_info.h"
-#include "ui_sys_info_widget_net_adapters.h"
 
 namespace {
 

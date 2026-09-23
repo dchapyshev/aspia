@@ -22,9 +22,9 @@
 
 #include "base/logging.h"
 #include "base/net/udp_channel.h"
+#include "client/desktop/desktop/ui_statistics_dialog.h"
 #include "common/desktop/formatter.h"
 #include "proto/desktop_video.h"
-#include "ui_statistics_dialog.h"
 
 namespace {
 

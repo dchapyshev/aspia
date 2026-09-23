@@ -23,7 +23,7 @@
 #include "base/logging.h"
 #include "common/system_info_constants.h"
 #include "common/desktop/formatter.h"
-#include "ui_sys_info_widget_event_logs.h"
+#include "common/sys_info/ui_sys_info_widget_event_logs.h"
 
 namespace {
 

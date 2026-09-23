@@ -29,10 +29,10 @@
 #include "base/peer/user.h"
 #include "client/config.h"
 #include "client/database.h"
+#include "client/desktop/ui_router_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/password_edit.h"
 #include "proto/router.h"
-#include "ui_router_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)

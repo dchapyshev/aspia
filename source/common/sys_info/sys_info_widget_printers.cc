@@ -22,8 +22,8 @@
 
 #include "base/logging.h"
 #include "common/system_info_constants.h"
+#include "common/sys_info/ui_sys_info_widget_printers.h"
 #include "proto/system_info.h"
-#include "ui_sys_info_widget_printers.h"
 
 namespace {
 

@@ -34,7 +34,7 @@
 #include "base/logging.h"
 #include "base/time_types.h"
 #include "base/crypto/totp.h"
-#include "ui_two_factor_enroll_dialog.h"
+#include "common/desktop/ui_two_factor_enroll_dialog.h"
 
 namespace {
 

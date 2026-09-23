@@ -22,7 +22,7 @@
 #include <QLocale>
 
 #include "base/gui_application.h"
-#include "ui_chat_incoming_message.h"
+#include "common/desktop/ui_chat_incoming_message.h"
 
 //--------------------------------------------------------------------------------------------------
 ChatIncomingMessage::ChatIncomingMessage(QWidget* parent)

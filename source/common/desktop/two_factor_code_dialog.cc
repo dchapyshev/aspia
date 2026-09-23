@@ -26,7 +26,7 @@
 
 #include "base/gui_application.h"
 #include "base/crypto/totp.h"
-#include "ui_two_factor_code_dialog.h"
+#include "common/desktop/ui_two_factor_code_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 TwoFactorCodeDialog::TwoFactorCodeDialog(bool code_refused, QWidget* parent)

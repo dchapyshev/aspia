@@ -23,11 +23,11 @@
 #include "base/crypto/generic_hash.h"
 #include "base/peer/host_id.h"
 #include "client/database.h"
+#include "client/desktop/chat/ui_chat_window.h"
 #include "client/workers/network_worker.h"
 #include "common/desktop/chat_widget.h"
 #include "proto/chat.h"
 #include "proto/peer.h"
-#include "ui_chat_window.h"
 
 namespace {
 

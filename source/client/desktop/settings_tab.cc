@@ -42,11 +42,11 @@
 #include "client/database.h"
 #include "client/master_password.h"
 #include "client/settings.h"
+#include "client/desktop/ui_settings_tab.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/update_dialog.h"
 #include "proto/desktop_control.h"
-#include "ui_settings_tab.h"
 
 namespace {
 

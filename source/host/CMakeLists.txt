@@ -284,8 +284,9 @@ target_link_libraries(aspia_host_core
     ${THIRD_PARTY_LIBS})
 
 set_property(TARGET aspia_host_core PROPERTY AUTOMOC ON)
-set_property(TARGET aspia_host_core PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_host_core PROPERTY AUTORCC ON)
+
+add_ui_headers(aspia_host_core)
 
 if (LINUX)
     # The screen capturers compile the PipeWire/DRM stubs (host/linux); only their headers are needed
