@@ -317,6 +317,13 @@ void ServerWorker::onUpdateSettingsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ServerWorker::onUsersChanged()
+{
+    if (router_manager_)
+        router_manager_->onSettingsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ServerWorker::onCredentialsChanged(HostId host_id, const SecureString& password)
 {
     emit sig_credentialsChanged(hostIdToString(host_id), password.toString());

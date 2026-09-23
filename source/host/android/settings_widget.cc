@@ -88,6 +88,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
     // A saved user returns to the (reloaded) list.
     connect(editor_page_, &UserEditorWidget::sig_saved, this, &SettingsWidget::showUsers);
+    connect(editor_page_, &UserEditorWidget::sig_saved, this, &SettingsWidget::sig_usersChanged);
 
     buildSettings();
 

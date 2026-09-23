@@ -111,6 +111,8 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
             server_, &ServerWorker::onRouterSettingsChanged, Qt::QueuedConnection);
     connect(settings, &SettingsWidget::sig_updateSettingsChanged,
             server_, &ServerWorker::onUpdateSettingsChanged, Qt::QueuedConnection);
+    connect(settings, &SettingsWidget::sig_usersChanged,
+            server_, &ServerWorker::onUsersChanged, Qt::QueuedConnection);
     connect(server_, &ServerWorker::sig_credentialsChanged,
             this, &AndroidMainWindow::onCredentialsChanged, Qt::QueuedConnection);
     connect(server_, &ServerWorker::sig_routerStateChanged,

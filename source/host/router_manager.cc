@@ -471,9 +471,23 @@ void RouterManager::sendTelemetry()
         update.insert("last_check_result", check_result);
 #endif
 
+    const QVector<User> user_list = database_.userList();
+
+    int enabled_users = 0;
+    for (const User& user : user_list)
+    {
+        if (user.flags & User::ENABLED)
+            ++enabled_users;
+    }
+
+    QJsonObject users;
+    users.insert("total", user_list.size());
+    users.insert("enabled", enabled_users);
+
     QJsonObject telemetry;
     telemetry.insert("version", proto::router::kTelemetryVersion);
     telemetry.insert("update", update);
+    telemetry.insert("users", users);
 
     proto::router::HostToRouter message;
     message.mutable_host_telemetry()->set_json(

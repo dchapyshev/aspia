@@ -790,6 +790,35 @@ TEST_F(RouterManagerTest, TelemetryIsSentAfterAnUpdateCheck)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The report counts the users of the host and the enabled ones among them, without naming anyone.
+TEST_F(RouterManagerTest, TelemetryCountsUsers)
+{
+    host_worker_->invoke([this]()
+    {
+        Database& database = host_worker_->database();
+
+        User enabled_user = User::create("john", SecureString(QString("password")));
+        enabled_user.flags = User::ENABLED;
+        ASSERT_TRUE(database.addUser(enabled_user));
+        ASSERT_TRUE(database.addUser(User::create("mary", SecureString(QString("password")))));
+    });
+
+    startManager();
+
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+    sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
+    ASSERT_TRUE(waitFor([this]() { return telemetry_received_.load() >= 1; }));
+
+    const QJsonObject users = QJsonDocument::fromJson(
+        QByteArray::fromStdString(last_telemetry_.json())).object().value("users").toObject();
+    EXPECT_EQ(users.value("total").toInt(), 2);
+    EXPECT_EQ(users.value("enabled").toInt(), 1);
+
+    EXPECT_EQ(last_telemetry_.json().find("john"), std::string::npos);
+    EXPECT_EQ(last_telemetry_.json().find("mary"), std::string::npos);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The router can ask for the telemetry at any time, and the host answers at once, without waiting
 // for the minute to pass since the previous report.
 TEST_F(RouterManagerTest, TelemetryIsSentOnRouterCommand)

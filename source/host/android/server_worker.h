@@ -64,6 +64,7 @@ public slots:
     void onNewPassword();
     void onRouterSettingsChanged();
     void onUpdateSettingsChanged();
+    void onUsersChanged();
 
 signals:
     void sig_credentialsChanged(const QString& host_id, const QString& password);

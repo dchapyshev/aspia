@@ -196,6 +196,10 @@ void TelemetryModel::parseVersion1(const QJsonObject& telemetry, QList<Group>* g
     const QJsonValue update = telemetry.value("update");
     if (update.isObject())
         parseUpdateGroup(update.toObject(), groups);
+
+    const QJsonValue users = telemetry.value("users");
+    if (users.isObject())
+        parseUsersGroup(users.toObject(), groups);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -233,6 +237,25 @@ void TelemetryModel::parseUpdateGroup(const QJsonObject& update, QList<Group>* g
         group.parameters.append(
             { tr("Last update check result"), checkResultName(last_check_result.toString()) });
     }
+
+    if (!group.parameters.isEmpty())
+        groups->append(group);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void TelemetryModel::parseUsersGroup(const QJsonObject& users, QList<Group>* groups)
+{
+    Group group;
+    group.name = tr("Users");
+
+    const QJsonValue total = users.value("total");
+    if (total.isDouble())
+        group.parameters.append({ tr("Total users"), QString::number(total.toInt()) });
+
+    const QJsonValue enabled = users.value("enabled");
+    if (enabled.isDouble())
+        group.parameters.append({ tr("Enabled users"), QString::number(enabled.toInt()) });
 
     if (!group.parameters.isEmpty())
         groups->append(group);
