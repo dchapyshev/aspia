@@ -33,8 +33,9 @@ class Button final : public QPushButton
 public:
     enum class Role
     {
-        FILLED, // Primary action: an accent colored surface with contrasting text.
-        TEXT    // Secondary action: no surface, accent colored text.
+        FILLED,   // Primary action: an accent colored surface with contrasting text.
+        OUTLINED, // Secondary action that needs a visible boundary: an outline, accent colored text.
+        TEXT      // Secondary action: no surface, accent colored text.
     };
 
     explicit Button(QWidget* parent = nullptr);
@@ -49,6 +50,12 @@ public:
     // color. An invalid color falls back to the shared brand accent.
     void setAccentColor(const QColor& color);
 
+    // Fills |percentage| of a FILLED button with the accent, turns the rest into a pale track and
+    // shows the percentage in place of the text, so the button itself shows how far an operation it
+    // started has gone. Presses do nothing while it is shown. A negative value returns the button to
+    // the plain look.
+    void setProgress(int percentage);
+
     // QPushButton implementation.
     QSize sizeHint() const final;
     QSize minimumSizeHint() const final;
@@ -62,10 +69,14 @@ private slots:
     void onReleased();
 
 private:
+    bool isProgressShown() const;
+    void updateMouseEvents();
+
     Animation* animation_;
     double press_progress_;
     Role role_;
     QColor accent_color_;
+    int progress_;
 
     Q_DISABLE_COPY_MOVE(Button)
 };

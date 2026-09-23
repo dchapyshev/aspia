@@ -19,6 +19,7 @@
 #include "common/android/button.h"
 
 #include <QPainter>
+#include <QPainterPath>
 
 #include "common/android/animation.h"
 #include "common/android/controls.h"
@@ -29,8 +30,10 @@ constexpr int kButtonHeight = 40;
 constexpr int kFilledHorizontalPadding = 20;
 constexpr int kTextHorizontalPadding = 12;
 constexpr int kMinWidth = 64;
+constexpr int kOutlineWidth = 1;
 constexpr double kDisabledOpacity = 0.38;
 constexpr double kPressedLayerOpacity = 0.12;
+constexpr double kProgressTrackOpacity = 0.2;
 
 } // namespace
 
@@ -53,7 +56,8 @@ Button::Button(const QString& text, Role role, QWidget* parent)
     : QPushButton(text, parent),
       animation_(Controls::createAnimation(this)),
       press_progress_(0.0),
-      role_(role)
+      role_(role),
+      progress_(-1)
 {
     setFont(Controls::scaledFont(font(), Controls::kFontScale));
 
@@ -81,6 +85,7 @@ void Button::setRole(Role role)
         return;
 
     role_ = role;
+    updateMouseEvents();
     updateGeometry();
     update();
 }
@@ -93,11 +98,23 @@ void Button::setAccentColor(const QColor& color)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Button::setProgress(int percentage)
+{
+    percentage = qMin(percentage, 100);
+    if (progress_ == percentage)
+        return;
+
+    progress_ = percentage;
+    updateMouseEvents();
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
 QSize Button::sizeHint() const
 {
     QFontMetrics fm(font());
 
-    const int padding = (role_ == Role::FILLED) ? kFilledHorizontalPadding : kTextHorizontalPadding;
+    const int padding = (role_ == Role::TEXT) ? kTextHorizontalPadding : kFilledHorizontalPadding;
     int width = qMax(kMinWidth, fm.horizontalAdvance(text()) + padding * 2);
     return QSize(width, kButtonHeight);
 }
@@ -126,12 +143,41 @@ void Button::paintEvent(QPaintEvent* /* event */)
     const bool filled = (role_ == Role::FILLED);
     const QColor foreground = filled ? Controls::contrastColor(accent) : accent;
 
+    const bool progress = isProgressShown();
+
     painter.setPen(Qt::NoPen);
 
-    if (filled)
+    QRectF done;
+    if (progress)
+    {
+        done = surface;
+        done.setWidth(surface.width() * progress_ / 100.0);
+        if (layoutDirection() == Qt::RightToLeft)
+            done.moveRight(surface.right());
+
+        QColor track = accent;
+        track.setAlphaF(kProgressTrackOpacity);
+
+        QPainterPath shape;
+        shape.addRoundedRect(surface, radius, radius);
+
+        painter.setClipPath(shape);
+        painter.fillRect(surface, track);
+        painter.fillRect(done, accent);
+    }
+    else if (filled)
     {
         painter.setBrush(accent);
         painter.drawRoundedRect(surface, radius, radius);
+    }
+    else if (role_ == Role::OUTLINED)
+    {
+        const QRectF outline = surface.adjusted(kOutlineWidth / 2.0, kOutlineWidth / 2.0,
+                                                -kOutlineWidth / 2.0, -kOutlineWidth / 2.0);
+
+        painter.setPen(QPen(palette().color(QPalette::Mid), kOutlineWidth));
+        painter.drawRoundedRect(outline, radius, radius);
+        painter.setPen(Qt::NoPen);
     }
 
     // The state layer is an overlay tinted with the foreground color that fades in while pressed.
@@ -148,7 +194,16 @@ void Button::paintEvent(QPaintEvent* /* event */)
     // so elide against the whole width - only a genuinely shrunk button (long caption, tight layout)
     // then gets the ellipsis.
     const QString shown = painter.fontMetrics().elidedText(
-        text(), Qt::ElideRight, int(surface.width()));
+        progress ? QString("%1%").arg(progress_) : text(), Qt::ElideRight, int(surface.width()));
+
+    // Over the track the text takes the accent, and only the part over the done fill stays in the
+    // contrast color.
+    if (progress)
+    {
+        painter.setPen(accent);
+        painter.drawText(surface, Qt::AlignCenter, shown);
+        painter.setClipRect(done, Qt::IntersectClip);
+    }
 
     painter.setPen(foreground);
     painter.drawText(surface, Qt::AlignCenter, shown);
@@ -170,4 +225,16 @@ void Button::onReleased()
     animation_->setStartValue(press_progress_);
     animation_->setEndValue(0.0);
     animation_->start();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Button::isProgressShown() const
+{
+    return role_ == Role::FILLED && progress_ >= 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Button::updateMouseEvents()
+{
+    setAttribute(Qt::WA_TransparentForMouseEvents, isProgressShown());
 }

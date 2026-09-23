@@ -23,10 +23,9 @@
 #include "base/update/update_info.h"
 #include "common/android/scroll_area.h"
 
-class QProgressBar;
-
 class Button;
 class HttpFileDownloader;
+class IconButton;
 class Label;
 class UpdateChecker;
 class UpdateInstaller;
@@ -51,23 +50,31 @@ private slots:
 
 private:
     void onUpdateClicked();
+    void onCheckClicked();
     void startDownload();
     void cancelDownload();
 
     // Puts the screen back to offering what the check found.
     void showAvailable();
 
-    // Returns the button to the one that starts an update.
-    void showUpdateButton();
+    // Shows the screen of a check that did not end with an update to offer.
+    void showNotAvailable(const QString& status);
 
     void setDescription(const QString& text);
 
+    // An empty |text| hides the error.
+    void setError(const QString& text);
+
     const QString package_;
 
+    Label* label_title_ = nullptr;
     Label* label_status_ = nullptr;
-    Label* label_description_ = nullptr;
-    QProgressBar* progress_ = nullptr;
+    Label* label_error_ = nullptr;
     Button* button_update_ = nullptr;
+    IconButton* button_cancel_ = nullptr;
+    Button* button_check_ = nullptr;
+    Label* label_whats_new_ = nullptr;
+    Label* label_description_ = nullptr;
 
     QString channel_;
     UpdateInfo update_info_;
