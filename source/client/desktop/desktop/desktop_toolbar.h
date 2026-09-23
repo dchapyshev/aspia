@@ -153,6 +153,7 @@ private:
     QMenu* additional_menu_ = nullptr;
 
     QList<QAction*> screen_actions_;
+    QActionGroup* screens_group_ = nullptr;
 
     QMenu* resolutions_menu_ = nullptr;
     QActionGroup* resolutions_group_ = nullptr;

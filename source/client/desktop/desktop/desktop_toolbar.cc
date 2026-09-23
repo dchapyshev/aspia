@@ -99,6 +99,8 @@ DesktopToolBar::DesktopToolBar(QWidget* parent)
     hide_timer_ = new QTimer(this);
     connect(hide_timer_, &QTimer::timeout, this, &DesktopToolBar::onHideTimer);
 
+    screens_group_ = new QActionGroup(this);
+
     resolutions_menu_ = new QMenu(this);
     resolutions_group_ = new QActionGroup(resolutions_menu_);
 
@@ -335,6 +337,7 @@ void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
 
             ui->toolbar->insertAction(ui->action_power_control, action);
             screen_actions_.append(action);
+            screens_group_->addAction(action);
 
             if (screen_list.current_screen() == screen.id())
             {
@@ -351,9 +354,10 @@ void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
                 }
             }
 
-            connect(action, &SelectScreenAction::triggered, this, [this, action]()
+            connect(action, &SelectScreenAction::toggled, this, [this, action](bool checked)
             {
-                onChangeScreenAction(action);
+                if (checked)
+                    onChangeScreenAction(action);
             });
         }
     }
