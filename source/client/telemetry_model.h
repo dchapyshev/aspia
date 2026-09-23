@@ -78,6 +78,7 @@ private:
     static void parseUpdateGroup(const QJsonObject& update, QList<Group>* groups);
     static void parseUsersGroup(const QJsonObject& users, QList<Group>* groups);
     static QString updateChannelName(const QString& channel);
+    static QString checkFrequencyName(int days);
     static QString checkResultName(const QString& result);
     static QString countToString(int count);
     static QString timeToString(qint64 time);

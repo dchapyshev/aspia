@@ -417,7 +417,7 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="465"/>
+        <location filename="../host/android/main_window.cc" line="469"/>
         <source>Settings</source>
         <translation>تنظیمات</translation>
     </message>
@@ -489,37 +489,37 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="463"/>
+        <location filename="../host/android/main_window.cc" line="467"/>
         <source>Connection</source>
         <translation>اتصال</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="337"/>
-        <location filename="../host/android/main_window.cc" line="372"/>
-        <location filename="../host/android/main_window.cc" line="404"/>
+        <location filename="../host/android/main_window.cc" line="341"/>
+        <location filename="../host/android/main_window.cc" line="376"/>
+        <location filename="../host/android/main_window.cc" line="408"/>
         <source>Permissions</source>
         <translation>مجوزهای دسترسی</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="338"/>
+        <location filename="../host/android/main_window.cc" line="342"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
         <translation>برای امکان کنترل صفحه‌کلید و ماوس از راه دور، سرویس دسترس‌پذیری را فعال کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="696"/>
-        <location filename="../host/android/main_window.cc" line="339"/>
-        <location filename="../host/android/main_window.cc" line="374"/>
-        <location filename="../host/android/main_window.cc" line="407"/>
+        <location filename="../host/android/main_window.cc" line="343"/>
+        <location filename="../host/android/main_window.cc" line="378"/>
+        <location filename="../host/android/main_window.cc" line="411"/>
         <source>Open</source>
         <translation>باز کردن</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="373"/>
+        <location filename="../host/android/main_window.cc" line="377"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
         <translation>برای نمایش دکمه عملیات روی صفحه در طول نشست، نمایش روی برنامه‌های دیگر را مجاز کنید.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="405"/>
+        <location filename="../host/android/main_window.cc" line="409"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
         <translation>برای اینکه کاربر متصل بتواند فایل‌های این دستگاه را مرور و منتقل کند، دسترسی به همه فایل‌ها را مجاز کنید.</translation>
     </message>
@@ -3337,6 +3337,34 @@ Password: %2</source>
     </message>
 </context>
 <context>
+    <name>HostTelemetryDialog</name>
+    <message>
+        <location filename="../client/desktop/management/host_telemetry_dialog.ui" line="14"/>
+        <source>Telemetry</source>
+        <translation>تله‌متری</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/host_telemetry_dialog.ui" line="51"/>
+        <source>Refresh</source>
+        <translation>تازه‌سازی</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="121"/>
+        <source>The host has not reported telemetry yet.</source>
+        <translation>میزبان هنوز تله‌متری ارسال نکرده است.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="125"/>
+        <source>The telemetry of the host could not be read.</source>
+        <translation>تله‌متری میزبان خوانده نشد.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="129"/>
+        <source>The telemetry of the host is in a newer format. Update the client to view it.</source>
+        <translation>تله‌متری میزبان در قالب جدیدتری است. برای مشاهده آن، کلاینت را به‌روزرسانی کنید.</translation>
+    </message>
+</context>
+<context>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
@@ -4503,195 +4531,200 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="365"/>
+        <source>Telemetry</source>
+        <translation>تله‌متری</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="374"/>
         <source>Approve</source>
         <translation>تأیید</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="374"/>
+        <location filename="../client/desktop/management_tab.ui" line="383"/>
         <source>Save...</source>
         <translation>ذخیره...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="377"/>
+        <location filename="../client/desktop/management_tab.ui" line="386"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="386"/>
+        <location filename="../client/desktop/management_tab.ui" line="395"/>
         <source>Reload</source>
         <translation>بارگذاری مجدد</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="389"/>
+        <location filename="../client/desktop/management_tab.ui" line="398"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="398"/>
+        <location filename="../client/desktop/management_tab.ui" line="407"/>
         <source>Import Old Address Book...</source>
         <translation>وارد کردن دفترچه آدرس قدیمی...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="407"/>
+        <location filename="../client/desktop/management_tab.ui" line="416"/>
         <source>Create Backup...</source>
         <translation>ایجاد نسخه پشتیبان...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="416"/>
+        <location filename="../client/desktop/management_tab.ui" line="425"/>
         <source>Restore from Backup...</source>
         <translation>بازیابی از نسخه پشتیبان...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="424"/>
+        <location filename="../client/desktop/management_tab.ui" line="433"/>
         <source>Auto-refresh Status</source>
         <translation>به‌روزرسانی خودکار وضعیت</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="998"/>
+        <location filename="../client/desktop/management_tab.cc" line="999"/>
         <source>(copy)</source>
         <translation>(کپی)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="966"/>
-        <location filename="../client/desktop/management_tab.cc" line="1039"/>
-        <location filename="../client/desktop/management_tab.cc" line="2121"/>
+        <location filename="../client/desktop/management_tab.cc" line="967"/>
+        <location filename="../client/desktop/management_tab.cc" line="1040"/>
+        <location filename="../client/desktop/management_tab.cc" line="2132"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>دریافت اطلاعات میزبان از پایگاه داده محلی ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1003"/>
+        <location filename="../client/desktop/management_tab.cc" line="1004"/>
         <source>Failed to add the host to the local database.</source>
         <translation>افزودن میزبان به پایگاه داده محلی ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1043"/>
+        <location filename="../client/desktop/management_tab.cc" line="1044"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>آیا مطمئن هستید که می‌خواهید میزبان &quot;%1&quot; را حذف کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1053"/>
+        <location filename="../client/desktop/management_tab.cc" line="1054"/>
         <source>Unable to remove host</source>
         <translation>حذف میزبان ممکن نیست</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1110"/>
-        <location filename="../client/desktop/management_tab.cc" line="1153"/>
-        <location filename="../client/desktop/management_tab.cc" line="1178"/>
+        <location filename="../client/desktop/management_tab.cc" line="1112"/>
+        <location filename="../client/desktop/management_tab.cc" line="1155"/>
+        <location filename="../client/desktop/management_tab.cc" line="1180"/>
         <source>Copy Row</source>
         <translation>کپی سطر</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1111"/>
-        <location filename="../client/desktop/management_tab.cc" line="1154"/>
-        <location filename="../client/desktop/management_tab.cc" line="1179"/>
+        <location filename="../client/desktop/management_tab.cc" line="1113"/>
+        <location filename="../client/desktop/management_tab.cc" line="1156"/>
+        <location filename="../client/desktop/management_tab.cc" line="1181"/>
         <source>Copy Value</source>
         <translation>کپی مقدار</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1278"/>
+        <location filename="../client/desktop/management_tab.cc" line="1280"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>آیا مطمئن هستید که می‌خواهید فضای کاری &quot;%1&quot; را حذف کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1298"/>
+        <location filename="../client/desktop/management_tab.cc" line="1300"/>
         <source>Failed to delete the workspace.</source>
         <translation>حذف فضای کاری ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1393"/>
+        <location filename="../client/desktop/management_tab.cc" line="1395"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>آیا مطمئن هستید که می‌خواهید گروه &quot;%1&quot; را حذف کنید؟ میزبان‌های اختصاص‌یافته به این گروه یا زیرگروه‌های آن به ریشه فضای کاری منتقل خواهند شد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1412"/>
+        <location filename="../client/desktop/management_tab.cc" line="1414"/>
         <source>Failed to delete the group.</source>
         <translation>حذف گروه ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1451"/>
+        <location filename="../client/desktop/management_tab.cc" line="1453"/>
         <source>Import Old Address Book</source>
         <translation>وارد کردن دفترچه آدرس قدیمی</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1452"/>
+        <location filename="../client/desktop/management_tab.cc" line="1454"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>دفترچه آدرس (*.aab);;همه فایل‌ها (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1475"/>
-        <location filename="../client/desktop/management_tab.cc" line="1533"/>
+        <location filename="../client/desktop/management_tab.cc" line="1477"/>
+        <location filename="../client/desktop/management_tab.cc" line="1535"/>
         <source>The database is not available.</source>
         <translation>پایگاه داده در دسترس نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1481"/>
+        <location filename="../client/desktop/management_tab.cc" line="1483"/>
         <source>Create Backup</source>
         <translation>ایجاد نسخه پشتیبان</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1498"/>
+        <location filename="../client/desktop/management_tab.cc" line="1500"/>
         <source>There is nothing to save.</source>
         <translation>چیزی برای ذخیره وجود ندارد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1506"/>
+        <location filename="../client/desktop/management_tab.cc" line="1508"/>
         <source>Some records of the database could not be read. Edit them to enter their data again.</source>
         <translation>برخی رکوردهای پایگاه داده خوانده نشدند. آنها را ویرایش کنید تا داده‌هایشان را دوباره وارد کنید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1511"/>
+        <location filename="../client/desktop/management_tab.cc" line="1513"/>
         <source>Failed to create the backup.</source>
         <translation>ایجاد نسخه پشتیبان ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1539"/>
-        <location filename="../client/desktop/management_tab.cc" line="1565"/>
+        <location filename="../client/desktop/management_tab.cc" line="1541"/>
+        <location filename="../client/desktop/management_tab.cc" line="1567"/>
         <source>Restore from Backup</source>
         <translation>بازیابی از نسخه پشتیبان</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1548"/>
+        <location filename="../client/desktop/management_tab.cc" line="1550"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>همه داده‌های ذخیره‌شده فعلی حذف و با محتوای نسخه پشتیبان جایگزین می‌شود. ادامه می‌دهید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1567"/>
+        <location filename="../client/desktop/management_tab.cc" line="1569"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>این نسخه پشتیبان روی نصب دیگری از برنامه ساخته شده است. گذرواژه اصلی همان نصب را وارد کنید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1592"/>
+        <location filename="../client/desktop/management_tab.cc" line="1594"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>این نسخه پشتیبان حاوی داده‌ای نیست، بنابراین چیزی تغییر نکرد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1600"/>
+        <location filename="../client/desktop/management_tab.cc" line="1602"/>
         <source>The file is not a valid backup.</source>
         <translation>این فایل یک نسخه پشتیبان معتبر نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1604"/>
+        <location filename="../client/desktop/management_tab.cc" line="1606"/>
         <source>Failed to restore from the backup.</source>
         <translation>بازیابی از نسخه پشتیبان ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1482"/>
-        <location filename="../client/desktop/management_tab.cc" line="1540"/>
+        <location filename="../client/desktop/management_tab.cc" line="1484"/>
+        <location filename="../client/desktop/management_tab.cc" line="1542"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>پشتیبان Aspia (*.aspia-backup);;همه فایل‌ها (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1502"/>
+        <location filename="../client/desktop/management_tab.cc" line="1504"/>
         <source>Unable to write the file.</source>
         <translation>نوشتن فایل ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1596"/>
+        <location filename="../client/desktop/management_tab.cc" line="1598"/>
         <source>Unable to read the file.</source>
         <translation>خواندن فایل ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1516"/>
+        <location filename="../client/desktop/management_tab.cc" line="1518"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -4706,17 +4739,17 @@ Credentials exported: %5</source>
 اطلاعات ورود صادرشده: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1584"/>
+        <location filename="../client/desktop/management_tab.cc" line="1586"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>رمزگشایی فایل با گذرواژه مشخص‌شده ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1588"/>
+        <location filename="../client/desktop/management_tab.cc" line="1590"/>
         <source>Unsupported file format version.</source>
         <translation>نسخه قالب فایل پشتیبانی نمی‌شود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1609"/>
+        <location filename="../client/desktop/management_tab.cc" line="1611"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -4731,39 +4764,39 @@ Credentials imported: %5</source>
 اطلاعات ورود واردشده: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2044"/>
-        <location filename="../client/desktop/management_tab.cc" line="2075"/>
+        <location filename="../client/desktop/management_tab.cc" line="2055"/>
+        <location filename="../client/desktop/management_tab.cc" line="2086"/>
         <source>Copy Link</source>
         <translation>کپی پیوند</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2063"/>
-        <location filename="../client/desktop/management_tab.cc" line="2097"/>
+        <location filename="../client/desktop/management_tab.cc" line="2074"/>
+        <location filename="../client/desktop/management_tab.cc" line="2108"/>
         <source>Unable to create a link for this host.</source>
         <translation>ایجاد پیوند برای این میزبان ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2116"/>
+        <location filename="../client/desktop/management_tab.cc" line="2127"/>
         <source>The data of the host could not be read. Edit the host to enter it again.</source>
         <translation>داده‌های میزبان خوانده نشد. میزبان را ویرایش کنید تا دوباره آن را وارد کنید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2137"/>
+        <location filename="../client/desktop/management_tab.cc" line="2148"/>
         <source>The data of the router could not be read. Edit the router to enter it again.</source>
         <translation>داده‌های روتر خوانده نشد. روتر را ویرایش کنید تا دوباره آن را وارد کنید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2138"/>
+        <location filename="../client/desktop/management_tab.cc" line="2149"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>روتر مرتبط با این میزبان حذف شده است. میزبان را ویرایش کنید تا روتر دیگری انتخاب کنید یا به اتصال مستقیم تغییر دهید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2145"/>
+        <location filename="../client/desktop/management_tab.cc" line="2156"/>
         <source>The host has an invalid host ID.</source>
         <translation>ID میزبان نامعتبر است.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2154"/>
+        <location filename="../client/desktop/management_tab.cc" line="2165"/>
         <source>The host has an incorrect address.</source>
         <translation>آدرس میزبان نادرست است.</translation>
     </message>
@@ -6002,44 +6035,44 @@ Credentials imported: %5</source>
         <translation>موارد در هر صفحه:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="344"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="345"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>آیا مطمئن هستید که می‌خواهید اتصال میزبان &quot;%1&quot; را قطع کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="370"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>آیا مطمئن هستید که می‌خواهید اتصال همه میزبان‌ها را قطع کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="393"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="394"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>حذف میزبان باعث می‌شود همه پیکربندی آن برای اتصال به روتر حذف شود و برنامه از روی میزبان حذف نصب گردد. این عملیات برگشت‌ناپذیر است. آیا مطمئن هستید که می‌خواهید این کار را انجام دهید؟</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="661"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="677"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n میزبان</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="703"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="719"/>
         <source>Save File</source>
         <translation>ذخیره فایل</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="703"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="719"/>
         <source>JSON files (*.json)</source>
         <translation>فایل‌های JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="714"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="730"/>
         <source>Could not open file for writing.</source>
         <translation>باز کردن فایل برای نوشتن ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="761"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="777"/>
         <source>Unable to write file.</source>
         <translation>نوشتن فایل ممکن نیست.</translation>
     </message>
@@ -7147,7 +7180,7 @@ Credentials imported: %5</source>
     <name>SettingsWidget</name>
     <message>
         <location filename="../client/android/settings_widget.cc" line="138"/>
-        <location filename="../host/android/settings_widget.cc" line="178"/>
+        <location filename="../host/android/settings_widget.cc" line="179"/>
         <source>Update</source>
         <translation>به‌روزرسانی</translation>
     </message>
@@ -7158,19 +7191,19 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="169"/>
-        <location filename="../host/android/settings_widget.cc" line="150"/>
+        <location filename="../host/android/settings_widget.cc" line="151"/>
         <source>About</source>
         <translation>درباره</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="233"/>
-        <location filename="../host/android/settings_widget.cc" line="237"/>
+        <location filename="../host/android/settings_widget.cc" line="238"/>
         <source>Interface</source>
         <translation>رابط کاربری</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="236"/>
-        <location filename="../host/android/settings_widget.cc" line="242"/>
+        <location filename="../host/android/settings_widget.cc" line="243"/>
         <source>Theme</source>
         <translation>تم</translation>
     </message>
@@ -7181,7 +7214,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="261"/>
-        <location filename="../host/android/settings_widget.cc" line="258"/>
+        <location filename="../host/android/settings_widget.cc" line="259"/>
         <source>Security</source>
         <translation>امنیت</translation>
     </message>
@@ -7282,7 +7315,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="390"/>
-        <location filename="../host/android/settings_widget.cc" line="380"/>
+        <location filename="../host/android/settings_widget.cc" line="381"/>
         <source>Updates</source>
         <translation>به‌روزرسانی‌ها</translation>
     </message>
@@ -7293,31 +7326,31 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="401"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../host/android/settings_widget.cc" line="384"/>
         <source>Update channel</source>
         <translation>کانال به‌روزرسانی</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="402"/>
-        <location filename="../host/android/settings_widget.cc" line="384"/>
+        <location filename="../host/android/settings_widget.cc" line="385"/>
         <source>Stable</source>
         <translation>پایدار</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="403"/>
-        <location filename="../host/android/settings_widget.cc" line="385"/>
+        <location filename="../host/android/settings_widget.cc" line="386"/>
         <source>Beta</source>
         <translation>بتا</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="404"/>
-        <location filename="../host/android/settings_widget.cc" line="386"/>
+        <location filename="../host/android/settings_widget.cc" line="387"/>
         <source>Alpha</source>
         <translation>آلفا</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="396"/>
+        <location filename="../host/android/settings_widget.cc" line="398"/>
         <source>Check for updates</source>
         <translation>بررسی به‌روزرسانی‌ها</translation>
     </message>
@@ -7332,84 +7365,84 @@ Credentials imported: %5</source>
         <translation>لغو</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="159"/>
+        <location filename="../host/android/settings_widget.cc" line="160"/>
         <source>Users</source>
         <translation>کاربران</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="168"/>
+        <location filename="../host/android/settings_widget.cc" line="169"/>
         <source>Edit User</source>
         <translation>ویرایش کاربر</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="168"/>
+        <location filename="../host/android/settings_widget.cc" line="169"/>
         <source>Add User</source>
         <translation>افزودن کاربر</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="260"/>
+        <location filename="../host/android/settings_widget.cc" line="261"/>
         <source>Manage users</source>
         <translation>مدیریت کاربران</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="268"/>
+        <location filename="../host/android/settings_widget.cc" line="269"/>
         <source>Change password</source>
         <translation>تغییر گذرواژه</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="272"/>
+        <location filename="../host/android/settings_widget.cc" line="273"/>
         <source>Disable password protection</source>
         <translation>غیرفعال کردن محافظت با گذرواژه</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="281"/>
+        <location filename="../host/android/settings_widget.cc" line="282"/>
         <source>Enable password protection</source>
         <translation>فعال‌سازی محافظت با گذرواژه</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="296"/>
+        <location filename="../host/android/settings_widget.cc" line="297"/>
         <source>Router</source>
         <translation>روتر</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="301"/>
+        <location filename="../host/android/settings_widget.cc" line="302"/>
         <source>Enable the use of a router</source>
         <translation>فعال‌سازی استفاده از روتر</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="306"/>
+        <location filename="../host/android/settings_widget.cc" line="307"/>
         <source>Address</source>
         <translation>آدرس</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="312"/>
+        <location filename="../host/android/settings_widget.cc" line="313"/>
         <source>Public Key</source>
         <translation>کلید عمومی</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="317"/>
+        <location filename="../host/android/settings_widget.cc" line="318"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>در صورت نبود اتصال مستقیم (دور زدن NAT)، برای اتصال به رایانه به روتر نیاز است. Aspia روتر عمومی ارائه نمی‌دهد، اما می‌توانید روتر خود را نصب کنید. می‌توانید روتر را از &lt;a href=&quot;https://aspia.org&quot;&gt;وب‌سایت رسمی&lt;/a&gt; دانلود کنید.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="410"/>
-        <location filename="../host/android/settings_widget.cc" line="430"/>
+        <location filename="../host/android/settings_widget.cc" line="412"/>
+        <location filename="../host/android/settings_widget.cc" line="432"/>
         <source>Error</source>
         <translation>خطا</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="410"/>
-        <location filename="../host/android/settings_widget.cc" line="430"/>
+        <location filename="../host/android/settings_widget.cc" line="412"/>
+        <location filename="../host/android/settings_widget.cc" line="432"/>
         <source>An error occurred while processing the password.</source>
         <translation>هنگام پردازش گذرواژه خطایی رخ داد.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="451"/>
+        <location filename="../host/android/settings_widget.cc" line="453"/>
         <source>Import</source>
         <translation>وارد کردن</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="451"/>
+        <location filename="../host/android/settings_widget.cc" line="453"/>
         <source>JSON files (*.json)</source>
         <translation>فایل‌های JSON (*.json)</translation>
     </message>
@@ -11502,6 +11535,196 @@ Credentials imported: %5</source>
         <location filename="../base/net/tcp_channel.cc" line="122"/>
         <source>An unknown error occurred.</source>
         <translation>خطای ناشناخته‌ای رخ داد.</translation>
+    </message>
+</context>
+<context>
+    <name>TelemetryModel</name>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="150"/>
+        <source>Parameter</source>
+        <translation>پارامتر</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="153"/>
+        <source>Value</source>
+        <translation>مقدار</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="221"/>
+        <source>General</source>
+        <translation>کلی</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="225"/>
+        <source>Service start time</source>
+        <translation>زمان شروع سرویس</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="229"/>
+        <source>Service starts in 7 days</source>
+        <translation>تعداد شروع سرویس در 7 روز گذشته</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="240"/>
+        <source>Connections</source>
+        <translation>اتصال‌ها</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="246"/>
+        <source>Last incoming connection</source>
+        <translation>آخرین اتصال ورودی</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="251"/>
+        <source>Failed logins in 7 days</source>
+        <translation>ورودهای ناموفق در 7 روز گذشته</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="256"/>
+        <source>Failed logins since service start</source>
+        <translation>ورودهای ناموفق از زمان شروع سرویس</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="269"/>
+        <source>Updates</source>
+        <translation>به‌روزرسانی‌ها</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="273"/>
+        <source>Update channel</source>
+        <translation>کانال به‌روزرسانی</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="279"/>
+        <source>Automatic updates</source>
+        <translation>به‌روزرسانی خودکار</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="279"/>
+        <source>Enabled</source>
+        <translation>فعال</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="279"/>
+        <source>Disabled</source>
+        <translation>غیرفعال</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="286"/>
+        <source>Update check frequency</source>
+        <translation>تناوب بررسی به‌روزرسانی</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/telemetry_model.cc" line="350"/>
+        <source>Every %n days</source>
+        <translation>
+            <numerusform>هر %n روز</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="291"/>
+        <source>Last update check</source>
+        <translation>آخرین بررسی به‌روزرسانی</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="297"/>
+        <source>Last update check result</source>
+        <translation>نتیجه آخرین بررسی به‌روزرسانی</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="309"/>
+        <source>Users</source>
+        <translation>کاربران</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="313"/>
+        <source>Total users</source>
+        <translation>تعداد کل کاربران</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="317"/>
+        <source>Enabled users</source>
+        <translation>کاربران فعال</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="328"/>
+        <source>Stable</source>
+        <translation>پایدار</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="330"/>
+        <source>Beta</source>
+        <translation>بتا</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="332"/>
+        <source>Alpha</source>
+        <translation>آلفا</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="344"/>
+        <source>Once a day</source>
+        <translation>روزی یک بار</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="346"/>
+        <source>Once a week</source>
+        <translation>هفته‌ای یک بار</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="348"/>
+        <source>Once a month</source>
+        <translation>ماهی یک بار</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="358"/>
+        <source>No updates</source>
+        <translation>به‌روزرسانی جدیدی موجود نیست</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="360"/>
+        <source>Check failed</source>
+        <translation>بررسی ناموفق بود</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="362"/>
+        <source>Unsupported package</source>
+        <translation>پکیج پشتیبانی‌نشده</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="364"/>
+        <source>Download failed</source>
+        <translation>دانلود ناموفق بود</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="366"/>
+        <source>Damaged package</source>
+        <translation>پکیج آسیب‌دیده</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="368"/>
+        <source>Installation failed</source>
+        <translation>نصب ناموفق بود</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="370"/>
+        <source>Installation started</source>
+        <translation>نصب شروع شد</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="372"/>
+        <source>Installation succeeded</source>
+        <translation>نصب با موفقیت انجام شد</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="382"/>
+        <source>%1 or more</source>
+        <translation>%1 یا بیشتر</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="392"/>
+        <source>Never</source>
+        <translation>هرگز</translation>
     </message>
 </context>
 <context>

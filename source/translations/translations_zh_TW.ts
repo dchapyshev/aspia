@@ -417,7 +417,7 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="465"/>
+        <location filename="../host/android/main_window.cc" line="469"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
@@ -489,37 +489,37 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="463"/>
+        <location filename="../host/android/main_window.cc" line="467"/>
         <source>Connection</source>
         <translation>連線</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="337"/>
-        <location filename="../host/android/main_window.cc" line="372"/>
-        <location filename="../host/android/main_window.cc" line="404"/>
+        <location filename="../host/android/main_window.cc" line="341"/>
+        <location filename="../host/android/main_window.cc" line="376"/>
+        <location filename="../host/android/main_window.cc" line="408"/>
         <source>Permissions</source>
         <translation>權限</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="338"/>
+        <location filename="../host/android/main_window.cc" line="342"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
         <translation>啟用協助工具服務，以允許遠端控制鍵盤和滑鼠。</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="696"/>
-        <location filename="../host/android/main_window.cc" line="339"/>
-        <location filename="../host/android/main_window.cc" line="374"/>
-        <location filename="../host/android/main_window.cc" line="407"/>
+        <location filename="../host/android/main_window.cc" line="343"/>
+        <location filename="../host/android/main_window.cc" line="378"/>
+        <location filename="../host/android/main_window.cc" line="411"/>
         <source>Open</source>
         <translation>開啟</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="373"/>
+        <location filename="../host/android/main_window.cc" line="377"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
         <translation>允許顯示在其他應用程式上層，以便在工作階段期間顯示螢幕上的動作按鈕。</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="405"/>
+        <location filename="../host/android/main_window.cc" line="409"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
         <translation>允許存取所有檔案，讓連線的使用者可以瀏覽和傳輸此裝置上的檔案。</translation>
     </message>
@@ -3337,6 +3337,34 @@ Password: %2</source>
     </message>
 </context>
 <context>
+    <name>HostTelemetryDialog</name>
+    <message>
+        <location filename="../client/desktop/management/host_telemetry_dialog.ui" line="14"/>
+        <source>Telemetry</source>
+        <translation>遙測</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/host_telemetry_dialog.ui" line="51"/>
+        <source>Refresh</source>
+        <translation>重新整理</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="121"/>
+        <source>The host has not reported telemetry yet.</source>
+        <translation>主機尚未回報遙測資料。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="125"/>
+        <source>The telemetry of the host could not be read.</source>
+        <translation>主機的遙測資料無法讀取。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="129"/>
+        <source>The telemetry of the host is in a newer format. Update the client to view it.</source>
+        <translation>主機的遙測資料為較新的格式。請更新用戶端以檢視。</translation>
+    </message>
+</context>
+<context>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
@@ -4503,195 +4531,200 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="365"/>
+        <source>Telemetry</source>
+        <translation>遙測</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="374"/>
         <source>Approve</source>
         <translation>核准</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="374"/>
+        <location filename="../client/desktop/management_tab.ui" line="383"/>
         <source>Save...</source>
         <translation>儲存...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="377"/>
+        <location filename="../client/desktop/management_tab.ui" line="386"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="386"/>
+        <location filename="../client/desktop/management_tab.ui" line="395"/>
         <source>Reload</source>
         <translation>重新載入</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="389"/>
+        <location filename="../client/desktop/management_tab.ui" line="398"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="398"/>
+        <location filename="../client/desktop/management_tab.ui" line="407"/>
         <source>Import Old Address Book...</source>
         <translation>匯入舊版通訊錄...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="407"/>
+        <location filename="../client/desktop/management_tab.ui" line="416"/>
         <source>Create Backup...</source>
         <translation>建立備份...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="416"/>
+        <location filename="../client/desktop/management_tab.ui" line="425"/>
         <source>Restore from Backup...</source>
         <translation>從備份還原...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="424"/>
+        <location filename="../client/desktop/management_tab.ui" line="433"/>
         <source>Auto-refresh Status</source>
         <translation>自動重新整理狀態</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="998"/>
+        <location filename="../client/desktop/management_tab.cc" line="999"/>
         <source>(copy)</source>
         <translation>（複製）</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="966"/>
-        <location filename="../client/desktop/management_tab.cc" line="1039"/>
-        <location filename="../client/desktop/management_tab.cc" line="2121"/>
+        <location filename="../client/desktop/management_tab.cc" line="967"/>
+        <location filename="../client/desktop/management_tab.cc" line="1040"/>
+        <location filename="../client/desktop/management_tab.cc" line="2132"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>無法從本機資料庫取得主機資訊。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1003"/>
+        <location filename="../client/desktop/management_tab.cc" line="1004"/>
         <source>Failed to add the host to the local database.</source>
         <translation>無法將主機加入本機資料庫。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1043"/>
+        <location filename="../client/desktop/management_tab.cc" line="1044"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>確定要刪除主機「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1053"/>
+        <location filename="../client/desktop/management_tab.cc" line="1054"/>
         <source>Unable to remove host</source>
         <translation>無法移除主機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1110"/>
-        <location filename="../client/desktop/management_tab.cc" line="1153"/>
-        <location filename="../client/desktop/management_tab.cc" line="1178"/>
+        <location filename="../client/desktop/management_tab.cc" line="1112"/>
+        <location filename="../client/desktop/management_tab.cc" line="1155"/>
+        <location filename="../client/desktop/management_tab.cc" line="1180"/>
         <source>Copy Row</source>
         <translation>複製列</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1111"/>
-        <location filename="../client/desktop/management_tab.cc" line="1154"/>
-        <location filename="../client/desktop/management_tab.cc" line="1179"/>
+        <location filename="../client/desktop/management_tab.cc" line="1113"/>
+        <location filename="../client/desktop/management_tab.cc" line="1156"/>
+        <location filename="../client/desktop/management_tab.cc" line="1181"/>
         <source>Copy Value</source>
         <translation>複製值</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1278"/>
+        <location filename="../client/desktop/management_tab.cc" line="1280"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>確定要刪除工作區「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1298"/>
+        <location filename="../client/desktop/management_tab.cc" line="1300"/>
         <source>Failed to delete the workspace.</source>
         <translation>無法刪除工作區。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1393"/>
+        <location filename="../client/desktop/management_tab.cc" line="1395"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>確定要刪除群組「%1」嗎？指派給此群組或其子群組的主機將被移至工作區根目錄。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1412"/>
+        <location filename="../client/desktop/management_tab.cc" line="1414"/>
         <source>Failed to delete the group.</source>
         <translation>無法刪除群組。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1451"/>
+        <location filename="../client/desktop/management_tab.cc" line="1453"/>
         <source>Import Old Address Book</source>
         <translation>匯入舊版通訊錄</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1452"/>
+        <location filename="../client/desktop/management_tab.cc" line="1454"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>通訊錄 (*.aab);;所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1475"/>
-        <location filename="../client/desktop/management_tab.cc" line="1533"/>
+        <location filename="../client/desktop/management_tab.cc" line="1477"/>
+        <location filename="../client/desktop/management_tab.cc" line="1535"/>
         <source>The database is not available.</source>
         <translation>資料庫無法使用。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1481"/>
+        <location filename="../client/desktop/management_tab.cc" line="1483"/>
         <source>Create Backup</source>
         <translation>建立備份</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1498"/>
+        <location filename="../client/desktop/management_tab.cc" line="1500"/>
         <source>There is nothing to save.</source>
         <translation>沒有可儲存的內容。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1506"/>
+        <location filename="../client/desktop/management_tab.cc" line="1508"/>
         <source>Some records of the database could not be read. Edit them to enter their data again.</source>
         <translation>資料庫中有部分記錄無法讀取。請編輯以重新輸入資料。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1511"/>
+        <location filename="../client/desktop/management_tab.cc" line="1513"/>
         <source>Failed to create the backup.</source>
         <translation>無法建立備份。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1539"/>
-        <location filename="../client/desktop/management_tab.cc" line="1565"/>
+        <location filename="../client/desktop/management_tab.cc" line="1541"/>
+        <location filename="../client/desktop/management_tab.cc" line="1567"/>
         <source>Restore from Backup</source>
         <translation>從備份還原</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1548"/>
+        <location filename="../client/desktop/management_tab.cc" line="1550"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>目前儲存的所有內容都將被刪除，並以備份中的內容取代。要繼續嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1567"/>
+        <location filename="../client/desktop/management_tab.cc" line="1569"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>此備份是在另一個安裝上建立的。請輸入該處使用的主密碼。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1592"/>
+        <location filename="../client/desktop/management_tab.cc" line="1594"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>備份中沒有資料，因此未做任何變更。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1600"/>
+        <location filename="../client/desktop/management_tab.cc" line="1602"/>
         <source>The file is not a valid backup.</source>
         <translation>此檔案不是有效的備份。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1604"/>
+        <location filename="../client/desktop/management_tab.cc" line="1606"/>
         <source>Failed to restore from the backup.</source>
         <translation>無法從備份還原。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1482"/>
-        <location filename="../client/desktop/management_tab.cc" line="1540"/>
+        <location filename="../client/desktop/management_tab.cc" line="1484"/>
+        <location filename="../client/desktop/management_tab.cc" line="1542"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia 備份 (*.aspia-backup);;所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1502"/>
+        <location filename="../client/desktop/management_tab.cc" line="1504"/>
         <source>Unable to write the file.</source>
         <translation>無法寫入檔案。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1596"/>
+        <location filename="../client/desktop/management_tab.cc" line="1598"/>
         <source>Unable to read the file.</source>
         <translation>無法讀取檔案。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1516"/>
+        <location filename="../client/desktop/management_tab.cc" line="1518"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -4706,17 +4739,17 @@ Credentials exported: %5</source>
 已匯出認證：%5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1584"/>
+        <location filename="../client/desktop/management_tab.cc" line="1586"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>無法使用指定的密碼解密檔案。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1588"/>
+        <location filename="../client/desktop/management_tab.cc" line="1590"/>
         <source>Unsupported file format version.</source>
         <translation>不支援的檔案格式版本。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1609"/>
+        <location filename="../client/desktop/management_tab.cc" line="1611"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -4731,39 +4764,39 @@ Credentials imported: %5</source>
 已匯入認證：%5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2044"/>
-        <location filename="../client/desktop/management_tab.cc" line="2075"/>
+        <location filename="../client/desktop/management_tab.cc" line="2055"/>
+        <location filename="../client/desktop/management_tab.cc" line="2086"/>
         <source>Copy Link</source>
         <translation>複製連結</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2063"/>
-        <location filename="../client/desktop/management_tab.cc" line="2097"/>
+        <location filename="../client/desktop/management_tab.cc" line="2074"/>
+        <location filename="../client/desktop/management_tab.cc" line="2108"/>
         <source>Unable to create a link for this host.</source>
         <translation>無法為此主機建立連結。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2116"/>
+        <location filename="../client/desktop/management_tab.cc" line="2127"/>
         <source>The data of the host could not be read. Edit the host to enter it again.</source>
         <translation>主機的資料無法讀取。請編輯主機以重新輸入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2137"/>
+        <location filename="../client/desktop/management_tab.cc" line="2148"/>
         <source>The data of the router could not be read. Edit the router to enter it again.</source>
         <translation>路由器的資料無法讀取。請編輯路由器以重新輸入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2138"/>
+        <location filename="../client/desktop/management_tab.cc" line="2149"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>與此主機關聯的路由器已被刪除。請編輯主機以選擇其他路由器，或改用直接連線。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2145"/>
+        <location filename="../client/desktop/management_tab.cc" line="2156"/>
         <source>The host has an invalid host ID.</source>
         <translation>主機的 ID 無效。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2154"/>
+        <location filename="../client/desktop/management_tab.cc" line="2165"/>
         <source>The host has an incorrect address.</source>
         <translation>主機的位址不正確。</translation>
     </message>
@@ -6002,44 +6035,44 @@ Credentials imported: %5</source>
         <translation>每頁項目數：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="344"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="345"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>確定要中斷主機「%1」的連線嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="370"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>確定要中斷所有主機的連線嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="393"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="394"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>刪除主機將會刪除其連線到路由器的所有設定，且主機上的應用程式將被解除安裝。此操作無法復原。確定要繼續嗎？</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="661"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="677"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n 個主機</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="703"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="719"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="703"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="719"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 檔案 (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="714"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="730"/>
         <source>Could not open file for writing.</source>
         <translation>無法開啟檔案進行寫入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="761"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="777"/>
         <source>Unable to write file.</source>
         <translation>無法寫入檔案。</translation>
     </message>
@@ -7147,7 +7180,7 @@ Credentials imported: %5</source>
     <name>SettingsWidget</name>
     <message>
         <location filename="../client/android/settings_widget.cc" line="138"/>
-        <location filename="../host/android/settings_widget.cc" line="178"/>
+        <location filename="../host/android/settings_widget.cc" line="179"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
@@ -7158,19 +7191,19 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="169"/>
-        <location filename="../host/android/settings_widget.cc" line="150"/>
+        <location filename="../host/android/settings_widget.cc" line="151"/>
         <source>About</source>
         <translation>關於</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="233"/>
-        <location filename="../host/android/settings_widget.cc" line="237"/>
+        <location filename="../host/android/settings_widget.cc" line="238"/>
         <source>Interface</source>
         <translation>介面</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="236"/>
-        <location filename="../host/android/settings_widget.cc" line="242"/>
+        <location filename="../host/android/settings_widget.cc" line="243"/>
         <source>Theme</source>
         <translation>佈景主題</translation>
     </message>
@@ -7181,7 +7214,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="261"/>
-        <location filename="../host/android/settings_widget.cc" line="258"/>
+        <location filename="../host/android/settings_widget.cc" line="259"/>
         <source>Security</source>
         <translation>安全性</translation>
     </message>
@@ -7282,7 +7315,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="390"/>
-        <location filename="../host/android/settings_widget.cc" line="380"/>
+        <location filename="../host/android/settings_widget.cc" line="381"/>
         <source>Updates</source>
         <translation>更新</translation>
     </message>
@@ -7293,31 +7326,31 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="401"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../host/android/settings_widget.cc" line="384"/>
         <source>Update channel</source>
         <translation>更新頻道</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="402"/>
-        <location filename="../host/android/settings_widget.cc" line="384"/>
+        <location filename="../host/android/settings_widget.cc" line="385"/>
         <source>Stable</source>
         <translation>穩定版</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="403"/>
-        <location filename="../host/android/settings_widget.cc" line="385"/>
+        <location filename="../host/android/settings_widget.cc" line="386"/>
         <source>Beta</source>
         <translation>測試版</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="404"/>
-        <location filename="../host/android/settings_widget.cc" line="386"/>
+        <location filename="../host/android/settings_widget.cc" line="387"/>
         <source>Alpha</source>
         <translation>早期測試版</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="396"/>
+        <location filename="../host/android/settings_widget.cc" line="398"/>
         <source>Check for updates</source>
         <translation>檢查更新</translation>
     </message>
@@ -7332,84 +7365,84 @@ Credentials imported: %5</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="159"/>
+        <location filename="../host/android/settings_widget.cc" line="160"/>
         <source>Users</source>
         <translation>使用者</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="168"/>
+        <location filename="../host/android/settings_widget.cc" line="169"/>
         <source>Edit User</source>
         <translation>編輯使用者</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="168"/>
+        <location filename="../host/android/settings_widget.cc" line="169"/>
         <source>Add User</source>
         <translation>新增使用者</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="260"/>
+        <location filename="../host/android/settings_widget.cc" line="261"/>
         <source>Manage users</source>
         <translation>管理使用者</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="268"/>
+        <location filename="../host/android/settings_widget.cc" line="269"/>
         <source>Change password</source>
         <translation>變更密碼</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="272"/>
+        <location filename="../host/android/settings_widget.cc" line="273"/>
         <source>Disable password protection</source>
         <translation>停用密碼保護</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="281"/>
+        <location filename="../host/android/settings_widget.cc" line="282"/>
         <source>Enable password protection</source>
         <translation>啟用密碼保護</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="296"/>
+        <location filename="../host/android/settings_widget.cc" line="297"/>
         <source>Router</source>
         <translation>路由器</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="301"/>
+        <location filename="../host/android/settings_widget.cc" line="302"/>
         <source>Enable the use of a router</source>
         <translation>啟用路由器的使用</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="306"/>
+        <location filename="../host/android/settings_widget.cc" line="307"/>
         <source>Address</source>
         <translation>位址</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="312"/>
+        <location filename="../host/android/settings_widget.cc" line="313"/>
         <source>Public Key</source>
         <translation>公開金鑰</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="317"/>
+        <location filename="../host/android/settings_widget.cc" line="318"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>當無法直接連線（繞過 NAT）到電腦時，就需要透過路由器進行連接。Aspia 不提供公共路由，但您可以自行搭建。您可從&lt;a href=&quot;https://aspia.org&quot;&gt;官網&lt;/a&gt;下載路由器。</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="410"/>
-        <location filename="../host/android/settings_widget.cc" line="430"/>
+        <location filename="../host/android/settings_widget.cc" line="412"/>
+        <location filename="../host/android/settings_widget.cc" line="432"/>
         <source>Error</source>
         <translation>錯誤</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="410"/>
-        <location filename="../host/android/settings_widget.cc" line="430"/>
+        <location filename="../host/android/settings_widget.cc" line="412"/>
+        <location filename="../host/android/settings_widget.cc" line="432"/>
         <source>An error occurred while processing the password.</source>
         <translation>處理密碼時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="451"/>
+        <location filename="../host/android/settings_widget.cc" line="453"/>
         <source>Import</source>
         <translation>匯入</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="451"/>
+        <location filename="../host/android/settings_widget.cc" line="453"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 檔案 (*.json)</translation>
     </message>
@@ -11502,6 +11535,196 @@ Credentials imported: %5</source>
         <location filename="../base/net/tcp_channel.cc" line="122"/>
         <source>An unknown error occurred.</source>
         <translation>發生未知的錯誤。</translation>
+    </message>
+</context>
+<context>
+    <name>TelemetryModel</name>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="150"/>
+        <source>Parameter</source>
+        <translation>參數</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="153"/>
+        <source>Value</source>
+        <translation>值</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="221"/>
+        <source>General</source>
+        <translation>一般</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="225"/>
+        <source>Service start time</source>
+        <translation>服務啟動時間</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="229"/>
+        <source>Service starts in 7 days</source>
+        <translation>過去 7 天服務啟動次數</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="240"/>
+        <source>Connections</source>
+        <translation>連線</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="246"/>
+        <source>Last incoming connection</source>
+        <translation>上次連入連線</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="251"/>
+        <source>Failed logins in 7 days</source>
+        <translation>過去 7 天登入失敗次數</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="256"/>
+        <source>Failed logins since service start</source>
+        <translation>服務啟動後登入失敗次數</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="269"/>
+        <source>Updates</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="273"/>
+        <source>Update channel</source>
+        <translation>更新頻道</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="279"/>
+        <source>Automatic updates</source>
+        <translation>自動更新</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="279"/>
+        <source>Enabled</source>
+        <translation>已啟用</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="279"/>
+        <source>Disabled</source>
+        <translation>已停用</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="286"/>
+        <source>Update check frequency</source>
+        <translation>更新檢查頻率</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/telemetry_model.cc" line="350"/>
+        <source>Every %n days</source>
+        <translation>
+            <numerusform>每 %n 天</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="291"/>
+        <source>Last update check</source>
+        <translation>上次更新檢查</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="297"/>
+        <source>Last update check result</source>
+        <translation>上次更新檢查結果</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="309"/>
+        <source>Users</source>
+        <translation>使用者</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="313"/>
+        <source>Total users</source>
+        <translation>使用者總數</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="317"/>
+        <source>Enabled users</source>
+        <translation>已啟用的使用者</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="328"/>
+        <source>Stable</source>
+        <translation>穩定版</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="330"/>
+        <source>Beta</source>
+        <translation>測試版</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="332"/>
+        <source>Alpha</source>
+        <translation>早期測試版</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="344"/>
+        <source>Once a day</source>
+        <translation>每天一次</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="346"/>
+        <source>Once a week</source>
+        <translation>每週一次</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="348"/>
+        <source>Once a month</source>
+        <translation>每月一次</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="358"/>
+        <source>No updates</source>
+        <translation>沒有更新</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="360"/>
+        <source>Check failed</source>
+        <translation>檢查失敗</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="362"/>
+        <source>Unsupported package</source>
+        <translation>不支援的套件</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="364"/>
+        <source>Download failed</source>
+        <translation>下載失敗</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="366"/>
+        <source>Damaged package</source>
+        <translation>套件已損壞</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="368"/>
+        <source>Installation failed</source>
+        <translation>安裝失敗</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="370"/>
+        <source>Installation started</source>
+        <translation>已開始安裝</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="372"/>
+        <source>Installation succeeded</source>
+        <translation>安裝成功</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="382"/>
+        <source>%1 or more</source>
+        <translation>%1 或更多</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="392"/>
+        <source>Never</source>
+        <translation>從不</translation>
     </message>
 </context>
 <context>

@@ -283,7 +283,7 @@ void TelemetryModel::parseUpdateGroup(const QJsonObject& update, QList<Group>* g
     if (check_frequency.isDouble())
     {
         group.parameters.append(
-            { tr("Update check frequency"), tr("Every %n days", "", check_frequency.toInt()) });
+            { tr("Update check frequency"), checkFrequencyName(check_frequency.toInt()) });
     }
 
     const QJsonValue last_check_time = update.value("last_check_time");
@@ -332,6 +332,22 @@ QString TelemetryModel::updateChannelName(const QString& channel)
         return tr("Alpha");
 
     return channel;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString TelemetryModel::checkFrequencyName(int days)
+{
+    // The host settings offer these three. Any other number of days comes only from an imported
+    // configuration.
+    if (days == 1)
+        return tr("Once a day");
+    else if (days == 7)
+        return tr("Once a week");
+    else if (days == 30)
+        return tr("Once a month");
+
+    return tr("Every %n days", "", days);
 }
 
 //--------------------------------------------------------------------------------------------------
