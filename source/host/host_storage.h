@@ -49,12 +49,23 @@ public:
     int serviceStartCount() const;
     void registerServiceStart();
 
+    qint64 lastClientConnectTime() const;
+    void setLastClientConnectTime(qint64 timepoint);
+
+    // The number of failed logins in the last 7 days and since the last start of the service.
+    int failedLoginCount() const;
+    int failedLoginCountSinceStart() const;
+    void registerFailedLogin();
+
     bool isBootToSafeMode() const;
     void setBootToSafeMode(bool enable);
 
 private:
     QList<qint64> serviceStarts() const;
     void setServiceStarts(const QList<qint64>& starts);
+
+    QList<qint64> failedLogins() const;
+    void setFailedLogins(const QList<qint64>& failed_logins);
 
     QSettings impl_;
 

@@ -22,8 +22,47 @@
 
 namespace {
 
-const qint64 kServiceStartPeriod = 7 * 24 * 60 * 60; // Seconds.
-const qsizetype kMaxServiceStarts = 1000;
+const qint64 kCountPeriod = 7 * 24 * 60 * 60; // Seconds.
+const qsizetype kMaxTimepoints = 1000;
+
+//--------------------------------------------------------------------------------------------------
+QList<qint64> readTimepoints(const QSettings& settings, const QString& key)
+{
+    QList<qint64> timepoints;
+    for (const QString& timepoint : settings.value(key).toStringList())
+        timepoints.append(timepoint.toLongLong());
+    return timepoints;
+}
+
+//--------------------------------------------------------------------------------------------------
+void writeTimepoints(QSettings& settings, const QString& key, const QList<qint64>& timepoints)
+{
+    QStringList list;
+    for (qint64 timepoint : timepoints)
+        list.append(QString::number(timepoint));
+    settings.setValue(key, list);
+}
+
+//--------------------------------------------------------------------------------------------------
+void appendTimepoint(QList<qint64>* timepoints, qint64 timepoint)
+{
+    while (timepoints->size() >= kMaxTimepoints)
+        timepoints->removeFirst();
+
+    timepoints->append(timepoint);
+}
+
+//--------------------------------------------------------------------------------------------------
+int countAfter(const QList<qint64>& timepoints, qint64 boundary)
+{
+    int count = 0;
+    for (qint64 timepoint : timepoints)
+    {
+        if (timepoint > boundary)
+            ++count;
+    }
+    return count;
+}
 
 } // namespace
 
@@ -115,16 +154,7 @@ qint64 HostStorage::serviceStartTime() const
 //--------------------------------------------------------------------------------------------------
 int HostStorage::serviceStartCount() const
 {
-    const qint64 current_time = std::time(nullptr);
-
-    int count = 0;
-    for (qint64 start : serviceStarts())
-    {
-        if (current_time - start < kServiceStartPeriod)
-            ++count;
-    }
-
-    return count;
+    return countAfter(serviceStarts(), std::time(nullptr) - kCountPeriod);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -135,34 +165,76 @@ void HostStorage::registerServiceStart()
     QList<qint64> starts = serviceStarts();
     starts.removeIf([current_time](qint64 start)
     {
-        return current_time - start >= kServiceStartPeriod;
+        return current_time - start >= kCountPeriod;
     });
-
-    // At the limit the oldest start gives way, so that the last start stays known.
-    while (starts.size() >= kMaxServiceStarts)
-        starts.removeFirst();
-
-    starts.append(current_time);
+    appendTimepoint(&starts, current_time);
 
     setServiceStarts(starts);
 }
 
 //--------------------------------------------------------------------------------------------------
+qint64 HostStorage::lastClientConnectTime() const
+{
+    return impl_.value("last_client_connect_time").toLongLong();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::setLastClientConnectTime(qint64 timepoint)
+{
+    impl_.setValue("last_client_connect_time", timepoint);
+}
+
+//--------------------------------------------------------------------------------------------------
+int HostStorage::failedLoginCount() const
+{
+    return countAfter(failedLogins(), std::time(nullptr) - kCountPeriod);
+}
+
+//--------------------------------------------------------------------------------------------------
+int HostStorage::failedLoginCountSinceStart() const
+{
+    return countAfter(failedLogins(), serviceStartTime() - 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::registerFailedLogin()
+{
+    const qint64 current_time = std::time(nullptr);
+    const qint64 start_time = serviceStartTime();
+
+    // A failed login is kept while it counts in the last 7 days or since the service start.
+    QList<qint64> failed_logins = failedLogins();
+    failed_logins.removeIf([current_time, start_time](qint64 failed_login)
+    {
+        return current_time - failed_login >= kCountPeriod && failed_login < start_time;
+    });
+    appendTimepoint(&failed_logins, current_time);
+
+    setFailedLogins(failed_logins);
+}
+
+//--------------------------------------------------------------------------------------------------
 QList<qint64> HostStorage::serviceStarts() const
 {
-    QList<qint64> starts;
-    for (const QString& start : impl_.value("service_starts").toStringList())
-        starts.append(start.toLongLong());
-    return starts;
+    return readTimepoints(impl_, "service_starts");
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostStorage::setServiceStarts(const QList<qint64>& starts)
 {
-    QStringList list;
-    for (qint64 start : starts)
-        list.append(QString::number(start));
-    impl_.setValue("service_starts", list);
+    writeTimepoints(impl_, "service_starts", starts);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<qint64> HostStorage::failedLogins() const
+{
+    return readTimepoints(impl_, "failed_logins");
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::setFailedLogins(const QList<qint64>& failed_logins)
+{
+    writeTimepoints(impl_, "failed_logins", failed_logins);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -24,6 +24,7 @@
 #include <QMutex>
 #include <QVariant>
 
+#include <ctime>
 #include <optional>
 
 #include "base/build_config.h"
@@ -122,6 +123,16 @@ void ServerWorker::onPrepare()
     // Created here (on the I/O thread) so its asio acceptor binds to this thread's io_context.
     tcp_server_ = new TcpServer(this);
     connect(tcp_server_, &TcpServer::sig_newConnection, this, &ServerWorker::onNewConnection);
+    connect(tcp_server_, &TcpServer::sig_errorOccurred, this,
+            [this](const QString& /* address */, const QString& username)
+    {
+        if (username.isEmpty())
+            return;
+
+        HostStorage().registerFailedLogin();
+        if (router_manager_)
+            router_manager_->onTelemetryChanged();
+    });
 
     tcp_server_->setMaxPendingConnections(kMaxPendingConnections);
     tcp_server_->setMaxConnectionsPerMinute(kMaxConnectionsPerMinute);
@@ -232,6 +243,10 @@ void ServerWorker::onClientStarted()
         return;
 
     LOG(INFO) << "Client started:" << client->clientId();
+
+    HostStorage().setLastClientConnectTime(std::time(nullptr));
+    if (router_manager_)
+        router_manager_->onTelemetryChanged();
 
     ClientInfo info;
     info.client_id = client->clientId();

@@ -69,7 +69,7 @@ public slots:
     void onOneTimeSessionsChanged(quint32 one_time_sessions);
     void onNewOneTimePassword();
     void onUserSessionAttached();
-    void onUpdateCheckFinished();
+    void onTelemetryChanged();
 
 signals:
     void sig_routerStateChanged(const proto::user::RouterState& state);
@@ -90,7 +90,6 @@ private:
     void delayedConnectToRouter();
     void routerStateChanged(proto::user::RouterState::State state);
     void hostIdRequest();
-    void markTelemetryOutdated();
     void sendTelemetry();
     void readConnectionOffer(const proto::router::ConnectionOffer& offer);
     void renewOneTimePassword();
@@ -117,7 +116,8 @@ private:
     bool telemetry_outdated_ = false;
     TimePoint next_telemetry_time_ = TimePoint::min();
     int service_start_count_ = 0;
-    TimePoint service_start_count_check_time_ = TimePoint::max();
+    int failed_login_count_ = 0;
+    TimePoint count_check_time_ = TimePoint::max();
 
     QQueue<ReadyConnection> channels_;
 

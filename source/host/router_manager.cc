@@ -41,7 +41,7 @@ namespace {
 
 const Seconds kReconnectTimeout{ 10 };
 const Minutes kTelemetryInterval{ 1 };
-const Minutes kServiceStartCountCheckInterval{ 30 };
+const Minutes kCountCheckInterval{ 30 };
 
 } // namespace
 
@@ -129,7 +129,7 @@ void RouterManager::onSettingsChanged()
     }
 
     emit sig_credentialsChanged(host_id_, one_time_password_);
-    markTelemetryOutdated();
+    onTelemetryChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -160,9 +160,9 @@ void RouterManager::onUserSessionAttached()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManager::onUpdateCheckFinished()
+void RouterManager::onTelemetryChanged()
 {
-    markTelemetryOutdated();
+    telemetry_outdated_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -359,12 +359,17 @@ void RouterManager::onTimer(TimePoint now)
         connectToRouter();
     }
 
-    // The count of service starts drops as they leave the last 7 days.
-    if (now >= service_start_count_check_time_)
+    // The counts over the last 7 days drop while the service runs.
+    if (now >= count_check_time_)
     {
-        service_start_count_check_time_ = now + kServiceStartCountCheckInterval;
-        if (HostStorage().serviceStartCount() != service_start_count_)
-            markTelemetryOutdated();
+        count_check_time_ = now + kCountCheckInterval;
+
+        HostStorage storage;
+        if (storage.serviceStartCount() != service_start_count_ ||
+            storage.failedLoginCount() != failed_login_count_)
+        {
+            onTelemetryChanged();
+        }
     }
 
     if (telemetry_outdated_ && now >= next_telemetry_time_)
@@ -452,12 +457,6 @@ void RouterManager::hostIdRequest()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManager::markTelemetryOutdated()
-{
-    telemetry_outdated_ = true;
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterManager::sendTelemetry()
 {
     if (!tcp_channel_ || !tcp_channel_->isAuthenticated() || host_id_ == kInvalidHostId)
@@ -467,11 +466,17 @@ void RouterManager::sendTelemetry()
     SystemSettings settings;
 
     service_start_count_ = storage.serviceStartCount();
-    service_start_count_check_time_ = Clock::now() + kServiceStartCountCheckInterval;
+    failed_login_count_ = storage.failedLoginCount();
+    count_check_time_ = Clock::now() + kCountCheckInterval;
 
     QJsonObject general;
     general.insert("start_time", storage.serviceStartTime());
     general.insert("start_count", service_start_count_);
+
+    QJsonObject connects;
+    connects.insert("last_connect_time", storage.lastClientConnectTime());
+    connects.insert("failed_logins", failed_login_count_);
+    connects.insert("failed_logins_since_start", storage.failedLoginCountSinceStart());
 
     QJsonObject update;
     update.insert("channel", settings.updateChannel());
@@ -502,6 +507,7 @@ void RouterManager::sendTelemetry()
     QJsonObject telemetry;
     telemetry.insert("version", proto::router::kTelemetryVersion);
     telemetry.insert("general", general);
+    telemetry.insert("connects", connects);
     telemetry.insert("update", update);
     telemetry.insert("users", users);
 
@@ -531,6 +537,16 @@ void RouterManager::readConnectionOffer(const proto::router::ConnectionOffer& of
     // itself by name and password over SRP.
     ScopedQPointer<ServerAuthenticator> authenticator(new ServerAuthenticator());
     authenticator->setUserList(user_list_);
+
+    connect(authenticator.get(), &Authenticator::sig_finished,
+            this, [this](Authenticator::ErrorCode error_code)
+    {
+        if (error_code != Authenticator::ErrorCode::ACCESS_DENIED)
+            return;
+
+        HostStorage().registerFailedLogin();
+        onTelemetryChanged();
+    });
 
     peer_manager_->addConnectionOffer(offer, authenticator.release());
 }

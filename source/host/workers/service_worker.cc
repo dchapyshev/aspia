@@ -22,6 +22,8 @@
 #include <QFileInfo>
 #include <QFileSystemWatcher>
 
+#include <ctime>
+
 #include "base/build_config.h"
 #include "base/core_application.h"
 #include "base/location.h"
@@ -150,9 +152,16 @@ void ServiceWorker::onPrepare()
     tcp_server_ = new TcpServer(this);
     connect(tcp_server_, &TcpServer::sig_newConnection, this, &ServiceWorker::onNewDirectConnection);
 
-    connect(tcp_server_, &TcpServer::sig_errorOccurred, [](const QString& address, const QString& username)
+    connect(tcp_server_, &TcpServer::sig_errorOccurred, this, [this](const QString& address, const QString& username)
     {
         SLOG(ERROR) << "[connection failed] address:" << address << "user:" << username;
+
+        if (!username.isEmpty())
+        {
+            HostStorage().registerFailedLogin();
+            if (router_manager_)
+                router_manager_->onTelemetryChanged();
+        }
     });
 
     // A host serves a single user - only a handful of simultaneous handshakes and a low
@@ -723,6 +732,10 @@ void ServiceWorker::startClient(const PendingConfirmation& pending)
                   << ", computer name:" << client_to_start->computerName()
                   << ", version:" << client_to_start->version().toString() << ")";
 
+    HostStorage().setLastClientConnectTime(std::time(nullptr));
+    if (router_manager_)
+        router_manager_->onTelemetryChanged();
+
     clients_.append(client_to_start);
     client_to_start->start(pending.stun_host, pending.stun_port);
 }
@@ -749,7 +762,7 @@ void ServiceWorker::connectToRouter(const Location& location)
     connect(router_manager_, &RouterManager::sig_checkUpdates,
             update_worker, &UpdateWorker::onCheckUpdates, Qt::QueuedConnection);
     connect(update_worker, &UpdateWorker::sig_updateCheckFinished,
-            router_manager_, &RouterManager::onUpdateCheckFinished, Qt::QueuedConnection);
+            router_manager_, &RouterManager::onTelemetryChanged, Qt::QueuedConnection);
 
     connect(user_session_, &UserSession::sig_changeOneTimeSessions, router_manager_, &RouterManager::onOneTimeSessionsChanged);
     connect(user_session_, &UserSession::sig_changeOneTimePassword, router_manager_, &RouterManager::onNewOneTimePassword);

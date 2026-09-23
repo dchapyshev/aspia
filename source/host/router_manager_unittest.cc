@@ -782,7 +782,7 @@ TEST_F(RouterManagerTest, TelemetryIsSentAfterAnUpdateCheck)
     HostStorage storage;
     storage.setLastUpdateCheck(2000);
     storage.setUpdateCheckResult("check_failed");
-    host_worker_->invoke([this]() { manager_->onUpdateCheckFinished(); });
+    host_worker_->invoke([this]() { manager_->onTelemetryChanged(); });
 
     timer.fireTimer(now + Minutes(1));
     ASSERT_TRUE(waitFor([this]() { return telemetry_received_.load() >= 2; }));
@@ -857,6 +857,33 @@ TEST_F(RouterManagerTest, TelemetryCountsServiceStarts)
     general = QJsonDocument::fromJson(
         QByteArray::fromStdString(last_telemetry_.json())).object().value("general").toObject();
     EXPECT_EQ(general.value("start_count").toInt(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The report carries the last incoming connection and the failed logins of the last 7 days and
+// since the service start.
+TEST_F(RouterManagerTest, TelemetryCarriesConnects)
+{
+    const qint64 current_time = std::time(nullptr);
+
+    QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "aspia", "host_storage");
+    settings.setValue("service_starts", QStringList{ QString::number(current_time - 100) });
+    settings.setValue("failed_logins", QStringList{ QString::number(current_time - 200),
+                                                    QString::number(current_time - 50) });
+    settings.setValue("last_client_connect_time", 5000);
+    settings.sync();
+
+    startManager();
+
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+    sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
+    ASSERT_TRUE(waitFor([this]() { return telemetry_received_.load() >= 1; }));
+
+    const QJsonObject connects = QJsonDocument::fromJson(
+        QByteArray::fromStdString(last_telemetry_.json())).object().value("connects").toObject();
+    EXPECT_EQ(connects.value("last_connect_time").toInteger(), 5000);
+    EXPECT_EQ(connects.value("failed_logins").toInt(), 2);
+    EXPECT_EQ(connects.value("failed_logins_since_start").toInt(), 1);
 }
 
 //--------------------------------------------------------------------------------------------------

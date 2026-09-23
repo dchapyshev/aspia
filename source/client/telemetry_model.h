@@ -74,10 +74,12 @@ private:
     static Status parse(const QByteArray& json, QList<Group>* groups);
     static void parseVersion1(const QJsonObject& telemetry, QList<Group>* groups);
     static void parseGeneralGroup(const QJsonObject& general, QList<Group>* groups);
+    static void parseConnectsGroup(const QJsonObject& connects, QList<Group>* groups);
     static void parseUpdateGroup(const QJsonObject& update, QList<Group>* groups);
     static void parseUsersGroup(const QJsonObject& users, QList<Group>* groups);
     static QString updateChannelName(const QString& channel);
     static QString checkResultName(const QString& result);
+    static QString countToString(int count);
     static QString timeToString(qint64 time);
 
     QList<Group> groups_;

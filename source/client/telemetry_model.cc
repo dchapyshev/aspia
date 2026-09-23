@@ -32,8 +32,8 @@ namespace {
 // The internal id of a group row. A parameter row carries the row of its group plus one.
 const quintptr kGroupId = 0;
 
-// The host keeps no more starts of the service than this.
-const int kMaxServiceStartCount = 1000;
+// The host keeps no more events of a kind (service starts, failed logins) than this.
+const int kMaxEventCount = 1000;
 
 } // namespace
 
@@ -204,6 +204,10 @@ void TelemetryModel::parseVersion1(const QJsonObject& telemetry, QList<Group>* g
     if (update.isObject())
         parseUpdateGroup(update.toObject(), groups);
 
+    const QJsonValue connects = telemetry.value("connects");
+    if (connects.isObject())
+        parseConnectsGroup(connects.toObject(), groups);
+
     const QJsonValue users = telemetry.value("users");
     if (users.isObject())
         parseUsersGroup(users.toObject(), groups);
@@ -222,10 +226,35 @@ void TelemetryModel::parseGeneralGroup(const QJsonObject& general, QList<Group>*
 
     const QJsonValue start_count = general.value("start_count");
     if (start_count.isDouble())
+        group.parameters.append({ tr("Service starts in 7 days"), countToString(start_count.toInt()) });
+
+    if (!group.parameters.isEmpty())
+        groups->append(group);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void TelemetryModel::parseConnectsGroup(const QJsonObject& connects, QList<Group>* groups)
+{
+    Group group;
+    group.name = tr("Connections");
+
+    const QJsonValue last_connect_time = connects.value("last_connect_time");
+    if (last_connect_time.isDouble())
     {
-        const int count = start_count.toInt();
-        group.parameters.append({ tr("Service starts in 7 days"), count >= kMaxServiceStartCount ?
-            tr("%1 or more").arg(kMaxServiceStartCount) : QString::number(count) });
+        group.parameters.append(
+            { tr("Last incoming connection"), timeToString(last_connect_time.toInteger()) });
+    }
+
+    const QJsonValue failed_logins = connects.value("failed_logins");
+    if (failed_logins.isDouble())
+        group.parameters.append({ tr("Failed logins in 7 days"), countToString(failed_logins.toInt()) });
+
+    const QJsonValue failed_logins_since_start = connects.value("failed_logins_since_start");
+    if (failed_logins_since_start.isDouble())
+    {
+        group.parameters.append({ tr("Failed logins since service start"),
+                                  countToString(failed_logins_since_start.toInt()) });
     }
 
     if (!group.parameters.isEmpty())
@@ -327,6 +356,16 @@ QString TelemetryModel::checkResultName(const QString& result)
         return tr("Installation succeeded");
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString TelemetryModel::countToString(int count)
+{
+    if (count >= kMaxEventCount)
+        return tr("%1 or more").arg(kMaxEventCount);
+
+    return QString::number(count);
 }
 
 //--------------------------------------------------------------------------------------------------

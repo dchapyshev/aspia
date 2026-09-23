@@ -45,15 +45,20 @@ protected:
         QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, temp_dir_.path());
     }
 
-    // Writes the starts of the service the way the storage keeps them.
-    static void setServiceStarts(const QList<qint64>& starts)
+    // Writes a list of timepoints the way the storage keeps them.
+    static void setTimepoints(const QString& key, const QList<qint64>& timepoints)
     {
         QStringList list;
-        for (qint64 start : starts)
-            list.append(QString::number(start));
+        for (qint64 timepoint : timepoints)
+            list.append(QString::number(timepoint));
 
         QSettings(QSettings::IniFormat, QSettings::SystemScope, "aspia", "host_storage")
-            .setValue("service_starts", list);
+            .setValue(key, list);
+    }
+
+    static void setServiceStarts(const QList<qint64>& starts)
+    {
+        setTimepoints("service_starts", starts);
     }
 
     QTemporaryDir temp_dir_;
@@ -74,6 +79,24 @@ TEST_F(HostStorageTest, ServiceStartsOfTheLastWeekAreCounted)
 
     EXPECT_GE(storage.serviceStartTime(), current_time);
     EXPECT_EQ(storage.serviceStartCount(), 2);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Failed logins are counted over the last 7 days and since the last start of the service.
+TEST_F(HostStorageTest, FailedLoginsAreCounted)
+{
+    const qint64 current_time = std::time(nullptr);
+    setServiceStarts({ current_time - 100 });
+    setTimepoints("failed_logins", { current_time - kPeriod - 60, current_time - 200, current_time - 50 });
+
+    HostStorage storage;
+    EXPECT_EQ(storage.failedLoginCount(), 2);
+    EXPECT_EQ(storage.failedLoginCountSinceStart(), 1);
+
+    storage.registerFailedLogin();
+
+    EXPECT_EQ(storage.failedLoginCount(), 3);
+    EXPECT_EQ(storage.failedLoginCountSinceStart(), 2);
 }
 
 //--------------------------------------------------------------------------------------------------
