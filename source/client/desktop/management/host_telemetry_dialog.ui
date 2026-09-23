@@ -19,6 +19,15 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTreeView" name="tree_telemetry">
+     <property name="indentation">
+      <number>20</number>
+     </property>
+     <property name="rootIsDecorated">
+      <bool>false</bool>
+     </property>
+     <property name="itemsExpandable">
+      <bool>false</bool>
+     </property>
      <property name="uniformRowHeights">
       <bool>true</bool>
      </property>
