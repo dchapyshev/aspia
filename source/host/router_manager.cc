@@ -41,6 +41,7 @@ namespace {
 
 const Seconds kReconnectTimeout{ 10 };
 const Minutes kTelemetryInterval{ 1 };
+const Minutes kServiceStartCountCheckInterval{ 30 };
 
 } // namespace
 
@@ -358,6 +359,14 @@ void RouterManager::onTimer(TimePoint now)
         connectToRouter();
     }
 
+    // The count of service starts drops as they leave the last 7 days.
+    if (now >= service_start_count_check_time_)
+    {
+        service_start_count_check_time_ = now + kServiceStartCountCheckInterval;
+        if (HostStorage().serviceStartCount() != service_start_count_)
+            markTelemetryOutdated();
+    }
+
     if (telemetry_outdated_ && now >= next_telemetry_time_)
         sendTelemetry();
 }
@@ -454,7 +463,15 @@ void RouterManager::sendTelemetry()
     if (!tcp_channel_ || !tcp_channel_->isAuthenticated() || host_id_ == kInvalidHostId)
         return;
 
+    HostStorage storage;
     SystemSettings settings;
+
+    service_start_count_ = storage.serviceStartCount();
+    service_start_count_check_time_ = Clock::now() + kServiceStartCountCheckInterval;
+
+    QJsonObject general;
+    general.insert("start_time", storage.serviceStartTime());
+    general.insert("start_count", service_start_count_);
 
     QJsonObject update;
     update.insert("channel", settings.updateChannel());
@@ -462,8 +479,6 @@ void RouterManager::sendTelemetry()
     // The mobile host checks for updates only on request.
     update.insert("auto_update", settings.isAutoUpdateEnabled());
     update.insert("check_frequency", settings.updateCheckFrequency());
-
-    HostStorage storage;
     update.insert("last_check_time", storage.lastUpdateCheck());
 
     const QString check_result = storage.updateCheckResult();
@@ -486,6 +501,7 @@ void RouterManager::sendTelemetry()
 
     QJsonObject telemetry;
     telemetry.insert("version", proto::router::kTelemetryVersion);
+    telemetry.insert("general", general);
     telemetry.insert("update", update);
     telemetry.insert("users", users);
 

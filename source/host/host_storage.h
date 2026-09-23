@@ -44,10 +44,18 @@ public:
     QString updateInstallVersion() const;
     void setUpdateInstallVersion(const QString& version);
 
+    // The last start of the service and the number of its starts in the last 7 days.
+    qint64 serviceStartTime() const;
+    int serviceStartCount() const;
+    void registerServiceStart();
+
     bool isBootToSafeMode() const;
     void setBootToSafeMode(bool enable);
 
 private:
+    QList<qint64> serviceStarts() const;
+    void setServiceStarts(const QList<qint64>& starts);
+
     QSettings impl_;
 
     Q_DISABLE_COPY_MOVE(HostStorage)

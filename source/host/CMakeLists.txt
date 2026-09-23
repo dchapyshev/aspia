@@ -152,6 +152,7 @@ list(APPEND SOURCE_HOST_TESTS
     audio_silence_detector_unittest.cc
     capture_scheduler_unittest.cc
     database_unittest.cc
+    host_storage_unittest.cc
     host_user_list_unittest.cc
     router_manager_unittest.cc
     scale_reducer_unittest.cc

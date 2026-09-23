@@ -18,6 +18,15 @@
 
 #include "host/host_storage.h"
 
+#include <ctime>
+
+namespace {
+
+const qint64 kServiceStartPeriod = 7 * 24 * 60 * 60; // Seconds.
+const qsizetype kMaxServiceStarts = 1000;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 HostStorage::HostStorage()
     // The desktop host runs as a system service and keeps these values machine-wide (SystemScope). On
@@ -94,6 +103,66 @@ QString HostStorage::updateInstallVersion() const
 void HostStorage::setUpdateInstallVersion(const QString& version)
 {
     impl_.setValue("update_install_version", version);
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 HostStorage::serviceStartTime() const
+{
+    const QList<qint64> starts = serviceStarts();
+    return starts.isEmpty() ? 0 : starts.last();
+}
+
+//--------------------------------------------------------------------------------------------------
+int HostStorage::serviceStartCount() const
+{
+    const qint64 current_time = std::time(nullptr);
+
+    int count = 0;
+    for (qint64 start : serviceStarts())
+    {
+        if (current_time - start < kServiceStartPeriod)
+            ++count;
+    }
+
+    return count;
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::registerServiceStart()
+{
+    const qint64 current_time = std::time(nullptr);
+
+    QList<qint64> starts = serviceStarts();
+    starts.removeIf([current_time](qint64 start)
+    {
+        return current_time - start >= kServiceStartPeriod;
+    });
+
+    // At the limit the oldest start gives way, so that the last start stays known.
+    while (starts.size() >= kMaxServiceStarts)
+        starts.removeFirst();
+
+    starts.append(current_time);
+
+    setServiceStarts(starts);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<qint64> HostStorage::serviceStarts() const
+{
+    QList<qint64> starts;
+    for (const QString& start : impl_.value("service_starts").toStringList())
+        starts.append(start.toLongLong());
+    return starts;
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::setServiceStarts(const QList<qint64>& starts)
+{
+    QStringList list;
+    for (qint64 start : starts)
+        list.append(QString::number(start));
+    impl_.setValue("service_starts", list);
 }
 
 //--------------------------------------------------------------------------------------------------

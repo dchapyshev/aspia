@@ -116,6 +116,8 @@ private:
 
     bool telemetry_outdated_ = false;
     TimePoint next_telemetry_time_ = TimePoint::min();
+    int service_start_count_ = 0;
+    TimePoint service_start_count_check_time_ = TimePoint::max();
 
     QQueue<ReadyConnection> channels_;
 

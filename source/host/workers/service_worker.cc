@@ -172,6 +172,7 @@ void ServiceWorker::onStart()
         return;
 
     LOG(INFO) << "Starting the host server";
+    HostStorage().registerServiceStart();
 
     user_session_->start();
 

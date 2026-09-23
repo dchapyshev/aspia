@@ -32,6 +32,9 @@ namespace {
 // The internal id of a group row. A parameter row carries the row of its group plus one.
 const quintptr kGroupId = 0;
 
+// The host keeps no more starts of the service than this.
+const int kMaxServiceStartCount = 1000;
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -193,6 +196,10 @@ TelemetryModel::Status TelemetryModel::parse(const QByteArray& json, QList<Group
 // static
 void TelemetryModel::parseVersion1(const QJsonObject& telemetry, QList<Group>* groups)
 {
+    const QJsonValue general = telemetry.value("general");
+    if (general.isObject())
+        parseGeneralGroup(general.toObject(), groups);
+
     const QJsonValue update = telemetry.value("update");
     if (update.isObject())
         parseUpdateGroup(update.toObject(), groups);
@@ -200,6 +207,29 @@ void TelemetryModel::parseVersion1(const QJsonObject& telemetry, QList<Group>* g
     const QJsonValue users = telemetry.value("users");
     if (users.isObject())
         parseUsersGroup(users.toObject(), groups);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void TelemetryModel::parseGeneralGroup(const QJsonObject& general, QList<Group>* groups)
+{
+    Group group;
+    group.name = tr("General");
+
+    const QJsonValue start_time = general.value("start_time");
+    if (start_time.isDouble())
+        group.parameters.append({ tr("Service start time"), timeToString(start_time.toInteger()) });
+
+    const QJsonValue start_count = general.value("start_count");
+    if (start_count.isDouble())
+    {
+        const int count = start_count.toInt();
+        group.parameters.append({ tr("Service starts in 7 days"), count >= kMaxServiceStartCount ?
+            tr("%1 or more").arg(kMaxServiceStartCount) : QString::number(count) });
+    }
+
+    if (!group.parameters.isEmpty())
+        groups->append(group);
 }
 
 //--------------------------------------------------------------------------------------------------

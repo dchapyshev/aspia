@@ -36,6 +36,7 @@
 #include "base/peer/user_list.h"
 #include "host/client.h"
 #include "host/database.h"
+#include "host/host_storage.h"
 #include "host/host_user_list.h"
 #include "host/router_manager.h"
 #include "host/user_settings.h"
@@ -143,6 +144,8 @@ void ServerWorker::onPrepare()
 //--------------------------------------------------------------------------------------------------
 void ServerWorker::onStart()
 {
+    HostStorage().registerServiceStart();
+
     const quint16 port = Database::instance().tcpPort();
     tcp_server_->start(port);
 

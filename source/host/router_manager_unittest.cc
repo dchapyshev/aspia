@@ -34,6 +34,7 @@
 #include <array>
 #include <atomic>
 #include <condition_variable>
+#include <ctime>
 #include <memory>
 #include <mutex>
 #include <thread>
@@ -70,6 +71,9 @@ constexpr MilliSeconds kPasswordExpire{ 60 * 1000 };
 
 const HostId kHostId = 1234;
 const char kHostKey[] = "the-key-the-router-issued";
+
+// HostStorage, the period the starts of the service are counted over.
+const qint64 kServiceStartPeriod = 7 * 24 * 60 * 60;
 
 // The loopback port range the stand probes for its listener.
 constexpr quint16 kFirstPort = 48111;
@@ -816,6 +820,43 @@ TEST_F(RouterManagerTest, TelemetryCountsUsers)
 
     EXPECT_EQ(last_telemetry_.json().find("john"), std::string::npos);
     EXPECT_EQ(last_telemetry_.json().find("mary"), std::string::npos);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The report carries the last start of the service and the number of starts in the last 7 days.
+// When a start leaves them, the host reports the smaller number by itself.
+TEST_F(RouterManagerTest, TelemetryCountsServiceStarts)
+{
+    const qint64 current_time = std::time(nullptr);
+
+    QStringList starts;
+    starts.append(QString::number(current_time - kServiceStartPeriod - 60));
+    starts.append(QString::number(current_time - kServiceStartPeriod + 2));
+    starts.append(QString::number(current_time - 60));
+    QSettings(QSettings::IniFormat, QSettings::SystemScope, "aspia", "host_storage")
+        .setValue("service_starts", starts);
+
+    startManager();
+
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+    sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
+    ASSERT_TRUE(waitFor([this]() { return telemetry_received_.load() >= 1; }));
+
+    QJsonObject general = QJsonDocument::fromJson(
+        QByteArray::fromStdString(last_telemetry_.json())).object().value("general").toObject();
+    EXPECT_EQ(general.value("start_time").toInteger(), current_time - 60);
+    EXPECT_EQ(general.value("start_count").toInt(), 2);
+
+    // The days are counted by the wall clock, so the test waits until the start really leaves them.
+    std::this_thread::sleep_for(Seconds(3));
+
+    RouterManagerTestPeer timer(host_worker_, manager_);
+    timer.fireTimer(Clock::now() + Minutes(31));
+    ASSERT_TRUE(waitFor([this]() { return telemetry_received_.load() >= 2; }));
+
+    general = QJsonDocument::fromJson(
+        QByteArray::fromStdString(last_telemetry_.json())).object().value("general").toObject();
+    EXPECT_EQ(general.value("start_count").toInt(), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
