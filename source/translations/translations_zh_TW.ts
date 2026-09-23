@@ -2446,24 +2446,6 @@ Password: %2</source>
     </message>
 </context>
 <context>
-    <name>DownloadDialog</name>
-    <message>
-        <location filename="../common/desktop/download_dialog.ui" line="14"/>
-        <source>Downloading</source>
-        <translation>正在下載</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/download_dialog.ui" line="26"/>
-        <source>Downloading update in progress...</source>
-        <translation>正在下載更新...</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/download_dialog.cc" line="64"/>
-        <source>An error occurred while downloading the update: %1</source>
-        <translation>下載更新時發生錯誤：%1</translation>
-    </message>
-</context>
-<context>
     <name>FileError</name>
     <message>
         <location filename="../client/file_error_code.cc" line="33"/>
@@ -3297,8 +3279,8 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
-        <source>Last Connect</source>
-        <translation>上次連線</translation>
+        <source>Last Online</source>
+        <translation>上次上線</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
@@ -11686,7 +11668,7 @@ Credentials imported: %5</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.ui" line="44"/>
+        <location filename="../common/desktop/update_dialog.cc" line="364"/>
         <source>Checking for updates</source>
         <translation>正在檢查更新</translation>
     </message>
@@ -11711,75 +11693,95 @@ Credentials imported: %5</source>
         <translation>更新說明：</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.ui" line="181"/>
+        <location filename="../common/desktop/update_dialog.ui" line="185"/>
+        <source>Downloading update in progress...</source>
+        <translation>正在下載更新...</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.ui" line="223"/>
         <source>Update now!</source>
         <translation>立即更新！</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.ui" line="188"/>
+        <location filename="../common/desktop/update_dialog.cc" line="369"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="63"/>
+        <location filename="../common/desktop/update_dialog.cc" line="70"/>
         <source>Receiving information...</source>
         <translation>正在接收資訊...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="137"/>
+        <location filename="../common/desktop/update_dialog.cc" line="152"/>
         <source>Install the update yourself: %1</source>
         <translation>請自行安裝更新：%1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="143"/>
+        <location filename="../common/desktop/update_dialog.cc" line="158"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>將下載更新。下載完成後，應用程式將自動關閉。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="145"/>
+        <location filename="../common/desktop/update_dialog.cc" line="160"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>所有已連線的工作階段將被終止。更新完成前無法建立連線。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="147"/>
+        <location filename="../common/desktop/update_dialog.cc" line="162"/>
         <source>All unsaved data will be lost.</source>
         <translation>所有未儲存的資料將會遺失。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="148"/>
+        <location filename="../common/desktop/update_dialog.cc" line="163"/>
         <source>Continue?</source>
         <translation>要繼續嗎？</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="176"/>
-        <location filename="../common/desktop/update_dialog.cc" line="201"/>
-        <location filename="../common/desktop/update_dialog.cc" line="210"/>
-        <location filename="../common/desktop/update_dialog.cc" line="232"/>
+        <location filename="../common/desktop/update_dialog.cc" line="193"/>
+        <location filename="../common/desktop/update_dialog.cc" line="213"/>
+        <location filename="../common/desktop/update_dialog.cc" line="235"/>
+        <location filename="../common/desktop/update_dialog.cc" line="331"/>
         <source>An error occurred while installing the update.</source>
         <translation>安裝更新時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="199"/>
+        <location filename="../common/desktop/update_dialog.cc" line="304"/>
+        <source>An error occurred while downloading the update: %1</source>
+        <translation>下載更新時發生錯誤：%1</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="329"/>
         <source>The downloaded file is damaged.</source>
         <translation>下載的檔案已損壞。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="278"/>
+        <location filename="../common/desktop/update_dialog.cc" line="364"/>
+        <source>Downloading the update</source>
+        <translation>正在下載更新</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="369"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="281"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="279"/>
+        <location filename="../common/desktop/update_dialog.cc" line="282"/>
         <source>Error retrieving update information.</source>
         <translation>取得更新資訊時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="289"/>
+        <location filename="../common/desktop/update_dialog.cc" line="339"/>
         <source>Installing the update. Please wait.</source>
         <translation>正在安裝更新。請稍候。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="254"/>
+        <location filename="../common/desktop/update_dialog.cc" line="257"/>
         <source>No updates available.</source>
         <translation>沒有可用的更新。</translation>
     </message>
@@ -11787,87 +11789,87 @@ Credentials imported: %5</source>
 <context>
     <name>UpdateWidget</name>
     <message>
-        <location filename="../common/android/update_widget.cc" line="63"/>
-        <location filename="../common/android/update_widget.cc" line="218"/>
-        <location filename="../common/android/update_widget.cc" line="227"/>
-        <location filename="../common/android/update_widget.cc" line="237"/>
-        <location filename="../common/android/update_widget.cc" line="305"/>
+        <location filename="../common/android/update_widget.cc" line="76"/>
+        <location filename="../common/android/update_widget.cc" line="261"/>
+        <location filename="../common/android/update_widget.cc" line="270"/>
+        <location filename="../common/android/update_widget.cc" line="280"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="73"/>
+        <location filename="../common/android/update_widget.cc" line="82"/>
+        <source>Check again</source>
+        <translation>重新檢查</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="85"/>
+        <source>What&apos;s new</source>
+        <translation>新功能</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="198"/>
+        <location filename="../common/android/update_widget.cc" line="347"/>
         <source>Installed version: %1</source>
         <translation>已安裝版本：%1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="111"/>
+        <location filename="../common/android/update_widget.cc" line="158"/>
         <source>Receiving information...</source>
         <translation>正在接收資訊...</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="132"/>
+        <location filename="../common/android/update_widget.cc" line="180"/>
         <source>No updates available.</source>
         <translation>沒有可用的更新。</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="298"/>
-        <source>Version %1 is available.</source>
-        <translation>版本 %1 已可使用。</translation>
-    </message>
-    <message>
-        <location filename="../common/android/update_widget.cc" line="150"/>
+        <location filename="../common/android/update_widget.cc" line="199"/>
         <source>Error retrieving update information.</source>
         <translation>取得更新資訊時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="174"/>
+        <location filename="../common/android/update_widget.cc" line="228"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>下載更新時發生錯誤：%1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="197"/>
+        <location filename="../common/android/update_widget.cc" line="249"/>
         <source>The downloaded file is damaged.</source>
         <translation>下載的檔案已損壞。</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="199"/>
-        <location filename="../common/android/update_widget.cc" line="257"/>
+        <location filename="../common/android/update_widget.cc" line="251"/>
+        <location filename="../common/android/update_widget.cc" line="307"/>
         <source>An error occurred while installing the update.</source>
         <translation>安裝更新時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="219"/>
+        <location filename="../common/android/update_widget.cc" line="262"/>
         <source>Install the update yourself: %1</source>
         <translation>請自行安裝更新：%1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="228"/>
+        <location filename="../common/android/update_widget.cc" line="271"/>
         <source>To install the update, allow this application to install unknown apps on the next screen.</source>
         <translation>若要安裝更新，請在下一個畫面允許此應用程式安裝不明應用程式。</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="229"/>
+        <location filename="../common/android/update_widget.cc" line="272"/>
         <source>Allow</source>
         <translation>允許</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="238"/>
+        <location filename="../common/android/update_widget.cc" line="281"/>
         <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
         <translation>將下載更新。所有已連線的工作階段將被終止，所有未儲存的資料將會遺失。</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="239"/>
+        <location filename="../common/android/update_widget.cc" line="282"/>
         <source>Continue</source>
         <translation>繼續</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="270"/>
-        <source>Cancel</source>
-        <translation>取消</translation>
-    </message>
-    <message>
-        <location filename="../common/android/update_widget.cc" line="274"/>
+        <location filename="../common/android/update_widget.cc" line="321"/>
         <source>Downloading the update. Please wait.</source>
         <translation>正在下載更新。請稍候。</translation>
     </message>

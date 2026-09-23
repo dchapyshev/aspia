@@ -2453,24 +2453,6 @@ Password: %2</source>
     </message>
 </context>
 <context>
-    <name>DownloadDialog</name>
-    <message>
-        <location filename="../common/desktop/download_dialog.ui" line="14"/>
-        <source>Downloading</source>
-        <translation>מוריד</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/download_dialog.ui" line="26"/>
-        <source>Downloading update in progress...</source>
-        <translation>הורדת העדכון מתבצעת...</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/download_dialog.cc" line="64"/>
-        <source>An error occurred while downloading the update: %1</source>
-        <translation>אירעה שגיאה בעת הורדת העדכון: %1</translation>
-    </message>
-</context>
-<context>
     <name>FileError</name>
     <message>
         <location filename="../client/file_error_code.cc" line="33"/>
@@ -3308,8 +3290,8 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
-        <source>Last Connect</source>
-        <translation>חיבור אחרון</translation>
+        <source>Last Online</source>
+        <translation>מקוון לאחרונה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
@@ -11725,7 +11707,7 @@ Credentials imported: %5</source>
         <translation>עדכון</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.ui" line="44"/>
+        <location filename="../common/desktop/update_dialog.cc" line="364"/>
         <source>Checking for updates</source>
         <translation>בודק עדכונים</translation>
     </message>
@@ -11750,75 +11732,95 @@ Credentials imported: %5</source>
         <translation>תיאור העדכון:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.ui" line="181"/>
+        <location filename="../common/desktop/update_dialog.ui" line="185"/>
+        <source>Downloading update in progress...</source>
+        <translation>הורדת העדכון מתבצעת...</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.ui" line="223"/>
         <source>Update now!</source>
         <translation>עדכן עכשיו!</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.ui" line="188"/>
+        <location filename="../common/desktop/update_dialog.cc" line="369"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="63"/>
+        <location filename="../common/desktop/update_dialog.cc" line="70"/>
         <source>Receiving information...</source>
         <translation>מקבל מידע...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="137"/>
+        <location filename="../common/desktop/update_dialog.cc" line="152"/>
         <source>Install the update yourself: %1</source>
         <translation>התקן את העדכון בעצמך: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="143"/>
+        <location filename="../common/desktop/update_dialog.cc" line="158"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>תתבצע הורדה של העדכון. לאחר השלמת ההורדה, היישום ייסגר אוטומטית.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="145"/>
+        <location filename="../common/desktop/update_dialog.cc" line="160"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>כל ההפעלות המחוברות יופסקו. לא ניתן ליצור חיבור עד להשלמת העדכון.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="147"/>
+        <location filename="../common/desktop/update_dialog.cc" line="162"/>
         <source>All unsaved data will be lost.</source>
         <translation>כל הנתונים שלא נשמרו יאבדו.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="148"/>
+        <location filename="../common/desktop/update_dialog.cc" line="163"/>
         <source>Continue?</source>
         <translation>להמשיך?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="176"/>
-        <location filename="../common/desktop/update_dialog.cc" line="201"/>
-        <location filename="../common/desktop/update_dialog.cc" line="210"/>
-        <location filename="../common/desktop/update_dialog.cc" line="232"/>
+        <location filename="../common/desktop/update_dialog.cc" line="193"/>
+        <location filename="../common/desktop/update_dialog.cc" line="213"/>
+        <location filename="../common/desktop/update_dialog.cc" line="235"/>
+        <location filename="../common/desktop/update_dialog.cc" line="331"/>
         <source>An error occurred while installing the update.</source>
         <translation>אירעה שגיאה בעת התקנת העדכון.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="199"/>
+        <location filename="../common/desktop/update_dialog.cc" line="304"/>
+        <source>An error occurred while downloading the update: %1</source>
+        <translation>אירעה שגיאה בעת הורדת העדכון: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="329"/>
         <source>The downloaded file is damaged.</source>
         <translation>הקובץ שהורד פגום.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="278"/>
+        <location filename="../common/desktop/update_dialog.cc" line="364"/>
+        <source>Downloading the update</source>
+        <translation>מוריד את העדכון</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="369"/>
+        <source>Cancel</source>
+        <translation>ביטול</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="281"/>
         <source>Unknown</source>
         <translation>לא ידוע</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="279"/>
+        <location filename="../common/desktop/update_dialog.cc" line="282"/>
         <source>Error retrieving update information.</source>
         <translation>שגיאה באחזור פרטי העדכון.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="289"/>
+        <location filename="../common/desktop/update_dialog.cc" line="339"/>
         <source>Installing the update. Please wait.</source>
         <translation>מתקין את העדכון. נא להמתין.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="254"/>
+        <location filename="../common/desktop/update_dialog.cc" line="257"/>
         <source>No updates available.</source>
         <translation>אין עדכונים זמינים.</translation>
     </message>
@@ -11826,87 +11828,87 @@ Credentials imported: %5</source>
 <context>
     <name>UpdateWidget</name>
     <message>
-        <location filename="../common/android/update_widget.cc" line="63"/>
-        <location filename="../common/android/update_widget.cc" line="218"/>
-        <location filename="../common/android/update_widget.cc" line="227"/>
-        <location filename="../common/android/update_widget.cc" line="237"/>
-        <location filename="../common/android/update_widget.cc" line="305"/>
+        <location filename="../common/android/update_widget.cc" line="76"/>
+        <location filename="../common/android/update_widget.cc" line="261"/>
+        <location filename="../common/android/update_widget.cc" line="270"/>
+        <location filename="../common/android/update_widget.cc" line="280"/>
         <source>Update</source>
         <translation>עדכון</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="73"/>
+        <location filename="../common/android/update_widget.cc" line="82"/>
+        <source>Check again</source>
+        <translation>בדוק שוב</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="85"/>
+        <source>What&apos;s new</source>
+        <translation>מה חדש</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="198"/>
+        <location filename="../common/android/update_widget.cc" line="347"/>
         <source>Installed version: %1</source>
         <translation>גרסה מותקנת: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="111"/>
+        <location filename="../common/android/update_widget.cc" line="158"/>
         <source>Receiving information...</source>
         <translation>מקבל מידע...</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="132"/>
+        <location filename="../common/android/update_widget.cc" line="180"/>
         <source>No updates available.</source>
         <translation>אין עדכונים זמינים.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="298"/>
-        <source>Version %1 is available.</source>
-        <translation>גרסה %1 זמינה.</translation>
-    </message>
-    <message>
-        <location filename="../common/android/update_widget.cc" line="150"/>
+        <location filename="../common/android/update_widget.cc" line="199"/>
         <source>Error retrieving update information.</source>
         <translation>שגיאה באחזור פרטי העדכון.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="174"/>
+        <location filename="../common/android/update_widget.cc" line="228"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>אירעה שגיאה בעת הורדת העדכון: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="197"/>
+        <location filename="../common/android/update_widget.cc" line="249"/>
         <source>The downloaded file is damaged.</source>
         <translation>הקובץ שהורד פגום.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="199"/>
-        <location filename="../common/android/update_widget.cc" line="257"/>
+        <location filename="../common/android/update_widget.cc" line="251"/>
+        <location filename="../common/android/update_widget.cc" line="307"/>
         <source>An error occurred while installing the update.</source>
         <translation>אירעה שגיאה בעת התקנת העדכון.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="219"/>
+        <location filename="../common/android/update_widget.cc" line="262"/>
         <source>Install the update yourself: %1</source>
         <translation>התקן את העדכון בעצמך: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="228"/>
+        <location filename="../common/android/update_widget.cc" line="271"/>
         <source>To install the update, allow this application to install unknown apps on the next screen.</source>
         <translation>כדי להתקין את העדכון, אפשר ליישום זה להתקין אפליקציות לא מוכרות במסך הבא.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="229"/>
+        <location filename="../common/android/update_widget.cc" line="272"/>
         <source>Allow</source>
         <translation>אפשר</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="238"/>
+        <location filename="../common/android/update_widget.cc" line="281"/>
         <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
         <translation>תתבצע הורדה של העדכון. כל ההפעלות המחוברות יופסקו וכל הנתונים שלא נשמרו יאבדו.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="239"/>
+        <location filename="../common/android/update_widget.cc" line="282"/>
         <source>Continue</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="270"/>
-        <source>Cancel</source>
-        <translation>ביטול</translation>
-    </message>
-    <message>
-        <location filename="../common/android/update_widget.cc" line="274"/>
+        <location filename="../common/android/update_widget.cc" line="321"/>
         <source>Downloading the update. Please wait.</source>
         <translation>מוריד את העדכון. נא להמתין.</translation>
     </message>

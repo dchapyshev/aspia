@@ -2446,24 +2446,6 @@ Password: %2</source>
     </message>
 </context>
 <context>
-    <name>DownloadDialog</name>
-    <message>
-        <location filename="../common/desktop/download_dialog.ui" line="14"/>
-        <source>Downloading</source>
-        <translation>다운로드 중</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/download_dialog.ui" line="26"/>
-        <source>Downloading update in progress...</source>
-        <translation>업데이트를 다운로드하는 중...</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/download_dialog.cc" line="64"/>
-        <source>An error occurred while downloading the update: %1</source>
-        <translation>업데이트를 다운로드하는 동안 오류가 발생했습니다: %1</translation>
-    </message>
-</context>
-<context>
     <name>FileError</name>
     <message>
         <location filename="../client/file_error_code.cc" line="33"/>
@@ -3297,8 +3279,8 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
-        <source>Last Connect</source>
-        <translation>마지막 연결</translation>
+        <source>Last Online</source>
+        <translation>마지막 접속</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
@@ -11686,7 +11668,7 @@ Credentials imported: %5</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.ui" line="44"/>
+        <location filename="../common/desktop/update_dialog.cc" line="364"/>
         <source>Checking for updates</source>
         <translation>업데이트 확인 중</translation>
     </message>
@@ -11711,75 +11693,95 @@ Credentials imported: %5</source>
         <translation>업데이트 설명:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.ui" line="181"/>
+        <location filename="../common/desktop/update_dialog.ui" line="185"/>
+        <source>Downloading update in progress...</source>
+        <translation>업데이트를 다운로드하는 중...</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.ui" line="223"/>
         <source>Update now!</source>
         <translation>지금 업데이트!</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.ui" line="188"/>
+        <location filename="../common/desktop/update_dialog.cc" line="369"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="63"/>
+        <location filename="../common/desktop/update_dialog.cc" line="70"/>
         <source>Receiving information...</source>
         <translation>정보를 받는 중...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="137"/>
+        <location filename="../common/desktop/update_dialog.cc" line="152"/>
         <source>Install the update yourself: %1</source>
         <translation>업데이트를 직접 설치하십시오: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="143"/>
+        <location filename="../common/desktop/update_dialog.cc" line="158"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>업데이트가 다운로드됩니다. 다운로드가 완료되면 응용 프로그램이 자동으로 닫힙니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="145"/>
+        <location filename="../common/desktop/update_dialog.cc" line="160"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>연결된 모든 세션이 종료됩니다. 업데이트가 완료될 때까지 연결할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="147"/>
+        <location filename="../common/desktop/update_dialog.cc" line="162"/>
         <source>All unsaved data will be lost.</source>
         <translation>저장하지 않은 모든 데이터가 손실됩니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="148"/>
+        <location filename="../common/desktop/update_dialog.cc" line="163"/>
         <source>Continue?</source>
         <translation>계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="176"/>
-        <location filename="../common/desktop/update_dialog.cc" line="201"/>
-        <location filename="../common/desktop/update_dialog.cc" line="210"/>
-        <location filename="../common/desktop/update_dialog.cc" line="232"/>
+        <location filename="../common/desktop/update_dialog.cc" line="193"/>
+        <location filename="../common/desktop/update_dialog.cc" line="213"/>
+        <location filename="../common/desktop/update_dialog.cc" line="235"/>
+        <location filename="../common/desktop/update_dialog.cc" line="331"/>
         <source>An error occurred while installing the update.</source>
         <translation>업데이트를 설치하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="199"/>
+        <location filename="../common/desktop/update_dialog.cc" line="304"/>
+        <source>An error occurred while downloading the update: %1</source>
+        <translation>업데이트를 다운로드하는 동안 오류가 발생했습니다: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="329"/>
         <source>The downloaded file is damaged.</source>
         <translation>다운로드한 파일이 손상되었습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="278"/>
+        <location filename="../common/desktop/update_dialog.cc" line="364"/>
+        <source>Downloading the update</source>
+        <translation>업데이트 다운로드 중</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="369"/>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="281"/>
         <source>Unknown</source>
         <translation>알 수 없음</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="279"/>
+        <location filename="../common/desktop/update_dialog.cc" line="282"/>
         <source>Error retrieving update information.</source>
         <translation>업데이트 정보를 가져오는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="289"/>
+        <location filename="../common/desktop/update_dialog.cc" line="339"/>
         <source>Installing the update. Please wait.</source>
         <translation>업데이트를 설치하는 중입니다. 잠시 기다려 주십시오.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="254"/>
+        <location filename="../common/desktop/update_dialog.cc" line="257"/>
         <source>No updates available.</source>
         <translation>사용 가능한 업데이트가 없습니다.</translation>
     </message>
@@ -11787,87 +11789,87 @@ Credentials imported: %5</source>
 <context>
     <name>UpdateWidget</name>
     <message>
-        <location filename="../common/android/update_widget.cc" line="63"/>
-        <location filename="../common/android/update_widget.cc" line="218"/>
-        <location filename="../common/android/update_widget.cc" line="227"/>
-        <location filename="../common/android/update_widget.cc" line="237"/>
-        <location filename="../common/android/update_widget.cc" line="305"/>
+        <location filename="../common/android/update_widget.cc" line="76"/>
+        <location filename="../common/android/update_widget.cc" line="261"/>
+        <location filename="../common/android/update_widget.cc" line="270"/>
+        <location filename="../common/android/update_widget.cc" line="280"/>
         <source>Update</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="73"/>
+        <location filename="../common/android/update_widget.cc" line="82"/>
+        <source>Check again</source>
+        <translation>다시 확인</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="85"/>
+        <source>What&apos;s new</source>
+        <translation>새로운 기능</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="198"/>
+        <location filename="../common/android/update_widget.cc" line="347"/>
         <source>Installed version: %1</source>
         <translation>설치된 버전: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="111"/>
+        <location filename="../common/android/update_widget.cc" line="158"/>
         <source>Receiving information...</source>
         <translation>정보를 받는 중...</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="132"/>
+        <location filename="../common/android/update_widget.cc" line="180"/>
         <source>No updates available.</source>
         <translation>사용 가능한 업데이트가 없습니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="298"/>
-        <source>Version %1 is available.</source>
-        <translation>%1 버전을 사용할 수 있습니다.</translation>
-    </message>
-    <message>
-        <location filename="../common/android/update_widget.cc" line="150"/>
+        <location filename="../common/android/update_widget.cc" line="199"/>
         <source>Error retrieving update information.</source>
         <translation>업데이트 정보를 가져오는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="174"/>
+        <location filename="../common/android/update_widget.cc" line="228"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>업데이트를 다운로드하는 동안 오류가 발생했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="197"/>
+        <location filename="../common/android/update_widget.cc" line="249"/>
         <source>The downloaded file is damaged.</source>
         <translation>다운로드한 파일이 손상되었습니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="199"/>
-        <location filename="../common/android/update_widget.cc" line="257"/>
+        <location filename="../common/android/update_widget.cc" line="251"/>
+        <location filename="../common/android/update_widget.cc" line="307"/>
         <source>An error occurred while installing the update.</source>
         <translation>업데이트를 설치하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="219"/>
+        <location filename="../common/android/update_widget.cc" line="262"/>
         <source>Install the update yourself: %1</source>
         <translation>업데이트를 직접 설치하십시오: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="228"/>
+        <location filename="../common/android/update_widget.cc" line="271"/>
         <source>To install the update, allow this application to install unknown apps on the next screen.</source>
         <translation>업데이트를 설치하려면 다음 화면에서 이 응용 프로그램이 알 수 없는 앱을 설치하도록 허용하십시오.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="229"/>
+        <location filename="../common/android/update_widget.cc" line="272"/>
         <source>Allow</source>
         <translation>허용</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="238"/>
+        <location filename="../common/android/update_widget.cc" line="281"/>
         <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
         <translation>업데이트가 다운로드됩니다. 연결된 모든 세션이 종료되고 저장하지 않은 모든 데이터가 손실됩니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="239"/>
+        <location filename="../common/android/update_widget.cc" line="282"/>
         <source>Continue</source>
         <translation>계속</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="270"/>
-        <source>Cancel</source>
-        <translation>취소</translation>
-    </message>
-    <message>
-        <location filename="../common/android/update_widget.cc" line="274"/>
+        <location filename="../common/android/update_widget.cc" line="321"/>
         <source>Downloading the update. Please wait.</source>
         <translation>업데이트를 다운로드하는 중입니다. 잠시 기다려 주십시오.</translation>
     </message>

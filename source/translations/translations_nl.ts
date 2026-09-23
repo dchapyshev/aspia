@@ -2453,24 +2453,6 @@ Wachtwoord: %2</translation>
     </message>
 </context>
 <context>
-    <name>DownloadDialog</name>
-    <message>
-        <location filename="../common/desktop/download_dialog.ui" line="14"/>
-        <source>Downloading</source>
-        <translation>Downloaden</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/download_dialog.ui" line="26"/>
-        <source>Downloading update in progress...</source>
-        <translation>De update wordt gedownload...</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/download_dialog.cc" line="64"/>
-        <source>An error occurred while downloading the update: %1</source>
-        <translation>Er is een fout opgetreden bij het downloaden van de update: %1</translation>
-    </message>
-</context>
-<context>
     <name>FileError</name>
     <message>
         <location filename="../client/file_error_code.cc" line="33"/>
@@ -3308,8 +3290,8 @@ Wachtwoord: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
-        <source>Last Connect</source>
-        <translation>Laatste verbinding</translation>
+        <source>Last Online</source>
+        <translation>Laatst online</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
@@ -11725,7 +11707,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Update</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.ui" line="44"/>
+        <location filename="../common/desktop/update_dialog.cc" line="364"/>
         <source>Checking for updates</source>
         <translation>Controleren op updates</translation>
     </message>
@@ -11750,75 +11732,95 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Update beschrijving:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.ui" line="181"/>
+        <location filename="../common/desktop/update_dialog.ui" line="185"/>
+        <source>Downloading update in progress...</source>
+        <translation>De update wordt gedownload...</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.ui" line="223"/>
         <source>Update now!</source>
         <translation>Update nu!</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.ui" line="188"/>
+        <location filename="../common/desktop/update_dialog.cc" line="369"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="63"/>
+        <location filename="../common/desktop/update_dialog.cc" line="70"/>
         <source>Receiving information...</source>
         <translation>Informatie ontvangen...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="137"/>
+        <location filename="../common/desktop/update_dialog.cc" line="152"/>
         <source>Install the update yourself: %1</source>
         <translation>Installeer de update zelf: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="143"/>
+        <location filename="../common/desktop/update_dialog.cc" line="158"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Er wordt een update gedownload. Nadat de download is voltooid, wordt de applicatie automatisch gesloten.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="145"/>
+        <location filename="../common/desktop/update_dialog.cc" line="160"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Alle verbonden sessies worden beëindigd. U kunt geen verbinding maken totdat de update is voltooid.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="147"/>
+        <location filename="../common/desktop/update_dialog.cc" line="162"/>
         <source>All unsaved data will be lost.</source>
         <translation>Alle niet-opgeslagen gegevens gaan verloren.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="148"/>
+        <location filename="../common/desktop/update_dialog.cc" line="163"/>
         <source>Continue?</source>
         <translation>Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="176"/>
-        <location filename="../common/desktop/update_dialog.cc" line="201"/>
-        <location filename="../common/desktop/update_dialog.cc" line="210"/>
-        <location filename="../common/desktop/update_dialog.cc" line="232"/>
+        <location filename="../common/desktop/update_dialog.cc" line="193"/>
+        <location filename="../common/desktop/update_dialog.cc" line="213"/>
+        <location filename="../common/desktop/update_dialog.cc" line="235"/>
+        <location filename="../common/desktop/update_dialog.cc" line="331"/>
         <source>An error occurred while installing the update.</source>
         <translation>Er is een fout opgetreden bij het installeren van de update.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="199"/>
+        <location filename="../common/desktop/update_dialog.cc" line="304"/>
+        <source>An error occurred while downloading the update: %1</source>
+        <translation>Er is een fout opgetreden bij het downloaden van de update: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="329"/>
         <source>The downloaded file is damaged.</source>
         <translation>Het gedownloade bestand is beschadigd.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="278"/>
+        <location filename="../common/desktop/update_dialog.cc" line="364"/>
+        <source>Downloading the update</source>
+        <translation>Downloaden van de update</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="369"/>
+        <source>Cancel</source>
+        <translation>Annuleren</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="281"/>
         <source>Unknown</source>
         <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="279"/>
+        <location filename="../common/desktop/update_dialog.cc" line="282"/>
         <source>Error retrieving update information.</source>
         <translation>Fout bij het ophalen van update-informatie.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="289"/>
+        <location filename="../common/desktop/update_dialog.cc" line="339"/>
         <source>Installing the update. Please wait.</source>
         <translation>De update wordt geïnstalleerd. Even geduld.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="254"/>
+        <location filename="../common/desktop/update_dialog.cc" line="257"/>
         <source>No updates available.</source>
         <translation>Geen updates beschikbaar.</translation>
     </message>
@@ -11826,87 +11828,87 @@ Aanmeldgegevens geïmporteerd: %5</translation>
 <context>
     <name>UpdateWidget</name>
     <message>
-        <location filename="../common/android/update_widget.cc" line="63"/>
-        <location filename="../common/android/update_widget.cc" line="218"/>
-        <location filename="../common/android/update_widget.cc" line="227"/>
-        <location filename="../common/android/update_widget.cc" line="237"/>
-        <location filename="../common/android/update_widget.cc" line="305"/>
+        <location filename="../common/android/update_widget.cc" line="76"/>
+        <location filename="../common/android/update_widget.cc" line="261"/>
+        <location filename="../common/android/update_widget.cc" line="270"/>
+        <location filename="../common/android/update_widget.cc" line="280"/>
         <source>Update</source>
         <translation>Update</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="73"/>
+        <location filename="../common/android/update_widget.cc" line="82"/>
+        <source>Check again</source>
+        <translation>Controleer opnieuw</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="85"/>
+        <source>What&apos;s new</source>
+        <translation>Wat is er nieuw</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="198"/>
+        <location filename="../common/android/update_widget.cc" line="347"/>
         <source>Installed version: %1</source>
         <translation>Geïnstalleerde versie: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="111"/>
+        <location filename="../common/android/update_widget.cc" line="158"/>
         <source>Receiving information...</source>
         <translation>Informatie ontvangen...</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="132"/>
+        <location filename="../common/android/update_widget.cc" line="180"/>
         <source>No updates available.</source>
         <translation>Geen updates beschikbaar.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="298"/>
-        <source>Version %1 is available.</source>
-        <translation>Versie %1 is beschikbaar.</translation>
-    </message>
-    <message>
-        <location filename="../common/android/update_widget.cc" line="150"/>
+        <location filename="../common/android/update_widget.cc" line="199"/>
         <source>Error retrieving update information.</source>
         <translation>Fout bij het ophalen van update-informatie.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="174"/>
+        <location filename="../common/android/update_widget.cc" line="228"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Er is een fout opgetreden bij het downloaden van de update: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="197"/>
+        <location filename="../common/android/update_widget.cc" line="249"/>
         <source>The downloaded file is damaged.</source>
         <translation>Het gedownloade bestand is beschadigd.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="199"/>
-        <location filename="../common/android/update_widget.cc" line="257"/>
+        <location filename="../common/android/update_widget.cc" line="251"/>
+        <location filename="../common/android/update_widget.cc" line="307"/>
         <source>An error occurred while installing the update.</source>
         <translation>Er is een fout opgetreden bij het installeren van de update.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="219"/>
+        <location filename="../common/android/update_widget.cc" line="262"/>
         <source>Install the update yourself: %1</source>
         <translation>Installeer de update zelf: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="228"/>
+        <location filename="../common/android/update_widget.cc" line="271"/>
         <source>To install the update, allow this application to install unknown apps on the next screen.</source>
         <translation>Om de update te installeren, moet u deze applicatie op het volgende scherm toestaan om onbekende apps te installeren.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="229"/>
+        <location filename="../common/android/update_widget.cc" line="272"/>
         <source>Allow</source>
         <translation>Toestaan</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="238"/>
+        <location filename="../common/android/update_widget.cc" line="281"/>
         <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
         <translation>Er wordt een update gedownload. Alle verbonden sessies worden beëindigd en alle niet-opgeslagen gegevens gaan verloren.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="239"/>
+        <location filename="../common/android/update_widget.cc" line="282"/>
         <source>Continue</source>
         <translation>Doorgaan</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="270"/>
-        <source>Cancel</source>
-        <translation>Annuleren</translation>
-    </message>
-    <message>
-        <location filename="../common/android/update_widget.cc" line="274"/>
+        <location filename="../common/android/update_widget.cc" line="321"/>
         <source>Downloading the update. Please wait.</source>
         <translation>De update wordt gedownload. Even geduld.</translation>
     </message>
