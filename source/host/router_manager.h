@@ -89,6 +89,8 @@ private:
     void delayedConnectToRouter();
     void routerStateChanged(proto::user::RouterState::State state);
     void hostIdRequest();
+    void markTelemetryOutdated();
+    void sendTelemetry();
     void readConnectionOffer(const proto::router::ConnectionOffer& offer);
     void renewOneTimePassword();
     User createOneTimeUser() const;
@@ -110,6 +112,9 @@ private:
 
     HostId host_id_ = kInvalidHostId;
     proto::user::RouterState router_state_;
+
+    bool telemetry_outdated_ = false;
+    TimePoint next_telemetry_time_ = TimePoint::min();
 
     QQueue<ReadyConnection> channels_;
 

@@ -18,6 +18,8 @@
 
 #include "host/router_manager.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QPointer>
 #include <QSettings>
 #include <QTemporaryDir>
@@ -48,6 +50,7 @@
 #include "base/threading/worker.h"
 #include "host/database.h"
 #include "host/host_storage.h"
+#include "host/system_settings.h"
 #include "proto/key_exchange.h"
 #include "proto/peer.h"
 #include "proto/router.h"
@@ -235,11 +238,16 @@ protected:
                         if (!parse(buffer, &message))
                             return;
 
-                        if (!message.has_host_id_request())
-                            return;
-
-                        last_request_ = message.host_id_request();
-                        ++requests_received_;
+                        if (message.has_host_id_request())
+                        {
+                            last_request_ = message.host_id_request();
+                            ++requests_received_;
+                        }
+                        else if (message.has_host_telemetry())
+                        {
+                            last_telemetry_ = message.host_telemetry();
+                            ++telemetry_received_;
+                        }
                     });
 
                     host_channel_->setPaused(false);
@@ -521,6 +529,17 @@ protected:
         });
     }
 
+    // Sends the host command |name| the way the router does.
+    void sendCommand(const char* name)
+    {
+        stand_worker_->invoke([&]()
+        {
+            proto::router::RouterToHost message;
+            message.mutable_host_command()->set_command_name(name);
+            host_channel_->send(0, serialize(message));
+        });
+    }
+
     // Creates the manager in its worker thread, pointed at the stand, with the one-time password
     // switched by |one_time_password|.
     void startManager(bool one_time_password = false)
@@ -601,6 +620,8 @@ protected:
     proto::router::HostIdRequest last_request_;
     std::atomic<int> accepted_ { 0 };
     std::atomic<int> requests_received_ { 0 };
+    proto::router::HostTelemetry last_telemetry_;
+    std::atomic<int> telemetry_received_ { 0 };
 
     QPointer<RouterManager> manager_;
     std::atomic<HostId> credentials_host_id_ { kInvalidHostId };
@@ -686,6 +707,65 @@ TEST_F(RouterManagerTest, ReconnectsAfterTheRouterIsLost)
 
     // The host knows its key now, so it comes back with it.
     EXPECT_EQ(last_request_.type(), proto::router::HostIdRequest::EXISTING_ID);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The host reports its telemetry as soon as it has an id. A change of its settings is reported on the
+// timer, at most once a minute.
+TEST_F(RouterManagerTest, TelemetryIsSentWithTheIdAndOnSettingsChanges)
+{
+    SystemSettings settings;
+    settings.setUpdateChannel("beta");
+    settings.setUpdateCheckFrequency(3);
+    settings.sync();
+
+    startManager();
+
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+    sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
+    ASSERT_TRUE(waitFor([this]() { return telemetry_received_.load() >= 1; }));
+
+    RouterManagerTestPeer timer(host_worker_, manager_);
+    const TimePoint now = Clock::now();
+
+    QJsonObject telemetry =
+        QJsonDocument::fromJson(QByteArray::fromStdString(last_telemetry_.json())).object();
+    EXPECT_EQ(telemetry.value("version").toInt(), proto::router::kTelemetryVersion);
+    EXPECT_EQ(telemetry.value("update").toObject().value("channel").toString(), "beta");
+    EXPECT_EQ(telemetry.value("update").toObject().value("check_frequency").toInt(), 3);
+
+    settings.setUpdateChannel("stable");
+    settings.sync();
+
+    // What the service does when it sees the settings file change.
+    host_worker_->invoke([this]() { manager_->onSettingsChanged(); });
+
+    // A minute has not passed since the previous report, so this one waits.
+    timer.fireTimer(now + Seconds(10));
+    std::this_thread::sleep_for(MilliSeconds(200));
+    EXPECT_EQ(telemetry_received_.load(), 1);
+
+    timer.fireTimer(now + Minutes(1));
+    ASSERT_TRUE(waitFor([this]() { return telemetry_received_.load() >= 2; }));
+
+    telemetry = QJsonDocument::fromJson(QByteArray::fromStdString(last_telemetry_.json())).object();
+    EXPECT_EQ(telemetry.value("update").toObject().value("channel").toString(), "stable");
+    EXPECT_EQ(telemetry.value("update").toObject().value("check_frequency").toInt(), 3);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The router can ask for the telemetry at any time, and the host answers at once, without waiting
+// for the minute to pass since the previous report.
+TEST_F(RouterManagerTest, TelemetryIsSentOnRouterCommand)
+{
+    startManager();
+
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+    sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
+    ASSERT_TRUE(waitFor([this]() { return telemetry_received_.load() >= 1; }));
+
+    sendCommand(proto::router::kCommandHostTelemetry);
+    ASSERT_TRUE(waitFor([this]() { return telemetry_received_.load() >= 2; }));
 }
 
 //--------------------------------------------------------------------------------------------------

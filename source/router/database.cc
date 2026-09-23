@@ -167,6 +167,7 @@ bool ensureSchema(SqlDatabase& db)
              "\"comment\" TEXT NOT NULL DEFAULT '',"
              "\"last_connect\" INTEGER NOT NULL DEFAULT 0,"
              "\"last_modify\" INTEGER NOT NULL DEFAULT 0,"
+             "\"telemetry\" TEXT NOT NULL DEFAULT '',"
              "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         return false;
@@ -338,6 +339,13 @@ bool ensureSchema(SqlDatabase& db)
             LOG(ERROR) << "Unable to add column" << column.name << ":" << db.lastError();
             return false;
         }
+    }
+
+    // Temporary migration from 3.0.10.
+    if (!hasColumn(db, "hosts", "telemetry") &&
+        !run("ALTER TABLE \"hosts\" ADD COLUMN \"telemetry\" TEXT NOT NULL DEFAULT ''"))
+    {
+        return false;
     }
 
     // Composite index for the dominant host list/count query (hosts of a given workspace and
@@ -1579,6 +1587,58 @@ bool Database::updateHostInfo(HostId host_id, std::string_view hwid, std::string
     // The row is expected to exist (addHost() runs first); a zero-row update means it was removed
     // in between, so report that instead of a silent success.
     return db_.changes() > 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::updateHostTelemetry(HostId host_id, std::string_view telemetry)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    SqlQuery query(db_, "UPDATE hosts SET telemetry=? WHERE id=?");
+    query.addText(telemetry);
+    query.addUInt64(host_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    return db_.changes() > 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view Database::hostTelemetry(HostId host_id, std::string* telemetry) const
+{
+    CHECK(telemetry);
+
+    telemetry->clear();
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
+    }
+
+    SqlQuery query(db_, "SELECT telemetry FROM hosts WHERE id=?");
+    query.addUInt64(host_id);
+
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (step != SqlQuery::StepResult::ROW)
+        return proto::router::kErrorNotFound;
+
+    *telemetry = query.columnTextView(0);
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -43,6 +43,7 @@
 #include "client/router_controller.h"
 #include "client/desktop/file_dialog.h"
 #include "client/desktop/management/drag_and_drop.h"
+#include "client/desktop/management/host_telemetry_dialog.h"
 #include "client/desktop/management/router_host_dialog.h"
 #include "common/desktop/icon_text_button.h"
 #include "common/desktop/msg_box.h"
@@ -425,6 +426,21 @@ void RouterHostsWidget::onCheckHostUpdates()
 
     LOG(INFO) << "[ACTION] Check host updates requested by user";
     session->checkHostUpdates(host->host_id, { this, &RouterHostsWidget::onHostResultReceived });
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterHostsWidget::onHostTelemetry()
+{
+    const RouterHost* host = currentHost();
+    if (!host)
+    {
+        LOG(INFO) << "No selected host";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Host telemetry requested by user";
+    HostTelemetryDialog dialog(router_id_, *host, this);
+    dialog.exec();
 }
 
 //--------------------------------------------------------------------------------------------------

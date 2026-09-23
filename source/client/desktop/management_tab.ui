@@ -356,6 +356,15 @@
     <string>Check for Updates</string>
    </property>
   </action>
+  <action name="action_host_telemetry">
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/computer-telemetry.svg</normaloff>:/img/computer-telemetry.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Telemetry</string>
+   </property>
+  </action>
   <action name="action_host_approve">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">

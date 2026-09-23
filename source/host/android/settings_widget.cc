@@ -385,11 +385,12 @@ void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
     channel->addItem(tr("Beta"), kBetaUpdateChannel);
     channel->addItem(tr("Alpha"), kAlphaUpdateChannel);
     channel->setCurrentIndex(qMax(0, channel->findData(SystemSettings().updateChannel())));
-    connect(channel, &QComboBox::currentIndexChanged, this, [channel](int /* index */)
+    connect(channel, &QComboBox::currentIndexChanged, this, [this, channel](int /* index */)
     {
         SystemSettings settings;
         settings.setUpdateChannel(channel->currentData().toString());
         settings.sync();
+        emit sig_updateSettingsChanged();
     });
     layout->addWidget(channel);
 

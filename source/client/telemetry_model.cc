@@ -1,0 +1,233 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#include "client/telemetry_model.h"
+
+#include <QFont>
+#include <QJsonDocument>
+#include <QJsonObject>
+
+#include "base/build_config.h"
+#include "base/logging.h"
+
+namespace {
+
+// The internal id of a group row. A parameter row carries the row of its group plus one.
+const quintptr kGroupId = 0;
+
+} // namespace
+
+//--------------------------------------------------------------------------------------------------
+TelemetryModel::TelemetryModel(QObject* parent)
+    : QAbstractItemModel(parent)
+{
+    LOG(TRACE) << "Ctor";
+}
+
+//--------------------------------------------------------------------------------------------------
+TelemetryModel::~TelemetryModel()
+{
+    LOG(TRACE) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+TelemetryModel::Status TelemetryModel::setTelemetry(const QByteArray& json)
+{
+    QList<Group> groups;
+    const Status status = parse(json, &groups);
+
+    beginResetModel();
+    groups_ = std::move(groups);
+    endResetModel();
+
+    return status;
+}
+
+//--------------------------------------------------------------------------------------------------
+QModelIndex TelemetryModel::index(int row, int column, const QModelIndex& parent) const
+{
+    if (!hasIndex(row, column, parent))
+        return QModelIndex();
+
+    if (!parent.isValid())
+        return createIndex(row, column, kGroupId);
+
+    return createIndex(row, column, static_cast<quintptr>(parent.row()) + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QModelIndex TelemetryModel::parent(const QModelIndex& child) const
+{
+    if (!child.isValid() || child.internalId() == kGroupId)
+        return QModelIndex();
+
+    return createIndex(static_cast<int>(child.internalId() - 1), 0, kGroupId);
+}
+
+//--------------------------------------------------------------------------------------------------
+int TelemetryModel::rowCount(const QModelIndex& parent) const
+{
+    if (!parent.isValid())
+        return static_cast<int>(groups_.size());
+
+    // Only the first column of a group row has children.
+    if (parent.internalId() != kGroupId || parent.column() != 0)
+        return 0;
+
+    return static_cast<int>(groups_.at(parent.row()).parameters.size());
+}
+
+//--------------------------------------------------------------------------------------------------
+int TelemetryModel::columnCount(const QModelIndex& /* parent */) const
+{
+    return 2;
+}
+
+//--------------------------------------------------------------------------------------------------
+QVariant TelemetryModel::data(const QModelIndex& index, int role) const
+{
+    if (!index.isValid())
+        return QVariant();
+
+    const Column column = static_cast<Column>(index.column());
+
+    if (index.internalId() == kGroupId)
+    {
+        if (column != Column::NAME)
+            return QVariant();
+
+        if (role == Qt::DisplayRole)
+            return groups_.at(index.row()).name;
+
+        if (role == Qt::FontRole)
+        {
+            QFont font;
+            font.setBold(true);
+            return font;
+        }
+
+        return QVariant();
+    }
+
+    if (role != Qt::DisplayRole)
+        return QVariant();
+
+    const Group& group = groups_.at(static_cast<int>(index.internalId() - 1));
+    const Parameter& parameter = group.parameters.at(index.row());
+
+    return column == Column::NAME ? parameter.name : parameter.value;
+}
+
+//--------------------------------------------------------------------------------------------------
+QVariant TelemetryModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (orientation != Qt::Horizontal || role != Qt::DisplayRole)
+        return QVariant();
+
+    switch (static_cast<Column>(section))
+    {
+        case Column::NAME:
+            return tr("Parameter");
+
+        case Column::VALUE:
+            return tr("Value");
+    }
+
+    return QVariant();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+TelemetryModel::Status TelemetryModel::parse(const QByteArray& json, QList<Group>* groups)
+{
+    if (json.isEmpty())
+        return Status::EMPTY;
+
+    QJsonParseError error;
+    const QJsonDocument document = QJsonDocument::fromJson(json, &error);
+    if (error.error != QJsonParseError::NoError || !document.isObject())
+    {
+        LOG(ERROR) << "Unable to parse telemetry:" << error.errorString();
+        return Status::INVALID;
+    }
+
+    const QJsonObject telemetry = document.object();
+
+    const QJsonValue version = telemetry.value("version");
+    if (!version.isDouble())
+    {
+        LOG(ERROR) << "Telemetry has no version";
+        return Status::INVALID;
+    }
+
+    switch (version.toInt())
+    {
+        case 1:
+            parseVersion1(telemetry, groups);
+            return Status::OK;
+
+        default:
+            LOG(ERROR) << "Unsupported telemetry version:" << version.toInt();
+            return Status::UNSUPPORTED_VERSION;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void TelemetryModel::parseVersion1(const QJsonObject& telemetry, QList<Group>* groups)
+{
+    const QJsonValue update = telemetry.value("update");
+    if (update.isObject())
+        parseUpdateGroup(update.toObject(), groups);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void TelemetryModel::parseUpdateGroup(const QJsonObject& update, QList<Group>* groups)
+{
+    Group group;
+    group.name = tr("Updates");
+
+    const QJsonValue channel = update.value("channel");
+    if (channel.isString())
+        group.parameters.append({ tr("Update channel"), updateChannelName(channel.toString()) });
+
+    const QJsonValue check_frequency = update.value("check_frequency");
+    if (check_frequency.isDouble())
+    {
+        group.parameters.append(
+            { tr("Update check frequency"), tr("Every %n days", "", check_frequency.toInt()) });
+    }
+
+    if (!group.parameters.isEmpty())
+        groups->append(group);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString TelemetryModel::updateChannelName(const QString& channel)
+{
+    if (channel == kStableUpdateChannel)
+        return tr("Stable");
+    else if (channel == kBetaUpdateChannel)
+        return tr("Beta");
+    else if (channel == kAlphaUpdateChannel)
+        return tr("Alpha");
+
+    return channel;
+}

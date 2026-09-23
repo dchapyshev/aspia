@@ -71,6 +71,10 @@ struct HostIdResult
 
     // The validated hardware id of the host; the caller keeps it for the approval command.
     QByteArray hardware_id;
+
+    // SEND_RESPONSE: the telemetry stored for the host, so that a report repeating it is not
+    // written again.
+    std::string telemetry;
 };
 
 // |current_host_id| is what the connection was assigned already (kInvalidHostId while it has

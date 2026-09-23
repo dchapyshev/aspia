@@ -212,6 +212,13 @@ public:
         std::string_view cpu_arch, std::string_view version, std::string_view os_name,
         std::string_view address);
 
+    // Replaces the telemetry the host reported last.
+    bool updateHostTelemetry(HostId host_id, std::string_view telemetry);
+
+    // Reads the telemetry the host reported last. Returns kErrorNotFound for an unknown host and
+    // kErrorInternalError when the read failed.
+    std::string_view hostTelemetry(HostId host_id, std::string* telemetry) const;
+
     // Answers whether the host is in the database: kErrorOk - it is, kErrorNotFound - it is not,
     // kErrorInternalError - the read failed. A failed read must not pass for a missing host,
     // because on kErrorNotFound the client drops the credentials it keeps for the host.

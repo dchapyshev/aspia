@@ -238,19 +238,34 @@ message WorkspaceResult
     int64 entry_id      = 4; // Id of created workspace for "add".
 }
 
+message HostTelemetryRequest
+{
+    int64 request_id = 1;
+    uint64 host_id   = 2;
+}
+
+message HostTelemetryResult
+{
+    int64 request_id  = 1;
+    string error_code = 2;
+    uint64 host_id    = 3;
+    string json       = 4;
+}
+
 message RouterToAdmin
 {
-    RelayList relay_list              = 1;
-    RelayResult relay_result          = 2;
-    HostResult host_result            = 3;
-    ClientList client_list            = 4;
-    ClientResult client_result        = 5;
-    UserList user_list                = 6;
-    UserResult user_result            = 7;
-    UserTokenList user_token_list     = 8;
-    UserTokenResult user_token_result = 9;
-    PeerResult peer_result            = 10;
-    WorkspaceResult workspace_result  = 11;
+    RelayList relay_list                      = 1;
+    RelayResult relay_result                  = 2;
+    HostResult host_result                    = 3;
+    ClientList client_list                    = 4;
+    ClientResult client_result                = 5;
+    UserList user_list                        = 6;
+    UserResult user_result                    = 7;
+    UserTokenList user_token_list             = 8;
+    UserTokenResult user_token_result         = 9;
+    PeerResult peer_result                    = 10;
+    WorkspaceResult workspace_result          = 11;
+    HostTelemetryResult host_telemetry_result = 12;
 }
 
 message AdminToRouter
@@ -266,4 +281,5 @@ message AdminToRouter
     UserTokenRequest user_token_request          = 9;
     PeerRequest peer_request                     = 10;
     WorkspaceRequest workspace_request           = 11;
+    HostTelemetryRequest host_telemetry_request  = 12;
 }

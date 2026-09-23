@@ -89,6 +89,8 @@ void ClientAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
         doPeerRequest(message.peer_request());
     else if (message.has_workspace_request())
         doWorkspaceRequest(message.workspace_request());
+    else if (message.has_host_telemetry_request())
+        doHostTelemetryRequest(message.host_telemetry_request());
     else
         CLOG(ERROR) << "Unhandled message from manager";
 }
@@ -257,6 +259,21 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
         CLOG(ERROR) << "Unknown host request command:" << command_name;
         send_result(proto::router::kErrorInvalidRequest);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientAdmin::doHostTelemetryRequest(const proto::router::HostTelemetryRequest& request)
+{
+    proto::router::RouterToAdmin message;
+    proto::router::HostTelemetryResult* result = message.mutable_host_telemetry_result();
+    result->set_request_id(request.request_id());
+    result->set_host_id(request.host_id());
+
+    std::string telemetry;
+    result->set_error_code(database().hostTelemetry(request.host_id(), &telemetry));
+    result->set_json(std::move(telemetry));
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

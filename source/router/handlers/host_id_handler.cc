@@ -145,5 +145,8 @@ HostIdResult handleHostIdRequest(Database& database, const proto::router::HostId
         LOG(WARNING) << "Failed to update host info for host_id:" << host_id;
     }
 
+    if (database.hostTelemetry(host_id, &result.telemetry) != proto::router::kErrorOk)
+        LOG(WARNING) << "Failed to read telemetry for host_id:" << host_id;
+
     return result;
 }

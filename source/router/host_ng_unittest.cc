@@ -34,7 +34,25 @@ namespace {
 const char kHostKey[] = "the-key-the-host-presents";
 const char kHardwareId[] = "hw-id-of-the-host";
 
+const Seconds kTelemetryInterval{ 5 };
+
+const char kFirstTelemetry[] = "{\"version\":1,\"update\":{\"channel\":\"stable\"}}";
+const char kSecondTelemetry[] = "{\"version\":1,\"update\":{\"channel\":\"beta\"}}";
+
 } // namespace
+
+// Hands the host a telemetry report with a synthetic clock. In production the report is read with
+// the real time, and the tests cannot wait the real interval out.
+class HostNGTestPeer
+{
+public:
+    static void readTelemetry(HostNG& host, const std::string& json, TimePoint now)
+    {
+        proto::router::HostTelemetry telemetry;
+        telemetry.set_json(json);
+        host.readHostTelemetry(telemetry, now);
+    }
+};
 
 // A host connection end to end: what it answers to an id request, which hosts it announces to the
 // rest of the router and what it leaves behind when it goes away. The host is the real HostNG, in a
@@ -91,6 +109,19 @@ protected:
         if (key)
             request->set_key(key);
         return serialize(message);
+    }
+
+    static QByteArray telemetry(const std::string& json)
+    {
+        proto::router::HostToRouter message;
+        message.mutable_host_telemetry()->set_json(json);
+        return serialize(message);
+    }
+
+    bool hasTelemetry(HostId host_id, const QString& telemetry)
+    {
+        return countRaw(QString("SELECT COUNT(*) FROM hosts WHERE id=%1 AND telemetry='%2'")
+                            .arg(host_id).arg(telemetry)) == 1;
     }
 
     // The reply the host was sent last, parsed as RouterToHost.
@@ -167,6 +198,125 @@ TEST_F(HostNGTest, ApprovedHostGetsItsPermanentIdAndIsAnnounced)
 
         ASSERT_EQ(announced_.size(), 1);
         EXPECT_EQ(announced_.at(0), host_id);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// An approved host has the telemetry it reports stored in its record, each report replacing the one
+// before. A report over the size bound is dropped.
+TEST_F(HostNGTest, TelemetryOfAnApprovedHostIsStored)
+{
+    const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    withHost([&](HostNG& host, FakeTcpChannel* channel)
+    {
+        host.start();
+
+        channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
+        channel->receive(0, telemetry(kFirstTelemetry));
+        EXPECT_TRUE(hasTelemetry(host_id, kFirstTelemetry));
+
+        const TimePoint later = Clock::now() + kTelemetryInterval;
+        HostNGTestPeer::readTelemetry(host, kSecondTelemetry, later);
+        HostNGTestPeer::readTelemetry(host, std::string(8192, 'x'), later + kTelemetryInterval);
+    });
+
+    EXPECT_TRUE(hasTelemetry(host_id, kSecondTelemetry));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A report that repeats the one already stored over the same connection is not written again.
+TEST_F(HostNGTest, RepeatedTelemetryIsNotWrittenAgain)
+{
+    const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    withHost([&](HostNG& host, FakeTcpChannel* channel)
+    {
+        host.start();
+        channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
+
+        const TimePoint now = Clock::now();
+        HostNGTestPeer::readTelemetry(host, kFirstTelemetry, now);
+
+        // A write would put the report back over the marker.
+        ASSERT_TRUE(execRaw(QString("UPDATE hosts SET telemetry='marker' WHERE id=%1").arg(host_id)));
+        HostNGTestPeer::readTelemetry(host, kFirstTelemetry, now + kTelemetryInterval);
+        EXPECT_TRUE(hasTelemetry(host_id, "marker"));
+
+        HostNGTestPeer::readTelemetry(host, kSecondTelemetry, now + 2 * kTelemetryInterval);
+    });
+
+    EXPECT_TRUE(hasTelemetry(host_id, kSecondTelemetry));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A report that comes sooner than the interval after the one accepted before it is dropped, so a
+// host cannot keep the router writing to the database.
+TEST_F(HostNGTest, TooFrequentTelemetryIsDropped)
+{
+    const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    withHost([&](HostNG& host, FakeTcpChannel* channel)
+    {
+        host.start();
+        channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
+
+        const TimePoint now = Clock::now();
+        HostNGTestPeer::readTelemetry(host, kFirstTelemetry, now);
+
+        HostNGTestPeer::readTelemetry(host, kSecondTelemetry, now + kTelemetryInterval - Seconds(1));
+        EXPECT_TRUE(hasTelemetry(host_id, kFirstTelemetry));
+
+        HostNGTestPeer::readTelemetry(host, kSecondTelemetry, now + kTelemetryInterval);
+        EXPECT_TRUE(hasTelemetry(host_id, kSecondTelemetry));
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A repeat of the stored report does not hold the next one back. Saving the host settings sends a
+// report with the old values first and one with the new values right after it, and the second one
+// must not be dropped as too frequent.
+TEST_F(HostNGTest, RepeatedTelemetryDoesNotHoldTheNextOne)
+{
+    const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    withHost([&](HostNG& host, FakeTcpChannel* channel)
+    {
+        host.start();
+        channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
+
+        const TimePoint now = Clock::now();
+        HostNGTestPeer::readTelemetry(host, kFirstTelemetry, now);
+
+        const TimePoint later = now + kTelemetryInterval;
+        HostNGTestPeer::readTelemetry(host, kFirstTelemetry, later);
+        HostNGTestPeer::readTelemetry(host, kSecondTelemetry, later + Seconds(1));
+        EXPECT_TRUE(hasTelemetry(host_id, kSecondTelemetry));
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A reconnected host that reports what is already in the database causes no write. The report does
+// not hold the interval either, so a changed report right after it is taken.
+TEST_F(HostNGTest, StoredTelemetryIsNotWrittenAgainOnReconnect)
+{
+    const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
+    ASSERT_NE(host_id, kInvalidHostId);
+    ASSERT_TRUE(db_.updateHostTelemetry(host_id, kFirstTelemetry));
+
+    withHost([&](HostNG& host, FakeTcpChannel* channel)
+    {
+        host.start();
+        channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
+
+        const TimePoint now = Clock::now();
+        HostNGTestPeer::readTelemetry(host, kFirstTelemetry, now);
+        HostNGTestPeer::readTelemetry(host, kSecondTelemetry, now + Seconds(1));
+        EXPECT_TRUE(hasTelemetry(host_id, kSecondTelemetry));
     });
 }
 

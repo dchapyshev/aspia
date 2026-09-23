@@ -33,6 +33,8 @@
 namespace {
 
 const size_t kHostKeySize = 512;
+const size_t kMaxTelemetrySize = 4096;
+const Seconds kMinTelemetryInterval{ 5 };
 
 thread_local std::set<HostId> g_assigned_temp_host_ids;
 
@@ -141,6 +143,10 @@ void HostNG::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     {
         readHostIdRequest(message.host_id_request());
     }
+    else if (message.has_host_telemetry())
+    {
+        readHostTelemetry(message.host_telemetry(), Clock::now());
+    }
     else
     {
         CLOG(ERROR) << "Unhandled message from host";
@@ -199,6 +205,7 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
     }
 
     host_id_ = result.host_id;
+    telemetry_ = result.telemetry;
     host_id_response->set_error_code(result.error_code);
 
     if (host_id_ != kInvalidHostId)
@@ -222,4 +229,40 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
         if (!result.removal_pending)
             emit sig_notifyChanged(result.notify_flags);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostNG::readHostTelemetry(const proto::router::HostTelemetry& host_telemetry, TimePoint now)
+{
+    if (host_id_ == kInvalidHostId || isTempHostId(host_id_) || remove_command_sent_)
+    {
+        CLOG(TRACE) << "Telemetry ignored for host_id:" << host_id_;
+        return;
+    }
+
+    const std::string& telemetry = host_telemetry.json();
+    if (telemetry == telemetry_)
+        return;
+
+    if (now < next_telemetry_time_)
+    {
+        CLOG(TRACE) << "Telemetry is too frequent for host_id:" << host_id_;
+        return;
+    }
+
+    next_telemetry_time_ = now + kMinTelemetryInterval;
+
+    if (telemetry.size() > kMaxTelemetrySize)
+    {
+        CLOG(ERROR) << "Host reported an oversized telemetry (" << telemetry.size() << "bytes)";
+        return;
+    }
+
+    if (!database().updateHostTelemetry(host_id_, telemetry))
+    {
+        CLOG(WARNING) << "Failed to update telemetry for host_id:" << host_id_;
+        return;
+    }
+
+    telemetry_ = telemetry;
 }

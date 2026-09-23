@@ -57,12 +57,16 @@ namespace proto::router {
 [[maybe_unused]] constexpr size_t kMaxEntryNameLength = 64;
 [[maybe_unused]] constexpr size_t kMaxCommentLength = 8 * 1024;
 
+// Version of the JSON the host sends in HostTelemetry.
+[[maybe_unused]] constexpr int kTelemetryVersion = 1;
+
 // Command names for HostRequest.
 extern const char* const kCommandHostDisconnect;
 extern const char* const kCommandHostRemove;
 extern const char* const kCommandHostModify;
 extern const char* const kCommandHostUpdate;
 extern const char* const kCommandHostApprove;
+extern const char* const kCommandHostTelemetry;
 
 // Command names for RelayRequest.
 extern const char* const kCommandRelayDisconnect;

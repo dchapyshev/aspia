@@ -51,6 +51,11 @@ message HostCommand
     string params       = 2;
 }
 
+message HostTelemetry
+{
+    string json = 1;
+}
+
 message RouterToHost
 {
     HostIdResponse host_id_response  = 1;
@@ -61,4 +66,5 @@ message RouterToHost
 message HostToRouter
 {
     HostIdRequest host_id_request = 1;
+    HostTelemetry host_telemetry  = 2;
 }

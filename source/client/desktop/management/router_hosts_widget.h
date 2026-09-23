@@ -77,6 +77,7 @@ public slots:
     void onDisconnectAllHosts();
     void onRemoveHost();
     void onCheckHostUpdates();
+    void onHostTelemetry();
 
 signals:
     void sig_currentChanged();

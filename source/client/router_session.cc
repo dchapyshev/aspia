@@ -389,6 +389,18 @@ void RouterSession::checkHostUpdates(HostId host_id, RouterCallback<proto::route
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterSession::requestHostTelemetry(
+    HostId host_id, RouterCallback<proto::router::HostTelemetryResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_host_telemetry_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_host_id(host_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterSession::editHost(const RouterHost& host, RouterCallback<proto::router::HostResult> callback)
 {
     proto::router::Host serialized;
@@ -796,6 +808,10 @@ void RouterSession::onMessageReceived(const proto::router::RouterToAdmin& messag
     else if (message.has_peer_result())
     {
         rpc_.dispatch(message.peer_result().request_id(), message.peer_result());
+    }
+    else if (message.has_host_telemetry_result())
+    {
+        rpc_.dispatch(message.host_telemetry_result().request_id(), message.host_telemetry_result());
     }
     else
     {

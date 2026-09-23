@@ -27,6 +27,7 @@
 namespace proto::router {
 class ConnectionOffer;
 class HostIdRequest;
+class HostTelemetry;
 } // namespace proto::router
 
 class HostNG final : public Host
@@ -59,13 +60,17 @@ protected:
 
 private:
     void readHostIdRequest(const proto::router::HostIdRequest& host_id_request);
+    void readHostTelemetry(const proto::router::HostTelemetry& host_telemetry, TimePoint now);
 
     HostId host_id_ = kInvalidHostId;
     QByteArray key_hash_;
     QByteArray hw_id_;
+    std::string telemetry_;
+    TimePoint next_telemetry_time_ = TimePoint::min();
     int id_request_count_ = 0;
     bool remove_command_sent_ = false;
 
+    friend class HostNGTestPeer;
     Q_DISABLE_COPY_MOVE(HostNG)
 };
 

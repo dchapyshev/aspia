@@ -262,6 +262,7 @@ ManagementTab::ManagementTab(QWidget* parent)
     connect(ui->action_host_remove, &QAction::triggered, this, &ManagementTab::onRemoveHostAction);
     connect(ui->action_host_approve, &QAction::triggered, this, &ManagementTab::onApproveHostAction);
     connect(ui->action_host_check_updates, &QAction::triggered, this, &ManagementTab::onCheckHostUpdatesAction);
+    connect(ui->action_host_telemetry, &QAction::triggered, this, &ManagementTab::onHostTelemetryAction);
     connect(ui->action_online_check, &QAction::toggled, this, &ManagementTab::onOnlineCheckToggled);
     connect(session_connect_group, &QActionGroup::triggered, this, &ManagementTab::onConnectAction);
 
@@ -290,8 +291,8 @@ ManagementTab::ManagementTab(QWidget* parent)
     addActions(ActionRole::EDIT,
     {
         ui->action_add_host, ui->action_edit_host, ui->action_copy_host, ui->action_delete_host,
-        ui->action_host_check_updates, ui->action_host_approve, ui->action_host_remove,
-        ui->action_disconnect, ui->action_disconnect_all
+        ui->action_host_check_updates, ui->action_host_telemetry, ui->action_host_approve,
+        ui->action_host_remove, ui->action_disconnect, ui->action_disconnect_all
     });
     addActions(ActionRole::ACTION,
     {
@@ -1091,6 +1092,7 @@ void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
         menu.addAction(ui->action_disconnect);
     }
 
+    menu.addAction(ui->action_host_telemetry);
     menu.addAction(ui->action_host_remove);
 
     if (is_online)
@@ -1694,6 +1696,13 @@ void ManagementTab::onCheckHostUpdatesAction()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ManagementTab::onHostTelemetryAction()
+{
+    if (current_content_ == router_hosts_widget_)
+        router_hosts_widget_->onHostTelemetry();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ManagementTab::onOnlineCheckToggled(bool checked)
 {
     Settings settings;
@@ -1850,6 +1859,7 @@ void ManagementTab::updateActionsState()
     ui->action_host_remove->setVisible(false);
     ui->action_host_approve->setVisible(false);
     ui->action_host_check_updates->setVisible(false);
+    ui->action_host_telemetry->setVisible(false);
     ui->action_online_check->setVisible(false);
     ui->action_desktop_connect->setVisible(false);
     ui->action_file_transfer_connect->setVisible(false);
@@ -1940,6 +1950,7 @@ void ManagementTab::updateActionsState()
         ui->action_edit_host->setVisible(has_host);
 
         ui->action_host_check_updates->setVisible(can_connect);
+        ui->action_host_telemetry->setVisible(has_host);
         ui->action_desktop_connect->setVisible(can_connect);
         ui->action_file_transfer_connect->setVisible(can_connect);
         ui->action_chat_connect->setVisible(can_connect);

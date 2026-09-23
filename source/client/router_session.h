@@ -120,6 +120,7 @@ public:
     void removeHost(HostId host_id, RouterCallback<proto::router::HostResult> callback);
     void approveHost(HostId host_id, RouterCallback<proto::router::HostResult> callback);
     void checkHostUpdates(HostId host_id, RouterCallback<proto::router::HostResult> callback);
+    void requestHostTelemetry(HostId host_id, RouterCallback<proto::router::HostTelemetryResult> callback);
 
     // A record that breaks the protocol bounds is answered with its error code without a request.
     // |workspace_id| is the workspace the host ends up in (0 releases it), and only an

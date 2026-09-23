@@ -25,6 +25,7 @@ namespace proto::router {
 class ClientListRequest;
 class ClientRequest;
 class HostRequest;
+class HostTelemetryRequest;
 class PeerRequest;
 class RelayListRequest;
 class RelayRequest;
@@ -58,6 +59,7 @@ private:
     void doUserTokenListRequest(const proto::router::UserTokenListRequest& request);
     void doUserTokenRequest(const proto::router::UserTokenRequest& request);
     void doHostRequest(const proto::router::HostRequest& request);
+    void doHostTelemetryRequest(const proto::router::HostTelemetryRequest& request);
     void doRelayRequest(const proto::router::RelayRequest& request);
     void doPeerRequest(const proto::router::PeerRequest& request);
     void doWorkspaceRequest(const proto::router::WorkspaceRequest& request);

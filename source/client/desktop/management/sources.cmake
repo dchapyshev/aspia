@@ -27,6 +27,9 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB
     group_combo_box.h
     host_list_model.cc
     host_list_model.h
+    host_telemetry_dialog.cc
+    host_telemetry_dialog.h
+    host_telemetry_dialog.ui
     local_group_dialog.cc
     local_group_dialog.h
     local_group_dialog.ui

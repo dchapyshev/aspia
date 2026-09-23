@@ -18,6 +18,9 @@
 
 #include "host/router_manager.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/sys_info.h"
@@ -29,6 +32,7 @@
 #include "base/threading/worker.h"
 #include "host/database.h"
 #include "host/host_storage.h"
+#include "host/system_settings.h"
 #include "proto/key_exchange.h"
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
@@ -36,6 +40,7 @@
 namespace {
 
 const Seconds kReconnectTimeout{ 10 };
+const Minutes kTelemetryInterval{ 1 };
 
 } // namespace
 
@@ -123,6 +128,7 @@ void RouterManager::onSettingsChanged()
     }
 
     emit sig_credentialsChanged(host_id_, one_time_password_);
+    markTelemetryOutdated();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -252,6 +258,7 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
         user_list_->setOneTimeUser(createOneTimeUser());
 
         emit sig_credentialsChanged(host_id_, one_time_password_);
+        sendTelemetry();
     }
     else if (in_message.has_connection_offer())
     {
@@ -271,6 +278,11 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
         {
             LOG(INFO) << "Update check command received";
             emit sig_checkUpdates();
+        }
+        else if (command_name == "telemetry")
+        {
+            LOG(INFO) << "Telemetry command received";
+            sendTelemetry();
         }
         else
         {
@@ -339,6 +351,9 @@ void RouterManager::onTimer(TimePoint now)
         reconnect_time_ = TimePoint::max();
         connectToRouter();
     }
+
+    if (telemetry_outdated_ && now >= next_telemetry_time_)
+        sendTelemetry();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -419,6 +434,42 @@ void RouterManager::hostIdRequest()
     // Send host ID request.
     LOG(INFO) << "Send ID request to router";
     tcp_channel_->send(0, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterManager::markTelemetryOutdated()
+{
+    telemetry_outdated_ = true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterManager::sendTelemetry()
+{
+    if (!tcp_channel_ || !tcp_channel_->isAuthenticated() || host_id_ == kInvalidHostId)
+        return;
+
+    SystemSettings settings;
+
+    QJsonObject update;
+    update.insert("channel", settings.updateChannel());
+#if !defined(Q_OS_ANDROID)
+    // The mobile host checks for updates only on request.
+    update.insert("check_frequency", settings.updateCheckFrequency());
+#endif
+
+    QJsonObject telemetry;
+    telemetry.insert("version", proto::router::kTelemetryVersion);
+    telemetry.insert("update", update);
+
+    proto::router::HostToRouter message;
+    message.mutable_host_telemetry()->set_json(
+        QJsonDocument(telemetry).toJson(QJsonDocument::Compact).toStdString());
+
+    LOG(INFO) << "Send telemetry to router";
+    tcp_channel_->send(0, serialize(message));
+
+    telemetry_outdated_ = false;
+    next_telemetry_time_ = Clock::now() + kTelemetryInterval;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -110,6 +110,7 @@ private slots:
     void onRemoveHostAction();
     void onApproveHostAction();
     void onCheckHostUpdatesAction();
+    void onHostTelemetryAction();
     void onOnlineCheckToggled(bool checked);
     void onTwoFactorRequired(qint64 router_id);
 

@@ -61,6 +61,9 @@ signals:
     // Emitted after the router settings are stored.
     void sig_routerSettingsChanged();
 
+    // Emitted after the update settings are stored.
+    void sig_updateSettingsChanged();
+
 private:
     void showAbout();
     void showUsers();

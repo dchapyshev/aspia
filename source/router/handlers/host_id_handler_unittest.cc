@@ -206,6 +206,21 @@ TEST_F(HostIdHandlerTest, ApprovedHostGetsItsIdAndRefreshesItsTelemetry)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The answer to an approved host carries the telemetry stored for it, so the connection knows what
+// is already in the database.
+TEST_F(HostIdHandlerTest, ApprovedHostGetsItsStoredTelemetry)
+{
+    const HostId host_id = approveHost("key-1");
+    ASSERT_NE(host_id, kInvalidHostId);
+    ASSERT_TRUE(db_.updateHostTelemetry(host_id, "{\"version\":1}"));
+
+    const HostIdResult result = handle(existingIdRequest("key-1"));
+
+    EXPECT_EQ(result.host_id, host_id);
+    EXPECT_EQ(result.telemetry, "{\"version\":1}");
+}
+
+//--------------------------------------------------------------------------------------------------
 // The key of a host that was never approved (or whose removal was finalized) is simply not known;
 // the host is told so and asks for a new id.
 TEST_F(HostIdHandlerTest, UnknownKeyIsRefused)
