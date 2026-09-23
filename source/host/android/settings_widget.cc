@@ -459,5 +459,6 @@ void SettingsWidget::onImport()
     {
         buildSettings();
         users_page_->reload();
+        emit sig_routerSettingsChanged();
     }
 }
