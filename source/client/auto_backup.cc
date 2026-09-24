@@ -26,7 +26,7 @@
 
 namespace {
 
-const char kFilePrefix[] = "aspia-backup-";
+const char kFilePrefix[] = "client-";
 const char kFileSuffix[] = ".aspia-backup";
 const char kTimeFormat[] = "yyyy-MM-dd-HHmmss";
 
