@@ -200,20 +200,6 @@ TEST_F(RouterDatabaseTest, ReopenLeavesSessionsOfAnUpgradedDatabaseAlone)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The hosts table of 3.0.10 has no telemetry column, and opening such a database adds it.
-TEST_F(RouterDatabaseTest, HostsTableOf3010GainsTheTelemetryColumn)
-{
-    const HostId host_id = addHost("hash-1");
-    ASSERT_NE(host_id, kInvalidHostId);
-
-    ASSERT_TRUE(execRaw("ALTER TABLE hosts DROP COLUMN telemetry"));
-
-    Database reopened;
-    ASSERT_TRUE(reopened.open(file_path_));
-    EXPECT_TRUE(reopened.updateHostTelemetry(host_id, "{}"));
-}
-
-//--------------------------------------------------------------------------------------------------
 // The telemetry of a host reads back as it was stored, and a host the router does not know is told
 // apart from one that has not reported anything yet.
 TEST_F(RouterDatabaseTest, HostTelemetryReadsBack)
@@ -1104,5 +1090,10 @@ TEST(RouterDatabaseFreshTest, UpgradeFrom27KeepsHostsWritable)
 
     EXPECT_EQ(db.modifyHost(HostId(1), 1, 0, 0, "renamed", std::string_view()),
               proto::router::kErrorOk);
+
+    std::string telemetry;
+    EXPECT_TRUE(db.updateHostTelemetry(HostId(1), "{\"version\":1}"));
+    EXPECT_EQ(db.hostTelemetry(HostId(1), &telemetry), proto::router::kErrorOk);
+    EXPECT_EQ(telemetry, "{\"version\":1}");
 }
 

@@ -324,7 +324,8 @@ bool ensureSchema(SqlDatabase& db)
         { "address",       "TEXT NOT NULL DEFAULT ''"    },
         { "comment",       "TEXT NOT NULL DEFAULT ''"    },
         { "last_connect",  "INTEGER NOT NULL DEFAULT 0"  },
-        { "last_modify",   "INTEGER NOT NULL DEFAULT 0"  }
+        { "last_modify",   "INTEGER NOT NULL DEFAULT 0"  },
+        { "telemetry",     "TEXT NOT NULL DEFAULT ''"    }
     };
 
     for (const auto& column : kHostColumns)
@@ -339,13 +340,6 @@ bool ensureSchema(SqlDatabase& db)
             LOG(ERROR) << "Unable to add column" << column.name << ":" << db.lastError();
             return false;
         }
-    }
-
-    // Temporary migration from 3.0.10.
-    if (!hasColumn(db, "hosts", "telemetry") &&
-        !run("ALTER TABLE \"hosts\" ADD COLUMN \"telemetry\" TEXT NOT NULL DEFAULT ''"))
-    {
-        return false;
     }
 
     // Composite index for the dominant host list/count query (hosts of a given workspace and
