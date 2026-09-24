@@ -27,6 +27,7 @@
 #include <QPalette>
 #include <QPushButton>
 #include <QScreen>
+#include <QScrollArea>
 #include <QSignalBlocker>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -145,6 +146,13 @@ SettingsTab::SettingsTab(QWidget* parent)
     center(ui->layout_general_outer, ui->page_general_content, kMaxContentWidth);
     center(ui->layout_desktop_outer, ui->page_desktop_content, kMaxContentWidth);
     center(ui->layout_update_outer, ui->page_update_content, kMaxContentWidth);
+
+    // A scroll area fills the page with the window color, the pane of the tab has the base one.
+    for (QScrollArea* page : { ui->page_general, ui->page_desktop, ui->page_update })
+    {
+        page->viewport()->setAutoFillBackground(false);
+        page->widget()->setAutoFillBackground(false);
+    }
 
     // General page.
     QString current_locale = settings.locale();
