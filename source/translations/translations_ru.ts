@@ -1024,17 +1024,17 @@ Routers added: %4</source>
         <translation>Ссылка aspia:// для подключения к хосту.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="61"/>
+        <location filename="../client/desktop/app_lock.cc" line="63"/>
         <source>Unlock</source>
         <translation>Разблокировка</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="63"/>
+        <location filename="../client/desktop/app_lock.cc" line="65"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Введите мастер-пароль, чтобы разблокировать приложение.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="91"/>
+        <location filename="../client/desktop/app_lock.cc" line="99"/>
         <source>Unable to unlock the database.</source>
         <translation>Не удалось разблокировать базу данных.</translation>
     </message>
@@ -1082,7 +1082,7 @@ Routers added: %4</source>
         <translation>Не удалось установить мастер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="96"/>
+        <location filename="../client/desktop/app_lock.cc" line="104"/>
         <source>Invalid master password.</source>
         <translation>Неверный мастер-пароль.</translation>
     </message>
@@ -4709,39 +4709,39 @@ Credentials imported: %5</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="118"/>
-        <location filename="../client/desktop/main_window.ui" line="190"/>
+        <location filename="../client/desktop/main_window.ui" line="119"/>
+        <location filename="../client/desktop/main_window.ui" line="201"/>
         <source>Tool Bar</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="146"/>
+        <location filename="../client/desktop/main_window.ui" line="148"/>
         <source>F1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="77"/>
+        <location filename="../client/desktop/main_window.ui" line="78"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="89"/>
+        <location filename="../client/desktop/main_window.ui" line="90"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="182"/>
+        <location filename="../client/desktop/main_window.ui" line="193"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="143"/>
+        <location filename="../client/desktop/main_window.ui" line="145"/>
         <source>Online Help...</source>
         <translation>Онлайн справка...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="383"/>
+        <location filename="../client/desktop/main_window.cc" line="404"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
@@ -4751,57 +4751,62 @@ Credentials imported: %5</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="84"/>
+        <location filename="../client/desktop/main_window.ui" line="85"/>
         <source>Edit</source>
         <translation>Правка</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="101"/>
+        <location filename="../client/desktop/main_window.ui" line="102"/>
         <source>Session Type</source>
         <translation>Тип сессии</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="164"/>
+        <location filename="../client/desktop/main_window.ui" line="166"/>
         <source>Credentials...</source>
         <translation>Учетные данные...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="198"/>
+        <location filename="../client/desktop/main_window.ui" line="184"/>
+        <source>Lock</source>
+        <translation>Блокировка</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="209"/>
         <source>Status Bar</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="206"/>
+        <location filename="../client/desktop/main_window.ui" line="217"/>
         <source>Search Field</source>
         <translation>Поле поиска</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="214"/>
+        <location filename="../client/desktop/main_window.ui" line="225"/>
         <source>Large icons</source>
         <translation>Большие иконки</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="222"/>
+        <location filename="../client/desktop/main_window.ui" line="233"/>
         <source>Open Sessions in Tabs</source>
         <translation>Открывать сессии во вкладках</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="230"/>
+        <location filename="../client/desktop/main_window.ui" line="241"/>
         <source>Always on Top</source>
         <translation>Поверх всех окон</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="155"/>
+        <location filename="../client/desktop/main_window.ui" line="157"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="106"/>
+        <location filename="../client/desktop/main_window.ui" line="107"/>
         <source>Actions</source>
         <translation>Действия</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="173"/>
+        <location filename="../client/desktop/main_window.ui" line="175"/>
         <source>Settings...</source>
         <translation>Параметры...</translation>
     </message>
@@ -4811,53 +4816,63 @@ Credentials imported: %5</source>
         <translation>Поиск...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="178"/>
+        <location filename="../client/desktop/main_window.cc" line="179"/>
         <source>Management</source>
         <translation>Управление</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="224"/>
+        <location filename="../client/desktop/main_window.cc" line="225"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Недопустимая ссылка &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="247"/>
+        <location filename="../client/desktop/main_window.cc" line="248"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Маршрутизатор, указанный в ссылке, не найден среди сохраненных маршрутизаторов.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="296"/>
+        <location filename="../client/desktop/main_window.cc" line="297"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Хост, указанный в ссылке, не найден среди сохраненных хостов.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="481"/>
+        <location filename="../client/desktop/main_window.cc" line="380"/>
+        <source>Close all sessions to lock the application.</source>
+        <translation>Закройте все сессии, чтобы заблокировать приложение.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="386"/>
+        <source>Close all dialogs to lock the application.</source>
+        <translation>Закройте все диалоги, чтобы заблокировать приложение.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="502"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>В свойствах хоста указано подключение по ID, но маршрутизатор не настроен. Проверьте параметры маршрутизатора в свойствах хоста.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="308"/>
+        <location filename="../client/desktop/main_window.cc" line="309"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Маршрутизатор, связанный с этим хостом, был удален. Измените хост, чтобы выбрать другой маршрутизатор, или переключитесь на прямое подключение.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="255"/>
-        <location filename="../client/desktop/main_window.cc" line="307"/>
+        <location filename="../client/desktop/main_window.cc" line="256"/>
+        <location filename="../client/desktop/main_window.cc" line="308"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Данные маршрутизатора повреждены. Измените маршрутизатор и введите их заново.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="295"/>
+        <location filename="../client/desktop/main_window.cc" line="296"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Данные хоста повреждены. Измените хост и введите их заново.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="338"/>
+        <location filename="../client/desktop/main_window.cc" line="339"/>
         <source>Credentials</source>
         <translation>Учетные данные</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="369"/>
+        <location filename="../client/desktop/main_window.cc" line="370"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
@@ -5976,44 +5991,44 @@ Credentials imported: %5</source>
 <context>
     <name>RouterController</name>
     <message>
-        <location filename="../client/router_controller.cc" line="210"/>
-        <location filename="../client/router_controller.cc" line="236"/>
-        <location filename="../client/router_controller.cc" line="436"/>
+        <location filename="../client/router_controller.cc" line="216"/>
+        <location filename="../client/router_controller.cc" line="242"/>
+        <location filename="../client/router_controller.cc" line="442"/>
         <source>Connecting to router %1...</source>
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="259"/>
+        <location filename="../client/router_controller.cc" line="265"/>
         <source>Event history cleared.</source>
         <translation>История событий очищена.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="304"/>
+        <location filename="../client/router_controller.cc" line="310"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
         <translation>Слишком много неудачных попыток. Маршрутизатор %1 снова начнет принимать коды примерно через %2 мин.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="312"/>
+        <location filename="../client/router_controller.cc" line="318"/>
         <source>The code was not accepted by router %1.</source>
         <translation>Код не принят маршрутизатором %1.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="315"/>
+        <location filename="../client/router_controller.cc" line="321"/>
         <source>Router %1 is waiting for a two-factor code.</source>
         <translation>Маршрутизатор %1 ожидает код двухфакторной аутентификации.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="344"/>
+        <location filename="../client/router_controller.cc" line="350"/>
         <source>Connection to router %1 established.</source>
         <translation>Соединение с маршрутизатором %1 установлено.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="389"/>
+        <location filename="../client/router_controller.cc" line="395"/>
         <source>Network error: %1</source>
         <translation>Ошибка сети: %1</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="403"/>
+        <location filename="../client/router_controller.cc" line="409"/>
         <source>Disconnected from router %1.</source>
         <translation>Отключено от маршрутизатора %1.</translation>
     </message>
@@ -7354,304 +7369,304 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsTab</name>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="119"/>
+        <location filename="../client/desktop/settings_tab.ui" line="126"/>
         <source>Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="125"/>
+        <location filename="../client/desktop/settings_tab.ui" line="132"/>
         <source>Language:</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="135"/>
+        <location filename="../client/desktop/settings_tab.ui" line="142"/>
         <source>Theme:</source>
         <translation>Тема:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="145"/>
+        <location filename="../client/desktop/settings_tab.ui" line="152"/>
         <source>Display name when connected:</source>
         <translation>Имя отображаемое при подключении:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="155"/>
+        <location filename="../client/desktop/settings_tab.ui" line="162"/>
         <source>Enter a name or leave the field empty</source>
         <translation>Введите имя или оставьте поле пустым</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="165"/>
+        <location filename="../client/desktop/settings_tab.ui" line="172"/>
         <source>Backup</source>
         <translation>Резервное копирование</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="171"/>
+        <location filename="../client/desktop/settings_tab.ui" line="178"/>
         <source>Create backups on application startup</source>
         <translation>Создавать резервные копии при запуске</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="178"/>
+        <location filename="../client/desktop/settings_tab.ui" line="185"/>
         <source>Directory:</source>
         <translation>Директория:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="188"/>
+        <location filename="../client/desktop/settings_tab.ui" line="195"/>
         <source>Browse...</source>
         <translation>Обзор...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="195"/>
+        <location filename="../client/desktop/settings_tab.ui" line="202"/>
         <source>Keep backups for:</source>
         <translation>Хранить резервные копии:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="208"/>
+        <location filename="../client/desktop/settings_tab.ui" line="215"/>
         <source>UDP Connections</source>
         <translation>UDP подключения</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="214"/>
+        <location filename="../client/desktop/settings_tab.ui" line="221"/>
         <source>Allow direct connections</source>
         <translation>Разрешить прямые подключения</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="221"/>
+        <location filename="../client/desktop/settings_tab.ui" line="228"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Разрешить UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="228"/>
+        <location filename="../client/desktop/settings_tab.ui" line="235"/>
         <source>Allow PCP protocol</source>
         <translation>Разрешить PCP протокол</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="235"/>
+        <location filename="../client/desktop/settings_tab.ui" line="242"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Разрешить NAT-PMP протокол</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="242"/>
+        <location filename="../client/desktop/settings_tab.ui" line="249"/>
         <source>Allow UPnP protocol</source>
         <translation>Разрешить UPnP протокол</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="252"/>
+        <location filename="../client/desktop/settings_tab.ui" line="259"/>
         <source>Security</source>
         <translation>Безопасность</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="258"/>
+        <location filename="../client/desktop/settings_tab.ui" line="265"/>
         <source>Lock after inactivity:</source>
         <translation>Блокировать при бездействии:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="268"/>
+        <location filename="../client/desktop/settings_tab.ui" line="275"/>
         <source>Change Master Password...</source>
         <translation>Изменить мастер-пароль...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="331"/>
+        <location filename="../client/desktop/settings_tab.ui" line="346"/>
         <source>Features</source>
         <translation>Возможности</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="337"/>
+        <location filename="../client/desktop/settings_tab.ui" line="352"/>
         <source>Enable audio</source>
         <translation>Включить звук</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="344"/>
+        <location filename="../client/desktop/settings_tab.ui" line="359"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="351"/>
+        <location filename="../client/desktop/settings_tab.ui" line="366"/>
         <source>Show shape of remote cursor</source>
         <translation>Показывать форму удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="358"/>
+        <location filename="../client/desktop/settings_tab.ui" line="373"/>
         <source>Show position of remote cursor</source>
         <translation>Показывать положение удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="365"/>
+        <location filename="../client/desktop/settings_tab.ui" line="380"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="372"/>
+        <location filename="../client/desktop/settings_tab.ui" line="387"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="379"/>
+        <location filename="../client/desktop/settings_tab.ui" line="394"/>
         <source>Lock computer at disconnect</source>
         <translation>Блокировать компьютер при отключении</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="386"/>
+        <location filename="../client/desktop/settings_tab.ui" line="401"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="393"/>
+        <location filename="../client/desktop/settings_tab.ui" line="408"/>
         <source>Send key combinations</source>
         <translation>Отправлять комбинации клавиш</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="409"/>
+        <location filename="../client/desktop/settings_tab.ui" line="424"/>
         <source>Screen</source>
         <translation>Экран</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="417"/>
+        <location filename="../client/desktop/settings_tab.ui" line="432"/>
         <source>Preferred resolution:</source>
         <translation>Предпочитаемое разрешение:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="445"/>
+        <location filename="../client/desktop/settings_tab.ui" line="460"/>
         <source>Recording</source>
         <translation>Запись</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="451"/>
+        <location filename="../client/desktop/settings_tab.ui" line="466"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>Автоматически начинать запись при подключении</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="460"/>
+        <location filename="../client/desktop/settings_tab.ui" line="475"/>
         <source>Write path:</source>
         <translation>Путь для записи:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="548"/>
-        <location filename="../client/desktop/settings_tab.cc" line="128"/>
+        <location filename="../client/desktop/settings_tab.ui" line="571"/>
+        <location filename="../client/desktop/settings_tab.cc" line="129"/>
         <source>Update</source>
         <translation>Обновление</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="554"/>
+        <location filename="../client/desktop/settings_tab.ui" line="577"/>
         <source>Check for updates on startup</source>
         <translation>Проверять обновления при запуске</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="563"/>
+        <location filename="../client/desktop/settings_tab.ui" line="586"/>
         <source>Update channel:</source>
         <translation>Канал обновлений:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="590"/>
+        <location filename="../client/desktop/settings_tab.ui" line="613"/>
         <source>Check for updates</source>
         <translation>Проверить обновления</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="126"/>
+        <location filename="../client/desktop/settings_tab.cc" line="127"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="127"/>
+        <location filename="../client/desktop/settings_tab.cc" line="128"/>
         <source>Desktop</source>
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="173"/>
+        <location filename="../client/desktop/settings_tab.cc" line="181"/>
         <source>1 week</source>
         <translation>1 неделю</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="174"/>
+        <location filename="../client/desktop/settings_tab.cc" line="182"/>
         <source>2 weeks</source>
         <translation>2 недели</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="175"/>
+        <location filename="../client/desktop/settings_tab.cc" line="183"/>
         <source>1 month</source>
         <translation>1 месяц</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="176"/>
+        <location filename="../client/desktop/settings_tab.cc" line="184"/>
         <source>6 months</source>
         <translation>6 месяцев</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="177"/>
+        <location filename="../client/desktop/settings_tab.cc" line="185"/>
         <source>1 year</source>
         <translation>1 год</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="181"/>
+        <location filename="../client/desktop/settings_tab.cc" line="189"/>
         <source>Do not lock</source>
         <translation>Не блокировать</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="182"/>
+        <location filename="../client/desktop/settings_tab.cc" line="190"/>
         <source>1 minute</source>
         <translation>1 минута</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="183"/>
+        <location filename="../client/desktop/settings_tab.cc" line="191"/>
         <source>5 minutes</source>
         <translation>5 минут</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="184"/>
+        <location filename="../client/desktop/settings_tab.cc" line="192"/>
         <source>10 minutes</source>
         <translation>10 минут</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="185"/>
+        <location filename="../client/desktop/settings_tab.cc" line="193"/>
         <source>30 minutes</source>
         <translation>30 минут</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="186"/>
+        <location filename="../client/desktop/settings_tab.cc" line="194"/>
         <source>1 hour</source>
         <translation>1 час</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="210"/>
+        <location filename="../client/desktop/settings_tab.cc" line="218"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="235"/>
+        <location filename="../client/desktop/settings_tab.cc" line="243"/>
         <source>Stable</source>
         <translation>Стабильный</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="236"/>
+        <location filename="../client/desktop/settings_tab.cc" line="244"/>
         <source>Beta</source>
         <translation>Бета</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="237"/>
+        <location filename="../client/desktop/settings_tab.cc" line="245"/>
         <source>Alpha</source>
         <translation>Альфа</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="357"/>
+        <location filename="../client/desktop/settings_tab.cc" line="365"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Новый язык будет применен после перезапуска приложения.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="406"/>
-        <location filename="../client/desktop/settings_tab.cc" line="484"/>
+        <location filename="../client/desktop/settings_tab.cc" line="414"/>
+        <location filename="../client/desktop/settings_tab.cc" line="492"/>
         <source>Choose path</source>
         <translation>Выбор пути</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="504"/>
+        <location filename="../client/desktop/settings_tab.cc" line="512"/>
         <source>Change Master Password</source>
         <translation>Изменение мастер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="506"/>
+        <location filename="../client/desktop/settings_tab.cc" line="514"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Введите свой текущий пароль и выберите новый.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="514"/>
+        <location filename="../client/desktop/settings_tab.cc" line="522"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не должен быть короче %n символа.</numerusform>
@@ -7660,12 +7675,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="521"/>
+        <location filename="../client/desktop/settings_tab.cc" line="529"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="522"/>
+        <location filename="../client/desktop/settings_tab.cc" line="530"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -7674,22 +7689,22 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="525"/>
+        <location filename="../client/desktop/settings_tab.cc" line="533"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="538"/>
+        <location filename="../client/desktop/settings_tab.cc" line="546"/>
         <source>Invalid current password.</source>
         <translation>Неверный текущий пароль.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="542"/>
+        <location filename="../client/desktop/settings_tab.cc" line="550"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Некоторые записи базы данных повреждены. Исправьте или удалите их и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="546"/>
+        <location filename="../client/desktop/settings_tab.cc" line="554"/>
         <source>Unable to change the password.</source>
         <translation>Не удалось изменить пароль.</translation>
     </message>

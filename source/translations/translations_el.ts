@@ -1059,7 +1059,7 @@ Routers added: %4</source>
         <translation>Δεν είναι δυνατός ο ορισμός του κύριου κωδικού πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="61"/>
+        <location filename="../client/desktop/app_lock.cc" line="63"/>
         <source>Unlock</source>
         <translation>Ξεκλείδωμα</translation>
     </message>
@@ -1079,17 +1079,17 @@ Routers added: %4</source>
         <translation>Σύνδεσμος aspia:// για σύνδεση με κεντρικό υπολογιστή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="63"/>
+        <location filename="../client/desktop/app_lock.cc" line="65"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Εισαγάγετε τον κύριο κωδικό πρόσβασης για να ξεκλειδώσετε την εφαρμογή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="91"/>
+        <location filename="../client/desktop/app_lock.cc" line="99"/>
         <source>Unable to unlock the database.</source>
         <translation>Δεν είναι δυνατό το ξεκλείδωμα της βάσης δεδομένων.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="96"/>
+        <location filename="../client/desktop/app_lock.cc" line="104"/>
         <source>Invalid master password.</source>
         <translation>Μη έγκυρος κύριος κωδικός πρόσβασης.</translation>
     </message>
@@ -4684,44 +4684,44 @@ Credentials imported: %5</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="89"/>
+        <location filename="../client/desktop/main_window.ui" line="90"/>
         <source>View</source>
         <translation>Προβολή</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="118"/>
-        <location filename="../client/desktop/main_window.ui" line="190"/>
+        <location filename="../client/desktop/main_window.ui" line="119"/>
+        <location filename="../client/desktop/main_window.ui" line="201"/>
         <source>Tool Bar</source>
         <translation>Γραμμή εργαλείων</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="146"/>
+        <location filename="../client/desktop/main_window.ui" line="148"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="198"/>
+        <location filename="../client/desktop/main_window.ui" line="209"/>
         <source>Status Bar</source>
         <translation>Γραμμή κατάστασης</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="77"/>
+        <location filename="../client/desktop/main_window.ui" line="78"/>
         <source>Help</source>
         <translation>Βοήθεια</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="182"/>
+        <location filename="../client/desktop/main_window.ui" line="193"/>
         <source>Exit</source>
         <translation>Έξοδος</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="143"/>
+        <location filename="../client/desktop/main_window.ui" line="145"/>
         <source>Online Help...</source>
         <translation>Ηλεκτρονική βοήθεια...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="383"/>
+        <location filename="../client/desktop/main_window.cc" line="404"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4731,52 +4731,57 @@ Credentials imported: %5</source>
         <translation>Αρχείο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="84"/>
+        <location filename="../client/desktop/main_window.ui" line="85"/>
         <source>Edit</source>
         <translation>Επεξεργασία</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="101"/>
+        <location filename="../client/desktop/main_window.ui" line="102"/>
         <source>Session Type</source>
         <translation>Τύπος περιόδου λειτουργίας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="106"/>
+        <location filename="../client/desktop/main_window.ui" line="107"/>
         <source>Actions</source>
         <translation>Ενέργειες</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="155"/>
+        <location filename="../client/desktop/main_window.ui" line="157"/>
         <source>About</source>
         <translation>Πληροφορίες</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="164"/>
+        <location filename="../client/desktop/main_window.ui" line="166"/>
         <source>Credentials...</source>
         <translation>Διαπιστευτήρια...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="173"/>
+        <location filename="../client/desktop/main_window.ui" line="175"/>
         <source>Settings...</source>
         <translation>Ρυθμίσεις...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="206"/>
+        <location filename="../client/desktop/main_window.ui" line="184"/>
+        <source>Lock</source>
+        <translation>Κλείδωμα</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="217"/>
         <source>Search Field</source>
         <translation>Πεδίο αναζήτησης</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="214"/>
+        <location filename="../client/desktop/main_window.ui" line="225"/>
         <source>Large icons</source>
         <translation>Μεγάλα εικονίδια</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="222"/>
+        <location filename="../client/desktop/main_window.ui" line="233"/>
         <source>Open Sessions in Tabs</source>
         <translation>Άνοιγμα περιόδων λειτουργίας σε καρτέλες</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="230"/>
+        <location filename="../client/desktop/main_window.ui" line="241"/>
         <source>Always on Top</source>
         <translation>Πάντα σε πρώτο πλάνο</translation>
     </message>
@@ -4786,53 +4791,63 @@ Credentials imported: %5</source>
         <translation>Αναζήτηση...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="178"/>
+        <location filename="../client/desktop/main_window.cc" line="179"/>
         <source>Management</source>
         <translation>Διαχείριση</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="224"/>
+        <location filename="../client/desktop/main_window.cc" line="225"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Μη έγκυρος σύνδεσμος &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="247"/>
+        <location filename="../client/desktop/main_window.cc" line="248"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Ο δρομολογητής στον οποίο αναφέρεται ο σύνδεσμος δεν βρίσκεται μεταξύ των αποθηκευμένων δρομολογητών.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="296"/>
+        <location filename="../client/desktop/main_window.cc" line="297"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Ο κεντρικός υπολογιστής στον οποίο αναφέρεται ο σύνδεσμος δεν βρίσκεται μεταξύ των αποθηκευμένων κεντρικών υπολογιστών.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="481"/>
+        <location filename="../client/desktop/main_window.cc" line="380"/>
+        <source>Close all sessions to lock the application.</source>
+        <translation>Κλείστε όλες τις περιόδους λειτουργίας για να κλειδώσετε την εφαρμογή.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="386"/>
+        <source>Close all dialogs to lock the application.</source>
+        <translation>Κλείστε όλα τα παράθυρα διαλόγου για να κλειδώσετε την εφαρμογή.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="502"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Στις ιδιότητες του κεντρικού υπολογιστή έχει καθοριστεί σύνδεση μέσω ID, αλλά ο δρομολογητής δεν έχει ρυθμιστεί. Ελέγξτε τις παραμέτρους του δρομολογητή στις ιδιότητες του κεντρικού υπολογιστή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="308"/>
+        <location filename="../client/desktop/main_window.cc" line="309"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Ο δρομολογητής που είναι συσχετισμένος με αυτόν τον κεντρικό υπολογιστή έχει διαγραφεί. Επεξεργαστείτε τον κεντρικό υπολογιστή για να επιλέξετε άλλον δρομολογητή ή μεταβείτε σε απευθείας σύνδεση.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="255"/>
-        <location filename="../client/desktop/main_window.cc" line="307"/>
+        <location filename="../client/desktop/main_window.cc" line="256"/>
+        <location filename="../client/desktop/main_window.cc" line="308"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Τα δεδομένα του δρομολογητή είναι κατεστραμμένα. Επεξεργαστείτε τον δρομολογητή και εισαγάγετέ τα ξανά.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="295"/>
+        <location filename="../client/desktop/main_window.cc" line="296"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Τα δεδομένα του κεντρικού υπολογιστή είναι κατεστραμμένα. Επεξεργαστείτε τον κεντρικό υπολογιστή και εισαγάγετέ τα ξανά.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="338"/>
+        <location filename="../client/desktop/main_window.cc" line="339"/>
         <source>Credentials</source>
         <translation>Διαπιστευτήρια</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="369"/>
+        <location filename="../client/desktop/main_window.cc" line="370"/>
         <source>Settings</source>
         <translation>Ρυθμίσεις</translation>
     </message>
@@ -5949,44 +5964,44 @@ Credentials imported: %5</source>
 <context>
     <name>RouterController</name>
     <message>
-        <location filename="../client/router_controller.cc" line="210"/>
-        <location filename="../client/router_controller.cc" line="236"/>
-        <location filename="../client/router_controller.cc" line="436"/>
+        <location filename="../client/router_controller.cc" line="216"/>
+        <location filename="../client/router_controller.cc" line="242"/>
+        <location filename="../client/router_controller.cc" line="442"/>
         <source>Connecting to router %1...</source>
         <translation>Σύνδεση με τον δρομολογητή %1...</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="259"/>
+        <location filename="../client/router_controller.cc" line="265"/>
         <source>Event history cleared.</source>
         <translation>Το ιστορικό συμβάντων απαλείφθηκε.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="304"/>
+        <location filename="../client/router_controller.cc" line="310"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
         <translation>Πάρα πολλές αποτυχημένες προσπάθειες. Ο δρομολογητής %1 θα δέχεται ξανά κωδικούς σε περίπου %2 λεπ.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="312"/>
+        <location filename="../client/router_controller.cc" line="318"/>
         <source>The code was not accepted by router %1.</source>
         <translation>Ο κωδικός δεν έγινε δεκτός από τον δρομολογητή %1.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="315"/>
+        <location filename="../client/router_controller.cc" line="321"/>
         <source>Router %1 is waiting for a two-factor code.</source>
         <translation>Ο δρομολογητής %1 αναμένει κωδικό δύο παραγόντων.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="344"/>
+        <location filename="../client/router_controller.cc" line="350"/>
         <source>Connection to router %1 established.</source>
         <translation>Η σύνδεση με τον δρομολογητή %1 πραγματοποιήθηκε.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="389"/>
+        <location filename="../client/router_controller.cc" line="395"/>
         <source>Network error: %1</source>
         <translation>Σφάλμα δικτύου: %1</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="403"/>
+        <location filename="../client/router_controller.cc" line="409"/>
         <source>Disconnected from router %1.</source>
         <translation>Έγινε αποσύνδεση από τον δρομολογητή %1.</translation>
     </message>
@@ -7316,304 +7331,304 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsTab</name>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="119"/>
+        <location filename="../client/desktop/settings_tab.ui" line="126"/>
         <source>Interface</source>
         <translation>Περιβάλλον εργασίας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="125"/>
+        <location filename="../client/desktop/settings_tab.ui" line="132"/>
         <source>Language:</source>
         <translation>Γλώσσα:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="135"/>
+        <location filename="../client/desktop/settings_tab.ui" line="142"/>
         <source>Theme:</source>
         <translation>Θέμα:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="145"/>
+        <location filename="../client/desktop/settings_tab.ui" line="152"/>
         <source>Display name when connected:</source>
         <translation>Εμφανιζόμενο όνομα κατά τη σύνδεση:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="155"/>
+        <location filename="../client/desktop/settings_tab.ui" line="162"/>
         <source>Enter a name or leave the field empty</source>
         <translation>Εισαγάγετε ένα όνομα ή αφήστε το πεδίο κενό</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="165"/>
+        <location filename="../client/desktop/settings_tab.ui" line="172"/>
         <source>Backup</source>
         <translation>Αντίγραφα ασφαλείας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="171"/>
+        <location filename="../client/desktop/settings_tab.ui" line="178"/>
         <source>Create backups on application startup</source>
         <translation>Δημιουργία αντιγράφων ασφαλείας κατά την εκκίνηση της εφαρμογής</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="178"/>
+        <location filename="../client/desktop/settings_tab.ui" line="185"/>
         <source>Directory:</source>
         <translation>Κατάλογος:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="188"/>
+        <location filename="../client/desktop/settings_tab.ui" line="195"/>
         <source>Browse...</source>
         <translation>Αναζήτηση...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="195"/>
+        <location filename="../client/desktop/settings_tab.ui" line="202"/>
         <source>Keep backups for:</source>
         <translation>Διατήρηση αντιγράφων ασφαλείας για:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="208"/>
+        <location filename="../client/desktop/settings_tab.ui" line="215"/>
         <source>UDP Connections</source>
         <translation>Συνδέσεις UDP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="214"/>
+        <location filename="../client/desktop/settings_tab.ui" line="221"/>
         <source>Allow direct connections</source>
         <translation>Να επιτρέπονται απευθείας συνδέσεις</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="221"/>
+        <location filename="../client/desktop/settings_tab.ui" line="228"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Να επιτρέπεται το UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="228"/>
+        <location filename="../client/desktop/settings_tab.ui" line="235"/>
         <source>Allow PCP protocol</source>
         <translation>Να επιτρέπεται το πρωτόκολλο PCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="235"/>
+        <location filename="../client/desktop/settings_tab.ui" line="242"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Να επιτρέπεται το πρωτόκολλο NAT-PMP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="242"/>
+        <location filename="../client/desktop/settings_tab.ui" line="249"/>
         <source>Allow UPnP protocol</source>
         <translation>Να επιτρέπεται το πρωτόκολλο UPnP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="252"/>
+        <location filename="../client/desktop/settings_tab.ui" line="259"/>
         <source>Security</source>
         <translation>Ασφάλεια</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="258"/>
+        <location filename="../client/desktop/settings_tab.ui" line="265"/>
         <source>Lock after inactivity:</source>
         <translation>Κλείδωμα μετά από αδράνεια:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="268"/>
+        <location filename="../client/desktop/settings_tab.ui" line="275"/>
         <source>Change Master Password...</source>
         <translation>Αλλαγή κύριου κωδικού πρόσβασης...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="331"/>
+        <location filename="../client/desktop/settings_tab.ui" line="346"/>
         <source>Features</source>
         <translation>Δυνατότητες</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="337"/>
+        <location filename="../client/desktop/settings_tab.ui" line="352"/>
         <source>Enable audio</source>
         <translation>Ενεργοποίηση ήχου</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="344"/>
+        <location filename="../client/desktop/settings_tab.ui" line="359"/>
         <source>Enable clipboard</source>
         <translation>Ενεργοποίηση προχείρου</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="351"/>
+        <location filename="../client/desktop/settings_tab.ui" line="366"/>
         <source>Show shape of remote cursor</source>
         <translation>Εμφάνιση σχήματος απομακρυσμένου δρομέα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="358"/>
+        <location filename="../client/desktop/settings_tab.ui" line="373"/>
         <source>Show position of remote cursor</source>
         <translation>Εμφάνιση θέσης απομακρυσμένου δρομέα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="365"/>
+        <location filename="../client/desktop/settings_tab.ui" line="380"/>
         <source>Disable desktop effects</source>
         <translation>Απενεργοποίηση εφέ επιφάνειας εργασίας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="372"/>
+        <location filename="../client/desktop/settings_tab.ui" line="387"/>
         <source>Disable desktop wallpaper</source>
         <translation>Απενεργοποίηση ταπετσαρίας επιφάνειας εργασίας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="379"/>
+        <location filename="../client/desktop/settings_tab.ui" line="394"/>
         <source>Lock computer at disconnect</source>
         <translation>Κλείδωμα υπολογιστή κατά την αποσύνδεση</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="386"/>
+        <location filename="../client/desktop/settings_tab.ui" line="401"/>
         <source>Block remote input</source>
         <translation>Αποκλεισμός απομακρυσμένης εισόδου</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="393"/>
+        <location filename="../client/desktop/settings_tab.ui" line="408"/>
         <source>Send key combinations</source>
         <translation>Αποστολή συνδυασμών πλήκτρων</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="409"/>
+        <location filename="../client/desktop/settings_tab.ui" line="424"/>
         <source>Screen</source>
         <translation>Οθόνη</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="417"/>
+        <location filename="../client/desktop/settings_tab.ui" line="432"/>
         <source>Preferred resolution:</source>
         <translation>Προτιμώμενη ανάλυση:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="445"/>
+        <location filename="../client/desktop/settings_tab.ui" line="460"/>
         <source>Recording</source>
         <translation>Εγγραφή</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="451"/>
+        <location filename="../client/desktop/settings_tab.ui" line="466"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>Αυτόματη έναρξη εγγραφής περιόδων λειτουργίας κατά τη σύνδεση</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="460"/>
+        <location filename="../client/desktop/settings_tab.ui" line="475"/>
         <source>Write path:</source>
         <translation>Διαδρομή εγγραφής:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="548"/>
-        <location filename="../client/desktop/settings_tab.cc" line="128"/>
+        <location filename="../client/desktop/settings_tab.ui" line="571"/>
+        <location filename="../client/desktop/settings_tab.cc" line="129"/>
         <source>Update</source>
         <translation>Ενημέρωση</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="554"/>
+        <location filename="../client/desktop/settings_tab.ui" line="577"/>
         <source>Check for updates on startup</source>
         <translation>Έλεγχος για ενημερώσεις κατά την εκκίνηση</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="563"/>
+        <location filename="../client/desktop/settings_tab.ui" line="586"/>
         <source>Update channel:</source>
         <translation>Κανάλι ενημερώσεων:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="590"/>
+        <location filename="../client/desktop/settings_tab.ui" line="613"/>
         <source>Check for updates</source>
         <translation>Έλεγχος για ενημερώσεις</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="126"/>
+        <location filename="../client/desktop/settings_tab.cc" line="127"/>
         <source>General</source>
         <translation>Γενικά</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="127"/>
+        <location filename="../client/desktop/settings_tab.cc" line="128"/>
         <source>Desktop</source>
         <translation>Επιφάνεια εργασίας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="173"/>
+        <location filename="../client/desktop/settings_tab.cc" line="181"/>
         <source>1 week</source>
         <translation>1 εβδομάδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="174"/>
+        <location filename="../client/desktop/settings_tab.cc" line="182"/>
         <source>2 weeks</source>
         <translation>2 εβδομάδες</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="175"/>
+        <location filename="../client/desktop/settings_tab.cc" line="183"/>
         <source>1 month</source>
         <translation>1 μήνα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="176"/>
+        <location filename="../client/desktop/settings_tab.cc" line="184"/>
         <source>6 months</source>
         <translation>6 μήνες</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="177"/>
+        <location filename="../client/desktop/settings_tab.cc" line="185"/>
         <source>1 year</source>
         <translation>1 έτος</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="181"/>
+        <location filename="../client/desktop/settings_tab.cc" line="189"/>
         <source>Do not lock</source>
         <translation>Ποτέ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="182"/>
+        <location filename="../client/desktop/settings_tab.cc" line="190"/>
         <source>1 minute</source>
         <translation>1 λεπτό</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="183"/>
+        <location filename="../client/desktop/settings_tab.cc" line="191"/>
         <source>5 minutes</source>
         <translation>5 λεπτά</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="184"/>
+        <location filename="../client/desktop/settings_tab.cc" line="192"/>
         <source>10 minutes</source>
         <translation>10 λεπτά</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="185"/>
+        <location filename="../client/desktop/settings_tab.cc" line="193"/>
         <source>30 minutes</source>
         <translation>30 λεπτά</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="186"/>
+        <location filename="../client/desktop/settings_tab.cc" line="194"/>
         <source>1 hour</source>
         <translation>1 ώρα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="210"/>
+        <location filename="../client/desktop/settings_tab.cc" line="218"/>
         <source>None</source>
         <translation>Κανένα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="235"/>
+        <location filename="../client/desktop/settings_tab.cc" line="243"/>
         <source>Stable</source>
         <translation>Σταθερό</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="236"/>
+        <location filename="../client/desktop/settings_tab.cc" line="244"/>
         <source>Beta</source>
         <translation>Βήτα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="237"/>
+        <location filename="../client/desktop/settings_tab.cc" line="245"/>
         <source>Alpha</source>
         <translation>Άλφα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="357"/>
+        <location filename="../client/desktop/settings_tab.cc" line="365"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Η νέα γλώσσα θα εφαρμοστεί μετά την επανεκκίνηση της εφαρμογής.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="406"/>
-        <location filename="../client/desktop/settings_tab.cc" line="484"/>
+        <location filename="../client/desktop/settings_tab.cc" line="414"/>
+        <location filename="../client/desktop/settings_tab.cc" line="492"/>
         <source>Choose path</source>
         <translation>Επιλογή διαδρομής</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="504"/>
+        <location filename="../client/desktop/settings_tab.cc" line="512"/>
         <source>Change Master Password</source>
         <translation>Αλλαγή κύριου κωδικού πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="506"/>
+        <location filename="../client/desktop/settings_tab.cc" line="514"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Εισαγάγετε τον τρέχοντα κωδικό πρόσβασης και επιλέξτε έναν νέο.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="514"/>
+        <location filename="../client/desktop/settings_tab.cc" line="522"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Ο κωδικός πρόσβασης δεν πρέπει να είναι μικρότερος από %n χαρακτήρα.</numerusform>
@@ -7621,12 +7636,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="521"/>
+        <location filename="../client/desktop/settings_tab.cc" line="529"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Ο κωδικός πρόσβασης που εισαγάγατε δεν πληροί τις απαιτήσεις ασφαλείας!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="522"/>
+        <location filename="../client/desktop/settings_tab.cc" line="530"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Ο κωδικός πρόσβασης πρέπει να περιέχει πεζούς και κεφαλαίους χαρακτήρες, αριθμούς και να μην είναι μικρότερος από %n χαρακτήρα.</numerusform>
@@ -7634,22 +7649,22 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="525"/>
+        <location filename="../client/desktop/settings_tab.cc" line="533"/>
         <source>Do you want to enter a different password?</source>
         <translation>Θέλετε να εισαγάγετε διαφορετικό κωδικό πρόσβασης;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="538"/>
+        <location filename="../client/desktop/settings_tab.cc" line="546"/>
         <source>Invalid current password.</source>
         <translation>Μη έγκυρος τρέχων κωδικός πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="542"/>
+        <location filename="../client/desktop/settings_tab.cc" line="550"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Ορισμένες εγγραφές της βάσης δεδομένων είναι κατεστραμμένες. Διορθώστε τις ή διαγράψτε τις και δοκιμάστε ξανά.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="546"/>
+        <location filename="../client/desktop/settings_tab.cc" line="554"/>
         <source>Unable to change the password.</source>
         <translation>Δεν είναι δυνατή η αλλαγή του κωδικού πρόσβασης.</translation>
     </message>

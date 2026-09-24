@@ -1056,7 +1056,7 @@ Routers added: %4</source>
         <translation>无法设置主密码。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="61"/>
+        <location filename="../client/desktop/app_lock.cc" line="63"/>
         <source>Unlock</source>
         <translation>解锁</translation>
     </message>
@@ -1076,17 +1076,17 @@ Routers added: %4</source>
         <translation>用于连接到主机的 aspia:// 链接。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="63"/>
+        <location filename="../client/desktop/app_lock.cc" line="65"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>输入主密码以解锁应用程序。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="91"/>
+        <location filename="../client/desktop/app_lock.cc" line="99"/>
         <source>Unable to unlock the database.</source>
         <translation>无法解锁数据库。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="96"/>
+        <location filename="../client/desktop/app_lock.cc" line="104"/>
         <source>Invalid master password.</source>
         <translation>主密码无效。</translation>
     </message>
@@ -4659,39 +4659,39 @@ Credentials imported: %5</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="118"/>
-        <location filename="../client/desktop/main_window.ui" line="190"/>
+        <location filename="../client/desktop/main_window.ui" line="119"/>
+        <location filename="../client/desktop/main_window.ui" line="201"/>
         <source>Tool Bar</source>
         <translation>工具栏</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="146"/>
+        <location filename="../client/desktop/main_window.ui" line="148"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="77"/>
+        <location filename="../client/desktop/main_window.ui" line="78"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="89"/>
+        <location filename="../client/desktop/main_window.ui" line="90"/>
         <source>View</source>
         <translation>查看</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="182"/>
+        <location filename="../client/desktop/main_window.ui" line="193"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="143"/>
+        <location filename="../client/desktop/main_window.ui" line="145"/>
         <source>Online Help...</source>
         <translation>在线帮助...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="383"/>
+        <location filename="../client/desktop/main_window.cc" line="404"/>
         <source>Aspia Client</source>
         <translation>Aspia 客户端</translation>
     </message>
@@ -4701,57 +4701,62 @@ Credentials imported: %5</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="84"/>
+        <location filename="../client/desktop/main_window.ui" line="85"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="101"/>
+        <location filename="../client/desktop/main_window.ui" line="102"/>
         <source>Session Type</source>
         <translation>会话类型</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="164"/>
+        <location filename="../client/desktop/main_window.ui" line="166"/>
         <source>Credentials...</source>
         <translation>凭据...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="198"/>
+        <location filename="../client/desktop/main_window.ui" line="184"/>
+        <source>Lock</source>
+        <translation>锁定</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="209"/>
         <source>Status Bar</source>
         <translation>状态栏</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="206"/>
+        <location filename="../client/desktop/main_window.ui" line="217"/>
         <source>Search Field</source>
         <translation>搜索字段</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="214"/>
+        <location filename="../client/desktop/main_window.ui" line="225"/>
         <source>Large icons</source>
         <translation>大图标</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="222"/>
+        <location filename="../client/desktop/main_window.ui" line="233"/>
         <source>Open Sessions in Tabs</source>
         <translation>在标签页中打开会话</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="230"/>
+        <location filename="../client/desktop/main_window.ui" line="241"/>
         <source>Always on Top</source>
         <translation>窗口置顶</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="155"/>
+        <location filename="../client/desktop/main_window.ui" line="157"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="106"/>
+        <location filename="../client/desktop/main_window.ui" line="107"/>
         <source>Actions</source>
         <translation>操作</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="173"/>
+        <location filename="../client/desktop/main_window.ui" line="175"/>
         <source>Settings...</source>
         <translation>设置...</translation>
     </message>
@@ -4761,53 +4766,63 @@ Credentials imported: %5</source>
         <translation>搜索...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="178"/>
+        <location filename="../client/desktop/main_window.cc" line="179"/>
         <source>Management</source>
         <translation>管理</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="224"/>
+        <location filename="../client/desktop/main_window.cc" line="225"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>无效链接&quot;%1&quot;。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="247"/>
+        <location filename="../client/desktop/main_window.cc" line="248"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>在已保存的路由器中找不到链接所指的路由器。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="296"/>
+        <location filename="../client/desktop/main_window.cc" line="297"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>在已保存的主机中找不到链接所指的主机。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="481"/>
+        <location filename="../client/desktop/main_window.cc" line="380"/>
+        <source>Close all sessions to lock the application.</source>
+        <translation>请关闭所有会话以锁定应用程序。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="386"/>
+        <source>Close all dialogs to lock the application.</source>
+        <translation>请关闭所有对话框以锁定应用程序。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="502"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>主机属性中指定了按 ID 连接，但尚未配置路由器。请检查主机属性中的路由器参数。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="308"/>
+        <location filename="../client/desktop/main_window.cc" line="309"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>与此主机关联的路由器已被删除。请编辑主机以选择其他路由器，或改用直接连接。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="255"/>
-        <location filename="../client/desktop/main_window.cc" line="307"/>
+        <location filename="../client/desktop/main_window.cc" line="256"/>
+        <location filename="../client/desktop/main_window.cc" line="308"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>路由器的数据已损坏。请编辑路由器并重新输入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="295"/>
+        <location filename="../client/desktop/main_window.cc" line="296"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>主机的数据已损坏。请编辑主机并重新输入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="338"/>
+        <location filename="../client/desktop/main_window.cc" line="339"/>
         <source>Credentials</source>
         <translation>凭据</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="369"/>
+        <location filename="../client/desktop/main_window.cc" line="370"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
@@ -5922,44 +5937,44 @@ Credentials imported: %5</source>
 <context>
     <name>RouterController</name>
     <message>
-        <location filename="../client/router_controller.cc" line="210"/>
-        <location filename="../client/router_controller.cc" line="236"/>
-        <location filename="../client/router_controller.cc" line="436"/>
+        <location filename="../client/router_controller.cc" line="216"/>
+        <location filename="../client/router_controller.cc" line="242"/>
+        <location filename="../client/router_controller.cc" line="442"/>
         <source>Connecting to router %1...</source>
         <translation>正在连接到路由器 %1...</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="259"/>
+        <location filename="../client/router_controller.cc" line="265"/>
         <source>Event history cleared.</source>
         <translation>事件历史记录已清除。</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="304"/>
+        <location filename="../client/router_controller.cc" line="310"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
         <translation>失败次数过多。路由器 %1 将在约 %2 分钟后重新接受代码。</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="312"/>
+        <location filename="../client/router_controller.cc" line="318"/>
         <source>The code was not accepted by router %1.</source>
         <translation>路由器 %1 未接受该代码。</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="315"/>
+        <location filename="../client/router_controller.cc" line="321"/>
         <source>Router %1 is waiting for a two-factor code.</source>
         <translation>路由器 %1 正在等待双重验证代码。</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="344"/>
+        <location filename="../client/router_controller.cc" line="350"/>
         <source>Connection to router %1 established.</source>
         <translation>已建立与路由器 %1 的连接。</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="389"/>
+        <location filename="../client/router_controller.cc" line="395"/>
         <source>Network error: %1</source>
         <translation>网络错误：%1</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="403"/>
+        <location filename="../client/router_controller.cc" line="409"/>
         <source>Disconnected from router %1.</source>
         <translation>已断开与路由器 %1 的连接。</translation>
     </message>
@@ -7278,338 +7293,338 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsTab</name>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="119"/>
+        <location filename="../client/desktop/settings_tab.ui" line="126"/>
         <source>Interface</source>
         <translation>界面</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="125"/>
+        <location filename="../client/desktop/settings_tab.ui" line="132"/>
         <source>Language:</source>
         <translation>语言：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="135"/>
+        <location filename="../client/desktop/settings_tab.ui" line="142"/>
         <source>Theme:</source>
         <translation>主题：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="145"/>
+        <location filename="../client/desktop/settings_tab.ui" line="152"/>
         <source>Display name when connected:</source>
         <translation>连接时的显示名称：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="155"/>
+        <location filename="../client/desktop/settings_tab.ui" line="162"/>
         <source>Enter a name or leave the field empty</source>
         <translation>输入名称或将该字段留空</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="165"/>
+        <location filename="../client/desktop/settings_tab.ui" line="172"/>
         <source>Backup</source>
         <translation>备份</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="171"/>
+        <location filename="../client/desktop/settings_tab.ui" line="178"/>
         <source>Create backups on application startup</source>
         <translation>应用程序启动时创建备份</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="178"/>
+        <location filename="../client/desktop/settings_tab.ui" line="185"/>
         <source>Directory:</source>
         <translation>目录：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="188"/>
+        <location filename="../client/desktop/settings_tab.ui" line="195"/>
         <source>Browse...</source>
         <translation>浏览...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="195"/>
+        <location filename="../client/desktop/settings_tab.ui" line="202"/>
         <source>Keep backups for:</source>
         <translation>备份保留期限：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="208"/>
+        <location filename="../client/desktop/settings_tab.ui" line="215"/>
         <source>UDP Connections</source>
         <translation>UDP 连接</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="214"/>
+        <location filename="../client/desktop/settings_tab.ui" line="221"/>
         <source>Allow direct connections</source>
         <translation>允许直接连接</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="221"/>
+        <location filename="../client/desktop/settings_tab.ui" line="228"/>
         <source>Allow UDP Hole Punching</source>
         <translation>允许 UDP 打洞</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="228"/>
+        <location filename="../client/desktop/settings_tab.ui" line="235"/>
         <source>Allow PCP protocol</source>
         <translation>允许 PCP 协议</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="235"/>
+        <location filename="../client/desktop/settings_tab.ui" line="242"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>允许 NAT-PMP 协议</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="242"/>
+        <location filename="../client/desktop/settings_tab.ui" line="249"/>
         <source>Allow UPnP protocol</source>
         <translation>允许 UPnP 协议</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="252"/>
+        <location filename="../client/desktop/settings_tab.ui" line="259"/>
         <source>Security</source>
         <translation>安全</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="258"/>
+        <location filename="../client/desktop/settings_tab.ui" line="265"/>
         <source>Lock after inactivity:</source>
         <translation>无操作后锁定时间：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="268"/>
+        <location filename="../client/desktop/settings_tab.ui" line="275"/>
         <source>Change Master Password...</source>
         <translation>更改主密码...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="331"/>
+        <location filename="../client/desktop/settings_tab.ui" line="346"/>
         <source>Features</source>
         <translation>功能</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="337"/>
+        <location filename="../client/desktop/settings_tab.ui" line="352"/>
         <source>Enable audio</source>
         <translation>启用音频</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="344"/>
+        <location filename="../client/desktop/settings_tab.ui" line="359"/>
         <source>Enable clipboard</source>
         <translation>启用剪贴板</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="351"/>
+        <location filename="../client/desktop/settings_tab.ui" line="366"/>
         <source>Show shape of remote cursor</source>
         <translation>显示远程光标的形状</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="358"/>
+        <location filename="../client/desktop/settings_tab.ui" line="373"/>
         <source>Show position of remote cursor</source>
         <translation>显示远程光标的位置</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="365"/>
+        <location filename="../client/desktop/settings_tab.ui" line="380"/>
         <source>Disable desktop effects</source>
         <translation>禁用桌面效果</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="372"/>
+        <location filename="../client/desktop/settings_tab.ui" line="387"/>
         <source>Disable desktop wallpaper</source>
         <translation>禁用桌面壁纸</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="379"/>
+        <location filename="../client/desktop/settings_tab.ui" line="394"/>
         <source>Lock computer at disconnect</source>
         <translation>断开连接时锁定计算机</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="386"/>
+        <location filename="../client/desktop/settings_tab.ui" line="401"/>
         <source>Block remote input</source>
         <translation>阻止远程输入</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="393"/>
+        <location filename="../client/desktop/settings_tab.ui" line="408"/>
         <source>Send key combinations</source>
         <translation>发送组合键</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="409"/>
+        <location filename="../client/desktop/settings_tab.ui" line="424"/>
         <source>Screen</source>
         <translation>屏幕</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="417"/>
+        <location filename="../client/desktop/settings_tab.ui" line="432"/>
         <source>Preferred resolution:</source>
         <translation>首选分辨率：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="445"/>
+        <location filename="../client/desktop/settings_tab.ui" line="460"/>
         <source>Recording</source>
         <translation>录制</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="451"/>
+        <location filename="../client/desktop/settings_tab.ui" line="466"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>连接时自动开始录制会话</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="460"/>
+        <location filename="../client/desktop/settings_tab.ui" line="475"/>
         <source>Write path:</source>
         <translation>写入路径：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="548"/>
-        <location filename="../client/desktop/settings_tab.cc" line="128"/>
+        <location filename="../client/desktop/settings_tab.ui" line="571"/>
+        <location filename="../client/desktop/settings_tab.cc" line="129"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="554"/>
+        <location filename="../client/desktop/settings_tab.ui" line="577"/>
         <source>Check for updates on startup</source>
         <translation>启动时检查更新</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="563"/>
+        <location filename="../client/desktop/settings_tab.ui" line="586"/>
         <source>Update channel:</source>
         <translation>更新通道：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="590"/>
+        <location filename="../client/desktop/settings_tab.ui" line="613"/>
         <source>Check for updates</source>
         <translation>检查更新</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="126"/>
+        <location filename="../client/desktop/settings_tab.cc" line="127"/>
         <source>General</source>
         <translation>常规</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="127"/>
+        <location filename="../client/desktop/settings_tab.cc" line="128"/>
         <source>Desktop</source>
         <translation>桌面</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="173"/>
+        <location filename="../client/desktop/settings_tab.cc" line="181"/>
         <source>1 week</source>
         <translation>1 周</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="174"/>
+        <location filename="../client/desktop/settings_tab.cc" line="182"/>
         <source>2 weeks</source>
         <translation>2 周</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="175"/>
+        <location filename="../client/desktop/settings_tab.cc" line="183"/>
         <source>1 month</source>
         <translation>1 个月</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="176"/>
+        <location filename="../client/desktop/settings_tab.cc" line="184"/>
         <source>6 months</source>
         <translation>6 个月</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="177"/>
+        <location filename="../client/desktop/settings_tab.cc" line="185"/>
         <source>1 year</source>
         <translation>1 年</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="181"/>
+        <location filename="../client/desktop/settings_tab.cc" line="189"/>
         <source>Do not lock</source>
         <translation>不锁定</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="182"/>
+        <location filename="../client/desktop/settings_tab.cc" line="190"/>
         <source>1 minute</source>
         <translation>1 分钟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="183"/>
+        <location filename="../client/desktop/settings_tab.cc" line="191"/>
         <source>5 minutes</source>
         <translation>5 分钟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="184"/>
+        <location filename="../client/desktop/settings_tab.cc" line="192"/>
         <source>10 minutes</source>
         <translation>10 分钟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="185"/>
+        <location filename="../client/desktop/settings_tab.cc" line="193"/>
         <source>30 minutes</source>
         <translation>30 分钟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="186"/>
+        <location filename="../client/desktop/settings_tab.cc" line="194"/>
         <source>1 hour</source>
         <translation>1 小时</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="210"/>
+        <location filename="../client/desktop/settings_tab.cc" line="218"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="235"/>
+        <location filename="../client/desktop/settings_tab.cc" line="243"/>
         <source>Stable</source>
         <translation>稳定版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="236"/>
+        <location filename="../client/desktop/settings_tab.cc" line="244"/>
         <source>Beta</source>
         <translation>公测版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="237"/>
+        <location filename="../client/desktop/settings_tab.cc" line="245"/>
         <source>Alpha</source>
         <translation>内测版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="357"/>
+        <location filename="../client/desktop/settings_tab.cc" line="365"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>新语言将在应用程序重新启动后生效。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="406"/>
-        <location filename="../client/desktop/settings_tab.cc" line="484"/>
+        <location filename="../client/desktop/settings_tab.cc" line="414"/>
+        <location filename="../client/desktop/settings_tab.cc" line="492"/>
         <source>Choose path</source>
         <translation>选择路径</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="504"/>
+        <location filename="../client/desktop/settings_tab.cc" line="512"/>
         <source>Change Master Password</source>
         <translation>更改主密码</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="506"/>
+        <location filename="../client/desktop/settings_tab.cc" line="514"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>输入您的当前密码并选择新密码。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="514"/>
+        <location filename="../client/desktop/settings_tab.cc" line="522"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码长度不能少于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="521"/>
+        <location filename="../client/desktop/settings_tab.cc" line="529"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>输入的密码不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="522"/>
+        <location filename="../client/desktop/settings_tab.cc" line="530"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码必须包含大小写字母和数字，且长度不能少于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="525"/>
+        <location filename="../client/desktop/settings_tab.cc" line="533"/>
         <source>Do you want to enter a different password?</source>
         <translation>要输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="538"/>
+        <location filename="../client/desktop/settings_tab.cc" line="546"/>
         <source>Invalid current password.</source>
         <translation>当前密码无效。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="542"/>
+        <location filename="../client/desktop/settings_tab.cc" line="550"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>部分记录已损坏。请修复或删除这些记录后重试。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="546"/>
+        <location filename="../client/desktop/settings_tab.cc" line="554"/>
         <source>Unable to change the password.</source>
         <translation>无法更改密码。</translation>
     </message>
