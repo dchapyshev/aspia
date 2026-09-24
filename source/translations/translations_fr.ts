@@ -3860,7 +3860,7 @@ Identifiants remplacés: %2</translation>
     <message>
         <location filename="../host/ui/host_window.ui" line="296"/>
         <source>Exit</source>
-        <translation>Sortie</translation>
+        <translation>Quitter</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="301"/>
@@ -4702,7 +4702,7 @@ Identifiants importés: %5</translation>
     <message>
         <location filename="../client/desktop/main_window.ui" line="193"/>
         <source>Exit</source>
-        <translation>Sortie</translation>
+        <translation>Quitter</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="145"/>
