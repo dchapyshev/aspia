@@ -11550,201 +11550,226 @@ Credentials imported: %5</source>
         <translation>값</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="225"/>
+        <location filename="../client/telemetry_model.cc" line="229"/>
         <source>General</source>
         <translation>일반</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="229"/>
+        <location filename="../client/telemetry_model.cc" line="233"/>
         <source>Service start time</source>
         <translation>서비스 시작 시간</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="233"/>
+        <location filename="../client/telemetry_model.cc" line="237"/>
         <source>Service starts in 7 days</source>
         <translation>최근 7일간 서비스 시작 횟수</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="244"/>
+        <location filename="../client/telemetry_model.cc" line="248"/>
         <source>Connections</source>
         <translation>연결</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="250"/>
+        <location filename="../client/telemetry_model.cc" line="254"/>
         <source>Last incoming connection</source>
         <translation>마지막 수신 연결</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="255"/>
+        <location filename="../client/telemetry_model.cc" line="270"/>
         <source>Failed logins in 7 days</source>
         <translation>최근 7일간 로그인 실패 횟수</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="260"/>
+        <location filename="../client/telemetry_model.cc" line="275"/>
         <source>Failed logins since service start</source>
         <translation>서비스 시작 이후 로그인 실패 횟수</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="273"/>
+        <location filename="../client/telemetry_model.cc" line="310"/>
         <source>Updates</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="277"/>
+        <location filename="../client/telemetry_model.cc" line="314"/>
         <source>Update channel</source>
         <translation>업데이트 채널</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Automatic updates</source>
         <translation>자동 업데이트</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Enabled</source>
         <translation>사용</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Disabled</source>
         <translation>사용 안 함</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="290"/>
+        <location filename="../client/telemetry_model.cc" line="327"/>
         <source>Update check frequency</source>
         <translation>업데이트 확인 주기</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/telemetry_model.cc" line="375"/>
+        <location filename="../client/telemetry_model.cc" line="412"/>
         <source>Every %n days</source>
         <translation>
             <numerusform>%n일마다</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="295"/>
+        <location filename="../client/telemetry_model.cc" line="332"/>
         <source>Last update check</source>
         <translation>마지막 업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="301"/>
+        <location filename="../client/telemetry_model.cc" line="259"/>
+        <source>Successful logins in 7 days</source>
+        <translation>최근 7일간 로그인 성공 횟수</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="264"/>
+        <source>Successful logins since service start</source>
+        <translation>서비스 시작 이후 로그인 성공 횟수</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="288"/>
+        <source>Router</source>
+        <translation>라우터</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="292"/>
+        <source>Connections in 7 days</source>
+        <translation>최근 7일간 연결 횟수</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="297"/>
+        <source>Connections since service start</source>
+        <translation>서비스 시작 이후 연결 횟수</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="338"/>
         <source>Last update check result</source>
         <translation>마지막 업데이트 확인 결과</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="313"/>
+        <location filename="../client/telemetry_model.cc" line="350"/>
         <source>Users</source>
         <translation>사용자</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="317"/>
+        <location filename="../client/telemetry_model.cc" line="354"/>
         <source>Total users</source>
         <translation>전체 사용자 수</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="321"/>
+        <location filename="../client/telemetry_model.cc" line="358"/>
         <source>Enabled users</source>
         <translation>사용 설정된 사용자 수</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="332"/>
+        <location filename="../client/telemetry_model.cc" line="369"/>
         <source>Security</source>
         <translation>보안</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="339"/>
+        <location filename="../client/telemetry_model.cc" line="376"/>
         <source>Settings password protection</source>
         <translation>설정 암호 보호</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="340"/>
+        <location filename="../client/telemetry_model.cc" line="377"/>
         <source>Enabled</source>
         <comment>password protection</comment>
         <translation>사용</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="341"/>
+        <location filename="../client/telemetry_model.cc" line="378"/>
         <source>Disabled</source>
         <comment>password protection</comment>
         <translation>사용 안 함</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="353"/>
+        <location filename="../client/telemetry_model.cc" line="390"/>
         <source>Stable</source>
         <translation>안정 버전</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="355"/>
+        <location filename="../client/telemetry_model.cc" line="392"/>
         <source>Beta</source>
         <translation>베타 버전</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="357"/>
+        <location filename="../client/telemetry_model.cc" line="394"/>
         <source>Alpha</source>
         <translation>알파 버전</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="369"/>
+        <location filename="../client/telemetry_model.cc" line="406"/>
         <source>Once a day</source>
         <translation>하루에 한 번</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="371"/>
+        <location filename="../client/telemetry_model.cc" line="408"/>
         <source>Once a week</source>
         <translation>일주일에 한 번</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="373"/>
+        <location filename="../client/telemetry_model.cc" line="410"/>
         <source>Once a month</source>
         <translation>한 달에 한 번</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="383"/>
+        <location filename="../client/telemetry_model.cc" line="420"/>
         <source>No updates</source>
         <translation>업데이트 없음</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="385"/>
+        <location filename="../client/telemetry_model.cc" line="422"/>
         <source>Check failed</source>
         <translation>확인 실패</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="387"/>
+        <location filename="../client/telemetry_model.cc" line="424"/>
         <source>Unsupported package</source>
         <translation>지원되지 않는 패키지</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="389"/>
+        <location filename="../client/telemetry_model.cc" line="426"/>
         <source>Download failed</source>
         <translation>다운로드 실패</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="391"/>
+        <location filename="../client/telemetry_model.cc" line="428"/>
         <source>Damaged package</source>
         <translation>손상된 패키지</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="393"/>
+        <location filename="../client/telemetry_model.cc" line="430"/>
         <source>Installation failed</source>
         <translation>설치 실패</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="395"/>
+        <location filename="../client/telemetry_model.cc" line="432"/>
         <source>Installation started</source>
         <translation>설치 시작됨</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="397"/>
+        <location filename="../client/telemetry_model.cc" line="434"/>
         <source>Installation succeeded</source>
         <translation>설치 성공</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="407"/>
+        <location filename="../client/telemetry_model.cc" line="444"/>
         <source>%1 or more</source>
         <translation>%1 이상</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="417"/>
+        <location filename="../client/telemetry_model.cc" line="454"/>
         <source>Never</source>
         <translation>없음</translation>
     </message>

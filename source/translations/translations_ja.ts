@@ -11550,201 +11550,226 @@ Credentials imported: %5</source>
         <translation>値</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="225"/>
+        <location filename="../client/telemetry_model.cc" line="229"/>
         <source>General</source>
         <translation>全般</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="229"/>
+        <location filename="../client/telemetry_model.cc" line="233"/>
         <source>Service start time</source>
         <translation>サービス起動日時</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="233"/>
+        <location filename="../client/telemetry_model.cc" line="237"/>
         <source>Service starts in 7 days</source>
         <translation>過去 7 日間のサービス起動回数</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="244"/>
+        <location filename="../client/telemetry_model.cc" line="248"/>
         <source>Connections</source>
         <translation>接続</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="250"/>
+        <location filename="../client/telemetry_model.cc" line="254"/>
         <source>Last incoming connection</source>
         <translation>最終受信接続</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="255"/>
+        <location filename="../client/telemetry_model.cc" line="270"/>
         <source>Failed logins in 7 days</source>
         <translation>過去 7 日間のログイン失敗回数</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="260"/>
+        <location filename="../client/telemetry_model.cc" line="275"/>
         <source>Failed logins since service start</source>
         <translation>サービス起動以降のログイン失敗回数</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="273"/>
+        <location filename="../client/telemetry_model.cc" line="310"/>
         <source>Updates</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="277"/>
+        <location filename="../client/telemetry_model.cc" line="314"/>
         <source>Update channel</source>
         <translation>更新チャネル</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Automatic updates</source>
         <translation>自動更新</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Enabled</source>
         <translation>有効</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Disabled</source>
         <translation>無効</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="290"/>
+        <location filename="../client/telemetry_model.cc" line="327"/>
         <source>Update check frequency</source>
         <translation>更新の確認頻度</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/telemetry_model.cc" line="375"/>
+        <location filename="../client/telemetry_model.cc" line="412"/>
         <source>Every %n days</source>
         <translation>
             <numerusform>%n 日ごと</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="295"/>
+        <location filename="../client/telemetry_model.cc" line="332"/>
         <source>Last update check</source>
         <translation>更新の最終確認</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="301"/>
+        <location filename="../client/telemetry_model.cc" line="259"/>
+        <source>Successful logins in 7 days</source>
+        <translation>過去 7 日間のログイン成功回数</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="264"/>
+        <source>Successful logins since service start</source>
+        <translation>サービス起動以降のログイン成功回数</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="288"/>
+        <source>Router</source>
+        <translation>ルーター</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="292"/>
+        <source>Connections in 7 days</source>
+        <translation>過去 7 日間の接続回数</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="297"/>
+        <source>Connections since service start</source>
+        <translation>サービス起動以降の接続回数</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="338"/>
         <source>Last update check result</source>
         <translation>更新の最終確認結果</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="313"/>
+        <location filename="../client/telemetry_model.cc" line="350"/>
         <source>Users</source>
         <translation>ユーザー</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="317"/>
+        <location filename="../client/telemetry_model.cc" line="354"/>
         <source>Total users</source>
         <translation>ユーザー総数</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="321"/>
+        <location filename="../client/telemetry_model.cc" line="358"/>
         <source>Enabled users</source>
         <translation>有効なユーザー数</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="332"/>
+        <location filename="../client/telemetry_model.cc" line="369"/>
         <source>Security</source>
         <translation>セキュリティ</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="339"/>
+        <location filename="../client/telemetry_model.cc" line="376"/>
         <source>Settings password protection</source>
         <translation>設定のパスワード保護</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="340"/>
+        <location filename="../client/telemetry_model.cc" line="377"/>
         <source>Enabled</source>
         <comment>password protection</comment>
         <translation>有効</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="341"/>
+        <location filename="../client/telemetry_model.cc" line="378"/>
         <source>Disabled</source>
         <comment>password protection</comment>
         <translation>無効</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="353"/>
+        <location filename="../client/telemetry_model.cc" line="390"/>
         <source>Stable</source>
         <translation>安定版</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="355"/>
+        <location filename="../client/telemetry_model.cc" line="392"/>
         <source>Beta</source>
         <translation>ベータ版</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="357"/>
+        <location filename="../client/telemetry_model.cc" line="394"/>
         <source>Alpha</source>
         <translation>アルファ版</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="369"/>
+        <location filename="../client/telemetry_model.cc" line="406"/>
         <source>Once a day</source>
         <translation>1 日 1 回</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="371"/>
+        <location filename="../client/telemetry_model.cc" line="408"/>
         <source>Once a week</source>
         <translation>週 1 回</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="373"/>
+        <location filename="../client/telemetry_model.cc" line="410"/>
         <source>Once a month</source>
         <translation>月 1 回</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="383"/>
+        <location filename="../client/telemetry_model.cc" line="420"/>
         <source>No updates</source>
         <translation>更新なし</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="385"/>
+        <location filename="../client/telemetry_model.cc" line="422"/>
         <source>Check failed</source>
         <translation>確認に失敗</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="387"/>
+        <location filename="../client/telemetry_model.cc" line="424"/>
         <source>Unsupported package</source>
         <translation>サポートされていないパッケージ</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="389"/>
+        <location filename="../client/telemetry_model.cc" line="426"/>
         <source>Download failed</source>
         <translation>ダウンロードに失敗</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="391"/>
+        <location filename="../client/telemetry_model.cc" line="428"/>
         <source>Damaged package</source>
         <translation>破損したパッケージ</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="393"/>
+        <location filename="../client/telemetry_model.cc" line="430"/>
         <source>Installation failed</source>
         <translation>インストールに失敗</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="395"/>
+        <location filename="../client/telemetry_model.cc" line="432"/>
         <source>Installation started</source>
         <translation>インストールを開始</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="397"/>
+        <location filename="../client/telemetry_model.cc" line="434"/>
         <source>Installation succeeded</source>
         <translation>インストールに成功</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="407"/>
+        <location filename="../client/telemetry_model.cc" line="444"/>
         <source>%1 or more</source>
         <translation>%1 以上</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="417"/>
+        <location filename="../client/telemetry_model.cc" line="454"/>
         <source>Never</source>
         <translation>なし</translation>
     </message>

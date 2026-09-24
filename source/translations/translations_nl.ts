@@ -11589,72 +11589,72 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Waarde</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="225"/>
+        <location filename="../client/telemetry_model.cc" line="229"/>
         <source>General</source>
         <translation>Basis</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="229"/>
+        <location filename="../client/telemetry_model.cc" line="233"/>
         <source>Service start time</source>
         <translation>Starttijd van de service</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="233"/>
+        <location filename="../client/telemetry_model.cc" line="237"/>
         <source>Service starts in 7 days</source>
         <translation>Servicestarts in de afgelopen 7 dagen</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="244"/>
+        <location filename="../client/telemetry_model.cc" line="248"/>
         <source>Connections</source>
         <translation>Verbindingen</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="250"/>
+        <location filename="../client/telemetry_model.cc" line="254"/>
         <source>Last incoming connection</source>
         <translation>Laatste inkomende verbinding</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="255"/>
+        <location filename="../client/telemetry_model.cc" line="270"/>
         <source>Failed logins in 7 days</source>
         <translation>Mislukte aanmeldingen in de afgelopen 7 dagen</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="260"/>
+        <location filename="../client/telemetry_model.cc" line="275"/>
         <source>Failed logins since service start</source>
         <translation>Mislukte aanmeldingen sinds start van de service</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="273"/>
+        <location filename="../client/telemetry_model.cc" line="310"/>
         <source>Updates</source>
         <translation>Updates</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="277"/>
+        <location filename="../client/telemetry_model.cc" line="314"/>
         <source>Update channel</source>
         <translation>Updatekanaal</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Automatic updates</source>
         <translation>Automatische updates</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Enabled</source>
         <translation>Ingeschakeld</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Disabled</source>
         <translation>Uitgeschakeld</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="290"/>
+        <location filename="../client/telemetry_model.cc" line="327"/>
         <source>Update check frequency</source>
         <translation>Frequentie van updatecontrole</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/telemetry_model.cc" line="375"/>
+        <location filename="../client/telemetry_model.cc" line="412"/>
         <source>Every %n days</source>
         <translation>
             <numerusform>Elke %n dag</numerusform>
@@ -11662,129 +11662,154 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="295"/>
+        <location filename="../client/telemetry_model.cc" line="332"/>
         <source>Last update check</source>
         <translation>Laatste updatecontrole</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="301"/>
+        <location filename="../client/telemetry_model.cc" line="259"/>
+        <source>Successful logins in 7 days</source>
+        <translation>Geslaagde aanmeldingen in de afgelopen 7 dagen</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="264"/>
+        <source>Successful logins since service start</source>
+        <translation>Geslaagde aanmeldingen sinds start van de service</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="288"/>
+        <source>Router</source>
+        <translation>Router</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="292"/>
+        <source>Connections in 7 days</source>
+        <translation>Verbindingen in de afgelopen 7 dagen</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="297"/>
+        <source>Connections since service start</source>
+        <translation>Verbindingen sinds start van de service</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="338"/>
         <source>Last update check result</source>
         <translation>Resultaat van laatste updatecontrole</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="313"/>
+        <location filename="../client/telemetry_model.cc" line="350"/>
         <source>Users</source>
         <translation>Gebruikers</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="317"/>
+        <location filename="../client/telemetry_model.cc" line="354"/>
         <source>Total users</source>
         <translation>Totaal aantal gebruikers</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="321"/>
+        <location filename="../client/telemetry_model.cc" line="358"/>
         <source>Enabled users</source>
         <translation>Ingeschakelde gebruikers</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="332"/>
+        <location filename="../client/telemetry_model.cc" line="369"/>
         <source>Security</source>
         <translation>Beveiliging</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="339"/>
+        <location filename="../client/telemetry_model.cc" line="376"/>
         <source>Settings password protection</source>
         <translation>Wachtwoordbeveiliging van instellingen</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="340"/>
+        <location filename="../client/telemetry_model.cc" line="377"/>
         <source>Enabled</source>
         <comment>password protection</comment>
         <translation>Ingeschakeld</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="341"/>
+        <location filename="../client/telemetry_model.cc" line="378"/>
         <source>Disabled</source>
         <comment>password protection</comment>
         <translation>Uitgeschakeld</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="353"/>
+        <location filename="../client/telemetry_model.cc" line="390"/>
         <source>Stable</source>
         <translation>Stabiel</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="355"/>
+        <location filename="../client/telemetry_model.cc" line="392"/>
         <source>Beta</source>
         <translation>Bèta</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="357"/>
+        <location filename="../client/telemetry_model.cc" line="394"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="369"/>
+        <location filename="../client/telemetry_model.cc" line="406"/>
         <source>Once a day</source>
         <translation>Eén keer per dag</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="371"/>
+        <location filename="../client/telemetry_model.cc" line="408"/>
         <source>Once a week</source>
         <translation>Eén keer per week</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="373"/>
+        <location filename="../client/telemetry_model.cc" line="410"/>
         <source>Once a month</source>
         <translation>Eén keer per maand</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="383"/>
+        <location filename="../client/telemetry_model.cc" line="420"/>
         <source>No updates</source>
         <translation>Geen updates</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="385"/>
+        <location filename="../client/telemetry_model.cc" line="422"/>
         <source>Check failed</source>
         <translation>Controle mislukt</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="387"/>
+        <location filename="../client/telemetry_model.cc" line="424"/>
         <source>Unsupported package</source>
         <translation>Niet-ondersteund pakket</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="389"/>
+        <location filename="../client/telemetry_model.cc" line="426"/>
         <source>Download failed</source>
         <translation>Downloaden mislukt</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="391"/>
+        <location filename="../client/telemetry_model.cc" line="428"/>
         <source>Damaged package</source>
         <translation>Beschadigd pakket</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="393"/>
+        <location filename="../client/telemetry_model.cc" line="430"/>
         <source>Installation failed</source>
         <translation>Installatie mislukt</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="395"/>
+        <location filename="../client/telemetry_model.cc" line="432"/>
         <source>Installation started</source>
         <translation>Installatie gestart</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="397"/>
+        <location filename="../client/telemetry_model.cc" line="434"/>
         <source>Installation succeeded</source>
         <translation>Installatie geslaagd</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="407"/>
+        <location filename="../client/telemetry_model.cc" line="444"/>
         <source>%1 or more</source>
         <translation>%1 of meer</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="417"/>
+        <location filename="../client/telemetry_model.cc" line="454"/>
         <source>Never</source>
         <translation>Nooit</translation>
     </message>

@@ -11589,72 +11589,72 @@ Importerade inloggningsuppgifter: %5</translation>
         <translation>Värde</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="225"/>
+        <location filename="../client/telemetry_model.cc" line="229"/>
         <source>General</source>
         <translation>Allmänt</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="229"/>
+        <location filename="../client/telemetry_model.cc" line="233"/>
         <source>Service start time</source>
         <translation>Tjänstens starttid</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="233"/>
+        <location filename="../client/telemetry_model.cc" line="237"/>
         <source>Service starts in 7 days</source>
         <translation>Tjänststarter under de senaste 7 dagarna</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="244"/>
+        <location filename="../client/telemetry_model.cc" line="248"/>
         <source>Connections</source>
         <translation>Anslutningar</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="250"/>
+        <location filename="../client/telemetry_model.cc" line="254"/>
         <source>Last incoming connection</source>
         <translation>Senaste inkommande anslutning</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="255"/>
+        <location filename="../client/telemetry_model.cc" line="270"/>
         <source>Failed logins in 7 days</source>
         <translation>Misslyckade inloggningar under de senaste 7 dagarna</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="260"/>
+        <location filename="../client/telemetry_model.cc" line="275"/>
         <source>Failed logins since service start</source>
         <translation>Misslyckade inloggningar sedan tjänsten startade</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="273"/>
+        <location filename="../client/telemetry_model.cc" line="310"/>
         <source>Updates</source>
         <translation>Uppdateringar</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="277"/>
+        <location filename="../client/telemetry_model.cc" line="314"/>
         <source>Update channel</source>
         <translation>Uppdateringskanal</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Automatic updates</source>
         <translation>Automatiska uppdateringar</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Enabled</source>
         <translation>Aktiverade</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Disabled</source>
         <translation>Inaktiverade</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="290"/>
+        <location filename="../client/telemetry_model.cc" line="327"/>
         <source>Update check frequency</source>
         <translation>Frekvens för uppdateringskontroll</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/telemetry_model.cc" line="375"/>
+        <location filename="../client/telemetry_model.cc" line="412"/>
         <source>Every %n days</source>
         <translation>
             <numerusform>En gång per %n dag</numerusform>
@@ -11662,129 +11662,154 @@ Importerade inloggningsuppgifter: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="295"/>
+        <location filename="../client/telemetry_model.cc" line="332"/>
         <source>Last update check</source>
         <translation>Senaste uppdateringskontroll</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="301"/>
+        <location filename="../client/telemetry_model.cc" line="259"/>
+        <source>Successful logins in 7 days</source>
+        <translation>Lyckade inloggningar under de senaste 7 dagarna</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="264"/>
+        <source>Successful logins since service start</source>
+        <translation>Lyckade inloggningar sedan tjänsten startade</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="288"/>
+        <source>Router</source>
+        <translation>Router</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="292"/>
+        <source>Connections in 7 days</source>
+        <translation>Anslutningar under de senaste 7 dagarna</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="297"/>
+        <source>Connections since service start</source>
+        <translation>Anslutningar sedan tjänsten startade</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="338"/>
         <source>Last update check result</source>
         <translation>Resultat av senaste uppdateringskontroll</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="313"/>
+        <location filename="../client/telemetry_model.cc" line="350"/>
         <source>Users</source>
         <translation>Användare</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="317"/>
+        <location filename="../client/telemetry_model.cc" line="354"/>
         <source>Total users</source>
         <translation>Totalt antal användare</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="321"/>
+        <location filename="../client/telemetry_model.cc" line="358"/>
         <source>Enabled users</source>
         <translation>Aktiverade användare</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="332"/>
+        <location filename="../client/telemetry_model.cc" line="369"/>
         <source>Security</source>
         <translation>Säkerhet</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="339"/>
+        <location filename="../client/telemetry_model.cc" line="376"/>
         <source>Settings password protection</source>
         <translation>Lösenordsskydd för inställningar</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="340"/>
+        <location filename="../client/telemetry_model.cc" line="377"/>
         <source>Enabled</source>
         <comment>password protection</comment>
         <translation>Aktiverat</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="341"/>
+        <location filename="../client/telemetry_model.cc" line="378"/>
         <source>Disabled</source>
         <comment>password protection</comment>
         <translation>Inaktiverat</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="353"/>
+        <location filename="../client/telemetry_model.cc" line="390"/>
         <source>Stable</source>
         <translation>Stabil</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="355"/>
+        <location filename="../client/telemetry_model.cc" line="392"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="357"/>
+        <location filename="../client/telemetry_model.cc" line="394"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="369"/>
+        <location filename="../client/telemetry_model.cc" line="406"/>
         <source>Once a day</source>
         <translation>En gång om dagen</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="371"/>
+        <location filename="../client/telemetry_model.cc" line="408"/>
         <source>Once a week</source>
         <translation>En gång i veckan</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="373"/>
+        <location filename="../client/telemetry_model.cc" line="410"/>
         <source>Once a month</source>
         <translation>En gång i månaden</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="383"/>
+        <location filename="../client/telemetry_model.cc" line="420"/>
         <source>No updates</source>
         <translation>Inga uppdateringar</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="385"/>
+        <location filename="../client/telemetry_model.cc" line="422"/>
         <source>Check failed</source>
         <translation>Kontrollen misslyckades</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="387"/>
+        <location filename="../client/telemetry_model.cc" line="424"/>
         <source>Unsupported package</source>
         <translation>Paketet stöds inte</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="389"/>
+        <location filename="../client/telemetry_model.cc" line="426"/>
         <source>Download failed</source>
         <translation>Nedladdningen misslyckades</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="391"/>
+        <location filename="../client/telemetry_model.cc" line="428"/>
         <source>Damaged package</source>
         <translation>Skadat paket</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="393"/>
+        <location filename="../client/telemetry_model.cc" line="430"/>
         <source>Installation failed</source>
         <translation>Installationen misslyckades</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="395"/>
+        <location filename="../client/telemetry_model.cc" line="432"/>
         <source>Installation started</source>
         <translation>Installationen har startat</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="397"/>
+        <location filename="../client/telemetry_model.cc" line="434"/>
         <source>Installation succeeded</source>
         <translation>Installationen lyckades</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="407"/>
+        <location filename="../client/telemetry_model.cc" line="444"/>
         <source>%1 or more</source>
         <translation>%1 eller fler</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="417"/>
+        <location filename="../client/telemetry_model.cc" line="454"/>
         <source>Never</source>
         <translation>Aldrig</translation>
     </message>

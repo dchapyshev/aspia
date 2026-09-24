@@ -11550,201 +11550,226 @@ Credentials imported: %5</source>
         <translation>Değer</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="225"/>
+        <location filename="../client/telemetry_model.cc" line="229"/>
         <source>General</source>
         <translation>Genel</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="229"/>
+        <location filename="../client/telemetry_model.cc" line="233"/>
         <source>Service start time</source>
         <translation>Hizmet başlangıç zamanı</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="233"/>
+        <location filename="../client/telemetry_model.cc" line="237"/>
         <source>Service starts in 7 days</source>
         <translation>Son 7 gündeki hizmet başlatmaları</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="244"/>
+        <location filename="../client/telemetry_model.cc" line="248"/>
         <source>Connections</source>
         <translation>Bağlantılar</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="250"/>
+        <location filename="../client/telemetry_model.cc" line="254"/>
         <source>Last incoming connection</source>
         <translation>Son gelen bağlantı</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="255"/>
+        <location filename="../client/telemetry_model.cc" line="270"/>
         <source>Failed logins in 7 days</source>
         <translation>Son 7 gündeki başarısız oturum açmalar</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="260"/>
+        <location filename="../client/telemetry_model.cc" line="275"/>
         <source>Failed logins since service start</source>
         <translation>Hizmet başlangıcından bu yana başarısız oturum açmalar</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="273"/>
+        <location filename="../client/telemetry_model.cc" line="310"/>
         <source>Updates</source>
         <translation>Güncellemeler</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="277"/>
+        <location filename="../client/telemetry_model.cc" line="314"/>
         <source>Update channel</source>
         <translation>Güncelleme kanalı</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Automatic updates</source>
         <translation>Otomatik güncellemeler</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Enabled</source>
         <translation>Etkin</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="283"/>
+        <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Disabled</source>
         <translation>Devre Dışı</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="290"/>
+        <location filename="../client/telemetry_model.cc" line="327"/>
         <source>Update check frequency</source>
         <translation>Güncelleme denetleme sıklığı</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/telemetry_model.cc" line="375"/>
+        <location filename="../client/telemetry_model.cc" line="412"/>
         <source>Every %n days</source>
         <translation>
             <numerusform>%n günde bir</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="295"/>
+        <location filename="../client/telemetry_model.cc" line="332"/>
         <source>Last update check</source>
         <translation>Son güncelleme denetimi</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="301"/>
+        <location filename="../client/telemetry_model.cc" line="259"/>
+        <source>Successful logins in 7 days</source>
+        <translation>Son 7 gündeki başarılı oturum açmalar</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="264"/>
+        <source>Successful logins since service start</source>
+        <translation>Hizmet başlangıcından bu yana başarılı oturum açmalar</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="288"/>
+        <source>Router</source>
+        <translation>Yönlendirici</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="292"/>
+        <source>Connections in 7 days</source>
+        <translation>Son 7 gündeki bağlantılar</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="297"/>
+        <source>Connections since service start</source>
+        <translation>Hizmet başlangıcından bu yana bağlantılar</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="338"/>
         <source>Last update check result</source>
         <translation>Son güncelleme denetimi sonucu</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="313"/>
+        <location filename="../client/telemetry_model.cc" line="350"/>
         <source>Users</source>
         <translation>Kullanıcılar</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="317"/>
+        <location filename="../client/telemetry_model.cc" line="354"/>
         <source>Total users</source>
         <translation>Toplam kullanıcı</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="321"/>
+        <location filename="../client/telemetry_model.cc" line="358"/>
         <source>Enabled users</source>
         <translation>Etkin kullanıcılar</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="332"/>
+        <location filename="../client/telemetry_model.cc" line="369"/>
         <source>Security</source>
         <translation>Güvenlik</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="339"/>
+        <location filename="../client/telemetry_model.cc" line="376"/>
         <source>Settings password protection</source>
         <translation>Ayarların parola koruması</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="340"/>
+        <location filename="../client/telemetry_model.cc" line="377"/>
         <source>Enabled</source>
         <comment>password protection</comment>
         <translation>Etkin</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="341"/>
+        <location filename="../client/telemetry_model.cc" line="378"/>
         <source>Disabled</source>
         <comment>password protection</comment>
         <translation>Devre Dışı</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="353"/>
+        <location filename="../client/telemetry_model.cc" line="390"/>
         <source>Stable</source>
         <translation>Kararlı</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="355"/>
+        <location filename="../client/telemetry_model.cc" line="392"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="357"/>
+        <location filename="../client/telemetry_model.cc" line="394"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="369"/>
+        <location filename="../client/telemetry_model.cc" line="406"/>
         <source>Once a day</source>
         <translation>Günde bir</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="371"/>
+        <location filename="../client/telemetry_model.cc" line="408"/>
         <source>Once a week</source>
         <translation>Haftada bir</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="373"/>
+        <location filename="../client/telemetry_model.cc" line="410"/>
         <source>Once a month</source>
         <translation>Ayda bir</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="383"/>
+        <location filename="../client/telemetry_model.cc" line="420"/>
         <source>No updates</source>
         <translation>Güncelleme yok</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="385"/>
+        <location filename="../client/telemetry_model.cc" line="422"/>
         <source>Check failed</source>
         <translation>Denetim başarısız</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="387"/>
+        <location filename="../client/telemetry_model.cc" line="424"/>
         <source>Unsupported package</source>
         <translation>Desteklenmeyen paket</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="389"/>
+        <location filename="../client/telemetry_model.cc" line="426"/>
         <source>Download failed</source>
         <translation>İndirme başarısız</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="391"/>
+        <location filename="../client/telemetry_model.cc" line="428"/>
         <source>Damaged package</source>
         <translation>Hasarlı paket</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="393"/>
+        <location filename="../client/telemetry_model.cc" line="430"/>
         <source>Installation failed</source>
         <translation>Yükleme başarısız</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="395"/>
+        <location filename="../client/telemetry_model.cc" line="432"/>
         <source>Installation started</source>
         <translation>Yükleme başlatıldı</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="397"/>
+        <location filename="../client/telemetry_model.cc" line="434"/>
         <source>Installation succeeded</source>
         <translation>Yükleme başarılı</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="407"/>
+        <location filename="../client/telemetry_model.cc" line="444"/>
         <source>%1 or more</source>
         <translation>%1 veya daha fazla</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="417"/>
+        <location filename="../client/telemetry_model.cc" line="454"/>
         <source>Never</source>
         <translation>Hiçbir zaman</translation>
     </message>
