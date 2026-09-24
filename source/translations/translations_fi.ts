@@ -1013,22 +1013,22 @@ Lisättyjä reitittimiä: %4</translation>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="75"/>
+        <location filename="../client/main.cc" line="78"/>
         <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
         <translation>Varmuuskopion luominen epäonnistui. Jotkin tietokannan tietueet ovat vioittuneet. Korjaa tai poista ne.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="278"/>
+        <location filename="../client/main.cc" line="258"/>
         <source>Set Master Password</source>
         <translation>Aseta pääsalasana</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="280"/>
+        <location filename="../client/main.cc" line="260"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Aseta pääsalasana, joka vaaditaan sovelluksen lukituksen avaamiseen.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="288"/>
+        <location filename="../client/main.cc" line="268"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Salasana ei saa olla lyhyempi kuin %n merkki.</numerusform>
@@ -1036,12 +1036,12 @@ Lisättyjä reitittimiä: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="296"/>
+        <location filename="../client/main.cc" line="276"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Syöttämäsi salasana ei täytä turvallisuusvaatimuksia!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="298"/>
+        <location filename="../client/main.cc" line="278"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Salasanassa on oltava pieniä ja isoja kirjaimia sekä numeroita, eikä se saa olla lyhyempi kuin %n merkki.</numerusform>
@@ -1049,52 +1049,52 @@ Lisättyjä reitittimiä: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="302"/>
+        <location filename="../client/main.cc" line="282"/>
         <source>Do you want to enter a different password?</source>
         <translation>Haluatko syöttää toisen salasanan?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="312"/>
+        <location filename="../client/main.cc" line="292"/>
         <source>Unable to set master password.</source>
         <translation>Pääsalasanaa ei voi asettaa.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="243"/>
+        <location filename="../client/desktop/app_lock.cc" line="61"/>
         <source>Unlock</source>
         <translation>Avaa lukitus</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="69"/>
+        <location filename="../client/main.cc" line="72"/>
         <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
         <translation>Varmuuskopion luominen kansioon &quot;%1&quot; epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="81"/>
+        <location filename="../client/main.cc" line="84"/>
         <source>Unable to create a backup.</source>
         <translation>Varmuuskopion luominen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="204"/>
+        <location filename="../client/main.cc" line="207"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>aspia://-linkki yhteyden muodostamiseen isäntään.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="245"/>
+        <location filename="../client/desktop/app_lock.cc" line="63"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Avaa sovelluksen lukitus syöttämällä pääsalasana.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="265"/>
+        <location filename="../client/desktop/app_lock.cc" line="91"/>
         <source>Unable to unlock the database.</source>
         <translation>Tietokantaa ei voi avata.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="270"/>
+        <location filename="../client/desktop/app_lock.cc" line="96"/>
         <source>Invalid master password.</source>
         <translation>Virheellinen pääsalasana.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="200"/>
+        <location filename="../client/main.cc" line="203"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4721,7 +4721,7 @@ Tuotuja kirjautumistietoja: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="376"/>
+        <location filename="../client/desktop/main_window.cc" line="383"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4781,58 +4781,58 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Aina päällimmäisenä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="98"/>
+        <location filename="../client/desktop/main_window.cc" line="99"/>
         <source>Search...</source>
         <translation>Hae...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="177"/>
+        <location filename="../client/desktop/main_window.cc" line="178"/>
         <source>Management</source>
         <translation>Hallinta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="206"/>
+        <location filename="../client/desktop/main_window.cc" line="224"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Virheellinen linkki &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="229"/>
+        <location filename="../client/desktop/main_window.cc" line="247"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Linkin viittaamaa reititintä ei ole tallennettujen reitittimien joukossa.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="278"/>
+        <location filename="../client/desktop/main_window.cc" line="296"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Linkin viittaamaa isäntää ei ole tallennettujen isäntien joukossa.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="474"/>
+        <location filename="../client/desktop/main_window.cc" line="481"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Isännän ominaisuuksissa on määritetty yhteys ID:llä, mutta reititintä ei ole määritetty. Tarkista reitittimen asetukset isännän ominaisuuksista.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="290"/>
+        <location filename="../client/desktop/main_window.cc" line="308"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Tähän isäntään liitetty reititin on poistettu. Muokkaa isäntää valitaksesi toisen reitittimen tai siirry suoraan yhteyteen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="237"/>
-        <location filename="../client/desktop/main_window.cc" line="289"/>
+        <location filename="../client/desktop/main_window.cc" line="255"/>
+        <location filename="../client/desktop/main_window.cc" line="307"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Reitittimen tiedot ovat vioittuneet. Muokkaa reititintä ja syötä ne uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="277"/>
+        <location filename="../client/desktop/main_window.cc" line="295"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Isännän tiedot ovat vioittuneet. Muokkaa isäntää ja syötä ne uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="336"/>
+        <location filename="../client/desktop/main_window.cc" line="338"/>
         <source>Credentials</source>
         <translation>Kirjautumistiedot</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="362"/>
+        <location filename="../client/desktop/main_window.cc" line="369"/>
         <source>Settings</source>
         <translation>Asetukset</translation>
     </message>
@@ -5032,156 +5032,156 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Päivitä tila automaattisesti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="999"/>
+        <location filename="../client/desktop/management_tab.cc" line="1003"/>
         <source>(copy)</source>
         <translation>(kopio)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="967"/>
-        <location filename="../client/desktop/management_tab.cc" line="1040"/>
-        <location filename="../client/desktop/management_tab.cc" line="2131"/>
+        <location filename="../client/desktop/management_tab.cc" line="971"/>
+        <location filename="../client/desktop/management_tab.cc" line="1044"/>
+        <location filename="../client/desktop/management_tab.cc" line="2135"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Isännän tietojen noutaminen paikallisesta tietokannasta epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1004"/>
+        <location filename="../client/desktop/management_tab.cc" line="1008"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Isännän lisääminen paikalliseen tietokantaan epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1044"/>
+        <location filename="../client/desktop/management_tab.cc" line="1048"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Haluatko varmasti poistaa isännän &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1054"/>
+        <location filename="../client/desktop/management_tab.cc" line="1058"/>
         <source>Unable to remove host</source>
         <translation>Isäntää ei voi poistaa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1112"/>
-        <location filename="../client/desktop/management_tab.cc" line="1155"/>
-        <location filename="../client/desktop/management_tab.cc" line="1180"/>
+        <location filename="../client/desktop/management_tab.cc" line="1116"/>
+        <location filename="../client/desktop/management_tab.cc" line="1159"/>
+        <location filename="../client/desktop/management_tab.cc" line="1184"/>
         <source>Copy Row</source>
         <translation>Kopioi rivi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1113"/>
-        <location filename="../client/desktop/management_tab.cc" line="1156"/>
-        <location filename="../client/desktop/management_tab.cc" line="1181"/>
+        <location filename="../client/desktop/management_tab.cc" line="1117"/>
+        <location filename="../client/desktop/management_tab.cc" line="1160"/>
+        <location filename="../client/desktop/management_tab.cc" line="1185"/>
         <source>Copy Value</source>
         <translation>Kopioi arvo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1280"/>
+        <location filename="../client/desktop/management_tab.cc" line="1284"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Haluatko varmasti poistaa työtilan &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1300"/>
+        <location filename="../client/desktop/management_tab.cc" line="1304"/>
         <source>Failed to delete the workspace.</source>
         <translation>Työtilan poistaminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1395"/>
+        <location filename="../client/desktop/management_tab.cc" line="1399"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Haluatko varmasti poistaa ryhmän &quot;%1&quot;? Tähän ryhmään tai sen aliryhmiin kuuluvat isännät siirretään työtilan juureen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1414"/>
+        <location filename="../client/desktop/management_tab.cc" line="1418"/>
         <source>Failed to delete the group.</source>
         <translation>Ryhmän poistaminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1453"/>
+        <location filename="../client/desktop/management_tab.cc" line="1457"/>
         <source>Import Old Address Book</source>
         <translation>Tuo vanha osoitekirja</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1454"/>
+        <location filename="../client/desktop/management_tab.cc" line="1458"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>Osoitekirja (*.aab);;Kaikki tiedostot (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1477"/>
-        <location filename="../client/desktop/management_tab.cc" line="1534"/>
+        <location filename="../client/desktop/management_tab.cc" line="1481"/>
+        <location filename="../client/desktop/management_tab.cc" line="1538"/>
         <source>The database is not available.</source>
         <translation>Tietokanta ei ole käytettävissä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1483"/>
+        <location filename="../client/desktop/management_tab.cc" line="1487"/>
         <source>Create Backup</source>
         <translation>Luo varmuuskopio</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1500"/>
+        <location filename="../client/desktop/management_tab.cc" line="1504"/>
         <source>There is nothing to save.</source>
         <translation>Tallennettavaa ei ole.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2126"/>
+        <location filename="../client/desktop/management_tab.cc" line="2130"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Isännän tiedot ovat vioittuneet. Muokkaa isäntää ja syötä ne uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2147"/>
+        <location filename="../client/desktop/management_tab.cc" line="2151"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Reitittimen tiedot ovat vioittuneet. Muokkaa reititintä ja syötä ne uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1512"/>
+        <location filename="../client/desktop/management_tab.cc" line="1516"/>
         <source>Failed to create the backup.</source>
         <translation>Varmuuskopion luominen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1540"/>
-        <location filename="../client/desktop/management_tab.cc" line="1566"/>
+        <location filename="../client/desktop/management_tab.cc" line="1544"/>
+        <location filename="../client/desktop/management_tab.cc" line="1570"/>
         <source>Restore from Backup</source>
         <translation>Palauta varmuuskopiosta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1549"/>
+        <location filename="../client/desktop/management_tab.cc" line="1553"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Kaikki nykyinen sisältö poistetaan ja korvataan varmuuskopion sisällöllä. Jatketaanko?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1568"/>
+        <location filename="../client/desktop/management_tab.cc" line="1572"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Varmuuskopio on tehty toisessa asennuksessa. Syötä siinä käytetty pääsalasana.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1593"/>
+        <location filename="../client/desktop/management_tab.cc" line="1597"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Varmuuskopio ei sisällä tietoja, joten mitään ei muutettu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1601"/>
+        <location filename="../client/desktop/management_tab.cc" line="1605"/>
         <source>The file is not a valid backup.</source>
         <translation>Tiedosto ei ole kelvollinen varmuuskopio.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1605"/>
+        <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Failed to restore from the backup.</source>
         <translation>Palauttaminen varmuuskopiosta epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1484"/>
-        <location filename="../client/desktop/management_tab.cc" line="1541"/>
+        <location filename="../client/desktop/management_tab.cc" line="1488"/>
+        <location filename="../client/desktop/management_tab.cc" line="1545"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia-varmuuskopio (*.aspia-backup);;Kaikki tiedostot (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1504"/>
+        <location filename="../client/desktop/management_tab.cc" line="1508"/>
         <source>Unable to write the file.</source>
         <translation>Tiedostoa ei voi kirjoittaa.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1597"/>
+        <location filename="../client/desktop/management_tab.cc" line="1601"/>
         <source>Unable to read the file.</source>
         <translation>Tiedostoa ei voi lukea.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1517"/>
+        <location filename="../client/desktop/management_tab.cc" line="1521"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5196,22 +5196,22 @@ Vietyjä tallennettuja salasanoja: %4
 Vietyjä kirjautumistietoja: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1508"/>
+        <location filename="../client/desktop/management_tab.cc" line="1512"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Jotkin tietokannan tietueet ovat vioittuneet. Korjaa tai poista ne ja yritä uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1585"/>
+        <location filename="../client/desktop/management_tab.cc" line="1589"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Tiedoston salausta ei voi purkaa annetulla salasanalla.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1589"/>
+        <location filename="../client/desktop/management_tab.cc" line="1593"/>
         <source>Unsupported file format version.</source>
         <translation>Tiedostomuodon versiota ei tueta.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1610"/>
+        <location filename="../client/desktop/management_tab.cc" line="1614"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5226,29 +5226,29 @@ Tuotuja tallennettuja salasanoja: %4
 Tuotuja kirjautumistietoja: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2054"/>
-        <location filename="../client/desktop/management_tab.cc" line="2085"/>
+        <location filename="../client/desktop/management_tab.cc" line="2058"/>
+        <location filename="../client/desktop/management_tab.cc" line="2089"/>
         <source>Copy Link</source>
         <translation>Kopioi linkki</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2073"/>
-        <location filename="../client/desktop/management_tab.cc" line="2107"/>
+        <location filename="../client/desktop/management_tab.cc" line="2077"/>
+        <location filename="../client/desktop/management_tab.cc" line="2111"/>
         <source>Unable to create a link for this host.</source>
         <translation>Tälle isännälle ei voi luoda linkkiä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2148"/>
+        <location filename="../client/desktop/management_tab.cc" line="2152"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Tähän isäntään liitetty reititin on poistettu. Muokkaa isäntää valitaksesi toisen reitittimen tai siirry suoraan yhteyteen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2155"/>
+        <location filename="../client/desktop/management_tab.cc" line="2159"/>
         <source>The host has an invalid host ID.</source>
         <translation>Isännän ID on virheellinen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2164"/>
+        <location filename="../client/desktop/management_tab.cc" line="2168"/>
         <source>The host has an incorrect address.</source>
         <translation>Isännän osoite on virheellinen.</translation>
     </message>
@@ -7397,107 +7397,112 @@ Tuotuja kirjautumistietoja: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="252"/>
-        <source>Master Password</source>
-        <translation>Pääsalasana</translation>
+        <source>Security</source>
+        <translation>Suojaus</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="271"/>
-        <source>Change...</source>
-        <translation>Vaihda...</translation>
+        <location filename="../client/desktop/settings_tab.ui" line="258"/>
+        <source>Lock after inactivity:</source>
+        <translation>Lukitus toimettomuuden jälkeen:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="334"/>
+        <location filename="../client/desktop/settings_tab.ui" line="268"/>
+        <source>Change Master Password...</source>
+        <translation>Vaihda pääsalasana...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="331"/>
         <source>Features</source>
         <translation>Ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="340"/>
+        <location filename="../client/desktop/settings_tab.ui" line="337"/>
         <source>Enable audio</source>
         <translation>Ota ääni käyttöön</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="347"/>
+        <location filename="../client/desktop/settings_tab.ui" line="344"/>
         <source>Enable clipboard</source>
         <translation>Ota leikepöytä käyttöön</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="354"/>
+        <location filename="../client/desktop/settings_tab.ui" line="351"/>
         <source>Show shape of remote cursor</source>
         <translation>Näytä etäosoittimen muoto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="361"/>
+        <location filename="../client/desktop/settings_tab.ui" line="358"/>
         <source>Show position of remote cursor</source>
         <translation>Näytä etäosoittimen sijainti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="368"/>
+        <location filename="../client/desktop/settings_tab.ui" line="365"/>
         <source>Disable desktop effects</source>
         <translation>Poista työpöytätehosteet käytöstä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="375"/>
+        <location filename="../client/desktop/settings_tab.ui" line="372"/>
         <source>Disable desktop wallpaper</source>
         <translation>Poista työpöydän taustakuva käytöstä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="382"/>
+        <location filename="../client/desktop/settings_tab.ui" line="379"/>
         <source>Lock computer at disconnect</source>
         <translation>Lukitse tietokone yhteyden katketessa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="389"/>
+        <location filename="../client/desktop/settings_tab.ui" line="386"/>
         <source>Block remote input</source>
         <translation>Estä etäsyöttö</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="396"/>
+        <location filename="../client/desktop/settings_tab.ui" line="393"/>
         <source>Send key combinations</source>
         <translation>Lähetä näppäinyhdistelmät</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="412"/>
+        <location filename="../client/desktop/settings_tab.ui" line="409"/>
         <source>Screen</source>
         <translation>Näyttö</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="420"/>
+        <location filename="../client/desktop/settings_tab.ui" line="417"/>
         <source>Preferred resolution:</source>
         <translation>Ensisijainen tarkkuus:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="448"/>
+        <location filename="../client/desktop/settings_tab.ui" line="445"/>
         <source>Recording</source>
         <translation>Tallennus</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="454"/>
+        <location filename="../client/desktop/settings_tab.ui" line="451"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>Aloita istuntojen tallennus automaattisesti yhdistettäessä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="463"/>
+        <location filename="../client/desktop/settings_tab.ui" line="460"/>
         <source>Write path:</source>
         <translation>Tallennuspolku:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="551"/>
+        <location filename="../client/desktop/settings_tab.ui" line="548"/>
         <location filename="../client/desktop/settings_tab.cc" line="128"/>
         <source>Update</source>
         <translation>Päivitä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="557"/>
+        <location filename="../client/desktop/settings_tab.ui" line="554"/>
         <source>Check for updates on startup</source>
         <translation>Tarkista päivitykset käynnistyksen yhteydessä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="566"/>
+        <location filename="../client/desktop/settings_tab.ui" line="563"/>
         <source>Update channel:</source>
         <translation>Päivityskanava:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="593"/>
+        <location filename="../client/desktop/settings_tab.ui" line="590"/>
         <source>Check for updates</source>
         <translation>Tarkista päivitykset</translation>
     </message>
@@ -7537,48 +7542,78 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>1 vuosi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="200"/>
+        <location filename="../client/desktop/settings_tab.cc" line="181"/>
+        <source>Do not lock</source>
+        <translation>Älä lukitse</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="182"/>
+        <source>1 minute</source>
+        <translation>1 minuutti</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="183"/>
+        <source>5 minutes</source>
+        <translation>5 minuuttia</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="184"/>
+        <source>10 minutes</source>
+        <translation>10 minuuttia</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="185"/>
+        <source>30 minutes</source>
+        <translation>30 minuuttia</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="186"/>
+        <source>1 hour</source>
+        <translation>1 tunti</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="210"/>
         <source>None</source>
         <translation>Ei mitään</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="225"/>
+        <location filename="../client/desktop/settings_tab.cc" line="235"/>
         <source>Stable</source>
         <translation>Vakaa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="226"/>
+        <location filename="../client/desktop/settings_tab.cc" line="236"/>
         <source>Beta</source>
         <translation>Beeta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="227"/>
+        <location filename="../client/desktop/settings_tab.cc" line="237"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="345"/>
+        <location filename="../client/desktop/settings_tab.cc" line="357"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Uusi kieli otetaan käyttöön, kun sovellus käynnistetään uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="394"/>
-        <location filename="../client/desktop/settings_tab.cc" line="464"/>
+        <location filename="../client/desktop/settings_tab.cc" line="406"/>
+        <location filename="../client/desktop/settings_tab.cc" line="484"/>
         <source>Choose path</source>
         <translation>Valitse polku</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="484"/>
+        <location filename="../client/desktop/settings_tab.cc" line="504"/>
         <source>Change Master Password</source>
         <translation>Vaihda pääsalasana</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="486"/>
+        <location filename="../client/desktop/settings_tab.cc" line="506"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Syötä nykyinen salasanasi ja valitse uusi.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="494"/>
+        <location filename="../client/desktop/settings_tab.cc" line="514"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Salasana ei saa olla lyhyempi kuin %n merkki.</numerusform>
@@ -7586,12 +7621,12 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="501"/>
+        <location filename="../client/desktop/settings_tab.cc" line="521"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Syöttämäsi salasana ei täytä turvallisuusvaatimuksia!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="502"/>
+        <location filename="../client/desktop/settings_tab.cc" line="522"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Salasanassa on oltava pieniä ja isoja kirjaimia sekä numeroita, eikä se saa olla lyhyempi kuin %n merkki.</numerusform>
@@ -7599,22 +7634,22 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="505"/>
+        <location filename="../client/desktop/settings_tab.cc" line="525"/>
         <source>Do you want to enter a different password?</source>
         <translation>Haluatko syöttää toisen salasanan?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="518"/>
+        <location filename="../client/desktop/settings_tab.cc" line="538"/>
         <source>Invalid current password.</source>
         <translation>Nykyinen salasana on virheellinen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="522"/>
+        <location filename="../client/desktop/settings_tab.cc" line="542"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Jotkin tietokannan tietueet ovat vioittuneet. Korjaa tai poista ne ja yritä uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="526"/>
+        <location filename="../client/desktop/settings_tab.cc" line="546"/>
         <source>Unable to change the password.</source>
         <translation>Salasanaa ei voi vaihtaa.</translation>
     </message>

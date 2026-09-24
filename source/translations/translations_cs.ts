@@ -1014,22 +1014,22 @@ Přidané routery: %4</translation>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="75"/>
+        <location filename="../client/main.cc" line="78"/>
         <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
         <translation>Nepodařilo se vytvořit zálohu. Některé záznamy databáze jsou poškozeny. Opravte je nebo odstraňte.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="278"/>
+        <location filename="../client/main.cc" line="258"/>
         <source>Set Master Password</source>
         <translation>Nastavit hlavní heslo</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="280"/>
+        <location filename="../client/main.cc" line="260"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Nastavte hlavní heslo vyžadované k odemknutí aplikace.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="288"/>
+        <location filename="../client/main.cc" line="268"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Heslo nemůže být kratší než %n znak.</numerusform>
@@ -1038,12 +1038,12 @@ Přidané routery: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="296"/>
+        <location filename="../client/main.cc" line="276"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Zadané heslo nesplňuje požadavky na zabezpečení!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="298"/>
+        <location filename="../client/main.cc" line="278"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Heslo musí obsahovat malá a velká písmena, číslice a nemělo by být kratší než %n znak.</numerusform>
@@ -1052,52 +1052,52 @@ Přidané routery: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="302"/>
+        <location filename="../client/main.cc" line="282"/>
         <source>Do you want to enter a different password?</source>
         <translation>Chcete zadat jiné heslo?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="312"/>
+        <location filename="../client/main.cc" line="292"/>
         <source>Unable to set master password.</source>
         <translation>Nelze nastavit hlavní heslo.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="243"/>
+        <location filename="../client/desktop/app_lock.cc" line="61"/>
         <source>Unlock</source>
         <translation>Odemknout</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="69"/>
+        <location filename="../client/main.cc" line="72"/>
         <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
         <translation>Nepodařilo se vytvořit zálohu ve složce &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="81"/>
+        <location filename="../client/main.cc" line="84"/>
         <source>Unable to create a backup.</source>
         <translation>Nepodařilo se vytvořit zálohu.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="204"/>
+        <location filename="../client/main.cc" line="207"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>Odkaz aspia:// pro připojení k hostiteli.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="245"/>
+        <location filename="../client/desktop/app_lock.cc" line="63"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Zadejte hlavní heslo pro odemknutí aplikace.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="265"/>
+        <location filename="../client/desktop/app_lock.cc" line="91"/>
         <source>Unable to unlock the database.</source>
         <translation>Nelze odemknout databázi.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="270"/>
+        <location filename="../client/desktop/app_lock.cc" line="96"/>
         <source>Invalid master password.</source>
         <translation>Neplatné hlavní heslo.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="200"/>
+        <location filename="../client/main.cc" line="203"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4746,7 +4746,7 @@ Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="376"/>
+        <location filename="../client/desktop/main_window.cc" line="383"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4806,58 +4806,58 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Vždy navrchu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="98"/>
+        <location filename="../client/desktop/main_window.cc" line="99"/>
         <source>Search...</source>
         <translation>Hledat...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="177"/>
+        <location filename="../client/desktop/main_window.cc" line="178"/>
         <source>Management</source>
         <translation>Správa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="206"/>
+        <location filename="../client/desktop/main_window.cc" line="224"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Neplatný odkaz &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="229"/>
+        <location filename="../client/desktop/main_window.cc" line="247"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Router, na který odkaz odkazuje, není mezi uloženými routery.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="278"/>
+        <location filename="../client/desktop/main_window.cc" line="296"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Hostitel, na kterého odkaz odkazuje, není mezi uloženými hostiteli.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="474"/>
+        <location filename="../client/desktop/main_window.cc" line="481"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Ve vlastnostech hostitele je zadáno připojení podle ID, ale router není nakonfigurován. Zkontrolujte parametry routeru ve vlastnostech hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="290"/>
+        <location filename="../client/desktop/main_window.cc" line="308"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Router přidružený k tomuto hostiteli byl odstraněn. Upravte hostitele a vyberte jiný router, nebo přepněte na přímé připojení.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="237"/>
-        <location filename="../client/desktop/main_window.cc" line="289"/>
+        <location filename="../client/desktop/main_window.cc" line="255"/>
+        <location filename="../client/desktop/main_window.cc" line="307"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Data routeru jsou poškozena. Upravte router a zadejte je znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="277"/>
+        <location filename="../client/desktop/main_window.cc" line="295"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Data hostitele jsou poškozena. Upravte hostitele a zadejte je znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="336"/>
+        <location filename="../client/desktop/main_window.cc" line="338"/>
         <source>Credentials</source>
         <translation>Přihlašovací údaje</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="362"/>
+        <location filename="../client/desktop/main_window.cc" line="369"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
     </message>
@@ -5057,156 +5057,156 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Automaticky obnovovat stav</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="999"/>
+        <location filename="../client/desktop/management_tab.cc" line="1003"/>
         <source>(copy)</source>
         <translation>(kopie)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="967"/>
-        <location filename="../client/desktop/management_tab.cc" line="1040"/>
-        <location filename="../client/desktop/management_tab.cc" line="2131"/>
+        <location filename="../client/desktop/management_tab.cc" line="971"/>
+        <location filename="../client/desktop/management_tab.cc" line="1044"/>
+        <location filename="../client/desktop/management_tab.cc" line="2135"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Nepodařilo se načíst informace o hostiteli z místní databáze.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1004"/>
+        <location filename="../client/desktop/management_tab.cc" line="1008"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Nepodařilo se přidat hostitele do místní databáze.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1044"/>
+        <location filename="../client/desktop/management_tab.cc" line="1048"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit hostitele &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1054"/>
+        <location filename="../client/desktop/management_tab.cc" line="1058"/>
         <source>Unable to remove host</source>
         <translation>Nelze odebrat hostitele</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1112"/>
-        <location filename="../client/desktop/management_tab.cc" line="1155"/>
-        <location filename="../client/desktop/management_tab.cc" line="1180"/>
+        <location filename="../client/desktop/management_tab.cc" line="1116"/>
+        <location filename="../client/desktop/management_tab.cc" line="1159"/>
+        <location filename="../client/desktop/management_tab.cc" line="1184"/>
         <source>Copy Row</source>
         <translation>Kopírovat řádek</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1113"/>
-        <location filename="../client/desktop/management_tab.cc" line="1156"/>
-        <location filename="../client/desktop/management_tab.cc" line="1181"/>
+        <location filename="../client/desktop/management_tab.cc" line="1117"/>
+        <location filename="../client/desktop/management_tab.cc" line="1160"/>
+        <location filename="../client/desktop/management_tab.cc" line="1185"/>
         <source>Copy Value</source>
         <translation>Kopírovat hodnotu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1280"/>
+        <location filename="../client/desktop/management_tab.cc" line="1284"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit pracovní prostor &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1300"/>
+        <location filename="../client/desktop/management_tab.cc" line="1304"/>
         <source>Failed to delete the workspace.</source>
         <translation>Nepodařilo se odstranit pracovní prostor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1395"/>
+        <location filename="../client/desktop/management_tab.cc" line="1399"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Opravdu chcete odstranit skupinu &quot;%1&quot;? Hostitelé přiřazení k této skupině nebo jejím podskupinám budou přesunuti do kořene pracovního prostoru.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1414"/>
+        <location filename="../client/desktop/management_tab.cc" line="1418"/>
         <source>Failed to delete the group.</source>
         <translation>Nepodařilo se odstranit skupinu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1453"/>
+        <location filename="../client/desktop/management_tab.cc" line="1457"/>
         <source>Import Old Address Book</source>
         <translation>Importovat starý adresář</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1454"/>
+        <location filename="../client/desktop/management_tab.cc" line="1458"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>Adresář (*.aab);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1477"/>
-        <location filename="../client/desktop/management_tab.cc" line="1534"/>
+        <location filename="../client/desktop/management_tab.cc" line="1481"/>
+        <location filename="../client/desktop/management_tab.cc" line="1538"/>
         <source>The database is not available.</source>
         <translation>Databáze není k dispozici.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1483"/>
+        <location filename="../client/desktop/management_tab.cc" line="1487"/>
         <source>Create Backup</source>
         <translation>Vytvořit zálohu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1500"/>
+        <location filename="../client/desktop/management_tab.cc" line="1504"/>
         <source>There is nothing to save.</source>
         <translation>Není co uložit.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2126"/>
+        <location filename="../client/desktop/management_tab.cc" line="2130"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Data hostitele jsou poškozena. Upravte hostitele a zadejte je znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2147"/>
+        <location filename="../client/desktop/management_tab.cc" line="2151"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Data routeru jsou poškozena. Upravte router a zadejte je znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1512"/>
+        <location filename="../client/desktop/management_tab.cc" line="1516"/>
         <source>Failed to create the backup.</source>
         <translation>Nepodařilo se vytvořit zálohu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1540"/>
-        <location filename="../client/desktop/management_tab.cc" line="1566"/>
+        <location filename="../client/desktop/management_tab.cc" line="1544"/>
+        <location filename="../client/desktop/management_tab.cc" line="1570"/>
         <source>Restore from Backup</source>
         <translation>Obnovit ze zálohy</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1549"/>
+        <location filename="../client/desktop/management_tab.cc" line="1553"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Vše, co je nyní uloženo, bude odstraněno a nahrazeno obsahem zálohy. Pokračovat?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1568"/>
+        <location filename="../client/desktop/management_tab.cc" line="1572"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Záloha byla vytvořena v jiné instalaci. Zadejte hlavní heslo dané instalace.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1593"/>
+        <location filename="../client/desktop/management_tab.cc" line="1597"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Záloha neobsahuje žádná data, takže nebylo nic změněno.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1601"/>
+        <location filename="../client/desktop/management_tab.cc" line="1605"/>
         <source>The file is not a valid backup.</source>
         <translation>Soubor není platná záloha.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1605"/>
+        <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Failed to restore from the backup.</source>
         <translation>Nepodařilo se obnovit ze zálohy.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1484"/>
-        <location filename="../client/desktop/management_tab.cc" line="1541"/>
+        <location filename="../client/desktop/management_tab.cc" line="1488"/>
+        <location filename="../client/desktop/management_tab.cc" line="1545"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Záloha Aspia (*.aspia-backup);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1504"/>
+        <location filename="../client/desktop/management_tab.cc" line="1508"/>
         <source>Unable to write the file.</source>
         <translation>Nelze zapsat soubor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1597"/>
+        <location filename="../client/desktop/management_tab.cc" line="1601"/>
         <source>Unable to read the file.</source>
         <translation>Nelze číst soubor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1517"/>
+        <location filename="../client/desktop/management_tab.cc" line="1521"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5221,22 +5221,22 @@ Exportovaná uložená hesla: %4
 Exportované přihlašovací údaje: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1508"/>
+        <location filename="../client/desktop/management_tab.cc" line="1512"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Některé záznamy databáze jsou poškozeny. Opravte je nebo odstraňte a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1585"/>
+        <location filename="../client/desktop/management_tab.cc" line="1589"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Soubor nelze zadaným heslem dešifrovat.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1589"/>
+        <location filename="../client/desktop/management_tab.cc" line="1593"/>
         <source>Unsupported file format version.</source>
         <translation>Nepodporovaná verze formátu souboru.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1610"/>
+        <location filename="../client/desktop/management_tab.cc" line="1614"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5251,29 +5251,29 @@ Importovaná uložená hesla: %4
 Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2054"/>
-        <location filename="../client/desktop/management_tab.cc" line="2085"/>
+        <location filename="../client/desktop/management_tab.cc" line="2058"/>
+        <location filename="../client/desktop/management_tab.cc" line="2089"/>
         <source>Copy Link</source>
         <translation>Kopírovat odkaz</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2073"/>
-        <location filename="../client/desktop/management_tab.cc" line="2107"/>
+        <location filename="../client/desktop/management_tab.cc" line="2077"/>
+        <location filename="../client/desktop/management_tab.cc" line="2111"/>
         <source>Unable to create a link for this host.</source>
         <translation>Nelze vytvořit odkaz pro tohoto hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2148"/>
+        <location filename="../client/desktop/management_tab.cc" line="2152"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Router přidružený k tomuto hostiteli byl odstraněn. Upravte hostitele a vyberte jiný router, nebo přepněte na přímé připojení.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2155"/>
+        <location filename="../client/desktop/management_tab.cc" line="2159"/>
         <source>The host has an invalid host ID.</source>
         <translation>Hostitel má neplatné ID hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2164"/>
+        <location filename="../client/desktop/management_tab.cc" line="2168"/>
         <source>The host has an incorrect address.</source>
         <translation>Hostitel má nesprávnou adresu.</translation>
     </message>
@@ -7435,107 +7435,112 @@ Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="252"/>
-        <source>Master Password</source>
-        <translation>Hlavní heslo</translation>
+        <source>Security</source>
+        <translation>Zabezpečení</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="271"/>
-        <source>Change...</source>
-        <translation>Změnit...</translation>
+        <location filename="../client/desktop/settings_tab.ui" line="258"/>
+        <source>Lock after inactivity:</source>
+        <translation>Uzamykat po nečinnosti:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="334"/>
+        <location filename="../client/desktop/settings_tab.ui" line="268"/>
+        <source>Change Master Password...</source>
+        <translation>Změnit hlavní heslo...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="331"/>
         <source>Features</source>
         <translation>Funkce</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="340"/>
+        <location filename="../client/desktop/settings_tab.ui" line="337"/>
         <source>Enable audio</source>
         <translation>Povolit zvuk</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="347"/>
+        <location filename="../client/desktop/settings_tab.ui" line="344"/>
         <source>Enable clipboard</source>
         <translation>Povolit schránku</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="354"/>
+        <location filename="../client/desktop/settings_tab.ui" line="351"/>
         <source>Show shape of remote cursor</source>
         <translation>Zobrazovat tvar vzdáleného kurzoru</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="361"/>
+        <location filename="../client/desktop/settings_tab.ui" line="358"/>
         <source>Show position of remote cursor</source>
         <translation>Zobrazovat pozici vzdáleného kurzoru</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="368"/>
+        <location filename="../client/desktop/settings_tab.ui" line="365"/>
         <source>Disable desktop effects</source>
         <translation>Zakázat efekty plochy</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="375"/>
+        <location filename="../client/desktop/settings_tab.ui" line="372"/>
         <source>Disable desktop wallpaper</source>
         <translation>Zakázat tapetu plochy</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="382"/>
+        <location filename="../client/desktop/settings_tab.ui" line="379"/>
         <source>Lock computer at disconnect</source>
         <translation>Uzamknout počítač při odpojení</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="389"/>
+        <location filename="../client/desktop/settings_tab.ui" line="386"/>
         <source>Block remote input</source>
         <translation>Blokovat vzdálený vstup</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="396"/>
+        <location filename="../client/desktop/settings_tab.ui" line="393"/>
         <source>Send key combinations</source>
         <translation>Odesílat klávesové zkratky</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="412"/>
+        <location filename="../client/desktop/settings_tab.ui" line="409"/>
         <source>Screen</source>
         <translation>Obrazovka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="420"/>
+        <location filename="../client/desktop/settings_tab.ui" line="417"/>
         <source>Preferred resolution:</source>
         <translation>Preferované rozlišení:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="448"/>
+        <location filename="../client/desktop/settings_tab.ui" line="445"/>
         <source>Recording</source>
         <translation>Nahrávání</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="454"/>
+        <location filename="../client/desktop/settings_tab.ui" line="451"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>Automaticky spustit nahrávání relací při připojení</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="463"/>
+        <location filename="../client/desktop/settings_tab.ui" line="460"/>
         <source>Write path:</source>
         <translation>Cesta pro zápis:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="551"/>
+        <location filename="../client/desktop/settings_tab.ui" line="548"/>
         <location filename="../client/desktop/settings_tab.cc" line="128"/>
         <source>Update</source>
         <translation>Aktualizovat</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="557"/>
+        <location filename="../client/desktop/settings_tab.ui" line="554"/>
         <source>Check for updates on startup</source>
         <translation>Kontrolovat aktualizace při spuštění</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="566"/>
+        <location filename="../client/desktop/settings_tab.ui" line="563"/>
         <source>Update channel:</source>
         <translation>Kanál aktualizací:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="593"/>
+        <location filename="../client/desktop/settings_tab.ui" line="590"/>
         <source>Check for updates</source>
         <translation>Zkontrolovat aktualizace</translation>
     </message>
@@ -7575,48 +7580,78 @@ Importované přihlašovací údaje: %5</translation>
         <translation>1 rok</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="200"/>
+        <location filename="../client/desktop/settings_tab.cc" line="181"/>
+        <source>Do not lock</source>
+        <translation>Neuzamykat</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="182"/>
+        <source>1 minute</source>
+        <translation>1 minuta</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="183"/>
+        <source>5 minutes</source>
+        <translation>5 minut</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="184"/>
+        <source>10 minutes</source>
+        <translation>10 minut</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="185"/>
+        <source>30 minutes</source>
+        <translation>30 minut</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="186"/>
+        <source>1 hour</source>
+        <translation>1 hodina</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="210"/>
         <source>None</source>
         <translation>Žádné</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="225"/>
+        <location filename="../client/desktop/settings_tab.cc" line="235"/>
         <source>Stable</source>
         <translation>Stabilní</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="226"/>
+        <location filename="../client/desktop/settings_tab.cc" line="236"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="227"/>
+        <location filename="../client/desktop/settings_tab.cc" line="237"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="345"/>
+        <location filename="../client/desktop/settings_tab.cc" line="357"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Nový jazyk bude použit po restartování aplikace.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="394"/>
-        <location filename="../client/desktop/settings_tab.cc" line="464"/>
+        <location filename="../client/desktop/settings_tab.cc" line="406"/>
+        <location filename="../client/desktop/settings_tab.cc" line="484"/>
         <source>Choose path</source>
         <translation>Vyberte cestu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="484"/>
+        <location filename="../client/desktop/settings_tab.cc" line="504"/>
         <source>Change Master Password</source>
         <translation>Změnit hlavní heslo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="486"/>
+        <location filename="../client/desktop/settings_tab.cc" line="506"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Zadejte aktuální heslo a zvolte nové.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="494"/>
+        <location filename="../client/desktop/settings_tab.cc" line="514"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Heslo nemůže být kratší než %n znak.</numerusform>
@@ -7625,12 +7660,12 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="501"/>
+        <location filename="../client/desktop/settings_tab.cc" line="521"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Zadané heslo nesplňuje požadavky na zabezpečení!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="502"/>
+        <location filename="../client/desktop/settings_tab.cc" line="522"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Heslo musí obsahovat malá a velká písmena, číslice a nemělo by být kratší než %n znak.</numerusform>
@@ -7639,22 +7674,22 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="505"/>
+        <location filename="../client/desktop/settings_tab.cc" line="525"/>
         <source>Do you want to enter a different password?</source>
         <translation>Chcete zadat jiné heslo?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="518"/>
+        <location filename="../client/desktop/settings_tab.cc" line="538"/>
         <source>Invalid current password.</source>
         <translation>Neplatné aktuální heslo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="522"/>
+        <location filename="../client/desktop/settings_tab.cc" line="542"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Některé záznamy databáze jsou poškozeny. Opravte je nebo odstraňte a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="526"/>
+        <location filename="../client/desktop/settings_tab.cc" line="546"/>
         <source>Unable to change the password.</source>
         <translation>Nelze změnit heslo.</translation>
     </message>
