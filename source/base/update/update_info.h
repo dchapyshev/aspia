@@ -34,8 +34,8 @@ public:
     UpdateInfo& operator=(const UpdateInfo& other) = default;
     ~UpdateInfo() = default;
 
-    // The version latest.json offers to |current|. A null version means the rules name nothing
-    // for it, and no value at all that they could not be read.
+    // The version the rules of a channel offer to |current|. A null version means the rules name
+    // nothing for it, and no value at all that they could not be read.
     static std::optional<QVersionNumber> targetVersion(const QByteArray& buffer,
                                                        const QVersionNumber& current);
 

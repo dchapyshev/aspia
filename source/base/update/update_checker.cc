@@ -41,14 +41,12 @@ const long kConnectTimeout = 30;
 const long kRequestTimeout = 60;
 
 //--------------------------------------------------------------------------------------------------
-QString serverUrl(const QString& channel)
+QString channelName(const QString& channel)
 {
-    QString name = kStableUpdateChannel;
-
     if (channel == kBetaUpdateChannel || channel == kAlphaUpdateChannel)
-        name = channel;
+        return channel;
 
-    return kUpdateServer + "/" + name;
+    return kStableUpdateChannel;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -89,7 +87,8 @@ int debugFunc(CURL* /* handle */, curl_infotype type, char* data, size_t size, v
 //--------------------------------------------------------------------------------------------------
 UpdateChecker::UpdateChecker(const QString& channel, const QString& package, QObject* parent)
     : QThread(parent),
-      server_(serverUrl(channel)),
+      server_(kUpdateServer),
+      channel_(channelName(channel)),
       package_(package)
 {
     LOG(TRACE) << "Ctor";
@@ -171,7 +170,7 @@ void UpdateChecker::check()
     format = "pkg";
 #endif
 
-    QByteArray rules = downloadSigned(server_ + "/latest.json");
+    QByteArray rules = downloadSigned(server_ + "/" + channel_ + ".json");
     if (interrupted_.load(std::memory_order_relaxed))
         return;
 
@@ -195,7 +194,7 @@ void UpdateChecker::check()
         return;
     }
 
-    QByteArray manifest = downloadSigned(server_ + "/" + target_version->toString() + ".json");
+    QByteArray manifest = downloadSigned(server_ + "/versions/" + target_version->toString() + ".json");
     if (interrupted_.load(std::memory_order_relaxed))
         return;
 

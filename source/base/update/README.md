@@ -8,28 +8,29 @@ This document is what to write into those files and what the applications do wit
 
 Layout
 ------
-A channel is a directory. An application builds the address it reads as
-`<server>/<channel>/latest.json`, where the server is `https://aspia.org/updates`.
+Versions grow one way whatever the channel, and a release is the same release in every channel that
+offers it. So the manifests are shared, and a channel is one file with its rules. The server is
+`https://aspia.org/updates`, an application reads `<server>/<channel>.json` and then
+`<server>/versions/<version>.json`.
 
 ```
 updates/
-  stable/
-    latest.json
-    latest.json.sig
-  beta/
-    latest.json
-    latest.json.sig
-    3.0.5.json
-    3.0.5.json.sig
-  alpha/
-    latest.json
-    latest.json.sig
+  stable.json
+  stable.json.sig
+  beta.json
+  beta.json.sig
+  alpha.json
+  alpha.json.sig
+  versions/
+    3.0.12.json
+    3.0.12.json.sig
 ```
 
 There are three channels: `stable`, `beta` and `alpha`. A name that is not one of them is read as
-the stable one, so a setting written by another version cannot send a check elsewhere.
+the stable one, so a setting written by another version cannot send a check elsewhere. Moving a
+release to another channel is a change of that channel's file; the manifest stays as it is.
 
-**Every channel must have a `latest.json`, even when nothing is offered.** An empty directory is
+**Every channel must have its file, even when nothing is offered.** A missing file is
 indistinguishable from a server that is down: the application gets a 404 and reports a failed check
 instead of "no updates". The smallest file that says "nothing here":
 
@@ -44,9 +45,16 @@ instead of "no updates". The smallest file that says "nothing here":
 The packages themselves are not served from this directory. A release manifest names the directory
 they lie in, and that can be anywhere.
 
-latest.json
------------
-Read at every check. It answers one question: what is offered to the version that is asking.
+**Versions up to 3.0.11 read another layout.** They look for `<server>/<channel>/latest.json` and
+`<server>/<channel>/<version>.json`, a directory per channel with the same files in it, and they
+keep reading it until they are updated. That layout is left as it is, and 3.0.12, the first version
+that reads the new one, is the last release put into it. Nothing newer is added there: a machine on
+an older version updates to 3.0.12 and from then on reads `versions/`.
+
+Channel rules
+-------------
+`<channel>.json` is read at every check. It answers one question: what is offered to the version
+that is asking.
 
 ```json
 {
@@ -89,7 +97,8 @@ together with that release: it does nothing until the label moves on.
 
 Release manifest
 ----------------
-`<version>.json` describes one release: what it is, where its files are and what they must hash to.
+`versions/<version>.json` describes one release: what it is, where its files are and what they must
+hash to. It is the same for every channel, so its description is too.
 
 ```json
 {
@@ -201,8 +210,7 @@ aspia_signer verifydir <public-key> <dir>...    checks every json file under the
 A private key is a file. A public key is the key itself in hex or a file holding the private key it
 belongs to, so the same file works for signing and for checking.
 
-A channel, or the whole `updates` directory, is signed and checked in one go with `signdir` and
-`verifydir`. They take the manifests lying under the directory, subdirectories included, and not the
+The whole `updates` directory is signed and checked in one go with `signdir` and `verifydir`. They take the manifests lying under the directory, subdirectories included, and not the
 signatures next to them. A signature does not depend on when it was made, so a file signed again
 keeps the bytes it had.
 
@@ -216,10 +224,10 @@ First it works out what it is. The operating system and the architecture come fr
 package format it prefers is `msi` on Windows, `apk` on Android, `pkg` on macOS, and on Linux `deb`
 when `apt-get` is on the machine or `rpm` when `dnf` is.
 
-1. Reads `latest.json` of its channel and its signature.
+1. Reads `<channel>.json` and its signature.
 2. Finds the entry for its own version and resolves the target, a label through `targets`. Nothing
    offered ends the check here, with no further request.
-3. Reads `<target>.json` and its signature.
+3. Reads `versions/<target>.json` and its signature.
 4. Takes the file for its application, system and architecture, and checks that the version inside
    the manifest is the one the rules pointed at.
 5. Downloads the file into a directory only its owner can write to, and compares the hash with the
@@ -260,11 +268,10 @@ Example
 -------
 A Windows host of version 3.0.4.8006 on the beta channel, against the files above:
 
-1. `https://aspia.org/updates/beta/latest.json` and its signature are read, and the signature is
-   good.
+1. `https://aspia.org/updates/beta.json` and its signature are read, and the signature is good.
 2. The running version is 3.0.4, the entry `{ "source": "3.0.4", "target": "@latest" }` matches,
    the label `latest` resolves to 3.0.5, which is newer.
-3. `https://aspia.org/updates/beta/3.0.5.json` and its signature are read.
+3. `https://aspia.org/updates/versions/3.0.5.json` and its signature are read.
 4. Under `packages.host.windows.x86_64` there is one entry, an `msi`, which is what Windows wants.
 5. The file is `https://files.aspia.net/beta/3.0.5/aspia-host-3.0.5-x86_64.msi` and must hash to
    what the entry says.
@@ -279,11 +286,12 @@ Publishing a release
 1. Upload the files of the release to the directory `path` will name. The hashes go into the
    manifest from exactly those files: a release rebuilt with another build number hashes
    differently, and the installation then stops on a package that does not match the manifest.
-2. Add `<version>.json` to the channel.
-3. In `latest.json`, move `targets.latest` to the new version and add an entry for the version that
-   came before it.
+2. Add `versions/<version>.json`.
+3. In the file of every channel that offers the release, move `targets.latest` to the new version
+   and add an entry for the version that came before it. A less stable channel is never behind a
+   more stable one: a release put into beta goes into alpha as well.
 4. Sign every file that changed and verify all of them with the public key.
-5. Commit the channel in one go. There is no intermediate state to be caught in.
+5. Commit everything in one go. There is no intermediate state to be caught in.
 
 Nothing else in the files is touched. The installers of versions that entries still lead to,
 intermediate ones included, stay where they are.

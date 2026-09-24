@@ -30,7 +30,7 @@ const char kUrl[] = "https://aspia.org/download/aspia-host-3.0.6-x86_64.msi";
 const char kSha256[] = "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
 
 //--------------------------------------------------------------------------------------------------
-// latest.json: which version each released one is offered. A target may name a label
+// The rules of a channel: which version each released one is offered. A target may name a label
 // instead of a version.
 QByteArray rulesJson()
 {

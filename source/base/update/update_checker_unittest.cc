@@ -158,10 +158,10 @@ QHash<QString, QByteArray> withSignatures(const QHash<QString, QByteArray>& file
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<UpdateChecker> checkerFor(const FileServer& server)
+std::unique_ptr<UpdateChecker> checkerFor(const FileServer& server,
+                                          const QString& channel = kStableUpdateChannel)
 {
-    std::unique_ptr<UpdateChecker> checker =
-        std::make_unique<UpdateChecker>(kStableUpdateChannel, "host");
+    std::unique_ptr<UpdateChecker> checker = std::make_unique<UpdateChecker>(channel, "host");
 
     checker->setServerForTesting(server.url());
     checker->setPublicKeysForTesting({ Signature::publicKey(privateKey()) });
@@ -176,8 +176,8 @@ std::unique_ptr<UpdateChecker> checkerFor(const FileServer& server)
 TEST(UpdateCheckerTest, UpdateIsOffered)
 {
     FileServer server(withSignatures(
-        { { "/latest.json", rules() },
-          { QString("/%1.json").arg(nextVersion().toString()), manifest() } }));
+        { { "/stable.json", rules() },
+          { QString("/versions/%1.json").arg(nextVersion().toString()), manifest() } }));
 
     std::unique_ptr<UpdateChecker> checker = checkerFor(server);
     QSignalSpy spy(checker.get(), &UpdateChecker::sig_checkFinished);
@@ -198,13 +198,38 @@ TEST(UpdateCheckerTest, UpdateIsOffered)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Each channel reads its own rules, while the manifests are shared. A name that is not a channel of
+// ours reads the stable rules, which this server does not have.
+TEST(UpdateCheckerTest, ChannelReadsItsOwnRules)
+{
+    FileServer server(withSignatures(
+        { { "/beta.json", rules() },
+          { QString("/versions/%1.json").arg(nextVersion().toString()), manifest() } }));
+
+    std::unique_ptr<UpdateChecker> beta = checkerFor(server, kBetaUpdateChannel);
+    QSignalSpy beta_finished(beta.get(), &UpdateChecker::sig_checkFinished);
+
+    beta->start();
+
+    ASSERT_TRUE(beta_finished.wait(15000));
+    EXPECT_EQ(beta_finished.takeFirst().at(0).value<UpdateInfo>().version(), nextVersion());
+
+    std::unique_ptr<UpdateChecker> unknown = checkerFor(server, "nightly");
+    QSignalSpy unknown_failed(unknown.get(), &UpdateChecker::sig_checkFailed);
+
+    unknown->start();
+
+    ASSERT_TRUE(unknown_failed.wait(15000));
+}
+
+//--------------------------------------------------------------------------------------------------
 // No rule for this version is the usual answer of a server that has nothing to offer, not a
 // failure, and the manifest is not read at all.
 TEST(UpdateCheckerTest, VersionWithoutRuleIsNotOffered)
 {
     QByteArray empty_rules = R"({ "format": 1, "targets": {}, "updates": [] })";
 
-    FileServer server(withSignatures({ { "/latest.json", empty_rules } }));
+    FileServer server(withSignatures({ { "/stable.json", empty_rules } }));
 
     std::unique_ptr<UpdateChecker> checker = checkerFor(server);
     QSignalSpy spy(checker.get(), &UpdateChecker::sig_checkFinished);
@@ -228,8 +253,8 @@ TEST(UpdateCheckerTest, ReleaseWithoutFilesIsNotOffered)
     })").arg(nextVersion().toString()).toUtf8();
 
     FileServer server(withSignatures(
-        { { "/latest.json", rules() },
-          { QString("/%1.json").arg(nextVersion().toString()), other } }));
+        { { "/stable.json", rules() },
+          { QString("/versions/%1.json").arg(nextVersion().toString()), other } }));
 
     std::unique_ptr<UpdateChecker> checker = checkerFor(server);
     QSignalSpy spy(checker.get(), &UpdateChecker::sig_checkFinished);
@@ -261,7 +286,7 @@ TEST(UpdateCheckerTest, UnreadableServerFails)
 // The manifest named by the rules is missing: the release is not there, whatever the rules say.
 TEST(UpdateCheckerTest, MissingManifestFails)
 {
-    FileServer server(withSignatures({ { "/latest.json", rules() } }));
+    FileServer server(withSignatures({ { "/stable.json", rules() } }));
 
     std::unique_ptr<UpdateChecker> checker = checkerFor(server);
     QSignalSpy spy(checker.get(), &UpdateChecker::sig_checkFinished);
@@ -277,7 +302,7 @@ TEST(UpdateCheckerTest, MissingManifestFails)
 // A file the server answers without a signature next to it is refused.
 TEST(UpdateCheckerTest, UnsignedFileFails)
 {
-    FileServer server({ { "/latest.json", rules() } });
+    FileServer server({ { "/stable.json", rules() } });
 
     std::unique_ptr<UpdateChecker> checker = checkerFor(server);
     QSignalSpy spy(checker.get(), &UpdateChecker::sig_checkFinished);
@@ -297,8 +322,8 @@ TEST(UpdateCheckerTest, FileSignedByAnotherKeyFails)
     SecureByteArray another_key(QByteArray::fromHex(
         "4ccd089b28ff96da9db6c346ec114e0f5b8a319f35aba624da8cf6ed4fb8a6fb"));
 
-    FileServer server({ { "/latest.json", rules() },
-                        { "/latest.json.sig",
+    FileServer server({ { "/stable.json", rules() },
+                        { "/stable.json.sig",
                           Signature::create(another_key, rules()).toBase64() } });
 
     std::unique_ptr<UpdateChecker> checker = checkerFor(server);
@@ -315,10 +340,10 @@ TEST(UpdateCheckerTest, FileSignedByAnotherKeyFails)
 // The manifest is signed, but not in the shape it arrives in.
 TEST(UpdateCheckerTest, ModifiedManifestFails)
 {
-    QString manifest_path = QString("/%1.json").arg(nextVersion().toString());
+    QString manifest_path = QString("/versions/%1.json").arg(nextVersion().toString());
 
     QHash<QString, QByteArray> files = withSignatures(
-        { { "/latest.json", rules() },
+        { { "/stable.json", rules() },
           { manifest_path, manifest() } });
 
     files[manifest_path] = QByteArray(manifest()).replace("A new version", "Another version");
@@ -343,7 +368,7 @@ TEST(UpdateCheckerTest, RulesWithUnknownLabelFail)
     QByteArray broken_rules = QByteArray(rules()).replace("@latest", "@lastest");
     ASSERT_NE(broken_rules, rules());
 
-    FileServer server(withSignatures({ { "/latest.json", broken_rules } }));
+    FileServer server(withSignatures({ { "/stable.json", broken_rules } }));
 
     std::unique_ptr<UpdateChecker> checker = checkerFor(server);
     QSignalSpy spy(checker.get(), &UpdateChecker::sig_checkFinished);
@@ -369,8 +394,8 @@ TEST(UpdateCheckerTest, ManifestOfAnotherVersionFails)
     ASSERT_NE(other_manifest, manifest());
 
     FileServer server(withSignatures(
-        { { "/latest.json", rules() },
-          { QString("/%1.json").arg(nextVersion().toString()), other_manifest } }));
+        { { "/stable.json", rules() },
+          { QString("/versions/%1.json").arg(nextVersion().toString()), other_manifest } }));
 
     std::unique_ptr<UpdateChecker> checker = checkerFor(server);
     QSignalSpy spy(checker.get(), &UpdateChecker::sig_checkFinished);

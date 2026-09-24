@@ -55,6 +55,7 @@ private:
     QByteArray download(const QString& url);
 
     QString server_;
+    const QString channel_;
     const QString package_;
     QList<QByteArray> public_keys_;
     std::atomic_bool interrupted_ { false };
