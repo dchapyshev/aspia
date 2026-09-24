@@ -22,23 +22,20 @@
 #include <QCoreApplication>
 #include <QEvent>
 #include <QInputMethod>
-#include <QJniEnvironment>
-#include <QJniObject>
 #include <QResizeEvent>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QStackedWidget>
-#include <QVariant>
 #include <QVBoxLayout>
 
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
-#include "common/android/message_dialog.h"
 #include "host/database.h"
 #include "host/android/connection_widget.h"
 #include "host/android/password_dialog.h"
+#include "host/android/permissions_widget.h"
 #include "host/android/server_worker.h"
 #include "host/android/settings_widget.h"
 #include "proto/user.h"
@@ -76,6 +73,9 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     content_->addWidget(connection_);
     content_->addWidget(settings);
 
+    permissions_ = new PermissionsWidget(this);
+    content_->addWidget(permissions_);
+
     connect(app_bar_, &AppBar::sig_backClicked, this, &AndroidMainWindow::onBackClicked);
 
     navigation_->addItem(tr("Connection"), ":/img/computer.svg");
@@ -107,6 +107,8 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 
     connect(connection_, &ConnectionWidget::sig_newPasswordRequested,
             server_, &ServerWorker::onNewPassword, Qt::QueuedConnection);
+    connect(connection_, &ConnectionWidget::sig_shareStarted,
+            server_, &ServerWorker::onShareStarted, Qt::QueuedConnection);
     connect(settings, &SettingsWidget::sig_routerSettingsChanged,
             server_, &ServerWorker::onRouterSettingsChanged, Qt::QueuedConnection);
     connect(settings, &SettingsWidget::sig_updateSettingsChanged,
@@ -121,9 +123,18 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
             this, &AndroidMainWindow::onRouterStateChanged, Qt::QueuedConnection);
     connect(server_, &ServerWorker::sig_connectedClientsChanged,
             this, &AndroidMainWindow::onConnectedClientsChanged, Qt::QueuedConnection);
+    connect(this, &AndroidMainWindow::sig_permissionsChanged,
+            server_, &ServerWorker::onPermissionsChanged, Qt::QueuedConnection);
 
-    // Prompt for the runtime permissions the host needs, once the window is shown.
-    QMetaObject::invokeMethod(this, &AndroidMainWindow::checkPermissions, Qt::QueuedConnection);
+    // The host does not work without any of the permissions. The user grants them in the settings of
+    // the system, so they are read again on every return to the app.
+    connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state)
+    {
+        if (state == Qt::ApplicationActive)
+            updatePermissions();
+    }, Qt::QueuedConnection);
+
+    updatePermissions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -235,7 +246,7 @@ void AndroidMainWindow::onUpdateKeyboardInset()
     }
 
     // The bottom navigation would sit over the field the keyboard pushes up, so hide it while typing.
-    navigation_->setVisible(!keyboard_visible);
+    navigation_->setVisible(!keyboard_visible && content_->currentWidget() != permissions_);
 
     if (inset != keyboard_inset_)
     {
@@ -319,127 +330,31 @@ void AndroidMainWindow::scrollFocusIntoView()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::checkPermissions()
+void AndroidMainWindow::updatePermissions()
 {
-    checkAccessibilityService();
-    checkOverlayPermission();
-    checkStoragePermission();
-}
-
-//--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::checkAccessibilityService()
-{
-    const char kInputServiceClass[] = "org/aspia/host/InputService";
-
-    QJniObject context = QNativeInterface::QAndroidApplication::context();
-    if (!context.isValid())
-        return;
-
-    const bool enabled = QJniObject::callStaticMethod<jboolean>(
-        kInputServiceClass, "isEnabled", "(Landroid/content/Context;)Z", context.object());
-    if (!enabled)
+    const bool granted = permissions_->refresh();
+    if (granted != permissions_granted_)
     {
-        const bool open = MessageDialog::confirm(
-            this, tr("Permissions"),
-            tr("Enable the accessibility service to allow remote keyboard and mouse control."),
-            tr("Open"));
-        if (open)
-        {
-            QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
-            {
-                QJniObject context = QNativeInterface::QAndroidApplication::context();
-                if (context.isValid())
-                {
-                    QJniObject::callStaticMethod<void>("org/aspia/host/InputService", "openSettings",
-                        "(Landroid/content/Context;)V", context.object());
-                }
-                return QVariant();
-            });
-        }
+        LOG(INFO) << "Permissions granted:" << granted;
+        permissions_granted_ = granted;
+        emit sig_permissionsChanged(granted);
     }
 
-}
+    const bool shown = (content_->currentWidget() == permissions_);
 
-//--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::checkOverlayPermission()
-{
-    const char kMenuClass[] = "org/aspia/host/FloatingMenu";
-
-    QJniObject context = QNativeInterface::QAndroidApplication::context();
-    if (!context.isValid())
-        return;
-
-    const bool granted = QJniObject::callStaticMethod<jboolean>(
-        kMenuClass, "canDraw", "(Landroid/content/Context;)Z", context.object());
-    if (granted)
-        return;
-
-    const bool open = MessageDialog::confirm(
-        this, tr("Permissions"),
-        tr("Allow display over other apps to show the on-screen action button during a session."),
-        tr("Open"));
-    if (!open)
-        return;
-
-    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
+    if (!granted && !shown)
     {
-        QJniObject context = QNativeInterface::QAndroidApplication::context();
-        if (context.isValid())
-        {
-            QJniObject::callStaticMethod<void>("org/aspia/host/FloatingMenu", "openPermissionSettings",
-                "(Landroid/content/Context;)V", context.object());
-        }
-        return QVariant();
-    });
-}
-
-//--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::checkStoragePermission()
-{
-    // The file transfer session needs "All files access" (MANAGE_EXTERNAL_STORAGE). The check is API 30+
-    // (Build.VERSION_CODES.R); earlier versions use the legacy install-time storage permission.
-    if (QJniObject::getStaticField<jint>("android/os/Build$VERSION", "SDK_INT") < 30)
-        return;
-
-    const bool granted = QJniObject::callStaticMethod<jboolean>(
-        "android/os/Environment", "isExternalStorageManager", "()Z");
-    if (granted)
-        return;
-
-    const bool open = MessageDialog::confirm(
-        this, tr("Permissions"),
-        tr("Allow access to all files so the connected user can browse and transfer files on this "
-           "device."),
-        tr("Open"));
-    if (!open)
-        return;
-
-    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
+        content_->setCurrentWidget(permissions_);
+        navigation_->hide();
+        app_bar_->setBackVisible(false);
+        app_bar_->setTitle(tr("Permissions"));
+        app_bar_->setActions({});
+    }
+    else if (granted && shown)
     {
-        QJniObject context = QNativeInterface::QAndroidApplication::context();
-        if (!context.isValid())
-            return QVariant();
-
-        QJniObject package_name = context.callObjectMethod("getPackageName", "()Ljava/lang/String;");
-        QJniObject uri = QJniObject::callStaticObjectMethod(
-            "android/net/Uri", "parse", "(Ljava/lang/String;)Landroid/net/Uri;",
-            QJniObject::fromString("package:" + package_name.toString()).object<jstring>());
-
-        QJniObject intent("android/content/Intent", "(Ljava/lang/String;Landroid/net/Uri;)V",
-            QJniObject::fromString("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION")
-                .object<jstring>(),
-            uri.object());
-
-        const jint flag_new_task = QJniObject::getStaticField<jint>(
-            "android/content/Intent", "FLAG_ACTIVITY_NEW_TASK");
-        intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", flag_new_task);
-
-        context.callMethod<void>("startActivity", "(Landroid/content/Intent;)V", intent.object());
-
-        // A device without this settings screen throws; clear the pending exception so later JNI is safe.
-        QJniEnvironment().checkAndClearExceptions();
-        return QVariant();
-    });
+        navigation_->show();
+        onSectionChanged(navigation_->currentIndex());
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -94,11 +94,6 @@ private:
     QRect screen_rect_;
     QPoint dpi_ = QPoint(96, 96);
 
-    // Default display geometry queried synchronously in start(), used to report a resolution before the
-    // projection (which needs user consent) is running.
-    QSize start_size_;
-    QPoint start_dpi_ = QPoint(96, 96);
-
     // Two reused frame buffers guarded by |frame_mutex_|. The listener thread fills the current frame;
     // captureFrame() advances the queue so the producer never overwrites the frame being encoded.
     QMutex frame_mutex_;

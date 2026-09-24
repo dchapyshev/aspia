@@ -55,6 +55,10 @@ public final class MediaProjection
 
     private static android.media.projection.MediaProjection sProjection = null;
 
+    // A session waits for the capture. The consent may come after the session has already ended, and
+    // then the capture must not start. Guarded by the class monitor.
+    private static boolean sRequested = false;
+
     // Screen capture state.
     private static VirtualDisplay sVirtualDisplay = null;
     private static ImageReader sReader = null;
@@ -62,8 +66,8 @@ public final class MediaProjection
     private static Handler sHandler = null;
 
     // Serialises the ImageReader listener (runs on the capture HandlerThread) with sReader.close()
-    // (runs on the Android main thread via the native stop path). Without it, acquiring an image while
-    // the reader is being closed throws IllegalStateException on the listener thread.
+    // (runs on the native capture thread via stopCapture()). Without it, acquiring an image while the
+    // reader is being closed throws IllegalStateException on the listener thread.
     private static final Object sReaderLock = new Object();
 
     // Audio capture state. Unlike the screen capture there is only ever one audio capturer, so no token
@@ -130,6 +134,11 @@ public final class MediaProjection
     // projection; on refusal notifyDenied() reports the failure to the native side.
     public static void requestCapture(Context context)
     {
+        synchronized (MediaProjection.class)
+        {
+            sRequested = true;
+        }
+
         Intent intent = new Intent(context, MediaProjectionPermissionActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
@@ -236,6 +245,11 @@ public final class MediaProjection
     // releases directly in case the service was never started.
     public static void stopCapture(Context context)
     {
+        synchronized (MediaProjection.class)
+        {
+            sRequested = false;
+        }
+
         try
         {
             context.stopService(new Intent(context, MediaProjectionService.class));
@@ -246,6 +260,12 @@ public final class MediaProjection
         }
 
         stop();
+    }
+
+    // Whether a session still waits for the capture it asked for with requestCapture().
+    public static synchronized boolean isRequested()
+    {
+        return sRequested;
     }
 
     // Releases all projection resources.

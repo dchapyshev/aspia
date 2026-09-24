@@ -28,6 +28,7 @@
 class AppBar;
 class BottomNavigationBar;
 class ConnectionWidget;
+class PermissionsWidget;
 class QScrollArea;
 class QStackedWidget;
 
@@ -40,6 +41,10 @@ class AndroidMainWindow final : public QWidget
 public:
     explicit AndroidMainWindow(QWidget* parent = nullptr);
     ~AndroidMainWindow() final;
+
+signals:
+    // All the permissions the host needs are granted, or one of them is missing.
+    void sig_permissionsChanged(bool granted);
 
 protected:
     // QWidget implementation.
@@ -64,10 +69,8 @@ private slots:
 
 private:
     void scrollFocusIntoView();
-    void checkPermissions();
-    void checkAccessibilityService();
-    void checkOverlayPermission();
-    void checkStoragePermission();
+    // Shows the permissions screen in place of the app while a permission is missing.
+    void updatePermissions();
     QScrollArea* focusedScrollArea() const;
     QString sectionTitle(int index) const;
 
@@ -75,6 +78,7 @@ private:
     QStackedWidget* content_ = nullptr;
     BottomNavigationBar* navigation_ = nullptr;
     ConnectionWidget* connection_ = nullptr;
+    PermissionsWidget* permissions_ = nullptr;
 
     QPointer<ServerWorker> server_;
 
@@ -84,6 +88,9 @@ private:
     // Set once the settings tab has been unlocked with the protection password (if any); the prompt is
     // then not shown again for the rest of the session.
     bool settings_unlocked_ = false;
+
+    // The server starts without the permissions and learns when they are granted.
+    bool permissions_granted_ = false;
 
     Q_DISABLE_COPY_MOVE(AndroidMainWindow)
 };

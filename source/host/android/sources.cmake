@@ -38,6 +38,8 @@ collect_sources(SOURCE_HOST_ANDROID
     main_window.h
     password_dialog.cc
     password_dialog.h
+    permissions_widget.cc
+    permissions_widget.h
     screen_capturer_android.cc
     screen_capturer_android.h
     server_worker.cc

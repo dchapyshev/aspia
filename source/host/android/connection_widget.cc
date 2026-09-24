@@ -67,6 +67,27 @@ QString formatHostId(const QString& host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Shows the notification of the waiting for a connection after the share. It has to start before the
+// share sheet, while the app is still in the foreground.
+void startConnectionWait(const QString& text, const QString& cancel_text)
+{
+    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([text, cancel_text]() -> QVariant
+    {
+        QJniObject context = QNativeInterface::QAndroidApplication::context();
+        if (!context.isValid())
+            return QVariant();
+
+        QJniObject jni_text = QJniObject::fromString(text);
+        QJniObject jni_cancel_text = QJniObject::fromString(cancel_text);
+
+        QJniObject::callStaticMethod<void>("org/aspia/host/ConnectionWaitService", "start",
+            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V",
+            context.object(), jni_text.object<jstring>(), jni_cancel_text.object<jstring>());
+        return QVariant();
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
 // Opens the system share sheet with |text| as plain text (ACTION_SEND).
 void shareText(const QString& text)
 {
@@ -344,6 +365,11 @@ bool ConnectionWidget::eventFilter(QObject* watched, QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void ConnectionWidget::onShare()
 {
+    // The app that gets the ID and the password stays on the screen, and the other side may connect
+    // before the user comes back.
+    startConnectionWait(tr("Waiting for a connection"), tr("Stop"));
+    emit sig_shareStarted();
+
     shareText(tr("Aspia ID: %1\nPassword: %2").arg(host_id_, password_));
 }
 

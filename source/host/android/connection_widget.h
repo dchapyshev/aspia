@@ -63,6 +63,9 @@ signals:
     // The user asked for a new one-time password.
     void sig_newPasswordRequested();
 
+    // The user shared the ID and the password with another app.
+    void sig_shareStarted();
+
 protected:
     // QWidget implementation.
     void changeEvent(QEvent* event) final;

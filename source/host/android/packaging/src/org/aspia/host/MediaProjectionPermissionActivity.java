@@ -43,6 +43,14 @@ public final class MediaProjectionPermissionActivity extends Activity
     {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // The session may have ended while the user was answering. Nothing waits for the capture then,
+        // and started now it would keep the screen captured until the next session.
+        if (!MediaProjection.isRequested())
+        {
+            finish();
+            return;
+        }
+
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null)
         {
             Intent intent = new Intent(this, MediaProjectionService.class);

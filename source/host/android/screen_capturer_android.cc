@@ -21,7 +21,6 @@
 #include <libyuv/convert_argb.h>
 
 #include <QCoreApplication>
-#include <QFuture>
 #include <QJniEnvironment>
 #include <QJniObject>
 #include <QMutex>
@@ -101,38 +100,32 @@ ScreenCapturerAndroid* ScreenCapturerAndroid::create(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerAndroid::start()
 {
-    // Querying the display geometry runs on the Android main thread and returns synchronously; the
-    // projection itself needs user consent, so requestCapture() only launches the consent flow and
+    // The Java side is called on this thread. Qt runs the calls it passes to the Android main thread
+    // only while the app is on the screen, and a session often starts with the app in the background.
+    // The projection itself needs user consent, so requestCapture() only launches the consent flow and
     // frames start arriving later (through nativeOnFrame), after the foreground service starts it.
-    ScreenCapturerAndroid* self = this;
-
-    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([self]() -> QVariant
-    {
-        QJniObject context = QNativeInterface::QAndroidApplication::context();
-        if (!context.isValid())
-            return QVariant();
-
-        const int width = QJniObject::callStaticMethod<jint>(
-            kCapturerClass, "displayWidth", "(Landroid/content/Context;)I", context.object());
-        const int height = QJniObject::callStaticMethod<jint>(
-            kCapturerClass, "displayHeight", "(Landroid/content/Context;)I", context.object());
-        const int dpi = QJniObject::callStaticMethod<jint>(
-            kCapturerClass, "displayDpi", "(Landroid/content/Context;)I", context.object());
-
-        self->start_size_ = QSize(width, height);
-        self->start_dpi_ = QPoint(dpi, dpi);
-
-        QJniObject::callStaticMethod<void>(kCapturerClass, "requestCapture",
-            "(Landroid/content/Context;)V", context.object());
-        return QVariant();
-    }).waitForFinished();
-
-    if (start_size_.isEmpty())
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (!context.isValid())
         return false;
 
+    const int width = QJniObject::callStaticMethod<jint>(
+        kCapturerClass, "displayWidth", "(Landroid/content/Context;)I", context.object());
+    const int height = QJniObject::callStaticMethod<jint>(
+        kCapturerClass, "displayHeight", "(Landroid/content/Context;)I", context.object());
+    const int dpi = QJniObject::callStaticMethod<jint>(
+        kCapturerClass, "displayDpi", "(Landroid/content/Context;)I", context.object());
+
+    // The display geometry is reported before the projection is running.
+    const QSize size(width, height);
+    if (size.isEmpty())
+        return false;
+
+    QJniObject::callStaticMethod<void>(kCapturerClass, "requestCapture",
+        "(Landroid/content/Context;)V", context.object());
+
     active_ = true;
-    screen_rect_ = QRect(QPoint(0, 0), start_size_);
-    dpi_ = start_dpi_;
+    screen_rect_ = QRect(QPoint(0, 0), size);
+    dpi_ = QPoint(dpi, dpi);
     return true;
 }
 
@@ -144,16 +137,14 @@ void ScreenCapturerAndroid::stop()
 
     active_ = false;
 
-    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
+    // On this thread for the same reason as in start(), a session may end with the app in the
+    // background.
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (context.isValid())
     {
-        QJniObject context = QNativeInterface::QAndroidApplication::context();
-        if (!context.isValid())
-            return QVariant();
-
         QJniObject::callStaticMethod<void>(kCapturerClass, "stopCapture",
             "(Landroid/content/Context;)V", context.object());
-        return QVariant();
-    }).waitForFinished();
+    }
 
     QMutexLocker locker(&frame_mutex_);
     queue_.reset();

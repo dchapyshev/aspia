@@ -67,6 +67,14 @@ public slots:
     void onUsersChanged();
     void onPasswordProtectionChanged();
 
+    // The user shared the ID and the password, and the app went to the background with the app that
+    // got them. The host stays online for a while so the other side can connect.
+    void onShareStarted();
+
+    // The host does not work without the permissions, so it takes no connections until all of them
+    // are granted.
+    void onPermissionsChanged(bool granted);
+
 signals:
     void sig_credentialsChanged(const QString& host_id, const QString& password);
     void sig_routerStateChanged(int state, const QString& router);
@@ -77,6 +85,7 @@ protected:
     void onPrepare() final;
     void onStart() final;
     void onStop() final;
+    void onTimer(TimePoint now) final;
 
 private slots:
     void onNewConnection();
@@ -87,11 +96,13 @@ private slots:
     void onCredentialsChanged(HostId host_id, const SecureString& password);
     void onApplicationStateChanged(Qt::ApplicationState state);
     void onScreenInteractiveChanged(bool interactive);
+    void onShareCancelled();
 
 private:
     void connectToRouter();
     void disconnectFromRouter();
     void updateRouterConnection();
+    void stopWaitingAfterShare();
     void startClient(TcpChannel* tcp_channel, const QString& stun_host = QString(),
                      quint16 stun_port = 0);
 
@@ -101,10 +112,17 @@ private:
     QList<ClientInfo> connected_clients_;
     ScopedQPointer<DesktopAgent> desktop_agent_;
 
-    // The host is reachable through the router only while in the foreground with the screen on; an
-    // active session keeps it connected regardless. Both are seeded with the live state in start().
+    // The host is reachable through the router only while in the foreground with the screen on, or for
+    // a while after the share; an active session keeps it connected regardless. Both are seeded with
+    // the live state in start().
     bool app_active_ = true;
     bool screen_on_ = true;
+
+    // After the share the host stays online in the background until this time.
+    TimePoint share_wait_end_ = TimePoint::min();
+
+    // Reported by the window, which checks them.
+    bool permissions_granted_ = false;
 
     Q_DISABLE_COPY_MOVE(ServerWorker)
 };

@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"  />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"  />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION"  />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"  />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"  />
     <uses-permission android:name="android.permission.OPEN_ACCESSIBILITY_DETAILS_SETTINGS"  />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"  />
@@ -56,6 +57,11 @@
         <service
             android:name="org.aspia.host.MediaProjectionService"
             android:foregroundServiceType="mediaProjection"
+            android:exported="false" />
+
+        <service
+            android:name="org.aspia.host.ConnectionWaitService"
+            android:foregroundServiceType="dataSync"
             android:exported="false" />
 
         <service

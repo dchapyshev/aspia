@@ -18,7 +18,11 @@
 
 package org.aspia.host;
 
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.system.ErrnoException;
 import android.system.Os;
 
@@ -32,6 +36,23 @@ import org.qtproject.qt.android.bindings.QtActivity;
 // runs the Qt setup.
 public final class HostActivity extends QtActivity
 {
+    // Covers both the permission of Android 13+ and the switch in the notification settings of the app.
+    public static boolean areNotificationsEnabled(Context context)
+    {
+        NotificationManager manager = context.getSystemService(NotificationManager.class);
+        return manager == null || manager.areNotificationsEnabled();
+    }
+
+    // The request of the system is not used, because Android stops showing it once the user denied it
+    // twice. The settings can always turn the notifications on.
+    public static void openNotificationSettings(Context context)
+    {
+        Intent intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+        intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {

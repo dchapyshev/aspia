@@ -50,6 +50,10 @@
 namespace {
 
 const char kScreenMonitorClass[] = "org/aspia/host/ScreenMonitor";
+const char kConnectionWaitServiceClass[] = "org/aspia/host/ConnectionWaitService";
+
+// How long the host waits for a connection in the background after the share.
+constexpr Minutes kShareWaitTime{ 5 };
 
 // A host serves a single user, so only a few simultaneous handshakes and a low per-address rate are
 // expected. Tight caps limit the damage of a flood; latecomers retry shortly.
@@ -77,6 +81,15 @@ void screenInteractiveChanged(JNIEnv* /* env */, jclass /* clazz */, jboolean in
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Called by ConnectionWaitService when the user stops the waiting from the notification.
+void connectionWaitCancelled(JNIEnv* /* env */, jclass /* clazz */)
+{
+    QMutexLocker locker(&g_mutex);
+    if (g_instance)
+        QMetaObject::invokeMethod(g_instance, "onShareCancelled", Qt::QueuedConnection);
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -89,14 +102,21 @@ ServerWorker::ServerWorker()
     static bool registered = false;
     if (!registered)
     {
-        const JNINativeMethod methods[] =
+        const JNINativeMethod screen_methods[] =
         {
             { "nativeOnInteractiveChanged", "(Z)V", reinterpret_cast<void*>(screenInteractiveChanged) }
         };
 
+        const JNINativeMethod wait_methods[] =
+        {
+            { "nativeOnCancelled", "()V", reinterpret_cast<void*>(connectionWaitCancelled) }
+        };
+
         QJniEnvironment env;
-        if (!env.registerNativeMethods(kScreenMonitorClass, methods, 1))
+        if (!env.registerNativeMethods(kScreenMonitorClass, screen_methods, 1))
             LOG(ERROR) << "Unable to register native methods for ScreenMonitor";
+        else if (!env.registerNativeMethods(kConnectionWaitServiceClass, wait_methods, 1))
+            LOG(ERROR) << "Unable to register native methods for ConnectionWaitService";
         else
             registered = true;
     }
@@ -187,6 +207,8 @@ void ServerWorker::onStop()
     for (auto* client : file_clients)
         delete client;
 
+    stopWaitingAfterShare();
+
     desktop_agent_.reset();
     router_manager_.reset();
     tcp_server_.reset();
@@ -203,6 +225,17 @@ void ServerWorker::onStop()
     });
 
     LOG(INFO) << "Host server stopped";
+}
+
+//--------------------------------------------------------------------------------------------------
+void ServerWorker::onTimer(TimePoint now)
+{
+    if (share_wait_end_ == TimePoint::min() || now < share_wait_end_)
+        return;
+
+    LOG(INFO) << "No connection after the share";
+    stopWaitingAfterShare();
+    updateRouterConnection();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -353,6 +386,24 @@ void ServerWorker::onPasswordProtectionChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ServerWorker::onShareStarted()
+{
+    LOG(INFO) << "Waiting for a connection after the share";
+
+    // The notification of the waiting is already on the screen, started by the share itself while
+    // the app was still in the foreground.
+    share_wait_end_ = Clock::now() + kShareWaitTime;
+    updateRouterConnection();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ServerWorker::onPermissionsChanged(bool granted)
+{
+    permissions_granted_ = granted;
+    updateRouterConnection();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ServerWorker::onCredentialsChanged(HostId host_id, const SecureString& password)
 {
     emit sig_credentialsChanged(hostIdToString(host_id), password.toString());
@@ -362,6 +413,11 @@ void ServerWorker::onCredentialsChanged(HostId host_id, const SecureString& pass
 void ServerWorker::onApplicationStateChanged(Qt::ApplicationState state)
 {
     app_active_ = (state == Qt::ApplicationActive);
+
+    // The user is back, the usual rules apply again.
+    if (app_active_)
+        stopWaitingAfterShare();
+
     updateRouterConnection();
 }
 
@@ -370,6 +426,18 @@ void ServerWorker::onScreenInteractiveChanged(bool interactive)
 {
     // Locking the screen does not change the Qt application state, so this is a separate signal.
     screen_on_ = interactive;
+
+    if (!screen_on_)
+        stopWaitingAfterShare();
+
+    updateRouterConnection();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ServerWorker::onShareCancelled()
+{
+    LOG(INFO) << "Waiting for a connection cancelled";
+    stopWaitingAfterShare();
     updateRouterConnection();
 }
 
@@ -422,11 +490,17 @@ void ServerWorker::updateRouterConnection()
         return;
 
     // The host is reachable through the router only while the user is looking at the app (foreground
-    // with the screen on). An active session keeps the connection regardless: it holds the app alive
-    // through its foreground service, and its relay leg must not be torn down. Otherwise Android would
-    // freeze the process in the background anyway and the router would drop the host by timeout, so the
-    // connection is closed now for a clean, immediate offline state.
-    const bool should_be_online = (app_active_ && screen_on_) || !connected_clients_.isEmpty();
+    // with the screen on), or for a while after the share, when the app that got the ID and the
+    // password stays on the screen. An active session keeps the connection regardless: it holds the app
+    // alive through its foreground service, and its relay leg must not be torn down. Otherwise Android
+    // would freeze the process in the background anyway and the router would drop the host by timeout,
+    // so the connection is closed now for a clean, immediate offline state.
+    // Without the permissions a session would not work, so the host stays offline. A session that has
+    // already started keeps going.
+    const bool waiting_after_share = (share_wait_end_ != TimePoint::min());
+    const bool should_be_online =
+        (permissions_granted_ && screen_on_ && (app_active_ || waiting_after_share)) ||
+        !connected_clients_.isEmpty();
 
     if (should_be_online)
     {
@@ -440,8 +514,34 @@ void ServerWorker::updateRouterConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ServerWorker::stopWaitingAfterShare()
+{
+    if (share_wait_end_ == TimePoint::min())
+        return;
+
+    share_wait_end_ = TimePoint::min();
+
+    // Called directly on this thread, because the main thread of Android is blocked while the app is
+    // in the background.
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (context.isValid())
+    {
+        QJniObject::callStaticMethod<void>(
+            kConnectionWaitServiceClass, "stop", "(Landroid/content/Context;)V", context.object());
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void ServerWorker::startClient(TcpChannel* tcp_channel, const QString& stun_host, quint16 stun_port)
 {
+    // Direct connections do not go through the router, so they are turned away here.
+    if (!permissions_granted_)
+    {
+        LOG(INFO) << "Connection rejected, the permissions are not granted";
+        tcp_channel->deleteLater();
+        return;
+    }
+
     tcp_channel->setParent(this);
     tcp_channel->setReadBufferSize(kReadBufferSize);
     tcp_channel->setWriteBufferSize(kWriteBufferSize);
