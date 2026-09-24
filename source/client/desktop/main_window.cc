@@ -131,6 +131,7 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui->action_settings, &QAction::triggered, this, &MainWindow::onSettings);
     connect(ui->action_help, &QAction::triggered, this, &MainWindow::onHelp);
     connect(ui->action_about, &QAction::triggered, this, &MainWindow::onAbout);
+    connect(ui->action_lock, &QAction::triggered, this, &MainWindow::onLock);
     connect(ui->action_exit, &QAction::triggered, this, &MainWindow::close);
     connect(ui->toolbar, &QToolBar::visibilityChanged, ui->action_toolbar, &QAction::setChecked);
     connect(ui->action_toolbar, &QAction::toggled, ui->toolbar, &QToolBar::setVisible);
@@ -367,6 +368,26 @@ void MainWindow::onSettings()
     });
 
     addTab(settings_tab, tr("Settings"), QIcon(":/img/settings.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onLock()
+{
+    LOG(INFO) << "[ACTION] Lock clicked";
+
+    if (hasSessions())
+    {
+        MsgBox::information(this, tr("Close all sessions to lock the application."));
+        return;
+    }
+
+    if (AppLock::hasOpenDialogs())
+    {
+        MsgBox::information(this, tr("Close all dialogs to lock the application."));
+        return;
+    }
+
+    onLockRequested();
 }
 
 //--------------------------------------------------------------------------------------------------

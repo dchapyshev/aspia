@@ -68,6 +68,7 @@ private slots:
     void onAfterThemeChanged();
     void onCredentials();
     void onSettings();
+    void onLock();
     void onHelp();
     void onAbout();
     void onCurrentTabChanged(int index);

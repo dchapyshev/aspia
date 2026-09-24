@@ -106,6 +106,32 @@ AppLock::Result AppLock::unlock()
 }
 
 //--------------------------------------------------------------------------------------------------
+// static
+bool AppLock::hasOpenDialogs()
+{
+    // exec() of a dialog, a message box or a menu runs a nested event loop.
+    if (QThread::currentThread()->loopLevel() > 1)
+        return true;
+
+    if (QApplication::activePopupWidget())
+        return true;
+
+    const QWidgetList widgets = QApplication::topLevelWidgets();
+    for (const QWidget* widget : widgets)
+    {
+        if (widget->isVisible() && qobject_cast<const QDialog*>(widget))
+            return true;
+
+        // A native file dialog is invisible to Qt and runs its own loop of the system, where the
+        // timers of Qt keep firing.
+        if (qobject_cast<const QFileDialog*>(widget))
+            return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
 void AppLock::setTimeout(Minutes timeout)
 {
     LOG(INFO) << "Lock timeout:" << timeout.count() << "min";
@@ -167,27 +193,5 @@ void AppLock::onCheck()
 //--------------------------------------------------------------------------------------------------
 bool AppLock::canLock() const
 {
-    if (!main_window_ || main_window_->hasSessions())
-        return false;
-
-    // exec() of a dialog, a message box or a menu runs a nested event loop.
-    if (QThread::currentThread()->loopLevel() > 1)
-        return false;
-
-    if (QApplication::activePopupWidget())
-        return false;
-
-    const QWidgetList widgets = QApplication::topLevelWidgets();
-    for (const QWidget* widget : widgets)
-    {
-        if (widget->isVisible() && qobject_cast<const QDialog*>(widget))
-            return false;
-
-        // A native file dialog is invisible to Qt and runs its own loop of the system, where the
-        // timers of Qt keep firing.
-        if (qobject_cast<const QFileDialog*>(widget))
-            return false;
-    }
-
-    return true;
+    return main_window_ && !main_window_->hasSessions() && !hasOpenDialogs();
 }

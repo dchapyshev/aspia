@@ -42,6 +42,10 @@ public:
     // Asks the master password until the user enters the right one or gives up.
     static Result unlock();
 
+    // A dialog, a message box, a menu or a file dialog is on the screen. The window can not be
+    // destroyed under them.
+    static bool hasOpenDialogs();
+
     // A zero |timeout| turns the lock off.
     void setTimeout(Minutes timeout);
 

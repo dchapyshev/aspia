@@ -70,6 +70,7 @@
     <addaction name="action_credentials"/>
     <addaction name="action_settings"/>
     <addaction name="separator"/>
+    <addaction name="action_lock"/>
     <addaction name="action_exit"/>
    </widget>
    <widget class="QMenu" name="menu_help">
@@ -127,6 +128,7 @@
    <addaction name="action_settings"/>
    <addaction name="separator"/>
    <addaction name="action_help"/>
+   <addaction name="action_lock"/>
    <addaction name="action_exit"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
@@ -171,6 +173,15 @@
    </property>
    <property name="text">
     <string>Settings...</string>
+   </property>
+  </action>
+  <action name="action_lock">
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/lock.svg</normaloff>:/img/lock.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Lock</string>
    </property>
   </action>
   <action name="action_exit">
