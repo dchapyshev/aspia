@@ -27,6 +27,8 @@ list(APPEND SOURCE_CLIENT_CORE
     audio_output.h
     audio_player.cc
     audio_player.h
+    auto_backup.cc
+    auto_backup.h
     backup.cc
     backup.h
     database.cc
@@ -82,6 +84,7 @@ list(APPEND SOURCE_CLIENT
     main.cc)
 
 list(APPEND SOURCE_CLIENT_TESTS
+    auto_backup_unittest.cc
     backup_unittest.cc
     config_unittest.cc
     credential_file_unittest.cc

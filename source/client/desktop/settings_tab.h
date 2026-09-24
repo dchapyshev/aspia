@@ -56,6 +56,10 @@ private slots:
     void onLanguageChanged();
     void onThemeChanged();
     void onDisplayNameChanged();
+    void onBackupOnStartupChanged();
+    void onBackupPathChanged();
+    void onSelectBackupPath();
+    void onBackupRetentionChanged();
     void onUdpMethodsChanged();
     void onDesktopFeatureChanged();
     void onRecordAutostartChanged();

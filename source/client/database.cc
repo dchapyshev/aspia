@@ -22,6 +22,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QHash>
+#include <QStandardPaths>
 #include <QUuid>
 
 #include "base/build_config.h"
@@ -43,6 +44,9 @@ const qint64 kRouterHostRecheckInterval = 7 * 24 * 60 * 60;
 constexpr auto kSettingDisplayName   = "display_name";
 constexpr auto kSettingCheckUpdates  = "check_updates";
 constexpr auto kSettingUpdateChannel = "update_channel";
+constexpr auto kSettingBackupEnabled = "backup_on_startup";
+constexpr auto kSettingBackupPath    = "backup_path";
+constexpr auto kSettingBackupKeep    = "backup_retention";
 constexpr auto kSettingSalt          = "master_password_salt";
 constexpr auto kSettingVerifier      = "master_password_verifier";
 constexpr auto kSettingVersion       = "master_password_version";
@@ -1736,6 +1740,53 @@ QString Database::updateChannel() const
 bool Database::setUpdateChannel(const QString& channel)
 {
     return writeSetting(kSettingUpdateChannel, channel);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::isBackupOnStartupEnabled() const
+{
+    return readSetting(kSettingBackupEnabled) == "1";
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setBackupOnStartupEnabled(bool enable)
+{
+    return writeSetting(kSettingBackupEnabled, enable ? "1" : "0");
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Database::backupPath() const
+{
+    QString value = readSetting(kSettingBackupPath);
+    if (value.isEmpty())
+        value = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Aspia/Backups";
+    return value;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setBackupPath(const QString& path)
+{
+    return writeSetting(kSettingBackupPath, path);
+}
+
+//--------------------------------------------------------------------------------------------------
+AutoBackup::Retention Database::backupRetention() const
+{
+    bool ok = false;
+    const int value = readSetting(kSettingBackupKeep).toInt(&ok);
+    if (!ok || value < static_cast<int>(AutoBackup::Retention::ONE_WEEK) ||
+        value > static_cast<int>(AutoBackup::Retention::ONE_YEAR))
+    {
+        return AutoBackup::Retention::ONE_MONTH;
+    }
+
+    return static_cast<AutoBackup::Retention>(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setBackupRetention(AutoBackup::Retention retention)
+{
+    return writeSetting(kSettingBackupKeep, QString::number(static_cast<int>(retention)));
 }
 
 //--------------------------------------------------------------------------------------------------

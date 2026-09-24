@@ -27,6 +27,7 @@
 #include <utility>
 
 #include "base/sql/sql_database.h"
+#include "client/auto_backup.h"
 #include "client/config.h"
 
 class Database
@@ -124,6 +125,15 @@ public:
 
     QString updateChannel() const;
     bool setUpdateChannel(const QString& channel);
+
+    bool isBackupOnStartupEnabled() const;
+    bool setBackupOnStartupEnabled(bool enable);
+
+    QString backupPath() const;
+    bool setBackupPath(const QString& path);
+
+    AutoBackup::Retention backupRetention() const;
+    bool setBackupRetention(AutoBackup::Retention retention);
 
     // Master password.
     bool isMasterPasswordSet() const;

@@ -34,9 +34,11 @@
 #include "client/android/main_window.h"
 #else
 #include <QCommandLineParser>
+#include <QDir>
 #include <QTimer>
 
 #include "base/crypto/secure_string.h"
+#include "client/database.h"
 #include "client/host_url.h"
 #include "client/master_password.h"
 #include "client/desktop/main_window.h"
@@ -44,6 +46,45 @@
 #include "common/desktop/msg_box.h"
 #include "common/desktop/update_dialog.h"
 #endif // defined(Q_OS_ANDROID)
+
+#if !defined(Q_OS_ANDROID)
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+void backupOnStartup()
+{
+    Database& db = Database::instance();
+    if (!db.isBackupOnStartupEnabled())
+        return;
+
+    const QString directory = db.backupPath();
+
+    switch (AutoBackup::run(db, directory, db.backupRetention()))
+    {
+        case Backup::Result::SUCCESS:
+        case Backup::Result::NOTHING_EXPORTED:
+            break;
+
+        case Backup::Result::FILE_ERROR:
+            MsgBox::warning(nullptr, QApplication::translate(
+                "Client", "Unable to create a backup in the directory \"%1\".")
+                    .arg(QDir::toNativeSeparators(directory)));
+            break;
+
+        case Backup::Result::UNREADABLE_RECORD:
+            MsgBox::warning(nullptr, QApplication::translate(
+                "Client", "Unable to create a backup. Some records of the database could not be read. "
+                          "Edit them to enter their data again."));
+            break;
+
+        default:
+            MsgBox::warning(nullptr, QApplication::translate("Client", "Unable to create a backup."));
+            break;
+    }
+}
+
+} // namespace
+#endif // !defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char* argv[])
@@ -283,6 +324,8 @@ int main(int argc, char* argv[])
 
         LOG(INFO) << "Master password set";
     }
+
+    backupOnStartup();
 
     std::unique_ptr<MainWindow> main_window = std::make_unique<MainWindow>();
 

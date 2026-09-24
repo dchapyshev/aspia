@@ -160,6 +160,49 @@
            </widget>
           </item>
           <item>
+           <widget class="QGroupBox" name="groupbox_backup">
+            <property name="title">
+             <string>Backup</string>
+            </property>
+            <layout class="QGridLayout" name="layout_backup">
+             <item row="0" column="0" colspan="3">
+              <widget class="QCheckBox" name="checkbox_backup_on_startup">
+               <property name="text">
+                <string>Create backups on application startup</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_backup_dir">
+               <property name="text">
+                <string>Directory:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="edit_backup_dir"/>
+             </item>
+             <item row="1" column="2">
+              <widget class="QPushButton" name="button_select_backup_dir">
+               <property name="text">
+                <string>Browse...</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_backup_retention">
+               <property name="text">
+                <string>Keep backups for:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1" colspan="2">
+              <widget class="QComboBox" name="combo_backup_retention"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
            <widget class="QGroupBox" name="groupbox_udp">
             <property name="title">
              <string>UDP Connections</string>

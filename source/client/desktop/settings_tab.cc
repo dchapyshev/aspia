@@ -167,6 +167,17 @@ SettingsTab::SettingsTab(QWidget* parent)
 
     ui->edit_display_name->setText(db.displayName());
 
+    ui->checkbox_backup_on_startup->setChecked(db.isBackupOnStartupEnabled());
+    ui->edit_backup_dir->setText(db.backupPath());
+
+    ui->combo_backup_retention->addItem(tr("1 week"), static_cast<int>(AutoBackup::Retention::ONE_WEEK));
+    ui->combo_backup_retention->addItem(tr("2 weeks"), static_cast<int>(AutoBackup::Retention::TWO_WEEKS));
+    ui->combo_backup_retention->addItem(tr("1 month"), static_cast<int>(AutoBackup::Retention::ONE_MONTH));
+    ui->combo_backup_retention->addItem(tr("6 months"), static_cast<int>(AutoBackup::Retention::SIX_MONTHS));
+    ui->combo_backup_retention->addItem(tr("1 year"), static_cast<int>(AutoBackup::Retention::ONE_YEAR));
+    ui->combo_backup_retention->setCurrentIndex(
+        ui->combo_backup_retention->findData(static_cast<int>(db.backupRetention())));
+
     const quint32 udp_methods = settings.udpMethods();
     ui->checkbox_udp_direct->setChecked(udp_methods & UDP_METHOD_DIRECT);
     ui->checkbox_udp_hole_punching->setChecked(udp_methods & UDP_METHOD_HOLE_PUNCHING);
@@ -227,6 +238,11 @@ SettingsTab::SettingsTab(QWidget* parent)
             this, &SettingsTab::onThemeChanged);
     connect(ui->edit_display_name, &QLineEdit::editingFinished,
             this, &SettingsTab::onDisplayNameChanged);
+    connect(ui->checkbox_backup_on_startup, &QCheckBox::toggled, this, &SettingsTab::onBackupOnStartupChanged);
+    connect(ui->edit_backup_dir, &QLineEdit::editingFinished, this, &SettingsTab::onBackupPathChanged);
+    connect(ui->button_select_backup_dir, &QPushButton::clicked, this, &SettingsTab::onSelectBackupPath);
+    connect(ui->combo_backup_retention, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &SettingsTab::onBackupRetentionChanged);
     connect(ui->checkbox_udp_direct, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
     connect(ui->checkbox_udp_hole_punching, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
     connect(ui->checkbox_udp_pcp, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
@@ -345,6 +361,56 @@ void SettingsTab::onDisplayNameChanged()
 {
     LOG(INFO) << "[ACTION] Display name changed";
     Database::instance().setDisplayName(ui->edit_display_name->text());
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onBackupOnStartupChanged()
+{
+    LOG(INFO) << "[ACTION] Backup on startup changed";
+    Database::instance().setBackupOnStartupEnabled(ui->checkbox_backup_on_startup->isChecked());
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onBackupPathChanged()
+{
+    LOG(INFO) << "[ACTION] Backup path changed";
+
+    Database& db = Database::instance();
+    if (ui->edit_backup_dir->text().isEmpty())
+    {
+        ui->edit_backup_dir->setText(db.backupPath());
+        return;
+    }
+
+    db.setBackupPath(ui->edit_backup_dir->text());
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onSelectBackupPath()
+{
+    LOG(INFO) << "[ACTION] Select backup path";
+
+    const QString path = QFileDialog::getExistingDirectory(
+        this, tr("Choose path"), ui->edit_backup_dir->text(),
+        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+
+    if (path.isEmpty())
+    {
+        LOG(INFO) << "[ACTION] Backup path selection rejected";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Backup path selected:" << path;
+    ui->edit_backup_dir->setText(path);
+    Database::instance().setBackupPath(path);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onBackupRetentionChanged()
+{
+    LOG(INFO) << "[ACTION] Backup retention changed";
+    Database::instance().setBackupRetention(
+        static_cast<AutoBackup::Retention>(ui->combo_backup_retention->currentData().toInt()));
 }
 
 //--------------------------------------------------------------------------------------------------
