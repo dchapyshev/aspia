@@ -43,6 +43,9 @@ public:
     // Resets the form for the file at |file_path|, which is opened once the password is entered.
     void prepare(const QString& file_path);
 
+    // Forgets the records and the password, so that nothing decrypted outlives the screen.
+    void clear();
+
 signals:
     // Emitted after the checked records have been written to the database.
     void sig_finished();

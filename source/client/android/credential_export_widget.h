@@ -43,6 +43,9 @@ public:
     // Reads the records from the database and resets the form.
     void prepare();
 
+    // Forgets the records and the password, so that nothing decrypted outlives the screen.
+    void clear();
+
 signals:
     // Emitted after the file has been written.
     void sig_finished();

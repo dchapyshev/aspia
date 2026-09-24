@@ -229,6 +229,9 @@ void CredentialsWidget::onReturnFromEditor()
 //--------------------------------------------------------------------------------------------------
 void CredentialsWidget::showList()
 {
+    export_->clear();
+    import_->clear();
+
     stack_->setCurrentIndex(0);
     emit sig_titleChanged(tr("Credentials"));
     emit sig_appBarActionsChanged();

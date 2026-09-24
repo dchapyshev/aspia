@@ -102,11 +102,7 @@ QList<QWidget*> CredentialExportWidget::appBarActions() const
 //--------------------------------------------------------------------------------------------------
 void CredentialExportWidget::prepare()
 {
-    credentials_.clear();
-
-    edit_password_->clear();
-    edit_password_->setEchoMode(QLineEdit::Password);
-    label_error_->setVisible(false);
+    clear();
 
     if (Database::instance().credentialList(&credentials_) == Database::ReadResult::FAILED)
     {
@@ -133,6 +129,17 @@ void CredentialExportWidget::prepare()
     }
 
     list_->setItems(items);
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialExportWidget::clear()
+{
+    credentials_.clear();
+    list_->setItems({});
+
+    edit_password_->clear();
+    edit_password_->setEchoMode(QLineEdit::Password);
+    label_error_->setVisible(false);
 }
 
 //--------------------------------------------------------------------------------------------------

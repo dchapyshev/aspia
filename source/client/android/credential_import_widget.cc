@@ -103,16 +103,23 @@ QList<QWidget*> CredentialImportWidget::appBarActions() const
 //--------------------------------------------------------------------------------------------------
 void CredentialImportWidget::prepare(const QString& file_path)
 {
+    clear();
     file_path_ = file_path;
+
+    setOpened(false);
+    edit_password_->setFocus();
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialImportWidget::clear()
+{
+    file_path_.clear();
     credentials_.clear();
     list_->setItems({});
 
     edit_password_->clear();
     edit_password_->setEchoMode(QLineEdit::Password);
     label_error_->setVisible(false);
-
-    setOpened(false);
-    edit_password_->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------

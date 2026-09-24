@@ -249,6 +249,11 @@ void LineEdit::mouseReleaseEvent(QMouseEvent* event)
     if (show_password_button_ && showPasswordButtonRect().contains(event->position().toPoint()))
     {
         setEchoMode(echoMode() == QLineEdit::Password ? QLineEdit::Normal : QLineEdit::Password);
+
+        // QLineEdit drops these hints in the normal mode, and the keyboard would then capitalize,
+        // correct and remember the shown password.
+        setInputMethodHints(inputMethodHints() | Qt::ImhSensitiveData | Qt::ImhNoPredictiveText |
+                            Qt::ImhNoAutoUppercase);
         event->accept();
         return;
     }
