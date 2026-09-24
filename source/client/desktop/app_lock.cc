@@ -27,6 +27,7 @@
 #include "base/crypto/secure_string.h"
 #include "client/application.h"
 #include "client/master_password.h"
+#include "client/settings.h"
 #include "client/desktop/main_window.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -58,11 +59,15 @@ AppLock::Result AppLock::unlock()
     while (true)
     {
         CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, nullptr);
+        dialog.setObjectName("UnlockDialog");
         dialog.setWindowTitle(QApplication::translate("Client", "Unlock"));
         dialog.setHeaderIcon(":/img/lock.svg");
         dialog.setHeaderText(QApplication::translate(
             "Client", "Enter the master password to unlock the application."));
         dialog.setShowPasswordButtonVisible(true);
+
+        Settings settings;
+        dialog.restoreGeometry(settings.dialogGeometry(dialog.objectName()));
 
         // A second start of the application activates its window, and until the unlock that window
         // is this dialog.
@@ -72,7 +77,10 @@ AppLock::Result AppLock::unlock()
             dialog.activateWindow();
         });
 
-        if (dialog.exec() != QDialog::Accepted)
+        const int result = dialog.exec();
+        settings.setDialogGeometry(dialog.objectName(), dialog.saveGeometry());
+
+        if (result != QDialog::Accepted)
         {
             LOG(INFO) << "Master password unlock cancelled by user";
             return Result::CANCELLED;
