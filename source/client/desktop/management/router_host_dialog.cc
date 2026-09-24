@@ -291,7 +291,7 @@ void RouterHostDialog::onLoadData()
     else if (credentials_found == Database::FindResult::UNREADABLE)
     {
         LOG(ERROR) << "Credentials of host" << host_.host_id << "could not be read";
-        MsgBox::warning(this, tr("The credentials of the host could not be read. You can enter them again."));
+        MsgBox::warning(this, tr("The credentials of the host are damaged. Enter them again."));
     }
 }
 

@@ -154,6 +154,6 @@ void CredentialDialog::onLoadData()
     if (found == Database::FindResult::UNREADABLE)
     {
         LOG(ERROR) << "Data of credentials" << credential_id_ << "could not be read";
-        MsgBox::warning(this, tr("The credentials could not be read. You can enter them again."));
+        MsgBox::warning(this, tr("The credentials are damaged. Enter them again."));
     }
 }

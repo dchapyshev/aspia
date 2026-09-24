@@ -73,8 +73,8 @@ void backupOnStartup()
 
         case Backup::Result::UNREADABLE_RECORD:
             MsgBox::warning(nullptr, QApplication::translate(
-                "Client", "Unable to create a backup. Some records of the database could not be read. "
-                          "Edit them to enter their data again."));
+                "Client", "Unable to create a backup. Some records of the database are damaged. Fix or "
+                          "delete them."));
             break;
 
         default:

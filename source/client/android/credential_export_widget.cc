@@ -124,7 +124,7 @@ void CredentialExportWidget::prepare()
         CredentialSelectionList::Item item;
         item.name = credential.displayName();
         item.enabled = credential.isValid();
-        item.details = item.enabled ? credential.username() : tr("Could not be read");
+        item.details = item.enabled ? credential.username() : tr("Damaged");
         items.append(item);
     }
 

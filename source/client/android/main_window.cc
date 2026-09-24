@@ -430,7 +430,7 @@ void AndroidMainWindow::onConnectHost(qint64 entry_id, proto::peer::SessionType 
         if (found == Database::FindResult::UNREADABLE)
         {
             MessageDialog::info(this, tr("Connection"),
-                tr("The data of the host could not be read. Edit the host to enter it again."));
+                tr("The data of the host is damaged. Edit the host and enter it again."));
         }
         return;
     }
@@ -740,7 +740,7 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
             LOG(ERROR) << "Unable to read router" << host.routerId();
             MessageDialog::info(this, tr("Connection"),
                 found == Database::FindResult::UNREADABLE ?
-                    tr("The data of the router could not be read. Edit the router to enter it again.") :
+                    tr("The data of the router is damaged. Edit the router and enter it again.") :
                     tr("The router associated with this host has been deleted. "
                        "Edit the host to select another router or switch to direct connection."));
             return;
@@ -966,7 +966,7 @@ void AndroidMainWindow::connectToUrl(const QString& url)
         {
             LOG(ERROR) << "Data of router" << router_id << "could not be read";
             MessageDialog::info(this, tr("Connection"),
-                tr("The data of the router could not be read. Edit the router to enter it again."));
+                tr("The data of the router is damaged. Edit the router and enter it again."));
             return;
         }
 
@@ -1008,7 +1008,7 @@ void AndroidMainWindow::connectToUrl(const QString& url)
         {
             MessageDialog::info(this, tr("Connection"),
                 host_found == Database::FindResult::UNREADABLE ?
-                    tr("The data of the host could not be read. Edit the host to enter it again.") :
+                    tr("The data of the host is damaged. Edit the host and enter it again.") :
                     tr("The host referenced by the link is not among the saved hosts."));
             return;
         }

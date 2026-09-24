@@ -1505,8 +1505,7 @@ void ManagementTab::onExportBookAction()
             return;
 
         case Backup::Result::UNREADABLE_RECORD:
-            MsgBox::warning(this, tr("Some records of the database could not be read. Edit them "
-                                     "to enter their data again."));
+            MsgBox::warning(this, tr("Some records of the database are damaged. Fix or delete them and try again."));
             return;
 
         default:
@@ -2124,7 +2123,7 @@ bool ManagementTab::readLocalHost(qint64 entry_id, LocalHostConfig* host)
     if (result == Database::FindResult::UNREADABLE)
     {
         LOG(ERROR) << "Data of host" << entry_id << "could not be read";
-        MsgBox::warning(this, tr("The data of the host could not be read. Edit the host to enter it again."));
+        MsgBox::warning(this, tr("The data of the host is damaged. Edit the host and enter it again."));
     }
     else
     {
@@ -2145,7 +2144,7 @@ bool ManagementTab::validateHostForConnect(const HostConfig& host)
         if (found != Database::FindResult::FOUND)
         {
             MsgBox::warning(this, found == Database::FindResult::UNREADABLE ?
-                tr("The data of the router could not be read. Edit the router to enter it again.") :
+                tr("The data of the router is damaged. Edit the router and enter it again.") :
                 tr("The router associated with this host has been deleted. "
                    "Edit the host to select another router or switch to direct connection."));
             return false;

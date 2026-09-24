@@ -171,7 +171,7 @@ bool LocalHostEditor::prepareForEdit(qint64 host_id)
     {
         LOG(ERROR) << "Data of host" << host_id << "could not be read";
         if (lists_loaded_)
-            showError(tr("The data of the host could not be read. You can enter it again."));
+            showError(tr("The data of the host is damaged. Enter it again."));
     }
 
     return true;

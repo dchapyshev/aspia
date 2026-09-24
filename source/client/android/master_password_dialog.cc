@@ -184,8 +184,7 @@ void MasterPasswordDialog::onAccept()
                 return;
 
             case MasterPassword::Result::UNREADABLE_RECORD:
-                showError(tr("Some records of the database could not be read. Edit them to "
-                             "enter their data again."));
+                showError(tr("Some records of the database are damaged. Fix or delete them and try again."));
                 return;
 
             default:

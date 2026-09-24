@@ -138,7 +138,7 @@ bool RouterHostEditor::prepareForEdit(qint64 router_id, HostId host_id)
     {
         LOG(ERROR) << "Credentials of host" << host_id_ << "could not be read";
         if (credentials_loaded_)
-            showError(tr("The credentials of the host could not be read. You can enter them again."));
+            showError(tr("The credentials of the host are damaged. Enter them again."));
     }
 
     return true;

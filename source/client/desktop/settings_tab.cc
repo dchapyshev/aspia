@@ -519,8 +519,7 @@ void SettingsTab::onChangeMasterPassword()
                 return false;
 
             case MasterPassword::Result::UNREADABLE_RECORD:
-                MsgBox::warning(d, tr("Some records of the database could not be read. Edit them "
-                                      "to enter their data again."));
+                MsgBox::warning(d, tr("Some records of the database are damaged. Fix or delete them and try again."));
                 return false;
 
             default:

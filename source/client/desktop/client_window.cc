@@ -514,7 +514,7 @@ void ClientWindow::fetchConnectionOffer()
         if (router_status == RouterStatus::OFFLINE)
             onErrorOccurred(tr("The specified router is unavailable."));
         else if (router_status == RouterStatus::UNREADABLE)
-            onErrorOccurred(tr("The data of the router could not be read. Edit the router to enter it again."));
+            onErrorOccurred(tr("The data of the router is damaged. Edit the router and enter it again."));
         else
             onErrorOccurred(tr("The specified router is offline."));
         return;

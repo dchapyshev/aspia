@@ -138,7 +138,7 @@ bool RouterEditor::prepareForEdit(qint64 router_id)
     if (found == Database::FindResult::UNREADABLE)
     {
         LOG(ERROR) << "Data of router" << router_id << "could not be read";
-        showError(tr("The data of the router could not be read. You can enter it again."));
+        showError(tr("The data of the router is damaged. Enter it again."));
     }
 
     return true;

@@ -389,7 +389,7 @@ void LocalHostDialog::onLoadData()
     if (host_found == Database::FindResult::UNREADABLE)
     {
         LOG(ERROR) << "Data of host" << entry_id_ << "could not be read";
-        MsgBox::warning(this, tr("The data of the host could not be read. You can enter it again."));
+        MsgBox::warning(this, tr("The data of the host is damaged. Enter it again."));
     }
 }
 

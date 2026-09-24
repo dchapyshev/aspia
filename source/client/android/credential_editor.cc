@@ -130,7 +130,7 @@ bool CredentialEditor::prepareForEdit(qint64 credential_id)
     if (found == Database::FindResult::UNREADABLE)
     {
         LOG(ERROR) << "Data of credentials" << credential_id << "could not be read";
-        showError(tr("The credentials could not be read. You can enter them again."));
+        showError(tr("The credentials are damaged. Enter them again."));
     }
 
     return true;

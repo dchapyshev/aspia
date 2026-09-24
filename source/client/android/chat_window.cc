@@ -485,7 +485,7 @@ void ChatWindow::fetchConnectionOffer()
     if (router_status == RouterStatus::OFFLINE || router_status == RouterStatus::UNREADABLE)
     {
         setStatusText(router_status == RouterStatus::UNREADABLE ?
-            tr("The data of the router could not be read. Edit the router to enter it again.") :
+            tr("The data of the router is damaged. Edit the router and enter it again.") :
             tr("The specified router is unavailable."));
         return;
     }
