@@ -67,6 +67,9 @@ signals:
     // Emitted after a user is created, modified or deleted.
     void sig_usersChanged();
 
+    // Emitted after the password protection of the settings is enabled or disabled.
+    void sig_passwordProtectionChanged();
+
 private:
     void showAbout();
     void showUsers();

@@ -414,6 +414,7 @@ void SettingsWidget::onEnableProtection()
     }
 
     buildSettings();
+    emit sig_passwordProtectionChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -444,6 +445,7 @@ void SettingsWidget::onDisableProtection()
 
     Database::instance().clearPassword();
     buildSettings();
+    emit sig_passwordProtectionChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

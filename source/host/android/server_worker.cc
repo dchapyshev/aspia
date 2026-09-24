@@ -342,6 +342,13 @@ void ServerWorker::onUsersChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ServerWorker::onPasswordProtectionChanged()
+{
+    if (router_manager_)
+        router_manager_->onTelemetryChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ServerWorker::onCredentialsChanged(HostId host_id, const SecureString& password)
 {
     emit sig_credentialsChanged(hostIdToString(host_id), password.toString());

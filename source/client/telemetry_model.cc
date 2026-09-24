@@ -211,6 +211,10 @@ void TelemetryModel::parseVersion1(const QJsonObject& telemetry, QList<Group>* g
     const QJsonValue users = telemetry.value("users");
     if (users.isObject())
         parseUsersGroup(users.toObject(), groups);
+
+    const QJsonValue security = telemetry.value("security");
+    if (security.isObject())
+        parseSecurityGroup(security.toObject(), groups);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -315,6 +319,27 @@ void TelemetryModel::parseUsersGroup(const QJsonObject& users, QList<Group>* gro
     const QJsonValue enabled = users.value("enabled");
     if (enabled.isDouble())
         group.parameters.append({ tr("Enabled users"), QString::number(enabled.toInt()) });
+
+    if (!group.parameters.isEmpty())
+        groups->append(group);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void TelemetryModel::parseSecurityGroup(const QJsonObject& security, QList<Group>* groups)
+{
+    Group group;
+    group.name = tr("Security");
+
+    // The values get their own disambiguation: "Enabled" and "Disabled" of the automatic updates
+    // agree with that label in some languages.
+    const QJsonValue settings_password = security.value("settings_password");
+    if (settings_password.isBool())
+    {
+        group.parameters.append({ tr("Settings password protection"),
+            settings_password.toBool() ? tr("Enabled", "password protection")
+                                       : tr("Disabled", "password protection") });
+    }
 
     if (!group.parameters.isEmpty())
         groups->append(group);

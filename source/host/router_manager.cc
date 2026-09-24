@@ -504,12 +504,22 @@ void RouterManager::sendTelemetry()
     users.insert("total", user_list.size());
     users.insert("enabled", enabled_users);
 
+    // Nothing is sent when the database is not readable.
+    const Database::PasswordProtection protection = database_.passwordProtectionState();
+
+    QJsonObject security;
+    if (protection != Database::PasswordProtection::UNAVAILABLE)
+        security.insert("settings_password", protection == Database::PasswordProtection::ENABLED);
+
     QJsonObject telemetry;
     telemetry.insert("version", proto::router::kTelemetryVersion);
     telemetry.insert("general", general);
     telemetry.insert("connects", connects);
     telemetry.insert("update", update);
     telemetry.insert("users", users);
+
+    if (!security.isEmpty())
+        telemetry.insert("security", security);
 
     proto::router::HostToRouter message;
     message.mutable_host_telemetry()->set_json(
