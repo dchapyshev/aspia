@@ -62,6 +62,11 @@ public:
     int failedLoginCountSinceStart() const;
     void registerFailedLogin();
 
+    // The number of connections to the router in the last 7 days and since the last start of the service.
+    int routerConnectCount() const;
+    int routerConnectCountSinceStart() const;
+    void registerRouterConnect();
+
     bool isBootToSafeMode() const;
     void setBootToSafeMode(bool enable);
 
@@ -74,6 +79,9 @@ private:
 
     QList<qint64> failedLogins() const;
     void setFailedLogins(const QList<qint64>& failed_logins);
+
+    QList<qint64> routerConnects() const;
+    void setRouterConnects(const QList<qint64>& router_connects);
 
     QSettings impl_;
 

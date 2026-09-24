@@ -118,6 +118,25 @@ TEST_F(HostStorageTest, FailedLoginsAreCounted)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Connections to the router are counted over the last 7 days and since the last start of the
+// service.
+TEST_F(HostStorageTest, RouterConnectsAreCounted)
+{
+    const qint64 current_time = std::time(nullptr);
+    setServiceStarts({ current_time - 100 });
+    setTimepoints("router_connects", { current_time - kPeriod - 60, current_time - 200, current_time - 50 });
+
+    HostStorage storage;
+    EXPECT_EQ(storage.routerConnectCount(), 2);
+    EXPECT_EQ(storage.routerConnectCountSinceStart(), 1);
+
+    storage.registerRouterConnect();
+
+    EXPECT_EQ(storage.routerConnectCount(), 3);
+    EXPECT_EQ(storage.routerConnectCountSinceStart(), 2);
+}
+
+//--------------------------------------------------------------------------------------------------
 // No more starts than the limit are kept. A new start still becomes the last one, the oldest start
 // gives way to it.
 TEST_F(HostStorageTest, ServiceStartsAreLimited)

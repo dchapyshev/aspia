@@ -75,6 +75,7 @@ private:
     static void parseVersion1(const QJsonObject& telemetry, QList<Group>* groups);
     static void parseGeneralGroup(const QJsonObject& general, QList<Group>* groups);
     static void parseConnectsGroup(const QJsonObject& connects, QList<Group>* groups);
+    static void parseRouterGroup(const QJsonObject& router, QList<Group>* groups);
     static void parseUpdateGroup(const QJsonObject& update, QList<Group>* groups);
     static void parseUsersGroup(const QJsonObject& users, QList<Group>* groups);
     static void parseSecurityGroup(const QJsonObject& security, QList<Group>* groups);

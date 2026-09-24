@@ -892,6 +892,29 @@ TEST_F(RouterManagerTest, TelemetryCarriesConnects)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The connection that delivers the report is already counted in it.
+TEST_F(RouterManagerTest, TelemetryCarriesRouterConnects)
+{
+    const qint64 current_time = std::time(nullptr);
+
+    QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "aspia", "host_storage");
+    settings.setValue("service_starts", QStringList{ QString::number(current_time - 100) });
+    settings.setValue("router_connects", QStringList{ QString::number(current_time - 200) });
+    settings.sync();
+
+    startManager();
+
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+    sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
+    ASSERT_TRUE(waitFor([this]() { return telemetry_received_.load() >= 1; }));
+
+    const QJsonObject router = QJsonDocument::fromJson(
+        QByteArray::fromStdString(last_telemetry_.json())).object().value("router").toObject();
+    EXPECT_EQ(router.value("connects").toInt(), 2);
+    EXPECT_EQ(router.value("connects_since_start").toInt(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The router can ask for the telemetry at any time, and the host answers at once, without waiting
 // for the minute to pass since the previous report.
 TEST_F(RouterManagerTest, TelemetryIsSentOnRouterCommand)

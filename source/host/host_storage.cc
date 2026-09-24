@@ -53,13 +53,13 @@ void appendTimepoint(QList<qint64>* timepoints, qint64 timepoint)
 }
 
 //--------------------------------------------------------------------------------------------------
-void appendLogin(QList<qint64>* logins, qint64 current_time, qint64 start_time)
+void appendEvent(QList<qint64>* events, qint64 current_time, qint64 start_time)
 {
-    logins->removeIf([current_time, start_time](qint64 login)
+    events->removeIf([current_time, start_time](qint64 event)
     {
-        return current_time - login >= kCountPeriod && login < start_time;
+        return current_time - event >= kCountPeriod && event < start_time;
     });
-    appendTimepoint(logins, current_time);
+    appendTimepoint(events, current_time);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -210,7 +210,7 @@ int HostStorage::successfulLoginCountSinceStart() const
 void HostStorage::registerSuccessfulLogin()
 {
     QList<qint64> successful_logins = successfulLogins();
-    appendLogin(&successful_logins, std::time(nullptr), serviceStartTime());
+    appendEvent(&successful_logins, std::time(nullptr), serviceStartTime());
     setSuccessfulLogins(successful_logins);
 }
 
@@ -230,8 +230,28 @@ int HostStorage::failedLoginCountSinceStart() const
 void HostStorage::registerFailedLogin()
 {
     QList<qint64> failed_logins = failedLogins();
-    appendLogin(&failed_logins, std::time(nullptr), serviceStartTime());
+    appendEvent(&failed_logins, std::time(nullptr), serviceStartTime());
     setFailedLogins(failed_logins);
+}
+
+//--------------------------------------------------------------------------------------------------
+int HostStorage::routerConnectCount() const
+{
+    return countAfter(routerConnects(), std::time(nullptr) - kCountPeriod);
+}
+
+//--------------------------------------------------------------------------------------------------
+int HostStorage::routerConnectCountSinceStart() const
+{
+    return countAfter(routerConnects(), serviceStartTime() - 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::registerRouterConnect()
+{
+    QList<qint64> router_connects = routerConnects();
+    appendEvent(&router_connects, std::time(nullptr), serviceStartTime());
+    setRouterConnects(router_connects);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -268,6 +288,18 @@ QList<qint64> HostStorage::failedLogins() const
 void HostStorage::setFailedLogins(const QList<qint64>& failed_logins)
 {
     writeTimepoints(impl_, "failed_logins", failed_logins);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<qint64> HostStorage::routerConnects() const
+{
+    return readTimepoints(impl_, "router_connects");
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::setRouterConnects(const QList<qint64>& router_connects)
+{
+    writeTimepoints(impl_, "router_connects", router_connects);
 }
 
 //--------------------------------------------------------------------------------------------------

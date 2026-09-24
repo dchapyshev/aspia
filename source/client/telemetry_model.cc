@@ -32,7 +32,7 @@ namespace {
 // The internal id of a group row. A parameter row carries the row of its group plus one.
 const quintptr kGroupId = 0;
 
-// The host keeps no more events of a kind (service starts, logins) than this.
+// The host keeps no more events of a kind (service starts, logins, router connections) than this.
 const int kMaxEventCount = 1000;
 
 } // namespace
@@ -208,6 +208,10 @@ void TelemetryModel::parseVersion1(const QJsonObject& telemetry, QList<Group>* g
     if (connects.isObject())
         parseConnectsGroup(connects.toObject(), groups);
 
+    const QJsonValue router = telemetry.value("router");
+    if (router.isObject())
+        parseRouterGroup(router.toObject(), groups);
+
     const QJsonValue users = telemetry.value("users");
     if (users.isObject())
         parseUsersGroup(users.toObject(), groups);
@@ -270,6 +274,28 @@ void TelemetryModel::parseConnectsGroup(const QJsonObject& connects, QList<Group
     {
         group.parameters.append({ tr("Failed logins since service start"),
                                   countToString(failed_logins_since_start.toInt()) });
+    }
+
+    if (!group.parameters.isEmpty())
+        groups->append(group);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void TelemetryModel::parseRouterGroup(const QJsonObject& router, QList<Group>* groups)
+{
+    Group group;
+    group.name = tr("Router");
+
+    const QJsonValue connects = router.value("connects");
+    if (connects.isDouble())
+        group.parameters.append({ tr("Connections in 7 days"), countToString(connects.toInt()) });
+
+    const QJsonValue connects_since_start = router.value("connects_since_start");
+    if (connects_since_start.isDouble())
+    {
+        group.parameters.append({ tr("Connections since service start"),
+                                  countToString(connects_since_start.toInt()) });
     }
 
     if (!group.parameters.isEmpty())

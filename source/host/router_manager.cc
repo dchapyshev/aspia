@@ -173,6 +173,9 @@ void RouterManager::onTcpReady()
     LOG(INFO) << "Connection to the router is established";
     routerStateChanged(proto::user::RouterState::CONNECTED);
 
+    HostStorage().registerRouterConnect();
+    onTelemetryChanged();
+
     // Now the session will receive incoming messages.
     reconnect_time_ = TimePoint::max();
     tcp_channel_->setPaused(false);
@@ -367,7 +370,8 @@ void RouterManager::onTimer(TimePoint now)
         HostStorage storage;
         if (storage.serviceStartCount() != service_start_count_ ||
             storage.successfulLoginCount() != successful_login_count_ ||
-            storage.failedLoginCount() != failed_login_count_)
+            storage.failedLoginCount() != failed_login_count_ ||
+            storage.routerConnectCount() != router_connect_count_)
         {
             onTelemetryChanged();
         }
@@ -469,6 +473,7 @@ void RouterManager::sendTelemetry()
     service_start_count_ = storage.serviceStartCount();
     successful_login_count_ = storage.successfulLoginCount();
     failed_login_count_ = storage.failedLoginCount();
+    router_connect_count_ = storage.routerConnectCount();
     count_check_time_ = Clock::now() + kCountCheckInterval;
 
     QJsonObject general;
@@ -481,6 +486,10 @@ void RouterManager::sendTelemetry()
     connects.insert("logins_since_start", storage.successfulLoginCountSinceStart());
     connects.insert("failed_logins", failed_login_count_);
     connects.insert("failed_logins_since_start", storage.failedLoginCountSinceStart());
+
+    QJsonObject router;
+    router.insert("connects", router_connect_count_);
+    router.insert("connects_since_start", storage.routerConnectCountSinceStart());
 
     QJsonObject update;
     update.insert("channel", settings.updateChannel());
@@ -519,6 +528,7 @@ void RouterManager::sendTelemetry()
     telemetry.insert("version", proto::router::kTelemetryVersion);
     telemetry.insert("general", general);
     telemetry.insert("connects", connects);
+    telemetry.insert("router", router);
     telemetry.insert("update", update);
     telemetry.insert("users", users);
 

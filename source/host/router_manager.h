@@ -118,6 +118,7 @@ private:
     int service_start_count_ = 0;
     int successful_login_count_ = 0;
     int failed_login_count_ = 0;
+    int router_connect_count_ = 0;
     TimePoint count_check_time_ = TimePoint::max();
 
     QQueue<ReadyConnection> channels_;
