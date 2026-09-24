@@ -46,6 +46,7 @@ public:
 
 signals:
     void sig_desktopConfigChanged();
+    void sig_lockTimeoutChanged();
 
 protected:
     // QWidget implementation.
@@ -61,6 +62,7 @@ private slots:
     void onSelectBackupPath();
     void onBackupRetentionChanged();
     void onUdpMethodsChanged();
+    void onLockTimeoutChanged();
     void onDesktopFeatureChanged();
     void onRecordAutostartChanged();
     void onRecordingPathChanged();

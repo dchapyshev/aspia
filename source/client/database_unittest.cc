@@ -1150,6 +1150,19 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheDeviceToken)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Without a choice of the user the application is never locked.
+TEST_F(DatabaseTest, LockTimeoutIsOffUntilChosen)
+{
+    EXPECT_EQ(db_.lockTimeout(), Minutes::zero());
+
+    ASSERT_TRUE(db_.setLockTimeout(Minutes(5)));
+    EXPECT_EQ(db_.lockTimeout(), Minutes(5));
+
+    ASSERT_TRUE(db_.setLockTimeout(Minutes::zero()));
+    EXPECT_EQ(db_.lockTimeout(), Minutes::zero());
+}
+
+//--------------------------------------------------------------------------------------------------
 // The credentials the user saved for a host of a router come back as they were saved.
 TEST_F(DatabaseTest, RouterHostCredentialsSurviveARoundTrip)
 {

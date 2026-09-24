@@ -39,6 +39,7 @@
 #include "client/host_url.h"
 #include "client/router_controller.h"
 #include "client/settings.h"
+#include "client/desktop/app_lock.h"
 #include "client/desktop/client_tab.h"
 #include "client/desktop/credentials_tab.h"
 #include "client/desktop/client_window.h"
@@ -175,12 +176,29 @@ MainWindow::MainWindow(QWidget* parent)
 
     // Create default tabs.
     addTab(new ManagementTab(this), tr("Management"), QIcon(":/img/cms.svg"));
+
+    app_lock_ = new AppLock(this);
+    connect(app_lock_, &AppLock::sig_lockRequested, this, &MainWindow::onLockRequested);
+    app_lock_->setTimeout(Database::instance().lockTimeout());
 }
 
 //--------------------------------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
     LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+bool MainWindow::hasSessions() const
+{
+    for (int i = 0; i < ui->tabs->count(); ++i)
+    {
+        const Tab* tab = dynamic_cast<const Tab*>(ui->tabs->widget(i));
+        if (tab && tab->tabType() == Tab::Type::SESSION)
+            return true;
+    }
+
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -305,23 +323,7 @@ void MainWindow::closeEvent(QCloseEvent* /* event */)
 {
     LOG(INFO) << "Close event detected";
 
-    Settings settings;
-    settings.setWindowGeometry(saveGeometry());
-    settings.setWindowState(saveState());
-    settings.setToolBarEnabled(ui->action_toolbar->isChecked());
-    settings.setStatusBarEnabled(ui->action_statusbar->isChecked());
-    settings.setSearchFieldEnabled(ui->action_search_field->isChecked());
-    settings.setLargeIcons(ui->action_large_icons->isChecked());
-    settings.setOpenSessionsInTabs(ui->action_sessions_in_tabs->isChecked());
-    settings.setAlwaysOnTop(ui->action_always_on_top->isChecked());
-
-    for (int i = 0; i < ui->tabs->count(); ++i)
-    {
-        Tab* tab = dynamic_cast<Tab*>(ui->tabs->widget(i));
-        if (tab)
-            settings.setTabState(tab->objectName(), tab->saveState());
-    }
-
+    saveWindowState();
     QApplication::quit();
 }
 
@@ -345,6 +347,11 @@ void MainWindow::onSettings()
         return;
 
     SettingsTab* settings_tab = new SettingsTab(this);
+
+    connect(settings_tab, &SettingsTab::sig_lockTimeoutChanged, this, [this]()
+    {
+        app_lock_->setTimeout(Database::instance().lockTimeout());
+    });
 
     connect(settings_tab, &SettingsTab::sig_desktopConfigChanged, this, [this]()
     {
@@ -732,6 +739,36 @@ void MainWindow::onAlwaysOnTop(bool checked)
     {
         if (widget != this && qobject_cast<ClientWindow*>(widget))
             apply(widget);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onLockRequested()
+{
+    LOG(INFO) << "Lock requested";
+
+    saveWindowState();
+    emit sig_lockRequested();
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::saveWindowState()
+{
+    Settings settings;
+    settings.setWindowGeometry(saveGeometry());
+    settings.setWindowState(saveState());
+    settings.setToolBarEnabled(ui->action_toolbar->isChecked());
+    settings.setStatusBarEnabled(ui->action_statusbar->isChecked());
+    settings.setSearchFieldEnabled(ui->action_search_field->isChecked());
+    settings.setLargeIcons(ui->action_large_icons->isChecked());
+    settings.setOpenSessionsInTabs(ui->action_sessions_in_tabs->isChecked());
+    settings.setAlwaysOnTop(ui->action_always_on_top->isChecked());
+
+    for (int i = 0; i < ui->tabs->count(); ++i)
+    {
+        Tab* tab = dynamic_cast<Tab*>(ui->tabs->widget(i));
+        if (tab)
+            settings.setTabState(tab->objectName(), tab->saveState());
     }
 }
 

@@ -178,6 +178,16 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->combo_backup_retention->setCurrentIndex(
         ui->combo_backup_retention->findData(static_cast<int>(db.backupRetention())));
 
+    ui->combo_lock_timeout->addItem(tr("Do not lock"), 0);
+    ui->combo_lock_timeout->addItem(tr("1 minute"), 1);
+    ui->combo_lock_timeout->addItem(tr("5 minutes"), 5);
+    ui->combo_lock_timeout->addItem(tr("10 minutes"), 10);
+    ui->combo_lock_timeout->addItem(tr("30 minutes"), 30);
+    ui->combo_lock_timeout->addItem(tr("1 hour"), 60);
+
+    const int lock_index = ui->combo_lock_timeout->findData(static_cast<int>(db.lockTimeout().count()));
+    ui->combo_lock_timeout->setCurrentIndex(lock_index >= 0 ? lock_index : 0);
+
     const quint32 udp_methods = settings.udpMethods();
     ui->checkbox_udp_direct->setChecked(udp_methods & UDP_METHOD_DIRECT);
     ui->checkbox_udp_hole_punching->setChecked(udp_methods & UDP_METHOD_HOLE_PUNCHING);
@@ -248,6 +258,8 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->checkbox_udp_pcp, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
     connect(ui->checkbox_udp_natpmp, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
     connect(ui->checkbox_udp_upnp, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
+    connect(ui->combo_lock_timeout, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &SettingsTab::onLockTimeoutChanged);
     connect(ui->button_change_master_password, &QPushButton::clicked,
             this, &SettingsTab::onChangeMasterPassword);
 
@@ -431,6 +443,14 @@ void SettingsTab::onUdpMethodsChanged()
         methods |= UDP_METHOD_UPNP;
 
     Settings().setUdpMethods(methods);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onLockTimeoutChanged()
+{
+    LOG(INFO) << "[ACTION] Lock timeout changed";
+    Database::instance().setLockTimeout(Minutes(ui->combo_lock_timeout->currentData().toInt()));
+    emit sig_lockTimeoutChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

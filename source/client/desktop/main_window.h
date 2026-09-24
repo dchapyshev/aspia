@@ -35,6 +35,7 @@ namespace proto::peer {
 enum SessionType : int;
 } // namespace proto::peer
 
+class AppLock;
 class Tab;
 class ManagementTab;
 class SearchDialog;
@@ -49,9 +50,15 @@ public:
     explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow() final;
 
+    bool hasSessions() const;
+
 public slots:
     void showAndActivate();
     void connectToUrl(const QString& url);
+
+signals:
+    // The state of the window is saved by then, and the window is expected to be destroyed.
+    void sig_lockRequested();
 
 protected:
     // QMainWindow implementation.
@@ -75,8 +82,10 @@ private slots:
     void onTabMinimizeRequested();
     void onTabShowRequested();
     void onAlwaysOnTop(bool checked);
+    void onLockRequested();
 
 private:
+    void saveWindowState();
     void addTab(Tab* tab, const QString& title, const QIcon& icon);
     bool tabBarHitTest(const QPoint& global_pos) const;
     void hideCloseButtonForTab(int index);
@@ -96,6 +105,7 @@ private:
     QLineEdit* search_field_ = nullptr;
     QAction* search_action_ = nullptr;
     SearchDialog* search_dialog_ = nullptr;
+    AppLock* app_lock_ = nullptr;
     Tab* active_tab_ = nullptr;
     QList<QPointer<QAction>> tab_toolbar_actions_;
     QList<QPair<QMenu*, QList<QPointer<QAction>>>> tab_menu_actions_;

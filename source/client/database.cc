@@ -47,6 +47,7 @@ constexpr auto kSettingUpdateChannel = "update_channel";
 constexpr auto kSettingBackupEnabled = "backup_on_startup";
 constexpr auto kSettingBackupPath    = "backup_path";
 constexpr auto kSettingBackupKeep    = "backup_retention";
+constexpr auto kSettingLockTimeout   = "lock_timeout";
 constexpr auto kSettingSalt          = "master_password_salt";
 constexpr auto kSettingVerifier      = "master_password_verifier";
 constexpr auto kSettingVersion       = "master_password_version";
@@ -1787,6 +1788,23 @@ AutoBackup::Retention Database::backupRetention() const
 bool Database::setBackupRetention(AutoBackup::Retention retention)
 {
     return writeSetting(kSettingBackupKeep, QString::number(static_cast<int>(retention)));
+}
+
+//--------------------------------------------------------------------------------------------------
+Minutes Database::lockTimeout() const
+{
+    bool ok = false;
+    const int value = readSetting(kSettingLockTimeout).toInt(&ok);
+    if (!ok || value < 0)
+        return Minutes::zero();
+
+    return Minutes(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setLockTimeout(Minutes timeout)
+{
+    return writeSetting(kSettingLockTimeout, QString::number(timeout.count()));
 }
 
 //--------------------------------------------------------------------------------------------------

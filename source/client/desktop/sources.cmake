@@ -17,6 +17,8 @@
 #
 
 collect_sources(SOURCE_CLIENT_CORE_DESKTOP
+    app_lock.cc
+    app_lock.h
     authorization_dialog.cc
     authorization_dialog.h
     authorization_dialog.ui

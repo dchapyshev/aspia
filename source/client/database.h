@@ -26,6 +26,7 @@
 #include <optional>
 #include <utility>
 
+#include "base/time_types.h"
 #include "base/sql/sql_database.h"
 #include "client/auto_backup.h"
 #include "client/config.h"
@@ -134,6 +135,9 @@ public:
 
     AutoBackup::Retention backupRetention() const;
     bool setBackupRetention(AutoBackup::Retention retention);
+
+    Minutes lockTimeout() const;
+    bool setLockTimeout(Minutes timeout);
 
     // Master password.
     bool isMasterPasswordSet() const;

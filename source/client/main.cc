@@ -37,10 +37,13 @@
 #include <QDir>
 #include <QTimer>
 
+#include <functional>
+
 #include "base/crypto/secure_string.h"
 #include "client/database.h"
 #include "client/host_url.h"
 #include "client/master_password.h"
+#include "client/desktop/app_lock.h"
 #include "client/desktop/main_window.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -212,11 +215,9 @@ int main(int argc, char* argv[])
     // A link can arrive before the main window exists: forwarded by a second instance or
     // delivered by a URL open event while the master password dialog is still on the screen.
     // Remember it and open it after the main window is created.
+    auto remember_url = [&start_url](const QString& url) { start_url = url; };
     QMetaObject::Connection pending_url_connection = QObject::connect(
-        &application, &Application::sig_urlOpened, &application, [&start_url](const QString& url)
-    {
-        start_url = url;
-    });
+        &application, &Application::sig_urlOpened, &application, remember_url);
 
     if (application.isRunning())
     {
@@ -237,37 +238,16 @@ int main(int argc, char* argv[])
     {
         LOG(INFO) << "Master password is set, prompting user";
 
-        while (true)
+        switch (AppLock::unlock())
         {
-            CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, nullptr);
-            dialog.setWindowTitle(QApplication::translate("Client", "Unlock"));
-            dialog.setHeaderIcon(":/img/lock.svg");
-            dialog.setHeaderText(QApplication::translate(
-                "Client", "Enter the master password to unlock the application."));
-            dialog.setShowPasswordButtonVisible(true);
-
-            if (dialog.exec() != QDialog::Accepted)
-            {
-                LOG(INFO) << "Master password unlock cancelled by user";
-                return 0;
-            }
-
-            const MasterPassword::Result unlocked = MasterPassword::unlock(dialog.password());
-            if (unlocked == MasterPassword::Result::SUCCESS)
-            {
-                LOG(INFO) << "Master password accepted";
+            case AppLock::Result::UNLOCKED:
                 break;
-            }
 
-            if (unlocked != MasterPassword::Result::INVALID_PASSWORD)
-            {
-                LOG(ERROR) << "Unable to unlock the database";
-                MsgBox::warning(nullptr, QApplication::translate(
-                    "Client", "Unable to unlock the database."));
+            case AppLock::Result::CANCELLED:
+                return 0;
+
+            case AppLock::Result::FAILED:
                 return 1;
-            }
-
-            MsgBox::warning(nullptr, QApplication::translate("Client", "Invalid master password."));
         }
     }
     else
@@ -327,27 +307,55 @@ int main(int argc, char* argv[])
 
     backupOnStartup();
 
-    std::unique_ptr<MainWindow> main_window = std::make_unique<MainWindow>();
+    std::unique_ptr<MainWindow> main_window;
 
-    QObject::disconnect(pending_url_connection);
-
-    QObject::connect(&application, &Application::sig_windowActivated,
-                     main_window.get(), &MainWindow::showAndActivate);
-    QObject::connect(&application, &Application::sig_urlOpened,
-                     main_window.get(), &MainWindow::connectToUrl);
-
-    main_window->show();
-    main_window->activateWindow();
-
-    if (!start_url.isEmpty())
+    // The lock destroys the window with everything it shows, and the unlock creates a new one.
+    std::function<void()> create_main_window = [&]()
     {
-        // Start the connection once the event loop is up and the window is shown.
-        QTimer::singleShot(MilliSeconds(0), main_window.get(), [window = main_window.get(), start_url]()
-        {
-            window->connectToUrl(start_url);
-        });
-    }
+        main_window = std::make_unique<MainWindow>();
 
+        QObject::disconnect(pending_url_connection);
+
+        QObject::connect(&application, &Application::sig_windowActivated,
+                         main_window.get(), &MainWindow::showAndActivate);
+        QObject::connect(&application, &Application::sig_urlOpened,
+                         main_window.get(), &MainWindow::connectToUrl);
+        QObject::connect(main_window.get(), &MainWindow::sig_lockRequested, &application, [&]()
+        {
+            // Until the new window there is no window on the screen, and closing the unlock dialog
+            // would otherwise quit the application.
+            const bool quit_on_last_window_closed = QApplication::quitOnLastWindowClosed();
+            QApplication::setQuitOnLastWindowClosed(false);
+
+            main_window.reset();
+            pending_url_connection = QObject::connect(
+                &application, &Application::sig_urlOpened, &application, remember_url);
+
+            if (AppLock::unlock() != AppLock::Result::UNLOCKED)
+            {
+                QApplication::quit();
+                return;
+            }
+
+            create_main_window();
+            QApplication::setQuitOnLastWindowClosed(quit_on_last_window_closed);
+        }, Qt::QueuedConnection);
+
+        main_window->show();
+        main_window->activateWindow();
+
+        if (!start_url.isEmpty())
+        {
+            // Start the connection once the event loop is up and the window is shown.
+            QTimer::singleShot(MilliSeconds(0), main_window.get(), [window = main_window.get(), start_url]()
+            {
+                window->connectToUrl(start_url);
+            });
+            start_url.clear();
+        }
+    };
+
+    create_main_window();
     return application.exec();
 #endif // defined(Q_OS_ANDROID)
 }

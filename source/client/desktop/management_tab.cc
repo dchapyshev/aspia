@@ -26,6 +26,7 @@
 #include <QIODevice>
 #include <QMenu>
 #include <QStatusBar>
+#include <QTimer>
 
 #include "base/build_config.h"
 #include "base/logging.h"
@@ -310,6 +311,9 @@ ManagementTab::ManagementTab(QWidget* parent)
     local_group_widget_->showGroup(ui->sidebar->currentGroupId());
     switchContent(local_group_widget_);
     updateActionsState();
+
+    // A question asked while the application was locked had no window to show it.
+    QTimer::singleShot(0, this, [this]() { showNextTwoFactorPrompt(); });
 }
 
 //--------------------------------------------------------------------------------------------------
