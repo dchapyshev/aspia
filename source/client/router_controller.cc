@@ -66,6 +66,12 @@ RouterController::~RouterController()
     {
         if (context.session)
             context.session->rpc_.dropPending();
+
+        if (router_worker_)
+        {
+            QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect,
+                                      Qt::QueuedConnection, router_id);
+        }
     }
 
     g_instance = nullptr;
