@@ -275,6 +275,11 @@ void ServiceWorker::onNewDirectConnection()
         PendingConfirmation pending;
         pending.tcp_channel = tcp_server_->nextReadyConnection();
         pending.start_time = Clock::now();
+
+        HostStorage().registerSuccessfulLogin();
+        if (router_manager_)
+            router_manager_->onTelemetryChanged();
+
         startConfirmation(pending);
     }
 }

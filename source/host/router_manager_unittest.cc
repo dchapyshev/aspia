@@ -860,14 +860,17 @@ TEST_F(RouterManagerTest, TelemetryCountsServiceStarts)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The report carries the last incoming connection and the failed logins of the last 7 days and
-// since the service start.
+// The report carries the last incoming connection and the successful and failed logins of the last
+// 7 days and since the service start.
 TEST_F(RouterManagerTest, TelemetryCarriesConnects)
 {
     const qint64 current_time = std::time(nullptr);
 
     QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "aspia", "host_storage");
     settings.setValue("service_starts", QStringList{ QString::number(current_time - 100) });
+    settings.setValue("successful_logins", QStringList{ QString::number(current_time - 300),
+                                                        QString::number(current_time - 250),
+                                                        QString::number(current_time - 40) });
     settings.setValue("failed_logins", QStringList{ QString::number(current_time - 200),
                                                     QString::number(current_time - 50) });
     settings.setValue("last_client_connect_time", 5000);
@@ -882,6 +885,8 @@ TEST_F(RouterManagerTest, TelemetryCarriesConnects)
     const QJsonObject connects = QJsonDocument::fromJson(
         QByteArray::fromStdString(last_telemetry_.json())).object().value("connects").toObject();
     EXPECT_EQ(connects.value("last_connect_time").toInteger(), 5000);
+    EXPECT_EQ(connects.value("logins").toInt(), 3);
+    EXPECT_EQ(connects.value("logins_since_start").toInt(), 1);
     EXPECT_EQ(connects.value("failed_logins").toInt(), 2);
     EXPECT_EQ(connects.value("failed_logins_since_start").toInt(), 1);
 }

@@ -214,6 +214,10 @@ void ServerWorker::onNewConnection()
         if (!tcp_channel)
             break;
 
+        HostStorage().registerSuccessfulLogin();
+        if (router_manager_)
+            router_manager_->onTelemetryChanged();
+
         startClient(tcp_channel);
     }
 }

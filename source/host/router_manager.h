@@ -116,6 +116,7 @@ private:
     bool telemetry_outdated_ = false;
     TimePoint next_telemetry_time_ = TimePoint::min();
     int service_start_count_ = 0;
+    int successful_login_count_ = 0;
     int failed_login_count_ = 0;
     TimePoint count_check_time_ = TimePoint::max();
 

@@ -82,6 +82,24 @@ TEST_F(HostStorageTest, ServiceStartsOfTheLastWeekAreCounted)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Successful logins are counted over the last 7 days and since the last start of the service.
+TEST_F(HostStorageTest, SuccessfulLoginsAreCounted)
+{
+    const qint64 current_time = std::time(nullptr);
+    setServiceStarts({ current_time - 100 });
+    setTimepoints("successful_logins", { current_time - kPeriod - 60, current_time - 200, current_time - 50 });
+
+    HostStorage storage;
+    EXPECT_EQ(storage.successfulLoginCount(), 2);
+    EXPECT_EQ(storage.successfulLoginCountSinceStart(), 1);
+
+    storage.registerSuccessfulLogin();
+
+    EXPECT_EQ(storage.successfulLoginCount(), 3);
+    EXPECT_EQ(storage.successfulLoginCountSinceStart(), 2);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Failed logins are counted over the last 7 days and since the last start of the service.
 TEST_F(HostStorageTest, FailedLoginsAreCounted)
 {

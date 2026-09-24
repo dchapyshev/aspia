@@ -52,6 +52,11 @@ public:
     qint64 lastClientConnectTime() const;
     void setLastClientConnectTime(qint64 timepoint);
 
+    // The number of successful logins in the last 7 days and since the last start of the service.
+    int successfulLoginCount() const;
+    int successfulLoginCountSinceStart() const;
+    void registerSuccessfulLogin();
+
     // The number of failed logins in the last 7 days and since the last start of the service.
     int failedLoginCount() const;
     int failedLoginCountSinceStart() const;
@@ -63,6 +68,9 @@ public:
 private:
     QList<qint64> serviceStarts() const;
     void setServiceStarts(const QList<qint64>& starts);
+
+    QList<qint64> successfulLogins() const;
+    void setSuccessfulLogins(const QList<qint64>& successful_logins);
 
     QList<qint64> failedLogins() const;
     void setFailedLogins(const QList<qint64>& failed_logins);

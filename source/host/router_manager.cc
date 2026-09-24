@@ -366,6 +366,7 @@ void RouterManager::onTimer(TimePoint now)
 
         HostStorage storage;
         if (storage.serviceStartCount() != service_start_count_ ||
+            storage.successfulLoginCount() != successful_login_count_ ||
             storage.failedLoginCount() != failed_login_count_)
         {
             onTelemetryChanged();
@@ -466,6 +467,7 @@ void RouterManager::sendTelemetry()
     SystemSettings settings;
 
     service_start_count_ = storage.serviceStartCount();
+    successful_login_count_ = storage.successfulLoginCount();
     failed_login_count_ = storage.failedLoginCount();
     count_check_time_ = Clock::now() + kCountCheckInterval;
 
@@ -475,6 +477,8 @@ void RouterManager::sendTelemetry()
 
     QJsonObject connects;
     connects.insert("last_connect_time", storage.lastClientConnectTime());
+    connects.insert("logins", successful_login_count_);
+    connects.insert("logins_since_start", storage.successfulLoginCountSinceStart());
     connects.insert("failed_logins", failed_login_count_);
     connects.insert("failed_logins_since_start", storage.failedLoginCountSinceStart());
 
@@ -551,10 +555,13 @@ void RouterManager::readConnectionOffer(const proto::router::ConnectionOffer& of
     connect(authenticator.get(), &Authenticator::sig_finished,
             this, [this](Authenticator::ErrorCode error_code)
     {
-        if (error_code != Authenticator::ErrorCode::ACCESS_DENIED)
+        if (error_code == Authenticator::ErrorCode::SUCCESS)
+            HostStorage().registerSuccessfulLogin();
+        else if (error_code == Authenticator::ErrorCode::ACCESS_DENIED)
+            HostStorage().registerFailedLogin();
+        else
             return;
 
-        HostStorage().registerFailedLogin();
         onTelemetryChanged();
     });
 

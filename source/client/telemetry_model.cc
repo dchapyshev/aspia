@@ -32,7 +32,7 @@ namespace {
 // The internal id of a group row. A parameter row carries the row of its group plus one.
 const quintptr kGroupId = 0;
 
-// The host keeps no more events of a kind (service starts, failed logins) than this.
+// The host keeps no more events of a kind (service starts, logins) than this.
 const int kMaxEventCount = 1000;
 
 } // namespace
@@ -248,6 +248,17 @@ void TelemetryModel::parseConnectsGroup(const QJsonObject& connects, QList<Group
     {
         group.parameters.append(
             { tr("Last incoming connection"), timeToString(last_connect_time.toInteger()) });
+    }
+
+    const QJsonValue logins = connects.value("logins");
+    if (logins.isDouble())
+        group.parameters.append({ tr("Successful logins in 7 days"), countToString(logins.toInt()) });
+
+    const QJsonValue logins_since_start = connects.value("logins_since_start");
+    if (logins_since_start.isDouble())
+    {
+        group.parameters.append({ tr("Successful logins since service start"),
+                                  countToString(logins_since_start.toInt()) });
     }
 
     const QJsonValue failed_logins = connects.value("failed_logins");
