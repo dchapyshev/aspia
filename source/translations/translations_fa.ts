@@ -1649,79 +1649,79 @@ Password: %2</source>
 <context>
     <name>CredentialDialog</name>
     <message>
-        <location filename="../client/desktop/credential_dialog.ui" line="14"/>
+        <location filename="../client/desktop/credentials/credential_dialog.ui" line="14"/>
         <source>Credentials</source>
         <translation>اطلاعات ورود</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.ui" line="25"/>
+        <location filename="../client/desktop/credentials/credential_dialog.ui" line="25"/>
         <source>Name:</source>
         <translation>نام:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.ui" line="32"/>
+        <location filename="../client/desktop/credentials/credential_dialog.ui" line="32"/>
         <source>Display name</source>
         <translation>نام نمایشی</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.ui" line="39"/>
+        <location filename="../client/desktop/credentials/credential_dialog.ui" line="39"/>
         <source>User Name:</source>
         <translation>نام کاربری:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.ui" line="49"/>
+        <location filename="../client/desktop/credentials/credential_dialog.ui" line="49"/>
         <source>Password:</source>
         <translation>گذرواژه:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="43"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="43"/>
         <source>Edit Credentials</source>
         <translation>ویرایش اطلاعات ورود</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="43"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="43"/>
         <source>Add Credentials</source>
         <translation>افزودن اطلاعات ورود</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="69"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="69"/>
         <source>Name cannot be empty.</source>
         <translation>نام نمی‌تواند خالی باشد.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credential_dialog.cc" line="77"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="77"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>نام خیلی طولانی است. حداکثر طول نام %n نویسه است.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="87"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="87"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های &quot;_&quot;، &quot;-&quot;، &quot;.&quot; باشد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="96"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="96"/>
         <source>Password cannot be empty.</source>
         <translation>گذرواژه نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="114"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="114"/>
         <source>Unable to add credentials</source>
         <translation>افزودن اطلاعات ورود ممکن نیست</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="125"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="125"/>
         <source>Unable to modify credentials</source>
         <translation>تغییر اطلاعات ورود ممکن نیست</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="145"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="145"/>
         <source>Failed to read the credentials.</source>
         <translation>خواندن اطلاعات ورود ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="157"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="157"/>
         <source>The credentials could not be read. You can enter them again.</source>
         <translation>اطلاعات ورود خوانده نشد. می‌توانید دوباره آن را وارد کنید.</translation>
     </message>
@@ -1803,14 +1803,398 @@ Password: %2</source>
     </message>
 </context>
 <context>
-    <name>CredentialListModel</name>
+    <name>CredentialExportDialog</name>
     <message>
-        <location filename="../client/desktop/credential_list_model.cc" line="123"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="14"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="107"/>
+        <source>Export Credentials</source>
+        <translation>صادر کردن اطلاعات ورود</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="23"/>
+        <source>Select the credentials to export and enter a password. The file will be encrypted, and the same password will be required to import it.</source>
+        <translation>اطلاعات ورودی را که باید صادر شود انتخاب کرده و یک گذرواژه وارد کنید. فایل رمزگذاری می‌شود و برای وارد کردن آن همین گذرواژه لازم است.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="43"/>
+        <source>Check all</source>
+        <translation>انتخاب همه</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="69"/>
+        <source>Uncheck all</source>
+        <translation>لغو انتخاب همه</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="114"/>
         <source>Name</source>
         <translation>نام</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_list_model.cc" line="126"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="119"/>
+        <source>User Name</source>
+        <translation>نام کاربری</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="131"/>
+        <source>Password:</source>
+        <translation>گذرواژه:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="108"/>
+        <source>Aspia Credentials (*.aspia-credentials);;All files (*)</source>
+        <translation>اطلاعات ورود Aspia (*.aspia-credentials);;همه فایل‌ها (*)</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="122"/>
+        <source>Unable to write the file.</source>
+        <translation>نوشتن فایل ممکن نیست.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="126"/>
+        <source>Failed to export the credentials.</source>
+        <translation>صادر کردن اطلاعات ورود ناموفق بود.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="130"/>
+        <source>Export completed successfully.
+Credentials exported: %1</source>
+        <translation>صادر کردن با موفقیت انجام شد.
+اطلاعات ورود صادرشده: %1</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="141"/>
+        <source>Failed to read the credentials.</source>
+        <translation>خواندن اطلاعات ورود ناموفق بود.</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="207"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>گذرواژه نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="215"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation>گذرواژه واردشده الزامات امنیتی را برآورده نمی‌کند!</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="216"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>گذرواژه باید شامل حروف کوچک و بزرگ و اعداد باشد و نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="219"/>
+        <source>Do you want to enter a different password?</source>
+        <translation>آیا می‌خواهید گذرواژه دیگری وارد کنید؟</translation>
+    </message>
+</context>
+<context>
+    <name>CredentialExportWidget</name>
+    <message>
+        <location filename="../client/android/credential_export_widget.cc" line="59"/>
+        <source>The file will be encrypted with this password.</source>
+        <translation>فایل با این گذرواژه رمزگذاری می‌شود.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_export_widget.cc" line="63"/>
+        <source>Password</source>
+        <translation>گذرواژه</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_export_widget.cc" line="110"/>
+        <source>Failed to read the credentials.</source>
+        <translation>خواندن اطلاعات ورود ناموفق بود.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_export_widget.cc" line="127"/>
+        <source>Could not be read</source>
+        <translation>خوانده نشد</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_export_widget.cc" line="153"/>
+        <location filename="../client/android/credential_export_widget.cc" line="172"/>
+        <source>Export Credentials</source>
+        <translation>صادر کردن اطلاعات ورود</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_export_widget.cc" line="154"/>
+        <source>Aspia Credentials (*.aspia-credentials)</source>
+        <translation>اطلاعات ورود Aspia (*.aspia-credentials)</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_export_widget.cc" line="164"/>
+        <source>Unable to write the file.</source>
+        <translation>نوشتن فایل ممکن نیست.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_export_widget.cc" line="168"/>
+        <source>Failed to export the credentials.</source>
+        <translation>صادر کردن اطلاعات ورود ناموفق بود.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_export_widget.cc" line="173"/>
+        <source>Export completed successfully.
+Credentials exported: %1</source>
+        <translation>صادر کردن با موفقیت انجام شد.
+اطلاعات ورود صادرشده: %1</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_export_widget.cc" line="182"/>
+        <source>Save (%1)</source>
+        <translation>ذخیره (%1)</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/android/credential_export_widget.cc" line="204"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>گذرواژه نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/android/credential_export_widget.cc" line="213"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>گذرواژه باید شامل حروف کوچک و بزرگ و اعداد باشد و نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_export_widget.cc" line="216"/>
+        <source>Weak Password</source>
+        <translation>گذرواژه ضعیف</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_export_widget.cc" line="216"/>
+        <source>Continue</source>
+        <translation>ادامه</translation>
+    </message>
+</context>
+<context>
+    <name>CredentialImportDialog</name>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="14"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="88"/>
+        <source>Import Credentials</source>
+        <translation>وارد کردن اطلاعات ورود</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="23"/>
+        <source>Select a file, enter the password it was exported with and open it. The checked credentials will be imported, and the ones that already exist will be replaced.</source>
+        <translation>یک فایل انتخاب کنید، گذرواژه‌ای را که با آن صادر شده است وارد کنید و آن را باز کنید. اطلاعات ورود علامت‌زده‌شده وارد می‌شود و مواردی که از قبل وجود دارند جایگزین می‌شوند.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="35"/>
+        <source>File:</source>
+        <translation>فایل:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="45"/>
+        <source>Browse...</source>
+        <translation>مرور...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="52"/>
+        <source>Password:</source>
+        <translation>گذرواژه:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="62"/>
+        <source>Open</source>
+        <translation>باز کردن</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="81"/>
+        <source>Check all</source>
+        <translation>انتخاب همه</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="107"/>
+        <source>Uncheck all</source>
+        <translation>لغو انتخاب همه</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="152"/>
+        <source>Name</source>
+        <translation>نام</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="157"/>
+        <source>User Name</source>
+        <translation>نام کاربری</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="162"/>
+        <source>Status</source>
+        <translation>وضعیت</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="54"/>
+        <source>Import</source>
+        <translation>وارد کردن</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="89"/>
+        <source>Aspia Credentials (*.aspia-credentials);;All files (*)</source>
+        <translation>اطلاعات ورود Aspia (*.aspia-credentials);;همه فایل‌ها (*)</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="113"/>
+        <source>Unable to decrypt the file with the specified password.</source>
+        <translation>رمزگشایی فایل با گذرواژه مشخص‌شده ممکن نیست.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="119"/>
+        <source>Unable to read the file.</source>
+        <translation>خواندن فایل ممکن نیست.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="123"/>
+        <source>Unsupported file format version.</source>
+        <translation>نسخه قالب فایل پشتیبانی نمی‌شود.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="127"/>
+        <source>The file is not a valid credentials file.</source>
+        <translation>این فایل یک فایل اطلاعات ورود معتبر نیست.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="131"/>
+        <source>Failed to import the credentials.</source>
+        <translation>وارد کردن اطلاعات ورود ناموفق بود.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
+        <source>Exists</source>
+        <translation>موجود</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
+        <source>New</source>
+        <translation>جدید</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="220"/>
+        <source>Unable to write credentials &quot;%1&quot;. The import was interrupted.
+Credentials added: %2
+Credentials replaced: %3</source>
+        <translation>نوشتن اطلاعات ورود &quot;%1&quot; ممکن نیست. وارد کردن متوقف شد.
+اطلاعات ورود افزوده‌شده: %2
+اطلاعات ورود جایگزین‌شده: %3</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="230"/>
+        <source>Import completed successfully.
+Credentials added: %1
+Credentials replaced: %2</source>
+        <translation>وارد کردن با موفقیت انجام شد.
+اطلاعات ورود افزوده‌شده: %1
+اطلاعات ورود جایگزین‌شده: %2</translation>
+    </message>
+</context>
+<context>
+    <name>CredentialImportWidget</name>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="51"/>
+        <source>Open</source>
+        <translation>باز کردن</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="61"/>
+        <source>Password</source>
+        <translation>گذرواژه</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="130"/>
+        <source>Password cannot be empty.</source>
+        <translation>گذرواژه نمی‌تواند خالی باشد.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="143"/>
+        <source>Unable to decrypt the file with the specified password.</source>
+        <translation>رمزگشایی فایل با گذرواژه مشخص‌شده ممکن نیست.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="149"/>
+        <source>Unable to read the file.</source>
+        <translation>خواندن فایل ممکن نیست.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="153"/>
+        <source>Unsupported file format version.</source>
+        <translation>نسخه قالب فایل پشتیبانی نمی‌شود.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="157"/>
+        <source>The file is not a valid credentials file.</source>
+        <translation>این فایل یک فایل اطلاعات ورود معتبر نیست.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="161"/>
+        <source>Failed to import the credentials.</source>
+        <translation>وارد کردن اطلاعات ورود ناموفق بود.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="183"/>
+        <source>Exists</source>
+        <translation>موجود</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="183"/>
+        <source>New</source>
+        <translation>جدید</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="231"/>
+        <location filename="../client/android/credential_import_widget.cc" line="241"/>
+        <source>Import Credentials</source>
+        <translation>وارد کردن اطلاعات ورود</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="232"/>
+        <source>Unable to write credentials &quot;%1&quot;. The import was interrupted.
+Credentials added: %2
+Credentials replaced: %3</source>
+        <translation>نوشتن اطلاعات ورود &quot;%1&quot; ممکن نیست. وارد کردن متوقف شد.
+اطلاعات ورود افزوده‌شده: %2
+اطلاعات ورود جایگزین‌شده: %3</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="242"/>
+        <source>Import completed successfully.
+Credentials added: %1
+Credentials replaced: %2</source>
+        <translation>وارد کردن با موفقیت انجام شد.
+اطلاعات ورود افزوده‌شده: %1
+اطلاعات ورود جایگزین‌شده: %2</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="252"/>
+        <source>The checked credentials will be imported, and the ones that already exist will be replaced.</source>
+        <translation>اطلاعات ورود علامت‌زده‌شده وارد می‌شود و مواردی که از قبل وجود دارند جایگزین می‌شوند.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="254"/>
+        <source>Enter the password the file was exported with.</source>
+        <translation>گذرواژه‌ای را که فایل با آن صادر شده است وارد کنید.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_import_widget.cc" line="267"/>
+        <source>Import (%1)</source>
+        <translation>وارد کردن (%1)</translation>
+    </message>
+</context>
+<context>
+    <name>CredentialListModel</name>
+    <message>
+        <location filename="../client/desktop/credentials/credential_list_model.cc" line="123"/>
+        <source>Name</source>
+        <translation>نام</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_list_model.cc" line="126"/>
         <source>User Name</source>
         <translation>نام کاربری</translation>
     </message>
@@ -1859,31 +2243,41 @@ Password: %2</source>
     <name>CredentialsTab</name>
     <message>
         <location filename="../client/desktop/credentials_tab.ui" line="58"/>
+        <source>Export Credentials...</source>
+        <translation>صادر کردن اطلاعات ورود...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials_tab.ui" line="67"/>
+        <source>Import Credentials...</source>
+        <translation>وارد کردن اطلاعات ورود...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials_tab.ui" line="76"/>
         <source>Add Credentials</source>
         <translation>افزودن اطلاعات ورود</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.ui" line="67"/>
+        <location filename="../client/desktop/credentials_tab.ui" line="85"/>
         <source>Edit Credentials</source>
         <translation>ویرایش اطلاعات ورود</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.ui" line="76"/>
+        <location filename="../client/desktop/credentials_tab.ui" line="94"/>
         <source>Delete Credentials</source>
         <translation>حذف اطلاعات ورود</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="151"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="175"/>
         <source>Are you sure you want to delete credentials &quot;%1&quot;?</source>
         <translation>آیا مطمئن هستید که می‌خواهید اطلاعات ورود &quot;%1&quot; را حذف کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="159"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="183"/>
         <source>Unable to delete credentials.</source>
         <translation>حذف اطلاعات ورود ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="204"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="228"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>خواندن داده‌ها ناموفق بود. ممکن است فهرست قدیمی باشد.</translation>
     </message>
@@ -1891,17 +2285,35 @@ Password: %2</source>
 <context>
     <name>CredentialsWidget</name>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="140"/>
+        <location filename="../client/android/credentials_widget.cc" line="160"/>
         <source>Add Credentials</source>
         <translation>افزودن اطلاعات ورود</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="151"/>
+        <location filename="../client/android/credentials_widget.cc" line="170"/>
+        <location filename="../client/android/credentials_widget.cc" line="200"/>
+        <location filename="../client/android/credentials_widget.cc" line="206"/>
+        <source>Import Credentials</source>
+        <translation>وارد کردن اطلاعات ورود</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credentials_widget.cc" line="171"/>
+        <location filename="../client/android/credentials_widget.cc" line="192"/>
+        <source>Export Credentials</source>
+        <translation>صادر کردن اطلاعات ورود</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credentials_widget.cc" line="200"/>
+        <source>Aspia Credentials (*.aspia-credentials)</source>
+        <translation>اطلاعات ورود Aspia (*.aspia-credentials)</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credentials_widget.cc" line="217"/>
         <source>Edit Credentials</source>
         <translation>ویرایش اطلاعات ورود</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="167"/>
+        <location filename="../client/android/credentials_widget.cc" line="236"/>
         <source>Credentials</source>
         <translation>اطلاعات ورود</translation>
     </message>
@@ -7179,188 +7591,188 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="138"/>
+        <location filename="../client/android/settings_widget.cc" line="139"/>
         <location filename="../host/android/settings_widget.cc" line="179"/>
         <source>Update</source>
         <translation>به‌روزرسانی</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="161"/>
+        <location filename="../client/android/settings_widget.cc" line="162"/>
         <source>Credentials</source>
         <translation>اطلاعات ورود</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="169"/>
+        <location filename="../client/android/settings_widget.cc" line="170"/>
         <location filename="../host/android/settings_widget.cc" line="151"/>
         <source>About</source>
         <translation>درباره</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="233"/>
+        <location filename="../client/android/settings_widget.cc" line="234"/>
         <location filename="../host/android/settings_widget.cc" line="238"/>
         <source>Interface</source>
         <translation>رابط کاربری</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="236"/>
+        <location filename="../client/android/settings_widget.cc" line="237"/>
         <location filename="../host/android/settings_widget.cc" line="243"/>
         <source>Theme</source>
         <translation>تم</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="249"/>
+        <location filename="../client/android/settings_widget.cc" line="250"/>
         <source>Display name when connected</source>
         <translation>نام نمایشی هنگام اتصال</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../client/android/settings_widget.cc" line="262"/>
         <location filename="../host/android/settings_widget.cc" line="259"/>
         <source>Security</source>
         <translation>امنیت</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="263"/>
+        <location filename="../client/android/settings_widget.cc" line="264"/>
         <source>Change Master Password</source>
         <translation>تغییر گذرواژه اصلی</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="275"/>
+        <location filename="../client/android/settings_widget.cc" line="276"/>
         <source>Unlock with biometrics</source>
         <translation>باز کردن قفل با بیومتریک</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="300"/>
+        <location filename="../client/android/settings_widget.cc" line="301"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>برای استفاده از این قابلیت، در تنظیمات سیستم اثر انگشت ثبت کنید.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="302"/>
+        <location filename="../client/android/settings_widget.cc" line="303"/>
         <source>Biometrics are not available on this device.</source>
         <translation>بیومتریک در این دستگاه در دسترس نیست.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="313"/>
+        <location filename="../client/android/settings_widget.cc" line="314"/>
         <source>UDP Connections</source>
         <translation>اتصال‌های UDP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="327"/>
+        <location filename="../client/android/settings_widget.cc" line="328"/>
         <source>Allow direct connections</source>
         <translation>اجازه به اتصال‌های مستقیم</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="328"/>
+        <location filename="../client/android/settings_widget.cc" line="329"/>
         <source>Allow UDP Hole Punching</source>
         <translation>اجازه به UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="329"/>
+        <location filename="../client/android/settings_widget.cc" line="330"/>
         <source>Allow PCP protocol</source>
         <translation>اجازه به پروتکل PCP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="330"/>
+        <location filename="../client/android/settings_widget.cc" line="331"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>اجازه به پروتکل NAT-PMP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="331"/>
+        <location filename="../client/android/settings_widget.cc" line="332"/>
         <source>Allow UPnP protocol</source>
         <translation>اجازه به پروتکل UPnP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="337"/>
+        <location filename="../client/android/settings_widget.cc" line="338"/>
         <source>Remote Desktop</source>
         <translation>دسکتاپ راه دور</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="339"/>
+        <location filename="../client/android/settings_widget.cc" line="340"/>
         <source>Enable audio</source>
         <translation>فعال‌سازی صدا</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="344"/>
+        <location filename="../client/android/settings_widget.cc" line="345"/>
         <source>Enable clipboard</source>
         <translation>فعال‌سازی کلیپ‌بورد</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="349"/>
+        <location filename="../client/android/settings_widget.cc" line="350"/>
         <source>Show shape of remote cursor</source>
         <translation>نمایش شکل نشانگر راه دور</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="355"/>
+        <location filename="../client/android/settings_widget.cc" line="356"/>
         <source>Show position of remote cursor</source>
         <translation>نمایش موقعیت نشانگر راه دور</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="361"/>
+        <location filename="../client/android/settings_widget.cc" line="362"/>
         <source>Disable desktop effects</source>
         <translation>غیرفعال کردن جلوه‌های دسکتاپ</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="367"/>
+        <location filename="../client/android/settings_widget.cc" line="368"/>
         <source>Disable desktop wallpaper</source>
         <translation>غیرفعال کردن تصویر زمینه دسکتاپ</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="373"/>
+        <location filename="../client/android/settings_widget.cc" line="374"/>
         <source>Lock computer at disconnect</source>
         <translation>قفل کردن رایانه هنگام قطع اتصال</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="379"/>
+        <location filename="../client/android/settings_widget.cc" line="380"/>
         <source>Block remote input</source>
         <translation>مسدود کردن ورودی راه دور</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="390"/>
+        <location filename="../client/android/settings_widget.cc" line="391"/>
         <location filename="../host/android/settings_widget.cc" line="381"/>
         <source>Updates</source>
         <translation>به‌روزرسانی‌ها</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="394"/>
+        <location filename="../client/android/settings_widget.cc" line="395"/>
         <source>Check for updates on startup</source>
         <translation>بررسی به‌روزرسانی‌ها هنگام راه‌اندازی</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../client/android/settings_widget.cc" line="402"/>
         <location filename="../host/android/settings_widget.cc" line="384"/>
         <source>Update channel</source>
         <translation>کانال به‌روزرسانی</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="402"/>
+        <location filename="../client/android/settings_widget.cc" line="403"/>
         <location filename="../host/android/settings_widget.cc" line="385"/>
         <source>Stable</source>
         <translation>پایدار</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="403"/>
+        <location filename="../client/android/settings_widget.cc" line="404"/>
         <location filename="../host/android/settings_widget.cc" line="386"/>
         <source>Beta</source>
         <translation>بتا</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="404"/>
+        <location filename="../client/android/settings_widget.cc" line="405"/>
         <location filename="../host/android/settings_widget.cc" line="387"/>
         <source>Alpha</source>
         <translation>آلفا</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="412"/>
+        <location filename="../client/android/settings_widget.cc" line="413"/>
         <location filename="../host/android/settings_widget.cc" line="398"/>
         <source>Check for updates</source>
         <translation>بررسی به‌روزرسانی‌ها</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="436"/>
+        <location filename="../client/android/settings_widget.cc" line="437"/>
         <source>Enable biometric unlock</source>
         <translation>فعال‌سازی باز کردن قفل با بیومتریک</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="437"/>
+        <location filename="../client/android/settings_widget.cc" line="438"/>
         <source>Cancel</source>
         <translation>لغو</translation>
     </message>
