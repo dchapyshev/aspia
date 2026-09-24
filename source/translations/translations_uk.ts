@@ -417,7 +417,7 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="469"/>
+        <location filename="../host/android/main_window.cc" line="471"/>
         <source>Settings</source>
         <translation>Налаштування</translation>
     </message>
@@ -489,37 +489,37 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="467"/>
+        <location filename="../host/android/main_window.cc" line="469"/>
         <source>Connection</source>
         <translation>Підключення</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="341"/>
-        <location filename="../host/android/main_window.cc" line="376"/>
-        <location filename="../host/android/main_window.cc" line="408"/>
+        <location filename="../host/android/main_window.cc" line="343"/>
+        <location filename="../host/android/main_window.cc" line="378"/>
+        <location filename="../host/android/main_window.cc" line="410"/>
         <source>Permissions</source>
         <translation>Дозволи</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="342"/>
+        <location filename="../host/android/main_window.cc" line="344"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
         <translation>Увімкніть службу спеціальних можливостей, щоб дозволити віддалене керування клавіатурою і мишею.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="696"/>
-        <location filename="../host/android/main_window.cc" line="343"/>
-        <location filename="../host/android/main_window.cc" line="378"/>
-        <location filename="../host/android/main_window.cc" line="411"/>
+        <location filename="../host/android/main_window.cc" line="345"/>
+        <location filename="../host/android/main_window.cc" line="380"/>
+        <location filename="../host/android/main_window.cc" line="413"/>
         <source>Open</source>
         <translation>Відкрити</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="377"/>
+        <location filename="../host/android/main_window.cc" line="379"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
         <translation>Дозвольте відображення поверх інших застосунків, щоб показувати екранну кнопку дій під час сеансу.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="409"/>
+        <location filename="../host/android/main_window.cc" line="411"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
         <translation>Дозвольте доступ до всіх файлів, щоб підключений користувач міг переглядати і передавати файли на цьому пристрої.</translation>
     </message>
@@ -1990,7 +1990,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="967"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="971"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
@@ -2080,7 +2080,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="569"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
         <source>Start recording</source>
         <translation>Почати запис</translation>
     </message>
@@ -2102,69 +2102,69 @@ Password: %2</source>
         <translation>Перемикання сесії</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="364"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="368"/>
         <source>Resolution selection</source>
         <translation>Вибір роздільної здатності</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1146"/>
         <source>Session %1</source>
         <translation>Сесія %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1146"/>
         <source>Session %1 (%2)</source>
         <translation>Сесія %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="564"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="568"/>
         <source>Stop recording</source>
         <translation>Зупинити запис</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="477"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="481"/>
         <source>Scripts</source>
         <translation>Скрипти</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="536"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="540"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Ви дійсно хочете запустити скрипт &quot;%1&quot; на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="796"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="800"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Ви дійсно хочете вимкнути віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="811"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="815"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="841"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="812"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="816"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Ви дійсно хочете перезавантажити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="817"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="821"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="847"/>
         <source>Wait for host</source>
         <translation>Очікування хоста</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="838"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="842"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Ви дійсно хочете перезавантажити віддалений комп&apos;ютер у безпечному режимі?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="863"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="867"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Ви дійсно хочете завершити сеанс користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="878"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="882"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Ви дійсно хочете заблокувати сеанс користувача на віддаленому комп&apos;ютері?</translation>
     </message>
@@ -7499,23 +7499,23 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="432"/>
+        <location filename="../host/android/settings_widget.cc" line="433"/>
         <source>Error</source>
         <translation>Помилка</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="432"/>
+        <location filename="../host/android/settings_widget.cc" line="433"/>
         <source>An error occurred while processing the password.</source>
         <translation>Сталася помилка при обробці пароля.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="453"/>
+        <location filename="../host/android/settings_widget.cc" line="455"/>
         <source>Import</source>
         <translation>Імпорт</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="453"/>
+        <location filename="../host/android/settings_widget.cc" line="455"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-файли (*.json)</translation>
     </message>
@@ -11630,72 +11630,72 @@ Credentials imported: %5</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="221"/>
+        <location filename="../client/telemetry_model.cc" line="225"/>
         <source>General</source>
         <translation>Основні</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="225"/>
+        <location filename="../client/telemetry_model.cc" line="229"/>
         <source>Service start time</source>
         <translation>Час запуску служби</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="229"/>
+        <location filename="../client/telemetry_model.cc" line="233"/>
         <source>Service starts in 7 days</source>
         <translation>Запусків служби за 7 днів</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="240"/>
+        <location filename="../client/telemetry_model.cc" line="244"/>
         <source>Connections</source>
         <translation>Підключення</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="246"/>
+        <location filename="../client/telemetry_model.cc" line="250"/>
         <source>Last incoming connection</source>
         <translation>Останнє вхідне підключення</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="251"/>
+        <location filename="../client/telemetry_model.cc" line="255"/>
         <source>Failed logins in 7 days</source>
         <translation>Невдалих входів за 7 днів</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="256"/>
+        <location filename="../client/telemetry_model.cc" line="260"/>
         <source>Failed logins since service start</source>
         <translation>Невдалих входів з моменту запуску служби</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="269"/>
+        <location filename="../client/telemetry_model.cc" line="273"/>
         <source>Updates</source>
         <translation>Оновлення</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="273"/>
+        <location filename="../client/telemetry_model.cc" line="277"/>
         <source>Update channel</source>
         <translation>Канал оновлень</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Automatic updates</source>
         <translation>Автоматичні оновлення</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Enabled</source>
         <translation>Увімкнені</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Disabled</source>
         <translation>Вимкнені</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="286"/>
+        <location filename="../client/telemetry_model.cc" line="290"/>
         <source>Update check frequency</source>
         <translation>Частота перевірки оновлень</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/telemetry_model.cc" line="350"/>
+        <location filename="../client/telemetry_model.cc" line="375"/>
         <source>Every %n days</source>
         <translation>
             <numerusform>Кожен %n день</numerusform>
@@ -11704,107 +11704,129 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="291"/>
+        <location filename="../client/telemetry_model.cc" line="295"/>
         <source>Last update check</source>
         <translation>Остання перевірка оновлень</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="297"/>
+        <location filename="../client/telemetry_model.cc" line="301"/>
         <source>Last update check result</source>
         <translation>Результат останньої перевірки оновлень</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="309"/>
+        <location filename="../client/telemetry_model.cc" line="313"/>
         <source>Users</source>
         <translation>Користувачі</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="313"/>
+        <location filename="../client/telemetry_model.cc" line="317"/>
         <source>Total users</source>
         <translation>Всього користувачів</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="317"/>
+        <location filename="../client/telemetry_model.cc" line="321"/>
         <source>Enabled users</source>
         <translation>Увімкнених користувачів</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="328"/>
+        <location filename="../client/telemetry_model.cc" line="332"/>
+        <source>Security</source>
+        <translation>Безпека</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="339"/>
+        <source>Settings password protection</source>
+        <translation>Захист налаштувань паролем</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="340"/>
+        <source>Enabled</source>
+        <comment>password protection</comment>
+        <translation>Увімкнений</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="341"/>
+        <source>Disabled</source>
+        <comment>password protection</comment>
+        <translation>Вимкнений</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="353"/>
         <source>Stable</source>
         <translation>Стабільний</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="330"/>
+        <location filename="../client/telemetry_model.cc" line="355"/>
         <source>Beta</source>
         <translation>Бета</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="332"/>
+        <location filename="../client/telemetry_model.cc" line="357"/>
         <source>Alpha</source>
         <translation>Альфа</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="344"/>
+        <location filename="../client/telemetry_model.cc" line="369"/>
         <source>Once a day</source>
         <translation>Раз на день</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="346"/>
+        <location filename="../client/telemetry_model.cc" line="371"/>
         <source>Once a week</source>
         <translation>Раз на тиждень</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="348"/>
+        <location filename="../client/telemetry_model.cc" line="373"/>
         <source>Once a month</source>
         <translation>Раз на місяць</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="358"/>
+        <location filename="../client/telemetry_model.cc" line="383"/>
         <source>No updates</source>
         <translation>Немає оновлень</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="360"/>
+        <location filename="../client/telemetry_model.cc" line="385"/>
         <source>Check failed</source>
         <translation>Помилка перевірки</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="362"/>
+        <location filename="../client/telemetry_model.cc" line="387"/>
         <source>Unsupported package</source>
         <translation>Непідтримуваний пакет</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="364"/>
+        <location filename="../client/telemetry_model.cc" line="389"/>
         <source>Download failed</source>
         <translation>Помилка завантаження</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="366"/>
+        <location filename="../client/telemetry_model.cc" line="391"/>
         <source>Damaged package</source>
         <translation>Пошкоджений пакет</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="368"/>
+        <location filename="../client/telemetry_model.cc" line="393"/>
         <source>Installation failed</source>
         <translation>Помилка встановлення</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="370"/>
+        <location filename="../client/telemetry_model.cc" line="395"/>
         <source>Installation started</source>
         <translation>Встановлення розпочато</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="372"/>
+        <location filename="../client/telemetry_model.cc" line="397"/>
         <source>Installation succeeded</source>
         <translation>Встановлення завершено успішно</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="382"/>
+        <location filename="../client/telemetry_model.cc" line="407"/>
         <source>%1 or more</source>
         <translation>%1 або більше</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="392"/>
+        <location filename="../client/telemetry_model.cc" line="417"/>
         <source>Never</source>
         <translation>Ніколи</translation>
     </message>

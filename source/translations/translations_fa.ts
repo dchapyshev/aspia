@@ -417,7 +417,7 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="469"/>
+        <location filename="../host/android/main_window.cc" line="471"/>
         <source>Settings</source>
         <translation>تنظیمات</translation>
     </message>
@@ -489,37 +489,37 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="467"/>
+        <location filename="../host/android/main_window.cc" line="469"/>
         <source>Connection</source>
         <translation>اتصال</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="341"/>
-        <location filename="../host/android/main_window.cc" line="376"/>
-        <location filename="../host/android/main_window.cc" line="408"/>
+        <location filename="../host/android/main_window.cc" line="343"/>
+        <location filename="../host/android/main_window.cc" line="378"/>
+        <location filename="../host/android/main_window.cc" line="410"/>
         <source>Permissions</source>
         <translation>مجوزهای دسترسی</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="342"/>
+        <location filename="../host/android/main_window.cc" line="344"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
         <translation>برای امکان کنترل صفحه‌کلید و ماوس از راه دور، سرویس دسترس‌پذیری را فعال کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="696"/>
-        <location filename="../host/android/main_window.cc" line="343"/>
-        <location filename="../host/android/main_window.cc" line="378"/>
-        <location filename="../host/android/main_window.cc" line="411"/>
+        <location filename="../host/android/main_window.cc" line="345"/>
+        <location filename="../host/android/main_window.cc" line="380"/>
+        <location filename="../host/android/main_window.cc" line="413"/>
         <source>Open</source>
         <translation>باز کردن</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="377"/>
+        <location filename="../host/android/main_window.cc" line="379"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
         <translation>برای نمایش دکمه عملیات روی صفحه در طول نشست، نمایش روی برنامه‌های دیگر را مجاز کنید.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="409"/>
+        <location filename="../host/android/main_window.cc" line="411"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
         <translation>برای اینکه کاربر متصل بتواند فایل‌های این دستگاه را مرور و منتقل کند، دسترسی به همه فایل‌ها را مجاز کنید.</translation>
     </message>
@@ -1976,7 +1976,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="967"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="971"/>
         <source>Scale</source>
         <translation>مقیاس</translation>
     </message>
@@ -2066,7 +2066,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="569"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
         <source>Start recording</source>
         <translation>شروع ضبط</translation>
     </message>
@@ -2088,69 +2088,69 @@ Password: %2</source>
         <translation>تعویض نشست</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="364"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="368"/>
         <source>Resolution selection</source>
         <translation>انتخاب وضوح</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1146"/>
         <source>Session %1</source>
         <translation>نشست %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1146"/>
         <source>Session %1 (%2)</source>
         <translation>نشست %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="564"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="568"/>
         <source>Stop recording</source>
         <translation>توقف ضبط</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="477"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="481"/>
         <source>Scripts</source>
         <translation>اسکریپت‌ها</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="536"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="540"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>آیا مطمئن هستید که می‌خواهید اسکریپت &quot;%1&quot; را در رایانه راه دور اجرا کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="796"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="800"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>آیا مطمئن هستید که می‌خواهید رایانه راه دور را خاموش کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="811"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="815"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="841"/>
         <source>Confirmation</source>
         <translation>تأیید</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="812"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="816"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>آیا مطمئن هستید که می‌خواهید رایانه راه دور را راه‌اندازی مجدد کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="817"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="821"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="847"/>
         <source>Wait for host</source>
         <translation>انتظار برای میزبان</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="838"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="842"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>آیا مطمئن هستید که می‌خواهید رایانه راه دور را در حالت امن راه‌اندازی مجدد کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="863"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="867"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>آیا مطمئن هستید که می‌خواهید نشست کاربر را در رایانه راه دور پایان دهید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="878"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="882"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>آیا مطمئن هستید که می‌خواهید نشست کاربر را در رایانه راه دور قفل کنید؟</translation>
     </message>
@@ -7426,23 +7426,23 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="432"/>
+        <location filename="../host/android/settings_widget.cc" line="433"/>
         <source>Error</source>
         <translation>خطا</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="432"/>
+        <location filename="../host/android/settings_widget.cc" line="433"/>
         <source>An error occurred while processing the password.</source>
         <translation>هنگام پردازش گذرواژه خطایی رخ داد.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="453"/>
+        <location filename="../host/android/settings_widget.cc" line="455"/>
         <source>Import</source>
         <translation>وارد کردن</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="453"/>
+        <location filename="../host/android/settings_widget.cc" line="455"/>
         <source>JSON files (*.json)</source>
         <translation>فایل‌های JSON (*.json)</translation>
     </message>
@@ -11550,179 +11550,201 @@ Credentials imported: %5</source>
         <translation>مقدار</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="221"/>
+        <location filename="../client/telemetry_model.cc" line="225"/>
         <source>General</source>
         <translation>کلی</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="225"/>
+        <location filename="../client/telemetry_model.cc" line="229"/>
         <source>Service start time</source>
         <translation>زمان شروع سرویس</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="229"/>
+        <location filename="../client/telemetry_model.cc" line="233"/>
         <source>Service starts in 7 days</source>
         <translation>تعداد شروع سرویس در 7 روز گذشته</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="240"/>
+        <location filename="../client/telemetry_model.cc" line="244"/>
         <source>Connections</source>
         <translation>اتصال‌ها</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="246"/>
+        <location filename="../client/telemetry_model.cc" line="250"/>
         <source>Last incoming connection</source>
         <translation>آخرین اتصال ورودی</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="251"/>
+        <location filename="../client/telemetry_model.cc" line="255"/>
         <source>Failed logins in 7 days</source>
         <translation>ورودهای ناموفق در 7 روز گذشته</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="256"/>
+        <location filename="../client/telemetry_model.cc" line="260"/>
         <source>Failed logins since service start</source>
         <translation>ورودهای ناموفق از زمان شروع سرویس</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="269"/>
+        <location filename="../client/telemetry_model.cc" line="273"/>
         <source>Updates</source>
         <translation>به‌روزرسانی‌ها</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="273"/>
+        <location filename="../client/telemetry_model.cc" line="277"/>
         <source>Update channel</source>
         <translation>کانال به‌روزرسانی</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Automatic updates</source>
         <translation>به‌روزرسانی خودکار</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Enabled</source>
         <translation>فعال</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Disabled</source>
         <translation>غیرفعال</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="286"/>
+        <location filename="../client/telemetry_model.cc" line="290"/>
         <source>Update check frequency</source>
         <translation>تناوب بررسی به‌روزرسانی</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/telemetry_model.cc" line="350"/>
+        <location filename="../client/telemetry_model.cc" line="375"/>
         <source>Every %n days</source>
         <translation>
             <numerusform>هر %n روز</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="291"/>
+        <location filename="../client/telemetry_model.cc" line="295"/>
         <source>Last update check</source>
         <translation>آخرین بررسی به‌روزرسانی</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="297"/>
+        <location filename="../client/telemetry_model.cc" line="301"/>
         <source>Last update check result</source>
         <translation>نتیجه آخرین بررسی به‌روزرسانی</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="309"/>
+        <location filename="../client/telemetry_model.cc" line="313"/>
         <source>Users</source>
         <translation>کاربران</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="313"/>
+        <location filename="../client/telemetry_model.cc" line="317"/>
         <source>Total users</source>
         <translation>تعداد کل کاربران</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="317"/>
+        <location filename="../client/telemetry_model.cc" line="321"/>
         <source>Enabled users</source>
         <translation>کاربران فعال</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="328"/>
+        <location filename="../client/telemetry_model.cc" line="332"/>
+        <source>Security</source>
+        <translation>امنیت</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="339"/>
+        <source>Settings password protection</source>
+        <translation>محافظت از تنظیمات با گذرواژه</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="340"/>
+        <source>Enabled</source>
+        <comment>password protection</comment>
+        <translation>فعال</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="341"/>
+        <source>Disabled</source>
+        <comment>password protection</comment>
+        <translation>غیرفعال</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="353"/>
         <source>Stable</source>
         <translation>پایدار</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="330"/>
+        <location filename="../client/telemetry_model.cc" line="355"/>
         <source>Beta</source>
         <translation>بتا</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="332"/>
+        <location filename="../client/telemetry_model.cc" line="357"/>
         <source>Alpha</source>
         <translation>آلفا</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="344"/>
+        <location filename="../client/telemetry_model.cc" line="369"/>
         <source>Once a day</source>
         <translation>روزی یک بار</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="346"/>
+        <location filename="../client/telemetry_model.cc" line="371"/>
         <source>Once a week</source>
         <translation>هفته‌ای یک بار</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="348"/>
+        <location filename="../client/telemetry_model.cc" line="373"/>
         <source>Once a month</source>
         <translation>ماهی یک بار</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="358"/>
+        <location filename="../client/telemetry_model.cc" line="383"/>
         <source>No updates</source>
         <translation>به‌روزرسانی جدیدی موجود نیست</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="360"/>
+        <location filename="../client/telemetry_model.cc" line="385"/>
         <source>Check failed</source>
         <translation>بررسی ناموفق بود</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="362"/>
+        <location filename="../client/telemetry_model.cc" line="387"/>
         <source>Unsupported package</source>
         <translation>پکیج پشتیبانی‌نشده</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="364"/>
+        <location filename="../client/telemetry_model.cc" line="389"/>
         <source>Download failed</source>
         <translation>دانلود ناموفق بود</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="366"/>
+        <location filename="../client/telemetry_model.cc" line="391"/>
         <source>Damaged package</source>
         <translation>پکیج آسیب‌دیده</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="368"/>
+        <location filename="../client/telemetry_model.cc" line="393"/>
         <source>Installation failed</source>
         <translation>نصب ناموفق بود</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="370"/>
+        <location filename="../client/telemetry_model.cc" line="395"/>
         <source>Installation started</source>
         <translation>نصب شروع شد</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="372"/>
+        <location filename="../client/telemetry_model.cc" line="397"/>
         <source>Installation succeeded</source>
         <translation>نصب با موفقیت انجام شد</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="382"/>
+        <location filename="../client/telemetry_model.cc" line="407"/>
         <source>%1 or more</source>
         <translation>%1 یا بیشتر</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="392"/>
+        <location filename="../client/telemetry_model.cc" line="417"/>
         <source>Never</source>
         <translation>هرگز</translation>
     </message>

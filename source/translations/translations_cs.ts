@@ -417,7 +417,7 @@ Přidané routery: %4</translation>
         <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="469"/>
+        <location filename="../host/android/main_window.cc" line="471"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
     </message>
@@ -489,37 +489,37 @@ Přidané routery: %4</translation>
         <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="467"/>
+        <location filename="../host/android/main_window.cc" line="469"/>
         <source>Connection</source>
         <translation>Připojení</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="341"/>
-        <location filename="../host/android/main_window.cc" line="376"/>
-        <location filename="../host/android/main_window.cc" line="408"/>
+        <location filename="../host/android/main_window.cc" line="343"/>
+        <location filename="../host/android/main_window.cc" line="378"/>
+        <location filename="../host/android/main_window.cc" line="410"/>
         <source>Permissions</source>
         <translation>Oprávnění</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="342"/>
+        <location filename="../host/android/main_window.cc" line="344"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
         <translation>Povolte službu přístupnosti, aby bylo možné vzdálené ovládání klávesnice a myši.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="696"/>
-        <location filename="../host/android/main_window.cc" line="343"/>
-        <location filename="../host/android/main_window.cc" line="378"/>
-        <location filename="../host/android/main_window.cc" line="411"/>
+        <location filename="../host/android/main_window.cc" line="345"/>
+        <location filename="../host/android/main_window.cc" line="380"/>
+        <location filename="../host/android/main_window.cc" line="413"/>
         <source>Open</source>
         <translation>Otevřít</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="377"/>
+        <location filename="../host/android/main_window.cc" line="379"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
         <translation>Povolte zobrazení přes ostatní aplikace, aby se během relace mohlo zobrazovat tlačítko akcí na obrazovce.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="409"/>
+        <location filename="../host/android/main_window.cc" line="411"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
         <translation>Povolte přístup ke všem souborům, aby připojený uživatel mohl procházet a přenášet soubory v tomto zařízení.</translation>
     </message>
@@ -1990,7 +1990,7 @@ Heslo: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="967"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="971"/>
         <source>Scale</source>
         <translation>Měřítko</translation>
     </message>
@@ -2080,7 +2080,7 @@ Heslo: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="569"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
         <source>Start recording</source>
         <translation>Spustit nahrávání</translation>
     </message>
@@ -2102,69 +2102,69 @@ Heslo: %2</translation>
         <translation>Přepnout relaci</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="364"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="368"/>
         <source>Resolution selection</source>
         <translation>Výběr rozlišení</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1146"/>
         <source>Session %1</source>
         <translation>Relace %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1146"/>
         <source>Session %1 (%2)</source>
         <translation>Relace %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="564"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="568"/>
         <source>Stop recording</source>
         <translation>Zastavit nahrávání</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="477"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="481"/>
         <source>Scripts</source>
         <translation>Skripty</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="536"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="540"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Opravdu chcete spustit skript &quot;%1&quot; na vzdáleném počítači?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="796"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="800"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Opravdu chcete vypnout vzdálený počítač?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="811"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="815"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="841"/>
         <source>Confirmation</source>
         <translation>Potvrzení</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="812"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="816"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Opravdu chcete restartovat vzdálený počítač?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="817"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="821"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="847"/>
         <source>Wait for host</source>
         <translation>Čekat na hostitele</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="838"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="842"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Opravdu chcete restartovat vzdálený počítač v nouzovém režimu?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="863"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="867"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Opravdu chcete ukončit relaci uživatele na vzdáleném počítači?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="878"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="882"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Opravdu chcete uzamknout relaci uživatele na vzdáleném počítači?</translation>
     </message>
@@ -7498,23 +7498,23 @@ Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="432"/>
+        <location filename="../host/android/settings_widget.cc" line="433"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="432"/>
+        <location filename="../host/android/settings_widget.cc" line="433"/>
         <source>An error occurred while processing the password.</source>
         <translation>Při zpracování hesla došlo k chybě.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="453"/>
+        <location filename="../host/android/settings_widget.cc" line="455"/>
         <source>Import</source>
         <translation>Importovat</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="453"/>
+        <location filename="../host/android/settings_widget.cc" line="455"/>
         <source>JSON files (*.json)</source>
         <translation>Soubory JSON (*.json)</translation>
     </message>
@@ -11628,72 +11628,72 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Hodnota</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="221"/>
+        <location filename="../client/telemetry_model.cc" line="225"/>
         <source>General</source>
         <translation>Obecné</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="225"/>
+        <location filename="../client/telemetry_model.cc" line="229"/>
         <source>Service start time</source>
         <translation>Čas spuštění služby</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="229"/>
+        <location filename="../client/telemetry_model.cc" line="233"/>
         <source>Service starts in 7 days</source>
         <translation>Spuštění služby za posledních 7 dní</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="240"/>
+        <location filename="../client/telemetry_model.cc" line="244"/>
         <source>Connections</source>
         <translation>Připojení</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="246"/>
+        <location filename="../client/telemetry_model.cc" line="250"/>
         <source>Last incoming connection</source>
         <translation>Poslední příchozí připojení</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="251"/>
+        <location filename="../client/telemetry_model.cc" line="255"/>
         <source>Failed logins in 7 days</source>
         <translation>Neúspěšná přihlášení za posledních 7 dní</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="256"/>
+        <location filename="../client/telemetry_model.cc" line="260"/>
         <source>Failed logins since service start</source>
         <translation>Neúspěšná přihlášení od spuštění služby</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="269"/>
+        <location filename="../client/telemetry_model.cc" line="273"/>
         <source>Updates</source>
         <translation>Aktualizace</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="273"/>
+        <location filename="../client/telemetry_model.cc" line="277"/>
         <source>Update channel</source>
         <translation>Kanál aktualizací</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Automatic updates</source>
         <translation>Automatické aktualizace</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Enabled</source>
         <translation>Povoleny</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Disabled</source>
         <translation>Zakázány</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="286"/>
+        <location filename="../client/telemetry_model.cc" line="290"/>
         <source>Update check frequency</source>
         <translation>Frekvence kontroly aktualizací</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/telemetry_model.cc" line="350"/>
+        <location filename="../client/telemetry_model.cc" line="375"/>
         <source>Every %n days</source>
         <translation>
             <numerusform>Každý %n den</numerusform>
@@ -11702,107 +11702,129 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="291"/>
+        <location filename="../client/telemetry_model.cc" line="295"/>
         <source>Last update check</source>
         <translation>Poslední kontrola aktualizací</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="297"/>
+        <location filename="../client/telemetry_model.cc" line="301"/>
         <source>Last update check result</source>
         <translation>Výsledek poslední kontroly aktualizací</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="309"/>
+        <location filename="../client/telemetry_model.cc" line="313"/>
         <source>Users</source>
         <translation>Uživatelé</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="313"/>
+        <location filename="../client/telemetry_model.cc" line="317"/>
         <source>Total users</source>
         <translation>Celkem uživatelů</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="317"/>
+        <location filename="../client/telemetry_model.cc" line="321"/>
         <source>Enabled users</source>
         <translation>Povolených uživatelů</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="328"/>
+        <location filename="../client/telemetry_model.cc" line="332"/>
+        <source>Security</source>
+        <translation>Zabezpečení</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="339"/>
+        <source>Settings password protection</source>
+        <translation>Ochrana nastavení heslem</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="340"/>
+        <source>Enabled</source>
+        <comment>password protection</comment>
+        <translation>Povolena</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="341"/>
+        <source>Disabled</source>
+        <comment>password protection</comment>
+        <translation>Zakázána</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="353"/>
         <source>Stable</source>
         <translation>Stabilní</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="330"/>
+        <location filename="../client/telemetry_model.cc" line="355"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="332"/>
+        <location filename="../client/telemetry_model.cc" line="357"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="344"/>
+        <location filename="../client/telemetry_model.cc" line="369"/>
         <source>Once a day</source>
         <translation>Jednou denně</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="346"/>
+        <location filename="../client/telemetry_model.cc" line="371"/>
         <source>Once a week</source>
         <translation>Jednou týdně</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="348"/>
+        <location filename="../client/telemetry_model.cc" line="373"/>
         <source>Once a month</source>
         <translation>Jednou měsíčně</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="358"/>
+        <location filename="../client/telemetry_model.cc" line="383"/>
         <source>No updates</source>
         <translation>Žádné aktualizace</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="360"/>
+        <location filename="../client/telemetry_model.cc" line="385"/>
         <source>Check failed</source>
         <translation>Kontrola se nezdařila</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="362"/>
+        <location filename="../client/telemetry_model.cc" line="387"/>
         <source>Unsupported package</source>
         <translation>Nepodporovaný balíček</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="364"/>
+        <location filename="../client/telemetry_model.cc" line="389"/>
         <source>Download failed</source>
         <translation>Stahování se nezdařilo</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="366"/>
+        <location filename="../client/telemetry_model.cc" line="391"/>
         <source>Damaged package</source>
         <translation>Poškozený balíček</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="368"/>
+        <location filename="../client/telemetry_model.cc" line="393"/>
         <source>Installation failed</source>
         <translation>Instalace se nezdařila</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="370"/>
+        <location filename="../client/telemetry_model.cc" line="395"/>
         <source>Installation started</source>
         <translation>Instalace zahájena</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="372"/>
+        <location filename="../client/telemetry_model.cc" line="397"/>
         <source>Installation succeeded</source>
         <translation>Instalace proběhla úspěšně</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="382"/>
+        <location filename="../client/telemetry_model.cc" line="407"/>
         <source>%1 or more</source>
         <translation>%1 nebo více</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="392"/>
+        <location filename="../client/telemetry_model.cc" line="417"/>
         <source>Never</source>
         <translation>Nikdy</translation>
     </message>

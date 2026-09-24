@@ -417,7 +417,7 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="469"/>
+        <location filename="../host/android/main_window.cc" line="471"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
@@ -489,37 +489,37 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="467"/>
+        <location filename="../host/android/main_window.cc" line="469"/>
         <source>Connection</source>
         <translation>Подключение</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="341"/>
-        <location filename="../host/android/main_window.cc" line="376"/>
-        <location filename="../host/android/main_window.cc" line="408"/>
+        <location filename="../host/android/main_window.cc" line="343"/>
+        <location filename="../host/android/main_window.cc" line="378"/>
+        <location filename="../host/android/main_window.cc" line="410"/>
         <source>Permissions</source>
         <translation>Разрешения</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="342"/>
+        <location filename="../host/android/main_window.cc" line="344"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
         <translation>Включите службу специальных возможностей, чтобы разрешить удаленное управление клавиатурой и мышью.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="696"/>
-        <location filename="../host/android/main_window.cc" line="343"/>
-        <location filename="../host/android/main_window.cc" line="378"/>
-        <location filename="../host/android/main_window.cc" line="411"/>
+        <location filename="../host/android/main_window.cc" line="345"/>
+        <location filename="../host/android/main_window.cc" line="380"/>
+        <location filename="../host/android/main_window.cc" line="413"/>
         <source>Open</source>
         <translation>Открыть</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="377"/>
+        <location filename="../host/android/main_window.cc" line="379"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
         <translation>Разрешите отображение поверх других приложений, чтобы показывать экранную кнопку действий во время сеанса.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="409"/>
+        <location filename="../host/android/main_window.cc" line="411"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
         <translation>Разрешите доступ ко всем файлам, чтобы подключенный пользователь мог просматривать и передавать файлы на этом устройстве.</translation>
     </message>
@@ -1990,7 +1990,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="967"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="971"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
@@ -2080,7 +2080,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="569"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
         <source>Start recording</source>
         <translation>Начать запись</translation>
     </message>
@@ -2102,69 +2102,69 @@ Password: %2</source>
         <translation>Переключение сессии</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="364"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="368"/>
         <source>Resolution selection</source>
         <translation>Выбор разрешения</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1146"/>
         <source>Session %1</source>
         <translation>Сессия %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1146"/>
         <source>Session %1 (%2)</source>
         <translation>Сессия %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="564"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="568"/>
         <source>Stop recording</source>
         <translation>Остановить запись</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="477"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="481"/>
         <source>Scripts</source>
         <translation>Скрипты</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="536"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="540"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Вы действительно хотите запустить скрипт &quot;%1&quot; на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="796"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="800"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="811"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="815"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="841"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="812"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="816"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="817"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="821"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="847"/>
         <source>Wait for host</source>
         <translation>Ожидание хоста</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="838"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="842"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="863"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="867"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="878"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="882"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
@@ -7498,23 +7498,23 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="432"/>
+        <location filename="../host/android/settings_widget.cc" line="433"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="432"/>
+        <location filename="../host/android/settings_widget.cc" line="433"/>
         <source>An error occurred while processing the password.</source>
         <translation>Возникла ошибка при обработке пароля.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="453"/>
+        <location filename="../host/android/settings_widget.cc" line="455"/>
         <source>Import</source>
         <translation>Импорт</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="453"/>
+        <location filename="../host/android/settings_widget.cc" line="455"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-файлы (*.json)</translation>
     </message>
@@ -11632,72 +11632,72 @@ Credentials imported: %5</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="221"/>
+        <location filename="../client/telemetry_model.cc" line="225"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="225"/>
+        <location filename="../client/telemetry_model.cc" line="229"/>
         <source>Service start time</source>
         <translation>Время запуска службы</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="229"/>
+        <location filename="../client/telemetry_model.cc" line="233"/>
         <source>Service starts in 7 days</source>
         <translation>Запусков службы за 7 дней</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="240"/>
+        <location filename="../client/telemetry_model.cc" line="244"/>
         <source>Connections</source>
         <translation>Подключения</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="246"/>
+        <location filename="../client/telemetry_model.cc" line="250"/>
         <source>Last incoming connection</source>
         <translation>Последнее входящее подключение</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="251"/>
+        <location filename="../client/telemetry_model.cc" line="255"/>
         <source>Failed logins in 7 days</source>
         <translation>Неудачных входов за 7 дней</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="256"/>
+        <location filename="../client/telemetry_model.cc" line="260"/>
         <source>Failed logins since service start</source>
         <translation>Неудачных входов с момента запуска службы</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="269"/>
+        <location filename="../client/telemetry_model.cc" line="273"/>
         <source>Updates</source>
         <translation>Обновления</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="273"/>
+        <location filename="../client/telemetry_model.cc" line="277"/>
         <source>Update channel</source>
         <translation>Канал обновлений</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Automatic updates</source>
         <translation>Автоматические обновления</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Enabled</source>
         <translation>Включены</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Disabled</source>
         <translation>Отключены</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="286"/>
+        <location filename="../client/telemetry_model.cc" line="290"/>
         <source>Update check frequency</source>
         <translation>Частота проверки обновлений</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/telemetry_model.cc" line="350"/>
+        <location filename="../client/telemetry_model.cc" line="375"/>
         <source>Every %n days</source>
         <translation>
             <numerusform>Каждый %n день</numerusform>
@@ -11706,107 +11706,129 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="291"/>
+        <location filename="../client/telemetry_model.cc" line="295"/>
         <source>Last update check</source>
         <translation>Последняя проверка обновлений</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="297"/>
+        <location filename="../client/telemetry_model.cc" line="301"/>
         <source>Last update check result</source>
         <translation>Результат последней проверки обновлений</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="309"/>
+        <location filename="../client/telemetry_model.cc" line="313"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="313"/>
+        <location filename="../client/telemetry_model.cc" line="317"/>
         <source>Total users</source>
         <translation>Всего пользователей</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="317"/>
+        <location filename="../client/telemetry_model.cc" line="321"/>
         <source>Enabled users</source>
         <translation>Включенных пользователей</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="328"/>
+        <location filename="../client/telemetry_model.cc" line="332"/>
+        <source>Security</source>
+        <translation>Безопасность</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="339"/>
+        <source>Settings password protection</source>
+        <translation>Защита настроек паролем</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="340"/>
+        <source>Enabled</source>
+        <comment>password protection</comment>
+        <translation>Включена</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="341"/>
+        <source>Disabled</source>
+        <comment>password protection</comment>
+        <translation>Отключена</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="353"/>
         <source>Stable</source>
         <translation>Стабильный</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="330"/>
+        <location filename="../client/telemetry_model.cc" line="355"/>
         <source>Beta</source>
         <translation>Бета</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="332"/>
+        <location filename="../client/telemetry_model.cc" line="357"/>
         <source>Alpha</source>
         <translation>Альфа</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="344"/>
+        <location filename="../client/telemetry_model.cc" line="369"/>
         <source>Once a day</source>
         <translation>Раз в день</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="346"/>
+        <location filename="../client/telemetry_model.cc" line="371"/>
         <source>Once a week</source>
         <translation>Раз в неделю</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="348"/>
+        <location filename="../client/telemetry_model.cc" line="373"/>
         <source>Once a month</source>
         <translation>Раз в месяц</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="358"/>
+        <location filename="../client/telemetry_model.cc" line="383"/>
         <source>No updates</source>
         <translation>Нет обновлений</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="360"/>
+        <location filename="../client/telemetry_model.cc" line="385"/>
         <source>Check failed</source>
         <translation>Ошибка проверки</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="362"/>
+        <location filename="../client/telemetry_model.cc" line="387"/>
         <source>Unsupported package</source>
         <translation>Неподдерживаемый пакет</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="364"/>
+        <location filename="../client/telemetry_model.cc" line="389"/>
         <source>Download failed</source>
         <translation>Ошибка загрузки</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="366"/>
+        <location filename="../client/telemetry_model.cc" line="391"/>
         <source>Damaged package</source>
         <translation>Поврежденный пакет</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="368"/>
+        <location filename="../client/telemetry_model.cc" line="393"/>
         <source>Installation failed</source>
         <translation>Ошибка установки</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="370"/>
+        <location filename="../client/telemetry_model.cc" line="395"/>
         <source>Installation started</source>
         <translation>Установка начата</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="372"/>
+        <location filename="../client/telemetry_model.cc" line="397"/>
         <source>Installation succeeded</source>
         <translation>Установка выполнена успешно</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="382"/>
+        <location filename="../client/telemetry_model.cc" line="407"/>
         <source>%1 or more</source>
         <translation>%1 и более</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="392"/>
+        <location filename="../client/telemetry_model.cc" line="417"/>
         <source>Never</source>
         <translation>Никогда</translation>
     </message>

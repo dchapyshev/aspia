@@ -417,7 +417,7 @@ Hozzáadott útválasztók: %4</translation>
         <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="469"/>
+        <location filename="../host/android/main_window.cc" line="471"/>
         <source>Settings</source>
         <translation>Beállítások</translation>
     </message>
@@ -489,37 +489,37 @@ Hozzáadott útválasztók: %4</translation>
         <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="467"/>
+        <location filename="../host/android/main_window.cc" line="469"/>
         <source>Connection</source>
         <translation>Kapcsolat</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="341"/>
-        <location filename="../host/android/main_window.cc" line="376"/>
-        <location filename="../host/android/main_window.cc" line="408"/>
+        <location filename="../host/android/main_window.cc" line="343"/>
+        <location filename="../host/android/main_window.cc" line="378"/>
+        <location filename="../host/android/main_window.cc" line="410"/>
         <source>Permissions</source>
         <translation>Engedélyek</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="342"/>
+        <location filename="../host/android/main_window.cc" line="344"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
         <translation>Engedélyezze a kisegítő lehetőségek szolgáltatást a távoli billentyűzet- és egérvezérléshez.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="696"/>
-        <location filename="../host/android/main_window.cc" line="343"/>
-        <location filename="../host/android/main_window.cc" line="378"/>
-        <location filename="../host/android/main_window.cc" line="411"/>
+        <location filename="../host/android/main_window.cc" line="345"/>
+        <location filename="../host/android/main_window.cc" line="380"/>
+        <location filename="../host/android/main_window.cc" line="413"/>
         <source>Open</source>
         <translation>Megnyitás</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="377"/>
+        <location filename="../host/android/main_window.cc" line="379"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
         <translation>Engedélyezze a más alkalmazások feletti megjelenítést, hogy a munkamenet alatt látható legyen a képernyőn megjelenő műveletgomb.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="409"/>
+        <location filename="../host/android/main_window.cc" line="411"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
         <translation>Engedélyezze a hozzáférést az összes fájlhoz, hogy a csatlakozott felhasználó böngészhesse és átvihesse az eszközön lévő fájlokat.</translation>
     </message>
@@ -1976,7 +1976,7 @@ Jelszó: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="967"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="971"/>
         <source>Scale</source>
         <translation>Méretezés</translation>
     </message>
@@ -2066,7 +2066,7 @@ Jelszó: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="569"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
         <source>Start recording</source>
         <translation>Felvétel indítása</translation>
     </message>
@@ -2088,69 +2088,69 @@ Jelszó: %2</translation>
         <translation>Munkamenet váltása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="364"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="368"/>
         <source>Resolution selection</source>
         <translation>Felbontás kiválasztása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1146"/>
         <source>Session %1</source>
         <translation>Munkamenet %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1146"/>
         <source>Session %1 (%2)</source>
         <translation>Munkamenet %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="564"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="568"/>
         <source>Stop recording</source>
         <translation>Felvétel leállítása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="477"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="481"/>
         <source>Scripts</source>
         <translation>Parancsfájlok</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="536"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="540"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Biztosan futtatja a(z) &quot;%1&quot; parancsfájlt a távoli számítógépen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="796"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="800"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Biztosan leállítja a távoli számítógépet?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="811"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="815"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="841"/>
         <source>Confirmation</source>
         <translation>Megerősítés</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="812"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="816"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Biztosan újraindítja a távoli számítógépet?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="817"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="821"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="847"/>
         <source>Wait for host</source>
         <translation>Várakozás a gazdagépre</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="838"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="842"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Biztosan újraindítja a távoli számítógépet csökkentett módban?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="863"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="867"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Biztosan befejezi a felhasználói munkamenetet a távoli számítógépen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="878"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="882"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Biztosan zárolja a felhasználói munkamenetet a távoli számítógépen?</translation>
     </message>
@@ -7426,23 +7426,23 @@ Importált hitelesítő adatok: %5</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="432"/>
+        <location filename="../host/android/settings_widget.cc" line="433"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="432"/>
+        <location filename="../host/android/settings_widget.cc" line="433"/>
         <source>An error occurred while processing the password.</source>
         <translation>Hiba történt a jelszó feldolgozása közben.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="453"/>
+        <location filename="../host/android/settings_widget.cc" line="455"/>
         <source>Import</source>
         <translation>Importálás</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="453"/>
+        <location filename="../host/android/settings_widget.cc" line="455"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-fájlok (*.json)</translation>
     </message>
@@ -11550,179 +11550,201 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Érték</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="221"/>
+        <location filename="../client/telemetry_model.cc" line="225"/>
         <source>General</source>
         <translation>Általános</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="225"/>
+        <location filename="../client/telemetry_model.cc" line="229"/>
         <source>Service start time</source>
         <translation>Szolgáltatás indításának ideje</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="229"/>
+        <location filename="../client/telemetry_model.cc" line="233"/>
         <source>Service starts in 7 days</source>
         <translation>Szolgáltatásindítások az elmúlt 7 napban</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="240"/>
+        <location filename="../client/telemetry_model.cc" line="244"/>
         <source>Connections</source>
         <translation>Kapcsolatok</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="246"/>
+        <location filename="../client/telemetry_model.cc" line="250"/>
         <source>Last incoming connection</source>
         <translation>Utolsó bejövő kapcsolat</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="251"/>
+        <location filename="../client/telemetry_model.cc" line="255"/>
         <source>Failed logins in 7 days</source>
         <translation>Sikertelen bejelentkezések az elmúlt 7 napban</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="256"/>
+        <location filename="../client/telemetry_model.cc" line="260"/>
         <source>Failed logins since service start</source>
         <translation>Sikertelen bejelentkezések a szolgáltatás indítása óta</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="269"/>
+        <location filename="../client/telemetry_model.cc" line="273"/>
         <source>Updates</source>
         <translation>Frissítések</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="273"/>
+        <location filename="../client/telemetry_model.cc" line="277"/>
         <source>Update channel</source>
         <translation>Frissítési csatorna</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Automatic updates</source>
         <translation>Automatikus frissítések</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Enabled</source>
         <translation>Engedélyezve</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="279"/>
+        <location filename="../client/telemetry_model.cc" line="283"/>
         <source>Disabled</source>
         <translation>Letiltva</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="286"/>
+        <location filename="../client/telemetry_model.cc" line="290"/>
         <source>Update check frequency</source>
         <translation>Frissítéskeresés gyakorisága</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/telemetry_model.cc" line="350"/>
+        <location filename="../client/telemetry_model.cc" line="375"/>
         <source>Every %n days</source>
         <translation>
             <numerusform>%n naponta</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="291"/>
+        <location filename="../client/telemetry_model.cc" line="295"/>
         <source>Last update check</source>
         <translation>Utolsó frissítéskeresés</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="297"/>
+        <location filename="../client/telemetry_model.cc" line="301"/>
         <source>Last update check result</source>
         <translation>Utolsó frissítéskeresés eredménye</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="309"/>
+        <location filename="../client/telemetry_model.cc" line="313"/>
         <source>Users</source>
         <translation>Felhasználók</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="313"/>
+        <location filename="../client/telemetry_model.cc" line="317"/>
         <source>Total users</source>
         <translation>Összes felhasználó</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="317"/>
+        <location filename="../client/telemetry_model.cc" line="321"/>
         <source>Enabled users</source>
         <translation>Engedélyezett felhasználók</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="328"/>
+        <location filename="../client/telemetry_model.cc" line="332"/>
+        <source>Security</source>
+        <translation>Biztonság</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="339"/>
+        <source>Settings password protection</source>
+        <translation>Beállítások jelszavas védelme</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="340"/>
+        <source>Enabled</source>
+        <comment>password protection</comment>
+        <translation>Engedélyezve</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="341"/>
+        <source>Disabled</source>
+        <comment>password protection</comment>
+        <translation>Letiltva</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="353"/>
         <source>Stable</source>
         <translation>Stabil</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="330"/>
+        <location filename="../client/telemetry_model.cc" line="355"/>
         <source>Beta</source>
         <translation>Béta</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="332"/>
+        <location filename="../client/telemetry_model.cc" line="357"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="344"/>
+        <location filename="../client/telemetry_model.cc" line="369"/>
         <source>Once a day</source>
         <translation>Naponta egyszer</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="346"/>
+        <location filename="../client/telemetry_model.cc" line="371"/>
         <source>Once a week</source>
         <translation>Hetente egyszer</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="348"/>
+        <location filename="../client/telemetry_model.cc" line="373"/>
         <source>Once a month</source>
         <translation>Havonta egyszer</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="358"/>
+        <location filename="../client/telemetry_model.cc" line="383"/>
         <source>No updates</source>
         <translation>Nincs frissítés</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="360"/>
+        <location filename="../client/telemetry_model.cc" line="385"/>
         <source>Check failed</source>
         <translation>Sikertelen keresés</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="362"/>
+        <location filename="../client/telemetry_model.cc" line="387"/>
         <source>Unsupported package</source>
         <translation>Nem támogatott csomag</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="364"/>
+        <location filename="../client/telemetry_model.cc" line="389"/>
         <source>Download failed</source>
         <translation>Sikertelen letöltés</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="366"/>
+        <location filename="../client/telemetry_model.cc" line="391"/>
         <source>Damaged package</source>
         <translation>Sérült csomag</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="368"/>
+        <location filename="../client/telemetry_model.cc" line="393"/>
         <source>Installation failed</source>
         <translation>Sikertelen telepítés</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="370"/>
+        <location filename="../client/telemetry_model.cc" line="395"/>
         <source>Installation started</source>
         <translation>Telepítés elindítva</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="372"/>
+        <location filename="../client/telemetry_model.cc" line="397"/>
         <source>Installation succeeded</source>
         <translation>Sikeres telepítés</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="382"/>
+        <location filename="../client/telemetry_model.cc" line="407"/>
         <source>%1 or more</source>
         <translation>%1 vagy több</translation>
     </message>
     <message>
-        <location filename="../client/telemetry_model.cc" line="392"/>
+        <location filename="../client/telemetry_model.cc" line="417"/>
         <source>Never</source>
         <translation>Soha</translation>
     </message>
