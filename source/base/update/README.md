@@ -45,11 +45,9 @@ instead of "no updates". The smallest file that says "nothing here":
 The packages themselves are not served from this directory. A release manifest names the directory
 they lie in, and that can be anywhere.
 
-**Versions up to 3.0.11 read another layout.** They look for `<server>/<channel>/latest.json` and
-`<server>/<channel>/<version>.json`, a directory per channel with the same files in it, and they
-keep reading it until they are updated. That layout is left as it is, and 3.0.12, the first version
-that reads the new one, is the last release put into it. Nothing newer is added there: a machine on
-an older version updates to 3.0.12 and from then on reads `versions/`.
+**Versions up to 3.0.11 read another layout.** They looked for `<server>/<channel>/latest.json` and
+`<server>/<channel>/<version>.json`, a directory per channel. That layout is removed, as no machine
+runs these versions any more; they no longer find updates.
 
 Channel rules
 -------------
