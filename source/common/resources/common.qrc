@@ -27,6 +27,9 @@
         <file>material/share.svg</file>
         <file>material/bug_report.svg</file>
         <file>material/favorite.svg</file>
+        <file>material/visibility.svg</file>
+        <file>material/visibility_off.svg</file>
+        <file>material/done_all.svg</file>
         <file>aspia.ico</file>
         <file>aspia.svg</file>
         <file>back.svg</file>
@@ -119,6 +122,8 @@
         <file>settings.svg</file>
         <file>keys.svg</file>
         <file>key-corrupted.svg</file>
+        <file>key-normal.svg</file>
+        <file>key-warning.svg</file>
         <file>monitor-1.svg</file>
         <file>monitor-2.svg</file>
         <file>monitor-3.svg</file>

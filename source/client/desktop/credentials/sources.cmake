@@ -16,36 +16,15 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-collect_sources(SOURCE_CLIENT_CORE_DESKTOP
-    authorization_dialog.cc
-    authorization_dialog.h
-    authorization_dialog.ui
-    client_tab.cc
-    client_tab.h
-    client_window.cc
-    client_window.h
-    credentials_tab.cc
-    credentials_tab.h
-    credentials_tab.ui
-    file_dialog.cc
-    file_dialog.h
-    management_tab.cc
-    management_tab.h
-    management_tab.ui
-    main_window.cc
-    main_window.h
-    main_window.ui
-    tab.cc
-    tab.h
-    tab_bar.cc
-    tab_bar.h
-    tab_widget.cc
-    tab_widget.h
-    router_dialog.cc
-    router_dialog.h
-    router_dialog.ui
-    status_overlay.cc
-    status_overlay.h
-    settings_tab.cc
-    settings_tab.h
-    settings_tab.ui)
+collect_sources(SOURCE_CLIENT_CORE_DESKTOP_CREDENTIALS
+    credential_dialog.cc
+    credential_dialog.h
+    credential_dialog.ui
+    credential_export_dialog.cc
+    credential_export_dialog.h
+    credential_export_dialog.ui
+    credential_import_dialog.cc
+    credential_import_dialog.h
+    credential_import_dialog.ui
+    credential_list_model.cc
+    credential_list_model.h)

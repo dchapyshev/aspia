@@ -23,6 +23,8 @@
 #include <QWidget>
 
 class CredentialEditor;
+class CredentialExportWidget;
+class CredentialImportWidget;
 class IconButton;
 class TreeWidget;
 class QStackedWidget;
@@ -41,9 +43,10 @@ public:
     // Reads the records from the database again.
     void reload();
 
-    // Returns to the list from the editor. Driven by the app bar back button.
+    // Returns to the list from the editor, the export or the import screen. Driven by the app bar
+    // back button.
     void goBack();
-    bool isEditorPage() const;
+    bool isListPage() const;
 
 signals:
     // Requests the app bar to show |title|.
@@ -54,6 +57,9 @@ signals:
 
 private slots:
     void onAddCredential();
+    void onShowMenu();
+    void onExport();
+    void onImport();
     void onItemClicked(QTreeWidgetItem* item);
     void onReturnFromEditor();
 
@@ -63,7 +69,10 @@ private:
     QStackedWidget* stack_ = nullptr;
     TreeWidget* tree_ = nullptr;
     CredentialEditor* editor_ = nullptr;
+    CredentialExportWidget* export_ = nullptr;
+    CredentialImportWidget* import_ = nullptr;
     IconButton* button_add_ = nullptr;
+    IconButton* button_overflow_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(CredentialsWidget)
 };

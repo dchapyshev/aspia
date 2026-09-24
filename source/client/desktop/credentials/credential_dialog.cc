@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/desktop/credential_dialog.h"
+#include "client/desktop/credentials/credential_dialog.h"
 
 #include <QAbstractButton>
 #include <QPushButton>
@@ -25,7 +25,7 @@
 #include "base/logging.h"
 #include "base/peer/user.h"
 #include "client/database.h"
-#include "client/desktop/ui_credential_dialog.h"
+#include "client/desktop/credentials/ui_credential_dialog.h"
 #include "common/desktop/msg_box.h"
 
 //--------------------------------------------------------------------------------------------------

@@ -24,9 +24,11 @@
 
 #include "base/logging.h"
 #include "client/database.h"
-#include "client/desktop/credential_dialog.h"
-#include "client/desktop/credential_list_model.h"
 #include "client/desktop/ui_credentials_tab.h"
+#include "client/desktop/credentials/credential_dialog.h"
+#include "client/desktop/credentials/credential_export_dialog.h"
+#include "client/desktop/credentials/credential_import_dialog.h"
+#include "client/desktop/credentials/credential_list_model.h"
 #include "common/desktop/msg_box.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -53,10 +55,13 @@ CredentialsTab::CredentialsTab(QWidget* parent)
     connect(ui->tree_credentials, &QWidget::customContextMenuRequested,
             this, &CredentialsTab::onContextMenu);
 
+    connect(ui->action_export, &QAction::triggered, this, &CredentialsTab::onExportAction);
+    connect(ui->action_import, &QAction::triggered, this, &CredentialsTab::onImportAction);
     connect(ui->action_add, &QAction::triggered, this, &CredentialsTab::onAddAction);
     connect(ui->action_edit, &QAction::triggered, this, &CredentialsTab::onEditAction);
     connect(ui->action_delete, &QAction::triggered, this, &CredentialsTab::onDeleteAction);
 
+    addActions(ActionRole::FILE, { ui->action_export, ui->action_import });
     addActions(ActionRole::EDIT, { ui->action_add, ui->action_edit, ui->action_delete });
 
     onSelectionChanged();
@@ -100,6 +105,25 @@ void CredentialsTab::deactivate(QStatusBar* /* statusbar */)
 bool CredentialsTab::hasStatusBar() const
 {
     return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialsTab::onExportAction()
+{
+    LOG(INFO) << "[ACTION] Export credentials";
+
+    CredentialExportDialog dialog(this);
+    dialog.exec();
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialsTab::onImportAction()
+{
+    LOG(INFO) << "[ACTION] Import credentials";
+
+    CredentialImportDialog dialog(this);
+    dialog.exec();
+    reload(-1);
 }
 
 //--------------------------------------------------------------------------------------------------

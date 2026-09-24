@@ -16,40 +16,44 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_DESKTOP_CREDENTIAL_DIALOG_H
-#define CLIENT_DESKTOP_CREDENTIAL_DIALOG_H
+#ifndef CLIENT_DESKTOP_CREDENTIALS_CREDENTIAL_EXPORT_DIALOG_H
+#define CLIENT_DESKTOP_CREDENTIALS_CREDENTIAL_EXPORT_DIALOG_H
 
 #include <QDialog>
 
 #include <memory>
 
+#include "client/config.h"
+
 class QAbstractButton;
 
 namespace Ui {
-class CredentialDialog;
+class CredentialExportDialog;
 } // namespace Ui
 
-class CredentialDialog final : public QDialog
+class CredentialExportDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
-    // |credential_id| of -1 adds a record.
-    CredentialDialog(qint64 credential_id, QWidget* parent = nullptr);
-    ~CredentialDialog() final;
-
-    // The record written, once the dialog is accepted.
-    qint64 credentialId() const { return credential_id_; }
+    explicit CredentialExportDialog(QWidget* parent = nullptr);
+    ~CredentialExportDialog() final;
 
 private slots:
+    void onCheckAllButtonPressed();
+    void onCheckNoneButtonPressed();
     void onButtonBoxClicked(QAbstractButton* button);
     void onLoadData();
 
 private:
-    std::unique_ptr<Ui::CredentialDialog> ui;
-    qint64 credential_id_ = -1;
+    void setCheckState(Qt::CheckState state);
+    QList<CredentialConfig> checkedCredentials() const;
+    bool checkPassword();
 
-    Q_DISABLE_COPY_MOVE(CredentialDialog)
+    std::unique_ptr<Ui::CredentialExportDialog> ui;
+    QList<CredentialConfig> credentials_;
+
+    Q_DISABLE_COPY_MOVE(CredentialExportDialog)
 };
 
-#endif // CLIENT_DESKTOP_CREDENTIAL_DIALOG_H
+#endif // CLIENT_DESKTOP_CREDENTIALS_CREDENTIAL_EXPORT_DIALOG_H

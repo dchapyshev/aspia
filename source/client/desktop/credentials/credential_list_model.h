@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_DESKTOP_CREDENTIAL_LIST_MODEL_H
-#define CLIENT_DESKTOP_CREDENTIAL_LIST_MODEL_H
+#ifndef CLIENT_DESKTOP_CREDENTIALS_CREDENTIAL_LIST_MODEL_H
+#define CLIENT_DESKTOP_CREDENTIALS_CREDENTIAL_LIST_MODEL_H
 
 #include <QAbstractTableModel>
 #include <QCollator>
@@ -69,4 +69,4 @@ private:
     Q_DISABLE_COPY_MOVE(CredentialListModel)
 };
 
-#endif // CLIENT_DESKTOP_CREDENTIAL_LIST_MODEL_H
+#endif // CLIENT_DESKTOP_CREDENTIALS_CREDENTIAL_LIST_MODEL_H

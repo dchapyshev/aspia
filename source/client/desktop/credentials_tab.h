@@ -46,6 +46,8 @@ public:
     bool hasStatusBar() const final;
 
 private slots:
+    void onExportAction();
+    void onImportAction();
     void onAddAction();
     void onEditAction();
     void onDeleteAction();

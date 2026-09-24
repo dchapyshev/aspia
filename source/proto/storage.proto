@@ -109,3 +109,28 @@ message BackupFile
     bytes verifier = 3;
     bytes data     = 4;
 }
+
+// Credentials exported by the user, sealed like BackupFile with a key derived from |salt| and the
+// password given on export. The fields are numbered unlike BackupFile, so that neither file reads
+// as the other.
+message CredentialFile
+{
+    message Credential
+    {
+        string guid         = 1;
+        uint32 type         = 2;
+        string display_name = 3;
+        string username     = 4;
+        string password     = 5;
+    }
+
+    message Content
+    {
+        repeated Credential credentials = 1;
+    }
+
+    bytes salt     = 1;
+    bytes verifier = 2;
+    bytes data     = 3;
+    uint32 version = 4;
+}

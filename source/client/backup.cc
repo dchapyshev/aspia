@@ -822,7 +822,11 @@ Backup::Result Backup::exportToFile(Database& db, const QString& file_path, Repo
         return Result::INTERNAL_ERROR;
     }
 
+    // A document picked on Android is a content URI, which has no directory for a temporary
+    // file, so it is written in place.
     QSaveFile file(file_path);
+    file.setDirectWriteFallback(true);
+
     if (!file.open(QIODevice::WriteOnly))
     {
         LOG(ERROR) << "Unable to open file" << file_path << ":" << file.errorString();

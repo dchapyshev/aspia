@@ -105,8 +105,9 @@ QList<QWidget*> SettingsWidget::appBarActions() const
 //--------------------------------------------------------------------------------------------------
 void SettingsWidget::goBack()
 {
-    // The editor of the credentials screen is a page of its own below the list.
-    if (isCredentialsPage() && credentials_page_->isEditorPage())
+    // The editor, the export and the import screens of the credentials screen are pages of their own
+    // below the list.
+    if (isCredentialsPage() && !credentials_page_->isListPage())
     {
         credentials_page_->goBack();
         return;
@@ -123,7 +124,7 @@ void SettingsWidget::goBack()
 //--------------------------------------------------------------------------------------------------
 void SettingsWidget::resetToSettings()
 {
-    if (credentials_page_->isEditorPage())
+    if (!credentials_page_->isListPage())
         credentials_page_->goBack();
 
     stack_->setCurrentWidget(settings_page_);

@@ -20,6 +20,7 @@
 
 #include <QGuiApplication>
 #include <QInputMethod>
+#include <QMouseEvent>
 #include <QPainter>
 
 #include "common/android/animation.h"
@@ -34,6 +35,7 @@ constexpr int kLabelPadding = 4;
 constexpr double kFloatedLabelScale = 0.78;
 constexpr double kDisabledOpacity = 0.38;
 constexpr double kMutedLabelOpacity = 0.55;
+constexpr int kIconSize = 24;
 
 } // namespace
 
@@ -57,9 +59,7 @@ LineEdit::LineEdit(QWidget* parent)
 
     setFont(Controls::scaledFont(font(), Controls::kFontScale));
 
-    // The top text margin keeps the text vertically centered in the field, which starts below
-    // the floating label overflow area.
-    setTextMargins(kHorizontalPadding, labelOverflow(), kHorizontalPadding, 0);
+    updateTextMargins();
 
     connect(float_animation_, &Animation::sig_valueChanged, this, [this](double value)
     {
@@ -84,6 +84,17 @@ void LineEdit::setLabel(const QString& label)
         return;
 
     label_ = label;
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void LineEdit::setShowPasswordButtonVisible(bool visible)
+{
+    if (show_password_button_ == visible)
+        return;
+
+    show_password_button_ = visible;
+    updateTextMargins();
     update();
 }
 
@@ -169,6 +180,23 @@ void LineEdit::paintEvent(QPaintEvent* event)
     }
 
     QLineEdit::paintEvent(event);
+
+    if (show_password_button_)
+    {
+        QPainter painter(this);
+        if (!isEnabled())
+            painter.setOpacity(kDisabledOpacity);
+
+        // The crossed out eye says that the password is on screen and that the button hides it.
+        const QString icon_path = (echoMode() == QLineEdit::Password) ?
+            ":/img/material/visibility.svg" : ":/img/material/visibility_off.svg";
+
+        const QRect button = showPasswordButtonRect();
+        painter.drawPixmap(QPointF(button.center().x() - kIconSize / 2.0,
+                                   button.center().y() - kIconSize / 2.0),
+                           Controls::tintedPixmap(icon_path, QSize(kIconSize, kIconSize),
+                                                  palette().color(QPalette::WindowText)));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -203,6 +231,32 @@ void LineEdit::focusOutEvent(QFocusEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void LineEdit::mousePressEvent(QMouseEvent* event)
+{
+    // A tap on the button does not move the cursor or bring up the keyboard.
+    if (show_password_button_ && showPasswordButtonRect().contains(event->position().toPoint()))
+    {
+        event->accept();
+        return;
+    }
+
+    QLineEdit::mousePressEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void LineEdit::mouseReleaseEvent(QMouseEvent* event)
+{
+    if (show_password_button_ && showPasswordButtonRect().contains(event->position().toPoint()))
+    {
+        setEchoMode(echoMode() == QLineEdit::Password ? QLineEdit::Normal : QLineEdit::Password);
+        event->accept();
+        return;
+    }
+
+    QLineEdit::mouseReleaseEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
 void LineEdit::onTextChanged(const QString& /* text */)
 {
     updateFloatState();
@@ -212,6 +266,32 @@ void LineEdit::onTextChanged(const QString& /* text */)
 int LineEdit::labelOverflow() const
 {
     return QFontMetrics(Controls::scaledFont(font(), kFloatedLabelScale)).height() / 2;
+}
+
+//--------------------------------------------------------------------------------------------------
+QRect LineEdit::showPasswordButtonRect() const
+{
+    // A square as tall as the field at its trailing edge, so the tap target is larger than the icon.
+    const int size = kFieldHeight;
+    const int top = labelOverflow();
+
+    if (layoutDirection() == Qt::RightToLeft)
+        return QRect(0, top, size, size);
+
+    return QRect(width() - size, top, size, size);
+}
+
+//--------------------------------------------------------------------------------------------------
+void LineEdit::updateTextMargins()
+{
+    // The top text margin keeps the text vertically centered in the field, which starts below
+    // the floating label overflow area. The button takes the trailing end of the field.
+    const int trailing = show_password_button_ ? kFieldHeight : kHorizontalPadding;
+
+    if (layoutDirection() == Qt::RightToLeft)
+        setTextMargins(trailing, labelOverflow(), kHorizontalPadding, 0);
+    else
+        setTextMargins(kHorizontalPadding, labelOverflow(), trailing, 0);
 }
 
 //--------------------------------------------------------------------------------------------------

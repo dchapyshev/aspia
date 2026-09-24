@@ -36,6 +36,10 @@ public:
     void setLabel(const QString& label);
     const QString& label() const { return label_; }
 
+    // Shows an eye button at the trailing edge of a password field that shows and hides the
+    // password.
+    void setShowPasswordButtonVisible(bool visible);
+
     // QLineEdit implementation.
     QSize sizeHint() const final;
     QSize minimumSizeHint() const final;
@@ -45,12 +49,16 @@ protected:
     void paintEvent(QPaintEvent* event) final;
     void focusInEvent(QFocusEvent* event) final;
     void focusOutEvent(QFocusEvent* event) final;
+    void mousePressEvent(QMouseEvent* event) final;
+    void mouseReleaseEvent(QMouseEvent* event) final;
 
 private slots:
     void onTextChanged(const QString& text);
 
 private:
     int labelOverflow() const;
+    QRect showPasswordButtonRect() const;
+    void updateTextMargins();
     void updateFloatState();
 
     Animation* float_animation_;
@@ -58,6 +66,7 @@ private:
     double float_progress_;
     double focus_progress_;
     QString label_;
+    bool show_password_button_ = false;
 
     Q_DISABLE_COPY_MOVE(LineEdit)
 };

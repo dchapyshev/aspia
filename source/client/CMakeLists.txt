@@ -33,6 +33,8 @@ list(APPEND SOURCE_CLIENT_CORE
     database.h
     config.cc
     config.h
+    credential_file.cc
+    credential_file.h
     file_error_code.cc
     file_error_code.h
     file_remove_queue_builder.cc
@@ -82,9 +84,10 @@ list(APPEND SOURCE_CLIENT
 list(APPEND SOURCE_CLIENT_TESTS
     backup_unittest.cc
     config_unittest.cc
+    credential_file_unittest.cc
     database_unittest.cc
     desktop/authorization_dialog_unittest.cc
-    desktop/credential_list_model_unittest.cc
+    desktop/credentials/credential_list_model_unittest.cc
     desktop/management/client_list_model_unittest.cc
     desktop/management/edit_model_unittest.cc
     desktop/management/host_list_model_unittest.cc
@@ -139,6 +142,7 @@ include(desktop/desktop/sources.cmake)
 include(desktop/file_transfer/sources.cmake)
 include(desktop/sys_info/sources.cmake)
 include(desktop/chat/sources.cmake)
+include(desktop/credentials/sources.cmake)
 include(desktop/management/sources.cmake)
 include(desktop/terminal/sources.cmake)
 include(workers/sources.cmake)
@@ -156,6 +160,7 @@ source_group(desktop\\desktop FILES ${SOURCE_CLIENT_CORE_DESKTOP_DESKTOP})
 source_group(desktop\\file_transfer FILES ${SOURCE_CLIENT_CORE_DESKTOP_FILE_TRANSFER})
 source_group(desktop\\sys_info FILES ${SOURCE_CLIENT_CORE_DESKTOP_SYS_INFO})
 source_group(desktop\\chat FILES ${SOURCE_CLIENT_CORE_DESKTOP_CHAT})
+source_group(desktop\\credentials FILES ${SOURCE_CLIENT_CORE_DESKTOP_CREDENTIALS})
 source_group(desktop\\terminal FILES ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL})
 source_group(desktop\\management FILES ${SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB})
 source_group(win FILES ${SOURCE_CLIENT_WIN})
@@ -199,6 +204,7 @@ else()
         ${SOURCE_CLIENT_CORE_DESKTOP_FILE_TRANSFER}
         ${SOURCE_CLIENT_CORE_DESKTOP_SYS_INFO}
         ${SOURCE_CLIENT_CORE_DESKTOP_CHAT}
+        ${SOURCE_CLIENT_CORE_DESKTOP_CREDENTIALS}
         ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL}
         ${SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB}
         ${SOURCE_CLIENT_WIN}

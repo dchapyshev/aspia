@@ -18,6 +18,7 @@
 
 #include "client/android/credentials_widget.h"
 
+#include <QFileDialog>
 #include <QHeaderView>
 #include <QStackedWidget>
 #include <QTreeWidgetItem>
@@ -29,7 +30,10 @@
 #include "client/config.h"
 #include "client/database.h"
 #include "client/android/credential_editor.h"
+#include "client/android/credential_export_widget.h"
+#include "client/android/credential_import_widget.h"
 #include "common/android/icon_button.h"
+#include "common/android/menu.h"
 #include "common/android/tree_widget.h"
 
 namespace {
@@ -44,11 +48,15 @@ CredentialsWidget::CredentialsWidget(QWidget* parent)
       stack_(new QStackedWidget(this)),
       tree_(new TreeWidget()),
       editor_(new CredentialEditor(this)),
-      button_add_(new IconButton(":/img/material/add_2.svg", this))
+      export_(new CredentialExportWidget(this)),
+      import_(new CredentialImportWidget(this)),
+      button_add_(new IconButton(":/img/material/add_2.svg", this)),
+      button_overflow_(new IconButton(":/img/material/more_vert.svg", this))
 {
-    // The add action lives in the app bar; AppBar::setActions() reparents and shows it. Hidden by
-    // default so it does not linger in this widget.
+    // The actions live in the app bar; AppBar::setActions() reparents and shows them. Hidden by
+    // default so they do not linger in this widget.
     button_add_->hide();
+    button_overflow_->hide();
 
     // Two columns: the name of the record and its user name.
     tree_->setRootIsDecorated(false);
@@ -65,6 +73,8 @@ CredentialsWidget::CredentialsWidget(QWidget* parent)
 
     stack_->addWidget(list_page);
     stack_->addWidget(editor_);
+    stack_->addWidget(export_);
+    stack_->addWidget(import_);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -72,11 +82,14 @@ CredentialsWidget::CredentialsWidget(QWidget* parent)
     layout->addWidget(stack_);
 
     connect(button_add_, &IconButton::clicked, this, &CredentialsWidget::onAddCredential);
+    connect(button_overflow_, &IconButton::clicked, this, &CredentialsWidget::onShowMenu);
     connect(tree_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
     {
         onItemClicked(item);
     });
     connect(editor_, &CredentialEditor::sig_accepted, this, &CredentialsWidget::onReturnFromEditor);
+    connect(export_, &CredentialExportWidget::sig_finished, this, &CredentialsWidget::showList);
+    connect(import_, &CredentialImportWidget::sig_finished, this, &CredentialsWidget::onReturnFromEditor);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -85,10 +98,17 @@ CredentialsWidget::~CredentialsWidget() = default;
 //--------------------------------------------------------------------------------------------------
 QList<QWidget*> CredentialsWidget::appBarActions() const
 {
+    if (stack_->currentWidget() == export_)
+        return export_->appBarActions();
+
+    if (stack_->currentWidget() == import_)
+        return import_->appBarActions();
+
     // The editor screen has its own form; no list actions there.
-    if (isEditorPage())
+    if (!isListPage())
         return {};
-    return { button_add_ };
+
+    return { button_add_, button_overflow_ };
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -127,9 +147,9 @@ void CredentialsWidget::goBack()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool CredentialsWidget::isEditorPage() const
+bool CredentialsWidget::isListPage() const
 {
-    return stack_->currentWidget() == editor_;
+    return stack_->currentIndex() == 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -138,6 +158,52 @@ void CredentialsWidget::onAddCredential()
     editor_->prepareForAdd();
     stack_->setCurrentWidget(editor_);
     emit sig_titleChanged(tr("Add Credentials"));
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialsWidget::onShowMenu()
+{
+    enum { kImport, kExport };
+
+    Menu* menu = new Menu(this);
+    menu->addItem(tr("Import Credentials"), ":/img/material/download.svg");
+    menu->addItem(tr("Export Credentials"), ":/img/material/upload.svg");
+
+    connect(menu, &Menu::sig_triggered, this, [this](int index)
+    {
+        switch (index)
+        {
+            case kImport: onImport(); break;
+            case kExport: onExport(); break;
+            default: break;
+        }
+    });
+
+    // Anchor the menu to the button; it drops from the button's near edge per layout direction.
+    menu->popup(QRect(button_overflow_->mapToGlobal(QPoint(0, 0)), button_overflow_->size()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialsWidget::onExport()
+{
+    export_->prepare();
+    stack_->setCurrentWidget(export_);
+    emit sig_titleChanged(tr("Export Credentials"));
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialsWidget::onImport()
+{
+    const QString path = QFileDialog::getOpenFileName(
+        this, tr("Import Credentials"), QString(), tr("Aspia Credentials (*.aspia-credentials)"));
+    if (path.isEmpty())
+        return;
+
+    import_->prepare(path);
+    stack_->setCurrentWidget(import_);
+    emit sig_titleChanged(tr("Import Credentials"));
     emit sig_appBarActionsChanged();
 }
 

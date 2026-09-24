@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/desktop/credential_list_model.h"
+#include "client/desktop/credentials/credential_list_model.h"
 
 #include <QIcon>
 
