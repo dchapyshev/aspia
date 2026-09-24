@@ -304,6 +304,11 @@ int runServiceCommand(int& argc, char* argv[], int (*command)(QTextStream& out))
 //--------------------------------------------------------------------------------------------------
 int runSysInfo(int& argc, char* argv[])
 {
+#if defined(Q_OS_MACOS)
+    // The report is started through Authorization Services, as the settings are.
+    ProcessUtil::restartAsRoot(argv);
+#endif // defined(Q_OS_MACOS)
+
     GuiApplication::setApplicationVersion(ASPIA_VERSION_STRING);
     GuiApplication::setHighDpiScaleFactorRoundingPolicy(
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
