@@ -417,7 +417,7 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="471"/>
+        <location filename="../host/android/main_window.cc" line="386"/>
         <source>Settings</source>
         <translation>Ρυθμίσεις</translation>
     </message>
@@ -489,39 +489,19 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="469"/>
+        <location filename="../host/android/main_window.cc" line="384"/>
         <source>Connection</source>
         <translation>Σύνδεση</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="343"/>
-        <location filename="../host/android/main_window.cc" line="378"/>
-        <location filename="../host/android/main_window.cc" line="410"/>
+        <location filename="../host/android/main_window.cc" line="350"/>
         <source>Permissions</source>
         <translation>Δικαιώματα</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="344"/>
-        <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
-        <translation>Ενεργοποιήστε την υπηρεσία προσβασιμότητας για να επιτρέψετε τον απομακρυσμένο έλεγχο πληκτρολογίου και ποντικιού.</translation>
-    </message>
-    <message>
         <location filename="../client/android/main_window.cc" line="696"/>
-        <location filename="../host/android/main_window.cc" line="345"/>
-        <location filename="../host/android/main_window.cc" line="380"/>
-        <location filename="../host/android/main_window.cc" line="413"/>
         <source>Open</source>
         <translation>Άνοιγμα</translation>
-    </message>
-    <message>
-        <location filename="../host/android/main_window.cc" line="379"/>
-        <source>Allow display over other apps to show the on-screen action button during a session.</source>
-        <translation>Επιτρέψτε την εμφάνιση πάνω από άλλες εφαρμογές, ώστε να εμφανίζεται το κουμπί ενεργειών στην οθόνη κατά τη διάρκεια μιας περιόδου λειτουργίας.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/main_window.cc" line="411"/>
-        <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
-        <translation>Επιτρέψτε την πρόσβαση σε όλα τα αρχεία, ώστε ο συνδεδεμένος χρήστης να μπορεί να περιηγείται και να μεταφέρει αρχεία σε αυτήν τη συσκευή.</translation>
     </message>
 </context>
 <context>
@@ -1604,64 +1584,74 @@ Routers added: %4</source>
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="223"/>
+        <location filename="../host/android/connection_widget.cc" line="244"/>
         <source>Your ID</source>
         <translation>Το ID σας</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="224"/>
+        <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>One-time password</source>
         <translation>Κωδικός μίας χρήσης</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="225"/>
+        <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>Access</source>
         <translation>Πρόσβαση</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="226"/>
+        <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Desktop</source>
         <translation>Επιφάνεια εργασίας</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="227"/>
+        <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>File Transfer</source>
         <translation>Μεταφορά αρχείων</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="347"/>
+        <location filename="../host/android/connection_widget.cc" line="370"/>
+        <source>Waiting for a connection</source>
+        <translation>Αναμονή για σύνδεση</translation>
+    </message>
+    <message>
+        <location filename="../host/android/connection_widget.cc" line="370"/>
+        <source>Stop</source>
+        <translation>Διακοπή</translation>
+    </message>
+    <message>
+        <location filename="../host/android/connection_widget.cc" line="373"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>Aspia ID: %1
 Κωδικός πρόσβασης: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="390"/>
+        <location filename="../host/android/connection_widget.cc" line="416"/>
         <source>Router is disabled</source>
         <translation>Ο δρομολογητής είναι απενεργοποιημένος</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="393"/>
+        <location filename="../host/android/connection_widget.cc" line="419"/>
         <source>Connecting to router...</source>
         <translation>Σύνδεση με τον δρομολογητή...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="394"/>
+        <location filename="../host/android/connection_widget.cc" line="420"/>
         <source>Connecting to router %1...</source>
         <translation>Σύνδεση με τον δρομολογητή %1...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="397"/>
+        <location filename="../host/android/connection_widget.cc" line="423"/>
         <source>Connected to router</source>
         <translation>Συνδέθηκε με τον δρομολογητή</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="398"/>
+        <location filename="../host/android/connection_widget.cc" line="424"/>
         <source>Connected to router %1</source>
         <translation>Συνδέθηκε με τον δρομολογητή %1</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="401"/>
+        <location filename="../host/android/connection_widget.cc" line="427"/>
         <source>Failed to connect to router</source>
         <translation>Δεν ήταν δυνατή η σύνδεση με τον δρομολογητή</translation>
     </message>
@@ -5759,6 +5749,44 @@ Credentials imported: %5</source>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Denied</source>
         <translation>Δεν επιτράπηκε</translation>
+    </message>
+</context>
+<context>
+    <name>PermissionsWidget</name>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="80"/>
+        <source>The following permissions are required for the app to work. Grant them in the system settings.</source>
+        <translation>Για τη λειτουργία της εφαρμογής απαιτούνται τα ακόλουθα δικαιώματα. Παραχωρήστε τα στις ρυθμίσεις του συστήματος.</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="93"/>
+        <source>Accessibility service</source>
+        <translation>Υπηρεσία προσβασιμότητας</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="94"/>
+        <source>Display over other apps</source>
+        <translation>Εμφάνιση πάνω από άλλες εφαρμογές</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="95"/>
+        <source>All files access</source>
+        <translation>Πρόσβαση σε όλα τα αρχεία</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="96"/>
+        <source>Notifications</source>
+        <translation>Ειδοποιήσεις</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="108"/>
+        <source>Open</source>
+        <translation>Άνοιγμα</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="109"/>
+        <source>Granted</source>
+        <translation>Παραχωρήθηκε</translation>
     </message>
 </context>
 <context>

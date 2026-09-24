@@ -417,7 +417,7 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="471"/>
+        <location filename="../host/android/main_window.cc" line="386"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
@@ -489,39 +489,19 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="469"/>
+        <location filename="../host/android/main_window.cc" line="384"/>
         <source>Connection</source>
         <translation>연결</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="343"/>
-        <location filename="../host/android/main_window.cc" line="378"/>
-        <location filename="../host/android/main_window.cc" line="410"/>
+        <location filename="../host/android/main_window.cc" line="350"/>
         <source>Permissions</source>
         <translation>권한</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="344"/>
-        <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
-        <translation>원격 키보드 및 마우스 제어를 허용하려면 접근성 서비스를 사용하도록 설정하십시오.</translation>
-    </message>
-    <message>
         <location filename="../client/android/main_window.cc" line="696"/>
-        <location filename="../host/android/main_window.cc" line="345"/>
-        <location filename="../host/android/main_window.cc" line="380"/>
-        <location filename="../host/android/main_window.cc" line="413"/>
         <source>Open</source>
         <translation>열기</translation>
-    </message>
-    <message>
-        <location filename="../host/android/main_window.cc" line="379"/>
-        <source>Allow display over other apps to show the on-screen action button during a session.</source>
-        <translation>세션 중에 화면 동작 버튼을 표시하려면 다른 앱 위에 표시를 허용하십시오.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/main_window.cc" line="411"/>
-        <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
-        <translation>연결된 사용자가 이 장치의 파일을 탐색하고 전송할 수 있도록 모든 파일에 대한 액세스를 허용하십시오.</translation>
     </message>
 </context>
 <context>
@@ -1599,64 +1579,74 @@ Routers added: %4</source>
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="223"/>
+        <location filename="../host/android/connection_widget.cc" line="244"/>
         <source>Your ID</source>
         <translation>내 ID</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="224"/>
+        <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>One-time password</source>
         <translation>일회용 암호</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="225"/>
+        <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>Access</source>
         <translation>액세스</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="226"/>
+        <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Desktop</source>
         <translation>데스크톱</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="227"/>
+        <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>File Transfer</source>
         <translation>파일 전송</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="347"/>
+        <location filename="../host/android/connection_widget.cc" line="370"/>
+        <source>Waiting for a connection</source>
+        <translation>연결 대기 중</translation>
+    </message>
+    <message>
+        <location filename="../host/android/connection_widget.cc" line="370"/>
+        <source>Stop</source>
+        <translation>중지</translation>
+    </message>
+    <message>
+        <location filename="../host/android/connection_widget.cc" line="373"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>Aspia ID: %1
 암호: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="390"/>
+        <location filename="../host/android/connection_widget.cc" line="416"/>
         <source>Router is disabled</source>
         <translation>라우터 사용 안 함</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="393"/>
+        <location filename="../host/android/connection_widget.cc" line="419"/>
         <source>Connecting to router...</source>
         <translation>라우터에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="394"/>
+        <location filename="../host/android/connection_widget.cc" line="420"/>
         <source>Connecting to router %1...</source>
         <translation>%1 라우터에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="397"/>
+        <location filename="../host/android/connection_widget.cc" line="423"/>
         <source>Connected to router</source>
         <translation>라우터에 연결됨</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="398"/>
+        <location filename="../host/android/connection_widget.cc" line="424"/>
         <source>Connected to router %1</source>
         <translation>%1 라우터에 연결됨</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="401"/>
+        <location filename="../host/android/connection_widget.cc" line="427"/>
         <source>Failed to connect to router</source>
         <translation>라우터에 연결하지 못했습니다</translation>
     </message>
@@ -5733,6 +5723,44 @@ Credentials imported: %5</source>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Denied</source>
         <translation>거부됨</translation>
+    </message>
+</context>
+<context>
+    <name>PermissionsWidget</name>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="80"/>
+        <source>The following permissions are required for the app to work. Grant them in the system settings.</source>
+        <translation>응용 프로그램이 작동하려면 다음 권한이 필요합니다. 시스템 설정에서 허용하십시오.</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="93"/>
+        <source>Accessibility service</source>
+        <translation>접근성 서비스</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="94"/>
+        <source>Display over other apps</source>
+        <translation>다른 앱 위에 표시</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="95"/>
+        <source>All files access</source>
+        <translation>모든 파일 액세스</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="96"/>
+        <source>Notifications</source>
+        <translation>알림</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="108"/>
+        <source>Open</source>
+        <translation>열기</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="109"/>
+        <source>Granted</source>
+        <translation>허용됨</translation>
     </message>
 </context>
 <context>

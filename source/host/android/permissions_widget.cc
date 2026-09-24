@@ -77,7 +77,8 @@ PermissionsWidget::PermissionsWidget(QWidget* parent)
     layout->setSpacing(kCardSpacing);
 
     Label* intro = new Label(
-        tr("Aspia Host needs all of these permissions to work. Grant them in the system settings."),
+        tr("The following permissions are required for the app to work. Grant them in the system "
+           "settings."),
         Label::Role::BODY, content);
     intro->setWordWrap(true);
     layout->addWidget(intro);
@@ -85,27 +86,22 @@ PermissionsWidget::PermissionsWidget(QWidget* parent)
     const struct
     {
         Permission permission;
-        QString text;
+        QString name;
     } permissions[] =
     {
-        { Permission::ACCESSIBILITY,
-          tr("Enable the accessibility service to allow remote keyboard and mouse control.") },
-        { Permission::OVERLAY,
-          tr("Allow display over other apps to show the on-screen action button during a session.") },
-        { Permission::STORAGE,
-          tr("Allow access to all files so the connected user can browse and transfer files on this "
-             "device.") },
-        { Permission::NOTIFICATIONS,
-          tr("Allow notifications so the host can show that it is waiting for a connection after "
-             "sharing.") }
+        // The names the settings of Android use, so the user finds them there.
+        { Permission::ACCESSIBILITY, tr("Accessibility service") },
+        { Permission::OVERLAY, tr("Display over other apps") },
+        { Permission::STORAGE, tr("All files access") },
+        { Permission::NOTIFICATIONS, tr("Notifications") }
     };
 
     for (const auto& item : permissions)
     {
         Card* card = new Card(content);
 
-        Label* text = new Label(item.text, Label::Role::BODY, card);
-        text->setWordWrap(true);
+        Label* name = new Label(item.name, Label::Role::BODY, card);
+        name->setWordWrap(true);
 
         Row row;
         row.permission = item.permission;
@@ -115,14 +111,13 @@ PermissionsWidget::PermissionsWidget(QWidget* parent)
         const Permission permission = item.permission;
         connect(row.open_button, &Button::clicked, this, [permission]() { openSettings(permission); });
 
-        QHBoxLayout* action_row = new QHBoxLayout();
-        action_row->setContentsMargins(0, 0, 0, 0);
-        action_row->addStretch();
-        action_row->addWidget(row.open_button);
-        action_row->addWidget(row.granted_label);
+        QHBoxLayout* card_row = new QHBoxLayout();
+        card_row->setContentsMargins(0, 0, 0, 0);
+        card_row->addWidget(name, 1);
+        card_row->addWidget(row.open_button);
+        card_row->addWidget(row.granted_label);
 
-        card->contentLayout()->addWidget(text);
-        card->contentLayout()->addLayout(action_row);
+        card->contentLayout()->addLayout(card_row);
         layout->addWidget(card);
 
         rows_.append(row);

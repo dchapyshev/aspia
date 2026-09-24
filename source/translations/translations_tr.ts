@@ -417,7 +417,7 @@ Eklenen yönlendiriciler: %4</translation>
         <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="471"/>
+        <location filename="../host/android/main_window.cc" line="386"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
@@ -489,39 +489,19 @@ Eklenen yönlendiriciler: %4</translation>
         <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="469"/>
+        <location filename="../host/android/main_window.cc" line="384"/>
         <source>Connection</source>
         <translation>Bağlantı</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="343"/>
-        <location filename="../host/android/main_window.cc" line="378"/>
-        <location filename="../host/android/main_window.cc" line="410"/>
+        <location filename="../host/android/main_window.cc" line="350"/>
         <source>Permissions</source>
         <translation>İzinler</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="344"/>
-        <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
-        <translation>Uzaktan klavye ve fare denetimine izin vermek için erişilebilirlik hizmetini etkinleştirin.</translation>
-    </message>
-    <message>
         <location filename="../client/android/main_window.cc" line="696"/>
-        <location filename="../host/android/main_window.cc" line="345"/>
-        <location filename="../host/android/main_window.cc" line="380"/>
-        <location filename="../host/android/main_window.cc" line="413"/>
         <source>Open</source>
         <translation>Aç</translation>
-    </message>
-    <message>
-        <location filename="../host/android/main_window.cc" line="379"/>
-        <source>Allow display over other apps to show the on-screen action button during a session.</source>
-        <translation>Oturum sırasında ekrandaki eylem düğmesini göstermek için diğer uygulamaların üzerinde görüntülemeye izin verin.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/main_window.cc" line="411"/>
-        <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
-        <translation>Bağlanan kullanıcının bu cihazdaki dosyalara göz atabilmesi ve dosya aktarabilmesi için tüm dosyalara erişime izin verin.</translation>
     </message>
 </context>
 <context>
@@ -1599,64 +1579,74 @@ Eklenen yönlendiriciler: %4</translation>
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="223"/>
+        <location filename="../host/android/connection_widget.cc" line="244"/>
         <source>Your ID</source>
         <translation>ID&apos;niz</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="224"/>
+        <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>One-time password</source>
         <translation>Tek kullanımlık parola</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="225"/>
+        <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>Access</source>
         <translation>Erişim</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="226"/>
+        <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Desktop</source>
         <translation>Masaüstü</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="227"/>
+        <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>File Transfer</source>
         <translation>Dosya Aktarımı</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="347"/>
+        <location filename="../host/android/connection_widget.cc" line="370"/>
+        <source>Waiting for a connection</source>
+        <translation>Bağlantı bekleniyor</translation>
+    </message>
+    <message>
+        <location filename="../host/android/connection_widget.cc" line="370"/>
+        <source>Stop</source>
+        <translation>Durdur</translation>
+    </message>
+    <message>
+        <location filename="../host/android/connection_widget.cc" line="373"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>Aspia ID: %1
 Parola: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="390"/>
+        <location filename="../host/android/connection_widget.cc" line="416"/>
         <source>Router is disabled</source>
         <translation>Yönlendirici devre dışı</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="393"/>
+        <location filename="../host/android/connection_widget.cc" line="419"/>
         <source>Connecting to router...</source>
         <translation>Yönlendiriciye bağlanılıyor...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="394"/>
+        <location filename="../host/android/connection_widget.cc" line="420"/>
         <source>Connecting to router %1...</source>
         <translation>%1 yönlendiricisine bağlanılıyor...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="397"/>
+        <location filename="../host/android/connection_widget.cc" line="423"/>
         <source>Connected to router</source>
         <translation>Yönlendiriciye bağlanıldı</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="398"/>
+        <location filename="../host/android/connection_widget.cc" line="424"/>
         <source>Connected to router %1</source>
         <translation>%1 yönlendiricisine bağlanıldı</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="401"/>
+        <location filename="../host/android/connection_widget.cc" line="427"/>
         <source>Failed to connect to router</source>
         <translation>Yönlendiriciye bağlanılamadı</translation>
     </message>
@@ -5733,6 +5723,44 @@ Credentials imported: %5</source>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Denied</source>
         <translation>Reddedildi</translation>
+    </message>
+</context>
+<context>
+    <name>PermissionsWidget</name>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="80"/>
+        <source>The following permissions are required for the app to work. Grant them in the system settings.</source>
+        <translation>Uygulamanın çalışması için aşağıdaki izinler gereklidir. Bunları sistem ayarlarında verin.</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="93"/>
+        <source>Accessibility service</source>
+        <translation>Erişilebilirlik hizmeti</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="94"/>
+        <source>Display over other apps</source>
+        <translation>Diğer uygulamaların üzerinde göster</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="95"/>
+        <source>All files access</source>
+        <translation>Tüm dosyalara erişim</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="96"/>
+        <source>Notifications</source>
+        <translation>Bildirimler</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="108"/>
+        <source>Open</source>
+        <translation>Aç</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="109"/>
+        <source>Granted</source>
+        <translation>Verildi</translation>
     </message>
 </context>
 <context>

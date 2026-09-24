@@ -417,7 +417,7 @@ Routeurs ajoutés: %4</translation>
         <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="471"/>
+        <location filename="../host/android/main_window.cc" line="386"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
@@ -489,39 +489,19 @@ Routeurs ajoutés: %4</translation>
         <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="469"/>
+        <location filename="../host/android/main_window.cc" line="384"/>
         <source>Connection</source>
         <translation>Connexion</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="343"/>
-        <location filename="../host/android/main_window.cc" line="378"/>
-        <location filename="../host/android/main_window.cc" line="410"/>
+        <location filename="../host/android/main_window.cc" line="350"/>
         <source>Permissions</source>
         <translation>Autorisations</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="344"/>
-        <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
-        <translation>Activez le service d&apos;accessibilité pour permettre le contrôle à distance du clavier et de la souris.</translation>
-    </message>
-    <message>
         <location filename="../client/android/main_window.cc" line="696"/>
-        <location filename="../host/android/main_window.cc" line="345"/>
-        <location filename="../host/android/main_window.cc" line="380"/>
-        <location filename="../host/android/main_window.cc" line="413"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
-    </message>
-    <message>
-        <location filename="../host/android/main_window.cc" line="379"/>
-        <source>Allow display over other apps to show the on-screen action button during a session.</source>
-        <translation>Autorisez l&apos;affichage par-dessus les autres applications pour afficher le bouton d&apos;action à l&apos;écran pendant une session.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/main_window.cc" line="411"/>
-        <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
-        <translation>Autorisez l&apos;accès à tous les fichiers pour que l&apos;utilisateur connecté puisse parcourir et transférer des fichiers sur cet appareil.</translation>
     </message>
 </context>
 <context>
@@ -1604,64 +1584,74 @@ Routeurs ajoutés: %4</translation>
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="223"/>
+        <location filename="../host/android/connection_widget.cc" line="244"/>
         <source>Your ID</source>
         <translation>Votre ID</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="224"/>
+        <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>One-time password</source>
         <translation>Mot de passe à usage unique</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="225"/>
+        <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>Access</source>
         <translation>Accès</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="226"/>
+        <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Desktop</source>
         <translation>Bureau</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="227"/>
+        <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>File Transfer</source>
         <translation>Transfert de fichiers</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="347"/>
+        <location filename="../host/android/connection_widget.cc" line="370"/>
+        <source>Waiting for a connection</source>
+        <translation>En attente de connexion</translation>
+    </message>
+    <message>
+        <location filename="../host/android/connection_widget.cc" line="370"/>
+        <source>Stop</source>
+        <translation>Arrêter</translation>
+    </message>
+    <message>
+        <location filename="../host/android/connection_widget.cc" line="373"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>ID Aspia: %1
 Mot de passe: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="390"/>
+        <location filename="../host/android/connection_widget.cc" line="416"/>
         <source>Router is disabled</source>
         <translation>Le routeur est désactivé</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="393"/>
+        <location filename="../host/android/connection_widget.cc" line="419"/>
         <source>Connecting to router...</source>
         <translation>Connexion au routeur...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="394"/>
+        <location filename="../host/android/connection_widget.cc" line="420"/>
         <source>Connecting to router %1...</source>
         <translation>Connexion au routeur %1...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="397"/>
+        <location filename="../host/android/connection_widget.cc" line="423"/>
         <source>Connected to router</source>
         <translation>Connecté au routeur</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="398"/>
+        <location filename="../host/android/connection_widget.cc" line="424"/>
         <source>Connected to router %1</source>
         <translation>Connecté au routeur %1</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="401"/>
+        <location filename="../host/android/connection_widget.cc" line="427"/>
         <source>Failed to connect to router</source>
         <translation>Impossible de se connecter au routeur</translation>
     </message>
@@ -5759,6 +5749,44 @@ Identifiants importés: %5</translation>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Denied</source>
         <translation>Refusé</translation>
+    </message>
+</context>
+<context>
+    <name>PermissionsWidget</name>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="80"/>
+        <source>The following permissions are required for the app to work. Grant them in the system settings.</source>
+        <translation>Les autorisations suivantes sont requises pour le fonctionnement de l&apos;application. Accordez-les dans les paramètres du système.</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="93"/>
+        <source>Accessibility service</source>
+        <translation>Service d&apos;accessibilité</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="94"/>
+        <source>Display over other apps</source>
+        <translation>Superposition sur d&apos;autres applis</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="95"/>
+        <source>All files access</source>
+        <translation>Accès à tous les fichiers</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="96"/>
+        <source>Notifications</source>
+        <translation>Notifications</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="108"/>
+        <source>Open</source>
+        <translation>Ouvrir</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="109"/>
+        <source>Granted</source>
+        <translation>Accordé</translation>
     </message>
 </context>
 <context>
