@@ -422,12 +422,6 @@ Routers added: %4</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="433"/>
-        <location filename="../client/android/main_window.cc" line="1011"/>
-        <source>The data of the host could not be read. Edit the host to enter it again.</source>
-        <translation>Не удалось прочитать данные хоста. Измените хост, чтобы ввести их заново.</translation>
-    </message>
-    <message>
         <location filename="../client/android/main_window.cc" line="695"/>
         <source>Update</source>
         <translation>Обновление</translation>
@@ -438,12 +432,6 @@ Routers added: %4</source>
         <translation>Доступна версия %1.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="743"/>
-        <location filename="../client/android/main_window.cc" line="969"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Не удалось прочитать данные маршрутизатора. Измените маршрутизатор, чтобы ввести их заново.</translation>
-    </message>
-    <message>
         <location filename="../client/android/main_window.cc" line="744"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Маршрутизатор, связанный с этим хостом, был удален. Измените хост, чтобы выбрать другой маршрутизатор, или переключитесь на прямое подключение.</translation>
@@ -452,6 +440,18 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="555"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Двухфакторная аутентификация - %1</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="433"/>
+        <location filename="../client/android/main_window.cc" line="1011"/>
+        <source>The data of the host is damaged. Edit the host and enter it again.</source>
+        <translation>Данные хоста повреждены. Измените хост и введите их заново.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="743"/>
+        <location filename="../client/android/main_window.cc" line="969"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Данные маршрутизатора повреждены. Измените маршрутизатор и введите их заново.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="921"/>
@@ -918,11 +918,6 @@ Routers added: %4</source>
         <translation>Соединение с хостом потеряно.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="488"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Не удалось прочитать данные маршрутизатора. Измените маршрутизатор, чтобы ввести их заново.</translation>
-    </message>
-    <message>
         <location filename="../client/android/chat_window.cc" line="489"/>
         <source>The specified router is unavailable.</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
@@ -946,6 +941,11 @@ Routers added: %4</source>
         <location filename="../client/android/chat_window.cc" line="465"/>
         <source>Connecting...</source>
         <translation>Подключение...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="488"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Данные маршрутизатора повреждены. Измените маршрутизатор и введите их заново.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="495"/>
@@ -1014,37 +1014,42 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="163"/>
+        <location filename="../client/main.cc" line="75"/>
+        <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
+        <translation>Не удалось создать резервную копию. Некоторые записи базы данных повреждены. Исправьте или удалите их.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="204"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>Ссылка aspia:// для подключения к хосту.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="202"/>
+        <location filename="../client/main.cc" line="243"/>
         <source>Unlock</source>
         <translation>Разблокировка</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="204"/>
+        <location filename="../client/main.cc" line="245"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Введите мастер-пароль, чтобы разблокировать приложение.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="224"/>
+        <location filename="../client/main.cc" line="265"/>
         <source>Unable to unlock the database.</source>
         <translation>Не удалось разблокировать базу данных.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="237"/>
+        <location filename="../client/main.cc" line="278"/>
         <source>Set Master Password</source>
         <translation>Установка мастер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="239"/>
+        <location filename="../client/main.cc" line="280"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Установите мастер-пароль, необходимый для разблокировки приложения.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="247"/>
+        <location filename="../client/main.cc" line="288"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не должен быть короче %n символа.</numerusform>
@@ -1053,12 +1058,12 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="255"/>
+        <location filename="../client/main.cc" line="296"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="257"/>
+        <location filename="../client/main.cc" line="298"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -1067,22 +1072,32 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="261"/>
+        <location filename="../client/main.cc" line="302"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="271"/>
+        <location filename="../client/main.cc" line="312"/>
         <source>Unable to set master password.</source>
         <translation>Не удалось установить мастер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="229"/>
+        <location filename="../client/main.cc" line="270"/>
         <source>Invalid master password.</source>
         <translation>Неверный мастер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="159"/>
+        <location filename="../client/main.cc" line="69"/>
+        <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
+        <translation>Не удалось создать резервную копию в директории &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="81"/>
+        <source>Unable to create a backup.</source>
+        <translation>Не удалось создать резервную копию.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="200"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
@@ -1133,6 +1148,11 @@ Routers added: %4</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
     </message>
     <message>
+        <location filename="../client/desktop/client_window.cc" line="517"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Данные маршрутизатора повреждены. Измените маршрутизатор и введите их заново.</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/client_window.cc" line="519"/>
         <source>The specified router is offline.</source>
         <translation>Указанный маршрутизатор не в сети.</translation>
@@ -1166,11 +1186,6 @@ Routers added: %4</source>
         <location filename="../client/desktop/client_window.cc" line="340"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Попытка подключения в режиме совместимости...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/client_window.cc" line="517"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Не удалось прочитать данные маршрутизатора. Измените маршрутизатор, чтобы ввести их заново.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="526"/>
@@ -1734,8 +1749,8 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="157"/>
-        <source>The credentials could not be read. You can enter them again.</source>
-        <translation>Не удалось прочитать учетные данные. Вы можете ввести их заново.</translation>
+        <source>The credentials are damaged. Enter them again.</source>
+        <translation>Учетные данные повреждены. Введите их заново.</translation>
     </message>
 </context>
 <context>
@@ -1768,8 +1783,8 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="133"/>
-        <source>The credentials could not be read. You can enter them again.</source>
-        <translation>Не удалось прочитать учетные данные. Вы можете ввести их заново.</translation>
+        <source>The credentials are damaged. Enter them again.</source>
+        <translation>Учетные данные повреждены. Введите их заново.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="145"/>
@@ -1929,8 +1944,8 @@ Credentials exported: %1</source>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="127"/>
-        <source>Could not be read</source>
-        <translation>Не удалось прочитать</translation>
+        <source>Damaged</source>
+        <translation>Повреждена</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="153"/>
@@ -2655,6 +2670,11 @@ Credentials replaced: %2</source>
         <translation>Сессия %1 (%2)</translation>
     </message>
     <message>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Данные маршрутизатора повреждены. Измените маршрутизатор и введите их заново.</translation>
+    </message>
+    <message>
         <location filename="../client/android/desktop_window.cc" line="543"/>
         <source>Connecting to router...</source>
         <translation>Подключение к маршрутизатору...</translation>
@@ -2713,11 +2733,6 @@ Credentials replaced: %2</source>
         <location filename="../client/android/desktop_window.cc" line="390"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="536"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Не удалось прочитать данные маршрутизатора. Измените маршрутизатор, чтобы ввести их заново.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="661"/>
@@ -3486,6 +3501,11 @@ Credentials replaced: %2</source>
         <translation>Соединение с хостом потеряно.</translation>
     </message>
     <message>
+        <location filename="../client/android/file_transfer_window.cc" line="330"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Данные маршрутизатора повреждены. Измените маршрутизатор и введите их заново.</translation>
+    </message>
+    <message>
         <location filename="../client/android/file_transfer_window.cc" line="331"/>
         <source>The specified router is unavailable.</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
@@ -3509,11 +3529,6 @@ Credentials replaced: %2</source>
         <location filename="../client/android/file_transfer_window.cc" line="307"/>
         <source>Connecting...</source>
         <translation>Подключение...</translation>
-    </message>
-    <message>
-        <location filename="../client/android/file_transfer_window.cc" line="330"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Не удалось прочитать данные маршрутизатора. Измените маршрутизатор, чтобы ввести их заново.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="337"/>
@@ -4348,8 +4363,8 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="392"/>
-        <source>The data of the host could not be read. You can enter it again.</source>
-        <translation>Не удалось прочитать данные хоста. Вы можете ввести их заново.</translation>
+        <source>The data of the host is damaged. Enter it again.</source>
+        <translation>Данные хоста повреждены. Введите их заново.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="402"/>
@@ -4423,8 +4438,8 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="174"/>
-        <source>The data of the host could not be read. You can enter it again.</source>
-        <translation>Не удалось прочитать данные хоста. Вы можете ввести их заново.</translation>
+        <source>The data of the host is damaged. Enter it again.</source>
+        <translation>Данные хоста повреждены. Введите их заново.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="184"/>
@@ -4564,13 +4579,13 @@ Credentials replaced: %2</source>
     <name>LocalWidget</name>
     <message>
         <location filename="../client/android/local_widget.cc" line="294"/>
-        <location filename="../client/android/local_widget.cc" line="438"/>
+        <location filename="../client/android/local_widget.cc" line="437"/>
         <source>Add Group</source>
         <translation>Добавить группу</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="295"/>
-        <location filename="../client/android/local_widget.cc" line="448"/>
+        <location filename="../client/android/local_widget.cc" line="447"/>
         <source>Add Host</source>
         <translation>Добавить хост</translation>
     </message>
@@ -4620,8 +4635,8 @@ Credentials imported: %5</source>
     <message>
         <location filename="../client/android/local_widget.cc" line="297"/>
         <location filename="../client/android/local_widget.cc" line="390"/>
-        <location filename="../client/android/local_widget.cc" line="423"/>
-        <location filename="../client/android/local_widget.cc" line="427"/>
+        <location filename="../client/android/local_widget.cc" line="422"/>
+        <location filename="../client/android/local_widget.cc" line="426"/>
         <source>Create Backup</source>
         <translation>Создать резервную копию</translation>
     </message>
@@ -4652,41 +4667,41 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="412"/>
-        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
-        <translation>Некоторые записи базы данных не удалось прочитать. Измените их, чтобы ввести данные заново.</translation>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>Некоторые записи базы данных повреждены. Исправьте или удалите их и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="417"/>
+        <location filename="../client/android/local_widget.cc" line="416"/>
         <source>Failed to create the backup.</source>
         <translation>Не удалось создать резервную копию.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="428"/>
+        <location filename="../client/android/local_widget.cc" line="427"/>
         <source>The file is written to %1. To open it elsewhere the master password of this installation is needed.</source>
         <translation>Файл записан в %1. Для его открытия в другом месте потребуется мастер-пароль этой установки приложения.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="536"/>
+        <location filename="../client/android/local_widget.cc" line="535"/>
         <source>Edit Group</source>
         <translation>Изменить группу</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="547"/>
+        <location filename="../client/android/local_widget.cc" line="546"/>
         <source>Edit Host</source>
         <translation>Изменить хост</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="657"/>
+        <location filename="../client/android/local_widget.cc" line="656"/>
         <source>Desktop</source>
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="659"/>
+        <location filename="../client/android/local_widget.cc" line="658"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="661"/>
+        <location filename="../client/android/local_widget.cc" line="660"/>
         <source>Chat</source>
         <translation>Чат</translation>
     </message>
@@ -4726,7 +4741,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="377"/>
+        <location filename="../client/desktop/main_window.cc" line="376"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
@@ -4811,38 +4826,38 @@ Credentials imported: %5</source>
         <translation>Маршрутизатор, указанный в ссылке, не найден среди сохраненных маршрутизаторов.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="237"/>
-        <location filename="../client/desktop/main_window.cc" line="290"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Не удалось прочитать данные маршрутизатора. Измените маршрутизатор, чтобы ввести их заново.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/main_window.cc" line="278"/>
-        <source>The data of the host could not be read. Edit the host to enter it again.</source>
-        <translation>Не удалось прочитать данные хоста. Измените хост, чтобы ввести их заново.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.cc" line="279"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Хост, указанный в ссылке, не найден среди сохраненных хостов.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="475"/>
+        <location filename="../client/desktop/main_window.cc" line="474"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>В свойствах хоста указано подключение по ID, но маршрутизатор не настроен. Проверьте параметры маршрутизатора в свойствах хоста.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="291"/>
+        <location filename="../client/desktop/main_window.cc" line="290"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Маршрутизатор, связанный с этим хостом, был удален. Измените хост, чтобы выбрать другой маршрутизатор, или переключитесь на прямое подключение.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="337"/>
+        <location filename="../client/desktop/main_window.cc" line="237"/>
+        <location filename="../client/desktop/main_window.cc" line="289"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Данные маршрутизатора повреждены. Измените маршрутизатор и введите их заново.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="277"/>
+        <source>The data of the host is damaged. Edit the host and enter it again.</source>
+        <translation>Данные хоста повреждены. Измените хост и введите их заново.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="336"/>
         <source>Credentials</source>
         <translation>Учетные данные</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="363"/>
+        <location filename="../client/desktop/main_window.cc" line="362"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
@@ -5044,7 +5059,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="967"/>
         <location filename="../client/desktop/management_tab.cc" line="1040"/>
-        <location filename="../client/desktop/management_tab.cc" line="2132"/>
+        <location filename="../client/desktop/management_tab.cc" line="2131"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Не удалось получить информацию о хосте из локальной базы данных.</translation>
     </message>
@@ -5114,7 +5129,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1477"/>
-        <location filename="../client/desktop/management_tab.cc" line="1535"/>
+        <location filename="../client/desktop/management_tab.cc" line="1534"/>
         <source>The database is not available.</source>
         <translation>База данных недоступна.</translation>
     </message>
@@ -5129,49 +5144,54 @@ Credentials imported: %5</source>
         <translation>Нечего сохранять.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1508"/>
-        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
-        <translation>Некоторые записи базы данных не удалось прочитать. Измените их, чтобы ввести данные заново.</translation>
+        <location filename="../client/desktop/management_tab.cc" line="2126"/>
+        <source>The data of the host is damaged. Edit the host and enter it again.</source>
+        <translation>Данные хоста повреждены. Измените хост и введите их заново.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1513"/>
+        <location filename="../client/desktop/management_tab.cc" line="2147"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Данные маршрутизатора повреждены. Измените маршрутизатор и введите их заново.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1512"/>
         <source>Failed to create the backup.</source>
         <translation>Не удалось создать резервную копию.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1541"/>
-        <location filename="../client/desktop/management_tab.cc" line="1567"/>
+        <location filename="../client/desktop/management_tab.cc" line="1540"/>
+        <location filename="../client/desktop/management_tab.cc" line="1566"/>
         <source>Restore from Backup</source>
         <translation>Восстановить из резервной копии</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1550"/>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Все текущие данные будут удалены и заменены содержимым резервной копии. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1569"/>
+        <location filename="../client/desktop/management_tab.cc" line="1568"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Резервная копия была создана в другой установке приложения. Введите мастер-пароль, который использовался там.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1594"/>
+        <location filename="../client/desktop/management_tab.cc" line="1593"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Резервная копия не содержит данных, поэтому ничего не было изменено.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1602"/>
+        <location filename="../client/desktop/management_tab.cc" line="1601"/>
         <source>The file is not a valid backup.</source>
         <translation>Файл не является допустимой резервной копией.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1606"/>
+        <location filename="../client/desktop/management_tab.cc" line="1605"/>
         <source>Failed to restore from the backup.</source>
         <translation>Не удалось восстановить из резервной копии.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1484"/>
-        <location filename="../client/desktop/management_tab.cc" line="1542"/>
+        <location filename="../client/desktop/management_tab.cc" line="1541"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Резервная копия Aspia (*.aspia-backup);;Все файлы (*)</translation>
     </message>
@@ -5181,12 +5201,12 @@ Credentials imported: %5</source>
         <translation>Не удалось записать файл.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1598"/>
+        <location filename="../client/desktop/management_tab.cc" line="1597"/>
         <source>Unable to read the file.</source>
         <translation>Не удалось прочитать файл.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1518"/>
+        <location filename="../client/desktop/management_tab.cc" line="1517"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5201,17 +5221,22 @@ Credentials exported: %5</source>
 Учетных данных экспортировано: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1586"/>
+        <location filename="../client/desktop/management_tab.cc" line="1508"/>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>Некоторые записи базы данных повреждены. Исправьте или удалите их и повторите попытку.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1585"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Не удается расшифровать файл с помощью указанного пароля.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1590"/>
+        <location filename="../client/desktop/management_tab.cc" line="1589"/>
         <source>Unsupported file format version.</source>
         <translation>Неподдерживаемая версия формата файла.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1611"/>
+        <location filename="../client/desktop/management_tab.cc" line="1610"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5226,39 +5251,29 @@ Credentials imported: %5</source>
 Учетных данных импортировано: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2055"/>
-        <location filename="../client/desktop/management_tab.cc" line="2086"/>
+        <location filename="../client/desktop/management_tab.cc" line="2054"/>
+        <location filename="../client/desktop/management_tab.cc" line="2085"/>
         <source>Copy Link</source>
         <translation>Копировать ссылку</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2074"/>
-        <location filename="../client/desktop/management_tab.cc" line="2108"/>
+        <location filename="../client/desktop/management_tab.cc" line="2073"/>
+        <location filename="../client/desktop/management_tab.cc" line="2107"/>
         <source>Unable to create a link for this host.</source>
         <translation>Не удалось создать ссылку для этого хоста.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2127"/>
-        <source>The data of the host could not be read. Edit the host to enter it again.</source>
-        <translation>Не удалось прочитать данные хоста. Измените хост, чтобы ввести их заново.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="2148"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Не удалось прочитать данные маршрутизатора. Измените маршрутизатор, чтобы ввести их заново.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="2149"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Маршрутизатор, связанный с этим хостом, был удален. Измените хост, чтобы выбрать другой маршрутизатор, или переключитесь на прямое подключение.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2156"/>
+        <location filename="../client/desktop/management_tab.cc" line="2155"/>
         <source>The host has an invalid host ID.</source>
         <translation>Хост имеет недопустимый ID.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2165"/>
+        <location filename="../client/desktop/management_tab.cc" line="2164"/>
         <source>The host has an incorrect address.</source>
         <translation>Хост имеет недопустимый адрес.</translation>
     </message>
@@ -5277,7 +5292,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <location filename="../client/android/master_password_dialog.cc" line="214"/>
+        <location filename="../client/android/master_password_dialog.cc" line="213"/>
         <source>Unlock</source>
         <translation>Разблокировка</translation>
     </message>
@@ -5367,27 +5382,27 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="187"/>
-        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
-        <translation>Некоторые записи базы данных не удалось прочитать. Измените их, чтобы ввести данные заново.</translation>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>Некоторые записи базы данных повреждены. Исправьте или удалите их и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="192"/>
+        <location filename="../client/android/master_password_dialog.cc" line="191"/>
         <source>Unable to change the password.</source>
         <translation>Не удалось изменить пароль.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="215"/>
+        <location filename="../client/android/master_password_dialog.cc" line="214"/>
         <source>Use password</source>
         <translation>Использовать пароль</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="232"/>
-        <location filename="../client/android/master_password_dialog.cc" line="240"/>
+        <location filename="../client/android/master_password_dialog.cc" line="231"/>
+        <location filename="../client/android/master_password_dialog.cc" line="239"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>Не удалось разблокировать с помощью биометрии. Введите мастер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="236"/>
+        <location filename="../client/android/master_password_dialog.cc" line="235"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>Биометрические данные изменились. Введите мастер-пароль, чтобы продолжить.</translation>
     </message>
@@ -6098,8 +6113,8 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="195"/>
-        <source>The data of the router could not be read. You can enter it again.</source>
-        <translation>Не удалось прочитать данные маршрутизатора. Вы можете ввести их заново.</translation>
+        <source>The data of the router is damaged. Enter it again.</source>
+        <translation>Данные маршрутизатора повреждены. Введите их заново.</translation>
     </message>
 </context>
 <context>
@@ -6137,8 +6152,8 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="141"/>
-        <source>The data of the router could not be read. You can enter it again.</source>
-        <translation>Не удалось прочитать данные маршрутизатора. Вы можете ввести их заново.</translation>
+        <source>The data of the router is damaged. Enter it again.</source>
+        <translation>Данные маршрутизатора повреждены. Введите их заново.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="152"/>
@@ -6418,8 +6433,8 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="294"/>
-        <source>The credentials of the host could not be read. You can enter them again.</source>
-        <translation>Не удалось прочитать учетные данные хоста. Вы можете ввести их заново.</translation>
+        <source>The credentials of the host are damaged. Enter them again.</source>
+        <translation>Учетные данные хоста повреждены. Введите их заново.</translation>
     </message>
 </context>
 <context>
@@ -6463,8 +6478,8 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="141"/>
-        <source>The credentials of the host could not be read. You can enter them again.</source>
-        <translation>Не удалось прочитать учетные данные хоста. Вы можете ввести их заново.</translation>
+        <source>The credentials of the host are damaged. Enter them again.</source>
+        <translation>Учетные данные хоста повреждены. Введите их заново.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="226"/>
@@ -7365,137 +7380,162 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="165"/>
+        <source>Backup</source>
+        <translation>Резервное копирование</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="171"/>
+        <source>Create backups on application startup</source>
+        <translation>Создавать резервные копии при запуске</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="178"/>
+        <source>Directory:</source>
+        <translation>Директория:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="188"/>
+        <source>Browse...</source>
+        <translation>Обзор...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="195"/>
+        <source>Keep backups for:</source>
+        <translation>Хранить резервные копии:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="208"/>
         <source>UDP Connections</source>
         <translation>UDP подключения</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="171"/>
+        <location filename="../client/desktop/settings_tab.ui" line="214"/>
         <source>Allow direct connections</source>
         <translation>Разрешить прямые подключения</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="178"/>
+        <location filename="../client/desktop/settings_tab.ui" line="221"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Разрешить UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="185"/>
+        <location filename="../client/desktop/settings_tab.ui" line="228"/>
         <source>Allow PCP protocol</source>
         <translation>Разрешить PCP протокол</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="192"/>
+        <location filename="../client/desktop/settings_tab.ui" line="235"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Разрешить NAT-PMP протокол</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="199"/>
+        <location filename="../client/desktop/settings_tab.ui" line="242"/>
         <source>Allow UPnP protocol</source>
         <translation>Разрешить UPnP протокол</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="209"/>
+        <location filename="../client/desktop/settings_tab.ui" line="252"/>
         <source>Master Password</source>
         <translation>Мастер-пароль</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="228"/>
+        <location filename="../client/desktop/settings_tab.ui" line="271"/>
         <source>Change...</source>
         <translation>Изменить...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="291"/>
+        <location filename="../client/desktop/settings_tab.ui" line="334"/>
         <source>Features</source>
         <translation>Возможности</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="297"/>
+        <location filename="../client/desktop/settings_tab.ui" line="340"/>
         <source>Enable audio</source>
         <translation>Включить звук</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="304"/>
+        <location filename="../client/desktop/settings_tab.ui" line="347"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="311"/>
+        <location filename="../client/desktop/settings_tab.ui" line="354"/>
         <source>Show shape of remote cursor</source>
         <translation>Показывать форму удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="318"/>
+        <location filename="../client/desktop/settings_tab.ui" line="361"/>
         <source>Show position of remote cursor</source>
         <translation>Показывать положение удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="325"/>
+        <location filename="../client/desktop/settings_tab.ui" line="368"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="332"/>
+        <location filename="../client/desktop/settings_tab.ui" line="375"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="339"/>
+        <location filename="../client/desktop/settings_tab.ui" line="382"/>
         <source>Lock computer at disconnect</source>
         <translation>Блокировать компьютер при отключении</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="346"/>
+        <location filename="../client/desktop/settings_tab.ui" line="389"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="353"/>
+        <location filename="../client/desktop/settings_tab.ui" line="396"/>
         <source>Send key combinations</source>
         <translation>Отправлять комбинации клавиш</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="369"/>
+        <location filename="../client/desktop/settings_tab.ui" line="412"/>
         <source>Screen</source>
         <translation>Экран</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="377"/>
+        <location filename="../client/desktop/settings_tab.ui" line="420"/>
         <source>Preferred resolution:</source>
         <translation>Предпочитаемое разрешение:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="405"/>
+        <location filename="../client/desktop/settings_tab.ui" line="448"/>
         <source>Recording</source>
         <translation>Запись</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="411"/>
+        <location filename="../client/desktop/settings_tab.ui" line="454"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>Автоматически начинать запись при подключении</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="420"/>
+        <location filename="../client/desktop/settings_tab.ui" line="463"/>
         <source>Write path:</source>
         <translation>Путь для записи:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="508"/>
+        <location filename="../client/desktop/settings_tab.ui" line="551"/>
         <location filename="../client/desktop/settings_tab.cc" line="128"/>
         <source>Update</source>
         <translation>Обновление</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="514"/>
+        <location filename="../client/desktop/settings_tab.ui" line="557"/>
         <source>Check for updates on startup</source>
         <translation>Проверять обновления при запуске</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="523"/>
+        <location filename="../client/desktop/settings_tab.ui" line="566"/>
         <source>Update channel:</source>
         <translation>Канал обновлений:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="550"/>
+        <location filename="../client/desktop/settings_tab.ui" line="593"/>
         <source>Check for updates</source>
         <translation>Проверить обновления</translation>
     </message>
@@ -7510,47 +7550,73 @@ Credentials imported: %5</source>
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="189"/>
+        <location filename="../client/desktop/settings_tab.cc" line="173"/>
+        <source>1 week</source>
+        <translation>1 неделю</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="174"/>
+        <source>2 weeks</source>
+        <translation>2 недели</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="175"/>
+        <source>1 month</source>
+        <translation>1 месяц</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="176"/>
+        <source>6 months</source>
+        <translation>6 месяцев</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="177"/>
+        <source>1 year</source>
+        <translation>1 год</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="200"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="214"/>
+        <location filename="../client/desktop/settings_tab.cc" line="225"/>
         <source>Stable</source>
         <translation>Стабильный</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="215"/>
+        <location filename="../client/desktop/settings_tab.cc" line="226"/>
         <source>Beta</source>
         <translation>Бета</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="216"/>
+        <location filename="../client/desktop/settings_tab.cc" line="227"/>
         <source>Alpha</source>
         <translation>Альфа</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="329"/>
+        <location filename="../client/desktop/settings_tab.cc" line="345"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Новый язык будет применен после перезапуска приложения.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="398"/>
+        <location filename="../client/desktop/settings_tab.cc" line="394"/>
+        <location filename="../client/desktop/settings_tab.cc" line="464"/>
         <source>Choose path</source>
         <translation>Выбор пути</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="418"/>
+        <location filename="../client/desktop/settings_tab.cc" line="484"/>
         <source>Change Master Password</source>
         <translation>Изменение мастер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="420"/>
+        <location filename="../client/desktop/settings_tab.cc" line="486"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Введите свой текущий пароль и выберите новый.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="428"/>
+        <location filename="../client/desktop/settings_tab.cc" line="494"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не должен быть короче %n символа.</numerusform>
@@ -7559,12 +7625,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="435"/>
+        <location filename="../client/desktop/settings_tab.cc" line="501"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="436"/>
+        <location filename="../client/desktop/settings_tab.cc" line="502"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -7573,22 +7639,22 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="439"/>
+        <location filename="../client/desktop/settings_tab.cc" line="505"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="452"/>
+        <location filename="../client/desktop/settings_tab.cc" line="518"/>
         <source>Invalid current password.</source>
         <translation>Неверный текущий пароль.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="456"/>
-        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
-        <translation>Некоторые записи базы данных не удалось прочитать. Измените их, чтобы ввести данные заново.</translation>
+        <location filename="../client/desktop/settings_tab.cc" line="522"/>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>Некоторые записи базы данных повреждены. Исправьте или удалите их и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="461"/>
+        <location filename="../client/desktop/settings_tab.cc" line="526"/>
         <source>Unable to change the password.</source>
         <translation>Не удалось изменить пароль.</translation>
     </message>

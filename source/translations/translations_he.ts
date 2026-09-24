@@ -422,12 +422,6 @@ Routers added: %4</source>
         <translation>הגדרות</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="433"/>
-        <location filename="../client/android/main_window.cc" line="1011"/>
-        <source>The data of the host could not be read. Edit the host to enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני המארח. ערוך את המארח כדי להזין אותם מחדש.</translation>
-    </message>
-    <message>
         <location filename="../client/android/main_window.cc" line="695"/>
         <source>Update</source>
         <translation>עדכון</translation>
@@ -438,12 +432,6 @@ Routers added: %4</source>
         <translation>גרסה %1 זמינה.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="743"/>
-        <location filename="../client/android/main_window.cc" line="969"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני הנתב. ערוך את הנתב כדי להזין אותם מחדש.</translation>
-    </message>
-    <message>
         <location filename="../client/android/main_window.cc" line="744"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>הנתב המשויך למארח זה נמחק. ערוך את המארח כדי לבחור נתב אחר או לעבור לחיבור ישיר.</translation>
@@ -452,6 +440,18 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="555"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>אימות דו-שלבי - %1</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="433"/>
+        <location filename="../client/android/main_window.cc" line="1011"/>
+        <source>The data of the host is damaged. Edit the host and enter it again.</source>
+        <translation>נתוני המארח פגומים. ערוך את המארח והזן אותם מחדש.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="743"/>
+        <location filename="../client/android/main_window.cc" line="969"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="921"/>
@@ -917,11 +917,6 @@ Routers added: %4</source>
         <translation>החיבור למארח אבד.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="488"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני הנתב. ערוך את הנתב כדי להזין אותם מחדש.</translation>
-    </message>
-    <message>
         <location filename="../client/android/chat_window.cc" line="489"/>
         <source>The specified router is unavailable.</source>
         <translation>הנתב שצוין אינו זמין.</translation>
@@ -945,6 +940,11 @@ Routers added: %4</source>
         <location filename="../client/android/chat_window.cc" line="465"/>
         <source>Connecting...</source>
         <translation>מתחבר...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="488"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="495"/>
@@ -1013,17 +1013,22 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="237"/>
+        <location filename="../client/main.cc" line="75"/>
+        <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
+        <translation>יצירת הגיבוי נכשלה. חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="278"/>
         <source>Set Master Password</source>
         <translation>הגדרת סיסמה ראשית</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="239"/>
+        <location filename="../client/main.cc" line="280"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>הגדר סיסמה ראשית הנדרשת לביטול נעילת היישום.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="247"/>
+        <location filename="../client/main.cc" line="288"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יפחת מ-%n תו.</numerusform>
@@ -1031,12 +1036,12 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="255"/>
+        <location filename="../client/main.cc" line="296"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>הסיסמה שהזנת אינה עומדת בדרישות האבטחה!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="257"/>
+        <location filename="../client/main.cc" line="298"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>הסיסמה חייבת להכיל אותיות קטנות וגדולות ומספרים, ואורכה לא יפחת מ-%n תו.</numerusform>
@@ -1044,42 +1049,52 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="261"/>
+        <location filename="../client/main.cc" line="302"/>
         <source>Do you want to enter a different password?</source>
         <translation>האם ברצונך להזין סיסמה אחרת?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="271"/>
+        <location filename="../client/main.cc" line="312"/>
         <source>Unable to set master password.</source>
         <translation>לא ניתן להגדיר סיסמה ראשית.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="202"/>
+        <location filename="../client/main.cc" line="243"/>
         <source>Unlock</source>
         <translation>בטל נעילה</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="163"/>
+        <location filename="../client/main.cc" line="69"/>
+        <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
+        <translation>יצירת הגיבוי בתיקייה &quot;%1&quot; נכשלה.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="81"/>
+        <source>Unable to create a backup.</source>
+        <translation>יצירת הגיבוי נכשלה.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="204"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>קישור aspia:// להתחברות למארח.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="204"/>
+        <location filename="../client/main.cc" line="245"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>הזן את הסיסמה הראשית כדי לבטל את נעילת היישום.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="224"/>
+        <location filename="../client/main.cc" line="265"/>
         <source>Unable to unlock the database.</source>
         <translation>לא ניתן לבטל את נעילת מסד הנתונים.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="229"/>
+        <location filename="../client/main.cc" line="270"/>
         <source>Invalid master password.</source>
         <translation>הסיסמה הראשית שגויה.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="159"/>
+        <location filename="../client/main.cc" line="200"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -1130,6 +1145,11 @@ Routers added: %4</source>
         <translation>הנתב שצוין אינו זמין.</translation>
     </message>
     <message>
+        <location filename="../client/desktop/client_window.cc" line="517"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/client_window.cc" line="519"/>
         <source>The specified router is offline.</source>
         <translation>הנתב שצוין אינו מקוון.</translation>
@@ -1163,11 +1183,6 @@ Routers added: %4</source>
         <location filename="../client/desktop/client_window.cc" line="340"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>מנסה להתחבר במצב תאימות...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/client_window.cc" line="517"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני הנתב. ערוך את הנתב כדי להזין אותם מחדש.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="526"/>
@@ -1728,8 +1743,8 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="157"/>
-        <source>The credentials could not be read. You can enter them again.</source>
-        <translation>לא ניתן היה לקרוא את פרטי הכניסה. ניתן להזין אותם מחדש.</translation>
+        <source>The credentials are damaged. Enter them again.</source>
+        <translation>פרטי הכניסה פגומים. הזן אותם מחדש.</translation>
     </message>
 </context>
 <context>
@@ -1762,8 +1777,8 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="133"/>
-        <source>The credentials could not be read. You can enter them again.</source>
-        <translation>לא ניתן היה לקרוא את פרטי הכניסה. ניתן להזין אותם מחדש.</translation>
+        <source>The credentials are damaged. Enter them again.</source>
+        <translation>פרטי הכניסה פגומים. הזן אותם מחדש.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="145"/>
@@ -1920,8 +1935,8 @@ Credentials exported: %1</source>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="127"/>
-        <source>Could not be read</source>
-        <translation>לא ניתן לקריאה</translation>
+        <source>Damaged</source>
+        <translation>פגום</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="153"/>
@@ -2644,6 +2659,11 @@ Credentials replaced: %2</source>
         <translation>הפעלה %1 (%2)</translation>
     </message>
     <message>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
+    </message>
+    <message>
         <location filename="../client/android/desktop_window.cc" line="543"/>
         <source>Connecting to router...</source>
         <translation>מתחבר לנתב...</translation>
@@ -2702,11 +2722,6 @@ Credentials replaced: %2</source>
         <location filename="../client/android/desktop_window.cc" line="390"/>
         <source>Disconnect</source>
         <translation>נתק</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="536"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני הנתב. ערוך את הנתב כדי להזין אותם מחדש.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="661"/>
@@ -3475,6 +3490,11 @@ Credentials replaced: %2</source>
         <translation>החיבור למארח אבד.</translation>
     </message>
     <message>
+        <location filename="../client/android/file_transfer_window.cc" line="330"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
+    </message>
+    <message>
         <location filename="../client/android/file_transfer_window.cc" line="331"/>
         <source>The specified router is unavailable.</source>
         <translation>הנתב שצוין אינו זמין.</translation>
@@ -3498,11 +3518,6 @@ Credentials replaced: %2</source>
         <location filename="../client/android/file_transfer_window.cc" line="307"/>
         <source>Connecting...</source>
         <translation>מתחבר...</translation>
-    </message>
-    <message>
-        <location filename="../client/android/file_transfer_window.cc" line="330"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני הנתב. ערוך את הנתב כדי להזין אותם מחדש.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="337"/>
@@ -4325,8 +4340,8 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="392"/>
-        <source>The data of the host could not be read. You can enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני המארח. ניתן להזין אותם מחדש.</translation>
+        <source>The data of the host is damaged. Enter it again.</source>
+        <translation>נתוני המארח פגומים. הזן אותם מחדש.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="402"/>
@@ -4400,8 +4415,8 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="174"/>
-        <source>The data of the host could not be read. You can enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני המארח. ניתן להזין אותם מחדש.</translation>
+        <source>The data of the host is damaged. Enter it again.</source>
+        <translation>נתוני המארח פגומים. הזן אותם מחדש.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="184"/>
@@ -4539,13 +4554,13 @@ Credentials replaced: %2</source>
     <name>LocalWidget</name>
     <message>
         <location filename="../client/android/local_widget.cc" line="294"/>
-        <location filename="../client/android/local_widget.cc" line="438"/>
+        <location filename="../client/android/local_widget.cc" line="437"/>
         <source>Add Group</source>
         <translation>הוספת קבוצה</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="295"/>
-        <location filename="../client/android/local_widget.cc" line="448"/>
+        <location filename="../client/android/local_widget.cc" line="447"/>
         <source>Add Host</source>
         <translation>הוספת מארח</translation>
     </message>
@@ -4595,8 +4610,8 @@ Credentials imported: %5</source>
     <message>
         <location filename="../client/android/local_widget.cc" line="297"/>
         <location filename="../client/android/local_widget.cc" line="390"/>
-        <location filename="../client/android/local_widget.cc" line="423"/>
-        <location filename="../client/android/local_widget.cc" line="427"/>
+        <location filename="../client/android/local_widget.cc" line="422"/>
+        <location filename="../client/android/local_widget.cc" line="426"/>
         <source>Create Backup</source>
         <translation>יצירת גיבוי</translation>
     </message>
@@ -4627,41 +4642,41 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="412"/>
-        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
-        <translation>לא ניתן היה לקרוא חלק מרשומות מסד הנתונים. ערוך אותן כדי להזין את הנתונים שלהן מחדש.</translation>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="417"/>
+        <location filename="../client/android/local_widget.cc" line="416"/>
         <source>Failed to create the backup.</source>
         <translation>יצירת הגיבוי נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="428"/>
+        <location filename="../client/android/local_widget.cc" line="427"/>
         <source>The file is written to %1. To open it elsewhere the master password of this installation is needed.</source>
         <translation>הקובץ נכתב אל %1. כדי לפתוח אותו במקום אחר נדרשת הסיסמה הראשית של התקנה זו.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="536"/>
+        <location filename="../client/android/local_widget.cc" line="535"/>
         <source>Edit Group</source>
         <translation>עריכת קבוצה</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="547"/>
+        <location filename="../client/android/local_widget.cc" line="546"/>
         <source>Edit Host</source>
         <translation>עריכת מארח</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="657"/>
+        <location filename="../client/android/local_widget.cc" line="656"/>
         <source>Desktop</source>
         <translation>שולחן עבודה</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="659"/>
+        <location filename="../client/android/local_widget.cc" line="658"/>
         <source>File Transfer</source>
         <translation>העברת קבצים</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="661"/>
+        <location filename="../client/android/local_widget.cc" line="660"/>
         <source>Chat</source>
         <translation>צ&apos;אט</translation>
     </message>
@@ -4706,7 +4721,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="377"/>
+        <location filename="../client/desktop/main_window.cc" line="376"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4786,38 +4801,38 @@ Credentials imported: %5</source>
         <translation>הנתב שאליו מפנה הקישור אינו נמצא בין הנתבים השמורים.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="237"/>
-        <location filename="../client/desktop/main_window.cc" line="290"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני הנתב. ערוך את הנתב כדי להזין אותם מחדש.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/main_window.cc" line="278"/>
-        <source>The data of the host could not be read. Edit the host to enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני המארח. ערוך את המארח כדי להזין אותם מחדש.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.cc" line="279"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>המארח שאליו מפנה הקישור אינו נמצא בין המארחים השמורים.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="475"/>
+        <location filename="../client/desktop/main_window.cc" line="474"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>במאפייני המארח צוין חיבור לפי ID, אך הנתב אינו מוגדר. בדוק את פרמטרי הנתב במאפייני המארח.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="291"/>
+        <location filename="../client/desktop/main_window.cc" line="290"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>הנתב המשויך למארח זה נמחק. ערוך את המארח כדי לבחור נתב אחר או לעבור לחיבור ישיר.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="337"/>
+        <location filename="../client/desktop/main_window.cc" line="237"/>
+        <location filename="../client/desktop/main_window.cc" line="289"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="277"/>
+        <source>The data of the host is damaged. Edit the host and enter it again.</source>
+        <translation>נתוני המארח פגומים. ערוך את המארח והזן אותם מחדש.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="336"/>
         <source>Credentials</source>
         <translation>פרטי כניסה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="363"/>
+        <location filename="../client/desktop/main_window.cc" line="362"/>
         <source>Settings</source>
         <translation>הגדרות</translation>
     </message>
@@ -5024,7 +5039,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="967"/>
         <location filename="../client/desktop/management_tab.cc" line="1040"/>
-        <location filename="../client/desktop/management_tab.cc" line="2132"/>
+        <location filename="../client/desktop/management_tab.cc" line="2131"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>אחזור פרטי המארח ממסד הנתונים המקומי נכשל.</translation>
     </message>
@@ -5089,7 +5104,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1477"/>
-        <location filename="../client/desktop/management_tab.cc" line="1535"/>
+        <location filename="../client/desktop/management_tab.cc" line="1534"/>
         <source>The database is not available.</source>
         <translation>מסד הנתונים אינו זמין.</translation>
     </message>
@@ -5104,49 +5119,54 @@ Credentials imported: %5</source>
         <translation>אין מה לשמור.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1508"/>
-        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
-        <translation>לא ניתן היה לקרוא חלק מרשומות מסד הנתונים. ערוך אותן כדי להזין את הנתונים שלהן מחדש.</translation>
+        <location filename="../client/desktop/management_tab.cc" line="2126"/>
+        <source>The data of the host is damaged. Edit the host and enter it again.</source>
+        <translation>נתוני המארח פגומים. ערוך את המארח והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1513"/>
+        <location filename="../client/desktop/management_tab.cc" line="2147"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1512"/>
         <source>Failed to create the backup.</source>
         <translation>יצירת הגיבוי נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1541"/>
-        <location filename="../client/desktop/management_tab.cc" line="1567"/>
+        <location filename="../client/desktop/management_tab.cc" line="1540"/>
+        <location filename="../client/desktop/management_tab.cc" line="1566"/>
         <source>Restore from Backup</source>
         <translation>שחזור מגיבוי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1550"/>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>כל מה ששמור כעת יימחק ויוחלף במה שהגיבוי מכיל. להמשיך?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1569"/>
+        <location filename="../client/desktop/management_tab.cc" line="1568"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>הגיבוי נוצר בהתקנה אחרת. הזן את הסיסמה הראשית ששימשה שם.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1594"/>
+        <location filename="../client/desktop/management_tab.cc" line="1593"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>הגיבוי אינו מכיל נתונים, ולכן לא שונה דבר.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1602"/>
+        <location filename="../client/desktop/management_tab.cc" line="1601"/>
         <source>The file is not a valid backup.</source>
         <translation>הקובץ אינו גיבוי חוקי.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1606"/>
+        <location filename="../client/desktop/management_tab.cc" line="1605"/>
         <source>Failed to restore from the backup.</source>
         <translation>השחזור מהגיבוי נכשל.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1484"/>
-        <location filename="../client/desktop/management_tab.cc" line="1542"/>
+        <location filename="../client/desktop/management_tab.cc" line="1541"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>גיבוי Aspia (*.aspia-backup);;כל הקבצים (*)</translation>
     </message>
@@ -5156,12 +5176,12 @@ Credentials imported: %5</source>
         <translation>לא ניתן לכתוב את הקובץ.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1598"/>
+        <location filename="../client/desktop/management_tab.cc" line="1597"/>
         <source>Unable to read the file.</source>
         <translation>לא ניתן לקרוא את הקובץ.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1518"/>
+        <location filename="../client/desktop/management_tab.cc" line="1517"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5176,17 +5196,22 @@ Credentials exported: %5</source>
 פרטי כניסה שיוצאו: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1586"/>
+        <location filename="../client/desktop/management_tab.cc" line="1508"/>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן ונסה שוב.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1585"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>לא ניתן לפענח את הקובץ באמצעות הסיסמה שצוינה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1590"/>
+        <location filename="../client/desktop/management_tab.cc" line="1589"/>
         <source>Unsupported file format version.</source>
         <translation>גרסת תבנית קובץ שאינה נתמכת.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1611"/>
+        <location filename="../client/desktop/management_tab.cc" line="1610"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5201,39 +5226,29 @@ Credentials imported: %5</source>
 פרטי כניסה שיובאו: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2055"/>
-        <location filename="../client/desktop/management_tab.cc" line="2086"/>
+        <location filename="../client/desktop/management_tab.cc" line="2054"/>
+        <location filename="../client/desktop/management_tab.cc" line="2085"/>
         <source>Copy Link</source>
         <translation>העתקת קישור</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2074"/>
-        <location filename="../client/desktop/management_tab.cc" line="2108"/>
+        <location filename="../client/desktop/management_tab.cc" line="2073"/>
+        <location filename="../client/desktop/management_tab.cc" line="2107"/>
         <source>Unable to create a link for this host.</source>
         <translation>לא ניתן ליצור קישור עבור מארח זה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2127"/>
-        <source>The data of the host could not be read. Edit the host to enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני המארח. ערוך את המארח כדי להזין אותם מחדש.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="2148"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני הנתב. ערוך את הנתב כדי להזין אותם מחדש.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="2149"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>הנתב המשויך למארח זה נמחק. ערוך את המארח כדי לבחור נתב אחר או לעבור לחיבור ישיר.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2156"/>
+        <location filename="../client/desktop/management_tab.cc" line="2155"/>
         <source>The host has an invalid host ID.</source>
         <translation>למארח מזהה מארח לא חוקי.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2165"/>
+        <location filename="../client/desktop/management_tab.cc" line="2164"/>
         <source>The host has an incorrect address.</source>
         <translation>למארח כתובת שגויה.</translation>
     </message>
@@ -5252,7 +5267,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <location filename="../client/android/master_password_dialog.cc" line="214"/>
+        <location filename="../client/android/master_password_dialog.cc" line="213"/>
         <source>Unlock</source>
         <translation>בטל נעילה</translation>
     </message>
@@ -5341,27 +5356,27 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="187"/>
-        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
-        <translation>לא ניתן היה לקרוא חלק מרשומות מסד הנתונים. ערוך אותן כדי להזין את הנתונים שלהן מחדש.</translation>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="192"/>
+        <location filename="../client/android/master_password_dialog.cc" line="191"/>
         <source>Unable to change the password.</source>
         <translation>לא ניתן לשנות את הסיסמה.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="215"/>
+        <location filename="../client/android/master_password_dialog.cc" line="214"/>
         <source>Use password</source>
         <translation>השתמש בסיסמה</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="232"/>
-        <location filename="../client/android/master_password_dialog.cc" line="240"/>
+        <location filename="../client/android/master_password_dialog.cc" line="231"/>
+        <location filename="../client/android/master_password_dialog.cc" line="239"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>שחרור הנעילה הביומטרי נכשל. הזן את הסיסמה הראשית.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="236"/>
+        <location filename="../client/android/master_password_dialog.cc" line="235"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>הנתונים הביומטריים השתנו. הזן את הסיסמה הראשית כדי להמשיך.</translation>
     </message>
@@ -6070,8 +6085,8 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="195"/>
-        <source>The data of the router could not be read. You can enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני הנתב. ניתן להזין אותם מחדש.</translation>
+        <source>The data of the router is damaged. Enter it again.</source>
+        <translation>נתוני הנתב פגומים. הזן אותם מחדש.</translation>
     </message>
 </context>
 <context>
@@ -6109,8 +6124,8 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="141"/>
-        <source>The data of the router could not be read. You can enter it again.</source>
-        <translation>לא ניתן היה לקרוא את נתוני הנתב. ניתן להזין אותם מחדש.</translation>
+        <source>The data of the router is damaged. Enter it again.</source>
+        <translation>נתוני הנתב פגומים. הזן אותם מחדש.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="152"/>
@@ -6388,8 +6403,8 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="294"/>
-        <source>The credentials of the host could not be read. You can enter them again.</source>
-        <translation>לא ניתן היה לקרוא את פרטי הכניסה של המארח. ניתן להזין אותם מחדש.</translation>
+        <source>The credentials of the host are damaged. Enter them again.</source>
+        <translation>פרטי הכניסה של המארח פגומים. הזן אותם מחדש.</translation>
     </message>
 </context>
 <context>
@@ -6433,8 +6448,8 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="141"/>
-        <source>The credentials of the host could not be read. You can enter them again.</source>
-        <translation>לא ניתן היה לקרוא את פרטי הכניסה של המארח. ניתן להזין אותם מחדש.</translation>
+        <source>The credentials of the host are damaged. Enter them again.</source>
+        <translation>פרטי הכניסה של המארח פגומים. הזן אותם מחדש.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="226"/>
@@ -7327,137 +7342,162 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="165"/>
+        <source>Backup</source>
+        <translation>גיבוי</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="171"/>
+        <source>Create backups on application startup</source>
+        <translation>צור גיבויים בעת הפעלת היישום</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="178"/>
+        <source>Directory:</source>
+        <translation>תיקייה:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="188"/>
+        <source>Browse...</source>
+        <translation>עיון...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="195"/>
+        <source>Keep backups for:</source>
+        <translation>שמור גיבויים למשך:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="208"/>
         <source>UDP Connections</source>
         <translation>חיבורי UDP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="171"/>
+        <location filename="../client/desktop/settings_tab.ui" line="214"/>
         <source>Allow direct connections</source>
         <translation>אפשר חיבורים ישירים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="178"/>
+        <location filename="../client/desktop/settings_tab.ui" line="221"/>
         <source>Allow UDP Hole Punching</source>
         <translation>אפשר UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="185"/>
+        <location filename="../client/desktop/settings_tab.ui" line="228"/>
         <source>Allow PCP protocol</source>
         <translation>אפשר פרוטוקול PCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="192"/>
+        <location filename="../client/desktop/settings_tab.ui" line="235"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>אפשר פרוטוקול NAT-PMP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="199"/>
+        <location filename="../client/desktop/settings_tab.ui" line="242"/>
         <source>Allow UPnP protocol</source>
         <translation>אפשר פרוטוקול UPnP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="209"/>
+        <location filename="../client/desktop/settings_tab.ui" line="252"/>
         <source>Master Password</source>
         <translation>סיסמה ראשית</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="228"/>
+        <location filename="../client/desktop/settings_tab.ui" line="271"/>
         <source>Change...</source>
         <translation>שנה...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="291"/>
+        <location filename="../client/desktop/settings_tab.ui" line="334"/>
         <source>Features</source>
         <translation>תכונות</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="297"/>
+        <location filename="../client/desktop/settings_tab.ui" line="340"/>
         <source>Enable audio</source>
         <translation>הפעל שמע</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="304"/>
+        <location filename="../client/desktop/settings_tab.ui" line="347"/>
         <source>Enable clipboard</source>
         <translation>הפעל לוח</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="311"/>
+        <location filename="../client/desktop/settings_tab.ui" line="354"/>
         <source>Show shape of remote cursor</source>
         <translation>הצג את צורת הסמן המרוחק</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="318"/>
+        <location filename="../client/desktop/settings_tab.ui" line="361"/>
         <source>Show position of remote cursor</source>
         <translation>הצג את מיקום הסמן המרוחק</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="325"/>
+        <location filename="../client/desktop/settings_tab.ui" line="368"/>
         <source>Disable desktop effects</source>
         <translation>השבת אפקטים של שולחן העבודה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="332"/>
+        <location filename="../client/desktop/settings_tab.ui" line="375"/>
         <source>Disable desktop wallpaper</source>
         <translation>השבת טפט שולחן העבודה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="339"/>
+        <location filename="../client/desktop/settings_tab.ui" line="382"/>
         <source>Lock computer at disconnect</source>
         <translation>נעל את המחשב בעת ניתוק</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="346"/>
+        <location filename="../client/desktop/settings_tab.ui" line="389"/>
         <source>Block remote input</source>
         <translation>חסום קלט מרחוק</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="353"/>
+        <location filename="../client/desktop/settings_tab.ui" line="396"/>
         <source>Send key combinations</source>
         <translation>שלח צירופי מקשים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="369"/>
+        <location filename="../client/desktop/settings_tab.ui" line="412"/>
         <source>Screen</source>
         <translation>מסך</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="377"/>
+        <location filename="../client/desktop/settings_tab.ui" line="420"/>
         <source>Preferred resolution:</source>
         <translation>רזולוציה מועדפת:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="405"/>
+        <location filename="../client/desktop/settings_tab.ui" line="448"/>
         <source>Recording</source>
         <translation>הקלטה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="411"/>
+        <location filename="../client/desktop/settings_tab.ui" line="454"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>התחל הקלטת הפעלות אוטומטית בעת התחברות</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="420"/>
+        <location filename="../client/desktop/settings_tab.ui" line="463"/>
         <source>Write path:</source>
         <translation>נתיב כתיבה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="508"/>
+        <location filename="../client/desktop/settings_tab.ui" line="551"/>
         <location filename="../client/desktop/settings_tab.cc" line="128"/>
         <source>Update</source>
         <translation>עדכון</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="514"/>
+        <location filename="../client/desktop/settings_tab.ui" line="557"/>
         <source>Check for updates on startup</source>
         <translation>בדוק עדכונים בעת ההפעלה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="523"/>
+        <location filename="../client/desktop/settings_tab.ui" line="566"/>
         <source>Update channel:</source>
         <translation>ערוץ עדכונים:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="550"/>
+        <location filename="../client/desktop/settings_tab.ui" line="593"/>
         <source>Check for updates</source>
         <translation>בדוק עדכונים</translation>
     </message>
@@ -7472,47 +7512,73 @@ Credentials imported: %5</source>
         <translation>שולחן עבודה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="189"/>
+        <location filename="../client/desktop/settings_tab.cc" line="173"/>
+        <source>1 week</source>
+        <translation>שבוע אחד</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="174"/>
+        <source>2 weeks</source>
+        <translation>2 שבועות</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="175"/>
+        <source>1 month</source>
+        <translation>חודש אחד</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="176"/>
+        <source>6 months</source>
+        <translation>6 חודשים</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="177"/>
+        <source>1 year</source>
+        <translation>שנה אחת</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="200"/>
         <source>None</source>
         <translation>ללא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="214"/>
+        <location filename="../client/desktop/settings_tab.cc" line="225"/>
         <source>Stable</source>
         <translation>יציב</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="215"/>
+        <location filename="../client/desktop/settings_tab.cc" line="226"/>
         <source>Beta</source>
         <translation>בטא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="216"/>
+        <location filename="../client/desktop/settings_tab.cc" line="227"/>
         <source>Alpha</source>
         <translation>אלפא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="329"/>
+        <location filename="../client/desktop/settings_tab.cc" line="345"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>השפה החדשה תוחל לאחר הפעלה מחדש של היישום.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="398"/>
+        <location filename="../client/desktop/settings_tab.cc" line="394"/>
+        <location filename="../client/desktop/settings_tab.cc" line="464"/>
         <source>Choose path</source>
         <translation>בחירת נתיב</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="418"/>
+        <location filename="../client/desktop/settings_tab.cc" line="484"/>
         <source>Change Master Password</source>
         <translation>שינוי סיסמה ראשית</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="420"/>
+        <location filename="../client/desktop/settings_tab.cc" line="486"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>הזן את הסיסמה הנוכחית שלך ובחר סיסמה חדשה.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="428"/>
+        <location filename="../client/desktop/settings_tab.cc" line="494"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יפחת מ-%n תו.</numerusform>
@@ -7520,12 +7586,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="435"/>
+        <location filename="../client/desktop/settings_tab.cc" line="501"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>הסיסמה שהזנת אינה עומדת בדרישות האבטחה!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="436"/>
+        <location filename="../client/desktop/settings_tab.cc" line="502"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>הסיסמה חייבת להכיל אותיות קטנות וגדולות ומספרים, ואורכה לא יפחת מ-%n תו.</numerusform>
@@ -7533,22 +7599,22 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="439"/>
+        <location filename="../client/desktop/settings_tab.cc" line="505"/>
         <source>Do you want to enter a different password?</source>
         <translation>האם ברצונך להזין סיסמה אחרת?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="452"/>
+        <location filename="../client/desktop/settings_tab.cc" line="518"/>
         <source>Invalid current password.</source>
         <translation>הסיסמה הנוכחית שגויה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="456"/>
-        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
-        <translation>לא ניתן היה לקרוא חלק מרשומות מסד הנתונים. ערוך אותן כדי להזין את הנתונים שלהן מחדש.</translation>
+        <location filename="../client/desktop/settings_tab.cc" line="522"/>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="461"/>
+        <location filename="../client/desktop/settings_tab.cc" line="526"/>
         <source>Unable to change the password.</source>
         <translation>לא ניתן לשנות את הסיסמה.</translation>
     </message>

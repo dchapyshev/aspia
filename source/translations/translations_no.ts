@@ -422,12 +422,6 @@ Rutere lagt til: %4</translation>
         <translation>Innstillinger</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="433"/>
-        <location filename="../client/android/main_window.cc" line="1011"/>
-        <source>The data of the host could not be read. Edit the host to enter it again.</source>
-        <translation>Dataene til verten kunne ikke leses. Rediger verten for å skrive dem inn på nytt.</translation>
-    </message>
-    <message>
         <location filename="../client/android/main_window.cc" line="695"/>
         <source>Update</source>
         <translation>Oppdater</translation>
@@ -438,12 +432,6 @@ Rutere lagt til: %4</translation>
         <translation>Versjon %1 er tilgjengelig.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="743"/>
-        <location filename="../client/android/main_window.cc" line="969"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Dataene til ruteren kunne ikke leses. Rediger ruteren for å skrive dem inn på nytt.</translation>
-    </message>
-    <message>
         <location filename="../client/android/main_window.cc" line="744"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Ruteren som er knyttet til denne verten, er slettet. Rediger verten for å velge en annen ruter eller bytte til direkte tilkobling.</translation>
@@ -452,6 +440,18 @@ Rutere lagt til: %4</translation>
         <location filename="../client/android/main_window.cc" line="555"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Tofaktorautentisering - %1</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="433"/>
+        <location filename="../client/android/main_window.cc" line="1011"/>
+        <source>The data of the host is damaged. Edit the host and enter it again.</source>
+        <translation>Dataene til verten er skadet. Rediger verten og skriv dem inn på nytt.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="743"/>
+        <location filename="../client/android/main_window.cc" line="969"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Dataene til ruteren er skadet. Rediger ruteren og skriv dem inn på nytt.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="921"/>
@@ -917,11 +917,6 @@ Rutere lagt til: %4</translation>
         <translation>Tilkoblingen til verten er brutt.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="488"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Dataene til ruteren kunne ikke leses. Rediger ruteren for å skrive dem inn på nytt.</translation>
-    </message>
-    <message>
         <location filename="../client/android/chat_window.cc" line="489"/>
         <source>The specified router is unavailable.</source>
         <translation>Den angitte ruteren er utilgjengelig.</translation>
@@ -945,6 +940,11 @@ Rutere lagt til: %4</translation>
         <location filename="../client/android/chat_window.cc" line="465"/>
         <source>Connecting...</source>
         <translation>Kobler til...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="488"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Dataene til ruteren er skadet. Rediger ruteren og skriv dem inn på nytt.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="495"/>
@@ -1013,17 +1013,22 @@ Rutere lagt til: %4</translation>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="237"/>
+        <location filename="../client/main.cc" line="75"/>
+        <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
+        <translation>Kan ikke opprette en sikkerhetskopi. Enkelte oppføringer i databasen er skadet. Reparer eller slett dem.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="278"/>
         <source>Set Master Password</source>
         <translation>Angi hovedpassord</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="239"/>
+        <location filename="../client/main.cc" line="280"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Angi et hovedpassord som kreves for å låse opp programmet.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="247"/>
+        <location filename="../client/main.cc" line="288"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
@@ -1031,12 +1036,12 @@ Rutere lagt til: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="255"/>
+        <location filename="../client/main.cc" line="296"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Passordet du skrev inn, oppfyller ikke sikkerhetskravene!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="257"/>
+        <location filename="../client/main.cc" line="298"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet må inneholde små og store bokstaver samt tall, og kan ikke være kortere enn %n tegn.</numerusform>
@@ -1044,42 +1049,52 @@ Rutere lagt til: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="261"/>
+        <location filename="../client/main.cc" line="302"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vil du skrive inn et annet passord?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="271"/>
+        <location filename="../client/main.cc" line="312"/>
         <source>Unable to set master password.</source>
         <translation>Kan ikke angi hovedpassord.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="202"/>
+        <location filename="../client/main.cc" line="243"/>
         <source>Unlock</source>
         <translation>Lås opp</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="163"/>
+        <location filename="../client/main.cc" line="69"/>
+        <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
+        <translation>Kan ikke opprette en sikkerhetskopi i mappen &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="81"/>
+        <source>Unable to create a backup.</source>
+        <translation>Kan ikke opprette en sikkerhetskopi.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="204"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>En aspia://-lenke for å koble til en vert.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="204"/>
+        <location filename="../client/main.cc" line="245"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Skriv inn hovedpassordet for å låse opp programmet.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="224"/>
+        <location filename="../client/main.cc" line="265"/>
         <source>Unable to unlock the database.</source>
         <translation>Kan ikke låse opp databasen.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="229"/>
+        <location filename="../client/main.cc" line="270"/>
         <source>Invalid master password.</source>
         <translation>Ugyldig hovedpassord.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="159"/>
+        <location filename="../client/main.cc" line="200"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -1130,6 +1145,11 @@ Rutere lagt til: %4</translation>
         <translation>Den angitte ruteren er utilgjengelig.</translation>
     </message>
     <message>
+        <location filename="../client/desktop/client_window.cc" line="517"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Dataene til ruteren er skadet. Rediger ruteren og skriv dem inn på nytt.</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/client_window.cc" line="519"/>
         <source>The specified router is offline.</source>
         <translation>Den angitte ruteren er ikke tilkoblet.</translation>
@@ -1163,11 +1183,6 @@ Rutere lagt til: %4</translation>
         <location filename="../client/desktop/client_window.cc" line="340"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Prøver å koble til i kompatibilitetsmodus...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/client_window.cc" line="517"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Dataene til ruteren kunne ikke leses. Rediger ruteren for å skrive dem inn på nytt.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="526"/>
@@ -1728,8 +1743,8 @@ Passord: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="157"/>
-        <source>The credentials could not be read. You can enter them again.</source>
-        <translation>Påloggingsinformasjonen kunne ikke leses. Du kan skrive den inn på nytt.</translation>
+        <source>The credentials are damaged. Enter them again.</source>
+        <translation>Påloggingsinformasjonen er skadet. Skriv den inn på nytt.</translation>
     </message>
 </context>
 <context>
@@ -1762,8 +1777,8 @@ Passord: %2</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="133"/>
-        <source>The credentials could not be read. You can enter them again.</source>
-        <translation>Påloggingsinformasjonen kunne ikke leses. Du kan skrive den inn på nytt.</translation>
+        <source>The credentials are damaged. Enter them again.</source>
+        <translation>Påloggingsinformasjonen er skadet. Skriv den inn på nytt.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="145"/>
@@ -1920,8 +1935,8 @@ Påloggingsinformasjon eksportert: %1</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="127"/>
-        <source>Could not be read</source>
-        <translation>Kunne ikke leses</translation>
+        <source>Damaged</source>
+        <translation>Skadet</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="153"/>
@@ -2644,6 +2659,11 @@ Påloggingsinformasjon erstattet: %2</translation>
         <translation>Økt %1 (%2)</translation>
     </message>
     <message>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Dataene til ruteren er skadet. Rediger ruteren og skriv dem inn på nytt.</translation>
+    </message>
+    <message>
         <location filename="../client/android/desktop_window.cc" line="543"/>
         <source>Connecting to router...</source>
         <translation>Kobler til ruter...</translation>
@@ -2702,11 +2722,6 @@ Påloggingsinformasjon erstattet: %2</translation>
         <location filename="../client/android/desktop_window.cc" line="390"/>
         <source>Disconnect</source>
         <translation>Koble fra</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="536"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Dataene til ruteren kunne ikke leses. Rediger ruteren for å skrive dem inn på nytt.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="661"/>
@@ -3475,6 +3490,11 @@ Påloggingsinformasjon erstattet: %2</translation>
         <translation>Tilkoblingen til verten er brutt.</translation>
     </message>
     <message>
+        <location filename="../client/android/file_transfer_window.cc" line="330"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Dataene til ruteren er skadet. Rediger ruteren og skriv dem inn på nytt.</translation>
+    </message>
+    <message>
         <location filename="../client/android/file_transfer_window.cc" line="331"/>
         <source>The specified router is unavailable.</source>
         <translation>Den angitte ruteren er utilgjengelig.</translation>
@@ -3498,11 +3518,6 @@ Påloggingsinformasjon erstattet: %2</translation>
         <location filename="../client/android/file_transfer_window.cc" line="307"/>
         <source>Connecting...</source>
         <translation>Kobler til...</translation>
-    </message>
-    <message>
-        <location filename="../client/android/file_transfer_window.cc" line="330"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Dataene til ruteren kunne ikke leses. Rediger ruteren for å skrive dem inn på nytt.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="337"/>
@@ -4325,8 +4340,8 @@ Påloggingsinformasjon erstattet: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="392"/>
-        <source>The data of the host could not be read. You can enter it again.</source>
-        <translation>Dataene til verten kunne ikke leses. Du kan skrive dem inn på nytt.</translation>
+        <source>The data of the host is damaged. Enter it again.</source>
+        <translation>Dataene til verten er skadet. Skriv dem inn på nytt.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="402"/>
@@ -4400,8 +4415,8 @@ Påloggingsinformasjon erstattet: %2</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="174"/>
-        <source>The data of the host could not be read. You can enter it again.</source>
-        <translation>Dataene til verten kunne ikke leses. Du kan skrive dem inn på nytt.</translation>
+        <source>The data of the host is damaged. Enter it again.</source>
+        <translation>Dataene til verten er skadet. Skriv dem inn på nytt.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="184"/>
@@ -4539,13 +4554,13 @@ Påloggingsinformasjon erstattet: %2</translation>
     <name>LocalWidget</name>
     <message>
         <location filename="../client/android/local_widget.cc" line="294"/>
-        <location filename="../client/android/local_widget.cc" line="438"/>
+        <location filename="../client/android/local_widget.cc" line="437"/>
         <source>Add Group</source>
         <translation>Legg til gruppe</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="295"/>
-        <location filename="../client/android/local_widget.cc" line="448"/>
+        <location filename="../client/android/local_widget.cc" line="447"/>
         <source>Add Host</source>
         <translation>Legg til vert</translation>
     </message>
@@ -4595,8 +4610,8 @@ Påloggingsinformasjon importert: %5</translation>
     <message>
         <location filename="../client/android/local_widget.cc" line="297"/>
         <location filename="../client/android/local_widget.cc" line="390"/>
-        <location filename="../client/android/local_widget.cc" line="423"/>
-        <location filename="../client/android/local_widget.cc" line="427"/>
+        <location filename="../client/android/local_widget.cc" line="422"/>
+        <location filename="../client/android/local_widget.cc" line="426"/>
         <source>Create Backup</source>
         <translation>Opprett sikkerhetskopi</translation>
     </message>
@@ -4627,41 +4642,41 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="412"/>
-        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
-        <translation>Enkelte oppføringer i databasen kunne ikke leses. Rediger dem for å skrive inn dataene deres på nytt.</translation>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>Enkelte oppføringer i databasen er skadet. Reparer eller slett dem og prøv igjen.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="417"/>
+        <location filename="../client/android/local_widget.cc" line="416"/>
         <source>Failed to create the backup.</source>
         <translation>Kunne ikke opprette sikkerhetskopien.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="428"/>
+        <location filename="../client/android/local_widget.cc" line="427"/>
         <source>The file is written to %1. To open it elsewhere the master password of this installation is needed.</source>
         <translation>Filen er skrevet til %1. For å åpne den et annet sted kreves hovedpassordet til denne installasjonen.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="536"/>
+        <location filename="../client/android/local_widget.cc" line="535"/>
         <source>Edit Group</source>
         <translation>Rediger gruppe</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="547"/>
+        <location filename="../client/android/local_widget.cc" line="546"/>
         <source>Edit Host</source>
         <translation>Rediger vert</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="657"/>
+        <location filename="../client/android/local_widget.cc" line="656"/>
         <source>Desktop</source>
         <translation>Skrivebord</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="659"/>
+        <location filename="../client/android/local_widget.cc" line="658"/>
         <source>File Transfer</source>
         <translation>Filoverføring</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="661"/>
+        <location filename="../client/android/local_widget.cc" line="660"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
@@ -4706,7 +4721,7 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="377"/>
+        <location filename="../client/desktop/main_window.cc" line="376"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4786,38 +4801,38 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Ruteren som lenken viser til, er ikke blant de lagrede ruterne.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="237"/>
-        <location filename="../client/desktop/main_window.cc" line="290"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Dataene til ruteren kunne ikke leses. Rediger ruteren for å skrive dem inn på nytt.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/main_window.cc" line="278"/>
-        <source>The data of the host could not be read. Edit the host to enter it again.</source>
-        <translation>Dataene til verten kunne ikke leses. Rediger verten for å skrive dem inn på nytt.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.cc" line="279"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Verten som lenken viser til, er ikke blant de lagrede vertene.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="475"/>
+        <location filename="../client/desktop/main_window.cc" line="474"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Tilkobling via ID er angitt i egenskapene til verten, men ruteren er ikke konfigurert. Kontroller ruterparametrene i egenskapene til verten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="291"/>
+        <location filename="../client/desktop/main_window.cc" line="290"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Ruteren som er knyttet til denne verten, er slettet. Rediger verten for å velge en annen ruter eller bytte til direkte tilkobling.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="337"/>
+        <location filename="../client/desktop/main_window.cc" line="237"/>
+        <location filename="../client/desktop/main_window.cc" line="289"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Dataene til ruteren er skadet. Rediger ruteren og skriv dem inn på nytt.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="277"/>
+        <source>The data of the host is damaged. Edit the host and enter it again.</source>
+        <translation>Dataene til verten er skadet. Rediger verten og skriv dem inn på nytt.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="336"/>
         <source>Credentials</source>
         <translation>Påloggingsinformasjon</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="363"/>
+        <location filename="../client/desktop/main_window.cc" line="362"/>
         <source>Settings</source>
         <translation>Innstillinger</translation>
     </message>
@@ -5024,7 +5039,7 @@ Påloggingsinformasjon importert: %5</translation>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="967"/>
         <location filename="../client/desktop/management_tab.cc" line="1040"/>
-        <location filename="../client/desktop/management_tab.cc" line="2132"/>
+        <location filename="../client/desktop/management_tab.cc" line="2131"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Kunne ikke hente vertsinformasjon fra den lokale databasen.</translation>
     </message>
@@ -5089,7 +5104,7 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1477"/>
-        <location filename="../client/desktop/management_tab.cc" line="1535"/>
+        <location filename="../client/desktop/management_tab.cc" line="1534"/>
         <source>The database is not available.</source>
         <translation>Databasen er ikke tilgjengelig.</translation>
     </message>
@@ -5104,49 +5119,54 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Det er ingenting å lagre.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1508"/>
-        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
-        <translation>Enkelte oppføringer i databasen kunne ikke leses. Rediger dem for å skrive inn dataene deres på nytt.</translation>
+        <location filename="../client/desktop/management_tab.cc" line="2126"/>
+        <source>The data of the host is damaged. Edit the host and enter it again.</source>
+        <translation>Dataene til verten er skadet. Rediger verten og skriv dem inn på nytt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1513"/>
+        <location filename="../client/desktop/management_tab.cc" line="2147"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Dataene til ruteren er skadet. Rediger ruteren og skriv dem inn på nytt.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1512"/>
         <source>Failed to create the backup.</source>
         <translation>Kunne ikke opprette sikkerhetskopien.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1541"/>
-        <location filename="../client/desktop/management_tab.cc" line="1567"/>
+        <location filename="../client/desktop/management_tab.cc" line="1540"/>
+        <location filename="../client/desktop/management_tab.cc" line="1566"/>
         <source>Restore from Backup</source>
         <translation>Gjenopprett fra sikkerhetskopi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1550"/>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Alt som er lagret nå, blir slettet og erstattet med innholdet i sikkerhetskopien. Fortsette?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1569"/>
+        <location filename="../client/desktop/management_tab.cc" line="1568"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Sikkerhetskopien ble laget på en annen installasjon. Skriv inn hovedpassordet som ble brukt der.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1594"/>
+        <location filename="../client/desktop/management_tab.cc" line="1593"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Sikkerhetskopien inneholder ingen data, så ingenting ble endret.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1602"/>
+        <location filename="../client/desktop/management_tab.cc" line="1601"/>
         <source>The file is not a valid backup.</source>
         <translation>Filen er ikke en gyldig sikkerhetskopi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1606"/>
+        <location filename="../client/desktop/management_tab.cc" line="1605"/>
         <source>Failed to restore from the backup.</source>
         <translation>Kunne ikke gjenopprette fra sikkerhetskopien.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1484"/>
-        <location filename="../client/desktop/management_tab.cc" line="1542"/>
+        <location filename="../client/desktop/management_tab.cc" line="1541"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia-sikkerhetskopi (*.aspia-backup);;Alle filer (*)</translation>
     </message>
@@ -5156,12 +5176,12 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Kan ikke skrive filen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1598"/>
+        <location filename="../client/desktop/management_tab.cc" line="1597"/>
         <source>Unable to read the file.</source>
         <translation>Kan ikke lese filen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1518"/>
+        <location filename="../client/desktop/management_tab.cc" line="1517"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5176,17 +5196,22 @@ Lagrede passord eksportert: %4
 Påloggingsinformasjon eksportert: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1586"/>
+        <location filename="../client/desktop/management_tab.cc" line="1508"/>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>Enkelte oppføringer i databasen er skadet. Reparer eller slett dem og prøv igjen.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1585"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Kan ikke dekryptere filen med det angitte passordet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1590"/>
+        <location filename="../client/desktop/management_tab.cc" line="1589"/>
         <source>Unsupported file format version.</source>
         <translation>Filformatversjonen støttes ikke.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1611"/>
+        <location filename="../client/desktop/management_tab.cc" line="1610"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5201,39 +5226,29 @@ Lagrede passord importert: %4
 Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2055"/>
-        <location filename="../client/desktop/management_tab.cc" line="2086"/>
+        <location filename="../client/desktop/management_tab.cc" line="2054"/>
+        <location filename="../client/desktop/management_tab.cc" line="2085"/>
         <source>Copy Link</source>
         <translation>Kopier lenke</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2074"/>
-        <location filename="../client/desktop/management_tab.cc" line="2108"/>
+        <location filename="../client/desktop/management_tab.cc" line="2073"/>
+        <location filename="../client/desktop/management_tab.cc" line="2107"/>
         <source>Unable to create a link for this host.</source>
         <translation>Kan ikke opprette en lenke for denne verten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2127"/>
-        <source>The data of the host could not be read. Edit the host to enter it again.</source>
-        <translation>Dataene til verten kunne ikke leses. Rediger verten for å skrive dem inn på nytt.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="2148"/>
-        <source>The data of the router could not be read. Edit the router to enter it again.</source>
-        <translation>Dataene til ruteren kunne ikke leses. Rediger ruteren for å skrive dem inn på nytt.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="2149"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Ruteren som er knyttet til denne verten, er slettet. Rediger verten for å velge en annen ruter eller bytte til direkte tilkobling.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2156"/>
+        <location filename="../client/desktop/management_tab.cc" line="2155"/>
         <source>The host has an invalid host ID.</source>
         <translation>Verten har en ugyldig verts-ID.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2165"/>
+        <location filename="../client/desktop/management_tab.cc" line="2164"/>
         <source>The host has an incorrect address.</source>
         <translation>Verten har en ugyldig adresse.</translation>
     </message>
@@ -5252,7 +5267,7 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <location filename="../client/android/master_password_dialog.cc" line="214"/>
+        <location filename="../client/android/master_password_dialog.cc" line="213"/>
         <source>Unlock</source>
         <translation>Lås opp</translation>
     </message>
@@ -5341,27 +5356,27 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="187"/>
-        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
-        <translation>Enkelte oppføringer i databasen kunne ikke leses. Rediger dem for å skrive inn dataene deres på nytt.</translation>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>Enkelte oppføringer i databasen er skadet. Reparer eller slett dem og prøv igjen.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="192"/>
+        <location filename="../client/android/master_password_dialog.cc" line="191"/>
         <source>Unable to change the password.</source>
         <translation>Kan ikke endre passordet.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="215"/>
+        <location filename="../client/android/master_password_dialog.cc" line="214"/>
         <source>Use password</source>
         <translation>Bruk passord</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="232"/>
-        <location filename="../client/android/master_password_dialog.cc" line="240"/>
+        <location filename="../client/android/master_password_dialog.cc" line="231"/>
+        <location filename="../client/android/master_password_dialog.cc" line="239"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>Biometrisk opplåsing mislyktes. Skriv inn hovedpassordet.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="236"/>
+        <location filename="../client/android/master_password_dialog.cc" line="235"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>Biometrien er endret. Skriv inn hovedpassordet for å fortsette.</translation>
     </message>
@@ -6070,8 +6085,8 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="195"/>
-        <source>The data of the router could not be read. You can enter it again.</source>
-        <translation>Dataene til ruteren kunne ikke leses. Du kan skrive dem inn på nytt.</translation>
+        <source>The data of the router is damaged. Enter it again.</source>
+        <translation>Dataene til ruteren er skadet. Skriv dem inn på nytt.</translation>
     </message>
 </context>
 <context>
@@ -6109,8 +6124,8 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="141"/>
-        <source>The data of the router could not be read. You can enter it again.</source>
-        <translation>Dataene til ruteren kunne ikke leses. Du kan skrive dem inn på nytt.</translation>
+        <source>The data of the router is damaged. Enter it again.</source>
+        <translation>Dataene til ruteren er skadet. Skriv dem inn på nytt.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="152"/>
@@ -6388,8 +6403,8 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="294"/>
-        <source>The credentials of the host could not be read. You can enter them again.</source>
-        <translation>Påloggingsinformasjonen til verten kunne ikke leses. Du kan skrive den inn på nytt.</translation>
+        <source>The credentials of the host are damaged. Enter them again.</source>
+        <translation>Påloggingsinformasjonen til verten er skadet. Skriv den inn på nytt.</translation>
     </message>
 </context>
 <context>
@@ -6433,8 +6448,8 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="141"/>
-        <source>The credentials of the host could not be read. You can enter them again.</source>
-        <translation>Påloggingsinformasjonen til verten kunne ikke leses. Du kan skrive den inn på nytt.</translation>
+        <source>The credentials of the host are damaged. Enter them again.</source>
+        <translation>Påloggingsinformasjonen til verten er skadet. Skriv den inn på nytt.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="226"/>
@@ -7327,137 +7342,162 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="165"/>
+        <source>Backup</source>
+        <translation>Sikkerhetskopi</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="171"/>
+        <source>Create backups on application startup</source>
+        <translation>Opprett sikkerhetskopier ved oppstart av programmet</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="178"/>
+        <source>Directory:</source>
+        <translation>Mappe:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="188"/>
+        <source>Browse...</source>
+        <translation>Bla gjennom...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="195"/>
+        <source>Keep backups for:</source>
+        <translation>Behold sikkerhetskopier i:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="208"/>
         <source>UDP Connections</source>
         <translation>UDP-tilkoblinger</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="171"/>
+        <location filename="../client/desktop/settings_tab.ui" line="214"/>
         <source>Allow direct connections</source>
         <translation>Tillat direkte tilkoblinger</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="178"/>
+        <location filename="../client/desktop/settings_tab.ui" line="221"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Tillat UDP hole punching</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="185"/>
+        <location filename="../client/desktop/settings_tab.ui" line="228"/>
         <source>Allow PCP protocol</source>
         <translation>Tillat PCP-protokoll</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="192"/>
+        <location filename="../client/desktop/settings_tab.ui" line="235"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Tillat NAT-PMP-protokoll</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="199"/>
+        <location filename="../client/desktop/settings_tab.ui" line="242"/>
         <source>Allow UPnP protocol</source>
         <translation>Tillat UPnP-protokoll</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="209"/>
+        <location filename="../client/desktop/settings_tab.ui" line="252"/>
         <source>Master Password</source>
         <translation>Hovedpassord</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="228"/>
+        <location filename="../client/desktop/settings_tab.ui" line="271"/>
         <source>Change...</source>
         <translation>Endre...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="291"/>
+        <location filename="../client/desktop/settings_tab.ui" line="334"/>
         <source>Features</source>
         <translation>Funksjoner</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="297"/>
+        <location filename="../client/desktop/settings_tab.ui" line="340"/>
         <source>Enable audio</source>
         <translation>Aktiver lyd</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="304"/>
+        <location filename="../client/desktop/settings_tab.ui" line="347"/>
         <source>Enable clipboard</source>
         <translation>Aktiver utklippstavle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="311"/>
+        <location filename="../client/desktop/settings_tab.ui" line="354"/>
         <source>Show shape of remote cursor</source>
         <translation>Vis formen til den eksterne markøren</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="318"/>
+        <location filename="../client/desktop/settings_tab.ui" line="361"/>
         <source>Show position of remote cursor</source>
         <translation>Vis posisjonen til den eksterne markøren</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="325"/>
+        <location filename="../client/desktop/settings_tab.ui" line="368"/>
         <source>Disable desktop effects</source>
         <translation>Deaktiver skrivebordseffekter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="332"/>
+        <location filename="../client/desktop/settings_tab.ui" line="375"/>
         <source>Disable desktop wallpaper</source>
         <translation>Deaktiver skrivebordsbakgrunn</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="339"/>
+        <location filename="../client/desktop/settings_tab.ui" line="382"/>
         <source>Lock computer at disconnect</source>
         <translation>Lås datamaskinen ved frakobling</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="346"/>
+        <location filename="../client/desktop/settings_tab.ui" line="389"/>
         <source>Block remote input</source>
         <translation>Blokker ekstern inndata</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="353"/>
+        <location filename="../client/desktop/settings_tab.ui" line="396"/>
         <source>Send key combinations</source>
         <translation>Send tastekombinasjoner</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="369"/>
+        <location filename="../client/desktop/settings_tab.ui" line="412"/>
         <source>Screen</source>
         <translation>Skjerm</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="377"/>
+        <location filename="../client/desktop/settings_tab.ui" line="420"/>
         <source>Preferred resolution:</source>
         <translation>Foretrukket oppløsning:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="405"/>
+        <location filename="../client/desktop/settings_tab.ui" line="448"/>
         <source>Recording</source>
         <translation>Opptak</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="411"/>
+        <location filename="../client/desktop/settings_tab.ui" line="454"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>Start opptak av økter automatisk ved tilkobling</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="420"/>
+        <location filename="../client/desktop/settings_tab.ui" line="463"/>
         <source>Write path:</source>
         <translation>Skrivebane:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="508"/>
+        <location filename="../client/desktop/settings_tab.ui" line="551"/>
         <location filename="../client/desktop/settings_tab.cc" line="128"/>
         <source>Update</source>
         <translation>Oppdater</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="514"/>
+        <location filename="../client/desktop/settings_tab.ui" line="557"/>
         <source>Check for updates on startup</source>
         <translation>Se etter oppdateringer ved oppstart</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="523"/>
+        <location filename="../client/desktop/settings_tab.ui" line="566"/>
         <source>Update channel:</source>
         <translation>Oppdateringskanal:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="550"/>
+        <location filename="../client/desktop/settings_tab.ui" line="593"/>
         <source>Check for updates</source>
         <translation>Se etter oppdateringer</translation>
     </message>
@@ -7472,47 +7512,73 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Skrivebord</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="189"/>
+        <location filename="../client/desktop/settings_tab.cc" line="173"/>
+        <source>1 week</source>
+        <translation>1 uke</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="174"/>
+        <source>2 weeks</source>
+        <translation>2 uker</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="175"/>
+        <source>1 month</source>
+        <translation>1 måned</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="176"/>
+        <source>6 months</source>
+        <translation>6 måneder</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="177"/>
+        <source>1 year</source>
+        <translation>1 år</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="200"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="214"/>
+        <location filename="../client/desktop/settings_tab.cc" line="225"/>
         <source>Stable</source>
         <translation>Stabil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="215"/>
+        <location filename="../client/desktop/settings_tab.cc" line="226"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="216"/>
+        <location filename="../client/desktop/settings_tab.cc" line="227"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="329"/>
+        <location filename="../client/desktop/settings_tab.cc" line="345"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Det nye språket tas i bruk etter at programmet er startet på nytt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="398"/>
+        <location filename="../client/desktop/settings_tab.cc" line="394"/>
+        <location filename="../client/desktop/settings_tab.cc" line="464"/>
         <source>Choose path</source>
         <translation>Velg bane</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="418"/>
+        <location filename="../client/desktop/settings_tab.cc" line="484"/>
         <source>Change Master Password</source>
         <translation>Endre hovedpassord</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="420"/>
+        <location filename="../client/desktop/settings_tab.cc" line="486"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Skriv inn gjeldende passord og velg et nytt.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="428"/>
+        <location filename="../client/desktop/settings_tab.cc" line="494"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
@@ -7520,12 +7586,12 @@ Påloggingsinformasjon importert: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="435"/>
+        <location filename="../client/desktop/settings_tab.cc" line="501"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Passordet du skrev inn, oppfyller ikke sikkerhetskravene!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="436"/>
+        <location filename="../client/desktop/settings_tab.cc" line="502"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet må inneholde små og store bokstaver samt tall, og kan ikke være kortere enn %n tegn.</numerusform>
@@ -7533,22 +7599,22 @@ Påloggingsinformasjon importert: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="439"/>
+        <location filename="../client/desktop/settings_tab.cc" line="505"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vil du skrive inn et annet passord?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="452"/>
+        <location filename="../client/desktop/settings_tab.cc" line="518"/>
         <source>Invalid current password.</source>
         <translation>Ugyldig gjeldende passord.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="456"/>
-        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
-        <translation>Enkelte oppføringer i databasen kunne ikke leses. Rediger dem for å skrive inn dataene deres på nytt.</translation>
+        <location filename="../client/desktop/settings_tab.cc" line="522"/>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>Enkelte oppføringer i databasen er skadet. Reparer eller slett dem og prøv igjen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="461"/>
+        <location filename="../client/desktop/settings_tab.cc" line="526"/>
         <source>Unable to change the password.</source>
         <translation>Kan ikke endre passordet.</translation>
     </message>
