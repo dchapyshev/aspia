@@ -1921,7 +1921,7 @@ Credenciais exportadas: %1</translation>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="127"/>
         <source>Could not be read</source>
-        <translation>Não puderam ser lidas</translation>
+        <translation>Não pôde ser lida</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="153"/>

@@ -2044,7 +2044,7 @@ Credentials exported: %1</source>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="54"/>
         <source>Import</source>
-        <translation>ייבוא</translation>
+        <translation>ייבא</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="89"/>
@@ -2194,7 +2194,7 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="267"/>
         <source>Import (%1)</source>
-        <translation>ייבוא (%1)</translation>
+        <translation>ייבא (%1)</translation>
     </message>
 </context>
 <context>

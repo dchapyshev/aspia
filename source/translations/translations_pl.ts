@@ -2090,12 +2090,12 @@ Wyeksportowane dane logowania: %1</translation>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
         <source>Exists</source>
-        <translation>Istniejące</translation>
+        <translation>Istniejący</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
         <source>New</source>
-        <translation>Nowe</translation>
+        <translation>Nowy</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="220"/>
@@ -2161,12 +2161,12 @@ Zastąpione dane logowania: %2</translation>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="183"/>
         <source>Exists</source>
-        <translation>Istniejące</translation>
+        <translation>Istniejący</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="183"/>
         <source>New</source>
-        <translation>Nowe</translation>
+        <translation>Nowy</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="231"/>

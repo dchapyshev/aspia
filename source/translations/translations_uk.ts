@@ -2055,7 +2055,7 @@ Credentials exported: %1</source>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="54"/>
         <source>Import</source>
-        <translation>Імпорт</translation>
+        <translation>Імпортувати</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="89"/>
@@ -2090,12 +2090,12 @@ Credentials exported: %1</source>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
         <source>Exists</source>
-        <translation>Наявні</translation>
+        <translation>Існує</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
         <source>New</source>
-        <translation>Нові</translation>
+        <translation>Нова</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="220"/>
@@ -2161,12 +2161,12 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="183"/>
         <source>Exists</source>
-        <translation>Наявні</translation>
+        <translation>Існує</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="183"/>
         <source>New</source>
-        <translation>Нові</translation>
+        <translation>Нова</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="231"/>
@@ -2205,7 +2205,7 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="267"/>
         <source>Import (%1)</source>
-        <translation>Імпорт (%1)</translation>
+        <translation>Імпортувати (%1)</translation>
     </message>
 </context>
 <context>

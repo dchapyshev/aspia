@@ -2079,12 +2079,12 @@ Credentials exported: %1</source>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
         <source>Exists</source>
-        <translation>Υπάρχοντα</translation>
+        <translation>Υπάρχον</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
         <source>New</source>
-        <translation>Νέα</translation>
+        <translation>Νέο</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="220"/>
@@ -2150,12 +2150,12 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="183"/>
         <source>Exists</source>
-        <translation>Υπάρχοντα</translation>
+        <translation>Υπάρχον</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="183"/>
         <source>New</source>
-        <translation>Νέα</translation>
+        <translation>Νέο</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="231"/>

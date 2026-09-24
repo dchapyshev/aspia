@@ -1921,7 +1921,7 @@ Credenziali esportate: %1</translation>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="127"/>
         <source>Could not be read</source>
-        <translation>Impossibile leggere</translation>
+        <translation>Non leggibile</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="153"/>
@@ -2079,12 +2079,12 @@ Credenziali esportate: %1</translation>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
         <source>Exists</source>
-        <translation>Esistenti</translation>
+        <translation>Esistente</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
         <source>New</source>
-        <translation>Nuove</translation>
+        <translation>Nuova</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="220"/>
@@ -2150,12 +2150,12 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="183"/>
         <source>Exists</source>
-        <translation>Esistenti</translation>
+        <translation>Esistente</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="183"/>
         <source>New</source>
-        <translation>Nuove</translation>
+        <translation>Nuova</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="231"/>

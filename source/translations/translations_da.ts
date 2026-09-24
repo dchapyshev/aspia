@@ -1820,7 +1820,7 @@ Adgangskode: %2</translation>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="23"/>
         <source>Select the credentials to export and enter a password. The file will be encrypted, and the same password will be required to import it.</source>
-        <translation>Vælg de legitimationsoplysninger, der skal eksporteres, og angiv en adgangskode. Filen bliver krypteret, og den samme adgangskode kræves for at importere den.</translation>
+        <translation>Vælg de legitimationsoplysninger, der skal eksporteres, og indtast en adgangskode. Filen bliver krypteret, og den samme adgangskode kræves for at importere den.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="43"/>
@@ -1994,7 +1994,7 @@ Eksporterede legitimationsoplysninger: %1</translation>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="23"/>
         <source>Select a file, enter the password it was exported with and open it. The checked credentials will be imported, and the ones that already exist will be replaced.</source>
-        <translation>Vælg en fil, angiv den adgangskode, den blev eksporteret med, og åbn den. De markerede legitimationsoplysninger bliver importeret, og dem, der allerede findes, bliver erstattet.</translation>
+        <translation>Vælg en fil, indtast den adgangskode, den blev eksporteret med, og åbn den. De markerede legitimationsoplysninger bliver importeret, og dem, der allerede findes, bliver erstattet.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="35"/>
@@ -2189,7 +2189,7 @@ Legitimationsoplysninger erstattet: %2</translation>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="254"/>
         <source>Enter the password the file was exported with.</source>
-        <translation>Angiv den adgangskode, filen blev eksporteret med.</translation>
+        <translation>Indtast den adgangskode, filen blev eksporteret med.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="267"/>

@@ -2073,7 +2073,7 @@ Credentials exported: %1</source>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
         <source>New</source>
-        <translation>新項目</translation>
+        <translation>新</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="220"/>
@@ -2144,7 +2144,7 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="183"/>
         <source>New</source>
-        <translation>新項目</translation>
+        <translation>新</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="231"/>

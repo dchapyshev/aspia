@@ -2080,7 +2080,7 @@ Credentials exported: %1</source>
         <source>Unable to write credentials &quot;%1&quot;. The import was interrupted.
 Credentials added: %2
 Credentials replaced: %3</source>
-        <translation>자격 증명 &quot;%1&quot;을(를) 쓸 수 없습니다. 가져오기가 중단되었습니다.
+        <translation>&quot;%1&quot; 자격 증명을 저장할 수 없습니다. 가져오기가 중단되었습니다.
 추가된 자격 증명: %2
 대체된 자격 증명: %3</translation>
     </message>
@@ -2157,7 +2157,7 @@ Credentials replaced: %2</source>
         <source>Unable to write credentials &quot;%1&quot;. The import was interrupted.
 Credentials added: %2
 Credentials replaced: %3</source>
-        <translation>자격 증명 &quot;%1&quot;을(를) 쓸 수 없습니다. 가져오기가 중단되었습니다.
+        <translation>&quot;%1&quot; 자격 증명을 저장할 수 없습니다. 가져오기가 중단되었습니다.
 추가된 자격 증명: %2
 대체된 자격 증명: %3</translation>
     </message>

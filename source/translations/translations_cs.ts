@@ -2095,7 +2095,7 @@ Exportované přihlašovací údaje: %1</translation>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
         <source>New</source>
-        <translation>Nové</translation>
+        <translation>Nový</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="220"/>
@@ -2166,7 +2166,7 @@ Nahrazené přihlašovací údaje: %2</translation>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="183"/>
         <source>New</source>
-        <translation>Nové</translation>
+        <translation>Nový</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="231"/>
