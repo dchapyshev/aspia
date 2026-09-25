@@ -189,10 +189,11 @@ VideoEncoder::Result VideoEncoderH264MF::encode(const Frame* frame, proto::video
 
     bool is_key_frame = isKeyFrameRequired();
 
-    if (last_size_ != frame->size())
+    // H264 is YUV 4:2:0 and cannot carry an odd width or height, while a screen can have one (a
+    // virtual machine window of any size). The last odd column and row are left out.
+    const QSize new_size(frame->size().width() & ~1, frame->size().height() & ~1);
+    if (last_size_ != new_size)
     {
-        const QSize new_size = frame->size();
-
         proto::video::Rect* video_rect = packet->mutable_format()->mutable_video_rect();
         video_rect->set_width(new_size.width());
         video_rect->set_height(new_size.height());

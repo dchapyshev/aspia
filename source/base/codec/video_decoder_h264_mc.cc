@@ -171,8 +171,12 @@ bool VideoDecoderH264MC::mapOutput(const quint8* data, size_t size, const QSize&
         return false;
     }
 
+    // The frame size comes from the packet and can be odd, and the last half-covered chroma row and
+    // column are then read too.
+    const qint32 chroma_rows = (slice_height + 1) / 2;
+    const qint32 chroma_row_size = ((stride + 1) / 2) * 2;
     const size_t luma_size = static_cast<size_t>(stride) * static_cast<size_t>(slice_height);
-    const size_t chroma_size = static_cast<size_t>(stride) * static_cast<size_t>(slice_height / 2);
+    const size_t chroma_size = static_cast<size_t>(chroma_row_size) * static_cast<size_t>(chroma_rows);
     const size_t needed = luma_size + chroma_size;
 
     if (size < needed)
@@ -194,10 +198,10 @@ bool VideoDecoderH264MC::mapOutput(const quint8* data, size_t size, const QSize&
     }
     else
     {
-        const qint32 chroma_stride = stride / 2;
+        const qint32 chroma_stride = chroma_row_size / 2;
         const quint8* u_plane = base + luma_size;
         const quint8* v_plane = u_plane + static_cast<size_t>(chroma_stride) *
-            static_cast<size_t>(slice_height / 2);
+            static_cast<size_t>(chroma_rows);
 
         frame_.reset(YuvFormat::I420, frame_size);
         frame_.setPlane(0, base, stride);            // Y

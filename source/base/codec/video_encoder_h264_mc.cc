@@ -145,10 +145,11 @@ VideoEncoder::Result VideoEncoderH264MC::encode(const Frame* frame, proto::video
 
     bool is_key_frame = isKeyFrameRequired();
 
-    if (!codec_ || last_size_ != frame->size())
+    // H264 is YUV 4:2:0 and cannot carry an odd width or height, while a screen can have one. The
+    // last odd column and row are left out.
+    const QSize new_size(frame->size().width() & ~1, frame->size().height() & ~1);
+    if (!codec_ || last_size_ != new_size)
     {
-        const QSize new_size = frame->size();
-
         proto::video::Rect* video_rect = packet->mutable_format()->mutable_video_rect();
         video_rect->set_width(new_size.width());
         video_rect->set_height(new_size.height());
@@ -475,8 +476,11 @@ bool VideoEncoderH264MC::fillInputBuffer(const Frame* frame, quint8* buffer, siz
         return false;
     }
 
+    // An odd height or stride still has its last half-covered chroma row and column.
+    const qint32 chroma_rows = (slice_height + 1) / 2;
+    const qint32 chroma_row_size = ((stride + 1) / 2) * 2;
     const size_t luma_size = static_cast<size_t>(stride) * static_cast<size_t>(slice_height);
-    const size_t chroma_size = static_cast<size_t>(stride) * static_cast<size_t>(slice_height / 2);
+    const size_t chroma_size = static_cast<size_t>(chroma_row_size) * static_cast<size_t>(chroma_rows);
     const size_t needed = luma_size + chroma_size;
 
     if (capacity < needed)
@@ -498,10 +502,10 @@ bool VideoEncoderH264MC::fillInputBuffer(const Frame* frame, quint8* buffer, siz
     }
     else
     {
-        const qint32 chroma_stride = stride / 2;
+        const qint32 chroma_stride = chroma_row_size / 2;
         quint8* u_plane = buffer + luma_size;
         quint8* v_plane = u_plane + static_cast<size_t>(chroma_stride) *
-            static_cast<size_t>(slice_height / 2);
+            static_cast<size_t>(chroma_rows);
 
         libyuv::ARGBToI420(src, src_stride,
                            buffer, stride,
