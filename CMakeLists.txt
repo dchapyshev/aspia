@@ -32,7 +32,7 @@ endif()
 
 set(ASPIA_VERSION_MAJOR 3)
 set(ASPIA_VERSION_MINOR 0)
-set(ASPIA_VERSION_PATCH 14)
+set(ASPIA_VERSION_PATCH 15)
 
 # On CI installed dir could be outside of vcpkg root
 if ("$ENV{VCPKG_INSTALLED_DIR}" STREQUAL "")
