@@ -6,4 +6,5 @@ Icon=aspia-client
 Type=Application
 Categories=Utility;
 Terminal=false
+StartupWMClass=aspia_client
 MimeType=x-scheme-handler/aspia;

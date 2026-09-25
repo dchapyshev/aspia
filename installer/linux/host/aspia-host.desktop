@@ -6,3 +6,4 @@ Icon=aspia-host
 Type=Application
 Categories=Utility;
 Terminal=false
+StartupWMClass=aspia_host
