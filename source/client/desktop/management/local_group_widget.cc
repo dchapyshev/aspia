@@ -59,6 +59,10 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     // model it has, and at the time the generated setup ran there was none.
     ui->tree_host->setSortingEnabled(true);
 
+    ui->tree_host->header()->resizeSection(static_cast<int>(LocalHostListModel::Column::NAME), 110);
+    ui->tree_host->header()->resizeSection(static_cast<int>(LocalHostListModel::Column::MODIFIED), 150);
+    ui->tree_host->header()->resizeSection(static_cast<int>(LocalHostListModel::Column::CONNECT), 150);
+
     status_check_label_->setVisible(false);
 
     ui->tree_host->viewport()->installEventFilter(this);

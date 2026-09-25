@@ -68,6 +68,9 @@ RouterClientsWidget::RouterClientsWidget(QWidget* parent)
     // model it has, and at the time the generated setup ran there was none.
     ui->tree_clients->setSortingEnabled(true);
 
+    ui->tree_clients->header()->resizeSection(static_cast<int>(ClientListModel::Column::COMPUTER_NAME), 110);
+    ui->tree_clients->header()->resizeSection(static_cast<int>(ClientListModel::Column::CONNECT_TIME), 130);
+
     ui->tree_clients->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_clients, &QWidget::customContextMenuRequested,
             this, &RouterClientsWidget::onClientContextMenu);

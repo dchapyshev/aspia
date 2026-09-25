@@ -416,8 +416,8 @@ void ManagementTab::restoreState(const QByteArray& state)
     else
     {
         QList<int> sizes;
-        sizes.emplace_back(200);
-        sizes.emplace_back(width() - 200);
+        sizes.emplace_back(260);
+        sizes.emplace_back(width() - 260);
         ui->splitter->setSizes(sizes);
     }
 

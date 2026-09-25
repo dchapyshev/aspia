@@ -65,6 +65,11 @@ RouterRelaysWidget::RouterRelaysWidget(QWidget* parent)
     ui->tree_relays->setSortingEnabled(true);
     ui->tree_peers->setSortingEnabled(true);
 
+    ui->tree_relays->header()->resizeSection(static_cast<int>(RelayListModel::Column::CONNECT_TIME), 125);
+    ui->tree_relays->header()->resizeSection(static_cast<int>(RelayListModel::Column::VERSION), 70);
+    ui->tree_relays->header()->resizeSection(static_cast<int>(RelayListModel::Column::COMPUTER_NAME), 110);
+    ui->tree_peers->header()->resizeSection(static_cast<int>(PeerListModel::Column::USER_NAME), 110);
+
     ui->tree_relays->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_relays, &QWidget::customContextMenuRequested,
             this, &RouterRelaysWidget::onRelayContextMenu);

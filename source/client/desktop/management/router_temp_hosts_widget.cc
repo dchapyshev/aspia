@@ -56,6 +56,9 @@ RouterTempHostsWidget::RouterTempHostsWidget(QWidget* parent)
     tree_->setModel(model_);
     tree_->setSortingEnabled(true);
 
+    tree_->header()->resizeSection(static_cast<int>(TempHostListModel::Column::COMPUTER_NAME), 130);
+    tree_->header()->resizeSection(static_cast<int>(TempHostListModel::Column::OS), 140);
+
     button_prev_ = new IconTextButton(this);
     button_prev_->setText(tr("Previous"));
     button_prev_->setToolTip(tr("Previous page"));

@@ -99,6 +99,17 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
 
     ui->tree_hosts->header()->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->tree_hosts->header()->setSectionHidden(model_->sectionOf(HostListModel::Column::COMMENT), true);
+
+    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::HOST_ID), 75);
+    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::DISPLAY_NAME), 120);
+    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::COMPUTER_NAME), 110);
+    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::WORKSPACE), 135);
+    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::OS), 140);
+    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::VERSION), 70);
+    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::ARCH), 90);
+    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::LAST_CONNECT), 135);
+    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::LAST_MODIFY), 135);
+
     connect(ui->tree_hosts->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterHostsWidget::onHeaderContextMenu);
 
