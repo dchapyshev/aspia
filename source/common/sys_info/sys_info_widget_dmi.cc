@@ -402,8 +402,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
     if (dmi_->has_misc())
         addGroup(GROUP_MISC, kInfoIcon, tr("Misc"), { tr("DMI Properties") });
 
-    if (!isStateRestored())
-        ui->tree->resizeColumnToContents(0);
+    fitColumns();
 
     // Selecting the first table fills the lower pane.
     if (ui->tree->topLevelItemCount())

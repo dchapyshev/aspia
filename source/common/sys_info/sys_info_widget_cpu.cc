@@ -200,11 +200,7 @@ void SysInfoWidgetCpu::setSystemInfo(const proto::system_info::SystemInfo& syste
     for (int i = 0; i < ui->tree->topLevelItemCount() && i < 2; ++i)
         ui->tree->expandItem(ui->tree->topLevelItem(i));
 
-    if (!isStateRestored())
-    {
-        for (int i = 0; i < ui->tree->columnCount(); ++i)
-            ui->tree->resizeColumnToContents(i);
-    }
+    fitColumns(ui->tree->columnCount());
 }
 
 //--------------------------------------------------------------------------------------------------

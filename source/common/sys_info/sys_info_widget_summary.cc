@@ -406,8 +406,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& r
     for (int i = 0; i < ui->tree->topLevelItemCount(); ++i)
         ui->tree->topLevelItem(i)->setExpanded(true);
 
-    if (!isStateRestored())
-        ui->tree->resizeColumnToContents(0);
+    fitColumns();
 }
 
 //--------------------------------------------------------------------------------------------------

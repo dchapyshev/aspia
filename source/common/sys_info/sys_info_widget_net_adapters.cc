@@ -197,8 +197,7 @@ void SysInfoWidgetNetAdapters::setSystemInfo(const proto::system_info::SystemInf
     for (int i = 0; i < ui->tree->topLevelItemCount(); ++i)
         ui->tree->topLevelItem(i)->setExpanded(true);
 
-    if (!isStateRestored())
-        ui->tree->resizeColumnToContents(0);
+    fitColumns();
 }
 
 //--------------------------------------------------------------------------------------------------

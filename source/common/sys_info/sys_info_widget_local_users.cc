@@ -183,8 +183,7 @@ void SysInfoWidgetLocalUsers::setSystemInfo(const proto::system_info::SystemInfo
 
     ui->tree->expandAll();
 
-    if (!isStateRestored())
-        ui->tree->resizeColumnToContents(0);
+    fitColumns();
 }
 
 //--------------------------------------------------------------------------------------------------

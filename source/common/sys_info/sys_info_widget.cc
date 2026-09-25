@@ -23,9 +23,11 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QDataStream>
 #include <QDesktopServices>
 #include <QEvent>
 #include <QHeaderView>
+#include <QIODevice>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QUrl>
@@ -124,7 +126,15 @@ QByteArray SysInfoWidget::saveState() const
     if (!tree)
         return QByteArray();
 
-    return tree->header()->saveState();
+    QByteArray buffer;
+
+    {
+        QDataStream stream(&buffer, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_6_10);
+        stream << columns_fitted_ << tree->header()->saveState();
+    }
+
+    return buffer;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -137,8 +147,31 @@ void SysInfoWidget::restoreState(const QByteArray& state)
     if (!tree)
         return;
 
-    tree->header()->restoreState(state);
-    state_restored_ = true;
+    QDataStream stream(state);
+    stream.setVersion(QDataStream::Qt_6_10);
+
+    bool fitted = false;
+    QByteArray header_state;
+    stream >> fitted >> header_state;
+
+    if (!tree->header()->restoreState(header_state))
+        return;
+
+    columns_fitted_ = fitted;
+    widths_restored_ = fitted;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SysInfoWidget::fitColumns(int count)
+{
+    QTreeWidget* tree = treeWidget();
+    if (!tree || widths_restored_ || !tree->topLevelItemCount())
+        return;
+
+    for (int i = 0; i < count; ++i)
+        tree->resizeColumnToContents(i);
+
+    columns_fitted_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------

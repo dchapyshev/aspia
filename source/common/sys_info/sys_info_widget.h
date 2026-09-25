@@ -102,13 +102,16 @@ signals:
 protected:
     explicit SysInfoWidget(QWidget* parent = nullptr);
 
-    bool isStateRestored() const { return state_restored_; }
+    // Fits the first |count| columns to the contents whenever the tree has rows, unless the widths
+    // came from a saved state in which they had been fitted.
+    void fitColumns(int count = 1);
 
     void copyRow(QTreeWidgetItem* item);
     void copyColumn(QTreeWidgetItem* item, int column);
 
 private:
-    bool state_restored_ = false;
+    bool columns_fitted_ = false;
+    bool widths_restored_ = false;
 };
 
 #endif // COMMON_SYS_INFO_SYS_INFO_WIDGET_H

@@ -94,8 +94,7 @@ void SysInfoWidgetLocalUserGroups::setSystemInfo(const proto::system_info::Syste
         ui->tree->addTopLevelItem(item);
     }
 
-    if (!isStateRestored())
-        ui->tree->resizeColumnToContents(0);
+    fitColumns();
 }
 
 //--------------------------------------------------------------------------------------------------

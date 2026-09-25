@@ -203,8 +203,7 @@ void SysInfoWidgetDrives::setSystemInfo(const proto::system_info::SystemInfo& sy
         item->setExpanded(true);
     }
 
-    if (!isStateRestored())
-        ui->tree->resizeColumnToContents(0);
+    fitColumns();
 }
 
 //--------------------------------------------------------------------------------------------------
