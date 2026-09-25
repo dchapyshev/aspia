@@ -48,6 +48,7 @@
 #include "client/desktop/management/router_clients_widget.h"
 #include "client/desktop/management/router_group_dialog.h"
 #include "client/desktop/management/router_group_widget.h"
+#include "client/desktop/management/router_host_dialog.h"
 #include "client/desktop/management/router_hosts_widget.h"
 #include "client/desktop/management/router_relays_widget.h"
 #include "client/desktop/management/router_status_widget.h"
@@ -913,13 +914,18 @@ void ManagementTab::onSearchContextMenu(const QPoint& pos)
         }
     }
 
-    // Router hosts have no address-book record to edit, copy or delete.
+    // Router hosts have no address-book record to copy or delete.
     if (row->type == SearchResultModel::Type::LOCAL)
     {
         menu.addSeparator();
         menu.addAction(ui->action_edit_host);
         menu.addAction(ui->action_copy_host);
         menu.addAction(ui->action_delete_host);
+    }
+    else if (ui->action_edit_host->isVisible())
+    {
+        menu.addSeparator();
+        menu.addAction(ui->action_edit_host);
     }
 
     menu.exec(pos);
@@ -964,6 +970,22 @@ void ManagementTab::onEditHost()
     {
         router_hosts_widget_->onModifyHost();
         return;
+    }
+
+    if (current_content_ == search_widget_)
+    {
+        const SearchResultModel::Row* row = search_widget_->currentRow();
+        if (row && row->type == SearchResultModel::Type::ROUTER)
+        {
+            const qint64 router_id = row->host.routerId();
+            const RouterHost& host = row->router_host;
+
+            RouterHostDialog dialog(router_id, ui->sidebar->routerWorkspaceName(router_id, host.workspace_id),
+                                    host, this);
+            if (dialog.exec() == QDialog::Accepted)
+                search_widget_->search(search_widget_->currentQuery());
+            return;
+        }
     }
 
     qint64 entry_id = currentHostEntryId();
@@ -1885,10 +1907,12 @@ void ManagementTab::updateActionsState()
     {
         const SearchResultModel::Row* row = search_widget_->currentRow();
         const bool is_local_host = row != nullptr && row->type == SearchResultModel::Type::LOCAL;
+        const bool is_router_host = row != nullptr && row->type == SearchResultModel::Type::ROUTER &&
+            RouterController::session(row->host.routerId()) != nullptr;
 
-        // Address-book operations apply to local hosts only; router hosts can only be connected.
+        // Router hosts have no address-book record to copy or delete.
         ui->action_delete_host->setVisible(is_local_host);
-        ui->action_edit_host->setVisible(is_local_host);
+        ui->action_edit_host->setVisible(is_local_host || is_router_host);
         ui->action_copy_host->setVisible(is_local_host);
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::LOCAL_GROUP)
@@ -2030,14 +2054,8 @@ void ManagementTab::updateActionsState()
         (sidebar_item->itemType() == SidebarItem::ROUTER_GROUP ||
          sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE))
     {
-        proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
         RouterSession* session = RouterController::session(router_group_widget_->routerId());
-        if (session)
-            session_type = session->config().sessionType();
-
-        const bool has_selection = router_group_widget_->hasSelectedHost();
-        const bool can_edit = has_selection && session_type != proto::router::SESSION_TYPE_OPERATOR;
-        ui->action_edit_host->setVisible(can_edit);
+        ui->action_edit_host->setVisible(session && router_group_widget_->hasSelectedHost());
     }
 
     ui->action_reload->setVisible(current_content_ && current_content_->canReload());

@@ -556,6 +556,27 @@ QList<qint64> Sidebar::routerWorkspaceIds(qint64 router_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
+QString Sidebar::routerWorkspaceName(qint64 router_id, qint64 workspace_id) const
+{
+    SidebarRouter* router = routerById(router_id);
+    if (!router)
+        return QString();
+
+    for (int i = 0; i < router->childCount(); ++i)
+    {
+        SidebarItem* child = static_cast<SidebarItem*>(router->child(i));
+        if (child->itemType() != SidebarItem::ROUTER_WORKSPACE)
+            continue;
+
+        SidebarRouterWorkspace* workspace = static_cast<SidebarRouterWorkspace*>(child);
+        if (workspace->workspaceId() == workspace_id)
+            return workspace->workspaceName();
+    }
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Sidebar::changeRouterPassword(qint64 router_id)
 {
     RouterSession* session = RouterController::session(router_id);

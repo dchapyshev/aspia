@@ -58,6 +58,7 @@ public:
     SidebarRouter* routerById(qint64 router_id) const;
     QList<qint64> routerIds() const;
     QList<qint64> routerWorkspaceIds(qint64 router_id) const;
+    QString routerWorkspaceName(qint64 router_id, qint64 workspace_id) const;
 
     void changeRouterPassword(qint64 router_id);
 

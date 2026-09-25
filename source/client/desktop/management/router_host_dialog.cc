@@ -61,6 +61,14 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
 
     ui->edit_password->setShowPasswordButtonVisible(true);
 
+    RouterSession* session = RouterController::session(router_id_);
+    if (session && session->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
+    {
+        ui->edit_display_name->setReadOnly(true);
+        ui->edit_comment->setReadOnly(true);
+        ui->combo_group->setEnabled(false);
+    }
+
     // A temporary host id is handed out at random and comes back for another machine, so what was
     // saved under it would be sent to a host the user never gave it to. Such a host is edited like
     // any other, it just has nowhere to keep credentials.
@@ -102,7 +110,6 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
     // response arrives so the user cannot submit before knowing which group they have selected.
     ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(false);
 
-    RouterSession* session = RouterController::session(router_id_);
     if (!session)
     {
         LOG(ERROR) << "No session for router" << router_id_;
@@ -218,6 +225,13 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
     if (!saveCredentials())
     {
         MsgBox::warning(this, tr("Failed to save the credentials."));
+        return;
+    }
+
+    if (session->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
+    {
+        LOG(INFO) << "[ACTION] Edit host accepted, credentials saved";
+        accept();
         return;
     }
 

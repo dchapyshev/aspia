@@ -23,6 +23,7 @@
 #include <QCollator>
 
 #include "client/config.h"
+#include "client/router_types.h"
 
 // One page of the matches of a search, over the address book and over every online router at once.
 // A row of either kind is shown and connected to the same way; what tells them apart is whether
@@ -53,6 +54,9 @@ public:
         // A local row carries the record as it is stored, a router row the same fields taken from
         // the reply. The id of a router row stays -1: there is no record behind it.
         LocalHostConfig host;
+
+        // A router row only: the host as the router sent it.
+        RouterHost router_host;
 
         // The group path in the address book, or the label of the router that answered.
         QString source;
