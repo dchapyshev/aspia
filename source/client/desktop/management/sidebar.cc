@@ -19,6 +19,7 @@
 #include "client/desktop/management/sidebar.h"
 
 #include <QApplication>
+#include <QDataStream>
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
@@ -27,10 +28,13 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QSet>
+#include <QTimer>
+#include <QTreeWidgetItemIterator>
 #include <QUuid>
 #include <QVBoxLayout>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/user.h"
@@ -50,6 +54,8 @@
 
 namespace {
 
+constexpr Seconds kPendingItemTimeout{ 30 };
+
 //--------------------------------------------------------------------------------------------------
 bool isRouterAdmin(qint64 router_id)
 {
@@ -57,11 +63,39 @@ bool isRouterAdmin(qint64 router_id)
     return session && session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Names an item across restarts. The items of a router lie under it at the top level.
+QByteArray itemKey(const SidebarItem* item)
+{
+    const QTreeWidgetItem* top_item = item;
+    while (top_item->parent())
+        top_item = top_item->parent();
+
+    qint64 router_id = 0;
+    if (item->itemType() != SidebarItem::LOCAL_GROUP)
+        router_id = static_cast<const SidebarRouter*>(top_item)->routerId();
+
+    qint64 entry_id = item->groupId();
+    if (item->itemType() == SidebarItem::ROUTER_WORKSPACE)
+        entry_id = static_cast<const SidebarRouterWorkspace*>(item)->workspaceId();
+
+    QByteArray buffer;
+
+    {
+        QDataStream stream(&buffer, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_6_10);
+        stream << static_cast<qint32>(item->itemType()) << router_id << entry_id;
+    }
+
+    return buffer;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 Sidebar::Sidebar(QWidget* parent)
     : QWidget(parent),
+      pending_timer_(new QTimer(this)),
       local_group_mime_type_(QString("application/%1").arg(QUuid::createUuid().toString())),
       router_group_mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
 {
@@ -75,6 +109,9 @@ Sidebar::Sidebar(QWidget* parent)
     tree_widget_->setColumnCount(1);
 
     layout->addWidget(tree_widget_);
+
+    pending_timer_->setSingleShot(true);
+    pending_timer_->setInterval(kPendingItemTimeout);
 
     RouterController& controller = RouterController::instance();
     connect(&controller, &RouterController::sig_statusChanged, this, &Sidebar::onRouterStatusChanged);
@@ -333,6 +370,7 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<RouterWorkspace>
     }
 
     router->setExpanded(true);
+    selectPendingItem();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -435,6 +473,8 @@ void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const Q
         }
     };
     apply(0, workspace_item);
+
+    selectPendingItem();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -573,6 +613,54 @@ void Sidebar::changeRouterPassword(qint64 router_id)
         if (error_code != proto::router::kErrorOk && error_code != proto::router::kErrorLostConnection)
             MsgBox::warning(this, routerErrorText(error_code));
     } });
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray Sidebar::saveState() const
+{
+    if (!pending_item_.isEmpty())
+        return pending_item_;
+
+    SidebarItem* item = currentItem();
+    if (!item)
+        return QByteArray();
+
+    return itemKey(item);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::restoreState(const QByteArray& state)
+{
+    QTreeWidgetItem* item = findItem(state);
+    if (item)
+    {
+        tree_widget_->setCurrentItem(item);
+        return;
+    }
+
+    QDataStream stream(state);
+    stream.setVersion(QDataStream::Qt_6_10);
+
+    qint32 type = 0;
+    qint64 router_id = 0;
+    stream >> type >> router_id;
+
+    SidebarRouter* router = routerById(router_id);
+    if (!router)
+        return;
+
+    // The items of a router appear once it is connected, so until then the router stands in for the
+    // item. The item is selected if it appears in time and the user has not selected another one.
+    // Until the user does, it is also what gets saved.
+    tree_widget_->setCurrentItem(router);
+    pending_item_ = state;
+    pending_timer_->start();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::cancelPendingItem()
+{
+    pending_item_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -876,6 +964,8 @@ void Sidebar::onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* pr
     if (!current)
         return;
 
+    pending_item_.clear();
+
     if (dragging_)
         return;
 
@@ -1016,6 +1106,7 @@ void Sidebar::buildRouterSections(qint64 router_id)
     move_to_top(new SidebarRouterTempHosts(router_id, router));
 
     router->setExpanded(true);
+    selectPendingItem();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1667,4 +1758,33 @@ QTreeWidgetItem* Sidebar::findGroupItem(qint64 group_id, QTreeWidgetItem* parent
     }
 
     return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+QTreeWidgetItem* Sidebar::findItem(const QByteArray& key) const
+{
+    if (key.isEmpty())
+        return nullptr;
+
+    for (QTreeWidgetItemIterator it(tree_widget_); *it; ++it)
+    {
+        if (itemKey(static_cast<SidebarItem*>(*it)) == key)
+            return *it;
+    }
+
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::selectPendingItem()
+{
+    if (!pending_timer_->isActive())
+        return;
+
+    QTreeWidgetItem* item = findItem(pending_item_);
+    if (!item)
+        return;
+
+    pending_item_.clear();
+    tree_widget_->setCurrentItem(item);
 }

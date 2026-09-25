@@ -346,6 +346,7 @@ QByteArray ManagementTab::saveState()
         stream << router_status_widget_->saveState();
         stream << search_widget_->saveState();
         stream << ui->splitter->saveState();
+        stream << ui->sidebar->saveState();
     }
 
     return buffer;
@@ -367,6 +368,7 @@ void ManagementTab::restoreState(const QByteArray& state)
     QByteArray router_status_state;
     QByteArray search_state;
     QByteArray splitter_state;
+    QByteArray sidebar_state;
 
     stream >> local_group_state;
     stream >> router_group_state;
@@ -378,6 +380,7 @@ void ManagementTab::restoreState(const QByteArray& state)
     stream >> router_status_state;
     stream >> search_state;
     stream >> splitter_state;
+    stream >> sidebar_state;
 
     if (!local_group_state.isEmpty())
         local_group_widget_->restoreState(local_group_state);
@@ -417,6 +420,9 @@ void ManagementTab::restoreState(const QByteArray& state)
         sizes.emplace_back(width() - 200);
         ui->splitter->setSizes(sizes);
     }
+
+    if (!sidebar_state.isEmpty())
+        ui->sidebar->restoreState(sidebar_state);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -460,6 +466,9 @@ void ManagementTab::searchTextChanged(const QString& text)
         // Save the current content widget before switching to search.
         if (current_content_ != search_widget_)
             previous_content_ = current_content_;
+
+        // An item selected later would take the place of the search results.
+        ui->sidebar->cancelPendingItem();
 
         switchContent(search_widget_);
         search_widget_->search(text);

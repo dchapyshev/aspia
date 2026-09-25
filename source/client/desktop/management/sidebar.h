@@ -29,6 +29,7 @@
 #include "client/desktop/management/drag_and_drop.h"
 #include "client/desktop/management/sidebar_items.h"
 
+class QTimer;
 class RouterConfig;
 
 class Sidebar final : public QWidget
@@ -59,6 +60,10 @@ public:
     QList<qint64> routerWorkspaceIds(qint64 router_id) const;
 
     void changeRouterPassword(qint64 router_id);
+
+    QByteArray saveState() const;
+    void restoreState(const QByteArray& state);
+    void cancelPendingItem();
 
 public slots:
     void onRefreshWorkspaces(qint64 router_id);
@@ -107,12 +112,16 @@ private:
 
     bool isAllowedDropTarget(QTreeWidgetItem* target, QTreeWidgetItem* source) const;
     QTreeWidgetItem* findGroupItem(qint64 group_id, QTreeWidgetItem* parent) const;
+    QTreeWidgetItem* findItem(const QByteArray& key) const;
+    void selectPendingItem();
 
     QTreeWidget* tree_widget_ = nullptr;
 
     SidebarLocalGroup* local_root_ = nullptr;
 
     qint64 current_group_id_ = 0;
+    QByteArray pending_item_;
+    QTimer* pending_timer_ = nullptr;
     QString local_host_mime_type_;
     QString router_host_mime_type_;
     QString local_group_mime_type_;
