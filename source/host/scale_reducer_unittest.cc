@@ -25,6 +25,11 @@
 #include "base/time_types.h"
 #include "base/desktop/frame_aligned.h"
 
+#if defined(Q_OS_WINDOWS)
+#include "base/desktop/frame_dib.h"
+#include "base/win/scoped_hdc.h"
+#endif // defined(Q_OS_WINDOWS)
+
 namespace {
 
 const int kAlignment = 32;
@@ -93,6 +98,24 @@ const char* qualityName(ScaleReducer::Quality quality)
             return "UNKNOWN";
     }
 }
+
+#if defined(Q_OS_WINDOWS)
+// Scales |frame| and returns false if that read memory past what the frame has.
+bool scaleWithoutAccessViolation(ScaleReducer* reducer, const Frame* frame, const QSize& target_size)
+{
+    __try
+    {
+        reducer->scaleFrame(frame, target_size);
+    }
+    __except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
+              EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
+    {
+        return false;
+    }
+
+    return true;
+}
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
@@ -383,6 +406,33 @@ TEST(scale_reducer_test, all_quality_levels_produce_valid_output)
         EXPECT_EQ(result->size(), target_size) << "Failed for quality: " << qualityName(quality);
     }
 }
+
+#if defined(Q_OS_WINDOWS)
+// The update that crashed the desktop agent on Windows 7: a GDI frame of 1920x1080 shown at 1614x908
+// and a rectangle that starts inside the screen and reaches its right and bottom edges. The clipped
+// scaling reads past the end of the frame, and the memory of a DIB ends right there.
+TEST(scale_reducer_test, update_at_bottom_of_dib_frame)
+{
+    ScopedCreateDC dc(CreateCompatibleDC(nullptr));
+    ASSERT_TRUE(dc.isValid());
+
+    const QSize source_size(1920, 1080);
+    const QSize target_size(1614, 908);
+
+    std::unique_ptr<FrameDib> frame = FrameDib::create(source_size, dc);
+    ASSERT_NE(frame, nullptr);
+
+    ScaleReducer reducer(ScaleReducer::Quality::NORMAL);
+
+    // The first call scales the whole frame.
+    *frame->updatedRegion() += QRect(QPoint(0, 0), source_size);
+    ASSERT_TRUE(scaleWithoutAccessViolation(&reducer, frame.get(), target_size));
+
+    *frame->updatedRegion() = Region();
+    *frame->updatedRegion() += QRect(48, 1040, 1872, 40);
+    EXPECT_TRUE(scaleWithoutAccessViolation(&reducer, frame.get(), target_size));
+}
+#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 // Benchmarks
