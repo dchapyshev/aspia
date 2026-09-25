@@ -119,6 +119,7 @@ private:
 
     ClientList clients_;
 
+    friend class UserIpcWorkerTestPeer;
     Q_DISABLE_COPY_MOVE(UserIpcWorker)
 };
 

@@ -248,7 +248,7 @@ endif()
 
 source_group("" FILES ${SOURCE_HOST_CORE} ${SOURCE_HOST} ${SOURCE_HOST_TESTS})
 source_group(ui FILES ${SOURCE_HOST_UI})
-source_group(workers FILES ${SOURCE_HOST_WORKERS})
+source_group(workers FILES ${SOURCE_HOST_WORKERS} ${SOURCE_HOST_WORKERS_TESTS})
 source_group(resources FILES ${SOURCE_HOST_RESOURCES})
 
 if (LINUX)
@@ -350,7 +350,7 @@ set_property(TARGET aspia_host PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_host PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_host INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
 
-add_executable(aspia_host_tests ${SOURCE_HOST_TESTS})
+add_executable(aspia_host_tests ${SOURCE_HOST_TESTS} ${SOURCE_HOST_WORKERS_TESTS})
 
 target_link_libraries(aspia_host_tests
     aspia_host_core

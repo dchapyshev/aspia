@@ -216,6 +216,9 @@ void UserIpcWorker::onIpcDisconnected()
         ipc_channel_.reset();
     }
 
+    clipboard_file_transfer_.reset();
+    clients_.clear();
+
     emit sig_statusChanged(Status::DISCONNECTED_FROM_SERVICE);
 }
 

@@ -38,6 +38,9 @@ collect_sources(SOURCE_HOST_WORKERS
     user_ipc_worker.cc
     user_ipc_worker.h)
 
+collect_sources(SOURCE_HOST_WORKERS_TESTS
+    user_ipc_worker_unittest.cc)
+
 if (WIN32)
     collect_sources(SOURCE_HOST_WORKERS
         tools_worker_win.cc)
