@@ -94,6 +94,21 @@ std::unique_ptr<Frame> makeFrame(const QSize& size, const Gray& gray)
                      argb(gray.right, gray.right, gray.right));
 }
 
+// Random pixels, so the packet size follows the quality the encoder aims for.
+std::unique_ptr<Frame> makeNoiseFrame(const QSize& size, std::mt19937& rng)
+{
+    std::unique_ptr<FrameAligned> frame = FrameAligned::create(size, 32);
+    for (int y = 0; y < size.height(); ++y)
+    {
+        quint32* row = reinterpret_cast<quint32*>(frame->frameData() + y * frame->stride());
+        for (int x = 0; x < size.width(); ++x)
+            row[x] = 0xFF000000 | (rng() & 0xFFFFFF);
+    }
+
+    *frame->updatedRegion() += QRect(QPoint(0, 0), size);
+    return frame;
+}
+
 // Limited range BT.601, as libyuv converts.
 Yuv expectedYuv(quint32 pixel)
 {
@@ -698,6 +713,60 @@ TEST(VideoCodecH264MFTest, ExtremeSizes)
 
     if (encoders == 0)
         GTEST_SKIP() << "No hardware H264 encoder";
+}
+
+// The quality follows the bandwidth: the packets shrink on a narrow link and grow back on a wide
+// one. A change of the bandwidth tier recreates the encoder, so it starts with a key frame that
+// carries the format.
+TEST(VideoCodecH264MFTest, BandwidthChange)
+{
+    if (!VideoEncoderH264MF::isHardwareSupported())
+        GTEST_SKIP() << "No hardware H264 encoder";
+
+    std::unique_ptr<VideoEncoderH264MF> encoder = VideoEncoderH264MF::create();
+    ASSERT_NE(encoder, nullptr);
+
+    std::unique_ptr<VideoDecoder> decoder = softwareDecoder();
+    std::mt19937 rng(3);
+
+    // Encodes a noise frame and returns the size of its packet.
+    auto noisePacket = [&](proto::video::Packet* packet)
+    {
+        const std::unique_ptr<Frame> frame = makeNoiseFrame(kScreenSize, rng);
+        EXPECT_EQ(encoder->encode(frame.get(), packet), VideoEncoder::Result::SUCCESS);
+        EXPECT_EQ(decoder->decode(*packet), VideoDecoder::Result::SUCCESS);
+        return packet->data().size();
+    };
+
+    // The first packet after a tier change, then the average of the following ones.
+    auto tierPackets = [&](int count)
+    {
+        proto::video::Packet first;
+        noisePacket(&first);
+        expectFormat(first, kScreenSize);
+
+        size_t total = 0;
+        for (int i = 0; i < count; ++i)
+        {
+            proto::video::Packet packet;
+            total += noisePacket(&packet);
+            EXPECT_FALSE(packet.has_format()) << i;
+        }
+        return total / count;
+    };
+
+    encoder->setBandwidth(4 * 1024 * 1024);
+    const size_t high = tierPackets(5);
+
+    encoder->setBandwidth(50 * 1024);
+    const size_t low = tierPackets(5);
+    EXPECT_LT(low, high * 7 / 10);
+
+    encoder->setBandwidth(4 * 1024 * 1024);
+    const size_t high_again = tierPackets(5);
+    EXPECT_GT(high_again, low * 13 / 10);
+
+    GTEST_LOG_(INFO) << "Packet sizes: " << high << " -> " << low << " -> " << high_again;
 }
 
 // Frames arrive back to back, as when a video plays on the host.
