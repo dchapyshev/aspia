@@ -143,10 +143,14 @@ int installService(QTextStream& out)
 #endif
 
     // Run the service under its low-privilege account with access only to the directories it needs
-    // (config files, database).
+    // (config files, database, logs).
+    QStringList paths = { BasePaths::appConfigDir(), BasePaths::appDataDir() };
+#if defined(Q_OS_LINUX)
+    paths.append(loggingDirectory());
+#endif
+
     const QString account = ServiceController::lowPrivilegeAccount(Service::kName);
-    if (!account.isEmpty() &&
-        !controller->setAccount(account, QString(), { BasePaths::appConfigDir(), BasePaths::appDataDir() }))
+    if (!account.isEmpty() && !controller->setAccount(account, QString(), paths))
     {
         out << "Warning: failed to reduce service privileges. The service runs under the default "
                "system account." << Qt::endl;

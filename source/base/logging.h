@@ -127,6 +127,13 @@ struct LoggingSettings
     //  destination: LOG_DEFAULT
     //  min_log_level: LOG_INFO
     //  max_log_file_age: 14 days
+    //  log_dir: empty, the logs then go to
+    //    Windows: %TEMP%\aspia for users, C:\Windows\SystemTemp\aspia for SYSTEM
+    //    Linux:   /var/log/aspia/<component> for root and system accounts (uid below 1000),
+    //             $XDG_STATE_HOME/aspia/logs (~/.local/state/aspia/logs) for users; the component
+    //             is the name of the executable without "aspia_"
+    //    MacOS:   $TMPDIR/aspia
+    //    Android: <application cache>/aspia
     LoggingSettings();
 
     LoggingDestination destination;

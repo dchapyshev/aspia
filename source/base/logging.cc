@@ -95,8 +95,32 @@ void removeOldFiles(const QString& path, qint64 max_file_age)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString defaultLogFileDir()
+QString defaultLogFileDir(const QString& prefix)
 {
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    // The temporary directory is shared by system and user processes and belongs to whichever
+    // created it first, so each of them keeps its logs in its own place. Root and the service
+    // accounts are system ones, their uids are below the first uid of a user.
+    if (geteuid() < 1000)
+    {
+        // The executables are named aspia_<component>.
+        QString component = prefix;
+        if (component.startsWith("aspia_"))
+            component.remove(0, 6);
+
+        return "/var/log/aspia/" + component;
+    }
+
+    QString state_dir = qEnvironmentVariable("XDG_STATE_HOME");
+    if (state_dir.isEmpty() && !qEnvironmentVariableIsEmpty("HOME"))
+        state_dir = qEnvironmentVariable("HOME") + "/.local/state";
+
+    if (!state_dir.isEmpty())
+        return state_dir + "/aspia/logs";
+#else
+    Q_UNUSED(prefix)
+#endif
+
     return QDir::tempPath() + "/aspia";
 }
 
@@ -108,7 +132,7 @@ bool initLoggingFile(const QString& prefix)
 
     QString file_dir = g_log_dir_path;
     if (file_dir.isEmpty())
-        file_dir = defaultLogFileDir();
+        file_dir = defaultLogFileDir(prefix);
 
     if (file_dir.isEmpty())
         return false;
@@ -333,7 +357,7 @@ void shutdownLogging()
 QString loggingDirectory()
 {
     if (g_log_dir_path.isEmpty())
-        return defaultLogFileDir();
+        return defaultLogFileDir(logFilePrefix());
 
     return g_log_dir_path;
 }
