@@ -676,12 +676,16 @@ void HostWindow::onSecurityLog()
 {
     LOG(INFO) << "[ACTION] Security Log";
 
-    if (elevate_util_ && elevate_util_->runElevated({ "--security-log" }, winId(), [this](int /* exit_code */)
+    if (!ProcessUtil::isPrivileged() && elevate_util_)
     {
-        ui->action_security_log->setEnabled(true);
-    }))
-    {
-        ui->action_security_log->setEnabled(false);
+        // Without the privileges the log cannot be read, so a refused elevation opens nothing.
+        if (elevate_util_->runElevated({ "--security-log" }, winId(), [this](int /* exit_code */)
+        {
+            ui->action_security_log->setEnabled(true);
+        }))
+        {
+            ui->action_security_log->setEnabled(false);
+        }
         return;
     }
 
@@ -693,13 +697,18 @@ void HostWindow::onSettings()
 {
     LOG(INFO) << "[ACTION] Settings";
 
-    if (elevate_util_ && elevate_util_->runElevated({ "--config" }, winId(), [this](int /* exit_code */)
+    if (!ProcessUtil::isPrivileged() && elevate_util_)
     {
-        ui->action_settings->setEnabled(true);
-        onSettingsChanged();
-    }))
-    {
-        ui->action_settings->setEnabled(false);
+        // Without the privileges the settings cannot be read or saved, so a refused elevation opens
+        // nothing.
+        if (elevate_util_->runElevated({ "--config" }, winId(), [this](int /* exit_code */)
+        {
+            ui->action_settings->setEnabled(true);
+            onSettingsChanged();
+        }))
+        {
+            ui->action_settings->setEnabled(false);
+        }
         return;
     }
 
