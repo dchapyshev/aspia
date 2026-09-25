@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.system.ErrnoException;
 import android.system.Os;
+import android.view.KeyEvent;
 
 import org.qtproject.qt.android.bindings.QtActivity;
 
@@ -75,5 +76,21 @@ public final class ClientActivity extends QtActivity
             // The native side is not up yet. The URL stays in the activity intent (setIntent
             // above) and is picked up by the startup path.
         }
+    }
+
+    // In landscape a phone keyboard goes fullscreen and sends its Shift to the application as key
+    // events. Qt restarts the input on every key event in that mode, and the restart drops the Shift
+    // the keyboard has just set, so the letter case never switches. The case of a letter comes with
+    // the letter itself, so the modifier keys of the on-screen keyboard are not passed to Qt.
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event)
+    {
+        if ((event.getFlags() & KeyEvent.FLAG_SOFT_KEYBOARD) != 0 &&
+            KeyEvent.isModifierKey(event.getKeyCode()))
+        {
+            return true;
+        }
+
+        return super.dispatchKeyEvent(event);
     }
 }
