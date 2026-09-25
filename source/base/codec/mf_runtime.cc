@@ -33,9 +33,11 @@ using PFN_MFCreateDXGISurfaceBuffer = decltype(&::MFCreateDXGISurfaceBuffer);
 using PFN_MFCreateDXGIDeviceManager = decltype(&::MFCreateDXGIDeviceManager);
 using PFN_MFTEnumEx = decltype(&::MFTEnumEx);
 using PFN_D3D11CreateDevice = decltype(&::D3D11CreateDevice);
+using PFN_CreateDXGIFactory1 = decltype(&::CreateDXGIFactory1);
 
 HMODULE h_mfplat = nullptr;
 HMODULE h_d3d11 = nullptr;
+HMODULE h_dxgi = nullptr;
 
 PFN_MFStartup pfn_MFStartup = nullptr;
 PFN_MFShutdown pfn_MFShutdown = nullptr;
@@ -46,6 +48,7 @@ PFN_MFCreateDXGISurfaceBuffer pfn_MFCreateDXGISurfaceBuffer = nullptr;
 PFN_MFCreateDXGIDeviceManager pfn_MFCreateDXGIDeviceManager = nullptr;
 PFN_MFTEnumEx pfn_MFTEnumEx = nullptr;
 PFN_D3D11CreateDevice pfn_D3D11CreateDevice = nullptr;
+PFN_CreateDXGIFactory1 pfn_CreateDXGIFactory1 = nullptr;
 
 //--------------------------------------------------------------------------------------------------
 template <typename Fn>
@@ -67,8 +70,9 @@ bool tryLoad()
     {
         h_mfplat = LoadLibraryW(L"mfplat.dll");
         h_d3d11 = LoadLibraryW(L"d3d11.dll");
+        h_dxgi = LoadLibraryW(L"dxgi.dll");
 
-        if (!h_mfplat || !h_d3d11)
+        if (!h_mfplat || !h_d3d11 || !h_dxgi)
         {
             LOG(WARNING) << "MF runtime DLLs not available on this system";
             return false;
@@ -84,6 +88,7 @@ bool tryLoad()
         ok &= resolve(h_mfplat, "MFCreateDXGIDeviceManager", &pfn_MFCreateDXGIDeviceManager);
         ok &= resolve(h_mfplat, "MFTEnumEx", &pfn_MFTEnumEx);
         ok &= resolve(h_d3d11, "D3D11CreateDevice", &pfn_D3D11CreateDevice);
+        ok &= resolve(h_dxgi, "CreateDXGIFactory1", &pfn_CreateDXGIFactory1);
         return ok;
     }();
     return result;
@@ -177,6 +182,14 @@ HRESULT d3d11CreateDevice(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driver_type,
         return E_NOTIMPL;
     return pfn_D3D11CreateDevice(adapter, driver_type, software, flags, feature_levels, num_levels,
         sdk_version, device, feature_level, context);
+}
+
+//--------------------------------------------------------------------------------------------------
+HRESULT createDxgiFactory(IDXGIFactory1** out)
+{
+    if (!tryLoad())
+        return E_NOTIMPL;
+    return pfn_CreateDXGIFactory1(IID_PPV_ARGS(out));
 }
 
 } // namespace mf

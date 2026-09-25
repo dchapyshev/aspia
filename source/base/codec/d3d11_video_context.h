@@ -33,7 +33,8 @@
 class D3D11VideoContext final
 {
 public:
-    static std::unique_ptr<D3D11VideoContext> create();
+    // Without |adapter| the device is created on the default one.
+    static std::unique_ptr<D3D11VideoContext> create(IDXGIAdapter* adapter = nullptr);
     ~D3D11VideoContext();
 
     // Returns true when this device exposes a DXVA2 H.264 video decoder profile (the typical
@@ -46,15 +47,17 @@ public:
     ID3D11VideoContext* videoContext() const { return video_context_.Get(); }
     IMFDXGIDeviceManager* manager() const { return manager_.Get(); }
     UINT resetToken() const { return reset_token_; }
+    const DXGI_ADAPTER_DESC& adapterDesc() const { return adapter_desc_; }
 
     Microsoft::WRL::ComPtr<ID3D11Texture2D> createDynamicArgbTexture(int width, int height);
     Microsoft::WRL::ComPtr<ID3D11Texture2D> createDefaultArgbTexture(int width, int height);
     Microsoft::WRL::ComPtr<ID3D11Texture2D> createNv12Texture(int width, int height);
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> createStagingNv12Texture(int width, int height);
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> createStagingNv12Texture(
+        int width, int height, UINT cpu_access);
 
 private:
     D3D11VideoContext() = default;
-    bool initialize();
+    bool initialize(IDXGIAdapter* adapter);
 
     Microsoft::WRL::ComPtr<ID3D11Device> device_;
     Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context_;
@@ -62,6 +65,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11VideoContext> video_context_;
     Microsoft::WRL::ComPtr<IMFDXGIDeviceManager> manager_;
     UINT reset_token_ = 0;
+    DXGI_ADAPTER_DESC adapter_desc_ = {};
 
     D3D11VideoContext(const D3D11VideoContext&) = delete;
     D3D11VideoContext& operator=(const D3D11VideoContext&) = delete;

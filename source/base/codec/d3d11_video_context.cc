@@ -27,10 +27,10 @@ using Microsoft::WRL::ComPtr;
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<D3D11VideoContext> D3D11VideoContext::create()
+std::unique_ptr<D3D11VideoContext> D3D11VideoContext::create(IDXGIAdapter* adapter)
 {
     std::unique_ptr<D3D11VideoContext> ctx(new D3D11VideoContext());
-    if (!ctx->initialize())
+    if (!ctx->initialize(adapter))
         return nullptr;
     return ctx;
 }
@@ -61,7 +61,7 @@ bool D3D11VideoContext::supportsH264Decode() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool D3D11VideoContext::initialize()
+bool D3D11VideoContext::initialize(IDXGIAdapter* adapter)
 {
     const D3D_FEATURE_LEVEL feature_levels[] =
         {
@@ -73,13 +73,23 @@ bool D3D11VideoContext::initialize()
 
     D3D_FEATURE_LEVEL feature_level = D3D_FEATURE_LEVEL_11_0;
 
-    _com_error error = mf::d3d11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr,
+    _com_error error = mf::d3d11CreateDevice(adapter,
+        adapter ? D3D_DRIVER_TYPE_UNKNOWN : D3D_DRIVER_TYPE_HARDWARE, nullptr,
         D3D11_CREATE_DEVICE_VIDEO_SUPPORT | D3D11_CREATE_DEVICE_BGRA_SUPPORT, feature_levels,
         ARRAYSIZE(feature_levels), D3D11_SDK_VERSION, &device_, &feature_level, &device_context_);
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "D3D11CreateDevice failed:" << error;
         return false;
+    }
+
+    ComPtr<IDXGIDevice> dxgi_device;
+    ComPtr<IDXGIAdapter> device_adapter;
+    if (SUCCEEDED(device_.As(&dxgi_device)) && SUCCEEDED(dxgi_device->GetAdapter(&device_adapter)) &&
+        SUCCEEDED(device_adapter->GetDesc(&adapter_desc_)))
+    {
+        LOG(INFO) << "D3D11 video device adapter:"
+                  << QString::fromWCharArray(adapter_desc_.Description);
     }
 
     // MF and our own thread can both touch the immediate context; thread protection is mandatory.
@@ -192,7 +202,8 @@ ComPtr<ID3D11Texture2D> D3D11VideoContext::createNv12Texture(int width, int heig
 }
 
 //--------------------------------------------------------------------------------------------------
-ComPtr<ID3D11Texture2D> D3D11VideoContext::createStagingNv12Texture(int width, int height)
+ComPtr<ID3D11Texture2D> D3D11VideoContext::createStagingNv12Texture(
+    int width, int height, UINT cpu_access)
 {
     D3D11_TEXTURE2D_DESC desc;
     memset(&desc, 0, sizeof(desc));
@@ -203,7 +214,7 @@ ComPtr<ID3D11Texture2D> D3D11VideoContext::createStagingNv12Texture(int width, i
     desc.Format = DXGI_FORMAT_NV12;
     desc.SampleDesc.Count = 1;
     desc.Usage = D3D11_USAGE_STAGING;
-    desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+    desc.CPUAccessFlags = cpu_access;
 
     ComPtr<ID3D11Texture2D> texture;
     _com_error error = device_->CreateTexture2D(&desc, nullptr, &texture);

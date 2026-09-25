@@ -40,9 +40,10 @@ const LONGLONG kFrameDuration100ns = 800000;
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<VideoDecoderH264MF> VideoDecoderH264MF::create()
+std::unique_ptr<VideoDecoderH264MF> VideoDecoderH264MF::create(IDXGIAdapter* adapter)
 {
     std::unique_ptr<VideoDecoderH264MF> instance(new VideoDecoderH264MF());
+    instance->adapter_ = adapter;
     if (!instance->initialize())
         return nullptr;
     return instance;
@@ -192,7 +193,7 @@ VideoDecoder::Result VideoDecoderH264MF::decode(const proto::video::Packet& pack
 //--------------------------------------------------------------------------------------------------
 bool VideoDecoderH264MF::createDecoder(const QSize& size)
 {
-    d3d_ = D3D11VideoContext::create();
+    d3d_ = D3D11VideoContext::create(adapter_.Get());
     if (!d3d_)
     {
         LOG(ERROR) << "Failed to create D3D11 context";
@@ -659,7 +660,8 @@ bool VideoDecoderH264MF::mapSampleToFrame(IMFSample* sample, const QSize& size)
     if (!staging_matches)
     {
         nv12_staging_ = d3d_->createStagingNv12Texture(
-            static_cast<int>(src_desc.Width), static_cast<int>(src_desc.Height));
+            static_cast<int>(src_desc.Width), static_cast<int>(src_desc.Height),
+            D3D11_CPU_ACCESS_READ);
         if (!nv12_staging_)
         {
             LOG(ERROR) << "Failed to create NV12 staging texture";

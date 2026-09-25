@@ -22,7 +22,6 @@
 #include "base/codec/d3d11_video_context.h"
 #include "base/codec/video_encoder.h"
 
-#include <QByteArray>
 #include <QSize>
 
 #include <codecapi.h>
@@ -34,6 +33,7 @@
 #include <wrl/client.h>
 
 #include <memory>
+#include <vector>
 
 // Hardware H.264 encoder built on top of an asynchronous Media Foundation Transform.
 // Two ARGB-to-NV12 implementations are compiled in: a libyuv-based CPU path (default,
@@ -46,13 +46,15 @@ class VideoEncoderH264MF final : public VideoEncoder
 public:
     // Constructs an encoder instance and brings up the Media Foundation runtime. Returns nullptr
     // when MF is unavailable on the system or MFStartup fails; callers must handle the null case.
-    static std::unique_ptr<VideoEncoderH264MF> create();
+    // The encoder runs on |adapter|, or on the default one when it is null.
+    static std::unique_ptr<VideoEncoderH264MF> create(IDXGIAdapter* adapter = nullptr);
 
     ~VideoEncoderH264MF() final;
 
-    // Returns true when a hardware H264 encoder MFT is available on this system. Cheap to call -
-    // probes the MF runtime and enumerates HW encoders without actually activating any of them.
-    static bool isHardwareSupported();
+    // Returns true when a hardware H264 encoder MFT is available on this system, or on |adapter|
+    // when it is given. Cheap to call - probes the MF runtime and enumerates HW encoders without
+    // actually activating any of them.
+    static bool isHardwareSupported(IDXGIAdapter* adapter = nullptr);
 
     // VideoEncoder implementation.
     Result encode(const Frame* frame, proto::video::Packet* packet) final;
@@ -76,6 +78,7 @@ private:
 
     bool waitForEvent(MediaEventType expected);
     bool readOutput(proto::video::Packet* packet, bool* is_key_frame_out);
+    Result failure();
 
     QSize last_size_;
 
@@ -85,6 +88,11 @@ private:
     bool output_provides_samples_ = false;
     quint64 frame_counter_ = 0;
     quint32 output_sample_size_ = 0;
+    int failures_ = 0;
+
+    // Events of the asynchronous transform, received but not yet consumed by waitForEvent().
+    int input_credits_ = 0;
+    int output_ready_ = 0;
 
     // Bandwidth-tuned codec parameters. Defaults match a "5 Mbps, decent quality" tier and are
     // shifted by setBandwidth() before each codec (re)creation; configureCodecApi() reads them
@@ -94,25 +102,27 @@ private:
     quint32 common_quality_ = 85;
     quint32 target_bitrate_bps_ = 5 * 1000 * 1000;
 
+    Microsoft::WRL::ComPtr<IDXGIAdapter> adapter_;
     std::unique_ptr<D3D11VideoContext> d3d_;
 
     Microsoft::WRL::ComPtr<IMFTransform> encoder_;
     Microsoft::WRL::ComPtr<ICodecAPI> codec_api_;
     Microsoft::WRL::ComPtr<IMFMediaEventGenerator> event_gen_;
 
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> nv12_texture_;
+    // NV12 input textures used in turn; |next_input_| receives the next frame.
+    std::vector<Microsoft::WRL::ComPtr<ID3D11Texture2D>> input_textures_;
+    size_t next_input_ = 0;
 
-    // libyuv path: ARGB-to-NV12 done on the CPU, result uploaded via UpdateSubresource.
-    QByteArray nv12_buffer_;
-    int nv12_stride_ = 0;
-    int nv12_y_rows_ = 0;
+    // libyuv path: ARGB-to-NV12 done on the CPU into the mapped staging texture, then copied
+    // to the input texture on the GPU.
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> staging_texture_;
 
     // VideoProcessor path: ARGB-to-NV12 done on the GPU via ID3D11VideoProcessor.
     Microsoft::WRL::ComPtr<ID3D11Texture2D> argb_texture_;
     Microsoft::WRL::ComPtr<ID3D11VideoProcessorEnumerator> vp_enumerator_;
     Microsoft::WRL::ComPtr<ID3D11VideoProcessor> vp_processor_;
     Microsoft::WRL::ComPtr<ID3D11VideoProcessorInputView> vp_input_view_;
-    Microsoft::WRL::ComPtr<ID3D11VideoProcessorOutputView> vp_output_view_;
+    std::vector<Microsoft::WRL::ComPtr<ID3D11VideoProcessorOutputView>> vp_output_views_;
 
     DWORD input_stream_id_ = 0;
     DWORD output_stream_id_ = 0;

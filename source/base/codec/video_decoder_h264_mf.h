@@ -40,7 +40,8 @@ class VideoDecoderH264MF final : public VideoDecoder
 {
 public:
     // Returns nullptr when MF runtime or HW H264 decoder MFT is not available on this system.
-    static std::unique_ptr<VideoDecoderH264MF> create();
+    // The decoder runs on |adapter|, or on the default one when it is null.
+    static std::unique_ptr<VideoDecoderH264MF> create(IDXGIAdapter* adapter = nullptr);
 
     // Cheap probe - enumerates HW decoder MFTs without activating any.
     static bool isHardwareSupported();
@@ -78,6 +79,7 @@ private:
     quint64 frame_counter_ = 0;
     quint32 output_sample_size_ = 0;
 
+    Microsoft::WRL::ComPtr<IDXGIAdapter> adapter_;
     std::unique_ptr<D3D11VideoContext> d3d_;
 
     Microsoft::WRL::ComPtr<IMFTransform> decoder_;

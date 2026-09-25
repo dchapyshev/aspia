@@ -43,6 +43,13 @@ const LONGLONG kFrameDuration100ns = 800000;
 
 const UINT32 kMaxRefFrames = 1;
 
+// The transform reads an input texture after ProcessInput has returned, so consecutive frames go
+// to different textures.
+const size_t kInputTextureCount = 3;
+
+// After this many failed frames in a row the caller falls back to a software codec.
+const int kMaxFailures = 3;
+
 // Selects the ARGB-to-NV12 implementation. libyuv handles subpixel-rendered text without
 // color fringes; the GPU VideoProcessor path is faster but exhibits visible chroma artifacts
 // on small text with many drivers. Flip to false to fall back to the VP path.
@@ -100,13 +107,33 @@ QRect alignRect(const QRect& rect)
     return QRect(QPoint(x, y), QPoint(right + 1, bottom + 1));
 }
 
+//--------------------------------------------------------------------------------------------------
+// The first hardware transform of the vendor with DXGI id |vendor_id|, or nullptr.
+IMFActivate* findActivate(IMFActivate** activate_arr, UINT32 count, UINT vendor_id)
+{
+    for (UINT32 i = 0; i < count; ++i)
+    {
+        // The value looks like "VEN_10DE".
+        WCHAR vendor[32] = { 0 };
+        activate_arr[i]->GetString(
+            MFT_ENUM_HARDWARE_VENDOR_ID_Attribute, vendor, ARRAYSIZE(vendor), nullptr);
+
+        const QString id = QString::fromWCharArray(vendor).section('_', 1, 1);
+        if (id.toUInt(nullptr, 16) == vendor_id)
+            return activate_arr[i];
+    }
+
+    return nullptr;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<VideoEncoderH264MF> VideoEncoderH264MF::create()
+std::unique_ptr<VideoEncoderH264MF> VideoEncoderH264MF::create(IDXGIAdapter* adapter)
 {
     std::unique_ptr<VideoEncoderH264MF> instance(new VideoEncoderH264MF());
+    instance->adapter_ = adapter;
     if (!instance->initialize())
         return nullptr;
     return instance;
@@ -149,7 +176,7 @@ bool VideoEncoderH264MF::initialize()
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool VideoEncoderH264MF::isHardwareSupported()
+bool VideoEncoderH264MF::isHardwareSupported(IDXGIAdapter* adapter)
 {
     if (!mf::isRuntimeAvailable())
         return false;
@@ -168,9 +195,16 @@ bool VideoEncoderH264MF::isHardwareSupported()
         MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_ASYNCMFT | MFT_ENUM_FLAG_SORTANDFILTER,
         nullptr, &output_info, &activate_arr, &count);
 
-    const bool supported = SUCCEEDED(error.Error()) && count > 0;
+    bool supported = SUCCEEDED(error.Error()) && count > 0;
     if (supported)
     {
+        if (adapter)
+        {
+            DXGI_ADAPTER_DESC desc = {};
+            adapter->GetDesc(&desc);
+            supported = findActivate(activate_arr.get(), count, desc.VendorId) != nullptr;
+        }
+
         for (UINT32 i = 0; i < count; ++i)
             activate_arr.get()[i]->Release();
     }
@@ -242,10 +276,10 @@ VideoEncoder::Result VideoEncoderH264MF::encode(const Frame* frame, proto::video
     }
 
     if (!uploadArgbAndConvert(frame))
-        return Result::TEMPORARY_ERROR;
+        return failure();
 
     if (!waitForEvent(METransformNeedInput))
-        return Result::TEMPORARY_ERROR;
+        return failure();
 
     if (force_key_frame_next_)
     {
@@ -256,28 +290,44 @@ VideoEncoder::Result VideoEncoderH264MF::encode(const Frame* frame, proto::video
     const quint64 sample_time = frame_counter_ * static_cast<quint64>(kFrameDuration100ns);
     ComPtr<IMFSample> input_sample;
     if (!buildInputSample(sample_time, &input_sample))
-        return Result::TEMPORARY_ERROR;
+        return failure();
 
     _com_error error = encoder_->ProcessInput(input_stream_id_, input_sample.Get(), 0);
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "IMFTransform::ProcessInput failed:" << error;
-        return Result::TEMPORARY_ERROR;
+        return failure();
     }
+    next_input_ = (next_input_ + 1) % input_textures_.size();
 
     if (!waitForEvent(METransformHaveOutput))
-        return Result::TEMPORARY_ERROR;
+        return failure();
 
     bool output_is_key = false;
     if (!readOutput(packet, &output_is_key))
-        return Result::TEMPORARY_ERROR;
+        return failure();
 
     if (is_key_frame || output_is_key)
         packet->set_flags(proto::video::PACKET_FLAG_IS_KEY_FRAME);
 
     ++frame_counter_;
+    failures_ = 0;
     setKeyFrameRequired(false);
     return Result::SUCCESS;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The transform may still hold the frame it failed on, so it is recreated for the next frame.
+VideoEncoder::Result VideoEncoderH264MF::failure()
+{
+    destroyEncoder();
+    last_size_ = QSize();
+
+    if (++failures_ < kMaxFailures)
+        return Result::TEMPORARY_ERROR;
+
+    LOG(ERROR) << "H264 encoder failed" << failures_ << "times in a row";
+    return Result::PERMANENT_ERROR;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -362,7 +412,7 @@ void VideoEncoderH264MF::setBandwidth(qint64 bandwidth)
 //--------------------------------------------------------------------------------------------------
 bool VideoEncoderH264MF::createEncoder(const QSize& size)
 {
-    d3d_ = D3D11VideoContext::create();
+    d3d_ = D3D11VideoContext::create(adapter_.Get());
     if (!d3d_)
     {
         LOG(ERROR) << "Failed to create D3D11 context";
@@ -458,15 +508,13 @@ void VideoEncoderH264MF::destroyEncoder()
         endStreaming();
 
     vp_input_view_.Reset();
-    vp_output_view_.Reset();
+    vp_output_views_.clear();
     vp_processor_.Reset();
     vp_enumerator_.Reset();
     argb_texture_.Reset();
-    nv12_texture_.Reset();
-
-    nv12_buffer_.clear();
-    nv12_stride_ = 0;
-    nv12_y_rows_ = 0;
+    staging_texture_.Reset();
+    input_textures_.clear();
+    next_input_ = 0;
 
     event_gen_.Reset();
     codec_api_.Reset();
@@ -482,6 +530,8 @@ void VideoEncoderH264MF::destroyEncoder()
     output_sample_size_ = 0;
     frame_counter_ = 0;
     force_key_frame_next_ = false;
+    input_credits_ = 0;
+    output_ready_ = 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -507,7 +557,16 @@ bool VideoEncoderH264MF::selectHardwareMft()
         return false;
     }
 
-    error = activate_arr.get()[0]->ActivateObject(IID_PPV_ARGS(&encoder_));
+    // A transform of another adapter refuses the device manager of ours.
+    IMFActivate* activate = findActivate(activate_arr.get(), count, d3d_->adapterDesc().VendorId);
+    if (!activate)
+        activate = activate_arr.get()[0];
+
+    WCHAR name[256] = { 0 };
+    activate->GetString(MFT_FRIENDLY_NAME_Attribute, name, ARRAYSIZE(name), nullptr);
+    LOG(INFO) << "Using H264 encoder:" << QString::fromWCharArray(name);
+
+    error = activate->ActivateObject(IID_PPV_ARGS(&encoder_));
 
     for (UINT32 i = 0; i < count; ++i)
         activate_arr.get()[i]->Release();
@@ -644,20 +703,22 @@ bool VideoEncoderH264MF::endStreaming()
 //--------------------------------------------------------------------------------------------------
 bool VideoEncoderH264MF::allocateGpuResources(const QSize& size)
 {
-    nv12_texture_ = d3d_->createNv12Texture(size.width(), size.height());
-    if (!nv12_texture_)
-        return false;
+    for (size_t i = 0; i < kInputTextureCount; ++i)
+    {
+        ComPtr<ID3D11Texture2D> texture = d3d_->createNv12Texture(size.width(), size.height());
+        if (!texture)
+            return false;
+
+        input_textures_.push_back(std::move(texture));
+    }
 
     if constexpr (kUseLibyuvForChromaConversion)
     {
-        // 16-byte alignment matches the alignment libyuv's NV12 fast paths expect, and is what
-        // NV12 textures use internally on every consumer GPU we care about.
-        nv12_stride_ = ((size.width() + 15) & ~15);
-        nv12_y_rows_ = ((size.height() + 1) & ~1);
+        staging_texture_ = d3d_->createStagingNv12Texture(
+            size.width(), size.height(), D3D11_CPU_ACCESS_WRITE);
+        if (!staging_texture_)
+            return false;
 
-        const int y_bytes = nv12_stride_ * nv12_y_rows_;
-        const int uv_bytes = nv12_stride_ * (nv12_y_rows_ / 2);
-        nv12_buffer_.resize(y_bytes + uv_bytes);
         return true;
     }
 
@@ -712,12 +773,18 @@ bool VideoEncoderH264MF::allocateGpuResources(const QSize& size)
     ov_desc.ViewDimension = D3D11_VPOV_DIMENSION_TEXTURE2D;
     ov_desc.Texture2D.MipSlice = 0;
 
-    error = d3d_->videoDevice()->CreateVideoProcessorOutputView(
-        nv12_texture_.Get(), vp_enumerator_.Get(), &ov_desc, &vp_output_view_);
-    if (FAILED(error.Error()))
+    for (const auto& texture : input_textures_)
     {
-        LOG(ERROR) << "CreateVideoProcessorOutputView failed:" << error;
-        return false;
+        ComPtr<ID3D11VideoProcessorOutputView> view;
+        error = d3d_->videoDevice()->CreateVideoProcessorOutputView(
+            texture.Get(), vp_enumerator_.Get(), &ov_desc, &view);
+        if (FAILED(error.Error()))
+        {
+            LOG(ERROR) << "CreateVideoProcessorOutputView failed:" << error;
+            return false;
+        }
+
+        vp_output_views_.push_back(std::move(view));
     }
 
     const RECT full_rect = { 0, 0, size.width(), size.height() };
@@ -742,24 +809,36 @@ bool VideoEncoderH264MF::allocateGpuResources(const QSize& size)
 //--------------------------------------------------------------------------------------------------
 bool VideoEncoderH264MF::uploadArgbAndConvert(const Frame* frame)
 {
-    if (!nv12_texture_)
+    if (input_textures_.empty())
     {
         LOG(ERROR) << "GPU resources not allocated";
         return false;
     }
 
+    ID3D11Texture2D* texture = input_textures_[next_input_].Get();
+
     if constexpr (kUseLibyuvForChromaConversion)
     {
-        quint8* y_plane = reinterpret_cast<quint8*>(nv12_buffer_.data());
-        quint8* uv_plane = y_plane + nv12_stride_ * nv12_y_rows_;
+        // The rows are written with the pitch the driver reports, so the driver copies nothing on
+        // the CPU. Intel HD Graphics of 2016 overruns the UV plane in UpdateSubresource of NV12.
+        D3D11_MAPPED_SUBRESOURCE mapped;
+        _com_error error = d3d_->deviceContext()->Map(
+            staging_texture_.Get(), 0, D3D11_MAP_WRITE, 0, &mapped);
+        if (FAILED(error.Error()))
+        {
+            LOG(ERROR) << "Map staging_texture_ failed:" << error;
+            return false;
+        }
 
-        libyuv::ARGBToNV12(frame->frameData(), frame->stride(),
-                           y_plane, nv12_stride_,
-                           uv_plane, nv12_stride_,
+        const int stride = static_cast<int>(mapped.RowPitch);
+        quint8* y_plane = static_cast<quint8*>(mapped.pData);
+        quint8* uv_plane = y_plane + stride * last_size_.height();
+
+        libyuv::ARGBToNV12(frame->frameData(), frame->stride(), y_plane, stride, uv_plane, stride,
                            last_size_.width(), last_size_.height());
 
-        d3d_->deviceContext()->UpdateSubresource(
-            nv12_texture_.Get(), 0, nullptr, y_plane, static_cast<UINT>(nv12_stride_), 0);
+        d3d_->deviceContext()->Unmap(staging_texture_.Get(), 0);
+        d3d_->deviceContext()->CopyResource(texture, staging_texture_.Get());
         return true;
     }
 
@@ -776,7 +855,7 @@ bool VideoEncoderH264MF::uploadArgbAndConvert(const Frame* frame)
     stream.pInputSurface = vp_input_view_.Get();
 
     _com_error error = d3d_->videoContext()->VideoProcessorBlt(
-        vp_processor_.Get(), vp_output_view_.Get(), 0, 1, &stream);
+        vp_processor_.Get(), vp_output_views_[next_input_].Get(), 0, 1, &stream);
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "VideoProcessorBlt failed:" << error;
@@ -790,7 +869,7 @@ bool VideoEncoderH264MF::buildInputSample(quint64 sample_time_100ns, ComPtr<IMFS
 {
     ComPtr<IMFMediaBuffer> buffer;
     _com_error error = mf::createDxgiSurfaceBuffer(
-        __uuidof(ID3D11Texture2D), nv12_texture_.Get(), 0, FALSE, &buffer);
+        __uuidof(ID3D11Texture2D), input_textures_[next_input_].Get(), 0, FALSE, &buffer);
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "MFCreateDXGISurfaceBuffer failed:" << error;
@@ -821,9 +900,13 @@ bool VideoEncoderH264MF::buildInputSample(quint64 sample_time_100ns, ComPtr<IMFS
 }
 
 //--------------------------------------------------------------------------------------------------
+// The transform sends its events in its own order. Intel asks for the next frame before it
+// reports the output of the previous one, so events are counted and consumed when needed.
 bool VideoEncoderH264MF::waitForEvent(MediaEventType expected)
 {
-    while (true)
+    int& counter = (expected == METransformNeedInput) ? input_credits_ : output_ready_;
+
+    while (counter == 0)
     {
         ComPtr<IMFMediaEvent> event;
         _com_error error = event_gen_->GetEvent(0, &event);
@@ -841,15 +924,21 @@ bool VideoEncoderH264MF::waitForEvent(MediaEventType expected)
             return false;
         }
 
-        if (type == expected)
-            return true;
-
-        if (type == METransformDrainComplete || type == METransformMarker)
-            continue;
-
-        LOG(ERROR) << "Unexpected MFT event:" << type << "expected:" << expected;
-        return false;
+        if (type == METransformNeedInput)
+            ++input_credits_;
+        else if (type == METransformHaveOutput)
+            ++output_ready_;
+        else if (type == MEError)
+        {
+            HRESULT status = S_OK;
+            event->GetStatus(&status);
+            LOG(ERROR) << "MFT reported an error:" << _com_error(status);
+            return false;
+        }
     }
+
+    --counter;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -20,6 +20,7 @@
 #define BASE_CODEC_MF_RUNTIME_H
 
 #include <d3d11.h>
+#include <dxgi.h>
 #include <mfapi.h>
 #include <mfidl.h>
 #include <mftransform.h>
@@ -28,10 +29,12 @@
 // _WIN32_WINNT=0x0601. EXTERN_GUID with DECLSPEC_SELECTANY is self-contained so we do not pull a
 // load-time dependency on mfuuid.lib.
 EXTERN_GUID(MF_LOW_LATENCY, 0x9c27891a, 0xed7a, 0x40e1, 0x88, 0xe8, 0xb2, 0x27, 0x27, 0xa0, 0x24, 0xee);
+EXTERN_GUID(MFT_ENUM_HARDWARE_VENDOR_ID_Attribute,
+            0x3aecb0cc, 0x35b, 0x4bcc, 0x81, 0x85, 0x2b, 0x8d, 0x55, 0x1e, 0xf3, 0xaf);
 
 namespace mf {
 
-// Loads mfplat.dll, mf.dll and d3d11.dll on first use and resolves the entry
+// Loads mfplat.dll, d3d11.dll and dxgi.dll on first use and resolves the entry
 // points used by the H264 encoder/decoder. Returns false on stripped Windows
 // installations where any of these libraries or symbols are missing (e.g.
 // Server Core without the Media Foundation feature pack). All wrappers below
@@ -56,6 +59,7 @@ HRESULT d3d11CreateDevice(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driver_type,
                           UINT sdk_version, ID3D11Device** device,
                           D3D_FEATURE_LEVEL* feature_level,
                           ID3D11DeviceContext** context);
+HRESULT createDxgiFactory(IDXGIFactory1** out);
 
 } // namespace mf
 

@@ -88,3 +88,8 @@ endif()
 collect_sources(SOURCE_BASE_CODEC_TESTS
     cursor_codec_unittest.cc
     zstd_stream_unittest.cc)
+
+if (WIN32)
+    collect_sources(SOURCE_BASE_CODEC_TESTS
+        video_codec_h264_mf_unittest.cc)
+endif()
