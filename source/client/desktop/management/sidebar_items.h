@@ -46,6 +46,9 @@ public:
     Type itemType() const { return type_; }
     qint64 groupId() const { return group_id_; }
 
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem& other) const final;
+
 protected:
     SidebarItem(Type type, qint64 group_id, QTreeWidget* parent);
     SidebarItem(Type type, qint64 group_id, QTreeWidgetItem* parent);

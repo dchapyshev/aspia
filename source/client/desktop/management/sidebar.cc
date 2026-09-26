@@ -195,6 +195,8 @@ bool Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
             result = false;
     }
 
+    parent_item->sortChildren(0, Qt::AscendingOrder);
+
     return result;
 }
 
@@ -369,6 +371,7 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<RouterWorkspace>
         }
     }
 
+    router->sortChildren(0, Qt::AscendingOrder);
     router->setExpanded(true);
     selectPendingItem();
 }
@@ -471,6 +474,8 @@ void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const Q
             }
             apply(group->entry_id, item);
         }
+
+        tree_parent->sortChildren(0, Qt::AscendingOrder);
     };
     apply(0, workspace_item);
 

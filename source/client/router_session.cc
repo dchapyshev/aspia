@@ -902,6 +902,12 @@ RouterWorkspaceList RouterSession::applyWorkspaceList(const proto::router::Works
             dst.user_ids.append(src.user_id(j));
     }
 
+    std::stable_sort(result.workspaces.begin(), result.workspaces.end(),
+        [](const RouterWorkspace& first, const RouterWorkspace& second)
+    {
+        return first.name.compare(second.name, Qt::CaseInsensitive) < 0;
+    });
+
     // Only the complete list is the authoritative answer about what we can access.
     if (requested_workspace_id == 0 && result.error_code == proto::router::kErrorOk)
         cache_.storeWorkspaces(result);
@@ -952,6 +958,12 @@ RouterGroupList RouterSession::applyGroupList(const proto::router::GroupList& li
         dst.comment      = QString::fromStdString(src.comment());
         dst.revision     = src.revision();
     }
+
+    std::stable_sort(result.groups.begin(), result.groups.end(),
+        [](const RouterGroup& first, const RouterGroup& second)
+    {
+        return first.name.compare(second.name, Qt::CaseInsensitive) < 0;
+    });
 
     cache_.storeGroups(result);
     return result;

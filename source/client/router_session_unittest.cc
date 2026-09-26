@@ -454,6 +454,41 @@ TEST_F(RouterSessionTest, GroupListIsParsedAndCached)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The router sends workspaces and groups in no particular order; the caller gets them by name, and
+// the case of a letter does not move them.
+TEST_F(RouterSessionTest, WorkspacesAndGroupsComeByName)
+{
+    proto::router::WorkspaceList workspace_list = workspaceList({10, 11, 12});
+    workspace_list.mutable_workspace(0)->set_name("gamma");
+    workspace_list.mutable_workspace(1)->set_name("Beta");
+    workspace_list.mutable_workspace(2)->set_name("alpha");
+
+    const RouterWorkspaceList workspaces = fetchWorkspaces(0, workspace_list);
+    ASSERT_EQ(workspaces.workspaces.size(), 3);
+    EXPECT_EQ(workspaces.workspaces.at(0).name, "alpha");
+    EXPECT_EQ(workspaces.workspaces.at(1).name, "Beta");
+    EXPECT_EQ(workspaces.workspaces.at(2).name, "gamma");
+
+    proto::router::GroupList group_list;
+    group_list.set_error_code(proto::router::kErrorOk);
+    group_list.set_workspace_id(kWorkspaceId);
+
+    qint64 entry_id = 1;
+    for (const char* name : { "servers", "Office", "accounting" })
+    {
+        proto::router::Group* group = group_list.add_group();
+        group->set_entry_id(entry_id++);
+        group->set_name(name);
+    }
+
+    const RouterGroupList groups = fetchGroups(kWorkspaceId, group_list);
+    ASSERT_EQ(groups.groups.size(), 3);
+    EXPECT_EQ(groups.groups.at(0).name, "accounting");
+    EXPECT_EQ(groups.groups.at(1).name, "Office");
+    EXPECT_EQ(groups.groups.at(2).name, "servers");
+}
+
+//--------------------------------------------------------------------------------------------------
 // An accepted rotation ends the session, and the reply announcing it dies with the channel. The
 // new password is what opens the account from that moment, so it is stored without waiting for
 // an answer that may never come.

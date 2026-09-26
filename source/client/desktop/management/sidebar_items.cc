@@ -18,9 +18,28 @@
 
 #include "client/desktop/management/sidebar_items.h"
 
+#include <QCollator>
 #include <QIcon>
 
 #include "client/config.h"
+
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+const QCollator& nameCollator()
+{
+    static const QCollator collator = []()
+    {
+        QCollator result;
+        result.setCaseSensitivity(Qt::CaseInsensitive);
+        result.setNumericMode(true);
+        return result;
+    }();
+
+    return collator;
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 SidebarItem::SidebarItem(Type type, qint64 group_id, QTreeWidget* parent)
@@ -38,6 +57,24 @@ SidebarItem::SidebarItem(Type type, qint64 group_id, QTreeWidgetItem* parent)
       group_id_(group_id)
 {
     // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SidebarItem::operator<(const QTreeWidgetItem& other) const
+{
+    auto by_name = [](const SidebarItem& item)
+    {
+        return item.itemType() == LOCAL_GROUP || item.itemType() == ROUTER_WORKSPACE ||
+               item.itemType() == ROUTER_GROUP;
+    };
+
+    const SidebarItem& other_item = static_cast<const SidebarItem&>(other);
+    if (!by_name(*this))
+        return by_name(other_item);
+    if (!by_name(other_item))
+        return false;
+
+    return nameCollator().compare(text(0), other_item.text(0)) < 0;
 }
 
 //--------------------------------------------------------------------------------------------------
