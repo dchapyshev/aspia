@@ -53,6 +53,8 @@ const char* kTerminals[][2] =
     { "konsole", "--separate -e" },
     { "xfce4-terminal", "--disable-server -x" },
     { "mate-terminal", "--disable-factory -x" },
+    { "ptyxis", "--standalone --" },
+    { "kgx", "--gapplication-app-id=org.aspia.Script --" },
     { "gnome-terminal", "--" }
 };
 
@@ -387,7 +389,8 @@ void ToolsWorker::buildToolList()
                       << "org.kde.dolphin.desktop" << "thunar.desktop" << "caja.desktop");
     add(QStringList() << "org.gnome.Terminal.desktop" << "gnome-terminal.desktop"
                       << "org.kde.konsole.desktop" << "xfce4-terminal.desktop"
-                      << "mate-terminal.desktop");
+                      << "mate-terminal.desktop" << "org.gnome.Ptyxis.desktop"
+                      << "org.gnome.Console.desktop");
 }
 
 //--------------------------------------------------------------------------------------------------
