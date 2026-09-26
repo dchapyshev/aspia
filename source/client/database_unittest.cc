@@ -439,6 +439,24 @@ TEST_F(DatabaseTest, GroupIsMovedUnderAGroupOutsideItsSubtree)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Groups come by name whatever order they were added in, and the case of a letter does not move a
+// group, Cyrillic included.
+TEST_F(DatabaseTest, GroupsAreListedByName)
+{
+    addGroup(QString::fromUtf8("Сервера"), 0);
+    addGroup("beta", 0);
+    addGroup(QString::fromUtf8("бухгалтерия"), 0);
+    addGroup("Alpha", 0);
+
+    const QList<LocalGroupConfig> groups = localGroupList(0);
+    ASSERT_EQ(groups.size(), 4);
+    EXPECT_EQ(groups[0].name(), "Alpha");
+    EXPECT_EQ(groups[1].name(), "beta");
+    EXPECT_EQ(groups[2].name(), QString::fromUtf8("бухгалтерия"));
+    EXPECT_EQ(groups[3].name(), QString::fromUtf8("Сервера"));
+}
+
+//--------------------------------------------------------------------------------------------------
 // The move writes the group and nothing else. A record whose sealed column did not open goes to
 // another group like any other, and one that opens is not resealed on the way.
 TEST_F(DatabaseTest, HostThatDoesNotOpenIsMovedLikeAnyOther)
@@ -1647,8 +1665,9 @@ TEST_F(DatabaseTest, BatchIsWrittenWithItsOwnLinks)
     const QList<LocalGroupConfig> groups = allLocalGroups();
     ASSERT_EQ(groups.size(), 2);
 
-    const std::optional<LocalGroupConfig> stored_parent = findLocalGroup(db_, groups.front().id());
-    const std::optional<LocalGroupConfig> stored_child = findLocalGroup(db_, groups.back().id());
+    // Listed by name: "child" comes before "parent".
+    const std::optional<LocalGroupConfig> stored_parent = findLocalGroup(db_, groups.back().id());
+    const std::optional<LocalGroupConfig> stored_child = findLocalGroup(db_, groups.front().id());
     ASSERT_TRUE(stored_parent.has_value() && stored_child.has_value());
 
     EXPECT_EQ(stored_parent->parentId(), 0);

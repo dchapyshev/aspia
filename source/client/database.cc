@@ -684,7 +684,7 @@ bool Database::localGroupList(qint64 parent_id, QList<LocalGroupConfig>* groups)
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
-                        "WHERE parent_id IS NULLIF(?, 0)");
+                        "WHERE parent_id IS NULLIF(?, 0) ORDER BY casefold(name)");
     query.addInt64(parent_id);
 
     for (;;)
@@ -716,7 +716,8 @@ bool Database::allLocalGroups(QList<LocalGroupConfig>* groups) const
         return false;
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups");
+    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
+                        "ORDER BY casefold(name)");
 
     for (;;)
     {
