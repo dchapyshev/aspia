@@ -142,7 +142,7 @@ QByteArray generatePlist(const QString& label, const QString& file_path,
 
     writer.writeTextElement("key", "EnvironmentVariables");
     writer.writeStartElement("dict");
-    writeKeyString(writer, "ASPIA_LOG_LEVEL", "2");
+    writeKeyString(writer, "ASPIA_LOG_LEVEL", "1");
     writer.writeEndElement(); // dict
 
     // Start at boot and keep the daemon alive, restarting it if it exits (mirrors Restart=always).

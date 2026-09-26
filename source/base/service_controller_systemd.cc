@@ -268,7 +268,7 @@ std::unique_ptr<ServiceController> ServiceControllerSystemd::install(
     ini.setStringValue(kUnitSection, "After", "network-online.target");
     ini.setStringValue(kUnitSection, "Wants", "network-online.target");
     ini.setStringValue(kServiceSection, "WorkingDirectory", file_info.absolutePath());
-    ini.setStringValue(kServiceSection, "Environment", "ASPIA_LOG_LEVEL=2");
+    ini.setStringValue(kServiceSection, "Environment", "ASPIA_LOG_LEVEL=1");
     ini.setStringValue(kServiceSection, "ExecStart", exec_start);
     ini.setStringValue(kServiceSection, "Restart", "always");
     ini.setStringValue(kServiceSection, "RestartSec", "5s");
