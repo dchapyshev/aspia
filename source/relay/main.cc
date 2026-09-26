@@ -181,7 +181,6 @@ int createConfig(QTextStream& out)
 int main(int argc, char* argv[])
 {
     LoggingSettings logging_settings;
-    logging_settings.min_log_level = LOG_INFO;
 #if defined(Q_OS_WINDOWS)
     // The service runs under a low-privilege account that can only write to its own directories, so
     // place the logs next to the application data instead of the system temp directory.

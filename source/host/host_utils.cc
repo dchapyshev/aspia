@@ -51,6 +51,15 @@
 
 namespace {
 
+// Environment variables whose values help to investigate problems. The others may hold secrets
+// (tokens, proxy credentials), so below TRACE only their names are logged.
+const char* const kEnvVarPrefixes[] = { "ASPIA_", "QT_", "XDG_" };
+const char* const kEnvVarNames[] =
+{
+    "APPDATA", "DBUS_SESSION_BUS_ADDRESS", "DISPLAY", "HOME", "LANG", "PROGRAMDATA", "SHELL",
+    "USERPROFILE", "WAYLAND_DISPLAY", "WINDIR", "XAUTHORITY"
+};
+
 //--------------------------------------------------------------------------------------------------
 QString hostFilePath()
 {
@@ -308,6 +317,59 @@ void doHostKeyMigrate(const QJsonDocument& doc)
         LOG(INFO) << "console: <present>";
         Database::instance().setHostKey(QByteArray::fromHex(value.toLatin1()));
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Names are compared case-insensitively: Windows keeps them as set, e.g. "windir".
+bool isUsefulEnvVar(const QString& name)
+{
+    for (const char* prefix : kEnvVarPrefixes)
+    {
+        if (name.startsWith(QLatin1String(prefix), Qt::CaseInsensitive))
+            return true;
+    }
+
+    for (const char* known_name : kEnvVarNames)
+    {
+        if (name.compare(QLatin1String(known_name), Qt::CaseInsensitive) == 0)
+            return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void logEnvironment()
+{
+    if (!LOG_IS_ON(INFO))
+        return;
+
+    const QStringList variables = QProcessEnvironment::systemEnvironment().toStringList();
+
+    if (LOG_IS_ON(TRACE))
+    {
+        LOG(TRACE) << "Environment variables:" << variables;
+        return;
+    }
+
+    QStringList values;
+    QStringList names;
+
+    for (const QString& variable : std::as_const(variables))
+    {
+        // Windows keeps per-drive directories in entries like "=C:=C:\dir", so the name separator
+        // is searched after the first character.
+        const qsizetype pos = variable.indexOf('=', 1);
+        const QString name = pos < 0 ? variable : variable.left(pos);
+
+        if (isUsefulEnvVar(name))
+            values.append(variable);
+        else
+            names.append(name);
+    }
+
+    LOG(INFO) << "Environment variables:" << values;
+    LOG(INFO) << "Other environment variables (values hidden):" << names;
 }
 
 } // namespace
@@ -624,7 +686,7 @@ void HostUtils::printDebugInfo(quint32 features)
     }
 #endif // defined(Q_OS_WINDOWS)
 
-    LOG(INFO) << "Environment variables:" << QProcessEnvironment::systemEnvironment().toStringList();
+    logEnvironment();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -118,7 +118,6 @@ int main(int argc, char* argv[])
     Q_INIT_RESOURCE(common_translations);
 
     LoggingSettings logging_settings;
-    logging_settings.min_log_level = LOG_INFO;
 
 #if defined(Q_OS_ANDROID)
     // Android defaults to logcat only (LOG_TO_STDOUT). Also write a log file so it can be pulled from

@@ -49,7 +49,7 @@
 
 namespace {
 
-const LoggingSeverity kDefaultLogLevel = LOG_FATAL;
+const LoggingSeverity kDefaultLogLevel = LOG_INFO;
 const qint64 kDefaultMaxLogFileAge = 14; // 14 days.
 
 LoggingSeverity g_min_log_level = LOG_ERROR;

@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 
     {
         LoggingSettings logging_settings;
-        logging_settings.min_log_level = LOG_INFO;
+        logging_settings.min_log_level = LOG_TRACE;
 
         ScopedLogging scoped_logging(logging_settings);
 

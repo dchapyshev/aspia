@@ -479,7 +479,6 @@ int main(int argc, char* argv[])
     Q_INIT_RESOURCE(common_translations);
 
     LoggingSettings logging_settings;
-    logging_settings.min_log_level = LOG_INFO;
 
     ScopedLogging scoped_logging(logging_settings);
 

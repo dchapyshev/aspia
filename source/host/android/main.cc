@@ -53,7 +53,6 @@ int main(int argc, char* argv[])
     Q_INIT_RESOURCE(common_translations);
 
     LoggingSettings logging_settings;
-    logging_settings.min_log_level = LOG_INFO;
 
     // Android defaults to logcat only (LOG_TO_STDOUT). Also write a log file so it can be pulled from
     // devices whose logcat is restricted (e.g. Huawei), then point that file at the external app files
