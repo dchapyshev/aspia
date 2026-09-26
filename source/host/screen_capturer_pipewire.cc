@@ -286,6 +286,13 @@ bool ScreenCapturerPipeWire::selectScreen(ScreenId screen_id)
         if (source_->recordedMonitor() == monitor.connector)
             return true; // Already recording this monitor.
 
+        if (source_->recordedMonitor().isEmpty())
+        {
+            source_->setRequestedMonitor(monitor.connector);
+            LOG(INFO) << "Selecting monitor:" << monitor.connector;
+            return true;
+        }
+
         // Switch the recorded monitor and renegotiate the stream. Queued so it runs off the capture
         // call stack: onRestartSource() tears down the PipeWire stream and re-starts the source, which
         // records the newly requested connector.
@@ -456,6 +463,8 @@ bool ScreenCapturerPipeWire::startStream()
 {
     if (!source_)
         return false;
+
+    stopStream();
 
     if (!PipeWire::ensureLoaded())
         return false;
