@@ -300,7 +300,7 @@ Database::ReadResult Database::localHostList(qint64 group_id, QList<LocalHostCon
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
-                        "FROM local_hosts WHERE group_id IS NULLIF(?, 0)");
+                        "FROM local_hosts WHERE group_id IS NULLIF(?, 0) ORDER BY casefold(name)");
     query.addInt64(group_id);
 
     ReadResult result = ReadResult::OK;
@@ -640,7 +640,7 @@ Database::ReadResult Database::searchLocalHosts(
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
-                        "FROM local_hosts");
+                        "FROM local_hosts ORDER BY casefold(name)");
 
     ReadResult result = ReadResult::OK;
 
@@ -937,6 +937,11 @@ Database::ReadResult Database::routerList(QList<RouterConfig>* routers) const
 
         routers->append(router);
     }
+
+    std::stable_sort(routers->begin(), routers->end(), [](const RouterConfig& first, const RouterConfig& second)
+    {
+        return first.displayLabel().compare(second.displayLabel(), Qt::CaseInsensitive) < 0;
+    });
 
     return result;
 }
@@ -1349,7 +1354,7 @@ Database::ReadResult Database::credentialList(QList<CredentialConfig>* credentia
         return ReadResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT id, type, name, data, guid FROM credentials");
+    SqlQuery query(db_, "SELECT id, type, name, data, guid FROM credentials ORDER BY casefold(name)");
 
     ReadResult result = ReadResult::OK;
 

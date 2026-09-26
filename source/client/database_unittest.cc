@@ -457,6 +457,29 @@ TEST_F(DatabaseTest, GroupsAreListedByName)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Hosts of a group and the hosts a search found come by name the same way.
+TEST_F(DatabaseTest, HostsAreListedByName)
+{
+    addHost("office-2", 0);
+    addHost(QString::fromUtf8("Склад"), 0);
+    addHost("Office-1", 0);
+    addHost("backup", 0);
+
+    const QList<LocalHostConfig> hosts = localHostList(0);
+    ASSERT_EQ(hosts.size(), 4);
+    EXPECT_EQ(hosts[0].name(), "backup");
+    EXPECT_EQ(hosts[1].name(), "Office-1");
+    EXPECT_EQ(hosts[2].name(), "office-2");
+    EXPECT_EQ(hosts[3].name(), QString::fromUtf8("Склад"));
+
+    QList<LocalHostConfig> found;
+    EXPECT_EQ(db_.searchLocalHosts("office", &found), Database::ReadResult::OK);
+    ASSERT_EQ(found.size(), 2);
+    EXPECT_EQ(found[0].name(), "Office-1");
+    EXPECT_EQ(found[1].name(), "office-2");
+}
+
+//--------------------------------------------------------------------------------------------------
 // The move writes the group and nothing else. A record whose sealed column did not open goes to
 // another group like any other, and one that opens is not resealed on the way.
 TEST_F(DatabaseTest, HostThatDoesNotOpenIsMovedLikeAnyOther)
@@ -860,6 +883,28 @@ TEST_F(DatabaseTest, RouterThatDoesNotOpenLeavesTheListIncomplete)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Routers come by the label they are shown with, whatever the case: a router without a name goes
+// by its address.
+TEST_F(DatabaseTest, RoutersAreListedByLabel)
+{
+    addRouter("gamma");
+
+    RouterConfig unnamed;
+    unnamed.setAddress("beta.example.com");
+    unnamed.setUsername("router-user");
+    unnamed.setPassword(SecureString("router-secret"));
+    ASSERT_TRUE(db_.addRouter(unnamed));
+
+    addRouter("Alpha");
+
+    const QList<RouterConfig> routers = routerList();
+    ASSERT_EQ(routers.size(), 3);
+    EXPECT_EQ(routers[0].displayLabel(), "Alpha");
+    EXPECT_EQ(routers[1].displayLabel(), "beta.example.com");
+    EXPECT_EQ(routers[2].displayLabel(), "gamma");
+}
+
+//--------------------------------------------------------------------------------------------------
 // A record that did not open has no name of its own to show and no address to fall back to.
 // The list holds the row all the same, so there must be something to show it under.
 TEST_F(DatabaseTest, RouterThatDoesNotOpenHasALabelToShow)
@@ -949,6 +994,24 @@ TEST_F(DatabaseTest, CredentialThatDoesNotOpenLeavesTheListIncomplete)
     EXPECT_TRUE(broken.username().isEmpty());
     EXPECT_EQ(readable.displayName(), QString("home"));
     EXPECT_EQ(readable.username(), QString("user"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Credentials come by name whatever order they were added in, and the case of a letter does not
+// move them.
+TEST_F(DatabaseTest, CredentialsAreListedByName)
+{
+    addCredential("office", "user", "secret");
+    addCredential("Home", "user", "secret");
+    addCredential(QString::fromUtf8("Склад"), "user", "secret");
+    addCredential("backup", "user", "secret");
+
+    const QList<CredentialConfig> credentials = credentialList();
+    ASSERT_EQ(credentials.size(), 4);
+    EXPECT_EQ(credentials[0].displayName(), "backup");
+    EXPECT_EQ(credentials[1].displayName(), "Home");
+    EXPECT_EQ(credentials[2].displayName(), "office");
+    EXPECT_EQ(credentials[3].displayName(), QString::fromUtf8("Склад"));
 }
 
 //--------------------------------------------------------------------------------------------------
