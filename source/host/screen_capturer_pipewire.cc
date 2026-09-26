@@ -102,10 +102,8 @@ ScreenCapturer::ScreenId connectorId(const QString& connector)
 
 //--------------------------------------------------------------------------------------------------
 // Builds one EnumFormat object. With |modifiers| it advertises a DMA-BUF format (the compositor
-// picks a modifier); without, a plain format (delivered via MemFd/MemPtr). |dont_fixate| advertises
-// a choice of modifiers; clearing it pins a single, already chosen modifier (the fixation step).
-const spa_pod* buildFormat(spa_pod_builder* builder, quint32 format,
-                           const QList<quint64>& modifiers, bool dont_fixate)
+// picks a modifier); without, a plain format (delivered via MemFd/MemPtr).
+const spa_pod* buildFormat(spa_pod_builder* builder, quint32 format, const QList<quint64>& modifiers)
 {
     spa_pod_frame format_frame;
     spa_pod_builder_push_object(builder, &format_frame, SPA_TYPE_OBJECT_Format, SPA_PARAM_EnumFormat);
@@ -117,10 +115,8 @@ const spa_pod* buildFormat(spa_pod_builder* builder, quint32 format,
 
     if (!modifiers.isEmpty())
     {
-        quint32 prop_flags = SPA_POD_PROP_FLAG_MANDATORY;
-        if (dont_fixate)
-            prop_flags |= SPA_POD_PROP_FLAG_DONT_FIXATE;
-        spa_pod_builder_prop(builder, SPA_FORMAT_VIDEO_modifier, prop_flags);
+        spa_pod_builder_prop(builder, SPA_FORMAT_VIDEO_modifier,
+                             SPA_POD_PROP_FLAG_MANDATORY | SPA_POD_PROP_FLAG_DONT_FIXATE);
 
         spa_pod_frame modifier_frame;
         spa_pod_builder_push_choice(builder, &modifier_frame, SPA_CHOICE_Enum, 0);
@@ -684,12 +680,12 @@ int ScreenCapturerPipeWire::buildFormatParams(
         {
             QList<quint64> modifiers = egl_dmabuf_->queryModifiers(drmFourcc(format));
             modifiers.append(DRM_FORMAT_MOD_INVALID);
-            params[n++] = buildFormat(builder, format, modifiers, true);
+            params[n++] = buildFormat(builder, format, modifiers);
         }
     }
 
     for (quint32 format : kVideoFormats)
-        params[n++] = buildFormat(builder, format, {}, false);
+        params[n++] = buildFormat(builder, format, {});
 
     return n;
 }
@@ -760,18 +756,6 @@ void ScreenCapturerPipeWire::handleParamChanged(quint32 id, const spa_pod* param
 
     LOG(INFO) << "PipeWire format negotiated:" << width << "x" << height << "format:" << info.format
               << "modifier:" << (format_modifier_ != DRM_FORMAT_MOD_INVALID);
-
-    // The compositor offered a modifier but asked us to fixate it: re-send the format with the chosen
-    // modifier pinned and wait for the next param_changed before requesting buffers.
-    if (modifier_prop && (modifier_prop->flags & SPA_POD_PROP_FLAG_DONT_FIXATE))
-    {
-        quint8 fixate_buffer[1024];
-        spa_pod_builder fixate_builder = SPA_POD_BUILDER_INIT(fixate_buffer, sizeof(fixate_buffer));
-        const spa_pod* fixate_params[1];
-        fixate_params[0] = buildFormat(&fixate_builder, info.format, { format_modifier_ }, false);
-        api_->pw_stream_update_params(stream_, fixate_params, 1);
-        return;
-    }
 
     // Allow shared-memory and DMA-BUF buffers, and request the metadata we use: the cursor (so it is
     // delivered separately), a header (corrupted-buffer detection), a video crop (valid region) and
