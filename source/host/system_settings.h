@@ -44,6 +44,9 @@ public:
     quint32 preferredVideoCapturer() const;
     void setPreferredVideoCapturer(quint32 type);
 
+    bool isHardwareVideoEncodingEnabled() const;
+    void setHardwareVideoEncodingEnabled(bool enable);
+
     // Token for restoring a Wayland portal session without re-prompting the user.
     QString waylandRestoreToken() const;
     void setWaylandRestoreToken(const QString& token);

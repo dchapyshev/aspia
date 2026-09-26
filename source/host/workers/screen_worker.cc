@@ -512,9 +512,10 @@ void ScreenWorker::onPrepare()
         LOG(ERROR) << "IPC worker not found";
     }
 
-    preferred_capturer_ =
-        static_cast<ScreenCapturer::Type>(SystemSettings().preferredVideoCapturer());
-    h264_enabled_ = VideoEncoder::isSupported(proto::video::ENCODING_H264);
+    SystemSettings settings;
+    preferred_capturer_ = static_cast<ScreenCapturer::Type>(settings.preferredVideoCapturer());
+    h264_enabled_ = settings.isHardwareVideoEncodingEnabled() &&
+                    VideoEncoder::isSupported(proto::video::ENCODING_H264);
 
     default_fps_ = defaultCaptureFps();
     min_fps_ = minCaptureFps();

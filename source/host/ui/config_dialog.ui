@@ -77,6 +77,13 @@
             </item>
            </layout>
           </item>
+          <item row="2" column="0" colspan="3">
+           <widget class="QCheckBox" name="checkbox_hardware_encoding">
+            <property name="text">
+             <string>Allow hardware video encoding</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

@@ -28,6 +28,7 @@ const QString kApplication = "host";
 
 const QString kApplicationShutdown = "application_shutdown";
 const QString kPreferredVideoCapturer = "preferred_video_capturer";
+const QString kHardwareVideoEncoding = "hardware_video_encoding";
 const QString kWaylandRestoreToken = "wayland_restore_token";
 
 const QString kUpdateChannel = "update/channel";
@@ -98,6 +99,18 @@ quint32 SystemSettings::preferredVideoCapturer() const
 void SystemSettings::setPreferredVideoCapturer(quint32 type)
 {
     settings_.setValue(kPreferredVideoCapturer, type);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SystemSettings::isHardwareVideoEncodingEnabled() const
+{
+    return settings_.value(kHardwareVideoEncoding, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemSettings::setHardwareVideoEncodingEnabled(bool enable)
+{
+    settings_.setValue(kHardwareVideoEncoding, enable);
 }
 
 //--------------------------------------------------------------------------------------------------

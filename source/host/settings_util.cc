@@ -46,6 +46,7 @@ const char kDatabase[] = "database";
 
 const char kUpdateChannel[] = "update_channel";
 const char kPreferredVideoCapturer[] = "preferred_video_capturer";
+const char kHardwareVideoEncodingEnabled[] = "hardware_video_encoding_enabled";
 const char kApplicationShutdownDisabled[] = "application_shutdown_disabled";
 const char kAutoUpdateEnabled[] = "auto_update_enabled";
 const char kUpdateCheckFrequency[] = "update_check_frequency";
@@ -81,6 +82,7 @@ QJsonObject exportSystemSettings()
     QJsonObject obj;
     obj[kUpdateChannel] = settings.updateChannel();
     obj[kPreferredVideoCapturer] = static_cast<qint64>(settings.preferredVideoCapturer());
+    obj[kHardwareVideoEncodingEnabled] = settings.isHardwareVideoEncodingEnabled();
     obj[kApplicationShutdownDisabled] = settings.isApplicationShutdownDisabled();
     obj[kAutoUpdateEnabled] = settings.isAutoUpdateEnabled();
     obj[kUpdateCheckFrequency] = settings.updateCheckFrequency();
@@ -135,6 +137,8 @@ void importSystemSettings(const QJsonObject& obj)
         settings.setUpdateChannel(obj[kUpdateChannel].toString());
     if (obj.contains(kPreferredVideoCapturer))
         settings.setPreferredVideoCapturer(static_cast<quint32>(obj[kPreferredVideoCapturer].toInteger()));
+    if (obj.contains(kHardwareVideoEncodingEnabled))
+        settings.setHardwareVideoEncodingEnabled(obj[kHardwareVideoEncodingEnabled].toBool());
     if (obj.contains(kApplicationShutdownDisabled))
         settings.setApplicationShutdownDisabled(obj[kApplicationShutdownDisabled].toBool());
     if (obj.contains(kAutoUpdateEnabled))
