@@ -51,9 +51,8 @@ public:
 
     ~VideoEncoderH264MF() final;
 
-    // Returns true when a hardware H264 encoder MFT is available on this system, or on |adapter|
-    // when it is given. Cheap to call - probes the MF runtime and enumerates HW encoders without
-    // actually activating any of them.
+    // Returns true when the hardware H264 encoder MFT of |adapter| (the default one when null) can
+    // be created. Creates a D3D11 device and the transform, so it takes a moment.
     static bool isHardwareSupported(IDXGIAdapter* adapter = nullptr);
 
     // VideoEncoder implementation.

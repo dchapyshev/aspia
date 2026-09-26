@@ -32,10 +32,10 @@
 
 #include <memory>
 
-// Hardware H.264 decoder built on a Media Foundation async MFT. Decode runs on the GPU through
-// D3D11; the decoder produces NV12 textures which are read back into a CPU staging texture exposed
-// as the NV12 frame(). Returns nullptr from create() when no HW MFT is available - callers should
-// fall back to a software decoder.
+// Hardware H.264 decoder built on the Microsoft H.264 decoder MFT with DXVA. Decode runs on the
+// GPU through D3D11; the decoder produces NV12 textures which are read back into a CPU staging
+// texture exposed as the NV12 frame(). Returns nullptr from create() when the GPU cannot decode
+// H.264 - callers should fall back to a software decoder.
 class VideoDecoderH264MF final : public VideoDecoder
 {
 public:
@@ -43,7 +43,7 @@ public:
     // The decoder runs on |adapter|, or on the default one when it is null.
     static std::unique_ptr<VideoDecoderH264MF> create(IDXGIAdapter* adapter = nullptr);
 
-    // Cheap probe - enumerates HW decoder MFTs without activating any.
+    // Returns true when the default GPU has the DXVA H.264 decoder profile.
     static bool isHardwareSupported();
 
     ~VideoDecoderH264MF() final;
@@ -65,7 +65,6 @@ private:
     void endStreaming();
     bool validateOutputType();
 
-    bool waitForEvent(MediaEventType expected);
     bool feedInput(const std::string& data, quint64 sample_time_100ns);
     bool readOutput(Microsoft::WRL::ComPtr<IMFSample>* out_sample);
     bool mapSampleToFrame(IMFSample* sample, const QSize& size);
@@ -73,7 +72,6 @@ private:
 
     bool mf_started_ = false;
     bool streaming_ = false;
-    bool is_async_ = false;
     bool output_provides_samples_ = false;
     QSize last_size_;
     quint64 frame_counter_ = 0;
@@ -83,7 +81,6 @@ private:
     std::unique_ptr<D3D11VideoContext> d3d_;
 
     Microsoft::WRL::ComPtr<IMFTransform> decoder_;
-    Microsoft::WRL::ComPtr<IMFMediaEventGenerator> event_gen_;
 
     // CPU-readable copy of the decoder's NV12 output. It is kept mapped between decode() calls so
     // frame_ can point straight into it without an extra copy; unmapStaging() releases the mapping

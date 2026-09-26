@@ -181,6 +181,10 @@ bool VideoEncoderH264MF::isHardwareSupported(IDXGIAdapter* adapter)
     if (!mf::isRuntimeAvailable())
         return false;
 
+    std::unique_ptr<D3D11VideoContext> d3d = D3D11VideoContext::create(adapter);
+    if (!d3d)
+        return false;
+
     // MFTEnumEx requires Media Foundation to be initialized; bracket the probe so callers can
     // ask about HW support before any encoder/decoder has called MFStartup for its own use.
     _com_error error = mf::startup(MF_VERSION, MFSTARTUP_LITE);
@@ -192,17 +196,30 @@ bool VideoEncoderH264MF::isHardwareSupported(IDXGIAdapter* adapter)
     UINT32 count = 0;
 
     error = mf::enumTransforms(MFT_CATEGORY_VIDEO_ENCODER,
-        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_ASYNCMFT | MFT_ENUM_FLAG_SORTANDFILTER,
-        nullptr, &output_info, &activate_arr, &count);
+        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_SORTANDFILTER, nullptr, &output_info, &activate_arr,
+        &count);
 
-    bool supported = SUCCEEDED(error.Error()) && count > 0;
-    if (supported)
+    bool supported = false;
+    if (SUCCEEDED(error.Error()))
     {
-        if (adapter)
+        // A driver can register a transform it then refuses to create (NVIDIA on a laptop with
+        // switchable graphics).
+        IMFActivate* activate =
+            findActivate(activate_arr.get(), count, d3d->adapterDesc().VendorId);
+        if (activate)
         {
-            DXGI_ADAPTER_DESC desc = {};
-            adapter->GetDesc(&desc);
-            supported = findActivate(activate_arr.get(), count, desc.VendorId) != nullptr;
+            ComPtr<IMFTransform> encoder;
+            error = activate->ActivateObject(IID_PPV_ARGS(&encoder));
+            if (SUCCEEDED(error.Error()))
+            {
+                supported = true;
+                encoder.Reset();
+                activate->ShutdownObject();
+            }
+            else
+            {
+                LOG(WARNING) << "H264 encoder MFT cannot be activated:" << error;
+            }
         }
 
         for (UINT32 i = 0; i < count; ++i)
@@ -651,7 +668,7 @@ void VideoEncoderH264MF::configureCodecApi()
     setUint32CodecAttr(api, CODECAPI_AVEncCommonQualityVsSpeed, 90);
     setUint32CodecAttr(api, CODECAPI_AVEncMPVDefaultBPictureCount, 0);
     setUint32CodecAttr(api, CODECAPI_AVEncVideoMaxNumRefFrame, kMaxRefFrames);
-    setBoolCodecAttr(api, CODECAPI_AVEncCommonLowLatency, true);
+    setBoolCodecAttr(api, CODECAPI_AVLowLatencyMode, true);
     setBoolCodecAttr(api, CODECAPI_AVEncH264CABACEnable, true);
     setUint32CodecAttr(api, CODECAPI_AVScenarioInfo, eAVScenarioInfo_DisplayRemoting);
     setUint32CodecAttr(api, CODECAPI_AVEncMPVGOPSize, 60000);
