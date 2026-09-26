@@ -22,16 +22,52 @@
 #include "base/logging.h"
 #include "base/desktop/frame.h"
 #include "base/win/scoped_co_mem.h"
+#include "base/win/scoped_object.h"
 #include "proto/desktop_video.h"
 
 #include <libyuv/convert_from_argb.h>
 
 #include <comdef.h>
 #include <mferror.h>
+#include <wrl/implements.h>
 
 #include <algorithm>
 
 using Microsoft::WRL::ComPtr;
+
+// Completion of IMFMediaEventGenerator::BeginGetEvent. GetEvent has no timeout, so the encoder
+// waits on a Win32 event instead and retrieves the media event with EndGetEvent.
+class MftEventSink final
+    : public Microsoft::WRL::RuntimeClass<
+          Microsoft::WRL::RuntimeClassFlags<Microsoft::WRL::ClassicCom>, IMFAsyncCallback>
+{
+public:
+    MftEventSink()
+        : event_(CreateEventW(nullptr, FALSE, FALSE, nullptr))
+    {
+        // Nothing
+    }
+
+    HANDLE handle() const { return event_.get(); }
+    ComPtr<IMFAsyncResult> takeResult() { return std::move(result_); }
+
+    // IMFAsyncCallback implementation.
+    HRESULT STDMETHODCALLTYPE GetParameters(DWORD* /* flags */, DWORD* /* queue */) final
+    {
+        return E_NOTIMPL;
+    }
+
+    HRESULT STDMETHODCALLTYPE Invoke(IMFAsyncResult* result) final
+    {
+        result_ = result;
+        SetEvent(event_.get());
+        return S_OK;
+    }
+
+private:
+    ScopedHandle event_;
+    ComPtr<IMFAsyncResult> result_;
+};
 
 namespace {
 
@@ -49,6 +85,9 @@ const size_t kInputTextureCount = 3;
 
 // After this many failed frames in a row the caller falls back to a software codec.
 const int kMaxFailures = 3;
+
+// A transform that drops a frame never reports its output; waiting longer than this is a failure.
+const DWORD kEventTimeoutMs = 2000;
 
 // Selects the ARGB-to-NV12 implementation. libyuv handles subpixel-rendered text without
 // color fringes; the GPU VideoProcessor path is faster but exhibits visible chroma artifacts
@@ -295,6 +334,9 @@ VideoEncoder::Result VideoEncoderH264MF::encode(const Frame* frame, proto::video
     if (!uploadArgbAndConvert(frame))
         return failure();
 
+    // The NVIDIA transform may not see the texture contents until the commands are submitted.
+    d3d_->deviceContext()->Flush();
+
     if (!waitForEvent(METransformNeedInput))
         return failure();
 
@@ -484,6 +526,16 @@ bool VideoEncoderH264MF::createEncoder(const QSize& size)
         return false;
     }
 
+    event_sink_ = Microsoft::WRL::Make<MftEventSink>();
+    if (!event_sink_ || !event_sink_->handle())
+    {
+        LOG(ERROR) << "CreateEvent failed:" << GetLastError();
+        return false;
+    }
+
+    if (!requestEvent())
+        return false;
+
     error = encoder_.As(&codec_api_);
     if (FAILED(error.Error()))
     {
@@ -534,6 +586,7 @@ void VideoEncoderH264MF::destroyEncoder()
     next_input_ = 0;
 
     event_gen_.Reset();
+    event_sink_.Reset();
     codec_api_.Reset();
     if (encoder_)
     {
@@ -917,6 +970,19 @@ bool VideoEncoderH264MF::buildInputSample(quint64 sample_time_100ns, ComPtr<IMFS
 }
 
 //--------------------------------------------------------------------------------------------------
+// One BeginGetEvent is outstanding while the transform exists.
+bool VideoEncoderH264MF::requestEvent()
+{
+    _com_error error = event_gen_->BeginGetEvent(event_sink_.Get(), nullptr);
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IMFMediaEventGenerator::BeginGetEvent failed:" << error;
+        return false;
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 // The transform sends its events in its own order. Intel asks for the next frame before it
 // reports the output of the previous one, so events are counted and consumed when needed.
 bool VideoEncoderH264MF::waitForEvent(MediaEventType expected)
@@ -925,13 +991,22 @@ bool VideoEncoderH264MF::waitForEvent(MediaEventType expected)
 
     while (counter == 0)
     {
-        ComPtr<IMFMediaEvent> event;
-        _com_error error = event_gen_->GetEvent(0, &event);
-        if (FAILED(error.Error()))
+        if (WaitForSingleObject(event_sink_->handle(), kEventTimeoutMs) != WAIT_OBJECT_0)
         {
-            LOG(ERROR) << "IMFMediaEventGenerator::GetEvent failed:" << error;
+            LOG(ERROR) << "No MFT event within" << kEventTimeoutMs << "ms";
             return false;
         }
+
+        ComPtr<IMFMediaEvent> event;
+        _com_error error = event_gen_->EndGetEvent(event_sink_->takeResult().Get(), &event);
+        if (FAILED(error.Error()))
+        {
+            LOG(ERROR) << "IMFMediaEventGenerator::EndGetEvent failed:" << error;
+            return false;
+        }
+
+        if (!requestEvent())
+            return false;
 
         MediaEventType type = MEUnknown;
         error = event->GetType(&type);

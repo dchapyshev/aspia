@@ -35,6 +35,8 @@
 #include <memory>
 #include <vector>
 
+class MftEventSink;
+
 // Hardware H.264 encoder built on top of an asynchronous Media Foundation Transform.
 // Two ARGB-to-NV12 implementations are compiled in: a libyuv-based CPU path (default,
 // high-quality chroma resampling that handles subpixel-rendered text correctly) and an
@@ -75,6 +77,7 @@ private:
     bool uploadArgbAndConvert(const Frame* frame);
     bool buildInputSample(quint64 sample_time_100ns, Microsoft::WRL::ComPtr<IMFSample>* out);
 
+    bool requestEvent();
     bool waitForEvent(MediaEventType expected);
     bool readOutput(proto::video::Packet* packet, bool* is_key_frame_out);
     Result failure();
@@ -107,6 +110,7 @@ private:
     Microsoft::WRL::ComPtr<IMFTransform> encoder_;
     Microsoft::WRL::ComPtr<ICodecAPI> codec_api_;
     Microsoft::WRL::ComPtr<IMFMediaEventGenerator> event_gen_;
+    Microsoft::WRL::ComPtr<MftEventSink> event_sink_;
 
     // NV12 input textures used in turn; |next_input_| receives the next frame.
     std::vector<Microsoft::WRL::ComPtr<ID3D11Texture2D>> input_textures_;
