@@ -6,4 +6,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">Найновішу версію програми вже встановлено.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Створити ярлик на робочих столах</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Створити ярлик в меню "Пуск"</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}Ярлики</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">Виберіть, де створити ярлики застосунку.</String>
 </WixLocalization>

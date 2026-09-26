@@ -36,13 +36,13 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
         <Directory Id="$(var.Program_Files)">
             <Directory Id="VendorProgramFilesFolder" Name="Aspia">
-                <Directory Id="INSTALLLOCATION" Name="Router" />
+                <Directory Id="InstallLocation" Name="Router" />
             </Directory>
         </Directory>
     </Directory>
 
     <!-- Router service -->
-    <DirectoryRef Id="INSTALLLOCATION" FileSource="$(var.SourceFiles)">
+    <DirectoryRef Id="InstallLocation" FileSource="$(var.SourceFiles)">
         <Component Id ="Applications" DiskId="1" Guid="{A0E3C629-4A61-4ED0-BD9D-FE12C71D7E36}">
             <File Id="aspia_router.exe" Name="aspia_router.exe" KeyPath="yes" />
         </Component>
@@ -71,7 +71,7 @@
     </InstallExecuteSequence>
 
     <!-- Product features -->
-    <Feature Id="FeatureProduct" Title="$(var.ProductName)" InstallDefault="local" ConfigurableDirectory="INSTALLLOCATION" Level="1">
+    <Feature Id="FeatureProduct" Title="$(var.ProductName)" InstallDefault="local" Level="1">
         <ComponentRef Id="Applications" />
     </Feature>
     <Property Id="INSTALLLEVEL" Value="1" />
@@ -87,7 +87,10 @@
 
     <!-- UI description -->
     <UI Id="InstallerUI">
-        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
+        <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="10">LicenseAccepted = "1"</Publish>
+        <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="10">NOT Installed</Publish>
+
+        <Property Id="WIXUI_INSTALLDIR" Value="InstallLocation" />
         <UIRef Id="WixUI_InstallDir" />
         <UIRef Id="WixUI_ErrorProgressText" />
     </UI>

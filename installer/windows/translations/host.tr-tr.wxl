@@ -5,4 +5,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">Uygulamanın daha yeni bir sürümü zaten yüklü.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Masaüstünde kısayol oluştur</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Başlat menüsünde kısayol oluştur</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}Kısayollar</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">Uygulama kısayollarının nerede oluşturulacağını seçin.</String>
 </WixLocalization>

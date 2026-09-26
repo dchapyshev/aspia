@@ -36,13 +36,13 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
         <Directory Id="$(var.Program_Files)">
             <Directory Id="VendorProgramFilesFolder" Name="Aspia">
-                <Directory Id="INSTALLLOCATION" Name="Relay" />
+                <Directory Id="InstallLocation" Name="Relay" />
             </Directory>
         </Directory>
     </Directory>
 
     <!-- Relay service -->
-    <DirectoryRef Id="INSTALLLOCATION" FileSource="$(var.SourceFiles)">
+    <DirectoryRef Id="InstallLocation" FileSource="$(var.SourceFiles)">
         <Component Id ="Applications" DiskId="1" Guid="{A462DE7C-8791-4123-8690-D67E34B1ECA5}">
             <File Id="aspia_relay.exe" Name="aspia_relay.exe" KeyPath="yes" />
         </Component>
@@ -71,7 +71,7 @@
     </InstallExecuteSequence>
 
     <!-- Product features -->
-    <Feature Id="FeatureProduct" Title="$(var.ProductName)" InstallDefault="local" ConfigurableDirectory="INSTALLLOCATION" Level="1">
+    <Feature Id="FeatureProduct" Title="$(var.ProductName)" InstallDefault="local" Level="1">
         <ComponentRef Id="Applications" />
     </Feature>
     <Property Id="INSTALLLEVEL" Value="1" />
@@ -87,7 +87,10 @@
 
     <!-- UI description -->
     <UI Id="InstallerUI">
-        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
+        <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="10">LicenseAccepted = "1"</Publish>
+        <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="10">NOT Installed</Publish>
+
+        <Property Id="WIXUI_INSTALLDIR" Value="InstallLocation" />
         <UIRef Id="WixUI_InstallDir" />
         <UIRef Id="WixUI_ErrorProgressText" />
     </UI>

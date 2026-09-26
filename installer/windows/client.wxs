@@ -34,7 +34,7 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
         <Directory Id="$(var.Program_Files)">
             <Directory Id="VendorProgramFilesFolder" Name="Aspia">
-                <Directory Id="INSTALLLOCATION" Name="Client" />
+                <Directory Id="InstallLocation" Name="Client" />
             </Directory>
         </Directory>
         <Directory Id="ProgramMenuFolder">
@@ -47,7 +47,7 @@
     <DirectoryRef Id="ApplicationMenuFolder">
         <Component Id="ProgramMenuShortcut" Guid="{BDFBE311-E1ED-434C-AFBD-FF3AEC854D23}">
             <Condition>STARTMENU_SHORTCUT</Condition>
-            <Shortcut Id="ProgramMenuShortcut" Name="!(loc.ShortcutName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]$(var.Executable)" />
+            <Shortcut Id="ProgramMenuShortcut" Name="!(loc.ShortcutName)" WorkingDirectory="InstallLocation" Target="[InstallLocation]$(var.Executable)" />
             <RemoveFolder Id="ApplicationMenuFolder" On="uninstall" />
             <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string" Value="" KeyPath="yes" />
         </Component>
@@ -57,13 +57,13 @@
     <DirectoryRef Id="DesktopFolder">
         <Component Id="DesktopShortcut" Guid="{56EADCC0-CF88-4230-9736-7479E9BC94A8}">
             <Condition>DESKTOP_SHORTCUT</Condition>
-            <Shortcut Id="DesktopShortcut" Name="!(loc.ShortcutName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]$(var.Executable)" />
+            <Shortcut Id="DesktopShortcut" Name="!(loc.ShortcutName)" WorkingDirectory="InstallLocation" Target="[InstallLocation]$(var.Executable)" />
             <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string" Value="" KeyPath="yes" />
         </Component>
     </DirectoryRef>
 
     <!-- Executable file -->
-    <DirectoryRef Id="INSTALLLOCATION" FileSource="$(var.SourceFiles)">
+    <DirectoryRef Id="InstallLocation" FileSource="$(var.SourceFiles)">
         <Component Id ="Applications" DiskId="1" Guid="{13CF58E8-7A9B-4100-AEC4-F35505A368AE}">
             <File Id="$(var.Executable)" Name="$(var.Executable)" KeyPath="yes">
                 <!-- Allow inbound UDP so the client can act as a UPnP listener for direct connections. -->
@@ -77,17 +77,17 @@
                 <RegistryValue Type="string" Value="URL:Aspia Protocol" KeyPath="yes" />
                 <RegistryValue Type="string" Name="URL Protocol" Value="" />
                 <RegistryKey Key="DefaultIcon">
-                    <RegistryValue Type="string" Value="&quot;[INSTALLLOCATION]$(var.Executable)&quot;,0" />
+                    <RegistryValue Type="string" Value="&quot;[InstallLocation]$(var.Executable)&quot;,0" />
                 </RegistryKey>
                 <RegistryKey Key="shell\open\command">
-                    <RegistryValue Type="string" Value="&quot;[INSTALLLOCATION]$(var.Executable)&quot; &quot;%1&quot;" />
+                    <RegistryValue Type="string" Value="&quot;[InstallLocation]$(var.Executable)&quot; &quot;%1&quot;" />
                 </RegistryKey>
             </RegistryKey>
         </Component>
     </DirectoryRef>
 
     <!-- Product features -->
-    <Feature Id="FeatureProduct" Title="$(var.ProductName)" InstallDefault="local" ConfigurableDirectory="INSTALLLOCATION" Level="1">
+    <Feature Id="FeatureProduct" Title="$(var.ProductName)" InstallDefault="local" Level="1">
         <ComponentRef Id="Applications" />
         <ComponentRef Id="UrlProtocol" />
         <ComponentRef Id="ProgramMenuShortcut" />
@@ -110,8 +110,8 @@
             <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
             <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="2" />
             <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="2" />
-            <Control Id="Title" Type="Text" X="15" Y="6" Width="210" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.InstallDirDlgTitle)" />
-            <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.InstallDirDlgDescription)" />
+            <Control Id="Title" Type="Text" X="15" Y="6" Width="210" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.ShortcutsDlgTitle)" />
+            <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.ShortcutsDlgDescription)" />
 
             <Control Id="DesktopShortcutCheckBox" Type="CheckBox" Height="18" Width="295" X="26" Y="58" Text="!(loc.CreateDesktopShortcut)" Property="DESKTOP_SHORTCUT" CheckBoxValue="1" />
             <Control Id="ProgramMenuShortcutCheckBox" Type="CheckBox" Height="18" Width="295" X="26" Y="79" Text="!(loc.CreateProgramMenuShortcut)" Property="STARTMENU_SHORTCUT" CheckBoxValue="1" />
@@ -120,7 +120,7 @@
                 <Publish Event="NewDialog" Value="VerifyReadyDlg" Order="10" />
             </Control>
             <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)">
-                <Publish Event="NewDialog" Value="InstallDirDlg" Order="10" />
+                <Publish Event="NewDialog" Value="LicenseAgreementDlg" Order="10" />
             </Control>
             <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
                 <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
@@ -130,10 +130,10 @@
         <Property Id="STARTMENU_SHORTCUT" Value="1"></Property>
         <Property Id="DESKTOP_SHORTCUT" Value="1"></Property>
 
-        <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="ShortcutsDlg" Order="10">NOT Installed</Publish>
+        <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="ShortcutsDlg" Order="10">LicenseAccepted = "1"</Publish>
         <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ShortcutsDlg" Order="10">NOT Installed</Publish>
 
-        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
+        <Property Id="WIXUI_INSTALLDIR" Value="InstallLocation" />
 
         <UIRef Id="WixUI_InstallDir" />
         <UIRef Id="WixUI_ErrorProgressText" />

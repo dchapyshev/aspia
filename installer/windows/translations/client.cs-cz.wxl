@@ -6,4 +6,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">Novější verze aplikace je již nainstalována.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Vytvořit zástupce na ploše</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Vytvořit zástupce v nabídce Start</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}Zástupci</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">Vyberte, kde se mají vytvořit zástupci aplikace.</String>
 </WixLocalization>

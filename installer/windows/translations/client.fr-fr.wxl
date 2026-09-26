@@ -6,4 +6,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">Une version plus récente de l application est déjà installée.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Créer un raccourci sur le bureau</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Créer un raccourci dans le menu démarrer</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}Raccourcis</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">Choisissez où créer les raccourcis vers l'application.</String>
 </WixLocalization>

@@ -6,4 +6,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">Una versione più recente dell'applicazione è già installata.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Crea collegamento sul desktop</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Crea collegamento nel menu Start</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}Collegamenti</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">Scegliere dove creare i collegamenti all'applicazione.</String>
 </WixLocalization>

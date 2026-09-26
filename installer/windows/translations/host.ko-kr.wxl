@@ -5,4 +5,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">애플리케이션의 최신 버전이 이미 설치되어 있습니다.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">바탕 화면에 바로 가기 만들기</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">시작 메뉴에 바로 가기 만들기</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}바로 가기</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">응용 프로그램 바로 가기를 만들 위치를 선택하십시오.</String>
 </WixLocalization>

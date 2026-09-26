@@ -5,4 +5,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">Μια νεότερη έκδοση της εφαρμογής είναι ήδη εγκατεστημένη.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Δημιουργία συντόμευσης στην επιφάνεια εργασίας</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Δημιουργία συντόμευσης στο μενού Έναρξη</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}Συντομεύσεις</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">Επιλέξτε πού θα δημιουργηθούν συντομεύσεις της εφαρμογής.</String>
 </WixLocalization>

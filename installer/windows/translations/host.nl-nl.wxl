@@ -5,4 +5,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">Er is al een nieuwere versie van de applicatie geinstalleerd.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Maak bureaublad snelkoppelingen</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Maak snelkoppelingen in het Start menu</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}Snelkoppelingen</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">Kies waar snelkoppelingen naar de toepassing moeten worden gemaakt.</String>
 </WixLocalization>

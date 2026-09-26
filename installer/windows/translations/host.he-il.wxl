@@ -5,4 +5,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">גרסה חדשה יותר של היישום כבר מותקנת.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">צור קיצור דרך בשולחן העבודה</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">צור קיצור דרך בתפריט התחל</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}קיצורי דרך</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">בחר היכן ליצור קיצורי דרך ליישום.</String>
 </WixLocalization>

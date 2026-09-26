@@ -6,4 +6,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">En nyere versjon av programmet er allerede installert.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Opprett snarvei på skrivebordet</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Opprett snarvei i Start-menyen</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}Snarveier</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">Velg hvor snarveier til programmet skal opprettes.</String>
 </WixLocalization>

@@ -6,4 +6,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">Az alkalmazás újabb verziója már telepítve van.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Parancsikon létrehozása az asztalon</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Parancsikon létrehozása a Start menüben</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}Parancsikonok</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">Válassza ki, hol jöjjenek létre az alkalmazás parancsikonjai.</String>
 </WixLocalization>

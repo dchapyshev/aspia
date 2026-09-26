@@ -6,4 +6,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">已经安装了较新版本的应用程序。</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">创建桌面快捷方式</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">在开始菜单中创建快捷方式</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}快捷方式</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">选择要在何处创建应用程序的快捷方式。</String>
 </WixLocalization>

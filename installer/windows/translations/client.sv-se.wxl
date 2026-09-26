@@ -6,4 +6,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">En nyare version av programmet är redan installerad.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Skapa genväg på skrivbordet</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Skapa genväg i Start-menyn</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}Genvägar</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">Välj var genvägar till programmet ska skapas.</String>
 </WixLocalization>

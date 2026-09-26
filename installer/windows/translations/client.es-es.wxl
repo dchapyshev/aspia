@@ -6,4 +6,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">Ya está instalada una versión más reciente de la aplicación.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Crear acceso directo en el escritorio</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Crear acceso directo en el menú Inicio</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}Accesos directos</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">Elija dónde crear accesos directos a la aplicación.</String>
 </WixLocalization>

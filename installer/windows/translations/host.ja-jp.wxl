@@ -5,4 +5,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">このアプリケーションの新しいバージョンが既にインストールされています。</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">デスクトップにショートカットを作成</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">スタート メニューにショートカットを作成</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}ショートカット</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">アプリケーションのショートカットを作成する場所を選択してください。</String>
 </WixLocalization>

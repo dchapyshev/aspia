@@ -6,4 +6,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">Uma versão mais recente do aplicativo já está instalada.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Criar atalho na área de trabalho</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Criar atalho no menu Iniciar</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}Atalhos</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">Escolha onde criar atalhos para o aplicativo.</String>
 </WixLocalization>

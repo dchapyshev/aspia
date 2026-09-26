@@ -6,4 +6,6 @@
     <String Id="DowngradeErrorMessage" Overridable="yes">已安裝較新版本的應用程式。</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">建立桌面捷徑</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">在「開始」功能表建立捷徑</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}捷徑</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">選擇要在何處建立應用程式的捷徑。</String>
 </WixLocalization>
