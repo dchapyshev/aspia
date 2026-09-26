@@ -409,6 +409,20 @@
                 </property>
                </widget>
               </item>
+              <item>
+               <widget class="QCheckBox" name="checkbox_hardware_encoding">
+                <property name="text">
+                 <string>Allow hardware video encoding</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkbox_hardware_decoding">
+                <property name="text">
+                 <string>Allow hardware video decoding</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>

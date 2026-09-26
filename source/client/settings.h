@@ -95,6 +95,12 @@ public:
     bool sendKeyCombinations() const;
     void setSendKeyCombinations(bool enable);
 
+    bool hardwareVideoEncoding() const;
+    void setHardwareVideoEncoding(bool enable);
+
+    bool hardwareVideoDecoding() const;
+    void setHardwareVideoDecoding(bool enable);
+
     quint32 udpMethods() const;
     void setUdpMethods(quint32 methods);
 

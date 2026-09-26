@@ -67,6 +67,7 @@ public:
 
 public slots:
     void onCursorConfig(bool shape_enabled, bool position_enabled);
+    void onHardwareDecoding(bool enable);
     void onSetRecording(bool enable, const QString& file_path, const QString& computer_name);
 
 signals:
@@ -132,8 +133,8 @@ private:
     qint64 fps_frame_count_ = 0;
     TimePoint fps_time_;
 
-    // Set once a hardware H264 decoder reports a permanent failure; sticks for the rest of the
-    // session so the software backend is picked on every subsequent VideoDecoder::create() call.
+    // Cleared by the client setting or once a hardware H264 decoder reports a permanent failure;
+    // the software backend is then picked on every subsequent VideoDecoder::create() call.
     bool h264_hw_enabled_ = true;
     // Set after both HW and SW H264 decoders failed permanently (e.g. resolution exceeds H264
     // level limits). The client drops H264 from its capabilities so the host switches to VP.

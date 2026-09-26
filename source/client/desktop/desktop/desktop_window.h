@@ -80,6 +80,7 @@ public:
 signals:
     // Pushes the cursor configuration to the video worker.
     void sig_cursorConfig(bool shape_enabled, bool position_enabled);
+    void sig_hardwareDecoding(bool enable);
 
 protected:
     // ClientWindow implementation.
@@ -185,10 +186,9 @@ private:
     int send_clipboard_count_ = 0;
 
     bool file_clipboard_supported_ = false;
-
-    // Cleared when the video worker reports a permanent H264 failure. sendCapabilities() drops
-    // kFlagVideoH264 so the host switches to VP.
     bool h264_sw_enabled_ = true;
+    bool hardware_encoding_ = true;
+    bool hardware_decoding_ = true;
 
     bool is_minimized_from_full_screen_ = false;
 

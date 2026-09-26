@@ -127,6 +127,8 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
     Settings settings;
     desktop_->enableKeyCombinations(settings.sendKeyCombinations());
     desktop_->enableRemoteCursorPosition(desktop_config_.cursor_position());
+    hardware_encoding_ = settings.hardwareVideoEncoding();
+    hardware_decoding_ = settings.hardwareVideoDecoding();
 
     connect(toolbar_, &DesktopToolBar::sig_keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
     connect(toolbar_, &DesktopToolBar::sig_switchToAutosize, this, &DesktopWindow::onAutosizeWindow);
@@ -260,6 +262,8 @@ void DesktopWindow::onRegisterWorkers()
 
     connect(this, &DesktopWindow::sig_cursorConfig, video_worker_, &VideoWorker::onCursorConfig,
             Qt::QueuedConnection);
+    connect(this, &DesktopWindow::sig_hardwareDecoding, video_worker_, &VideoWorker::onHardwareDecoding,
+            Qt::QueuedConnection);
 
     connect(video_worker_, &VideoWorker::sig_frameError, this, &DesktopWindow::onFrameError,
             Qt::QueuedConnection);
@@ -285,6 +289,7 @@ void DesktopWindow::onRegisterWorkers()
 
     // Push the initial cursor configuration; refreshed later on every onDesktopConfigChanged.
     emit sig_cursorConfig(desktop_config_.cursor_shape(), desktop_config_.cursor_position());
+    emit sig_hardwareDecoding(hardware_decoding_);
 
     // Created only when enabled to avoid monitoring the local clipboard.
     clipboard_.reset(desktop_config_.clipboard() ? Clipboard::create(this) : nullptr);
@@ -362,6 +367,20 @@ void DesktopWindow::applySettings()
         desktop_->setCursorShape(QPixmap(), QPoint());
 
     desktop_->enableKeyCombinations(settings.sendKeyCombinations());
+    const bool hardware_decoding = settings.hardwareVideoDecoding();
+    if (hardware_decoding != hardware_decoding_)
+    {
+        hardware_decoding_ = hardware_decoding;
+        emit sig_hardwareDecoding(hardware_decoding_);
+    }
+
+    const bool hardware_encoding = settings.hardwareVideoEncoding();
+    if (hardware_encoding != hardware_encoding_)
+    {
+        hardware_encoding_ = hardware_encoding;
+        if (!isLegacy())
+            sendCapabilities();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1616,7 +1635,7 @@ void DesktopWindow::sendCapabilities()
 
     add_flag(kFlagVideoVP8, true);
     add_flag(kFlagVideoVP9, true);
-    if (h264_sw_enabled_)
+    if (h264_sw_enabled_ && hardware_encoding_)
         add_flag(kFlagVideoH264, true);
     add_flag(kFlagAudioOpus, true);
 

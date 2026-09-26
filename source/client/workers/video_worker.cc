@@ -97,6 +97,26 @@ void VideoWorker::onCursorConfig(bool shape_enabled, bool position_enabled)
 }
 
 //--------------------------------------------------------------------------------------------------
+void VideoWorker::onHardwareDecoding(bool enable)
+{
+    if (h264_hw_enabled_ == enable)
+        return;
+
+    LOG(INFO) << "Hardware decoding" << (enable ? "enabled" : "disabled");
+    h264_hw_enabled_ = enable;
+
+    // A running H264 decoder is replaced right away; the new one starts from a keyframe.
+    if (decoder_ && encoding_ == proto::video::ENCODING_H264)
+    {
+        decoder_ = VideoDecoder::create(encoding_, h264_hw_enabled_);
+        key_frame_received_ = false;
+
+        metrics_.hardware_decoder = decoder_ && decoder_->isHardwareAccelerated();
+        sendKeyFrameRequest();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void VideoWorker::onSetRecording(bool enable, const QString& file_path, const QString& computer_name)
 {
     if (enable)

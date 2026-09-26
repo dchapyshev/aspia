@@ -52,6 +52,8 @@ const QString kRecordingPathParam = "recording_path";
 const QString kLastDirectoryParam = "last_directory";
 const QString kRecordSessionsParam = "record_sessions";
 const QString kSendKeyCombinationsParam = "send_key_combinations";
+const QString kHardwareVideoEncodingParam = "hardware_video_encoding";
+const QString kHardwareVideoDecodingParam = "hardware_video_decoding";
 const QString kUdpMethodsParam = "udp_methods";
 const QString kTabStateParam = "tab_state";
 const QString kDialogGeometryParam = "dialog_geometry";
@@ -330,6 +332,30 @@ bool Settings::sendKeyCombinations() const
 void Settings::setSendKeyCombinations(bool enable)
 {
     settings_.setValue(kSendKeyCombinationsParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::hardwareVideoEncoding() const
+{
+    return settings_.value(kHardwareVideoEncodingParam, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setHardwareVideoEncoding(bool enable)
+{
+    settings_.setValue(kHardwareVideoEncodingParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::hardwareVideoDecoding() const
+{
+    return settings_.value(kHardwareVideoDecodingParam, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setHardwareVideoDecoding(bool enable)
+{
+    settings_.setValue(kHardwareVideoDecodingParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------
