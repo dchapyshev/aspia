@@ -109,6 +109,7 @@ private slots:
 
 private:
     void startClient(const QString& ipc_channel_name);
+    void lastClientFinished();
     void connectToService();
     qint64 minimalBandwidth() const;
 

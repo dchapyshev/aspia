@@ -146,7 +146,7 @@ void DesktopIpcWorker::onIpcDisconnected()
     }
     clients_.clear();
 
-    emit sig_stopCapture();
+    lastClientFinished();
 
     QTimer::singleShot(Seconds(1), this, [this]()
     {
@@ -318,7 +318,7 @@ void DesktopIpcWorker::onClientFinished()
     }
 
     LOG(INFO) << "Last desktop client disconnected";
-    emit sig_stopCapture();
+    lastClientFinished();
 
     if (is_lock_at_disconnect_)
     {
@@ -373,6 +373,15 @@ void DesktopIpcWorker::startClient(const QString& ipc_channel_name)
 
     LOG(INFO) << "Starting client...";
     client->start(ipc_channel_name);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopIpcWorker::lastClientFinished()
+{
+    emit sig_stopCapture();
+    emit sig_paused(false);
+    emit sig_mouseLocked(false);
+    emit sig_keyboardLocked(false);
 }
 
 //--------------------------------------------------------------------------------------------------
