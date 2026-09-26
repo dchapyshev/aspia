@@ -999,17 +999,17 @@ Routers added: %4</source>
         <translation>Не вдалося створити резервну копію. Деякі записи бази даних пошкоджено. Виправте або видаліть їх.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="258"/>
+        <location filename="../client/main.cc" line="257"/>
         <source>Set Master Password</source>
         <translation>Встановлення майстер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="260"/>
+        <location filename="../client/main.cc" line="259"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Встановіть майстер-пароль, необхідний для розблокування застосунку.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="268"/>
+        <location filename="../client/main.cc" line="267"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не може бути коротшим за %n символ.</numerusform>
@@ -1018,12 +1018,12 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="276"/>
+        <location filename="../client/main.cc" line="275"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введений пароль не відповідає вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="278"/>
+        <location filename="../client/main.cc" line="277"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символ.</numerusform>
@@ -1032,12 +1032,12 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="282"/>
+        <location filename="../client/main.cc" line="281"/>
         <source>Do you want to enter a different password?</source>
         <translation>Хочете ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="292"/>
+        <location filename="../client/main.cc" line="291"/>
         <source>Unable to set master password.</source>
         <translation>Не вдалося встановити майстер-пароль.</translation>
     </message>
@@ -1057,7 +1057,7 @@ Routers added: %4</source>
         <translation>Не вдалося створити резервну копію.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="207"/>
+        <location filename="../client/main.cc" line="206"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>Посилання aspia:// для підключення до хоста.</translation>
     </message>
@@ -1077,7 +1077,7 @@ Routers added: %4</source>
         <translation>Невірний майстер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="203"/>
+        <location filename="../client/main.cc" line="202"/>
         <source>Aspia Client</source>
         <translation>Клієнт Aspia</translation>
     </message>
@@ -1187,7 +1187,7 @@ Routers added: %4</source>
     <name>ConfigDialog</name>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
-        <location filename="../host/ui/config_dialog.ui" line="154"/>
+        <location filename="../host/ui/config_dialog.ui" line="161"/>
         <source>Settings</source>
         <translation>Налаштування</translation>
     </message>
@@ -1197,7 +1197,7 @@ Routers added: %4</source>
         <translation>Основні</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="229"/>
+        <location filename="../host/ui/config_dialog.ui" line="236"/>
         <source>Change password</source>
         <translation>Змінити пароль</translation>
     </message>
@@ -1237,174 +1237,174 @@ Routers added: %4</source>
         <translation>За замовчуванням</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="188"/>
+        <location filename="../host/ui/config_dialog.cc" line="194"/>
         <source>On reboot</source>
         <translation>При перезавантаженні</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="189"/>
+        <location filename="../host/ui/config_dialog.cc" line="195"/>
         <source>Every 5 minutes</source>
         <translation>Кожні 5 хвилин</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="190"/>
+        <location filename="../host/ui/config_dialog.cc" line="196"/>
         <source>Every 30 minutes</source>
         <translation>Кожні 30 хвилин</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="191"/>
+        <location filename="../host/ui/config_dialog.cc" line="197"/>
         <source>Every 1 hour</source>
         <translation>Кожну годину</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="192"/>
+        <location filename="../host/ui/config_dialog.cc" line="198"/>
         <source>Every 6 hours</source>
         <translation>Кожні 6 годин</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="193"/>
+        <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>Every 12 hours</source>
         <translation>Кожні 12 годин</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="201"/>
+        <location filename="../host/ui/config_dialog.cc" line="207"/>
         <source>Letters and digits</source>
         <translation>Літери і цифри</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="204"/>
+        <location filename="../host/ui/config_dialog.cc" line="210"/>
         <source>Letters</source>
         <translation>Літери</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="206"/>
+        <location filename="../host/ui/config_dialog.cc" line="212"/>
         <source>Digits</source>
         <translation>Цифри</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="223"/>
+        <location filename="../host/ui/config_dialog.cc" line="229"/>
         <source>Never</source>
         <translation>Ніколи</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="224"/>
+        <location filename="../host/ui/config_dialog.cc" line="230"/>
         <source>15 seconds</source>
         <translation>15 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="225"/>
+        <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>30 seconds</source>
         <translation>30 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="226"/>
+        <location filename="../host/ui/config_dialog.cc" line="232"/>
         <source>45 seconds</source>
         <translation>45 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="227"/>
+        <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>60 seconds</source>
         <translation>60 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="235"/>
+        <location filename="../host/ui/config_dialog.cc" line="241"/>
         <source>Accept connection</source>
         <translation>Приймати підключення</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="236"/>
+        <location filename="../host/ui/config_dialog.cc" line="242"/>
         <source>Reject connection</source>
         <translation>Відхиляти підключення</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="435"/>
+        <location filename="../host/ui/config_dialog.cc" line="441"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Ви дійсно хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="462"/>
-        <location filename="../host/ui/config_dialog.cc" line="495"/>
+        <location filename="../host/ui/config_dialog.cc" line="468"/>
+        <location filename="../host/ui/config_dialog.cc" line="501"/>
         <source>An error occurred while processing the password.</source>
         <translation>Сталася помилка при обробці пароля.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="479"/>
+        <location filename="../host/ui/config_dialog.cc" line="485"/>
         <source>Settings storage is unavailable.</source>
         <translation>Сховище налаштувань недоступне.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="509"/>
+        <location filename="../host/ui/config_dialog.cc" line="515"/>
         <source>Import</source>
         <translation>Імпорт</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="509"/>
-        <location filename="../host/ui/config_dialog.cc" line="526"/>
+        <location filename="../host/ui/config_dialog.cc" line="515"/>
+        <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON-файли (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="526"/>
+        <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>Export</source>
         <translation>Експорт</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="551"/>
+        <location filename="../host/ui/config_dialog.cc" line="557"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Конфігурація не може бути записана. Переконайтеся, що у вас достатньо прав для запису.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="564"/>
+        <location filename="../host/ui/config_dialog.cc" line="570"/>
         <source>Incorrect router address entered.</source>
         <translation>Введено некоректну адресу маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="574"/>
+        <location filename="../host/ui/config_dialog.cc" line="580"/>
         <source>Incorrect router public key entered.</source>
         <translation>Введено некоректний публічний ключ маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="730"/>
+        <location filename="../host/ui/config_dialog.cc" line="738"/>
         <source>Install</source>
         <translation>Встановити</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="735"/>
+        <location filename="../host/ui/config_dialog.cc" line="743"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="204"/>
+        <location filename="../host/ui/config_dialog.ui" line="211"/>
         <source>Security</source>
         <translation>Безпека</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="210"/>
+        <location filename="../host/ui/config_dialog.ui" line="217"/>
         <source>Password Protection of Settings</source>
         <translation>Захист налаштувань за допомогою пароля</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="246"/>
+        <location filename="../host/ui/config_dialog.ui" line="253"/>
         <source>One-time Password</source>
         <translation>Одноразовий пароль</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="252"/>
+        <location filename="../host/ui/config_dialog.ui" line="259"/>
         <source>Enable one-time password</source>
         <translation>Увімкнути одноразовий пароль</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="261"/>
+        <location filename="../host/ui/config_dialog.ui" line="268"/>
         <source>Change password:</source>
         <translation>Змінювати пароль:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="281"/>
+        <location filename="../host/ui/config_dialog.ui" line="288"/>
         <source>Characters count:</source>
         <translation>Кількість символів:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="271"/>
+        <location filename="../host/ui/config_dialog.ui" line="278"/>
         <source>Characters:</source>
         <translation>Символи:</translation>
     </message>
@@ -1419,113 +1419,118 @@ Routers added: %4</source>
         <translation>Вхідний порт:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="343"/>
+        <location filename="../host/ui/config_dialog.ui" line="350"/>
         <source>Other</source>
         <translation>Інше</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="349"/>
+        <location filename="../host/ui/config_dialog.ui" line="356"/>
         <source>Disable Aspia shutdown</source>
         <translation>Не закривати Aspia</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="173"/>
+        <location filename="../host/ui/config_dialog.ui" line="180"/>
         <source>Import settings</source>
         <translation>Імпорт налаштувань</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="86"/>
+        <location filename="../host/ui/config_dialog.ui" line="83"/>
+        <source>Allow hardware video encoding</source>
+        <translation>Дозволити апаратне кодування відео</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="93"/>
         <source>Updates</source>
         <translation>Оновлення</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="92"/>
+        <location filename="../host/ui/config_dialog.ui" line="99"/>
         <source>Automatic checking and installation of updates</source>
         <translation>Автоматична перевірка і встановлення оновлень</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="101"/>
+        <location filename="../host/ui/config_dialog.ui" line="108"/>
         <source>Check for updates:</source>
         <translation>Перевіряти оновлення:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="115"/>
+        <location filename="../host/ui/config_dialog.ui" line="122"/>
         <source>Update channel:</source>
         <translation>Канал оновлень:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="180"/>
+        <location filename="../host/ui/config_dialog.ui" line="187"/>
         <source>Export settings</source>
         <translation>Експорт налаштувань</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="303"/>
+        <location filename="../host/ui/config_dialog.ui" line="310"/>
         <source>Connection Confirmation</source>
         <translation>Підтвердження підключення</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="309"/>
+        <location filename="../host/ui/config_dialog.ui" line="316"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>Вимагати підтвердження при підключенні до комп&apos;ютера</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="318"/>
+        <location filename="../host/ui/config_dialog.ui" line="325"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>Автоматичне підтвердження підключення через:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="328"/>
+        <location filename="../host/ui/config_dialog.ui" line="335"/>
         <source>If there is no active user:</source>
         <translation>Якщо немає активного користувача:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="373"/>
+        <location filename="../host/ui/config_dialog.ui" line="380"/>
         <source>Router</source>
         <translation>Маршрутизатор</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="379"/>
+        <location filename="../host/ui/config_dialog.ui" line="386"/>
         <source>Enable the use of a router</source>
         <translation>Використовувати маршрутизатор</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="391"/>
+        <location filename="../host/ui/config_dialog.ui" line="398"/>
         <source>Address:</source>
         <translation>Адреса:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="410"/>
+        <location filename="../host/ui/config_dialog.ui" line="417"/>
         <source>Public Key:</source>
         <translation>Публічний ключ:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="424"/>
+        <location filename="../host/ui/config_dialog.ui" line="431"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Потрібен маршрутизатор для підключення до комп&apos;ютера при відсутності прямого підключення (обхід NAT). Aspia не надає публічних маршрутизаторів, але ви можете налаштувати власний. Завантажити маршрутизатор можна на &lt;a href=&quot;https://aspia.org&quot;&gt;офіційному веб-сайті&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="441"/>
-        <location filename="../host/ui/config_dialog.ui" line="552"/>
+        <location filename="../host/ui/config_dialog.ui" line="448"/>
+        <location filename="../host/ui/config_dialog.ui" line="559"/>
         <source>Users</source>
         <translation>Користувачі</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="455"/>
+        <location filename="../host/ui/config_dialog.ui" line="462"/>
         <source>Add new user</source>
         <translation>Додати нового користувача</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="481"/>
+        <location filename="../host/ui/config_dialog.ui" line="488"/>
         <source>Edit user</source>
         <translation>Редагувати користувача</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="507"/>
+        <location filename="../host/ui/config_dialog.ui" line="514"/>
         <source>Delete user</source>
         <translation>Видалити користувача</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="142"/>
+        <location filename="../host/ui/config_dialog.ui" line="149"/>
         <source>Check for updates</source>
         <translation>Перевірити наявність оновлень</translation>
     </message>
@@ -1535,17 +1540,17 @@ Routers added: %4</source>
         <translation>Захоплювати відео за допомогою:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="575"/>
+        <location filename="../host/ui/config_dialog.ui" line="582"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="584"/>
+        <location filename="../host/ui/config_dialog.ui" line="591"/>
         <source>Modify</source>
         <translation>Змінити</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="593"/>
+        <location filename="../host/ui/config_dialog.ui" line="600"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
@@ -2620,17 +2625,17 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="954"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="973"/>
         <source>Save File</source>
         <translation>Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="955"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="974"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG зображення (*.png);;BMP зображення (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="986"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1005"/>
         <source>Could not save image</source>
         <translation>Не вдалося зберегти зображення</translation>
     </message>
@@ -3671,8 +3676,8 @@ Credentials replaced: %2</source>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="607"/>
-        <location filename="../host/main.cc" line="642"/>
+        <location filename="../host/main.cc" line="611"/>
+        <location filename="../host/main.cc" line="646"/>
         <source>Settings storage is unavailable.</source>
         <translation>Сховище налаштувань недоступне.</translation>
     </message>
@@ -3753,32 +3758,32 @@ Credentials replaced: %2</source>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="544"/>
+        <location filename="../host/main.cc" line="548"/>
         <source>Launch the application hidden.</source>
         <translation>Запустити застосунок прихованим.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="546"/>
+        <location filename="../host/main.cc" line="550"/>
         <source>Export parameters to file.</source>
         <translation>Експорт параметрів у файл.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
+        <location filename="../host/main.cc" line="552"/>
         <source>Import parameters from file.</source>
         <translation>Імпорт параметрів із файлу.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="550"/>
+        <location filename="../host/main.cc" line="554"/>
         <source>Do not display any messages during import and export.</source>
         <translation>Не показувати жодних повідомлень під час імпорту та експорту.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="552"/>
+        <location filename="../host/main.cc" line="556"/>
         <source>Calling the settings dialog.</source>
         <translation>Виклик діалогу налаштувань.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="554"/>
+        <location filename="../host/main.cc" line="558"/>
         <source>Calling the security log dialog.</source>
         <translation>Виклик діалогу журналу безпеки.</translation>
     </message>
@@ -3816,8 +3821,8 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
         <location filename="../host/ui/host_window.cc" line="552"/>
-        <location filename="../host/ui/host_window.cc" line="781"/>
-        <location filename="../host/ui/host_window.cc" line="1053"/>
+        <location filename="../host/ui/host_window.cc" line="790"/>
+        <location filename="../host/ui/host_window.cc" line="1062"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
@@ -3833,7 +3838,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
-        <location filename="../host/ui/host_window.cc" line="967"/>
+        <location filename="../host/ui/host_window.cc" line="976"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор відключено</translation>
     </message>
@@ -3899,7 +3904,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="329"/>
-        <location filename="../host/ui/host_window.cc" line="744"/>
+        <location filename="../host/ui/host_window.cc" line="753"/>
         <source>Hide</source>
         <translation>Сховати</translation>
     </message>
@@ -3940,7 +3945,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="287"/>
-        <location filename="../host/ui/host_window.cc" line="739"/>
+        <location filename="../host/ui/host_window.cc" line="748"/>
         <source>Show</source>
         <translation>Показати</translation>
     </message>
@@ -3955,42 +3960,42 @@ Credentials replaced: %2</source>
         <translation>Запис екрана зупинено.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="728"/>
+        <location filename="../host/ui/host_window.cc" line="737"/>
         <source>Settings storage is unavailable.</source>
         <translation>Сховище налаштувань недоступне.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="798"/>
+        <location filename="../host/ui/host_window.cc" line="807"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Якщо ви вийдете з Aspia, ви не зможете підключитися до цього комп&apos;ютера, доки знову не увімкнете комп&apos;ютер або Aspia вручну. Ви дійсно хочете вийти із застосунку?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="959"/>
+        <location filename="../host/ui/host_window.cc" line="968"/>
         <source>Not connected to service</source>
         <translation>Немає підключення до служби</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="972"/>
+        <location filename="../host/ui/host_window.cc" line="981"/>
         <source>Connecting to router...</source>
         <translation>Підключення до маршрутизатора...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="977"/>
+        <location filename="../host/ui/host_window.cc" line="986"/>
         <source>Connected to router</source>
         <translation>Підключено до маршрутизатора</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="982"/>
+        <location filename="../host/ui/host_window.cc" line="991"/>
         <source>Connection error</source>
         <translation>Помилка підключення</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1050"/>
+        <location filename="../host/ui/host_window.cc" line="1059"/>
         <source>IP addresses:</source>
         <translation>IP адреси:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1054"/>
+        <location filename="../host/ui/host_window.cc" line="1063"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
@@ -4162,12 +4167,12 @@ Credentials replaced: %2</source>
         <translation>Оновлення стану...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="156"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="160"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Не вдалося прочитати дані. Можливо, список застарів.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="413"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="417"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n дочірня група</numerusform>
@@ -4176,7 +4181,7 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="414"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="418"/>
         <source>%n child host(s)</source>
         <translation>
             <numerusform>%n дочірній хост</numerusform>
@@ -5062,156 +5067,156 @@ Credentials imported: %5</source>
         <translation>Автооновлення стану</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1003"/>
+        <location filename="../client/desktop/management_tab.cc" line="1034"/>
         <source>(copy)</source>
         <translation>(копія)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="971"/>
-        <location filename="../client/desktop/management_tab.cc" line="1044"/>
-        <location filename="../client/desktop/management_tab.cc" line="2135"/>
+        <location filename="../client/desktop/management_tab.cc" line="1002"/>
+        <location filename="../client/desktop/management_tab.cc" line="1075"/>
+        <location filename="../client/desktop/management_tab.cc" line="2162"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Не вдалося отримати інформацію про хост із локальної бази даних.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1008"/>
+        <location filename="../client/desktop/management_tab.cc" line="1039"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Не вдалося додати хост до локальної бази даних.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1048"/>
+        <location filename="../client/desktop/management_tab.cc" line="1079"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити хост &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1058"/>
+        <location filename="../client/desktop/management_tab.cc" line="1089"/>
         <source>Unable to remove host</source>
         <translation>Не вдалося видалити хост</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1116"/>
-        <location filename="../client/desktop/management_tab.cc" line="1159"/>
-        <location filename="../client/desktop/management_tab.cc" line="1184"/>
+        <location filename="../client/desktop/management_tab.cc" line="1147"/>
+        <location filename="../client/desktop/management_tab.cc" line="1190"/>
+        <location filename="../client/desktop/management_tab.cc" line="1215"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1117"/>
-        <location filename="../client/desktop/management_tab.cc" line="1160"/>
-        <location filename="../client/desktop/management_tab.cc" line="1185"/>
+        <location filename="../client/desktop/management_tab.cc" line="1148"/>
+        <location filename="../client/desktop/management_tab.cc" line="1191"/>
+        <location filename="../client/desktop/management_tab.cc" line="1216"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1284"/>
+        <location filename="../client/desktop/management_tab.cc" line="1315"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити робочий простір &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1304"/>
+        <location filename="../client/desktop/management_tab.cc" line="1335"/>
         <source>Failed to delete the workspace.</source>
         <translation>Не вдалося видалити робочий простір.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1399"/>
+        <location filename="../client/desktop/management_tab.cc" line="1430"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Ви впевнені, що хочете видалити групу &quot;%1&quot;? Хости, призначені цій групі або її підгрупам, будуть переміщені в корінь робочого простору.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1418"/>
+        <location filename="../client/desktop/management_tab.cc" line="1449"/>
         <source>Failed to delete the group.</source>
         <translation>Не вдалося видалити групу.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1457"/>
+        <location filename="../client/desktop/management_tab.cc" line="1488"/>
         <source>Import Old Address Book</source>
         <translation>Імпорт старої адресної книги</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1458"/>
+        <location filename="../client/desktop/management_tab.cc" line="1489"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>Адресна книга (*.aab);;Всі файли (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1481"/>
-        <location filename="../client/desktop/management_tab.cc" line="1538"/>
+        <location filename="../client/desktop/management_tab.cc" line="1512"/>
+        <location filename="../client/desktop/management_tab.cc" line="1569"/>
         <source>The database is not available.</source>
         <translation>База даних недоступна.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1487"/>
+        <location filename="../client/desktop/management_tab.cc" line="1518"/>
         <source>Create Backup</source>
         <translation>Створити резервну копію</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1504"/>
+        <location filename="../client/desktop/management_tab.cc" line="1535"/>
         <source>There is nothing to save.</source>
         <translation>Немає чого зберігати.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2130"/>
+        <location filename="../client/desktop/management_tab.cc" line="2157"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Дані хоста пошкоджено. Відредагуйте хост і введіть їх знову.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2151"/>
+        <location filename="../client/desktop/management_tab.cc" line="2178"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Дані маршрутизатора пошкоджено. Відредагуйте маршрутизатор і введіть їх знову.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1516"/>
+        <location filename="../client/desktop/management_tab.cc" line="1547"/>
         <source>Failed to create the backup.</source>
         <translation>Не вдалося створити резервну копію.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1544"/>
-        <location filename="../client/desktop/management_tab.cc" line="1570"/>
+        <location filename="../client/desktop/management_tab.cc" line="1575"/>
+        <location filename="../client/desktop/management_tab.cc" line="1601"/>
         <source>Restore from Backup</source>
         <translation>Відновити з резервної копії</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1553"/>
+        <location filename="../client/desktop/management_tab.cc" line="1584"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Все, що зберігається зараз, буде видалено та замінено вмістом резервної копії. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1572"/>
+        <location filename="../client/desktop/management_tab.cc" line="1603"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Резервну копію створено в іншому встановленні застосунку. Введіть майстер-пароль, який використовувався там.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1597"/>
+        <location filename="../client/desktop/management_tab.cc" line="1628"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Резервна копія не містить даних, тому нічого не змінено.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1605"/>
+        <location filename="../client/desktop/management_tab.cc" line="1636"/>
         <source>The file is not a valid backup.</source>
         <translation>Файл не є допустимою резервною копією.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1609"/>
+        <location filename="../client/desktop/management_tab.cc" line="1640"/>
         <source>Failed to restore from the backup.</source>
         <translation>Не вдалося відновити з резервної копії.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1488"/>
-        <location filename="../client/desktop/management_tab.cc" line="1545"/>
+        <location filename="../client/desktop/management_tab.cc" line="1519"/>
+        <location filename="../client/desktop/management_tab.cc" line="1576"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Резервна копія Aspia (*.aspia-backup);;Всі файли (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1508"/>
+        <location filename="../client/desktop/management_tab.cc" line="1539"/>
         <source>Unable to write the file.</source>
         <translation>Не вдалося записати файл.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1601"/>
+        <location filename="../client/desktop/management_tab.cc" line="1632"/>
         <source>Unable to read the file.</source>
         <translation>Не вдалося прочитати файл.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1521"/>
+        <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5226,22 +5231,22 @@ Credentials exported: %5</source>
 Експортовано облікових даних: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1512"/>
+        <location filename="../client/desktop/management_tab.cc" line="1543"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Деякі записи бази даних пошкоджено. Виправте або видаліть їх і повторіть спробу.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1589"/>
+        <location filename="../client/desktop/management_tab.cc" line="1620"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Не вдається розшифрувати файл за допомогою вказаного пароля.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1593"/>
+        <location filename="../client/desktop/management_tab.cc" line="1624"/>
         <source>Unsupported file format version.</source>
         <translation>Непідтримувана версія формату файлу.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1614"/>
+        <location filename="../client/desktop/management_tab.cc" line="1645"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5256,29 +5261,29 @@ Credentials imported: %5</source>
 Імпортовано облікових даних: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2058"/>
-        <location filename="../client/desktop/management_tab.cc" line="2089"/>
+        <location filename="../client/desktop/management_tab.cc" line="2085"/>
+        <location filename="../client/desktop/management_tab.cc" line="2116"/>
         <source>Copy Link</source>
         <translation>Копіювати посилання</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2077"/>
-        <location filename="../client/desktop/management_tab.cc" line="2111"/>
+        <location filename="../client/desktop/management_tab.cc" line="2104"/>
+        <location filename="../client/desktop/management_tab.cc" line="2138"/>
         <source>Unable to create a link for this host.</source>
         <translation>Не вдалося створити посилання для цього хоста.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2152"/>
+        <location filename="../client/desktop/management_tab.cc" line="2179"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Маршрутизатор, пов&apos;язаний із цим хостом, було видалено. Змініть хост, щоб вибрати інший маршрутизатор, або перейдіть на пряме підключення.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2159"/>
+        <location filename="../client/desktop/management_tab.cc" line="2186"/>
         <source>The host has an invalid host ID.</source>
         <translation>Хост має недопустимий ID.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2168"/>
+        <location filename="../client/desktop/management_tab.cc" line="2195"/>
         <source>The host has an incorrect address.</source>
         <translation>Хост має недопустиму адресу.</translation>
     </message>
@@ -5945,37 +5950,37 @@ Credentials imported: %5</source>
 <context>
     <name>RouterClientsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="230"/>
         <source>Save File</source>
         <translation>Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="230"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-файли (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="238"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="241"/>
         <source>Could not open file for writing.</source>
         <translation>Не вдалося відкрити файл для запису.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="273"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="276"/>
         <source>Unable to write file.</source>
         <translation>Не вдалося записати файл.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="310"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="313"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете відключити клієнта &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="335"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="338"/>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>Ви впевнені, що хочете відключити всіх клієнтів?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="496"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="499"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>%n клієнт</numerusform>
@@ -6369,7 +6374,7 @@ Credentials imported: %5</source>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="440"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="441"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n хост</numerusform>
@@ -6451,32 +6456,32 @@ Credentials imported: %5</source>
         <translation>Коментар:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="133"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="140"/>
         <source>Failed to get list of groups.</source>
         <translation>Не вдалося отримати список груп.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="207"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="214"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Введіть і ім&apos;я користувача, і пароль або залиште обидва поля порожніми.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="220"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="227"/>
         <source>Failed to save the credentials.</source>
         <translation>Не вдалося зберегти облікові дані.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="243"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="257"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Не вдалося прочитати список облікових даних.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="289"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="303"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>Не вдалося прочитати облікові дані хоста.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="294"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="308"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>Облікові дані хоста пошкоджено. Введіть їх знову.</translation>
     </message>
@@ -6566,22 +6571,22 @@ Credentials imported: %5</source>
         <translation>Елементів на сторінку:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="345"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="356"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете відключити хост &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="370"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="381"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Ви дійсно хочете відключити всі хости?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="394"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="405"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Видалення хоста призведе до видалення всієї його конфігурації для підключення до маршрутизатора, а застосунок на хості буде видалено. Ця дія незворотна. Ви впевнені, що хочете продовжити?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="677"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="688"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n хост</numerusform>
@@ -6590,22 +6595,22 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="719"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="730"/>
         <source>Save File</source>
         <translation>Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="719"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="730"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-файли (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="730"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="741"/>
         <source>Could not open file for writing.</source>
         <translation>Не вдалося відкрити файл для запису.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="777"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="788"/>
         <source>Unable to write file.</source>
         <translation>Не вдалося записати файл.</translation>
     </message>
@@ -6613,57 +6618,57 @@ Credentials imported: %5</source>
 <context>
     <name>RouterRelaysWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="246"/>
         <source>Save File</source>
         <translation>Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="246"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-файли (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="252"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="257"/>
         <source>Could not open file for writing.</source>
         <translation>Не вдалося відкрити файл для запису.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="314"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="319"/>
         <source>Unable to write file.</source>
         <translation>Не вдалося записати файл.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="351"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="356"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете відключити ретранслятор &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="376"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="381"/>
         <source>Are you sure you want to disconnect all relays?</source>
         <translation>Ви дійсно хочете відключити всі ретранслятори?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="429"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="434"/>
         <source>Disconnect</source>
         <translation>Відключити</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="431"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="436"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="432"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="437"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="441"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="446"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете відключити вузол &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="593"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="598"/>
         <source>%n relay(s)</source>
         <translation>
             <numerusform>%n ретранслятор</numerusform>
@@ -6732,37 +6737,37 @@ Credentials imported: %5</source>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="60"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="63"/>
         <source>Previous</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="61"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="64"/>
         <source>Previous page</source>
         <translation>Попередня сторінка</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="68"/>
         <source>Next</source>
         <translation>Вперед</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="66"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="69"/>
         <source>Next page</source>
         <translation>Наступна сторінка</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="84"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="87"/>
         <source>Items per page:</source>
         <translation>Елементів на сторінку:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="186"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="189"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
         <translation>Підтвердження хоста надасть йому постійний доступ до маршрутизатора. Ви впевнені, що хочете підтвердити хост &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="237"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="240"/>
         <source>Failed to approve the host.</source>
         <translation>Не вдалося підтвердити хост.</translation>
     </message>
@@ -7198,27 +7203,27 @@ Credentials imported: %5</source>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="294"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="295"/>
         <source>Previous</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="295"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous page</source>
         <translation>Попередня сторінка</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="301"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
         <source>Next</source>
         <translation>Вперед</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next page</source>
         <translation>Наступна сторінка</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/search_widget.cc" line="805"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="806"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>%n результат</numerusform>
@@ -7543,48 +7548,58 @@ Credentials imported: %5</source>
         <translation>Надсилати комбінації клавіш</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="424"/>
+        <location filename="../client/desktop/settings_tab.ui" line="415"/>
+        <source>Allow hardware video encoding</source>
+        <translation>Дозволити апаратне кодування відео</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="422"/>
+        <source>Allow hardware video decoding</source>
+        <translation>Дозволити апаратне декодування відео</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="438"/>
         <source>Screen</source>
         <translation>Екран</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="432"/>
+        <location filename="../client/desktop/settings_tab.ui" line="446"/>
         <source>Preferred resolution:</source>
         <translation>Бажана роздільна здатність:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="460"/>
+        <location filename="../client/desktop/settings_tab.ui" line="474"/>
         <source>Recording</source>
         <translation>Запис</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="466"/>
+        <location filename="../client/desktop/settings_tab.ui" line="480"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>Автоматично починати запис сесії при підключенні</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="475"/>
+        <location filename="../client/desktop/settings_tab.ui" line="489"/>
         <source>Write path:</source>
         <translation>Шлях для запису:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="571"/>
+        <location filename="../client/desktop/settings_tab.ui" line="585"/>
         <location filename="../client/desktop/settings_tab.cc" line="129"/>
         <source>Update</source>
         <translation>Оновлення</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="577"/>
+        <location filename="../client/desktop/settings_tab.ui" line="591"/>
         <source>Check for updates on startup</source>
         <translation>Перевіряти оновлення при запуску</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="586"/>
+        <location filename="../client/desktop/settings_tab.ui" line="600"/>
         <source>Update channel:</source>
         <translation>Канал оновлень:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="613"/>
+        <location filename="../client/desktop/settings_tab.ui" line="627"/>
         <source>Check for updates</source>
         <translation>Перевірити оновлення</translation>
     </message>
@@ -7654,48 +7669,48 @@ Credentials imported: %5</source>
         <translation>1 година</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="218"/>
+        <location filename="../client/desktop/settings_tab.cc" line="220"/>
         <source>None</source>
         <translation>Немає</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="243"/>
+        <location filename="../client/desktop/settings_tab.cc" line="245"/>
         <source>Stable</source>
         <translation>Стабільний</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="244"/>
+        <location filename="../client/desktop/settings_tab.cc" line="246"/>
         <source>Beta</source>
         <translation>Бета</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="245"/>
+        <location filename="../client/desktop/settings_tab.cc" line="247"/>
         <source>Alpha</source>
         <translation>Альфа</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="365"/>
+        <location filename="../client/desktop/settings_tab.cc" line="369"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Нова мова буде застосована після перезапуску застосунку.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="414"/>
-        <location filename="../client/desktop/settings_tab.cc" line="492"/>
+        <location filename="../client/desktop/settings_tab.cc" line="418"/>
+        <location filename="../client/desktop/settings_tab.cc" line="496"/>
         <source>Choose path</source>
         <translation>Вибір шляху</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="512"/>
+        <location filename="../client/desktop/settings_tab.cc" line="516"/>
         <source>Change Master Password</source>
         <translation>Зміна майстер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="514"/>
+        <location filename="../client/desktop/settings_tab.cc" line="518"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Введіть свій поточний пароль і виберіть новий.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="522"/>
+        <location filename="../client/desktop/settings_tab.cc" line="526"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не може бути коротшим за %n символ.</numerusform>
@@ -7704,12 +7719,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="529"/>
+        <location filename="../client/desktop/settings_tab.cc" line="533"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введений пароль не відповідає вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="530"/>
+        <location filename="../client/desktop/settings_tab.cc" line="534"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символ.</numerusform>
@@ -7718,22 +7733,22 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="533"/>
+        <location filename="../client/desktop/settings_tab.cc" line="537"/>
         <source>Do you want to enter a different password?</source>
         <translation>Хочете ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="546"/>
+        <location filename="../client/desktop/settings_tab.cc" line="550"/>
         <source>Invalid current password.</source>
         <translation>Невірний поточний пароль.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="550"/>
+        <location filename="../client/desktop/settings_tab.cc" line="554"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Деякі записи бази даних пошкоджено. Виправте або видаліть їх і повторіть спробу.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="554"/>
+        <location filename="../client/desktop/settings_tab.cc" line="558"/>
         <source>Unable to change the password.</source>
         <translation>Не вдалося змінити пароль.</translation>
     </message>
@@ -7741,74 +7756,74 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/settings_util.cc" line="280"/>
+        <location filename="../host/settings_util.cc" line="284"/>
         <source>The configuration was successfully imported.</source>
         <translation>Конфігурацію імпортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="329"/>
+        <location filename="../host/settings_util.cc" line="333"/>
         <source>The configuration was successfully exported.</source>
         <translation>Конфігурацію експортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="339"/>
         <location filename="../host/settings_util.cc" line="343"/>
+        <location filename="../host/settings_util.cc" line="347"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="237"/>
+        <location filename="../host/settings_util.cc" line="241"/>
         <source>Source settings file does not exist.</source>
         <translation>Вихідний файл налаштувань відсутній.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="246"/>
+        <location filename="../host/settings_util.cc" line="250"/>
         <source>Unable to open the source file.</source>
         <translation>Не вдалося відкрити вихідний файл.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="258"/>
+        <location filename="../host/settings_util.cc" line="262"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="340"/>
         <location filename="../host/settings_util.cc" line="344"/>
+        <location filename="../host/settings_util.cc" line="348"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>Поточні налаштування будуть перезаписані. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="340"/>
+        <location filename="../host/settings_util.cc" line="344"/>
         <source>Continue</source>
         <translation>Продовжити</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="356"/>
+        <location filename="../host/settings_util.cc" line="360"/>
         <source>Error</source>
         <translation>Помилка</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="367"/>
+        <location filename="../host/settings_util.cc" line="371"/>
         <source>Aspia</source>
         <translation>Aspia</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="275"/>
+        <location filename="../host/settings_util.cc" line="279"/>
         <source>Unable to write the secure database.</source>
         <translation>Не вдалося записати захищену базу даних.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="295"/>
+        <location filename="../host/settings_util.cc" line="299"/>
         <source>Unable to read the secure database.</source>
         <translation>Не вдалося прочитати захищену базу даних.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="316"/>
+        <location filename="../host/settings_util.cc" line="320"/>
         <source>Unable to open the target file.</source>
         <translation>Не вдалося відкрити цільовий файл.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="324"/>
+        <location filename="../host/settings_util.cc" line="328"/>
         <source>Unable to write the target file.</source>
         <translation>Неможливо записати цільовий файл.</translation>
     </message>
@@ -8088,24 +8103,24 @@ Credentials imported: %5</source>
     <name>Sidebar</name>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="115"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="89"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="126"/>
         <source>Local</source>
         <translation>Локальні</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="114"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="173"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="225"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="151"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="212"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="264"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Не вдалося прочитати дані. Можливо, список застарів.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="526"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="592"/>
         <source>Change Password</source>
         <translation>Змінити пароль</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="534"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="600"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не може бути коротшим за %n символ.</numerusform>
@@ -8114,7 +8129,7 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="535"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="601"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>Пароль не може перевищувати %n символ.</numerusform>
@@ -8123,12 +8138,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="543"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="609"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введений пароль не відповідає вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="544"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="610"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символ.</numerusform>
@@ -8137,51 +8152,51 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="547"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="613"/>
         <source>Do you want to enter a different password?</source>
         <translation>Хочете ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="565"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="631"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>Зміна пароля. Очікування повторного входу в сеанс...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="715"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="829"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити групу &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="728"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="842"/>
         <source>Unable to remove group</source>
         <translation>Не вдалося видалити групу</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="793"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="907"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити маршрутизатор &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1367"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1484"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Група з таким ім&apos;ям вже існує у вибраній батьківській групі.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1357"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1376"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1532"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1474"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1493"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1649"/>
         <source>Failed to move the group.</source>
         <translation>Не вдалося перемістити групу.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1432"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1549"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Хост з таким ім&apos;ям вже існує у вибраній групі.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1423"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1441"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1540"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1558"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1727"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Не вдалося перемістити хост у вибрану групу.</translation>
     </message>
@@ -8189,7 +8204,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterClients</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="170"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="207"/>
         <source>Clients</source>
         <translation>Клієнти</translation>
     </message>
@@ -8197,7 +8212,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="152"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="189"/>
         <source>Approved Hosts</source>
         <translation>Підтверджені хости</translation>
     </message>
@@ -8205,7 +8220,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterRelays</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="179"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="216"/>
         <source>Relays</source>
         <translation>Ретранслятори</translation>
     </message>
@@ -8213,7 +8228,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterTempHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="188"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="225"/>
         <source>Unapproved Hosts</source>
         <translation>Непідтверджені хости</translation>
     </message>
@@ -8221,7 +8236,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterUsers</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="161"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="198"/>
         <source>Users</source>
         <translation>Користувачі</translation>
     </message>
@@ -9302,98 +9317,98 @@ Credentials imported: %5</source>
         <translation>Інші функції</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="249"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="245"/>
         <source>Packages</source>
         <translation>Сокетів</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="252"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="248"/>
         <source>Physical Cores</source>
         <translation>Фізичних ядер</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="251"/>
         <source>Logical Cores</source>
         <translation>Логічних ядер</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="259"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
         <source>Temperature</source>
         <translation>Температура</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="260"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="256"/>
         <source>%1 C</source>
         <translation>%1 C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="278"/>
         <source>L%1 Data Cache</source>
         <translation>Кеш даних L%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
         <source>L%1 Instruction Cache</source>
         <translation>Кеш інструкцій L%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="290"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
         <source>L%1 Cache</source>
         <translation>Кеш L%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="293"/>
         <source>Size</source>
         <translation>Розмір</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="299"/>
         <source>Associativity</source>
         <translation>Асоціативність</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
         <source>Fully associative</source>
         <translation>Повністю асоціативний</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="299"/>
         <source>%1-way</source>
         <translation>%1-канальна</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="302"/>
         <source>Line Size</source>
         <translation>Розмір рядка</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="302"/>
         <source>%1 bytes</source>
         <translation>%1 байт</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="309"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="305"/>
         <source>Sets</source>
         <translation>Наборів</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="308"/>
         <source>Shared By</source>
         <translation>Спільний для</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="308"/>
         <source>%1 threads</source>
         <translation>%1 потоків</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="332"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="332"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
@@ -9402,7 +9417,7 @@ Credentials imported: %5</source>
     <name>SysInfoWidgetDmi</name>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="218"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="832"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="831"/>
         <source>BIOS</source>
         <translation>BIOS</translation>
     </message>
@@ -9444,14 +9459,14 @@ Credentials imported: %5</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="631"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="630"/>
         <source>OEM Strings</source>
         <translation>Рядки OEM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="636"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="635"/>
         <source>Configuration Options</source>
         <translation>Параметри конфігурації</translation>
     </message>
@@ -9503,7 +9518,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="730"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="729"/>
         <source>System Boot</source>
         <translation>Завантаження системи</translation>
     </message>
@@ -9534,1005 +9549,1005 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="747"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="746"/>
         <source>DMI Properties</source>
         <translation>Властивості DMI</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="842"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="841"/>
         <source>Vendor</source>
         <translation>Постачальник</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="845"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="906"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="963"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1029"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1904"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="844"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="905"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="962"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1028"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1903"/>
         <source>Version</source>
         <translation>Версія</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="848"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1916"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="847"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1915"/>
         <source>Release Date</source>
         <translation>Дата випуску</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="852"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="851"/>
         <source>Address</source>
         <translation>Адреса</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="857"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="856"/>
         <source>ROM Size</source>
         <translation>Розмір ROM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="860"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="859"/>
         <source>Revision</source>
         <translation>Ревізія</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="864"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="863"/>
         <source>Firmware Revision</source>
         <translation>Версія прошивки</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="874"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1276"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1875"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="873"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1275"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1874"/>
         <source>Characteristics</source>
         <translation>Характеристики</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="890"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="889"/>
         <source>Board %1</source>
         <translation>Плата %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="900"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="955"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1026"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1553"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1901"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="899"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="954"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1025"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1552"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1900"/>
         <source>Manufacturer</source>
         <translation>Виробник</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="903"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="902"/>
         <source>Product</source>
         <translation>Продукт</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="909"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="966"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1086"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1604"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="908"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="965"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1085"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1603"/>
         <source>Serial Number</source>
         <translation>Серійний номер</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="912"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="969"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1089"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1607"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="911"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="968"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1088"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1606"/>
         <source>Asset Tag</source>
         <translation>Інвентарний номер</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="915"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="914"/>
         <source>Location in Chassis</source>
         <translation>Розташування в корпусі</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="918"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="958"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1035"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1131"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1250"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1305"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1451"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1559"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1651"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="917"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="957"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1034"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1130"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1249"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1304"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1450"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1558"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1650"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
         <source>Hosting Board</source>
         <translation>Несуча плата</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1103"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1873"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1020"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1103"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1873"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1547"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <source>Requires Daughter Board</source>
         <translation>Потрібна дочірня плата</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <source>Removable</source>
         <translation>Знімний</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <source>Replaceable</source>
         <translation>Замінна</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
         <source>Hot Swappable</source>
         <translation>Гаряча заміна</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="929"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="928"/>
         <source>Features</source>
         <translation>Можливості</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="945"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="944"/>
         <source>Chassis %1</source>
         <translation>Корпус %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
         <source>Lock Present</source>
         <translation>Наявність замка</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="972"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="971"/>
         <source>SKU Number</source>
         <translation>Номер SKU</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="975"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="974"/>
         <source>Boot-up State</source>
         <translation>Стан при завантаженні</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="979"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="978"/>
         <source>Power Supply State</source>
         <translation>Стан блока живлення</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="984"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="983"/>
         <source>Thermal State</source>
         <translation>Тепловий стан</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="987"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="986"/>
         <source>Security Status</source>
         <translation>Стан безпеки</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="990"/>
         <source>Height</source>
         <translation>Висота</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="990"/>
         <source>%1 U</source>
         <translation>%1 U</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="994"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="993"/>
         <source>Power Cords</source>
         <translation>Шнури живлення</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1010"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1009"/>
         <source>Processor %1</source>
         <translation>Процесор %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1020"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1547"/>
         <source>Installed</source>
         <translation>Встановлено</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1032"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1031"/>
         <source>Family</source>
         <translation>Сімейство</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1038"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1402"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1454"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1037"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1401"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1453"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1042"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1126"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1041"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1125"/>
         <source>Socket Designation</source>
         <translation>Позначення сокета</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1047"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1046"/>
         <source>Socket</source>
         <translation>Сокет</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1050"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1049"/>
         <source>Socket Type</source>
         <translation>Тип сокета</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1053"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1264"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1919"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1052"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1263"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1918"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1055"/>
         <source>Voltage</source>
         <translation>Напруга</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1055"/>
         <source>%1 V</source>
         <translation>%1 В</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1059"/>
         <source>External Clock</source>
         <translation>Зовнішня частота</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1059"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1064"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1068"/>
         <source>%1 MHz</source>
         <translation>%1 МГц</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1064"/>
         <source>Max Speed</source>
         <translation>Максимальна частота</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1068"/>
         <source>Current Speed</source>
         <translation>Поточна частота</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1074"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1073"/>
         <source>Core Count</source>
         <translation>Кількість ядер</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1077"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1076"/>
         <source>Cores Enabled</source>
         <translation>Ядер увімкнено</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1080"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1079"/>
         <source>Thread Count</source>
         <translation>Кількість потоків</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1083"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1082"/>
         <source>Threads Enabled</source>
         <translation>Потоків увімкнено</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1092"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1601"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1091"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1600"/>
         <source>Part Number</source>
         <translation>Номер партії</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
         <source>64-bit Capable</source>
         <translation>Підтримка 64 біт</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <source>Multi-Core</source>
         <translation>Багатоядерність</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
         <source>Hardware Thread</source>
         <translation>Апаратні потоки</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1097"/>
         <source>Execute Protection</source>
         <translation>Захист виконання</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
         <source>Enhanced Virtualization</source>
         <translation>Розширена віртуалізація</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
         <source>Power/Performance Control</source>
         <translation>Керування живленням/продуктивністю</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1116"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1115"/>
         <source>L%1 Cache</source>
         <translation>Кеш L%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1128"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1127"/>
         <source>Level</source>
         <translation>Рівень</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1134"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1133"/>
         <source>Installed Size</source>
         <translation>Встановлений розмір</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1137"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1136"/>
         <source>Maximum Size</source>
         <translation>Максимальний розмір</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1140"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1399"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1497"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1540"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1139"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1398"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1496"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1539"/>
         <source>Location</source>
         <translation>Розташування</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1143"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1142"/>
         <source>Operational Mode</source>
         <translation>Режим роботи</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1146"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1145"/>
         <source>SRAM Type</source>
         <translation>Тип SRAM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1150"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1149"/>
         <source>Supported SRAM Types</source>
         <translation>Підтримувані типи SRAM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1156"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1155"/>
         <source>Error Correction Type</source>
         <translation>Тип корекції помилок</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1161"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1160"/>
         <source>Associativity</source>
         <translation>Асоціативність</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1164"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1570"/>
         <source>Speed</source>
         <translation>Швидкість</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1164"/>
         <source>%1 ns</source>
         <translation>%1 нс</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
         <source>Enabled</source>
         <translation>Увімкнено</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
         <source>Socketed</source>
         <translation>В сокеті</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1187"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1186"/>
         <source>Port %1</source>
         <translation>Порт %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1197"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1196"/>
         <source>Port Type</source>
         <translation>Тип порту</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1201"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1200"/>
         <source>Internal Designator</source>
         <translation>Внутрішнє позначення</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1207"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1206"/>
         <source>Internal Connector Type</source>
         <translation>Тип внутрішнього роз&apos;єму</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1213"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1212"/>
         <source>External Designator</source>
         <translation>Зовнішнє позначення</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1219"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1218"/>
         <source>External Connector Type</source>
         <translation>Тип зовнішнього роз&apos;єму</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1237"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1236"/>
         <source>Slot %1</source>
         <translation>Слот %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1247"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1246"/>
         <source>Designation</source>
         <translation>Позначення</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1253"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1252"/>
         <source>Data Bus Width</source>
         <translation>Ширина шини даних</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1256"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1255"/>
         <source>Current Usage</source>
         <translation>Поточне використання</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1259"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1258"/>
         <source>Length</source>
         <translation>Довжина</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1262"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1312"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1261"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1311"/>
         <source>Bus Address</source>
         <translation>Адреса шини</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
         <source>5 V Provided</source>
         <translation>Живлення 5 В</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <source>3.3 V Provided</source>
         <translation>Живлення 3.3 В</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <source>Shared</source>
         <translation>Спільний</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <source>PME Signal</source>
         <translation>Сигнал PME</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <source>Hot Plug</source>
         <translation>Гаряче підключення</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <source>SMBus Signal</source>
         <translation>Сигнал SMBus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
         <source>Bifurcation</source>
         <translation>Біфуркація</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1292"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1438"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1530"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1845"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1291"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1437"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1529"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1844"/>
         <source>Device %1</source>
         <translation>Пристрій %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1302"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1396"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1448"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1855"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1301"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1395"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1447"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1854"/>
         <source>Description</source>
         <translation>Опис</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1309"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1308"/>
         <source>Type Instance</source>
         <translation>Екземпляр типу</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1326"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1325"/>
         <source>String %1</source>
         <translation>Рядок %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1340"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1339"/>
         <source>Option %1</source>
         <translation>Параметр %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1358"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1357"/>
         <source>Probe %1</source>
         <translation>Датчик %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1369"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1368"/>
         <source>mV</source>
         <translation>мВ</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1371"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1370"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1373"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1372"/>
         <source>mA</source>
         <translation>мА</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1405"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1404"/>
         <source>Nominal Value</source>
         <translation>Номінальне значення</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1408"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1407"/>
         <source>Maximum Value</source>
         <translation>Максимальне значення</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1411"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1410"/>
         <source>Minimum Value</source>
         <translation>Мінімальне значення</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1414"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1413"/>
         <source>Tolerance</source>
         <translation>Допуск</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1417"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1416"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1678"/>
         <source>Resolution</source>
         <translation>Роздільна здатність</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1421"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1420"/>
         <source>Accuracy</source>
         <translation>Точність</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1458"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1457"/>
         <source>Cooling Unit Group</source>
         <translation>Група охолодження</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1460"/>
         <source>Nominal Speed</source>
         <translation>Номінальна швидкість</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1460"/>
         <source>%1 rpm</source>
         <translation>%1 об/хв</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1471"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1470"/>
         <source>Boot Status</source>
         <translation>Стан завантаження</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1487"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1486"/>
         <source>Array %1</source>
         <translation>Масив %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1500"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1499"/>
         <source>Use</source>
         <translation>Призначення</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1504"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1503"/>
         <source>Error Correction</source>
         <translation>Корекція помилок</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1510"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1509"/>
         <source>Maximum Capacity</source>
         <translation>Максимальна ємність</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1514"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1513"/>
         <source>Number of Devices</source>
         <translation>Кількість пристроїв</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1543"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1542"/>
         <source>Bank</source>
         <translation>Банк</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1556"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1711"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1750"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1555"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1710"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1749"/>
         <source>Size</source>
         <translation>Розмір</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1562"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1561"/>
         <source>Type Detail</source>
         <translation>Деталі типу</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1565"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1564"/>
         <source>Form Factor</source>
         <translation>Форм-фактор</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1568"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1567"/>
         <source>Technology</source>
         <translation>Технологія</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1576"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1570"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
         <source>%1 MT/s</source>
         <translation>%1 MT/s</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1574"/>
         <source>Configured Speed</source>
         <translation>Налаштована швидкість</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1579"/>
         <source>Total Width</source>
         <translation>Повна ширина</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1579"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1582"/>
         <source>%1 bit</source>
         <translation>%1 біт</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1582"/>
         <source>Data Width</source>
         <translation>Ширина даних</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1586"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1585"/>
         <source>Rank</source>
         <translation>Ранг</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1588"/>
         <source>Minimum Voltage</source>
         <translation>Мінімальна напруга</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1597"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1588"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1591"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
         <source>%1 mV</source>
         <translation>%1 мВ</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1591"/>
         <source>Maximum Voltage</source>
         <translation>Максимальна напруга</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1595"/>
         <source>Configured Voltage</source>
         <translation>Налаштована напруга</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1611"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1864"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1610"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1863"/>
         <source>Firmware Version</source>
         <translation>Версія прошивки</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1617"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1616"/>
         <source>Non-volatile Size</source>
         <translation>Розмір енергонезалежної пам&apos;яті</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1623"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1622"/>
         <source>Volatile Size</source>
         <translation>Розмір енергозалежної пам&apos;яті</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1628"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1627"/>
         <source>Cache Size</source>
         <translation>Розмір кешу</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1631"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1630"/>
         <source>Logical Size</source>
         <translation>Логічний розмір</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1641"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1640"/>
         <source>Record %1</source>
         <translation>Запис %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1654"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1653"/>
         <source>Granularity</source>
         <translation>Гранулярність</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1657"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1656"/>
         <source>Operation</source>
         <translation>Операція</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1662"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1661"/>
         <source>Vendor Syndrome</source>
         <translation>Синдром виробника</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1668"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1667"/>
         <source>Memory Array Address</source>
         <translation>Адреса масиву пам&apos;яті</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1674"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1673"/>
         <source>Device Address</source>
         <translation>Адреса пристрою</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1678"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1959"/>
         <source>%1 bytes</source>
         <translation>%1 байт</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1692"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1730"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1691"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1729"/>
         <source>Range %1</source>
         <translation>Діапазон %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1702"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1701"/>
         <source>Array</source>
         <translation>Масив</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1707"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1746"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1706"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1745"/>
         <source>Starting Address</source>
         <translation>Початкова адреса</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1709"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1748"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1708"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1747"/>
         <source>Ending Address</source>
         <translation>Кінцева адреса</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1716"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1715"/>
         <source>Partition Width</source>
         <translation>Ширина розділу</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1741"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1740"/>
         <source>Device</source>
         <translation>Пристрій</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1754"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1753"/>
         <source>Partition Row Position</source>
         <translation>Позиція ряду розділу</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1758"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1757"/>
         <source>Interleave Position</source>
         <translation>Позиція чергування</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1764"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1763"/>
         <source>Interleaved Data Depth</source>
         <translation>Глибина чергування даних</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1779"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1814"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1778"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1813"/>
         <source>Entry %1</source>
         <translation>Елемент %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1789"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1788"/>
         <source>String</source>
         <translation>Рядок</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1792"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1791"/>
         <source>Value</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1795"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1794"/>
         <source>Referenced Handle</source>
         <translation>Посилання на дескриптор</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1797"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1796"/>
         <source>Referenced Offset</source>
         <translation>Зміщення посилання</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1826"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1825"/>
         <source>Processor</source>
         <translation>Процесор</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1829"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1828"/>
         <source>Architecture</source>
         <translation>Архітектура</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1858"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1857"/>
         <source>Vendor ID</source>
         <translation>ID постачальника</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1861"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1860"/>
         <source>Specification Version</source>
         <translation>Версія специфікації</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1867"/>
         <source>Configurable by Firmware</source>
         <translation>Налаштовується прошивкою</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
         <source>Configurable by Software</source>
         <translation>Налаштовується ПЗ</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
         <source>Configurable by OEM</source>
         <translation>Налаштовується OEM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1888"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1887"/>
         <source>Firmware %1</source>
         <translation>Прошивка %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1898"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1897"/>
         <source>Name</source>
         <translation>Ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1907"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1906"/>
         <source>Version Format</source>
         <translation>Формат версії</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1911"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1910"/>
         <source>Lowest Supported Version</source>
         <translation>Мінімальна підтримувана версія</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1921"/>
         <source>ID Format</source>
         <translation>Формат ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1925"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1924"/>
         <source>State</source>
         <translation>Стан</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1928"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1927"/>
         <source>Image Size</source>
         <translation>Розмір образу</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
         <source>Updatable</source>
         <translation>Оновлювана</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <source>Write-protected</source>
         <translation>Захищена від запису</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1937"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1936"/>
         <source>Component %1</source>
         <translation>Компонент %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1942"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1941"/>
         <source>Associated Components</source>
         <translation>Пов&apos;язані компоненти</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1954"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1953"/>
         <source>SMBIOS Version</source>
         <translation>Версія SMBIOS</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1957"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1956"/>
         <source>Structures</source>
         <translation>Структури</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1959"/>
         <source>Structures Size</source>
         <translation>Розмір структур</translation>
     </message>
@@ -10966,17 +10981,17 @@ Credentials imported: %5</source>
         <translation>Підтримувані відеорежими</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="294"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="293"/>
         <source>Digital</source>
         <translation>Цифровий</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="296"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="295"/>
         <source>Analog</source>
         <translation>Аналоговий</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="298"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="297"/>
         <source>Unknown</source>
         <translation>Невідомо</translation>
     </message>
@@ -11183,7 +11198,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="316"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="315"/>
         <source>Charging</source>
         <translation>Заряджається</translation>
     </message>
@@ -11197,7 +11212,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="314"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="313"/>
         <source>Critical</source>
         <translation>Критичний</translation>
     </message>
@@ -11222,33 +11237,33 @@ Credentials imported: %5</source>
         <translation>Батарея #%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="292"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="291"/>
         <source>DC Battery</source>
         <translation>Батарея постійного струму</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="295"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="294"/>
         <source>AC Line</source>
         <translation>Лінія змінного струму</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="298"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="320"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="319"/>
         <source>Unknown</source>
         <translation>Невідомо</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="310"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="309"/>
         <source>High</source>
         <translation>Високий</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="312"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="311"/>
         <source>Low</source>
         <translation>Низький</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="318"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="317"/>
         <source>No Battery</source>
         <translation>Немає батареї</translation>
     </message>

@@ -997,41 +997,41 @@ Routers added: %4</source>
         <translation>無法建立備份。資料庫中有部分記錄已損壞。請修復或刪除這些記錄。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="258"/>
+        <location filename="../client/main.cc" line="257"/>
         <source>Set Master Password</source>
         <translation>設定主密碼</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="260"/>
+        <location filename="../client/main.cc" line="259"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>設定解除鎖定應用程式所需的主密碼。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="268"/>
+        <location filename="../client/main.cc" line="267"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="276"/>
+        <location filename="../client/main.cc" line="275"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>輸入的密碼不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="278"/>
+        <location filename="../client/main.cc" line="277"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼必須包含大小寫字母和數字，且長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="282"/>
+        <location filename="../client/main.cc" line="281"/>
         <source>Do you want to enter a different password?</source>
         <translation>要輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="292"/>
+        <location filename="../client/main.cc" line="291"/>
         <source>Unable to set master password.</source>
         <translation>無法設定主密碼。</translation>
     </message>
@@ -1051,7 +1051,7 @@ Routers added: %4</source>
         <translation>無法建立備份。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="207"/>
+        <location filename="../client/main.cc" line="206"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>用於連線到主機的 aspia:// 連結。</translation>
     </message>
@@ -1071,7 +1071,7 @@ Routers added: %4</source>
         <translation>主密碼無效。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="203"/>
+        <location filename="../client/main.cc" line="202"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -1181,7 +1181,7 @@ Routers added: %4</source>
     <name>ConfigDialog</name>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
-        <location filename="../host/ui/config_dialog.ui" line="154"/>
+        <location filename="../host/ui/config_dialog.ui" line="161"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
@@ -1201,143 +1201,148 @@ Routers added: %4</source>
         <translation>連入通訊埠：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="142"/>
+        <location filename="../host/ui/config_dialog.ui" line="149"/>
         <source>Check for updates</source>
         <translation>檢查更新</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="343"/>
+        <location filename="../host/ui/config_dialog.ui" line="350"/>
         <source>Other</source>
         <translation>其他</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="173"/>
+        <location filename="../host/ui/config_dialog.ui" line="180"/>
         <source>Import settings</source>
         <translation>匯入設定</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="86"/>
+        <location filename="../host/ui/config_dialog.ui" line="83"/>
+        <source>Allow hardware video encoding</source>
+        <translation>允許硬體視訊編碼</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="93"/>
         <source>Updates</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="115"/>
+        <location filename="../host/ui/config_dialog.ui" line="122"/>
         <source>Update channel:</source>
         <translation>更新頻道：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="180"/>
+        <location filename="../host/ui/config_dialog.ui" line="187"/>
         <source>Export settings</source>
         <translation>匯出設定</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="204"/>
+        <location filename="../host/ui/config_dialog.ui" line="211"/>
         <source>Security</source>
         <translation>安全性</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="210"/>
+        <location filename="../host/ui/config_dialog.ui" line="217"/>
         <source>Password Protection of Settings</source>
         <translation>以密碼保護設定</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="229"/>
+        <location filename="../host/ui/config_dialog.ui" line="236"/>
         <source>Change password</source>
         <translation>變更密碼</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="246"/>
+        <location filename="../host/ui/config_dialog.ui" line="253"/>
         <source>One-time Password</source>
         <translation>一次性密碼</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="252"/>
+        <location filename="../host/ui/config_dialog.ui" line="259"/>
         <source>Enable one-time password</source>
         <translation>啟用一次性密碼</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="261"/>
+        <location filename="../host/ui/config_dialog.ui" line="268"/>
         <source>Change password:</source>
         <translation>變更密碼：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="271"/>
+        <location filename="../host/ui/config_dialog.ui" line="278"/>
         <source>Characters:</source>
         <translation>字元：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="281"/>
+        <location filename="../host/ui/config_dialog.ui" line="288"/>
         <source>Characters count:</source>
         <translation>字元長度：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="303"/>
+        <location filename="../host/ui/config_dialog.ui" line="310"/>
         <source>Connection Confirmation</source>
         <translation>連線確認</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="309"/>
+        <location filename="../host/ui/config_dialog.ui" line="316"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>連線到電腦時要求確認</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="318"/>
+        <location filename="../host/ui/config_dialog.ui" line="325"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>在超過此時間後自動接受連線：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="328"/>
+        <location filename="../host/ui/config_dialog.ui" line="335"/>
         <source>If there is no active user:</source>
         <translation>若無正在活動的使用者：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="349"/>
+        <location filename="../host/ui/config_dialog.ui" line="356"/>
         <source>Disable Aspia shutdown</source>
         <translation>停用 Aspia 關閉</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="373"/>
+        <location filename="../host/ui/config_dialog.ui" line="380"/>
         <source>Router</source>
         <translation>路由器</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="379"/>
+        <location filename="../host/ui/config_dialog.ui" line="386"/>
         <source>Enable the use of a router</source>
         <translation>啟用路由器的使用</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="391"/>
+        <location filename="../host/ui/config_dialog.ui" line="398"/>
         <source>Address:</source>
         <translation>位址：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="410"/>
+        <location filename="../host/ui/config_dialog.ui" line="417"/>
         <source>Public Key:</source>
         <translation>公開金鑰：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="424"/>
+        <location filename="../host/ui/config_dialog.ui" line="431"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>當無法直接連線（繞過 NAT）到電腦時，就需要透過路由器進行連接。Aspia 不提供公共路由，但您可以自行搭建。您可從&lt;a href=&quot;https://aspia.org&quot;&gt;官網&lt;/a&gt;下載路由器。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="441"/>
-        <location filename="../host/ui/config_dialog.ui" line="552"/>
+        <location filename="../host/ui/config_dialog.ui" line="448"/>
+        <location filename="../host/ui/config_dialog.ui" line="559"/>
         <source>Users</source>
         <translation>使用者</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="455"/>
+        <location filename="../host/ui/config_dialog.ui" line="462"/>
         <source>Add new user</source>
         <translation>新增使用者</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="481"/>
+        <location filename="../host/ui/config_dialog.ui" line="488"/>
         <source>Edit user</source>
         <translation>編輯使用者</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="507"/>
+        <location filename="../host/ui/config_dialog.ui" line="514"/>
         <source>Delete user</source>
         <translation>刪除使用者</translation>
     </message>
@@ -1347,27 +1352,27 @@ Routers added: %4</source>
         <translation>偏好的視訊擷取器：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="575"/>
+        <location filename="../host/ui/config_dialog.ui" line="582"/>
         <source>Add</source>
         <translation>新增</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="584"/>
+        <location filename="../host/ui/config_dialog.ui" line="591"/>
         <source>Modify</source>
         <translation>修改</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="593"/>
+        <location filename="../host/ui/config_dialog.ui" line="600"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="92"/>
+        <location filename="../host/ui/config_dialog.ui" line="99"/>
         <source>Automatic checking and installation of updates</source>
         <translation>自動檢查並安裝更新</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="101"/>
+        <location filename="../host/ui/config_dialog.ui" line="108"/>
         <source>Check for updates:</source>
         <translation>檢查更新頻率：</translation>
     </message>
@@ -1407,139 +1412,139 @@ Routers added: %4</source>
         <translation>預設</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="188"/>
+        <location filename="../host/ui/config_dialog.cc" line="194"/>
         <source>On reboot</source>
         <translation>重新開機時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="189"/>
+        <location filename="../host/ui/config_dialog.cc" line="195"/>
         <source>Every 5 minutes</source>
         <translation>每 5 分鐘</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="190"/>
+        <location filename="../host/ui/config_dialog.cc" line="196"/>
         <source>Every 30 minutes</source>
         <translation>每 30 分鐘</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="191"/>
+        <location filename="../host/ui/config_dialog.cc" line="197"/>
         <source>Every 1 hour</source>
         <translation>每 1 小時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="192"/>
+        <location filename="../host/ui/config_dialog.cc" line="198"/>
         <source>Every 6 hours</source>
         <translation>每 6 小時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="193"/>
+        <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>Every 12 hours</source>
         <translation>每 12 小時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="201"/>
+        <location filename="../host/ui/config_dialog.cc" line="207"/>
         <source>Letters and digits</source>
         <translation>字母和數字</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="204"/>
+        <location filename="../host/ui/config_dialog.cc" line="210"/>
         <source>Letters</source>
         <translation>字母</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="206"/>
+        <location filename="../host/ui/config_dialog.cc" line="212"/>
         <source>Digits</source>
         <translation>數字</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="223"/>
+        <location filename="../host/ui/config_dialog.cc" line="229"/>
         <source>Never</source>
         <translation>從不</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="224"/>
+        <location filename="../host/ui/config_dialog.cc" line="230"/>
         <source>15 seconds</source>
         <translation>15 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="225"/>
+        <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>30 seconds</source>
         <translation>30 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="226"/>
+        <location filename="../host/ui/config_dialog.cc" line="232"/>
         <source>45 seconds</source>
         <translation>45 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="227"/>
+        <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>60 seconds</source>
         <translation>60 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="235"/>
+        <location filename="../host/ui/config_dialog.cc" line="241"/>
         <source>Accept connection</source>
         <translation>接受連線</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="236"/>
+        <location filename="../host/ui/config_dialog.cc" line="242"/>
         <source>Reject connection</source>
         <translation>拒絕連線</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="435"/>
+        <location filename="../host/ui/config_dialog.cc" line="441"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>確定要刪除使用者「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="462"/>
-        <location filename="../host/ui/config_dialog.cc" line="495"/>
+        <location filename="../host/ui/config_dialog.cc" line="468"/>
+        <location filename="../host/ui/config_dialog.cc" line="501"/>
         <source>An error occurred while processing the password.</source>
         <translation>處理密碼時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="479"/>
+        <location filename="../host/ui/config_dialog.cc" line="485"/>
         <source>Settings storage is unavailable.</source>
         <translation>設定儲存空間無法使用。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="509"/>
+        <location filename="../host/ui/config_dialog.cc" line="515"/>
         <source>Import</source>
         <translation>匯入</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="509"/>
-        <location filename="../host/ui/config_dialog.cc" line="526"/>
+        <location filename="../host/ui/config_dialog.cc" line="515"/>
+        <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON 檔案 (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="526"/>
+        <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>Export</source>
         <translation>匯出</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="551"/>
+        <location filename="../host/ui/config_dialog.cc" line="557"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>無法寫入配置。請確認您有足夠的寫入權限。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="564"/>
+        <location filename="../host/ui/config_dialog.cc" line="570"/>
         <source>Incorrect router address entered.</source>
         <translation>輸入的路由器位址不正確。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="574"/>
+        <location filename="../host/ui/config_dialog.cc" line="580"/>
         <source>Incorrect router public key entered.</source>
         <translation>輸入的路由器公開金鑰不正確。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="730"/>
+        <location filename="../host/ui/config_dialog.cc" line="738"/>
         <source>Install</source>
         <translation>安裝</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="735"/>
+        <location filename="../host/ui/config_dialog.cc" line="743"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
@@ -2598,17 +2603,17 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="954"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="973"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="955"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="974"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="986"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1005"/>
         <source>Could not save image</source>
         <translation>無法儲存影像</translation>
     </message>
@@ -3641,8 +3646,8 @@ Credentials replaced: %2</source>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="607"/>
-        <location filename="../host/main.cc" line="642"/>
+        <location filename="../host/main.cc" line="611"/>
+        <location filename="../host/main.cc" line="646"/>
         <source>Settings storage is unavailable.</source>
         <translation>設定儲存空間無法使用。</translation>
     </message>
@@ -3723,32 +3728,32 @@ Credentials replaced: %2</source>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="544"/>
+        <location filename="../host/main.cc" line="548"/>
         <source>Launch the application hidden.</source>
         <translation>以隱藏方式啟動應用程式。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="546"/>
+        <location filename="../host/main.cc" line="550"/>
         <source>Export parameters to file.</source>
         <translation>將參數匯出到檔案。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
+        <location filename="../host/main.cc" line="552"/>
         <source>Import parameters from file.</source>
         <translation>從檔案匯入參數。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="550"/>
+        <location filename="../host/main.cc" line="554"/>
         <source>Do not display any messages during import and export.</source>
         <translation>匯入和匯出期間不顯示任何訊息。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="552"/>
+        <location filename="../host/main.cc" line="556"/>
         <source>Calling the settings dialog.</source>
         <translation>呼叫設定對話方塊。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="554"/>
+        <location filename="../host/main.cc" line="558"/>
         <source>Calling the security log dialog.</source>
         <translation>呼叫安全性記錄對話方塊。</translation>
     </message>
@@ -3786,8 +3791,8 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
         <location filename="../host/ui/host_window.cc" line="552"/>
-        <location filename="../host/ui/host_window.cc" line="781"/>
-        <location filename="../host/ui/host_window.cc" line="1053"/>
+        <location filename="../host/ui/host_window.cc" line="790"/>
+        <location filename="../host/ui/host_window.cc" line="1062"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
@@ -3803,7 +3808,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
-        <location filename="../host/ui/host_window.cc" line="967"/>
+        <location filename="../host/ui/host_window.cc" line="976"/>
         <source>Router is disabled</source>
         <translation>路由器已停用</translation>
     </message>
@@ -3869,7 +3874,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="329"/>
-        <location filename="../host/ui/host_window.cc" line="744"/>
+        <location filename="../host/ui/host_window.cc" line="753"/>
         <source>Hide</source>
         <translation>隱藏</translation>
     </message>
@@ -3910,7 +3915,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="287"/>
-        <location filename="../host/ui/host_window.cc" line="739"/>
+        <location filename="../host/ui/host_window.cc" line="748"/>
         <source>Show</source>
         <translation>顯示</translation>
     </message>
@@ -3925,42 +3930,42 @@ Credentials replaced: %2</source>
         <translation>螢幕錄製已停止。</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="728"/>
+        <location filename="../host/ui/host_window.cc" line="737"/>
         <source>Settings storage is unavailable.</source>
         <translation>設定儲存空間無法使用。</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="798"/>
+        <location filename="../host/ui/host_window.cc" line="807"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>如果離開 Aspia，在您再次手動開啟電腦或 Aspia 之前，將無法連線到這台電腦。確定要離開應用程式嗎？</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="959"/>
+        <location filename="../host/ui/host_window.cc" line="968"/>
         <source>Not connected to service</source>
         <translation>未連線到服務</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="972"/>
+        <location filename="../host/ui/host_window.cc" line="981"/>
         <source>Connecting to router...</source>
         <translation>正在連線到路由器...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="977"/>
+        <location filename="../host/ui/host_window.cc" line="986"/>
         <source>Connected to router</source>
         <translation>已連線到路由器</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="982"/>
+        <location filename="../host/ui/host_window.cc" line="991"/>
         <source>Connection error</source>
         <translation>連線錯誤</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1050"/>
+        <location filename="../host/ui/host_window.cc" line="1059"/>
         <source>IP addresses:</source>
         <translation>IP 位址：</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1054"/>
+        <location filename="../host/ui/host_window.cc" line="1063"/>
         <source>ID: %1</source>
         <translation>ID：%1</translation>
     </message>
@@ -4124,19 +4129,19 @@ Credentials replaced: %2</source>
         <translation>正在更新狀態...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="156"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="160"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>無法讀取資料。清單可能已過時。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="413"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="417"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n 個子群組</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="414"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="418"/>
         <source>%n child host(s)</source>
         <translation>
             <numerusform>%n 個子主機</numerusform>
@@ -5012,156 +5017,156 @@ Credentials imported: %5</source>
         <translation>自動重新整理狀態</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1003"/>
+        <location filename="../client/desktop/management_tab.cc" line="1034"/>
         <source>(copy)</source>
         <translation>（複製）</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="971"/>
-        <location filename="../client/desktop/management_tab.cc" line="1044"/>
-        <location filename="../client/desktop/management_tab.cc" line="2135"/>
+        <location filename="../client/desktop/management_tab.cc" line="1002"/>
+        <location filename="../client/desktop/management_tab.cc" line="1075"/>
+        <location filename="../client/desktop/management_tab.cc" line="2162"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>無法從本機資料庫取得主機資訊。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1008"/>
+        <location filename="../client/desktop/management_tab.cc" line="1039"/>
         <source>Failed to add the host to the local database.</source>
         <translation>無法將主機加入本機資料庫。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1048"/>
+        <location filename="../client/desktop/management_tab.cc" line="1079"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>確定要刪除主機「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1058"/>
+        <location filename="../client/desktop/management_tab.cc" line="1089"/>
         <source>Unable to remove host</source>
         <translation>無法移除主機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1116"/>
-        <location filename="../client/desktop/management_tab.cc" line="1159"/>
-        <location filename="../client/desktop/management_tab.cc" line="1184"/>
+        <location filename="../client/desktop/management_tab.cc" line="1147"/>
+        <location filename="../client/desktop/management_tab.cc" line="1190"/>
+        <location filename="../client/desktop/management_tab.cc" line="1215"/>
         <source>Copy Row</source>
         <translation>複製列</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1117"/>
-        <location filename="../client/desktop/management_tab.cc" line="1160"/>
-        <location filename="../client/desktop/management_tab.cc" line="1185"/>
+        <location filename="../client/desktop/management_tab.cc" line="1148"/>
+        <location filename="../client/desktop/management_tab.cc" line="1191"/>
+        <location filename="../client/desktop/management_tab.cc" line="1216"/>
         <source>Copy Value</source>
         <translation>複製值</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1284"/>
+        <location filename="../client/desktop/management_tab.cc" line="1315"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>確定要刪除工作區「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1304"/>
+        <location filename="../client/desktop/management_tab.cc" line="1335"/>
         <source>Failed to delete the workspace.</source>
         <translation>無法刪除工作區。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1399"/>
+        <location filename="../client/desktop/management_tab.cc" line="1430"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>確定要刪除群組「%1」嗎？指派給此群組或其子群組的主機將被移至工作區根目錄。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1418"/>
+        <location filename="../client/desktop/management_tab.cc" line="1449"/>
         <source>Failed to delete the group.</source>
         <translation>無法刪除群組。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1457"/>
+        <location filename="../client/desktop/management_tab.cc" line="1488"/>
         <source>Import Old Address Book</source>
         <translation>匯入舊版通訊錄</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1458"/>
+        <location filename="../client/desktop/management_tab.cc" line="1489"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>通訊錄 (*.aab);;所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1481"/>
-        <location filename="../client/desktop/management_tab.cc" line="1538"/>
+        <location filename="../client/desktop/management_tab.cc" line="1512"/>
+        <location filename="../client/desktop/management_tab.cc" line="1569"/>
         <source>The database is not available.</source>
         <translation>資料庫無法使用。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1487"/>
+        <location filename="../client/desktop/management_tab.cc" line="1518"/>
         <source>Create Backup</source>
         <translation>建立備份</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1504"/>
+        <location filename="../client/desktop/management_tab.cc" line="1535"/>
         <source>There is nothing to save.</source>
         <translation>沒有可儲存的內容。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2130"/>
+        <location filename="../client/desktop/management_tab.cc" line="2157"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>主機的資料已損壞。請編輯主機並重新輸入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2151"/>
+        <location filename="../client/desktop/management_tab.cc" line="2178"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>路由器的資料已損壞。請編輯路由器並重新輸入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1516"/>
+        <location filename="../client/desktop/management_tab.cc" line="1547"/>
         <source>Failed to create the backup.</source>
         <translation>無法建立備份。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1544"/>
-        <location filename="../client/desktop/management_tab.cc" line="1570"/>
+        <location filename="../client/desktop/management_tab.cc" line="1575"/>
+        <location filename="../client/desktop/management_tab.cc" line="1601"/>
         <source>Restore from Backup</source>
         <translation>從備份還原</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1553"/>
+        <location filename="../client/desktop/management_tab.cc" line="1584"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>目前儲存的所有內容都將被刪除，並以備份中的內容取代。要繼續嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1572"/>
+        <location filename="../client/desktop/management_tab.cc" line="1603"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>此備份是在另一個安裝上建立的。請輸入該處使用的主密碼。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1597"/>
+        <location filename="../client/desktop/management_tab.cc" line="1628"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>備份中沒有資料，因此未做任何變更。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1605"/>
+        <location filename="../client/desktop/management_tab.cc" line="1636"/>
         <source>The file is not a valid backup.</source>
         <translation>此檔案不是有效的備份。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1609"/>
+        <location filename="../client/desktop/management_tab.cc" line="1640"/>
         <source>Failed to restore from the backup.</source>
         <translation>無法從備份還原。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1488"/>
-        <location filename="../client/desktop/management_tab.cc" line="1545"/>
+        <location filename="../client/desktop/management_tab.cc" line="1519"/>
+        <location filename="../client/desktop/management_tab.cc" line="1576"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia 備份 (*.aspia-backup);;所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1508"/>
+        <location filename="../client/desktop/management_tab.cc" line="1539"/>
         <source>Unable to write the file.</source>
         <translation>無法寫入檔案。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1601"/>
+        <location filename="../client/desktop/management_tab.cc" line="1632"/>
         <source>Unable to read the file.</source>
         <translation>無法讀取檔案。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1521"/>
+        <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5176,22 +5181,22 @@ Credentials exported: %5</source>
 已匯出認證：%5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1512"/>
+        <location filename="../client/desktop/management_tab.cc" line="1543"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>資料庫中有部分記錄已損壞。請修復或刪除這些記錄後再試一次。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1589"/>
+        <location filename="../client/desktop/management_tab.cc" line="1620"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>無法使用指定的密碼解密檔案。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1593"/>
+        <location filename="../client/desktop/management_tab.cc" line="1624"/>
         <source>Unsupported file format version.</source>
         <translation>不支援的檔案格式版本。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1614"/>
+        <location filename="../client/desktop/management_tab.cc" line="1645"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5206,29 +5211,29 @@ Credentials imported: %5</source>
 已匯入認證：%5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2058"/>
-        <location filename="../client/desktop/management_tab.cc" line="2089"/>
+        <location filename="../client/desktop/management_tab.cc" line="2085"/>
+        <location filename="../client/desktop/management_tab.cc" line="2116"/>
         <source>Copy Link</source>
         <translation>複製連結</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2077"/>
-        <location filename="../client/desktop/management_tab.cc" line="2111"/>
+        <location filename="../client/desktop/management_tab.cc" line="2104"/>
+        <location filename="../client/desktop/management_tab.cc" line="2138"/>
         <source>Unable to create a link for this host.</source>
         <translation>無法為此主機建立連結。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2152"/>
+        <location filename="../client/desktop/management_tab.cc" line="2179"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>與此主機關聯的路由器已被刪除。請編輯主機以選擇其他路由器，或改用直接連線。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2159"/>
+        <location filename="../client/desktop/management_tab.cc" line="2186"/>
         <source>The host has an invalid host ID.</source>
         <translation>主機的 ID 無效。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2168"/>
+        <location filename="../client/desktop/management_tab.cc" line="2195"/>
         <source>The host has an incorrect address.</source>
         <translation>主機的位址不正確。</translation>
     </message>
@@ -5892,37 +5897,37 @@ Credentials imported: %5</source>
 <context>
     <name>RouterClientsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="230"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="230"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 檔案 (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="238"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="241"/>
         <source>Could not open file for writing.</source>
         <translation>無法開啟檔案進行寫入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="273"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="276"/>
         <source>Unable to write file.</source>
         <translation>無法寫入檔案。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="310"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="313"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>確定要中斷用戶端「%1」的連線嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="335"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="338"/>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>確定要中斷所有用戶端的連線嗎？</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="496"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="499"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>%n 個用戶端</numerusform>
@@ -6310,7 +6315,7 @@ Credentials imported: %5</source>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="440"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="441"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n 個主機</numerusform>
@@ -6390,32 +6395,32 @@ Credentials imported: %5</source>
         <translation>註解：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="133"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="140"/>
         <source>Failed to get list of groups.</source>
         <translation>無法取得群組清單。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="207"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="214"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>請同時輸入使用者名稱和密碼，或兩者都留空。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="220"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="227"/>
         <source>Failed to save the credentials.</source>
         <translation>無法儲存認證。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="243"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="257"/>
         <source>Failed to read the list of credentials.</source>
         <translation>無法讀取認證清單。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="289"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="303"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>無法讀取主機的認證。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="294"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="308"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>主機的認證已損壞。請重新輸入。</translation>
     </message>
@@ -6505,44 +6510,44 @@ Credentials imported: %5</source>
         <translation>每頁項目數：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="345"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="356"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>確定要中斷主機「%1」的連線嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="370"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="381"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>確定要中斷所有主機的連線嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="394"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="405"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>刪除主機將會刪除其連線到路由器的所有設定，且主機上的應用程式將被解除安裝。此操作無法復原。確定要繼續嗎？</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="677"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="688"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n 個主機</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="719"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="730"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="719"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="730"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 檔案 (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="730"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="741"/>
         <source>Could not open file for writing.</source>
         <translation>無法開啟檔案進行寫入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="777"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="788"/>
         <source>Unable to write file.</source>
         <translation>無法寫入檔案。</translation>
     </message>
@@ -6550,57 +6555,57 @@ Credentials imported: %5</source>
 <context>
     <name>RouterRelaysWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="246"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="246"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 檔案 (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="252"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="257"/>
         <source>Could not open file for writing.</source>
         <translation>無法開啟檔案進行寫入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="314"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="319"/>
         <source>Unable to write file.</source>
         <translation>無法寫入檔案。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="351"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="356"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
         <translation>確定要中斷中繼伺服器「%1」的連線嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="376"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="381"/>
         <source>Are you sure you want to disconnect all relays?</source>
         <translation>確定要中斷所有中繼伺服器的連線嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="429"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="434"/>
         <source>Disconnect</source>
         <translation>中斷連線</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="431"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="436"/>
         <source>Copy Row</source>
         <translation>複製列</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="432"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="437"/>
         <source>Copy Value</source>
         <translation>複製值</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="441"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="446"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>確定要中斷節點「%1」的連線嗎？</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="593"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="598"/>
         <source>%n relay(s)</source>
         <translation>
             <numerusform>%n 個中繼伺服器</numerusform>
@@ -6665,37 +6670,37 @@ Credentials imported: %5</source>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="60"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="63"/>
         <source>Previous</source>
         <translation>上一頁</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="61"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="64"/>
         <source>Previous page</source>
         <translation>上一頁</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="68"/>
         <source>Next</source>
         <translation>下一頁</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="66"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="69"/>
         <source>Next page</source>
         <translation>下一頁</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="84"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="87"/>
         <source>Items per page:</source>
         <translation>每頁項目數：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="186"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="189"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
         <translation>核准主機將授予其永久存取路由器的權限。確定要核准主機「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="237"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="240"/>
         <source>Failed to approve the host.</source>
         <translation>無法核准主機。</translation>
     </message>
@@ -7123,27 +7128,27 @@ Credentials imported: %5</source>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="294"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="295"/>
         <source>Previous</source>
         <translation>上一頁</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="295"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous page</source>
         <translation>上一頁</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="301"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
         <source>Next</source>
         <translation>下一頁</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next page</source>
         <translation>下一頁</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/search_widget.cc" line="805"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="806"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>%n 個結果</numerusform>
@@ -7466,48 +7471,58 @@ Credentials imported: %5</source>
         <translation>傳送按鍵組合</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="424"/>
+        <location filename="../client/desktop/settings_tab.ui" line="415"/>
+        <source>Allow hardware video encoding</source>
+        <translation>允許硬體視訊編碼</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="422"/>
+        <source>Allow hardware video decoding</source>
+        <translation>允許硬體視訊解碼</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="438"/>
         <source>Screen</source>
         <translation>畫面</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="432"/>
+        <location filename="../client/desktop/settings_tab.ui" line="446"/>
         <source>Preferred resolution:</source>
         <translation>偏好的解析度：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="460"/>
+        <location filename="../client/desktop/settings_tab.ui" line="474"/>
         <source>Recording</source>
         <translation>錄製</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="466"/>
+        <location filename="../client/desktop/settings_tab.ui" line="480"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>連線時自動開始錄製工作階段</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="475"/>
+        <location filename="../client/desktop/settings_tab.ui" line="489"/>
         <source>Write path:</source>
         <translation>寫入路徑：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="571"/>
+        <location filename="../client/desktop/settings_tab.ui" line="585"/>
         <location filename="../client/desktop/settings_tab.cc" line="129"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="577"/>
+        <location filename="../client/desktop/settings_tab.ui" line="591"/>
         <source>Check for updates on startup</source>
         <translation>啟動時檢查更新</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="586"/>
+        <location filename="../client/desktop/settings_tab.ui" line="600"/>
         <source>Update channel:</source>
         <translation>更新頻道：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="613"/>
+        <location filename="../client/desktop/settings_tab.ui" line="627"/>
         <source>Check for updates</source>
         <translation>檢查更新</translation>
     </message>
@@ -7577,82 +7592,82 @@ Credentials imported: %5</source>
         <translation>1 小時</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="218"/>
+        <location filename="../client/desktop/settings_tab.cc" line="220"/>
         <source>None</source>
         <translation>無</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="243"/>
+        <location filename="../client/desktop/settings_tab.cc" line="245"/>
         <source>Stable</source>
         <translation>穩定版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="244"/>
+        <location filename="../client/desktop/settings_tab.cc" line="246"/>
         <source>Beta</source>
         <translation>測試版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="245"/>
+        <location filename="../client/desktop/settings_tab.cc" line="247"/>
         <source>Alpha</source>
         <translation>早期測試版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="365"/>
+        <location filename="../client/desktop/settings_tab.cc" line="369"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>新語言將在應用程式重新啟動後套用。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="414"/>
-        <location filename="../client/desktop/settings_tab.cc" line="492"/>
+        <location filename="../client/desktop/settings_tab.cc" line="418"/>
+        <location filename="../client/desktop/settings_tab.cc" line="496"/>
         <source>Choose path</source>
         <translation>選擇路徑</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="512"/>
+        <location filename="../client/desktop/settings_tab.cc" line="516"/>
         <source>Change Master Password</source>
         <translation>變更主密碼</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="514"/>
+        <location filename="../client/desktop/settings_tab.cc" line="518"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>輸入您目前的密碼並選擇新密碼。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="522"/>
+        <location filename="../client/desktop/settings_tab.cc" line="526"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="529"/>
+        <location filename="../client/desktop/settings_tab.cc" line="533"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>輸入的密碼不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="530"/>
+        <location filename="../client/desktop/settings_tab.cc" line="534"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼必須包含大小寫字母和數字，且長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="533"/>
+        <location filename="../client/desktop/settings_tab.cc" line="537"/>
         <source>Do you want to enter a different password?</source>
         <translation>要輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="546"/>
+        <location filename="../client/desktop/settings_tab.cc" line="550"/>
         <source>Invalid current password.</source>
         <translation>目前密碼無效。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="550"/>
+        <location filename="../client/desktop/settings_tab.cc" line="554"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>資料庫中有部分記錄已損壞。請修復或刪除這些記錄後再試一次。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="554"/>
+        <location filename="../client/desktop/settings_tab.cc" line="558"/>
         <source>Unable to change the password.</source>
         <translation>無法變更密碼。</translation>
     </message>
@@ -7660,74 +7675,74 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/settings_util.cc" line="280"/>
+        <location filename="../host/settings_util.cc" line="284"/>
         <source>The configuration was successfully imported.</source>
         <translation>配置已成功匯入。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="329"/>
+        <location filename="../host/settings_util.cc" line="333"/>
         <source>The configuration was successfully exported.</source>
         <translation>配置已成功匯出。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="339"/>
         <location filename="../host/settings_util.cc" line="343"/>
+        <location filename="../host/settings_util.cc" line="347"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="237"/>
+        <location filename="../host/settings_util.cc" line="241"/>
         <source>Source settings file does not exist.</source>
         <translation>原始設定檔案不存在。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="246"/>
+        <location filename="../host/settings_util.cc" line="250"/>
         <source>Unable to open the source file.</source>
         <translation>無法開啟原始檔案。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="258"/>
+        <location filename="../host/settings_util.cc" line="262"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>無法讀取原始檔：檔案已損壞或使用未知格式。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="340"/>
         <location filename="../host/settings_util.cc" line="344"/>
+        <location filename="../host/settings_util.cc" line="348"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>目前的設定將被覆蓋，是否繼續？</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="340"/>
+        <location filename="../host/settings_util.cc" line="344"/>
         <source>Continue</source>
         <translation>繼續</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="356"/>
+        <location filename="../host/settings_util.cc" line="360"/>
         <source>Error</source>
         <translation>錯誤</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="367"/>
+        <location filename="../host/settings_util.cc" line="371"/>
         <source>Aspia</source>
         <translation>Aspia</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="275"/>
+        <location filename="../host/settings_util.cc" line="279"/>
         <source>Unable to write the secure database.</source>
         <translation>無法寫入安全資料庫。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="295"/>
+        <location filename="../host/settings_util.cc" line="299"/>
         <source>Unable to read the secure database.</source>
         <translation>無法讀取安全資料庫。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="316"/>
+        <location filename="../host/settings_util.cc" line="320"/>
         <source>Unable to open the target file.</source>
         <translation>無法開啟目標檔案。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="324"/>
+        <location filename="../host/settings_util.cc" line="328"/>
         <source>Unable to write the target file.</source>
         <translation>無法寫入到目標檔案。</translation>
     </message>
@@ -8007,94 +8022,94 @@ Credentials imported: %5</source>
     <name>Sidebar</name>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="115"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="89"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="126"/>
         <source>Local</source>
         <translation>本機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="114"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="173"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="225"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="151"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="212"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="264"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>無法讀取資料。清單可能已過時。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="526"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="592"/>
         <source>Change Password</source>
         <translation>變更密碼</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="534"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="600"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="535"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="601"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>密碼不能超過 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="543"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="609"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>輸入的密碼不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="544"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="610"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼必須包含大小寫字母和數字，且長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="547"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="613"/>
         <source>Do you want to enter a different password?</source>
         <translation>要輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="565"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="631"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>正在變更密碼。正在等待工作階段重新登入...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="715"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="829"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>確定要刪除群組「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="728"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="842"/>
         <source>Unable to remove group</source>
         <translation>無法移除群組</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="793"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="907"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>確定要刪除路由器「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1367"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1484"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>所選的父群組中已存在同名群組。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1357"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1376"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1532"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1474"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1493"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1649"/>
         <source>Failed to move the group.</source>
         <translation>無法移動群組。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1432"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1549"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>所選群組中已存在同名主機。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1423"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1441"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1540"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1558"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1727"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>無法將主機移至所選群組。</translation>
     </message>
@@ -8102,7 +8117,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterClients</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="170"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="207"/>
         <source>Clients</source>
         <translation>用戶端</translation>
     </message>
@@ -8110,7 +8125,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="152"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="189"/>
         <source>Approved Hosts</source>
         <translation>已核准的主機</translation>
     </message>
@@ -8118,7 +8133,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterRelays</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="179"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="216"/>
         <source>Relays</source>
         <translation>中繼伺服器</translation>
     </message>
@@ -8126,7 +8141,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterTempHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="188"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="225"/>
         <source>Unapproved Hosts</source>
         <translation>未核准的主機</translation>
     </message>
@@ -8134,7 +8149,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterUsers</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="161"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="198"/>
         <source>Users</source>
         <translation>使用者</translation>
     </message>
@@ -9215,98 +9230,98 @@ Credentials imported: %5</source>
         <translation>其他功能</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="249"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="245"/>
         <source>Packages</source>
         <translation>處理器插槽</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="252"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="248"/>
         <source>Physical Cores</source>
         <translation>實體核心</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="251"/>
         <source>Logical Cores</source>
         <translation>邏輯核心</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="259"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
         <source>Temperature</source>
         <translation>溫度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="260"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="256"/>
         <source>%1 C</source>
         <translation>%1 C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="278"/>
         <source>L%1 Data Cache</source>
         <translation>L%1 資料快取</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
         <source>L%1 Instruction Cache</source>
         <translation>L%1 指令快取</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="290"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
         <source>L%1 Cache</source>
         <translation>L%1 快取</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="293"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="299"/>
         <source>Associativity</source>
         <translation>關聯性</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
         <source>Fully associative</source>
         <translation>全關聯</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="299"/>
         <source>%1-way</source>
         <translation>%1 路</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="302"/>
         <source>Line Size</source>
         <translation>行大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="302"/>
         <source>%1 bytes</source>
         <translation>%1 位元組</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="309"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="305"/>
         <source>Sets</source>
         <translation>集合</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="308"/>
         <source>Shared By</source>
         <translation>共用者</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="308"/>
         <source>%1 threads</source>
         <translation>%1 個執行緒</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="332"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="332"/>
         <source>No</source>
         <translation>否</translation>
     </message>
@@ -9315,7 +9330,7 @@ Credentials imported: %5</source>
     <name>SysInfoWidgetDmi</name>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="218"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="832"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="831"/>
         <source>BIOS</source>
         <translation>BIOS</translation>
     </message>
@@ -9357,14 +9372,14 @@ Credentials imported: %5</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="631"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="630"/>
         <source>OEM Strings</source>
         <translation>OEM 字串</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="636"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="635"/>
         <source>Configuration Options</source>
         <translation>組態選項</translation>
     </message>
@@ -9416,7 +9431,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="730"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="729"/>
         <source>System Boot</source>
         <translation>系統開機</translation>
     </message>
@@ -9447,1005 +9462,1005 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="747"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="746"/>
         <source>DMI Properties</source>
         <translation>DMI 內容</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="842"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="841"/>
         <source>Vendor</source>
         <translation>廠商</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="845"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="906"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="963"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1029"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1904"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="844"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="905"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="962"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1028"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1903"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="848"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1916"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="847"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1915"/>
         <source>Release Date</source>
         <translation>發行日期</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="852"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="851"/>
         <source>Address</source>
         <translation>位址</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="857"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="856"/>
         <source>ROM Size</source>
         <translation>ROM 大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="860"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="859"/>
         <source>Revision</source>
         <translation>修訂版本</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="864"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="863"/>
         <source>Firmware Revision</source>
         <translation>韌體修訂版本</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="874"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1276"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1875"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="873"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1275"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1874"/>
         <source>Characteristics</source>
         <translation>特性</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="890"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="889"/>
         <source>Board %1</source>
         <translation>主機板 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="900"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="955"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1026"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1553"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1901"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="899"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="954"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1025"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1552"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1900"/>
         <source>Manufacturer</source>
         <translation>製造商</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="903"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="902"/>
         <source>Product</source>
         <translation>產品</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="909"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="966"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1086"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1604"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="908"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="965"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1085"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1603"/>
         <source>Serial Number</source>
         <translation>序號</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="912"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="969"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1089"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1607"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="911"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="968"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1088"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1606"/>
         <source>Asset Tag</source>
         <translation>資產標籤</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="915"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="914"/>
         <source>Location in Chassis</source>
         <translation>機殼內位置</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="918"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="958"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1035"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1131"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1250"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1305"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1451"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1559"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1651"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="917"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="957"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1034"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1130"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1249"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1304"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1450"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1558"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1650"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
         <source>Hosting Board</source>
         <translation>承載板</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1103"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1873"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1020"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1103"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1873"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1547"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <source>Requires Daughter Board</source>
         <translation>需要子板</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <source>Removable</source>
         <translation>可移除</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <source>Replaceable</source>
         <translation>可更換</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
         <source>Hot Swappable</source>
         <translation>支援熱交換</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="929"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="928"/>
         <source>Features</source>
         <translation>功能</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="945"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="944"/>
         <source>Chassis %1</source>
         <translation>機殼 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
         <source>Lock Present</source>
         <translation>具有鎖</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="972"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="971"/>
         <source>SKU Number</source>
         <translation>SKU 編號</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="975"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="974"/>
         <source>Boot-up State</source>
         <translation>開機時狀態</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="979"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="978"/>
         <source>Power Supply State</source>
         <translation>電源供應器狀態</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="984"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="983"/>
         <source>Thermal State</source>
         <translation>散熱狀態</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="987"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="986"/>
         <source>Security Status</source>
         <translation>安全性狀態</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="990"/>
         <source>Height</source>
         <translation>高度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="990"/>
         <source>%1 U</source>
         <translation>%1 U</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="994"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="993"/>
         <source>Power Cords</source>
         <translation>電源線</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1010"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1009"/>
         <source>Processor %1</source>
         <translation>處理器 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1020"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1547"/>
         <source>Installed</source>
         <translation>已安裝</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1032"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1031"/>
         <source>Family</source>
         <translation>系列</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1038"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1402"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1454"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1037"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1401"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1453"/>
         <source>Status</source>
         <translation>狀態</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1042"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1126"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1041"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1125"/>
         <source>Socket Designation</source>
         <translation>插槽標示</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1047"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1046"/>
         <source>Socket</source>
         <translation>插槽</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1050"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1049"/>
         <source>Socket Type</source>
         <translation>插槽類型</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1053"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1264"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1919"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1052"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1263"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1918"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1055"/>
         <source>Voltage</source>
         <translation>電壓</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1055"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1059"/>
         <source>External Clock</source>
         <translation>外部時脈</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1059"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1064"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1068"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1064"/>
         <source>Max Speed</source>
         <translation>最高速度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1068"/>
         <source>Current Speed</source>
         <translation>目前速度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1074"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1073"/>
         <source>Core Count</source>
         <translation>核心數量</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1077"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1076"/>
         <source>Cores Enabled</source>
         <translation>已啟用核心</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1080"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1079"/>
         <source>Thread Count</source>
         <translation>執行緒數量</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1083"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1082"/>
         <source>Threads Enabled</source>
         <translation>已啟用執行緒</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1092"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1601"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1091"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1600"/>
         <source>Part Number</source>
         <translation>零件編號</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
         <source>64-bit Capable</source>
         <translation>支援 64 位元</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <source>Multi-Core</source>
         <translation>多核心</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
         <source>Hardware Thread</source>
         <translation>硬體執行緒</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1097"/>
         <source>Execute Protection</source>
         <translation>執行保護</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
         <source>Enhanced Virtualization</source>
         <translation>增強虛擬化</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
         <source>Power/Performance Control</source>
         <translation>電源/效能控制</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1116"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1115"/>
         <source>L%1 Cache</source>
         <translation>L%1 快取</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1128"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1127"/>
         <source>Level</source>
         <translation>層級</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1134"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1133"/>
         <source>Installed Size</source>
         <translation>已安裝大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1137"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1136"/>
         <source>Maximum Size</source>
         <translation>最大大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1140"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1399"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1497"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1540"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1139"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1398"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1496"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1539"/>
         <source>Location</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1143"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1142"/>
         <source>Operational Mode</source>
         <translation>運作模式</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1146"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1145"/>
         <source>SRAM Type</source>
         <translation>SRAM 類型</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1150"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1149"/>
         <source>Supported SRAM Types</source>
         <translation>支援的 SRAM 類型</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1156"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1155"/>
         <source>Error Correction Type</source>
         <translation>錯誤修正類型</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1161"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1160"/>
         <source>Associativity</source>
         <translation>關聯性</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1164"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1570"/>
         <source>Speed</source>
         <translation>速度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1164"/>
         <source>%1 ns</source>
         <translation>%1 ns</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
         <source>Enabled</source>
         <translation>已啟用</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
         <source>Socketed</source>
         <translation>已插入插槽</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1187"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1186"/>
         <source>Port %1</source>
         <translation>連接埠 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1197"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1196"/>
         <source>Port Type</source>
         <translation>連接埠類型</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1201"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1200"/>
         <source>Internal Designator</source>
         <translation>內部標示</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1207"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1206"/>
         <source>Internal Connector Type</source>
         <translation>內部接頭類型</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1213"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1212"/>
         <source>External Designator</source>
         <translation>外部標示</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1219"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1218"/>
         <source>External Connector Type</source>
         <translation>外部接頭類型</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1237"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1236"/>
         <source>Slot %1</source>
         <translation>插槽 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1247"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1246"/>
         <source>Designation</source>
         <translation>標示</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1253"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1252"/>
         <source>Data Bus Width</source>
         <translation>資料匯流排寬度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1256"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1255"/>
         <source>Current Usage</source>
         <translation>目前使用狀況</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1259"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1258"/>
         <source>Length</source>
         <translation>長度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1262"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1312"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1261"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1311"/>
         <source>Bus Address</source>
         <translation>匯流排位址</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
         <source>5 V Provided</source>
         <translation>提供 5 V</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <source>3.3 V Provided</source>
         <translation>提供 3.3 V</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <source>Shared</source>
         <translation>共用</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <source>PME Signal</source>
         <translation>PME 訊號</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <source>Hot Plug</source>
         <translation>熱插拔</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <source>SMBus Signal</source>
         <translation>SMBus 訊號</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
         <source>Bifurcation</source>
         <translation>通道分割</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1292"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1438"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1530"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1845"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1291"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1437"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1529"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1844"/>
         <source>Device %1</source>
         <translation>裝置 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1302"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1396"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1448"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1855"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1301"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1395"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1447"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1854"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1309"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1308"/>
         <source>Type Instance</source>
         <translation>類型執行個體</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1326"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1325"/>
         <source>String %1</source>
         <translation>字串 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1340"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1339"/>
         <source>Option %1</source>
         <translation>選項 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1358"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1357"/>
         <source>Probe %1</source>
         <translation>感測器 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1369"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1368"/>
         <source>mV</source>
         <translation>mV</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1371"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1370"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1373"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1372"/>
         <source>mA</source>
         <translation>mA</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1405"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1404"/>
         <source>Nominal Value</source>
         <translation>標稱值</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1408"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1407"/>
         <source>Maximum Value</source>
         <translation>最大值</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1411"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1410"/>
         <source>Minimum Value</source>
         <translation>最小值</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1414"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1413"/>
         <source>Tolerance</source>
         <translation>公差</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1417"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1416"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1678"/>
         <source>Resolution</source>
         <translation>解析度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1421"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1420"/>
         <source>Accuracy</source>
         <translation>精確度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1458"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1457"/>
         <source>Cooling Unit Group</source>
         <translation>散熱單元群組</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1460"/>
         <source>Nominal Speed</source>
         <translation>標稱速度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1460"/>
         <source>%1 rpm</source>
         <translation>%1 rpm</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1471"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1470"/>
         <source>Boot Status</source>
         <translation>開機狀態</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1487"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1486"/>
         <source>Array %1</source>
         <translation>陣列 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1500"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1499"/>
         <source>Use</source>
         <translation>用途</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1504"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1503"/>
         <source>Error Correction</source>
         <translation>錯誤修正</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1510"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1509"/>
         <source>Maximum Capacity</source>
         <translation>最大容量</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1514"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1513"/>
         <source>Number of Devices</source>
         <translation>裝置數量</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1543"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1542"/>
         <source>Bank</source>
         <translation>記憶體庫</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1556"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1711"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1750"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1555"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1710"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1749"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1562"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1561"/>
         <source>Type Detail</source>
         <translation>類型詳細資料</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1565"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1564"/>
         <source>Form Factor</source>
         <translation>尺寸規格</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1568"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1567"/>
         <source>Technology</source>
         <translation>技術</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1576"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1570"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
         <source>%1 MT/s</source>
         <translation>%1 MT/s</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1574"/>
         <source>Configured Speed</source>
         <translation>設定的速度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1579"/>
         <source>Total Width</source>
         <translation>總寬度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1579"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1582"/>
         <source>%1 bit</source>
         <translation>%1 位元</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1582"/>
         <source>Data Width</source>
         <translation>資料寬度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1586"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1585"/>
         <source>Rank</source>
         <translation>排數</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1588"/>
         <source>Minimum Voltage</source>
         <translation>最小電壓</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1597"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1588"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1591"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
         <source>%1 mV</source>
         <translation>%1 mV</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1591"/>
         <source>Maximum Voltage</source>
         <translation>最大電壓</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1595"/>
         <source>Configured Voltage</source>
         <translation>設定的電壓</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1611"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1864"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1610"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1863"/>
         <source>Firmware Version</source>
         <translation>韌體版本</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1617"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1616"/>
         <source>Non-volatile Size</source>
         <translation>非揮發性大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1623"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1622"/>
         <source>Volatile Size</source>
         <translation>揮發性大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1628"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1627"/>
         <source>Cache Size</source>
         <translation>快取大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1631"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1630"/>
         <source>Logical Size</source>
         <translation>邏輯大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1641"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1640"/>
         <source>Record %1</source>
         <translation>記錄 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1654"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1653"/>
         <source>Granularity</source>
         <translation>精細度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1657"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1656"/>
         <source>Operation</source>
         <translation>操作</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1662"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1661"/>
         <source>Vendor Syndrome</source>
         <translation>廠商症狀碼</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1668"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1667"/>
         <source>Memory Array Address</source>
         <translation>記憶體陣列位址</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1674"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1673"/>
         <source>Device Address</source>
         <translation>裝置位址</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1678"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1959"/>
         <source>%1 bytes</source>
         <translation>%1 位元組</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1692"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1730"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1691"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1729"/>
         <source>Range %1</source>
         <translation>範圍 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1702"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1701"/>
         <source>Array</source>
         <translation>陣列</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1707"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1746"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1706"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1745"/>
         <source>Starting Address</source>
         <translation>開始位址</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1709"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1748"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1708"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1747"/>
         <source>Ending Address</source>
         <translation>結束位址</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1716"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1715"/>
         <source>Partition Width</source>
         <translation>分割區寬度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1741"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1740"/>
         <source>Device</source>
         <translation>裝置</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1754"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1753"/>
         <source>Partition Row Position</source>
         <translation>分割區列位置</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1758"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1757"/>
         <source>Interleave Position</source>
         <translation>交錯位置</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1764"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1763"/>
         <source>Interleaved Data Depth</source>
         <translation>交錯資料深度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1779"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1814"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1778"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1813"/>
         <source>Entry %1</source>
         <translation>項目 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1789"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1788"/>
         <source>String</source>
         <translation>字串</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1792"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1791"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1795"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1794"/>
         <source>Referenced Handle</source>
         <translation>參照控制代碼</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1797"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1796"/>
         <source>Referenced Offset</source>
         <translation>參照位移</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1826"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1825"/>
         <source>Processor</source>
         <translation>處理器</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1829"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1828"/>
         <source>Architecture</source>
         <translation>架構</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1858"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1857"/>
         <source>Vendor ID</source>
         <translation>廠商 ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1861"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1860"/>
         <source>Specification Version</source>
         <translation>規格版本</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1867"/>
         <source>Configurable by Firmware</source>
         <translation>可由韌體設定</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
         <source>Configurable by Software</source>
         <translation>可由軟體設定</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
         <source>Configurable by OEM</source>
         <translation>可由 OEM 設定</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1888"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1887"/>
         <source>Firmware %1</source>
         <translation>韌體 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1898"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1897"/>
         <source>Name</source>
         <translation>名稱</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1907"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1906"/>
         <source>Version Format</source>
         <translation>版本格式</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1911"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1910"/>
         <source>Lowest Supported Version</source>
         <translation>最低支援版本</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1921"/>
         <source>ID Format</source>
         <translation>ID 格式</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1925"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1924"/>
         <source>State</source>
         <translation>狀態</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1928"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1927"/>
         <source>Image Size</source>
         <translation>映像大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
         <source>Updatable</source>
         <translation>可更新</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <source>Write-protected</source>
         <translation>防寫保護</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1937"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1936"/>
         <source>Component %1</source>
         <translation>元件 %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1942"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1941"/>
         <source>Associated Components</source>
         <translation>相關元件</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1954"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1953"/>
         <source>SMBIOS Version</source>
         <translation>SMBIOS 版本</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1957"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1956"/>
         <source>Structures</source>
         <translation>結構</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1959"/>
         <source>Structures Size</source>
         <translation>結構大小</translation>
     </message>
@@ -10879,17 +10894,17 @@ Credentials imported: %5</source>
         <translation>支援的視訊模式</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="294"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="293"/>
         <source>Digital</source>
         <translation>數位</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="296"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="295"/>
         <source>Analog</source>
         <translation>類比</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="298"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="297"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
@@ -11096,7 +11111,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="316"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="315"/>
         <source>Charging</source>
         <translation>充電中</translation>
     </message>
@@ -11110,7 +11125,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="314"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="313"/>
         <source>Critical</source>
         <translation>嚴重</translation>
     </message>
@@ -11135,33 +11150,33 @@ Credentials imported: %5</source>
         <translation>電池 #%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="292"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="291"/>
         <source>DC Battery</source>
         <translation>直流電池</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="295"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="294"/>
         <source>AC Line</source>
         <translation>交流電源</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="298"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="320"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="319"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="310"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="309"/>
         <source>High</source>
         <translation>高</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="312"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="311"/>
         <source>Low</source>
         <translation>低</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="318"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="317"/>
         <source>No Battery</source>
         <translation>無電池</translation>
     </message>

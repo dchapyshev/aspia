@@ -998,17 +998,17 @@ Routers added: %4</source>
         <translation>יצירת הגיבוי נכשלה. חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="258"/>
+        <location filename="../client/main.cc" line="257"/>
         <source>Set Master Password</source>
         <translation>הגדרת סיסמה ראשית</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="260"/>
+        <location filename="../client/main.cc" line="259"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>הגדר סיסמה ראשית הנדרשת לביטול נעילת היישום.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="268"/>
+        <location filename="../client/main.cc" line="267"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יפחת מ-%n תו.</numerusform>
@@ -1016,12 +1016,12 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="276"/>
+        <location filename="../client/main.cc" line="275"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>הסיסמה שהזנת אינה עומדת בדרישות האבטחה!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="278"/>
+        <location filename="../client/main.cc" line="277"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>הסיסמה חייבת להכיל אותיות קטנות וגדולות ומספרים, ואורכה לא יפחת מ-%n תו.</numerusform>
@@ -1029,12 +1029,12 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="282"/>
+        <location filename="../client/main.cc" line="281"/>
         <source>Do you want to enter a different password?</source>
         <translation>האם ברצונך להזין סיסמה אחרת?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="292"/>
+        <location filename="../client/main.cc" line="291"/>
         <source>Unable to set master password.</source>
         <translation>לא ניתן להגדיר סיסמה ראשית.</translation>
     </message>
@@ -1054,7 +1054,7 @@ Routers added: %4</source>
         <translation>יצירת הגיבוי נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="207"/>
+        <location filename="../client/main.cc" line="206"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>קישור aspia:// להתחברות למארח.</translation>
     </message>
@@ -1074,7 +1074,7 @@ Routers added: %4</source>
         <translation>הסיסמה הראשית שגויה.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="203"/>
+        <location filename="../client/main.cc" line="202"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -1184,7 +1184,7 @@ Routers added: %4</source>
     <name>ConfigDialog</name>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
-        <location filename="../host/ui/config_dialog.ui" line="154"/>
+        <location filename="../host/ui/config_dialog.ui" line="161"/>
         <source>Settings</source>
         <translation>הגדרות</translation>
     </message>
@@ -1194,73 +1194,78 @@ Routers added: %4</source>
         <translation>כללי</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="86"/>
+        <location filename="../host/ui/config_dialog.ui" line="83"/>
+        <source>Allow hardware video encoding</source>
+        <translation>אפשר קידוד וידאו בחומרה</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="93"/>
         <source>Updates</source>
         <translation>עדכונים</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="115"/>
+        <location filename="../host/ui/config_dialog.ui" line="122"/>
         <source>Update channel:</source>
         <translation>ערוץ עדכונים:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="441"/>
-        <location filename="../host/ui/config_dialog.ui" line="552"/>
+        <location filename="../host/ui/config_dialog.ui" line="448"/>
+        <location filename="../host/ui/config_dialog.ui" line="559"/>
         <source>Users</source>
         <translation>משתמשים</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="455"/>
+        <location filename="../host/ui/config_dialog.ui" line="462"/>
         <source>Add new user</source>
         <translation>הוספת משתמש חדש</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="481"/>
+        <location filename="../host/ui/config_dialog.ui" line="488"/>
         <source>Edit user</source>
         <translation>ערוך משתמש</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="507"/>
+        <location filename="../host/ui/config_dialog.ui" line="514"/>
         <source>Delete user</source>
         <translation>מחק משתמש</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="142"/>
+        <location filename="../host/ui/config_dialog.ui" line="149"/>
         <source>Check for updates</source>
         <translation>בדוק עדכונים</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="575"/>
+        <location filename="../host/ui/config_dialog.ui" line="582"/>
         <source>Add</source>
         <translation>הוסף</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="584"/>
+        <location filename="../host/ui/config_dialog.ui" line="591"/>
         <source>Modify</source>
         <translation>שנה</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="593"/>
+        <location filename="../host/ui/config_dialog.ui" line="600"/>
         <source>Delete</source>
         <translation>מחק</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="373"/>
+        <location filename="../host/ui/config_dialog.ui" line="380"/>
         <source>Router</source>
         <translation>נתב</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="379"/>
+        <location filename="../host/ui/config_dialog.ui" line="386"/>
         <source>Enable the use of a router</source>
         <translation>הפעל שימוש בנתב</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="391"/>
+        <location filename="../host/ui/config_dialog.ui" line="398"/>
         <source>Address:</source>
         <translation>כתובת:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="410"/>
+        <location filename="../host/ui/config_dialog.ui" line="417"/>
         <source>Public Key:</source>
         <translation>מפתח ציבורי:</translation>
     </message>
@@ -1270,67 +1275,67 @@ Routers added: %4</source>
         <translation>לוכד וידאו מועדף:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="229"/>
+        <location filename="../host/ui/config_dialog.ui" line="236"/>
         <source>Change password</source>
         <translation>שנה סיסמה</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="204"/>
+        <location filename="../host/ui/config_dialog.ui" line="211"/>
         <source>Security</source>
         <translation>אבטחה</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="210"/>
+        <location filename="../host/ui/config_dialog.ui" line="217"/>
         <source>Password Protection of Settings</source>
         <translation>הגנת סיסמה על ההגדרות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="246"/>
+        <location filename="../host/ui/config_dialog.ui" line="253"/>
         <source>One-time Password</source>
         <translation>סיסמה חד-פעמית</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="252"/>
+        <location filename="../host/ui/config_dialog.ui" line="259"/>
         <source>Enable one-time password</source>
         <translation>הפעל סיסמה חד-פעמית</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="281"/>
+        <location filename="../host/ui/config_dialog.ui" line="288"/>
         <source>Characters count:</source>
         <translation>מספר תווים:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="271"/>
+        <location filename="../host/ui/config_dialog.ui" line="278"/>
         <source>Characters:</source>
         <translation>תווים:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="303"/>
+        <location filename="../host/ui/config_dialog.ui" line="310"/>
         <source>Connection Confirmation</source>
         <translation>אישור חיבור</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="309"/>
+        <location filename="../host/ui/config_dialog.ui" line="316"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>דרוש אישור בעת התחברות למחשב</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="318"/>
+        <location filename="../host/ui/config_dialog.ui" line="325"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>אישור אוטומטי של חיבור באמצעות:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="261"/>
+        <location filename="../host/ui/config_dialog.ui" line="268"/>
         <source>Change password:</source>
         <translation>החלפת סיסמה:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="328"/>
+        <location filename="../host/ui/config_dialog.ui" line="335"/>
         <source>If there is no active user:</source>
         <translation>אם אין משתמש פעיל:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="424"/>
+        <location filename="../host/ui/config_dialog.ui" line="431"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>נתב נדרש לצורך התחברות למחשב כאשר אין חיבור ישיר (מעקף NAT). Aspia אינה מספקת נתב ציבורי, אך ניתן להתקין נתב משלך. ניתן להוריד את הנתב מתוך &lt;a href=&quot;https://aspia.org&quot;&gt;האתר הרשמי&lt;/a&gt;.</translation>
     </message>
@@ -1345,32 +1350,32 @@ Routers added: %4</source>
         <translation>פורט נכנס:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="349"/>
+        <location filename="../host/ui/config_dialog.ui" line="356"/>
         <source>Disable Aspia shutdown</source>
         <translation>מנע כיבוי של Aspia</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="343"/>
+        <location filename="../host/ui/config_dialog.ui" line="350"/>
         <source>Other</source>
         <translation>אחר</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="173"/>
+        <location filename="../host/ui/config_dialog.ui" line="180"/>
         <source>Import settings</source>
         <translation>ייבוא הגדרות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="180"/>
+        <location filename="../host/ui/config_dialog.ui" line="187"/>
         <source>Export settings</source>
         <translation>ייצוא הגדרות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="92"/>
+        <location filename="../host/ui/config_dialog.ui" line="99"/>
         <source>Automatic checking and installation of updates</source>
         <translation>בדיקה והתקנה אוטומטיות של עדכונים</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="101"/>
+        <location filename="../host/ui/config_dialog.ui" line="108"/>
         <source>Check for updates:</source>
         <translation>בדיקת עדכונים:</translation>
     </message>
@@ -1410,139 +1415,139 @@ Routers added: %4</source>
         <translation>ברירת מחדל</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="188"/>
+        <location filename="../host/ui/config_dialog.cc" line="194"/>
         <source>On reboot</source>
         <translation>בהפעלה מחדש</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="189"/>
+        <location filename="../host/ui/config_dialog.cc" line="195"/>
         <source>Every 5 minutes</source>
         <translation>כל 5 דקות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="190"/>
+        <location filename="../host/ui/config_dialog.cc" line="196"/>
         <source>Every 30 minutes</source>
         <translation>כל 30 דקות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="191"/>
+        <location filename="../host/ui/config_dialog.cc" line="197"/>
         <source>Every 1 hour</source>
         <translation>כל שעה</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="192"/>
+        <location filename="../host/ui/config_dialog.cc" line="198"/>
         <source>Every 6 hours</source>
         <translation>כל 6 שעות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="193"/>
+        <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>Every 12 hours</source>
         <translation>כל 12 שעות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="201"/>
+        <location filename="../host/ui/config_dialog.cc" line="207"/>
         <source>Letters and digits</source>
         <translation>אותיות וספרות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="204"/>
+        <location filename="../host/ui/config_dialog.cc" line="210"/>
         <source>Letters</source>
         <translation>אותיות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="206"/>
+        <location filename="../host/ui/config_dialog.cc" line="212"/>
         <source>Digits</source>
         <translation>ספרות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="223"/>
+        <location filename="../host/ui/config_dialog.cc" line="229"/>
         <source>Never</source>
         <translation>אף פעם</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="224"/>
+        <location filename="../host/ui/config_dialog.cc" line="230"/>
         <source>15 seconds</source>
         <translation>15 שניות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="225"/>
+        <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>30 seconds</source>
         <translation>30 שניות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="226"/>
+        <location filename="../host/ui/config_dialog.cc" line="232"/>
         <source>45 seconds</source>
         <translation>45 שניות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="227"/>
+        <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>60 seconds</source>
         <translation>60 שניות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="235"/>
+        <location filename="../host/ui/config_dialog.cc" line="241"/>
         <source>Accept connection</source>
         <translation>קבלת החיבור</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="236"/>
+        <location filename="../host/ui/config_dialog.cc" line="242"/>
         <source>Reject connection</source>
         <translation>דחיית החיבור</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="435"/>
+        <location filename="../host/ui/config_dialog.cc" line="441"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך למחוק את המשתמש &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="462"/>
-        <location filename="../host/ui/config_dialog.cc" line="495"/>
+        <location filename="../host/ui/config_dialog.cc" line="468"/>
+        <location filename="../host/ui/config_dialog.cc" line="501"/>
         <source>An error occurred while processing the password.</source>
         <translation>אירעה שגיאה בעת עיבוד הסיסמה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="479"/>
+        <location filename="../host/ui/config_dialog.cc" line="485"/>
         <source>Settings storage is unavailable.</source>
         <translation>אחסון ההגדרות אינו זמין.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="509"/>
+        <location filename="../host/ui/config_dialog.cc" line="515"/>
         <source>Import</source>
         <translation>ייבוא</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="509"/>
-        <location filename="../host/ui/config_dialog.cc" line="526"/>
+        <location filename="../host/ui/config_dialog.cc" line="515"/>
+        <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>JSON-files (*.json)</source>
         <translation>קובצי JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="526"/>
+        <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>Export</source>
         <translation>ייצוא</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="551"/>
+        <location filename="../host/ui/config_dialog.cc" line="557"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>לא ניתן לכתוב את התצורה. ודא שיש לך הרשאות כתיבה מספיקות.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="564"/>
+        <location filename="../host/ui/config_dialog.cc" line="570"/>
         <source>Incorrect router address entered.</source>
         <translation>הוזנה כתובת נתב שגויה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="574"/>
+        <location filename="../host/ui/config_dialog.cc" line="580"/>
         <source>Incorrect router public key entered.</source>
         <translation>הוזן מפתח ציבורי שגוי של הנתב.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="730"/>
+        <location filename="../host/ui/config_dialog.cc" line="738"/>
         <source>Install</source>
         <translation>התקן</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="735"/>
+        <location filename="../host/ui/config_dialog.cc" line="743"/>
         <source>Remove</source>
         <translation>הסר</translation>
     </message>
@@ -2609,17 +2614,17 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="954"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="973"/>
         <source>Save File</source>
         <translation>שמירת קובץ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="955"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="974"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>תמונת PNG (*.png);;תמונת BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="986"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1005"/>
         <source>Could not save image</source>
         <translation>לא ניתן לשמור תמונה</translation>
     </message>
@@ -3656,8 +3661,8 @@ Credentials replaced: %2</source>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="607"/>
-        <location filename="../host/main.cc" line="642"/>
+        <location filename="../host/main.cc" line="611"/>
+        <location filename="../host/main.cc" line="646"/>
         <source>Settings storage is unavailable.</source>
         <translation>אחסון ההגדרות אינו זמין.</translation>
     </message>
@@ -3738,32 +3743,32 @@ Credentials replaced: %2</source>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="544"/>
+        <location filename="../host/main.cc" line="548"/>
         <source>Launch the application hidden.</source>
         <translation>הפעלת היישום במצב מוסתר.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="546"/>
+        <location filename="../host/main.cc" line="550"/>
         <source>Export parameters to file.</source>
         <translation>ייצוא פרמטרים לקובץ.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
+        <location filename="../host/main.cc" line="552"/>
         <source>Import parameters from file.</source>
         <translation>ייבוא פרמטרים מקובץ.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="550"/>
+        <location filename="../host/main.cc" line="554"/>
         <source>Do not display any messages during import and export.</source>
         <translation>אל תציג הודעות במהלך ייבוא וייצוא.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="552"/>
+        <location filename="../host/main.cc" line="556"/>
         <source>Calling the settings dialog.</source>
         <translation>פתיחת תיבת הדו-שיח של ההגדרות.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="554"/>
+        <location filename="../host/main.cc" line="558"/>
         <source>Calling the security log dialog.</source>
         <translation>פתיחת תיבת הדו-שיח של יומן האבטחה.</translation>
     </message>
@@ -3801,8 +3806,8 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
         <location filename="../host/ui/host_window.cc" line="552"/>
-        <location filename="../host/ui/host_window.cc" line="781"/>
-        <location filename="../host/ui/host_window.cc" line="1053"/>
+        <location filename="../host/ui/host_window.cc" line="790"/>
+        <location filename="../host/ui/host_window.cc" line="1062"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
@@ -3818,7 +3823,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
-        <location filename="../host/ui/host_window.cc" line="967"/>
+        <location filename="../host/ui/host_window.cc" line="976"/>
         <source>Router is disabled</source>
         <translation>הנתב מושבת</translation>
     </message>
@@ -3884,7 +3889,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="329"/>
-        <location filename="../host/ui/host_window.cc" line="744"/>
+        <location filename="../host/ui/host_window.cc" line="753"/>
         <source>Hide</source>
         <translation>הסתר</translation>
     </message>
@@ -3925,7 +3930,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="287"/>
-        <location filename="../host/ui/host_window.cc" line="739"/>
+        <location filename="../host/ui/host_window.cc" line="748"/>
         <source>Show</source>
         <translation>הצג</translation>
     </message>
@@ -3940,42 +3945,42 @@ Credentials replaced: %2</source>
         <translation>הקלטת המסך הופסקה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="728"/>
+        <location filename="../host/ui/host_window.cc" line="737"/>
         <source>Settings storage is unavailable.</source>
         <translation>אחסון ההגדרות אינו זמין.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="798"/>
+        <location filename="../host/ui/host_window.cc" line="807"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>אם תצא מ-Aspia, לא ניתן יהיה להתחבר למחשב זה עד שתפעיל שוב את המחשב או את Aspia באופן ידני. האם אתה בטוח שברצונך לצאת מהיישום?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="959"/>
+        <location filename="../host/ui/host_window.cc" line="968"/>
         <source>Not connected to service</source>
         <translation>לא מחובר לשירות</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="972"/>
+        <location filename="../host/ui/host_window.cc" line="981"/>
         <source>Connecting to router...</source>
         <translation>מתחבר לנתב...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="977"/>
+        <location filename="../host/ui/host_window.cc" line="986"/>
         <source>Connected to router</source>
         <translation>מחובר לנתב</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="982"/>
+        <location filename="../host/ui/host_window.cc" line="991"/>
         <source>Connection error</source>
         <translation>שגיאת חיבור</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1050"/>
+        <location filename="../host/ui/host_window.cc" line="1059"/>
         <source>IP addresses:</source>
         <translation>כתובות IP:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1054"/>
+        <location filename="../host/ui/host_window.cc" line="1063"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
@@ -4143,12 +4148,12 @@ Credentials replaced: %2</source>
         <translation>עדכון מצב...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="156"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="160"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>קריאת הנתונים נכשלה. ייתכן שהרשימה אינה מעודכנת.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="413"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="417"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n קבוצת משנה</numerusform>
@@ -4156,7 +4161,7 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="414"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="418"/>
         <source>%n child host(s)</source>
         <translation>
             <numerusform>%n מארח</numerusform>
@@ -5037,156 +5042,156 @@ Credentials imported: %5</source>
         <translation>רענון מצב אוטומטי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1003"/>
+        <location filename="../client/desktop/management_tab.cc" line="1034"/>
         <source>(copy)</source>
         <translation>(עותק)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="971"/>
-        <location filename="../client/desktop/management_tab.cc" line="1044"/>
-        <location filename="../client/desktop/management_tab.cc" line="2135"/>
+        <location filename="../client/desktop/management_tab.cc" line="1002"/>
+        <location filename="../client/desktop/management_tab.cc" line="1075"/>
+        <location filename="../client/desktop/management_tab.cc" line="2162"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>אחזור פרטי המארח ממסד הנתונים המקומי נכשל.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1008"/>
+        <location filename="../client/desktop/management_tab.cc" line="1039"/>
         <source>Failed to add the host to the local database.</source>
         <translation>הוספת המארח למסד הנתונים המקומי נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1048"/>
+        <location filename="../client/desktop/management_tab.cc" line="1079"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך למחוק את המארח &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1058"/>
+        <location filename="../client/desktop/management_tab.cc" line="1089"/>
         <source>Unable to remove host</source>
         <translation>לא ניתן להסיר מארח</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1116"/>
-        <location filename="../client/desktop/management_tab.cc" line="1159"/>
-        <location filename="../client/desktop/management_tab.cc" line="1184"/>
+        <location filename="../client/desktop/management_tab.cc" line="1147"/>
+        <location filename="../client/desktop/management_tab.cc" line="1190"/>
+        <location filename="../client/desktop/management_tab.cc" line="1215"/>
         <source>Copy Row</source>
         <translation>העתק שורה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1117"/>
-        <location filename="../client/desktop/management_tab.cc" line="1160"/>
-        <location filename="../client/desktop/management_tab.cc" line="1185"/>
+        <location filename="../client/desktop/management_tab.cc" line="1148"/>
+        <location filename="../client/desktop/management_tab.cc" line="1191"/>
+        <location filename="../client/desktop/management_tab.cc" line="1216"/>
         <source>Copy Value</source>
         <translation>העתק ערך</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1284"/>
+        <location filename="../client/desktop/management_tab.cc" line="1315"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך למחוק את סביבת העבודה &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1304"/>
+        <location filename="../client/desktop/management_tab.cc" line="1335"/>
         <source>Failed to delete the workspace.</source>
         <translation>מחיקת סביבת העבודה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1399"/>
+        <location filename="../client/desktop/management_tab.cc" line="1430"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>האם אתה בטוח שברצונך למחוק את הקבוצה &quot;%1&quot;? מארחים המשויכים לקבוצה זו או לקבוצות המשנה שלה יועברו לשורש סביבת העבודה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1418"/>
+        <location filename="../client/desktop/management_tab.cc" line="1449"/>
         <source>Failed to delete the group.</source>
         <translation>מחיקת הקבוצה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1457"/>
+        <location filename="../client/desktop/management_tab.cc" line="1488"/>
         <source>Import Old Address Book</source>
         <translation>ייבוא פנקס כתובות ישן</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1458"/>
+        <location filename="../client/desktop/management_tab.cc" line="1489"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>פנקס כתובות (*.aab);;כל הקבצים (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1481"/>
-        <location filename="../client/desktop/management_tab.cc" line="1538"/>
+        <location filename="../client/desktop/management_tab.cc" line="1512"/>
+        <location filename="../client/desktop/management_tab.cc" line="1569"/>
         <source>The database is not available.</source>
         <translation>מסד הנתונים אינו זמין.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1487"/>
+        <location filename="../client/desktop/management_tab.cc" line="1518"/>
         <source>Create Backup</source>
         <translation>יצירת גיבוי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1504"/>
+        <location filename="../client/desktop/management_tab.cc" line="1535"/>
         <source>There is nothing to save.</source>
         <translation>אין מה לשמור.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2130"/>
+        <location filename="../client/desktop/management_tab.cc" line="2157"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>נתוני המארח פגומים. ערוך את המארח והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2151"/>
+        <location filename="../client/desktop/management_tab.cc" line="2178"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1516"/>
+        <location filename="../client/desktop/management_tab.cc" line="1547"/>
         <source>Failed to create the backup.</source>
         <translation>יצירת הגיבוי נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1544"/>
-        <location filename="../client/desktop/management_tab.cc" line="1570"/>
+        <location filename="../client/desktop/management_tab.cc" line="1575"/>
+        <location filename="../client/desktop/management_tab.cc" line="1601"/>
         <source>Restore from Backup</source>
         <translation>שחזור מגיבוי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1553"/>
+        <location filename="../client/desktop/management_tab.cc" line="1584"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>כל מה ששמור כעת יימחק ויוחלף במה שהגיבוי מכיל. להמשיך?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1572"/>
+        <location filename="../client/desktop/management_tab.cc" line="1603"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>הגיבוי נוצר בהתקנה אחרת. הזן את הסיסמה הראשית ששימשה שם.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1597"/>
+        <location filename="../client/desktop/management_tab.cc" line="1628"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>הגיבוי אינו מכיל נתונים, ולכן לא שונה דבר.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1605"/>
+        <location filename="../client/desktop/management_tab.cc" line="1636"/>
         <source>The file is not a valid backup.</source>
         <translation>הקובץ אינו גיבוי חוקי.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1609"/>
+        <location filename="../client/desktop/management_tab.cc" line="1640"/>
         <source>Failed to restore from the backup.</source>
         <translation>השחזור מהגיבוי נכשל.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1488"/>
-        <location filename="../client/desktop/management_tab.cc" line="1545"/>
+        <location filename="../client/desktop/management_tab.cc" line="1519"/>
+        <location filename="../client/desktop/management_tab.cc" line="1576"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>גיבוי Aspia (*.aspia-backup);;כל הקבצים (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1508"/>
+        <location filename="../client/desktop/management_tab.cc" line="1539"/>
         <source>Unable to write the file.</source>
         <translation>לא ניתן לכתוב את הקובץ.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1601"/>
+        <location filename="../client/desktop/management_tab.cc" line="1632"/>
         <source>Unable to read the file.</source>
         <translation>לא ניתן לקרוא את הקובץ.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1521"/>
+        <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5201,22 +5206,22 @@ Credentials exported: %5</source>
 פרטי כניסה שיוצאו: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1512"/>
+        <location filename="../client/desktop/management_tab.cc" line="1543"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1589"/>
+        <location filename="../client/desktop/management_tab.cc" line="1620"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>לא ניתן לפענח את הקובץ באמצעות הסיסמה שצוינה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1593"/>
+        <location filename="../client/desktop/management_tab.cc" line="1624"/>
         <source>Unsupported file format version.</source>
         <translation>גרסת תבנית קובץ שאינה נתמכת.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1614"/>
+        <location filename="../client/desktop/management_tab.cc" line="1645"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5231,29 +5236,29 @@ Credentials imported: %5</source>
 פרטי כניסה שיובאו: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2058"/>
-        <location filename="../client/desktop/management_tab.cc" line="2089"/>
+        <location filename="../client/desktop/management_tab.cc" line="2085"/>
+        <location filename="../client/desktop/management_tab.cc" line="2116"/>
         <source>Copy Link</source>
         <translation>העתקת קישור</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2077"/>
-        <location filename="../client/desktop/management_tab.cc" line="2111"/>
+        <location filename="../client/desktop/management_tab.cc" line="2104"/>
+        <location filename="../client/desktop/management_tab.cc" line="2138"/>
         <source>Unable to create a link for this host.</source>
         <translation>לא ניתן ליצור קישור עבור מארח זה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2152"/>
+        <location filename="../client/desktop/management_tab.cc" line="2179"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>הנתב המשויך למארח זה נמחק. ערוך את המארח כדי לבחור נתב אחר או לעבור לחיבור ישיר.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2159"/>
+        <location filename="../client/desktop/management_tab.cc" line="2186"/>
         <source>The host has an invalid host ID.</source>
         <translation>למארח מזהה מארח לא חוקי.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2168"/>
+        <location filename="../client/desktop/management_tab.cc" line="2195"/>
         <source>The host has an incorrect address.</source>
         <translation>למארח כתובת שגויה.</translation>
     </message>
@@ -5918,37 +5923,37 @@ Credentials imported: %5</source>
 <context>
     <name>RouterClientsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="230"/>
         <source>Save File</source>
         <translation>שמירת קובץ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="230"/>
         <source>JSON files (*.json)</source>
         <translation>קובצי JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="238"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="241"/>
         <source>Could not open file for writing.</source>
         <translation>לא ניתן לפתוח קובץ לכתיבה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="273"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="276"/>
         <source>Unable to write file.</source>
         <translation>לא ניתן לכתוב את הקובץ.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="310"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="313"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך לנתק את הלקוח &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="335"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="338"/>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>האם אתה בטוח שברצונך לנתק את כל הלקוחות?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="496"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="499"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>%n לקוח</numerusform>
@@ -6339,7 +6344,7 @@ Credentials imported: %5</source>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="440"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="441"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n מארח</numerusform>
@@ -6420,32 +6425,32 @@ Credentials imported: %5</source>
         <translation>הערה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="133"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="140"/>
         <source>Failed to get list of groups.</source>
         <translation>קבלת רשימת הקבוצות נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="207"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="214"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>הזן גם שם משתמש וגם סיסמה, או השאר את שניהם ריקים.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="220"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="227"/>
         <source>Failed to save the credentials.</source>
         <translation>שמירת פרטי הכניסה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="243"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="257"/>
         <source>Failed to read the list of credentials.</source>
         <translation>קריאת רשימת פרטי הכניסה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="289"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="303"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>קריאת פרטי הכניסה של המארח נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="294"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="308"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>פרטי הכניסה של המארח פגומים. הזן אותם מחדש.</translation>
     </message>
@@ -6535,22 +6540,22 @@ Credentials imported: %5</source>
         <translation>פריטים בעמוד:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="345"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="356"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך לנתק את המארח &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="370"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="381"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>האם אתה בטוח שברצונך לנתק את כל המארחים?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="394"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="405"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>מחיקת המארח תמחק את כל הגדרות החיבור שלו לנתב, והיישום יוסר מהמארח. פעולה זו אינה הפיכה. האם אתה בטוח שברצונך להמשיך?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="677"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="688"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n מארח</numerusform>
@@ -6558,22 +6563,22 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="719"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="730"/>
         <source>Save File</source>
         <translation>שמירת קובץ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="719"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="730"/>
         <source>JSON files (*.json)</source>
         <translation>קובצי JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="730"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="741"/>
         <source>Could not open file for writing.</source>
         <translation>לא ניתן לפתוח קובץ לכתיבה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="777"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="788"/>
         <source>Unable to write file.</source>
         <translation>לא ניתן לכתוב את הקובץ.</translation>
     </message>
@@ -6581,57 +6586,57 @@ Credentials imported: %5</source>
 <context>
     <name>RouterRelaysWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="246"/>
         <source>Save File</source>
         <translation>שמירת קובץ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="246"/>
         <source>JSON files (*.json)</source>
         <translation>קובצי JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="252"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="257"/>
         <source>Could not open file for writing.</source>
         <translation>לא ניתן לפתוח קובץ לכתיבה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="314"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="319"/>
         <source>Unable to write file.</source>
         <translation>לא ניתן לכתוב את הקובץ.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="351"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="356"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך לנתק את הממסר &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="376"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="381"/>
         <source>Are you sure you want to disconnect all relays?</source>
         <translation>האם אתה בטוח שברצונך לנתק את כל הממסרים?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="429"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="434"/>
         <source>Disconnect</source>
         <translation>נתק</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="431"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="436"/>
         <source>Copy Row</source>
         <translation>העתק שורה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="432"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="437"/>
         <source>Copy Value</source>
         <translation>העתק ערך</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="441"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="446"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך לנתק את העמית &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="593"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="598"/>
         <source>%n relay(s)</source>
         <translation>
             <numerusform>%n ממסר</numerusform>
@@ -6698,37 +6703,37 @@ Credentials imported: %5</source>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="60"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="63"/>
         <source>Previous</source>
         <translation>הקודם</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="61"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="64"/>
         <source>Previous page</source>
         <translation>העמוד הקודם</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="68"/>
         <source>Next</source>
         <translation>הבא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="66"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="69"/>
         <source>Next page</source>
         <translation>העמוד הבא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="84"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="87"/>
         <source>Items per page:</source>
         <translation>פריטים בעמוד:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="186"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="189"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
         <translation>אישור המארח יעניק לו גישה קבועה לנתב. האם אתה בטוח שברצונך לאשר את המארח &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="237"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="240"/>
         <source>Failed to approve the host.</source>
         <translation>אישור המארח נכשל.</translation>
     </message>
@@ -7160,27 +7165,27 @@ Credentials imported: %5</source>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="294"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="295"/>
         <source>Previous</source>
         <translation>הקודם</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="295"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous page</source>
         <translation>העמוד הקודם</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="301"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
         <source>Next</source>
         <translation>הבא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next page</source>
         <translation>העמוד הבא</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/search_widget.cc" line="805"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="806"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>%n תוצאה</numerusform>
@@ -7504,48 +7509,58 @@ Credentials imported: %5</source>
         <translation>שלח צירופי מקשים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="424"/>
+        <location filename="../client/desktop/settings_tab.ui" line="415"/>
+        <source>Allow hardware video encoding</source>
+        <translation>אפשר קידוד וידאו בחומרה</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="422"/>
+        <source>Allow hardware video decoding</source>
+        <translation>אפשר פענוח וידאו בחומרה</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="438"/>
         <source>Screen</source>
         <translation>מסך</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="432"/>
+        <location filename="../client/desktop/settings_tab.ui" line="446"/>
         <source>Preferred resolution:</source>
         <translation>רזולוציה מועדפת:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="460"/>
+        <location filename="../client/desktop/settings_tab.ui" line="474"/>
         <source>Recording</source>
         <translation>הקלטה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="466"/>
+        <location filename="../client/desktop/settings_tab.ui" line="480"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>התחל הקלטת הפעלות אוטומטית בעת התחברות</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="475"/>
+        <location filename="../client/desktop/settings_tab.ui" line="489"/>
         <source>Write path:</source>
         <translation>נתיב כתיבה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="571"/>
+        <location filename="../client/desktop/settings_tab.ui" line="585"/>
         <location filename="../client/desktop/settings_tab.cc" line="129"/>
         <source>Update</source>
         <translation>עדכון</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="577"/>
+        <location filename="../client/desktop/settings_tab.ui" line="591"/>
         <source>Check for updates on startup</source>
         <translation>בדוק עדכונים בעת ההפעלה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="586"/>
+        <location filename="../client/desktop/settings_tab.ui" line="600"/>
         <source>Update channel:</source>
         <translation>ערוץ עדכונים:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="613"/>
+        <location filename="../client/desktop/settings_tab.ui" line="627"/>
         <source>Check for updates</source>
         <translation>בדוק עדכונים</translation>
     </message>
@@ -7615,48 +7630,48 @@ Credentials imported: %5</source>
         <translation>שעה אחת</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="218"/>
+        <location filename="../client/desktop/settings_tab.cc" line="220"/>
         <source>None</source>
         <translation>ללא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="243"/>
+        <location filename="../client/desktop/settings_tab.cc" line="245"/>
         <source>Stable</source>
         <translation>יציב</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="244"/>
+        <location filename="../client/desktop/settings_tab.cc" line="246"/>
         <source>Beta</source>
         <translation>בטא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="245"/>
+        <location filename="../client/desktop/settings_tab.cc" line="247"/>
         <source>Alpha</source>
         <translation>אלפא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="365"/>
+        <location filename="../client/desktop/settings_tab.cc" line="369"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>השפה החדשה תוחל לאחר הפעלה מחדש של היישום.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="414"/>
-        <location filename="../client/desktop/settings_tab.cc" line="492"/>
+        <location filename="../client/desktop/settings_tab.cc" line="418"/>
+        <location filename="../client/desktop/settings_tab.cc" line="496"/>
         <source>Choose path</source>
         <translation>בחירת נתיב</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="512"/>
+        <location filename="../client/desktop/settings_tab.cc" line="516"/>
         <source>Change Master Password</source>
         <translation>שינוי סיסמה ראשית</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="514"/>
+        <location filename="../client/desktop/settings_tab.cc" line="518"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>הזן את הסיסמה הנוכחית שלך ובחר סיסמה חדשה.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="522"/>
+        <location filename="../client/desktop/settings_tab.cc" line="526"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יפחת מ-%n תו.</numerusform>
@@ -7664,12 +7679,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="529"/>
+        <location filename="../client/desktop/settings_tab.cc" line="533"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>הסיסמה שהזנת אינה עומדת בדרישות האבטחה!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="530"/>
+        <location filename="../client/desktop/settings_tab.cc" line="534"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>הסיסמה חייבת להכיל אותיות קטנות וגדולות ומספרים, ואורכה לא יפחת מ-%n תו.</numerusform>
@@ -7677,22 +7692,22 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="533"/>
+        <location filename="../client/desktop/settings_tab.cc" line="537"/>
         <source>Do you want to enter a different password?</source>
         <translation>האם ברצונך להזין סיסמה אחרת?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="546"/>
+        <location filename="../client/desktop/settings_tab.cc" line="550"/>
         <source>Invalid current password.</source>
         <translation>הסיסמה הנוכחית שגויה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="550"/>
+        <location filename="../client/desktop/settings_tab.cc" line="554"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="554"/>
+        <location filename="../client/desktop/settings_tab.cc" line="558"/>
         <source>Unable to change the password.</source>
         <translation>לא ניתן לשנות את הסיסמה.</translation>
     </message>
@@ -7700,74 +7715,74 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/settings_util.cc" line="280"/>
+        <location filename="../host/settings_util.cc" line="284"/>
         <source>The configuration was successfully imported.</source>
         <translation>התצורה יובאה בהצלחה.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="329"/>
+        <location filename="../host/settings_util.cc" line="333"/>
         <source>The configuration was successfully exported.</source>
         <translation>התצורה יוצאה בהצלחה.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="339"/>
         <location filename="../host/settings_util.cc" line="343"/>
+        <location filename="../host/settings_util.cc" line="347"/>
         <source>Warning</source>
         <translation>אזהרה</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="246"/>
+        <location filename="../host/settings_util.cc" line="250"/>
         <source>Unable to open the source file.</source>
         <translation>לא ניתן לפתוח את קובץ המקור.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="258"/>
+        <location filename="../host/settings_util.cc" line="262"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>לא ניתן לקרוא את קובץ המקור: הקובץ פגום או בתבנית לא מוכרת.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="275"/>
+        <location filename="../host/settings_util.cc" line="279"/>
         <source>Unable to write the secure database.</source>
         <translation>לא ניתן לכתוב את מסד הנתונים המאובטח.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="295"/>
+        <location filename="../host/settings_util.cc" line="299"/>
         <source>Unable to read the secure database.</source>
         <translation>לא ניתן לקרוא את מסד הנתונים המאובטח.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="316"/>
+        <location filename="../host/settings_util.cc" line="320"/>
         <source>Unable to open the target file.</source>
         <translation>לא ניתן לפתוח את קובץ היעד.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="324"/>
+        <location filename="../host/settings_util.cc" line="328"/>
         <source>Unable to write the target file.</source>
         <translation>לא ניתן לכתוב את קובץ היעד.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="340"/>
+        <location filename="../host/settings_util.cc" line="344"/>
         <source>Continue</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="356"/>
+        <location filename="../host/settings_util.cc" line="360"/>
         <source>Error</source>
         <translation>שגיאה</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="367"/>
+        <location filename="../host/settings_util.cc" line="371"/>
         <source>Aspia</source>
         <translation>Aspia</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="237"/>
+        <location filename="../host/settings_util.cc" line="241"/>
         <source>Source settings file does not exist.</source>
         <translation>קובץ הגדרות המקור אינו קיים.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="340"/>
         <location filename="../host/settings_util.cc" line="344"/>
+        <location filename="../host/settings_util.cc" line="348"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>ההגדרות הקיימות יוחלפו. להמשיך?</translation>
     </message>
@@ -8047,24 +8062,24 @@ Credentials imported: %5</source>
     <name>Sidebar</name>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="115"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="89"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="126"/>
         <source>Local</source>
         <translation>מקומי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="114"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="173"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="225"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="151"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="212"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="264"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>קריאת הנתונים נכשלה. ייתכן שהרשימה אינה מעודכנת.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="526"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="592"/>
         <source>Change Password</source>
         <translation>שינוי סיסמה</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="534"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="600"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יפחת מ-%n תו.</numerusform>
@@ -8072,7 +8087,7 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="535"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="601"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יחרוג מ-%n תו.</numerusform>
@@ -8080,12 +8095,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="543"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="609"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>הסיסמה שהזנת אינה עומדת בדרישות האבטחה!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="544"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="610"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>הסיסמה חייבת להכיל אותיות קטנות וגדולות ומספרים, ואורכה לא יפחת מ-%n תו.</numerusform>
@@ -8093,51 +8108,51 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="547"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="613"/>
         <source>Do you want to enter a different password?</source>
         <translation>האם ברצונך להזין סיסמה אחרת?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="565"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="631"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>משנה את הסיסמה. ממתין שההפעלה תתחבר מחדש...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="715"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="829"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך למחוק את הקבוצה &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="728"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="842"/>
         <source>Unable to remove group</source>
         <translation>לא ניתן להסיר קבוצה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="793"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="907"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך למחוק את הנתב &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1367"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1484"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>קבוצה בשם זה כבר קיימת בקבוצת האב שנבחרה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1357"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1376"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1532"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1474"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1493"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1649"/>
         <source>Failed to move the group.</source>
         <translation>העברת הקבוצה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1432"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1549"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>מארח בשם זה כבר קיים בקבוצה שנבחרה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1423"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1441"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1540"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1558"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1727"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>העברת המארח לקבוצה שנבחרה נכשלה.</translation>
     </message>
@@ -8145,7 +8160,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterClients</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="170"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="207"/>
         <source>Clients</source>
         <translation>לקוחות</translation>
     </message>
@@ -8153,7 +8168,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="152"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="189"/>
         <source>Approved Hosts</source>
         <translation>מארחים מאושרים</translation>
     </message>
@@ -8161,7 +8176,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterRelays</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="179"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="216"/>
         <source>Relays</source>
         <translation>ממסרים</translation>
     </message>
@@ -8169,7 +8184,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterTempHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="188"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="225"/>
         <source>Unapproved Hosts</source>
         <translation>מארחים לא מאושרים</translation>
     </message>
@@ -8177,7 +8192,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterUsers</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="161"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="198"/>
         <source>Users</source>
         <translation>משתמשים</translation>
     </message>
@@ -9258,98 +9273,98 @@ Credentials imported: %5</source>
         <translation>תכונות אחרות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="249"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="245"/>
         <source>Packages</source>
         <translation>מארזי מעבד</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="252"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="248"/>
         <source>Physical Cores</source>
         <translation>ליבות פיזיות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="251"/>
         <source>Logical Cores</source>
         <translation>ליבות לוגיות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="259"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
         <source>Temperature</source>
         <translation>טמפרטורה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="260"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="256"/>
         <source>%1 C</source>
         <translation>%1 C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="278"/>
         <source>L%1 Data Cache</source>
         <translation>מטמון נתונים L%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
         <source>L%1 Instruction Cache</source>
         <translation>מטמון הוראות L%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="290"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
         <source>L%1 Cache</source>
         <translation>מטמון L%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="293"/>
         <source>Size</source>
         <translation>גודל</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="299"/>
         <source>Associativity</source>
         <translation>אסוציאטיביות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
         <source>Fully associative</source>
         <translation>אסוציאטיבי מלא</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="299"/>
         <source>%1-way</source>
         <translation>%1-way</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="302"/>
         <source>Line Size</source>
         <translation>גודל שורה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="302"/>
         <source>%1 bytes</source>
         <translation>%1 בתים</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="309"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="305"/>
         <source>Sets</source>
         <translation>ערכות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="308"/>
         <source>Shared By</source>
         <translation>משותף על-ידי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="308"/>
         <source>%1 threads</source>
         <translation>%1 הליכי משנה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="332"/>
         <source>Yes</source>
         <translation>כן</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="332"/>
         <source>No</source>
         <translation>לא</translation>
     </message>
@@ -9358,7 +9373,7 @@ Credentials imported: %5</source>
     <name>SysInfoWidgetDmi</name>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="218"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="832"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="831"/>
         <source>BIOS</source>
         <translation>BIOS</translation>
     </message>
@@ -9400,14 +9415,14 @@ Credentials imported: %5</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="631"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="630"/>
         <source>OEM Strings</source>
         <translation>מחרוזות OEM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="636"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="635"/>
         <source>Configuration Options</source>
         <translation>אפשרויות תצורה</translation>
     </message>
@@ -9459,7 +9474,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="730"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="729"/>
         <source>System Boot</source>
         <translation>אתחול מערכת</translation>
     </message>
@@ -9490,1005 +9505,1005 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="747"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="746"/>
         <source>DMI Properties</source>
         <translation>מאפייני DMI</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="842"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="841"/>
         <source>Vendor</source>
         <translation>ספק</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="845"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="906"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="963"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1029"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1904"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="844"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="905"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="962"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1028"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1903"/>
         <source>Version</source>
         <translation>גרסה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="848"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1916"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="847"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1915"/>
         <source>Release Date</source>
         <translation>תאריך שחרור</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="852"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="851"/>
         <source>Address</source>
         <translation>כתובת</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="857"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="856"/>
         <source>ROM Size</source>
         <translation>גודל ROM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="860"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="859"/>
         <source>Revision</source>
         <translation>מהדורה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="864"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="863"/>
         <source>Firmware Revision</source>
         <translation>מהדורת קושחה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="874"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1276"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1875"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="873"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1275"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1874"/>
         <source>Characteristics</source>
         <translation>מאפיינים</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="890"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="889"/>
         <source>Board %1</source>
         <translation>לוח %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="900"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="955"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1026"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1553"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1901"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="899"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="954"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1025"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1552"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1900"/>
         <source>Manufacturer</source>
         <translation>יצרן</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="903"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="902"/>
         <source>Product</source>
         <translation>מוצר</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="909"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="966"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1086"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1604"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="908"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="965"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1085"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1603"/>
         <source>Serial Number</source>
         <translation>מספר סידורי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="912"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="969"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1089"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1607"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="911"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="968"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1088"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1606"/>
         <source>Asset Tag</source>
         <translation>תג נכס</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="915"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="914"/>
         <source>Location in Chassis</source>
         <translation>מיקום במארז</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="918"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="958"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1035"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1131"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1250"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1305"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1451"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1559"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1651"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="917"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="957"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1034"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1130"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1249"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1304"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1450"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1558"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1650"/>
         <source>Type</source>
         <translation>סוג</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
         <source>Hosting Board</source>
         <translation>לוח מארח</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1103"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1873"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Yes</source>
         <translation>כן</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1020"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1103"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1873"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1547"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>No</source>
         <translation>לא</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <source>Requires Daughter Board</source>
         <translation>דורש לוח בת</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <source>Removable</source>
         <translation>ניתן להסרה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <source>Replaceable</source>
         <translation>ניתן להחלפה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
         <source>Hot Swappable</source>
         <translation>ניתן להחלפה חמה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="929"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="928"/>
         <source>Features</source>
         <translation>תכונות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="945"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="944"/>
         <source>Chassis %1</source>
         <translation>מארז %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
         <source>Lock Present</source>
         <translation>נעילה קיימת</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="972"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="971"/>
         <source>SKU Number</source>
         <translation>מספר SKU</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="975"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="974"/>
         <source>Boot-up State</source>
         <translation>מצב בעת אתחול</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="979"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="978"/>
         <source>Power Supply State</source>
         <translation>מצב ספק כוח</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="984"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="983"/>
         <source>Thermal State</source>
         <translation>מצב תרמי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="987"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="986"/>
         <source>Security Status</source>
         <translation>מצב אבטחה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="990"/>
         <source>Height</source>
         <translation>גובה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="990"/>
         <source>%1 U</source>
         <translation>%1 U</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="994"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="993"/>
         <source>Power Cords</source>
         <translation>כבלי חשמל</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1010"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1009"/>
         <source>Processor %1</source>
         <translation>מעבד %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1020"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1547"/>
         <source>Installed</source>
         <translation>מותקן</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1032"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1031"/>
         <source>Family</source>
         <translation>משפחה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1038"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1402"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1454"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1037"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1401"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1453"/>
         <source>Status</source>
         <translation>סטטוס</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1042"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1126"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1041"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1125"/>
         <source>Socket Designation</source>
         <translation>ייעוד שקע</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1047"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1046"/>
         <source>Socket</source>
         <translation>שקע</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1050"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1049"/>
         <source>Socket Type</source>
         <translation>סוג שקע</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1053"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1264"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1919"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1052"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1263"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1918"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1055"/>
         <source>Voltage</source>
         <translation>מתח</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1055"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1059"/>
         <source>External Clock</source>
         <translation>שעון חיצוני</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1059"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1064"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1068"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1064"/>
         <source>Max Speed</source>
         <translation>מהירות מרבית</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1068"/>
         <source>Current Speed</source>
         <translation>מהירות נוכחית</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1074"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1073"/>
         <source>Core Count</source>
         <translation>מספר ליבות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1077"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1076"/>
         <source>Cores Enabled</source>
         <translation>ליבות מופעלות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1080"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1079"/>
         <source>Thread Count</source>
         <translation>מספר הליכי משנה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1083"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1082"/>
         <source>Threads Enabled</source>
         <translation>הליכי משנה מופעלים</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1092"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1601"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1091"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1600"/>
         <source>Part Number</source>
         <translation>מק&quot;ט</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
         <source>64-bit Capable</source>
         <translation>תמיכה ב-64 סיביות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <source>Multi-Core</source>
         <translation>מרובה ליבות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
         <source>Hardware Thread</source>
         <translation>הליך משנה בחומרה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1097"/>
         <source>Execute Protection</source>
         <translation>הגנת ביצוע</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
         <source>Enhanced Virtualization</source>
         <translation>וירטואליזציה משופרת</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
         <source>Power/Performance Control</source>
         <translation>בקרת צריכה/ביצועים</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1116"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1115"/>
         <source>L%1 Cache</source>
         <translation>מטמון L%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1128"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1127"/>
         <source>Level</source>
         <translation>רמה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1134"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1133"/>
         <source>Installed Size</source>
         <translation>גודל מותקן</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1137"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1136"/>
         <source>Maximum Size</source>
         <translation>גודל מרבי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1140"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1399"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1497"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1540"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1139"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1398"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1496"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1539"/>
         <source>Location</source>
         <translation>מיקום</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1143"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1142"/>
         <source>Operational Mode</source>
         <translation>מצב פעולה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1146"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1145"/>
         <source>SRAM Type</source>
         <translation>סוג SRAM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1150"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1149"/>
         <source>Supported SRAM Types</source>
         <translation>סוגי SRAM נתמכים</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1156"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1155"/>
         <source>Error Correction Type</source>
         <translation>סוג תיקון שגיאות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1161"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1160"/>
         <source>Associativity</source>
         <translation>אסוציאטיביות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1164"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1570"/>
         <source>Speed</source>
         <translation>מהירות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1164"/>
         <source>%1 ns</source>
         <translation>%1 ns</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
         <source>Enabled</source>
         <translation>מופעל</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
         <source>Socketed</source>
         <translation>מותקן בשקע</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1187"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1186"/>
         <source>Port %1</source>
         <translation>יציאה %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1197"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1196"/>
         <source>Port Type</source>
         <translation>סוג יציאה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1201"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1200"/>
         <source>Internal Designator</source>
         <translation>ייעוד פנימי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1207"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1206"/>
         <source>Internal Connector Type</source>
         <translation>סוג מחבר פנימי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1213"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1212"/>
         <source>External Designator</source>
         <translation>ייעוד חיצוני</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1219"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1218"/>
         <source>External Connector Type</source>
         <translation>סוג מחבר חיצוני</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1237"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1236"/>
         <source>Slot %1</source>
         <translation>חריץ %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1247"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1246"/>
         <source>Designation</source>
         <translation>ייעוד</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1253"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1252"/>
         <source>Data Bus Width</source>
         <translation>רוחב אפיק נתונים</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1256"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1255"/>
         <source>Current Usage</source>
         <translation>שימוש נוכחי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1259"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1258"/>
         <source>Length</source>
         <translation>אורך</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1262"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1312"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1261"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1311"/>
         <source>Bus Address</source>
         <translation>כתובת אפיק</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
         <source>5 V Provided</source>
         <translation>אספקת 5 V</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <source>3.3 V Provided</source>
         <translation>אספקת 3.3 V</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <source>Shared</source>
         <translation>משותף</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <source>PME Signal</source>
         <translation>אות PME</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <source>Hot Plug</source>
         <translation>חיבור חם</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <source>SMBus Signal</source>
         <translation>אות SMBus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
         <source>Bifurcation</source>
         <translation>Bifurcation</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1292"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1438"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1530"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1845"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1291"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1437"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1529"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1844"/>
         <source>Device %1</source>
         <translation>התקן %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1302"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1396"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1448"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1855"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1301"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1395"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1447"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1854"/>
         <source>Description</source>
         <translation>תיאור</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1309"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1308"/>
         <source>Type Instance</source>
         <translation>מופע סוג</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1326"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1325"/>
         <source>String %1</source>
         <translation>מחרוזת %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1340"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1339"/>
         <source>Option %1</source>
         <translation>אפשרות %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1358"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1357"/>
         <source>Probe %1</source>
         <translation>חיישן %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1369"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1368"/>
         <source>mV</source>
         <translation>mV</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1371"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1370"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1373"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1372"/>
         <source>mA</source>
         <translation>mA</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1405"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1404"/>
         <source>Nominal Value</source>
         <translation>ערך נומינלי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1408"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1407"/>
         <source>Maximum Value</source>
         <translation>ערך מרבי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1411"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1410"/>
         <source>Minimum Value</source>
         <translation>ערך מזערי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1414"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1413"/>
         <source>Tolerance</source>
         <translation>סבילות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1417"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1416"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1678"/>
         <source>Resolution</source>
         <translation>רזולוציה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1421"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1420"/>
         <source>Accuracy</source>
         <translation>דיוק</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1458"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1457"/>
         <source>Cooling Unit Group</source>
         <translation>קבוצת יחידות קירור</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1460"/>
         <source>Nominal Speed</source>
         <translation>מהירות נומינלית</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1460"/>
         <source>%1 rpm</source>
         <translation>%1 rpm</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1471"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1470"/>
         <source>Boot Status</source>
         <translation>מצב אתחול</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1487"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1486"/>
         <source>Array %1</source>
         <translation>מערך %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1500"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1499"/>
         <source>Use</source>
         <translation>שימוש</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1504"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1503"/>
         <source>Error Correction</source>
         <translation>תיקון שגיאות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1510"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1509"/>
         <source>Maximum Capacity</source>
         <translation>קיבולת מרבית</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1514"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1513"/>
         <source>Number of Devices</source>
         <translation>מספר התקנים</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1543"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1542"/>
         <source>Bank</source>
         <translation>בנק</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1556"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1711"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1750"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1555"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1710"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1749"/>
         <source>Size</source>
         <translation>גודל</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1562"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1561"/>
         <source>Type Detail</source>
         <translation>פירוט סוג</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1565"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1564"/>
         <source>Form Factor</source>
         <translation>גורם צורה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1568"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1567"/>
         <source>Technology</source>
         <translation>טכנולוגיה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1576"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1570"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
         <source>%1 MT/s</source>
         <translation>%1 MT/s</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1574"/>
         <source>Configured Speed</source>
         <translation>מהירות מוגדרת</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1579"/>
         <source>Total Width</source>
         <translation>רוחב כולל</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1579"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1582"/>
         <source>%1 bit</source>
         <translation>%1 סיביות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1582"/>
         <source>Data Width</source>
         <translation>רוחב נתונים</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1586"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1585"/>
         <source>Rank</source>
         <translation>דרגה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1588"/>
         <source>Minimum Voltage</source>
         <translation>מתח מזערי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1597"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1588"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1591"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
         <source>%1 mV</source>
         <translation>%1 mV</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1591"/>
         <source>Maximum Voltage</source>
         <translation>מתח מרבי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1595"/>
         <source>Configured Voltage</source>
         <translation>מתח מוגדר</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1611"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1864"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1610"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1863"/>
         <source>Firmware Version</source>
         <translation>גרסת קושחה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1617"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1616"/>
         <source>Non-volatile Size</source>
         <translation>גודל זיכרון לא נדיף</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1623"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1622"/>
         <source>Volatile Size</source>
         <translation>גודל זיכרון נדיף</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1628"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1627"/>
         <source>Cache Size</source>
         <translation>גודל מטמון</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1631"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1630"/>
         <source>Logical Size</source>
         <translation>גודל לוגי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1641"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1640"/>
         <source>Record %1</source>
         <translation>רשומה %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1654"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1653"/>
         <source>Granularity</source>
         <translation>גרנולריות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1657"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1656"/>
         <source>Operation</source>
         <translation>פעולה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1662"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1661"/>
         <source>Vendor Syndrome</source>
         <translation>תסמונת ספק</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1668"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1667"/>
         <source>Memory Array Address</source>
         <translation>כתובת מערך זיכרון</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1674"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1673"/>
         <source>Device Address</source>
         <translation>כתובת התקן</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1678"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1959"/>
         <source>%1 bytes</source>
         <translation>%1 בתים</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1692"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1730"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1691"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1729"/>
         <source>Range %1</source>
         <translation>טווח %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1702"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1701"/>
         <source>Array</source>
         <translation>מערך</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1707"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1746"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1706"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1745"/>
         <source>Starting Address</source>
         <translation>כתובת התחלה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1709"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1748"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1708"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1747"/>
         <source>Ending Address</source>
         <translation>כתובת סיום</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1716"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1715"/>
         <source>Partition Width</source>
         <translation>רוחב מחיצה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1741"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1740"/>
         <source>Device</source>
         <translation>התקן</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1754"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1753"/>
         <source>Partition Row Position</source>
         <translation>מיקום שורת מחיצה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1758"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1757"/>
         <source>Interleave Position</source>
         <translation>מיקום שילוב</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1764"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1763"/>
         <source>Interleaved Data Depth</source>
         <translation>עומק נתונים משולבים</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1779"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1814"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1778"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1813"/>
         <source>Entry %1</source>
         <translation>רשומה %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1789"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1788"/>
         <source>String</source>
         <translation>מחרוזת</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1792"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1791"/>
         <source>Value</source>
         <translation>ערך</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1795"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1794"/>
         <source>Referenced Handle</source>
         <translation>נקודת אחיזה מקושרת</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1797"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1796"/>
         <source>Referenced Offset</source>
         <translation>היסט מקושר</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1826"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1825"/>
         <source>Processor</source>
         <translation>מעבד</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1829"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1828"/>
         <source>Architecture</source>
         <translation>ארכיטקטורה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1858"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1857"/>
         <source>Vendor ID</source>
         <translation>מזהה ספק</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1861"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1860"/>
         <source>Specification Version</source>
         <translation>גרסת מפרט</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1867"/>
         <source>Configurable by Firmware</source>
         <translation>ניתן להגדרה על-ידי קושחה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
         <source>Configurable by Software</source>
         <translation>ניתן להגדרה על-ידי תוכנה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
         <source>Configurable by OEM</source>
         <translation>ניתן להגדרה על-ידי OEM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1888"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1887"/>
         <source>Firmware %1</source>
         <translation>קושחה %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1898"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1897"/>
         <source>Name</source>
         <translation>שם</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1907"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1906"/>
         <source>Version Format</source>
         <translation>תבנית גרסה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1911"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1910"/>
         <source>Lowest Supported Version</source>
         <translation>הגרסה הנמוכה ביותר הנתמכת</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1921"/>
         <source>ID Format</source>
         <translation>תבנית ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1925"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1924"/>
         <source>State</source>
         <translation>מצב</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1928"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1927"/>
         <source>Image Size</source>
         <translation>גודל תמונה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
         <source>Updatable</source>
         <translation>ניתן לעדכון</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <source>Write-protected</source>
         <translation>מוגן מפני כתיבה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1937"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1936"/>
         <source>Component %1</source>
         <translation>רכיב %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1942"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1941"/>
         <source>Associated Components</source>
         <translation>רכיבים משויכים</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1954"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1953"/>
         <source>SMBIOS Version</source>
         <translation>גרסת SMBIOS</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1957"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1956"/>
         <source>Structures</source>
         <translation>מבנים</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1959"/>
         <source>Structures Size</source>
         <translation>גודל מבנים</translation>
     </message>
@@ -10922,17 +10937,17 @@ Credentials imported: %5</source>
         <translation>מצבי וידאו נתמכים</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="294"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="293"/>
         <source>Digital</source>
         <translation>דיגיטלי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="296"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="295"/>
         <source>Analog</source>
         <translation>אנלוגי</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="298"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="297"/>
         <source>Unknown</source>
         <translation>לא ידוע</translation>
     </message>
@@ -11139,7 +11154,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="316"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="315"/>
         <source>Charging</source>
         <translation>בטעינה</translation>
     </message>
@@ -11153,7 +11168,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="314"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="313"/>
         <source>Critical</source>
         <translation>קריטי</translation>
     </message>
@@ -11178,33 +11193,33 @@ Credentials imported: %5</source>
         <translation>סוללה מס&apos; %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="292"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="291"/>
         <source>DC Battery</source>
         <translation>סוללת DC</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="295"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="294"/>
         <source>AC Line</source>
         <translation>רשת חשמל</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="298"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="320"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="319"/>
         <source>Unknown</source>
         <translation>לא ידוע</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="310"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="309"/>
         <source>High</source>
         <translation>גבוה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="312"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="311"/>
         <source>Low</source>
         <translation>נמוך</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="318"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="317"/>
         <source>No Battery</source>
         <translation>אין סוללה</translation>
     </message>
