@@ -417,10 +417,10 @@
      <normaloff>:/img/chat.svg</normaloff>:/img/chat.svg</iconset>
    </property>
    <property name="text">
-    <string>Text Chat</string>
+    <string>Chat</string>
    </property>
    <property name="toolTip">
-    <string>Text Chat</string>
+    <string>Chat</string>
    </property>
    <property name="visible">
     <bool>false</bool>
