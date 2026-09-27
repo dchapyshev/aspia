@@ -6993,7 +6993,7 @@ Credentials imported: %5</source>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n пользователь</numerusform>
-            <numerusform>%n пользователья</numerusform>
+            <numerusform>%n пользователя</numerusform>
             <numerusform>%n пользователей</numerusform>
         </translation>
     </message>
