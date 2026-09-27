@@ -68,7 +68,7 @@
             <item>
              <widget class="QLabel" name="label_video_capturer">
               <property name="text">
-               <string>Preffered video capturer:</string>
+               <string>Preferred video capturer:</string>
               </property>
              </widget>
             </item>
