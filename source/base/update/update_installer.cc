@@ -50,6 +50,10 @@
 #include <QProcessEnvironment>
 #endif // (defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)) || defined(Q_OS_MACOS)
 
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include "base/linux/linux_util.h"
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+
 namespace {
 
 const qint64 kHashBlockSize = 1024 * 1024;
@@ -210,8 +214,9 @@ bool UpdateInstaller::isSupported(const QString& format)
     if (format == "deb")
         return !QStandardPaths::findExecutable("apt-get").isEmpty();
 
+    // ALT Linux installs rpm packages with apt-get.
     if (format == "rpm")
-        return !QStandardPaths::findExecutable("dnf").isEmpty();
+        return !QStandardPaths::findExecutable("dnf").isEmpty() || LinuxUtil::isAltLinux();
 
     return false;
 #elif defined(Q_OS_MACOS)
@@ -483,6 +488,8 @@ bool UpdateInstaller::startInstaller()
 #else
     // Both managers install a local file and pull in what it depends on.
     if (update_info_.format() == "deb")
+        arguments << "apt-get" << "install" << "-y" << file_path_;
+    else if (update_info_.format() == "rpm" && LinuxUtil::isAltLinux())
         arguments << "apt-get" << "install" << "-y" << file_path_;
     else if (update_info_.format() == "rpm")
         arguments << "dnf" << "install" << "-y" << file_path_;

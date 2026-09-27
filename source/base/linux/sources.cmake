@@ -21,6 +21,8 @@ collect_sources(SOURCE_BASE_LINUX
     late_binding_symbol_table.h
     libsystemd.cc
     libsystemd.h
+    linux_util.cc
+    linux_util.h
     pulseaudio_symbol_table.cc
     pulseaudio_symbol_table.h
     scoped_user_credentials.cc

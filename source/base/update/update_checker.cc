@@ -30,6 +30,10 @@
 #include "base/crypto/signature.h"
 #include "base/net/curl_util.h"
 
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include "base/linux/linux_util.h"
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+
 namespace {
 
 const long kMaxFileSize = 1024 * 1024;
@@ -162,7 +166,10 @@ void UpdateChecker::check()
 #elif defined(Q_OS_ANDROID)
     format = "apk";
 #elif defined(Q_OS_LINUX)
-    if (!QStandardPaths::findExecutable("apt-get").isEmpty())
+    // ALT Linux has apt-get, but it installs rpm packages.
+    if (LinuxUtil::isAltLinux())
+        format = "rpm";
+    else if (!QStandardPaths::findExecutable("apt-get").isEmpty())
         format = "deb";
     else if (!QStandardPaths::findExecutable("dnf").isEmpty())
         format = "rpm";
