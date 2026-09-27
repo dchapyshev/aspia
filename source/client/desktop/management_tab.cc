@@ -1429,18 +1429,23 @@ void ManagementTab::onDeleteGroupAction()
 
     auto* group_item = static_cast<SidebarRouterGroup*>(item);
 
+    // A refresh or a disconnect of the router while the question is shown deletes the item, so the
+    // ids are taken before asking.
+    const qint64 router_id = group_item->routerId();
+    const qint64 workspace_id = group_item->workspaceId();
+    const qint64 group_id = group_item->groupId();
+
     const QString question = tr("Are you sure you want to delete the group \"%1\"? "
                                 "Hosts assigned to this group or its subgroups will be moved "
                                 "to the workspace root.").arg(group_item->text(0));
     if (MsgBox::question(this, question) == MsgBox::No)
         return;
 
-    const qint64 router_id = group_item->routerId();
     RouterSession* session = RouterController::session(router_id);
     if (!session)
         return;
 
-    session->deleteGroup(group_item->workspaceId(), group_item->groupId(), { this,
+    session->deleteGroup(workspace_id, group_id, { this,
         [this, router_id](const proto::router::GroupResult& result)
     {
         if (result.error_code() != proto::router::kErrorOk)

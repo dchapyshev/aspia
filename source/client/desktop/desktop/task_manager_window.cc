@@ -648,12 +648,16 @@ void TaskManagerWindow::onEndProcess()
     ProcessItem* current_item = static_cast<ProcessItem*>(ui->tree_processes->currentItem());
     if (current_item)
     {
+        // An update that arrives while the question is shown deletes the item of a process that
+        // has exited, so the id is taken before asking.
+        const quint64 process_id = current_item->processId();
+
         if (MsgBox::question(this,
                 tr("Do you really want to end \"%1\" process?")
                     .arg(current_item->text(PROC_COL_NAME))) == MsgBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
-            sendEndProcessRequest(current_item->processId());
+            sendEndProcessRequest(process_id);
         }
         else
         {
@@ -698,13 +702,16 @@ void TaskManagerWindow::onDisconnectUser()
     UserItem* current_item = static_cast<UserItem*>(ui->tree_users->currentItem());
     if (current_item)
     {
+        // An update that arrives while the question is shown deletes the item of a session that
+        // has ended, so the id is taken before asking.
+        const quint32 session_id = current_item->sessionId();
+
         if (MsgBox::question(this,
                 tr("Do you really want to disconnect user \"%1\" session?")
                     .arg(current_item->text(USER_COL_NAME))) == MsgBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
-            sendUserRequest(
-                current_item->sessionId(), proto::task_manager::UserRequest::COMMAND_DISCONNECT);
+            sendUserRequest(session_id, proto::task_manager::UserRequest::COMMAND_DISCONNECT);
         }
         else
         {
@@ -721,13 +728,16 @@ void TaskManagerWindow::onLogoffUser()
     UserItem* current_item = static_cast<UserItem*>(ui->tree_users->currentItem());
     if (current_item)
     {
+        // An update that arrives while the question is shown deletes the item of a session that
+        // has ended, so the id is taken before asking.
+        const quint32 session_id = current_item->sessionId();
+
         if (MsgBox::question(this,
                 tr("Do you really want to end user \"%1\" session?")
                     .arg(current_item->text(USER_COL_NAME))) == MsgBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
-            sendUserRequest(
-                current_item->sessionId(), proto::task_manager::UserRequest::COMMAND_LOGOFF);
+            sendUserRequest(session_id, proto::task_manager::UserRequest::COMMAND_LOGOFF);
         }
         else
         {

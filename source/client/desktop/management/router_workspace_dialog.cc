@@ -527,13 +527,17 @@ void RouterWorkspaceDialog::onHostRemoveClicked()
     if (!item)
         return;
 
+    // A refetch that arrives while the question is shown rebuilds the list and deletes the item,
+    // so the id is taken before asking.
+    const quint64 host_id = item->data(Qt::UserRole).toULongLong();
+
     if (MsgBox::question(this, tr("Are you sure you want to remove the host from the workspace?")) == MsgBox::No)
     {
         LOG(INFO) << "Action is rejected by user";
         return;
     }
 
-    moveHost(hostById(item->data(Qt::UserRole).toULongLong()), kNoWorkspace);
+    moveHost(hostById(host_id), kNoWorkspace);
 }
 
 //--------------------------------------------------------------------------------------------------
