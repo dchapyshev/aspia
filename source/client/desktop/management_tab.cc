@@ -625,10 +625,12 @@ void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& p
         if (RouterSession* session = RouterController::session(workspace_item->routerId()))
             session_type = session->config().sessionType();
 
-        // Clients are read-only and cannot manage host groups or workspaces.
+        // Operators are read-only; only an administrator manages the workspaces themselves.
         if (session_type != proto::router::SESSION_TYPE_OPERATOR)
-        {
             menu.addAction(ui->action_add_group);
+
+        if (session_type == proto::router::SESSION_TYPE_ADMIN)
+        {
             menu.addSeparator();
             menu.addAction(ui->action_edit_workspace);
             menu.addAction(ui->action_delete_workspace);
@@ -1938,11 +1940,11 @@ void ManagementTab::updateActionsState()
         if (RouterSession* session = RouterController::session(workspace_item->routerId()))
             session_type = session->config().sessionType();
 
-        // Clients are read-only and cannot manage host groups or workspaces.
-        const bool can_manage = session_type != proto::router::SESSION_TYPE_OPERATOR;
-        ui->action_add_group->setVisible(can_manage);
-        ui->action_edit_workspace->setVisible(can_manage);
-        ui->action_delete_workspace->setVisible(can_manage);
+        // Operators are read-only; only an administrator manages the workspaces themselves.
+        const bool is_admin = session_type == proto::router::SESSION_TYPE_ADMIN;
+        ui->action_add_group->setVisible(session_type != proto::router::SESSION_TYPE_OPERATOR);
+        ui->action_edit_workspace->setVisible(is_admin);
+        ui->action_delete_workspace->setVisible(is_admin);
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_GROUP)
     {
