@@ -24,6 +24,7 @@
 #include <QTimer>
 #include <QTranslator>
 
+#include "base/auto_qpointer.h"
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/crypto/password_generator.h"
@@ -140,7 +141,9 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui->button_check_updates, &QPushButton::clicked, this, [this]()
     {
-        UpdateDialog(SystemSettings().updateChannel(), "host", UpdateDialog::Action::ASK, this).exec();
+        AutoQPointer<UpdateDialog> dialog(
+            new UpdateDialog(SystemSettings().updateChannel(), "host", UpdateDialog::Action::ASK, this));
+        dialog->exec();
     });
 
     ui->combo_video_capturer->addItem(
@@ -404,8 +407,8 @@ void ConfigDialog::onAddUser()
 {
     LOG(INFO) << "[ACTION] Add user";
 
-    UserDialog dialog(0, this);
-    if (dialog.exec() == QDialog::Accepted)
+    AutoQPointer<UserDialog> dialog(new UserDialog(0, this));
+    if (dialog->exec() == QDialog::Accepted)
         reloadUserList();
 }
 
@@ -421,8 +424,8 @@ void ConfigDialog::onModifyUser()
         return;
     }
 
-    UserDialog dialog(current_item->entryId(), this);
-    if (dialog.exec() == QDialog::Accepted)
+    AutoQPointer<UserDialog> dialog(new UserDialog(current_item->entryId(), this));
+    if (dialog->exec() == QDialog::Accepted)
         reloadUserList();
 }
 
@@ -460,10 +463,11 @@ void ConfigDialog::onPassProtectClicked()
     {
         case Database::PasswordProtection::DISABLED:
         {
-            ChangePasswordDialog dialog(ChangePasswordDialog::Mode::CREATE_NEW_PASSWORD, this);
-            if (dialog.exec() == ChangePasswordDialog::Accepted)
+            AutoQPointer<ChangePasswordDialog> dialog(
+                new ChangePasswordDialog(ChangePasswordDialog::Mode::CREATE_NEW_PASSWORD, this));
+            if (dialog->exec() == ChangePasswordDialog::Accepted)
             {
-                if (!db.setPassword(dialog.newPassword()))
+                if (!db.setPassword(dialog->newPassword()))
                 {
                     MsgBox::warning(this, tr("An error occurred while processing the password."));
                     return;
@@ -474,8 +478,8 @@ void ConfigDialog::onPassProtectClicked()
 
         case Database::PasswordProtection::ENABLED:
         {
-            CheckPasswordDialog dialog(this);
-            if (dialog.exec() == CheckPasswordDialog::Accepted)
+            AutoQPointer<CheckPasswordDialog> dialog(new CheckPasswordDialog(this));
+            if (dialog->exec() == CheckPasswordDialog::Accepted)
                 db.clearPassword();
         }
         break;
@@ -493,10 +497,11 @@ void ConfigDialog::onPassProtectClicked()
 //--------------------------------------------------------------------------------------------------
 void ConfigDialog::onChangePassClicked()
 {
-    ChangePasswordDialog dialog(ChangePasswordDialog::Mode::CHANGE_PASSWORD, this);
-    if (dialog.exec() == ChangePasswordDialog::Accepted)
+    AutoQPointer<ChangePasswordDialog> dialog(
+        new ChangePasswordDialog(ChangePasswordDialog::Mode::CHANGE_PASSWORD, this));
+    if (dialog->exec() == ChangePasswordDialog::Accepted)
     {
-        if (!Database::instance().setPassword(dialog.newPassword()))
+        if (!Database::instance().setPassword(dialog->newPassword()))
         {
             MsgBox::warning(this, tr("An error occurred while processing the password."));
             return;

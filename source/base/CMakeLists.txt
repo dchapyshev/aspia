@@ -19,6 +19,7 @@
 list(APPEND SOURCE_BASE
     aligned_memory.cc
     aligned_memory.h
+    auto_qpointer.h
     bitset.h
     bucket_pool.h
     build_config.cc

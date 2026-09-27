@@ -22,6 +22,28 @@
 #include <QPointer>
 #include <QTimer>
 
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+int execAndDelete(MsgBox* message_box, QMessageBox::StandardButtons buttons)
+{
+    QPointer<MsgBox> guard(message_box);
+    const int result = message_box->exec();
+    if (!guard)
+    {
+        if (buttons & QMessageBox::No)
+            return QMessageBox::No;
+        if (buttons & QMessageBox::Cancel)
+            return QMessageBox::Cancel;
+        return QMessageBox::NoButton;
+    }
+
+    delete message_box;
+    return result;
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 MsgBox::MsgBox(QWidget* parent)
     : QMessageBox(parent)
@@ -82,25 +104,25 @@ int MsgBox::exec()
 // static
 int MsgBox::warning(QWidget* parent, const QString& text, StandardButtons buttons)
 {
-    MsgBox message_box(QMessageBox::Warning, tr("Warning"), text, buttons, parent);
-    return message_box.exec();
+    MsgBox* message_box = new MsgBox(QMessageBox::Warning, tr("Warning"), text, buttons, parent);
+    return execAndDelete(message_box, buttons);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 int MsgBox::information(QWidget* parent, const QString& text, StandardButtons buttons)
 {
-    MsgBox message_box(QMessageBox::Information, tr("Information"), text, buttons, parent);
-    return message_box.exec();
+    MsgBox* message_box = new MsgBox(QMessageBox::Information, tr("Information"), text, buttons, parent);
+    return execAndDelete(message_box, buttons);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 int MsgBox::question(QWidget* parent, const QString& text, StandardButtons buttons)
 {
-    MsgBox message_box(QMessageBox::Question, tr("Confirmation"), text, buttons, parent);
-    message_box.setTextFormat(Qt::PlainText);
-    return message_box.exec();
+    MsgBox* message_box = new MsgBox(QMessageBox::Question, tr("Confirmation"), text, buttons, parent);
+    message_box->setTextFormat(Qt::PlainText);
+    return execAndDelete(message_box, buttons);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -108,18 +130,18 @@ int MsgBox::question(QWidget* parent, const QString& text, StandardButtons butto
 int MsgBox::importantQuestion(QWidget* parent, const QString& text, Seconds delay,
                               StandardButtons buttons)
 {
-    MsgBox message_box(QMessageBox::Question, tr("Confirmation"), text, buttons, parent);
-    message_box.setTextFormat(Qt::PlainText);
+    MsgBox* message_box = new MsgBox(QMessageBox::Question, tr("Confirmation"), text, buttons, parent);
+    message_box->setTextFormat(Qt::PlainText);
 
     // The safe button is made default, the countdown is set on the accepting one.
-    if (message_box.button(No))
-        message_box.setDefaultButton(No);
+    if (message_box->button(No))
+        message_box->setDefaultButton(No);
     else
-        message_box.setDefaultButton(Cancel);
+        message_box->setDefaultButton(Cancel);
 
-    QPointer<QAbstractButton> button = message_box.button(Yes);
+    QPointer<QAbstractButton> button = message_box->button(Yes);
     if (!button)
-        button = message_box.button(Ok);
+        button = message_box->button(Ok);
 
     if (button && delay > Seconds::zero())
     {
@@ -157,5 +179,5 @@ int MsgBox::importantQuestion(QWidget* parent, const QString& text, Seconds dela
         timer->start(MilliSeconds::zero());
     }
 
-    return message_box.exec();
+    return execAndDelete(message_box, buttons);
 }

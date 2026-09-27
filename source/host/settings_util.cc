@@ -343,12 +343,8 @@ bool SettingsUtil::confirmOverwrite(QWidget* parent)
     return MessageDialog::confirm(parent, tr("Warning"),
         tr("The existing settings will be overwritten. Continue?"), tr("Continue"));
 #else
-    MsgBox message_box(MsgBox::Warning,
-        tr("Warning"),
-        tr("The existing settings will be overwritten. Continue?"),
-        MsgBox::Yes | MsgBox::No,
-        parent);
-    return message_box.exec() == MsgBox::Yes;
+    return MsgBox::warning(parent, tr("The existing settings will be overwritten. Continue?"),
+                           MsgBox::Yes | MsgBox::No) == MsgBox::Yes;
 #endif
 }
 

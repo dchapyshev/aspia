@@ -33,6 +33,7 @@
 #include <algorithm>
 #include <set>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "common/desktop/msg_box.h"
 #include "common/sys_info/sys_info_report.h"
@@ -362,8 +363,8 @@ void SysInfoView::onPrint()
 
     QPrinter printer;
 
-    QPrintDialog dialog(&printer, this);
-    if (dialog.exec() != QPrintDialog::Accepted)
+    AutoQPointer<QPrintDialog> dialog(new QPrintDialog(&printer, this));
+    if (dialog->exec() != QPrintDialog::Accepted)
         return;
 
     document.print(&printer);

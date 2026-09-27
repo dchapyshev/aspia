@@ -22,6 +22,7 @@
 #include <QItemSelectionModel>
 #include <QMenu>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "client/database.h"
 #include "client/desktop/ui_credentials_tab.h"
@@ -112,8 +113,8 @@ void CredentialsTab::onExportAction()
 {
     LOG(INFO) << "[ACTION] Export credentials";
 
-    CredentialExportDialog dialog(this);
-    dialog.exec();
+    AutoQPointer<CredentialExportDialog> dialog(new CredentialExportDialog(this));
+    dialog->exec();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -121,8 +122,8 @@ void CredentialsTab::onImportAction()
 {
     LOG(INFO) << "[ACTION] Import credentials";
 
-    CredentialImportDialog dialog(this);
-    dialog.exec();
+    AutoQPointer<CredentialImportDialog> dialog(new CredentialImportDialog(this));
+    dialog->exec();
     reload(-1);
 }
 
@@ -131,14 +132,14 @@ void CredentialsTab::onAddAction()
 {
     LOG(INFO) << "[ACTION] Add credentials";
 
-    CredentialDialog dialog(-1, this);
-    if (dialog.exec() == CredentialDialog::Rejected)
+    AutoQPointer<CredentialDialog> dialog(new CredentialDialog(-1, this));
+    if (dialog->exec() == CredentialDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
 
-    reload(dialog.credentialId());
+    reload(dialog->credentialId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -152,8 +153,8 @@ void CredentialsTab::onEditAction()
 
     const qint64 credential_id = credential->id();
 
-    CredentialDialog dialog(credential_id, this);
-    if (dialog.exec() == CredentialDialog::Rejected)
+    AutoQPointer<CredentialDialog> dialog(new CredentialDialog(credential_id, this));
+    if (dialog->exec() == CredentialDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
@@ -171,6 +172,8 @@ void CredentialsTab::onDeleteAction()
     if (!credential)
         return;
 
+    const qint64 credential_id = credential->id();
+
     if (MsgBox::question(this,
             tr("Are you sure you want to delete credentials \"%1\"?").arg(credential->displayName()),
             MsgBox::Yes | MsgBox::No) != MsgBox::Yes)
@@ -178,7 +181,7 @@ void CredentialsTab::onDeleteAction()
         return;
     }
 
-    if (!Database::instance().removeCredential(credential->id()))
+    if (!Database::instance().removeCredential(credential_id))
     {
         MsgBox::warning(this, tr("Unable to delete credentials."));
         return;

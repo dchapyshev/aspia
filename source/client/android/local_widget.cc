@@ -24,6 +24,7 @@
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 
+#include "base/auto_qpointer.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/data_cryptor.h"
@@ -335,11 +336,11 @@ void LocalWidget::onImport()
 
     if (result == Backup::Result::WRONG_PASSWORD)
     {
-        PasswordDialog dialog(PasswordDialog::Mode::ENTER, this);
-        if (dialog.exec() != QDialog::Accepted)
+        AutoQPointer<PasswordDialog> dialog(new PasswordDialog(PasswordDialog::Mode::ENTER, this));
+        if (dialog->exec() != QDialog::Accepted)
             return;
 
-        password = dialog.password();
+        password = dialog->password();
         result = Backup::importFromFile(Database::instance(), path, password, &report);
     }
 

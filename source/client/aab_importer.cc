@@ -20,6 +20,7 @@
 
 #include <QFile>
 
+#include "base/auto_qpointer.h"
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -340,18 +341,19 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
 
         case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
         {
-            CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, parent);
-            dialog.setWindowTitle(tr("Unlock"));
-            dialog.setHeaderIcon(":/img/lock.svg");
-            dialog.setHeaderText(tr("Address book is encrypted. To open, you must enter a password."));
-            dialog.setShowPasswordButtonVisible(true);
+            AutoQPointer<CredentialsDialog> dialog(
+                new CredentialsDialog(CredentialsDialog::Type::ENTER_PASSWORD, parent));
+            dialog->setWindowTitle(tr("Unlock"));
+            dialog->setHeaderIcon(":/img/lock.svg");
+            dialog->setHeaderText(tr("Address book is encrypted. To open, you must enter a password."));
+            dialog->setShowPasswordButtonVisible(true);
 
-            if (dialog.exec() != QDialog::Accepted)
+            if (dialog->exec() != QDialog::Accepted)
                 return false;
 
             SecureByteArray key = SecureByteArray(PasswordHash::hash(
                 PasswordHash::SCRYPT,
-                dialog.password(),
+                dialog->password(),
                 QByteArray::fromStdString(proto_file.hashing_salt())));
 
             std::optional<QByteArray> decrypted =

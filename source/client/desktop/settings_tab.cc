@@ -34,6 +34,7 @@
 
 #include <algorithm>
 
+#include "base/auto_qpointer.h"
 #include "base/build_config.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
@@ -512,11 +513,11 @@ void SettingsTab::onChangeMasterPassword()
 {
     LOG(INFO) << "[ACTION] Change master password";
 
-    CredentialsDialog dialog(CredentialsDialog::Type::CHANGE_PASSWORD, this);
-    dialog.setWindowTitle(tr("Change Master Password"));
-    dialog.setHeaderIcon(":/img/lock.svg");
-    dialog.setHeaderText(tr("Enter your current password and choose a new one."));
-    dialog.setValidator([this](CredentialsDialog* d) -> bool
+    AutoQPointer<CredentialsDialog> dialog(new CredentialsDialog(CredentialsDialog::Type::CHANGE_PASSWORD, this));
+    dialog->setWindowTitle(tr("Change Master Password"));
+    dialog->setHeaderIcon(":/img/lock.svg");
+    dialog->setHeaderText(tr("Enter your current password and choose a new one."));
+    dialog->setValidator([this](CredentialsDialog* d) -> bool
     {
         SecureString current = d->currentPassword();
         SecureString new_password = d->password();
@@ -561,7 +562,7 @@ void SettingsTab::onChangeMasterPassword()
 
         return true;
     });
-    dialog.exec();
+    dialog->exec();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -583,8 +584,9 @@ void SettingsTab::onUpdateChannelChanged()
 void SettingsTab::onCheckForUpdatesClicked()
 {
     LOG(INFO) << "[ACTION] Check for updates";
-    UpdateDialog(ui->combobox_update_channel->currentData().toString(), "client",
-                 UpdateDialog::Action::ASK, this).exec();
+    AutoQPointer<UpdateDialog> dialog(new UpdateDialog(
+        ui->combobox_update_channel->currentData().toString(), "client", UpdateDialog::Action::ASK, this));
+    dialog->exec();
 }
 
 //--------------------------------------------------------------------------------------------------

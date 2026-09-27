@@ -39,6 +39,7 @@
 
 #include <algorithm>
 
+#include "base/auto_qpointer.h"
 #include "proto/terminal.h"
 
 namespace {
@@ -1077,17 +1078,17 @@ void TerminalWidget::paste()
 //--------------------------------------------------------------------------------------------------
 void TerminalWidget::showContextMenu(const QPoint& global_position)
 {
-    QMenu menu(this);
+    AutoQPointer<QMenu> menu(new QMenu(this));
 
-    QAction* copy_action = menu.addAction(QIcon(":/img/copy.svg"), tr("Copy"));
+    QAction* copy_action = menu->addAction(QIcon(":/img/copy.svg"), tr("Copy"));
     copy_action->setEnabled(has_selection_);
 
-    QAction* paste_action = menu.addAction(QIcon(":/img/paste.svg"), tr("Paste"));
+    QAction* paste_action = menu->addAction(QIcon(":/img/paste.svg"), tr("Paste"));
     paste_action->setEnabled(!QApplication::clipboard()->text().isEmpty());
 
-    QAction* select_all_action = menu.addAction(QIcon(":/img/select-all.svg"), tr("Select All"));
+    QAction* select_all_action = menu->addAction(QIcon(":/img/select-all.svg"), tr("Select All"));
 
-    QAction* chosen = menu.exec(global_position);
+    QAction* chosen = menu->exec(global_position);
     if (chosen == copy_action)
     {
         copySelection();

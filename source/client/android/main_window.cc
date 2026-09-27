@@ -27,6 +27,7 @@
 
 #include <optional>
 
+#include "base/auto_qpointer.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/host_id.h"
@@ -644,8 +645,8 @@ void AndroidMainWindow::runMasterPasswordGate()
 
     // The data cryptor is invalid until the dialog unlocks it, so quit if the user cancels. The
     // dialog is anchored to the content stack so only it is blurred, not the bars.
-    MasterPasswordDialog dialog(mode, stack_content_);
-    if (dialog.exec() != QDialog::Accepted)
+    AutoQPointer<MasterPasswordDialog> dialog(new MasterPasswordDialog(mode, stack_content_));
+    if (dialog->exec() != QDialog::Accepted)
     {
         QCoreApplication::quit();
         return;
@@ -711,8 +712,9 @@ void AndroidMainWindow::relock()
     relocking_ = true;
 
     // The data cryptor stays open; this only re-verifies the user (password or fingerprint).
-    MasterPasswordDialog dialog(MasterPasswordDialog::Mode::UNLOCK, stack_content_);
-    if (dialog.exec() != QDialog::Accepted)
+    AutoQPointer<MasterPasswordDialog> dialog(
+        new MasterPasswordDialog(MasterPasswordDialog::Mode::UNLOCK, stack_content_));
+    if (dialog->exec() != QDialog::Accepted)
     {
         QCoreApplication::quit();
         return;

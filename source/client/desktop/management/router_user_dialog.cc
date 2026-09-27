@@ -25,6 +25,7 @@
 #include <QPushButton>
 #include <QScrollBar>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "base/peer/user.h"
@@ -560,12 +561,12 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
             QString question = tr("Do you want to enter a different password?");
 
-            MsgBox message_box(MsgBox::Warning,
-                                    tr("Warning"),
-                                    QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
-                                    MsgBox::Yes | MsgBox::No,
-                                    this);
-            if (message_box.exec() == MsgBox::Yes)
+            AutoQPointer<MsgBox> message_box(new MsgBox(MsgBox::Warning,
+                tr("Warning"),
+                QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
+                MsgBox::Yes | MsgBox::No,
+                this));
+            if (message_box->exec() == MsgBox::Yes)
             {
                 ui->edit_password->clear();
                 ui->edit_password_retry->clear();

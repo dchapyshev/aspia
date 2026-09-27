@@ -24,6 +24,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
+#include "base/auto_qpointer.h"
 #include "base/build_config.h"
 #include "base/gui_application.h"
 #include "base/net/udp_channel.h"
@@ -264,8 +265,8 @@ void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
     Button* change_password = new Button(tr("Change Master Password"), Button::Role::FILLED);
     connect(change_password, &Button::clicked, this, [this]()
     {
-        MasterPasswordDialog dialog(MasterPasswordDialog::Mode::CHANGE, this);
-        dialog.exec();
+        AutoQPointer<MasterPasswordDialog> dialog(new MasterPasswordDialog(MasterPasswordDialog::Mode::CHANGE, this));
+        dialog->exec();
     });
     layout->addWidget(change_password);
 
@@ -429,8 +430,8 @@ bool SettingsWidget::setBiometricEnabled(bool enable)
 
     // Confirm the master password before binding its key to a biometric, so a momentarily unlocked
     // app cannot be used to enroll someone else's fingerprint.
-    MasterPasswordDialog dialog(MasterPasswordDialog::Mode::UNLOCK, this);
-    if (dialog.exec() != QDialog::Accepted)
+    AutoQPointer<MasterPasswordDialog> dialog(new MasterPasswordDialog(MasterPasswordDialog::Mode::UNLOCK, this));
+    if (dialog->exec() != QDialog::Accepted)
         return false;
 
     BiometricGate::Prompt prompt;

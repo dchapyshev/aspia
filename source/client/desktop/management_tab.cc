@@ -28,6 +28,7 @@
 #include <QStatusBar>
 #include <QTimer>
 
+#include "base/auto_qpointer.h"
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
@@ -945,14 +946,14 @@ void ManagementTab::onAddHost()
         return;
     }
 
-    LocalHostDialog dialog(-1, group_id, this);
-    if (dialog.exec() == LocalHostDialog::Rejected)
+    AutoQPointer<LocalHostDialog> dialog(new LocalHostDialog(-1, group_id, this));
+    if (dialog->exec() == LocalHostDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
 
-    qint64 new_id = dialog.entryId();
+    qint64 new_id = dialog->entryId();
     local_group_widget_->showGroup(group_id);
     local_group_widget_->setCurrentHost(new_id);
 }
@@ -982,9 +983,9 @@ void ManagementTab::onEditHost()
             const qint64 router_id = row->host.routerId();
             const RouterHost& host = row->router_host;
 
-            RouterHostDialog dialog(router_id, ui->sidebar->routerWorkspaceName(router_id, host.workspace_id),
-                                    host, this);
-            if (dialog.exec() == QDialog::Accepted)
+            AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(
+                router_id, ui->sidebar->routerWorkspaceName(router_id, host.workspace_id), host, this));
+            if (dialog->exec() == QDialog::Accepted)
                 search_widget_->search(search_widget_->currentQuery());
             return;
         }
@@ -1005,8 +1006,8 @@ void ManagementTab::onEditHost()
         return;
     }
 
-    LocalHostDialog dialog(entry_id, host.groupId(), this);
-    if (dialog.exec() == LocalHostDialog::Rejected)
+    AutoQPointer<LocalHostDialog> dialog(new LocalHostDialog(entry_id, host.groupId(), this));
+    if (dialog->exec() == LocalHostDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
@@ -1044,7 +1045,8 @@ void ManagementTab::onCopyHost()
 
     qint64 new_id = host.id();
 
-    LocalHostDialog(new_id, host.groupId(), this).exec();
+    AutoQPointer<LocalHostDialog> dialog(new LocalHostDialog(new_id, host.groupId(), this));
+    dialog->exec();
 
     if (current_content_ == search_widget_)
     {
@@ -1283,8 +1285,8 @@ void ManagementTab::onAddWorkspaceAction()
     if (!router_id || !RouterController::session(router_id))
         return;
 
-    RouterWorkspaceDialog dialog(router_id, 0, this);
-    if (dialog.exec() == QDialog::Accepted)
+    AutoQPointer<RouterWorkspaceDialog> dialog(new RouterWorkspaceDialog(router_id, 0, this));
+    if (dialog->exec() == QDialog::Accepted)
         ui->sidebar->onRefreshWorkspaces(router_id);
 }
 
@@ -1298,8 +1300,9 @@ void ManagementTab::onEditWorkspaceAction()
     auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
     const qint64 router_id = workspace_item->routerId();
 
-    RouterWorkspaceDialog dialog(router_id, workspace_item->workspaceId(), this);
-    if (dialog.exec() == QDialog::Accepted)
+    AutoQPointer<RouterWorkspaceDialog> dialog(
+        new RouterWorkspaceDialog(router_id, workspace_item->workspaceId(), this));
+    if (dialog->exec() == QDialog::Accepted)
         ui->sidebar->onRefreshWorkspaces(router_id);
 }
 
@@ -1381,8 +1384,9 @@ void ManagementTab::onAddGroupAction()
         return;
     }
 
-    RouterGroupDialog dialog(router_id, workspace_id, workspace_name, 0, default_parent_id, this);
-    if (dialog.exec() == QDialog::Accepted)
+    AutoQPointer<RouterGroupDialog> dialog(
+        new RouterGroupDialog(router_id, workspace_id, workspace_name, 0, default_parent_id, this));
+    if (dialog->exec() == QDialog::Accepted)
         ui->sidebar->onRefreshHostGroups(router_id);
 }
 
@@ -1405,9 +1409,9 @@ void ManagementTab::onEditGroupAction()
     auto* group_item = static_cast<SidebarRouterGroup*>(item);
 
     const qint64 router_id = group_item->routerId();
-    RouterGroupDialog dialog(router_id, group_item->workspaceId(), group_item->workspaceName(),
-        group_item->groupId(), 0, this);
-    if (dialog.exec() == QDialog::Accepted)
+    AutoQPointer<RouterGroupDialog> dialog(new RouterGroupDialog(router_id, group_item->workspaceId(),
+        group_item->workspaceName(), group_item->groupId(), 0, this));
+    if (dialog->exec() == QDialog::Accepted)
         ui->sidebar->onRefreshHostGroups(router_id);
 }
 
@@ -1604,17 +1608,17 @@ void ManagementTab::onImportBookAction()
 
     if (result == Backup::Result::WRONG_PASSWORD)
     {
-        CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, this);
-        dialog.setWindowTitle(tr("Restore from Backup"));
-        dialog.setHeaderIcon(":/img/lock.svg");
-        dialog.setHeaderText(tr("The backup was made on another installation. Enter the master "
+        AutoQPointer<CredentialsDialog> dialog(new CredentialsDialog(CredentialsDialog::Type::ENTER_PASSWORD, this));
+        dialog->setWindowTitle(tr("Restore from Backup"));
+        dialog->setHeaderIcon(":/img/lock.svg");
+        dialog->setHeaderText(tr("The backup was made on another installation. Enter the master "
                                 "password used there."));
-        dialog.setShowPasswordButtonVisible(true);
+        dialog->setShowPasswordButtonVisible(true);
 
-        if (dialog.exec() != QDialog::Accepted)
+        if (dialog->exec() != QDialog::Accepted)
             return;
 
-        password = dialog.password();
+        password = dialog->password();
         result = Backup::importFromFile(Database::instance(), file_path, password, &report);
     }
 

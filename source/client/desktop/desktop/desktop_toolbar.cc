@@ -28,6 +28,7 @@
 #include <QTimer>
 #include <QToolButton>
 
+#include "base/auto_qpointer.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/time_types.h"
@@ -229,7 +230,10 @@ void DesktopToolBar::enablePowerControl(bool enable)
             ui->toolbar->widgetForAction(ui->action_power_control));
         button->setPopupMode(QToolButton::InstantPopup);
 
-        connect(power_menu_.get(), &QMenu::triggered, this, &DesktopToolBar::onPowerControl);
+        // New capabilities that arrive while a question of the slot is shown recreate the menu the
+        // slot is called from and crash the client, so the slot runs after the menu is done.
+        connect(power_menu_.get(), &QMenu::triggered, this, &DesktopToolBar::onPowerControl,
+                Qt::QueuedConnection);
         connect(power_menu_.get(), &QMenu::aboutToShow, this, &DesktopToolBar::onMenuShow);
         connect(power_menu_.get(), &QMenu::aboutToHide, this, &DesktopToolBar::onMenuHide);
     }
@@ -537,12 +541,20 @@ void DesktopToolBar::setToolList(const proto::tools::ToolList& tool_list)
 
             if (action->property("confirm").toBool())
             {
-                if (MsgBox::question(this, tr("Are you sure you want to run \"%1\" on the remote "
-                                              "computer?").arg(action->text())) != MsgBox::Yes)
+                // A new tool list that arrives while the question is shown deletes the menu this
+                // handler is called from and crashes the client, so the question is asked later.
+                QMetaObject::invokeMethod(this, [this, id, name = action->text()]()
                 {
-                    LOG(INFO) << "[ACTION] Script rejected by user";
-                    return;
-                }
+                    if (MsgBox::question(this, tr("Are you sure you want to run \"%1\" on the remote "
+                                                  "computer?").arg(name)) != MsgBox::Yes)
+                    {
+                        LOG(INFO) << "[ACTION] Script rejected by user";
+                        return;
+                    }
+
+                    emit sig_executeScript(id);
+                }, Qt::QueuedConnection);
+                return;
             }
 
             emit sig_executeScript(id);
@@ -811,18 +823,18 @@ void DesktopToolBar::onPowerControl(QAction* action)
     else if (action == ui->action_reboot)
     {
         LOG(INFO) << "[ACTION] Reboot";
-        MsgBox message_box(MsgBox::Question,
-                                tr("Confirmation"),
-                                tr("Are you sure you want to reboot the remote computer?"),
-                                MsgBox::Yes | MsgBox::No,
-                                this);
+        AutoQPointer<MsgBox> message_box(new MsgBox(MsgBox::Question,
+            tr("Confirmation"),
+            tr("Are you sure you want to reboot the remote computer?"),
+            MsgBox::Yes | MsgBox::No,
+            this));
 
-        QCheckBox* wait_checkbox = new QCheckBox(&message_box);
+        QCheckBox* wait_checkbox = new QCheckBox(message_box);
         wait_checkbox->setText(tr("Wait for host"));
         wait_checkbox->setChecked(wait_for_host_);
-        message_box.setCheckBox(wait_checkbox);
+        message_box->setCheckBox(wait_checkbox);
 
-        if (message_box.exec() == MsgBox::Yes)
+        if (message_box->exec() == MsgBox::Yes)
         {
             wait_for_host_ = wait_checkbox->isChecked();
 
@@ -837,18 +849,18 @@ void DesktopToolBar::onPowerControl(QAction* action)
     else if (action == ui->action_reboot_safe_mode)
     {
         LOG(INFO) << "[ACTION] Reboot (safe mode)";
-        MsgBox message_box(MsgBox::Question,
-                                tr("Confirmation"),
-                                tr("Are you sure you want to reboot the remote computer in Safe Mode?"),
-                                MsgBox::Yes | MsgBox::No,
-                                this);
+        AutoQPointer<MsgBox> message_box(new MsgBox(MsgBox::Question,
+            tr("Confirmation"),
+            tr("Are you sure you want to reboot the remote computer in Safe Mode?"),
+            MsgBox::Yes | MsgBox::No,
+            this));
 
-        QCheckBox* wait_checkbox = new QCheckBox(&message_box);
+        QCheckBox* wait_checkbox = new QCheckBox(message_box);
         wait_checkbox->setText(tr("Wait for host"));
         wait_checkbox->setChecked(wait_for_host_);
-        message_box.setCheckBox(wait_checkbox);
+        message_box->setCheckBox(wait_checkbox);
 
-        if (message_box.exec() == MsgBox::Yes)
+        if (message_box->exec() == MsgBox::Yes)
         {
             wait_for_host_ = wait_checkbox->isChecked();
 

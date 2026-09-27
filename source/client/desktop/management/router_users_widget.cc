@@ -28,6 +28,7 @@
 #include <QMenu>
 #include <QStatusBar>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "client/router_controller.h"
 #include "client/desktop/management/router_user_dialog.h"
@@ -191,8 +192,8 @@ void RouterUsersWidget::deactivate(QStatusBar* statusbar)
 //--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::onAddUser()
 {
-    RouterUserDialog dialog(router_id_, 0, this);
-    if (dialog.exec() == QDialog::Accepted)
+    AutoQPointer<RouterUserDialog> dialog(new RouterUserDialog(router_id_, 0, this));
+    if (dialog->exec() == QDialog::Accepted)
         fetchUsers();
 }
 
@@ -206,8 +207,8 @@ void RouterUsersWidget::onModifyUser()
         return;
     }
 
-    RouterUserDialog dialog(router_id_, user->entry_id, this);
-    if (dialog.exec() == QDialog::Accepted)
+    AutoQPointer<RouterUserDialog> dialog(new RouterUserDialog(router_id_, user->entry_id, this));
+    if (dialog->exec() == QDialog::Accepted)
         fetchUsers();
 }
 

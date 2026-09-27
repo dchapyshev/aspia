@@ -20,6 +20,7 @@
 
 #include <QMouseEvent>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_string.h"
@@ -239,13 +240,13 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
                 QString question = tr("Do you want to enter a different password?");
 
-                MsgBox message_box(MsgBox::Warning,
+                AutoQPointer<MsgBox> message_box(new MsgBox(MsgBox::Warning,
                     tr("Warning"),
                     QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
                     MsgBox::Yes | MsgBox::No,
-                    this);
+                    this));
 
-                if (message_box.exec() == MsgBox::Yes)
+                if (message_box->exec() == MsgBox::Yes)
                 {
                     ui->edit_password->clear();
                     ui->edit_password_repeat->clear();

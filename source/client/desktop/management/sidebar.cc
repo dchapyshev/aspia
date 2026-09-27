@@ -33,6 +33,7 @@
 #include <QUuid>
 #include <QVBoxLayout>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "base/time_types.h"
 #include "base/crypto/secure_string.h"
@@ -584,13 +585,12 @@ QString Sidebar::routerWorkspaceName(qint64 router_id, qint64 workspace_id) cons
 //--------------------------------------------------------------------------------------------------
 void Sidebar::changeRouterPassword(qint64 router_id)
 {
-    RouterSession* session = RouterController::session(router_id);
-    if (!session)
+    if (!RouterController::session(router_id))
         return;
 
-    CredentialsDialog dialog(CredentialsDialog::Type::SET_PASSWORD, this);
-    dialog.setWindowTitle(tr("Change Password"));
-    dialog.setValidator([](CredentialsDialog* dialog) -> bool
+    AutoQPointer<CredentialsDialog> dialog(new CredentialsDialog(CredentialsDialog::Type::SET_PASSWORD, this));
+    dialog->setWindowTitle(tr("Change Password"));
+    dialog->setValidator([](CredentialsDialog* dialog) -> bool
     {
         SecureString password = dialog->password();
 
@@ -620,7 +620,12 @@ void Sidebar::changeRouterPassword(qint64 router_id)
         return true;
     });
 
-    if (dialog.exec() != QDialog::Accepted)
+    if (dialog->exec() != QDialog::Accepted)
+        return;
+
+    // A disconnect while the dialog is shown deletes the session, so it is looked up again.
+    RouterSession* session = RouterController::session(router_id);
+    if (!session)
         return;
 
     // On success the router revokes every device token of the account and drops all of its
@@ -630,7 +635,7 @@ void Sidebar::changeRouterPassword(qint64 router_id)
     RouterController::instance().addEvent(router_id, RouterEvent::Severity::INFO,
         tr("Changing the password. Waiting for the session to sign in again..."));
 
-    session->changePassword(dialog.password(), { this,
+    session->changePassword(dialog->password(), { this,
         [this](const proto::router::ChangePasswordResult& result)
     {
         // The death of the session answers this request as a lost connection, which is what a
@@ -770,8 +775,8 @@ void Sidebar::onAddGroup()
         return;
     }
 
-    LocalGroupDialog dialog(-1, item->groupId(), this);
-    if (dialog.exec() == LocalGroupDialog::Rejected)
+    AutoQPointer<LocalGroupDialog> dialog(new LocalGroupDialog(-1, item->groupId(), this));
+    if (dialog->exec() == LocalGroupDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
@@ -799,8 +804,8 @@ void Sidebar::onEditGroup()
     if (local_group->groupId() == 0)
         return;
 
-    LocalGroupDialog dialog(local_group->groupId(), local_group->parentId(), this);
-    if (dialog.exec() == LocalGroupDialog::Rejected)
+    AutoQPointer<LocalGroupDialog> dialog(new LocalGroupDialog(local_group->groupId(), local_group->parentId(), this));
+    if (dialog->exec() == LocalGroupDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
@@ -854,8 +859,8 @@ void Sidebar::onAddRouter()
 {
     LOG(INFO) << "[ACTION] Add router";
 
-    RouterDialog dialog(-1, this);
-    if (dialog.exec() != QDialog::Accepted)
+    AutoQPointer<RouterDialog> dialog(new RouterDialog(-1, this));
+    if (dialog->exec() != QDialog::Accepted)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
@@ -874,8 +879,8 @@ void Sidebar::onEditRouter()
     qint64 router_id = static_cast<SidebarRouter*>(item)->routerId();
     LOG(INFO) << "[ACTION] Edit router" << router_id;
 
-    RouterDialog dialog(router_id, this);
-    if (dialog.exec() != QDialog::Accepted)
+    AutoQPointer<RouterDialog> dialog(new RouterDialog(router_id, this));
+    if (dialog->exec() != QDialog::Accepted)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;

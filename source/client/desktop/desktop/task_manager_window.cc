@@ -22,6 +22,7 @@
 #include <QActionGroup>
 #include <QLabel>
 #include <QMenu>
+#include <QPointer>
 #include <QTimer>
 
 #include "base/logging.h"
@@ -519,7 +520,7 @@ void TaskManagerWindow::closeEvent(QCloseEvent* event)
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onProcessHeaderContextMenu(const QPoint& pos)
 {
-    QHeaderView* header = ui->tree_processes->header();
+    QPointer<QHeaderView> header = ui->tree_processes->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
@@ -531,7 +532,7 @@ void TaskManagerWindow::onProcessHeaderContextMenu(const QPoint& pos)
 
     ColumnAction* action = dynamic_cast<ColumnAction*>(
         menu.exec(header->viewport()->mapToGlobal(pos)));
-    if (!action)
+    if (!action || !header)
         return;
 
     header->setSectionHidden(action->columnIndex(), !action->isChecked());
@@ -540,7 +541,7 @@ void TaskManagerWindow::onProcessHeaderContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onServiceHeaderContextMenu(const QPoint& pos)
 {
-    QHeaderView* header = ui->tree_services->header();
+    QPointer<QHeaderView> header = ui->tree_services->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
@@ -552,7 +553,7 @@ void TaskManagerWindow::onServiceHeaderContextMenu(const QPoint& pos)
 
     ColumnAction* action = dynamic_cast<ColumnAction*>(
         menu.exec(header->viewport()->mapToGlobal(pos)));
-    if (!action)
+    if (!action || !header)
         return;
 
     header->setSectionHidden(action->columnIndex(), !action->isChecked());
@@ -561,7 +562,7 @@ void TaskManagerWindow::onServiceHeaderContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onUserHeaderContextMenu(const QPoint& pos)
 {
-    QHeaderView* header = ui->tree_users->header();
+    QPointer<QHeaderView> header = ui->tree_users->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
@@ -573,7 +574,7 @@ void TaskManagerWindow::onUserHeaderContextMenu(const QPoint& pos)
 
     ColumnAction* action = dynamic_cast<ColumnAction*>(
         menu.exec(header->viewport()->mapToGlobal(pos)));
-    if (!action)
+    if (!action || !header)
         return;
 
     header->setSectionHidden(action->columnIndex(), !action->isChecked());

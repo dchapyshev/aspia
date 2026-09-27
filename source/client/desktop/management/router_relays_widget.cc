@@ -353,6 +353,8 @@ void RouterRelaysWidget::onDisconnectRelay()
         return;
     }
 
+    const qint64 entry_id = relay->entry_id();
+
     if (MsgBox::question(this, tr("Are you sure you want to disconnect relay \"%1\"?")
         .arg(QString::fromStdString(relay->ip_address()))) != MsgBox::Yes)
     {
@@ -365,7 +367,7 @@ void RouterRelaysWidget::onDisconnectRelay()
         return;
 
     LOG(INFO) << "[ACTION] Disconnect relay accepted by user";
-    session->disconnectRelay(relay->entry_id(), { this, &RouterRelaysWidget::onRelayResultReceived });
+    session->disconnectRelay(entry_id, { this, &RouterRelaysWidget::onRelayResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -427,7 +429,20 @@ void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
     if (!peer)
         return;
 
-    const int column = index.column();
+    const qint64 relay_id = relay->entry_id();
+    const qint64 peer_id = peer->peer_id();
+    const QString user_name = QString::fromStdString(peer->client_user_name());
+
+    QString row_text;
+    for (int i = 0; i < peer_model_->columnCount(); ++i)
+    {
+        const QString text = peer_model_->index(index.row(), i).data().toString();
+        if (!text.isEmpty())
+            row_text += text + ' ';
+    }
+    row_text.chop(1);
+
+    const QString value_text = peer_model_->index(index.row(), index.column()).data().toString();
     const QPoint global_pos = ui->tree_peers->viewport()->mapToGlobal(pos);
 
     QMenu menu;
@@ -442,9 +457,7 @@ void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
 
     if (selected == disconnect_action)
     {
-        if (MsgBox::question(this,
-                tr("Are you sure you want to disconnect peer \"%1\"?")
-                    .arg(QString::fromStdString(peer->client_user_name())))
+        if (MsgBox::question(this, tr("Are you sure you want to disconnect peer \"%1\"?").arg(user_name))
             != MsgBox::Yes)
         {
             LOG(INFO) << "[ACTION] Disconnect peer rejected by user";
@@ -456,34 +469,23 @@ void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
             return;
 
         LOG(INFO) << "[ACTION] Disconnect peer accepted by user";
-        session->disconnectPeer(relay->entry_id(), peer->peer_id(),
-                                { this, &RouterRelaysWidget::onPeerResultReceived });
+        session->disconnectPeer(relay_id, peer_id, { this, &RouterRelaysWidget::onPeerResultReceived });
     }
     else if (selected == copy_row_action)
     {
-        QString result;
-        for (int i = 0; i < peer_model_->columnCount(); ++i)
-        {
-            const QString text = peer_model_->index(index.row(), i).data().toString();
-            if (!text.isEmpty())
-                result += text + ' ';
-        }
-        result.chop(1);
-
-        if (result.isEmpty())
+        if (row_text.isEmpty())
             return;
 
         if (QClipboard* clipboard = QApplication::clipboard())
-            clipboard->setText(result);
+            clipboard->setText(row_text);
     }
     else if (selected == copy_value_action)
     {
-        const QString text = peer_model_->index(index.row(), column).data().toString();
-        if (text.isEmpty())
+        if (value_text.isEmpty())
             return;
 
         if (QClipboard* clipboard = QApplication::clipboard())
-            clipboard->setText(text);
+            clipboard->setText(value_text);
     }
 }
 

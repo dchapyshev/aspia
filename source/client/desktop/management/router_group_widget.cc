@@ -34,6 +34,7 @@
 #include <QToolButton>
 #include <QUuid>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "client/router_controller.h"
 #include "client/desktop/management/drag_and_drop.h"
@@ -259,8 +260,8 @@ void RouterGroupWidget::onEditHost()
     if (!host)
         return;
 
-    RouterHostDialog dialog(router_id_, workspace_name_, *host, this);
-    if (dialog.exec() == QDialog::Accepted)
+    AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(router_id_, workspace_name_, *host, this));
+    if (dialog->exec() == QDialog::Accepted)
         fetchHosts(RouterSession::CachePolicy::RELOAD);
 }
 

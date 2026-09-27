@@ -31,6 +31,7 @@
 #include <QUrl>
 #include <QWindow>
 
+#include "base/auto_qpointer.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/host_id.h"
@@ -163,7 +164,9 @@ MainWindow::MainWindow(QWidget* parent)
     connect(GuiApplication::findWorker<UpdateWorker>(), &UpdateWorker::sig_updateAvailable,
             this, [this](const UpdateInfo& /* update_info */)
     {
-        UpdateDialog(Database::instance().updateChannel(), "client", UpdateDialog::Action::ASK, this).exec();
+        AutoQPointer<UpdateDialog> dialog(
+            new UpdateDialog(Database::instance().updateChannel(), "client", UpdateDialog::Action::ASK, this));
+        dialog->exec();
     }, Qt::QueuedConnection);
 
     connect(GuiApplication::instance(), &GuiApplication::sig_themeChanged,
@@ -401,7 +404,8 @@ void MainWindow::onHelp()
 void MainWindow::onAbout()
 {
     LOG(INFO) << "[ACTION] About clicked";
-    AboutDialog(tr("Aspia Client"), this).exec();
+    AutoQPointer<AboutDialog> dialog(new AboutDialog(tr("Aspia Client"), this));
+    dialog->exec();
 }
 
 //--------------------------------------------------------------------------------------------------

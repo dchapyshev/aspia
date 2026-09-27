@@ -25,6 +25,7 @@
 #include <QMoveEvent>
 #include <QTimer>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/peer/host_id.h"
@@ -116,31 +117,31 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
     {
         LOG(INFO) << "Empty user name or password";
 
-        AuthorizationDialog auth_dialog(this);
+        AutoQPointer<AuthorizationDialog> auth_dialog(new AuthorizationDialog(this));
 
-        auth_dialog.setOneTimePasswordEnabled(host.routerId() > 0);
-        auth_dialog.setSaveCredentialsVisible(can_save_credentials);
-        auth_dialog.setUserName(host.username());
-        auth_dialog.setPassword(host.password());
+        auth_dialog->setOneTimePasswordEnabled(host.routerId() > 0);
+        auth_dialog->setSaveCredentialsVisible(can_save_credentials);
+        auth_dialog->setUserName(host.username());
+        auth_dialog->setPassword(host.password());
 
         QList<CredentialConfig> credentials;
         if (Database::instance().credentialList(&credentials) != Database::ReadResult::OK)
             LOG(ERROR) << "Unable to read credentials";
 
-        auth_dialog.setSavedCredentials(credentials);
+        auth_dialog->setSavedCredentials(credentials);
 
-        if (auth_dialog.exec() == AuthorizationDialog::Rejected)
+        if (auth_dialog->exec() == AuthorizationDialog::Rejected)
         {
             LOG(INFO) << "Authorization rejected by user";
             return false;
         }
 
-        host.setUsername(auth_dialog.userName());
-        host.setPassword(auth_dialog.password());
+        host.setUsername(auth_dialog->userName());
+        host.setPassword(auth_dialog->password());
 
-        if (can_save_credentials && auth_dialog.isSaveCredentialsChecked() && !host.username().isEmpty())
+        if (can_save_credentials && auth_dialog->isSaveCredentialsChecked() && !host.username().isEmpty())
         {
-            saveHostCredentials(host, auth_dialog.credentialId());
+            saveHostCredentials(host, auth_dialog->credentialId());
             credentials_saved_ = true;
         }
     }

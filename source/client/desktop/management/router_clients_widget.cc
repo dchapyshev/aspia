@@ -310,6 +310,8 @@ void RouterClientsWidget::onDisconnectClient()
         return;
     }
 
+    const qint64 entry_id = client->entry_id();
+
     if (MsgBox::question(this, tr("Are you sure you want to disconnect client \"%1\"?")
         .arg(QString::fromStdString(client->computer_name()))) != MsgBox::Yes)
     {
@@ -322,7 +324,7 @@ void RouterClientsWidget::onDisconnectClient()
         return;
 
     LOG(INFO) << "[ACTION] Disconnect client accepted by user";
-    session->disconnectClient(client->entry_id(), { this, &RouterClientsWidget::onClientResultReceived });
+    session->disconnectClient(entry_id, { this, &RouterClientsWidget::onClientResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

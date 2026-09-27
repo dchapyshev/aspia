@@ -30,6 +30,7 @@
 #include <QTimer>
 #include <QUrl>
 
+#include "base/auto_qpointer.h"
 #include "base/build_config.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
@@ -525,8 +526,8 @@ void HostWindow::onConfirmationRequest(const proto::user::ConfirmationRequest& r
 {
     LOG(INFO) << "Confirmation request (id=" << request.id() << ")";
 
-    ConnectConfirmDialog dialog(request, this);
-    bool accept = dialog.exec() == ConnectConfirmDialog::Accepted;
+    AutoQPointer<ConnectConfirmDialog> dialog(new ConnectConfirmDialog(request, this));
+    bool accept = dialog->exec() == ConnectConfirmDialog::Accepted;
 
     LOG(INFO) << "[ACTION] User" << (accept ? "ACCEPT" : "REJECT") << "connection request";
 
@@ -689,7 +690,8 @@ void HostWindow::onSecurityLog()
         return;
     }
 
-    SecurityLogDialog(this).exec();
+    AutoQPointer<SecurityLogDialog> dialog(new SecurityLogDialog(this));
+    dialog->exec();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -716,17 +718,19 @@ void HostWindow::onSettings()
     {
         case Database::PasswordProtection::DISABLED:
         {
-            ConfigDialog(this).exec();
+            AutoQPointer<ConfigDialog> config_dialog(new ConfigDialog(this));
+            config_dialog->exec();
             onSettingsChanged();
         }
         break;
 
         case Database::PasswordProtection::ENABLED:
         {
-            CheckPasswordDialog dialog(this);
-            if (dialog.exec() == CheckPasswordDialog::Accepted)
+            AutoQPointer<CheckPasswordDialog> dialog(new CheckPasswordDialog(this));
+            if (dialog->exec() == CheckPasswordDialog::Accepted)
             {
-                ConfigDialog(this).exec();
+                AutoQPointer<ConfigDialog> config_dialog(new ConfigDialog(this));
+                config_dialog->exec();
                 onSettingsChanged();
             }
         }
@@ -787,7 +791,8 @@ void HostWindow::onAboutSystem()
 void HostWindow::onAbout()
 {
     LOG(INFO) << "[ACTION] About";
-    AboutDialog(tr("Aspia Host"), this).exec();
+    AutoQPointer<AboutDialog> dialog(new AboutDialog(tr("Aspia Host"), this));
+    dialog->exec();
 }
 
 //--------------------------------------------------------------------------------------------------
