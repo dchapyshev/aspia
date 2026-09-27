@@ -1191,6 +1191,11 @@ Routers added: %4</source>
         <translation>کلی</translation>
     </message>
     <message>
+        <location filename="../host/ui/config_dialog.ui" line="71"/>
+        <source>Preferred video capturer:</source>
+        <translation>ضبط‌کننده ویدئوی ترجیحی:</translation>
+    </message>
+    <message>
         <location filename="../host/ui/config_dialog.ui" line="83"/>
         <source>Allow hardware video encoding</source>
         <translation>اجازه به رمزگذاری سخت‌افزاری ویدئو</translation>
@@ -1265,11 +1270,6 @@ Routers added: %4</source>
         <location filename="../host/ui/config_dialog.ui" line="417"/>
         <source>Public Key:</source>
         <translation>کلید عمومی:</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="71"/>
-        <source>Preffered video capturer:</source>
-        <translation>ضبط‌کننده ویدئوی ترجیحی:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="236"/>
@@ -2482,8 +2482,8 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="420"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="423"/>
-        <source>Text Chat</source>
-        <translation>چت متنی</translation>
+        <source>Chat</source>
+        <translation>چت</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
@@ -3905,8 +3905,8 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="395"/>
-        <source>Text Chat</source>
-        <translation>چت متنی</translation>
+        <source>Chat</source>
+        <translation>چت</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="400"/>
@@ -5017,156 +5017,156 @@ Credentials imported: %5</source>
         <translation>به‌روزرسانی خودکار وضعیت</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1034"/>
+        <location filename="../client/desktop/management_tab.cc" line="1036"/>
         <source>(copy)</source>
         <translation>(کپی)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1002"/>
-        <location filename="../client/desktop/management_tab.cc" line="1075"/>
-        <location filename="../client/desktop/management_tab.cc" line="2162"/>
+        <location filename="../client/desktop/management_tab.cc" line="1004"/>
+        <location filename="../client/desktop/management_tab.cc" line="1077"/>
+        <location filename="../client/desktop/management_tab.cc" line="2164"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>دریافت اطلاعات میزبان از پایگاه داده محلی ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1039"/>
+        <location filename="../client/desktop/management_tab.cc" line="1041"/>
         <source>Failed to add the host to the local database.</source>
         <translation>افزودن میزبان به پایگاه داده محلی ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1079"/>
+        <location filename="../client/desktop/management_tab.cc" line="1081"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>آیا مطمئن هستید که می‌خواهید میزبان &quot;%1&quot; را حذف کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1089"/>
+        <location filename="../client/desktop/management_tab.cc" line="1091"/>
         <source>Unable to remove host</source>
         <translation>حذف میزبان ممکن نیست</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1147"/>
-        <location filename="../client/desktop/management_tab.cc" line="1190"/>
-        <location filename="../client/desktop/management_tab.cc" line="1215"/>
+        <location filename="../client/desktop/management_tab.cc" line="1149"/>
+        <location filename="../client/desktop/management_tab.cc" line="1192"/>
+        <location filename="../client/desktop/management_tab.cc" line="1217"/>
         <source>Copy Row</source>
         <translation>کپی سطر</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1148"/>
-        <location filename="../client/desktop/management_tab.cc" line="1191"/>
-        <location filename="../client/desktop/management_tab.cc" line="1216"/>
+        <location filename="../client/desktop/management_tab.cc" line="1150"/>
+        <location filename="../client/desktop/management_tab.cc" line="1193"/>
+        <location filename="../client/desktop/management_tab.cc" line="1218"/>
         <source>Copy Value</source>
         <translation>کپی مقدار</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1315"/>
+        <location filename="../client/desktop/management_tab.cc" line="1317"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>آیا مطمئن هستید که می‌خواهید فضای کاری &quot;%1&quot; را حذف کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1335"/>
+        <location filename="../client/desktop/management_tab.cc" line="1337"/>
         <source>Failed to delete the workspace.</source>
         <translation>حذف فضای کاری ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1430"/>
+        <location filename="../client/desktop/management_tab.cc" line="1432"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>آیا مطمئن هستید که می‌خواهید گروه &quot;%1&quot; را حذف کنید؟ میزبان‌های اختصاص‌یافته به این گروه یا زیرگروه‌های آن به ریشه فضای کاری منتقل خواهند شد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1449"/>
+        <location filename="../client/desktop/management_tab.cc" line="1451"/>
         <source>Failed to delete the group.</source>
         <translation>حذف گروه ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1488"/>
+        <location filename="../client/desktop/management_tab.cc" line="1490"/>
         <source>Import Old Address Book</source>
         <translation>وارد کردن دفترچه آدرس قدیمی</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1489"/>
+        <location filename="../client/desktop/management_tab.cc" line="1491"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>دفترچه آدرس (*.aab);;همه فایل‌ها (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1512"/>
-        <location filename="../client/desktop/management_tab.cc" line="1569"/>
+        <location filename="../client/desktop/management_tab.cc" line="1514"/>
+        <location filename="../client/desktop/management_tab.cc" line="1571"/>
         <source>The database is not available.</source>
         <translation>پایگاه داده در دسترس نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1518"/>
+        <location filename="../client/desktop/management_tab.cc" line="1520"/>
         <source>Create Backup</source>
         <translation>ایجاد نسخه پشتیبان</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1535"/>
+        <location filename="../client/desktop/management_tab.cc" line="1537"/>
         <source>There is nothing to save.</source>
         <translation>چیزی برای ذخیره وجود ندارد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2157"/>
+        <location filename="../client/desktop/management_tab.cc" line="2159"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>داده‌های میزبان آسیب دیده است. میزبان را ویرایش کنید و دوباره آن را وارد کنید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2178"/>
+        <location filename="../client/desktop/management_tab.cc" line="2180"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>داده‌های روتر آسیب دیده است. روتر را ویرایش کنید و دوباره آن را وارد کنید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1547"/>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
         <source>Failed to create the backup.</source>
         <translation>ایجاد نسخه پشتیبان ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1575"/>
-        <location filename="../client/desktop/management_tab.cc" line="1601"/>
+        <location filename="../client/desktop/management_tab.cc" line="1577"/>
+        <location filename="../client/desktop/management_tab.cc" line="1603"/>
         <source>Restore from Backup</source>
         <translation>بازیابی از نسخه پشتیبان</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1584"/>
+        <location filename="../client/desktop/management_tab.cc" line="1586"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>همه داده‌های ذخیره‌شده فعلی حذف و با محتوای نسخه پشتیبان جایگزین می‌شود. ادامه می‌دهید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1603"/>
+        <location filename="../client/desktop/management_tab.cc" line="1605"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>این نسخه پشتیبان روی نصب دیگری از برنامه ساخته شده است. گذرواژه اصلی همان نصب را وارد کنید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1628"/>
+        <location filename="../client/desktop/management_tab.cc" line="1630"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>این نسخه پشتیبان حاوی داده‌ای نیست، بنابراین چیزی تغییر نکرد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1636"/>
+        <location filename="../client/desktop/management_tab.cc" line="1638"/>
         <source>The file is not a valid backup.</source>
         <translation>این فایل یک نسخه پشتیبان معتبر نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1640"/>
+        <location filename="../client/desktop/management_tab.cc" line="1642"/>
         <source>Failed to restore from the backup.</source>
         <translation>بازیابی از نسخه پشتیبان ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1519"/>
-        <location filename="../client/desktop/management_tab.cc" line="1576"/>
+        <location filename="../client/desktop/management_tab.cc" line="1521"/>
+        <location filename="../client/desktop/management_tab.cc" line="1578"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>پشتیبان Aspia (*.aspia-backup);;همه فایل‌ها (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1539"/>
+        <location filename="../client/desktop/management_tab.cc" line="1541"/>
         <source>Unable to write the file.</source>
         <translation>نوشتن فایل ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1632"/>
+        <location filename="../client/desktop/management_tab.cc" line="1634"/>
         <source>Unable to read the file.</source>
         <translation>خواندن فایل ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1552"/>
+        <location filename="../client/desktop/management_tab.cc" line="1554"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5181,22 +5181,22 @@ Credentials exported: %5</source>
 اطلاعات ورود صادرشده: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1543"/>
+        <location filename="../client/desktop/management_tab.cc" line="1545"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>برخی رکوردهای پایگاه داده آسیب دیده‌اند. آنها را اصلاح یا حذف کنید و دوباره تلاش کنید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1620"/>
+        <location filename="../client/desktop/management_tab.cc" line="1622"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>رمزگشایی فایل با گذرواژه مشخص‌شده ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1624"/>
+        <location filename="../client/desktop/management_tab.cc" line="1626"/>
         <source>Unsupported file format version.</source>
         <translation>نسخه قالب فایل پشتیبانی نمی‌شود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1645"/>
+        <location filename="../client/desktop/management_tab.cc" line="1647"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5211,29 +5211,29 @@ Credentials imported: %5</source>
 اطلاعات ورود واردشده: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2085"/>
-        <location filename="../client/desktop/management_tab.cc" line="2116"/>
+        <location filename="../client/desktop/management_tab.cc" line="2087"/>
+        <location filename="../client/desktop/management_tab.cc" line="2118"/>
         <source>Copy Link</source>
         <translation>کپی پیوند</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2104"/>
-        <location filename="../client/desktop/management_tab.cc" line="2138"/>
+        <location filename="../client/desktop/management_tab.cc" line="2106"/>
+        <location filename="../client/desktop/management_tab.cc" line="2140"/>
         <source>Unable to create a link for this host.</source>
         <translation>ایجاد پیوند برای این میزبان ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2179"/>
+        <location filename="../client/desktop/management_tab.cc" line="2181"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>روتر مرتبط با این میزبان حذف شده است. میزبان را ویرایش کنید تا روتر دیگری انتخاب کنید یا به اتصال مستقیم تغییر دهید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2186"/>
+        <location filename="../client/desktop/management_tab.cc" line="2188"/>
         <source>The host has an invalid host ID.</source>
         <translation>ID میزبان نامعتبر است.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2195"/>
+        <location filename="../client/desktop/management_tab.cc" line="2197"/>
         <source>The host has an incorrect address.</source>
         <translation>آدرس میزبان نادرست است.</translation>
     </message>

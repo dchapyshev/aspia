@@ -1194,6 +1194,11 @@ Routeurs ajoutés: %4</translation>
         <translation>Général</translation>
     </message>
     <message>
+        <location filename="../host/ui/config_dialog.ui" line="71"/>
+        <source>Preferred video capturer:</source>
+        <translation>Capteur vidéo préféré:</translation>
+    </message>
+    <message>
         <location filename="../host/ui/config_dialog.ui" line="83"/>
         <source>Allow hardware video encoding</source>
         <translation>Autoriser l&apos;encodage vidéo matériel</translation>
@@ -1268,11 +1273,6 @@ Routeurs ajoutés: %4</translation>
         <location filename="../host/ui/config_dialog.ui" line="417"/>
         <source>Public Key:</source>
         <translation>Clé publique:</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="71"/>
-        <source>Preffered video capturer:</source>
-        <translation>Capteur vidéo préféré:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="236"/>
@@ -2493,8 +2493,8 @@ Identifiants remplacés: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="420"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="423"/>
-        <source>Text Chat</source>
-        <translation>Fenêtre de dialogues</translation>
+        <source>Chat</source>
+        <translation>Chat</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
@@ -3920,8 +3920,8 @@ Identifiants remplacés: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="395"/>
-        <source>Text Chat</source>
-        <translation>Fenêtre de dialogues</translation>
+        <source>Chat</source>
+        <translation>Chat</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="400"/>
@@ -5042,156 +5042,156 @@ Identifiants importés: %5</translation>
         <translation>Actualisation automatique de l&apos;état</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1034"/>
+        <location filename="../client/desktop/management_tab.cc" line="1036"/>
         <source>(copy)</source>
         <translation>(copie)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1002"/>
-        <location filename="../client/desktop/management_tab.cc" line="1075"/>
-        <location filename="../client/desktop/management_tab.cc" line="2162"/>
+        <location filename="../client/desktop/management_tab.cc" line="1004"/>
+        <location filename="../client/desktop/management_tab.cc" line="1077"/>
+        <location filename="../client/desktop/management_tab.cc" line="2164"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Impossible de récupérer les informations de l&apos;hôte depuis la base de données locale.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1039"/>
+        <location filename="../client/desktop/management_tab.cc" line="1041"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Impossible d&apos;ajouter l&apos;hôte à la base de données locale.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1079"/>
+        <location filename="../client/desktop/management_tab.cc" line="1081"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Voulez-vous vraiment supprimer l&apos;hôte &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1089"/>
+        <location filename="../client/desktop/management_tab.cc" line="1091"/>
         <source>Unable to remove host</source>
         <translation>Impossible de supprimer l&apos;hôte</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1147"/>
-        <location filename="../client/desktop/management_tab.cc" line="1190"/>
-        <location filename="../client/desktop/management_tab.cc" line="1215"/>
+        <location filename="../client/desktop/management_tab.cc" line="1149"/>
+        <location filename="../client/desktop/management_tab.cc" line="1192"/>
+        <location filename="../client/desktop/management_tab.cc" line="1217"/>
         <source>Copy Row</source>
         <translation>Copier la ligne</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1148"/>
-        <location filename="../client/desktop/management_tab.cc" line="1191"/>
-        <location filename="../client/desktop/management_tab.cc" line="1216"/>
+        <location filename="../client/desktop/management_tab.cc" line="1150"/>
+        <location filename="../client/desktop/management_tab.cc" line="1193"/>
+        <location filename="../client/desktop/management_tab.cc" line="1218"/>
         <source>Copy Value</source>
         <translation>Copier la valeur</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1315"/>
+        <location filename="../client/desktop/management_tab.cc" line="1317"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Voulez-vous vraiment supprimer l&apos;espace de travail &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1335"/>
+        <location filename="../client/desktop/management_tab.cc" line="1337"/>
         <source>Failed to delete the workspace.</source>
         <translation>Impossible de supprimer l&apos;espace de travail.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1430"/>
+        <location filename="../client/desktop/management_tab.cc" line="1432"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Voulez-vous vraiment supprimer le groupe &quot;%1&quot;? Les hôtes affectés à ce groupe ou à ses sous-groupes seront déplacés à la racine de l&apos;espace de travail.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1449"/>
+        <location filename="../client/desktop/management_tab.cc" line="1451"/>
         <source>Failed to delete the group.</source>
         <translation>Impossible de supprimer le groupe.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1488"/>
+        <location filename="../client/desktop/management_tab.cc" line="1490"/>
         <source>Import Old Address Book</source>
         <translation>Importer un ancien carnet d&apos;adresses</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1489"/>
+        <location filename="../client/desktop/management_tab.cc" line="1491"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>Carnet d&apos;adresses (*.aab);;Tous les fichiers (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1512"/>
-        <location filename="../client/desktop/management_tab.cc" line="1569"/>
+        <location filename="../client/desktop/management_tab.cc" line="1514"/>
+        <location filename="../client/desktop/management_tab.cc" line="1571"/>
         <source>The database is not available.</source>
         <translation>La base de données n&apos;est pas disponible.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1518"/>
+        <location filename="../client/desktop/management_tab.cc" line="1520"/>
         <source>Create Backup</source>
         <translation>Créer une sauvegarde</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1535"/>
+        <location filename="../client/desktop/management_tab.cc" line="1537"/>
         <source>There is nothing to save.</source>
         <translation>Il n&apos;y a rien à enregistrer.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2157"/>
+        <location filename="../client/desktop/management_tab.cc" line="2159"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Les données de l&apos;hôte sont endommagées. Modifiez l&apos;hôte et saisissez-les à nouveau.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2178"/>
+        <location filename="../client/desktop/management_tab.cc" line="2180"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Les données du routeur sont endommagées. Modifiez le routeur et saisissez-les à nouveau.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1547"/>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
         <source>Failed to create the backup.</source>
         <translation>Impossible de créer la sauvegarde.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1575"/>
-        <location filename="../client/desktop/management_tab.cc" line="1601"/>
+        <location filename="../client/desktop/management_tab.cc" line="1577"/>
+        <location filename="../client/desktop/management_tab.cc" line="1603"/>
         <source>Restore from Backup</source>
         <translation>Restaurer depuis une sauvegarde</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1584"/>
+        <location filename="../client/desktop/management_tab.cc" line="1586"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Tout ce qui est actuellement enregistré sera supprimé et remplacé par le contenu de la sauvegarde. Continuer?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1603"/>
+        <location filename="../client/desktop/management_tab.cc" line="1605"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>La sauvegarde a été créée sur une autre installation. Saisissez le mot de passe principal qui y est utilisé.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1628"/>
+        <location filename="../client/desktop/management_tab.cc" line="1630"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>La sauvegarde ne contient aucune donnée, rien n&apos;a donc été modifié.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1636"/>
+        <location filename="../client/desktop/management_tab.cc" line="1638"/>
         <source>The file is not a valid backup.</source>
         <translation>Le fichier n&apos;est pas une sauvegarde valide.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1640"/>
+        <location filename="../client/desktop/management_tab.cc" line="1642"/>
         <source>Failed to restore from the backup.</source>
         <translation>Impossible de restaurer depuis la sauvegarde.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1519"/>
-        <location filename="../client/desktop/management_tab.cc" line="1576"/>
+        <location filename="../client/desktop/management_tab.cc" line="1521"/>
+        <location filename="../client/desktop/management_tab.cc" line="1578"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Sauvegarde Aspia (*.aspia-backup);;Tous les fichiers (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1539"/>
+        <location filename="../client/desktop/management_tab.cc" line="1541"/>
         <source>Unable to write the file.</source>
         <translation>Impossible d&apos;écrire le fichier.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1632"/>
+        <location filename="../client/desktop/management_tab.cc" line="1634"/>
         <source>Unable to read the file.</source>
         <translation>Impossible de lire le fichier.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1552"/>
+        <location filename="../client/desktop/management_tab.cc" line="1554"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5206,22 +5206,22 @@ Mots de passe enregistrés exportés: %4
 Identifiants exportés: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1543"/>
+        <location filename="../client/desktop/management_tab.cc" line="1545"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Certains enregistrements de la base de données sont endommagés. Corrigez-les ou supprimez-les, puis réessayez.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1620"/>
+        <location filename="../client/desktop/management_tab.cc" line="1622"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Impossible de déchiffrer le fichier avec le mot de passe spécifié.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1624"/>
+        <location filename="../client/desktop/management_tab.cc" line="1626"/>
         <source>Unsupported file format version.</source>
         <translation>Version de format de fichier non prise en charge.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1645"/>
+        <location filename="../client/desktop/management_tab.cc" line="1647"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5236,29 +5236,29 @@ Mots de passe enregistrés importés: %4
 Identifiants importés: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2085"/>
-        <location filename="../client/desktop/management_tab.cc" line="2116"/>
+        <location filename="../client/desktop/management_tab.cc" line="2087"/>
+        <location filename="../client/desktop/management_tab.cc" line="2118"/>
         <source>Copy Link</source>
         <translation>Copier le lien</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2104"/>
-        <location filename="../client/desktop/management_tab.cc" line="2138"/>
+        <location filename="../client/desktop/management_tab.cc" line="2106"/>
+        <location filename="../client/desktop/management_tab.cc" line="2140"/>
         <source>Unable to create a link for this host.</source>
         <translation>Impossible de créer un lien pour cet hôte.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2179"/>
+        <location filename="../client/desktop/management_tab.cc" line="2181"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Le routeur associé à cet hôte a été supprimé. Modifiez l&apos;hôte pour sélectionner un autre routeur ou passez à la connexion directe.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2186"/>
+        <location filename="../client/desktop/management_tab.cc" line="2188"/>
         <source>The host has an invalid host ID.</source>
         <translation>L&apos;hôte a un ID d&apos;hôte non valide.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2195"/>
+        <location filename="../client/desktop/management_tab.cc" line="2197"/>
         <source>The host has an incorrect address.</source>
         <translation>L&apos;hôte a une adresse incorrecte.</translation>
     </message>

@@ -1428,6 +1428,11 @@ Routers added: %4</source>
         <translation>导入设置</translation>
     </message>
     <message>
+        <location filename="../host/ui/config_dialog.ui" line="71"/>
+        <source>Preferred video capturer:</source>
+        <translation>首选视频捕获器：</translation>
+    </message>
+    <message>
         <location filename="../host/ui/config_dialog.ui" line="83"/>
         <source>Allow hardware video encoding</source>
         <translation>允许硬件视频编码</translation>
@@ -1527,11 +1532,6 @@ Routers added: %4</source>
         <location filename="../host/ui/config_dialog.ui" line="149"/>
         <source>Check for updates</source>
         <translation>检查更新</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="71"/>
-        <source>Preffered video capturer:</source>
-        <translation>首选视频捕获器：</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="582"/>
@@ -2482,8 +2482,8 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="420"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="423"/>
-        <source>Text Chat</source>
-        <translation>文字聊天</translation>
+        <source>Chat</source>
+        <translation>聊天</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
@@ -3905,8 +3905,8 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="395"/>
-        <source>Text Chat</source>
-        <translation>文字聊天</translation>
+        <source>Chat</source>
+        <translation>聊天</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="400"/>
@@ -5017,156 +5017,156 @@ Credentials imported: %5</source>
         <translation>自动刷新状态</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1034"/>
+        <location filename="../client/desktop/management_tab.cc" line="1036"/>
         <source>(copy)</source>
         <translation>（副本）</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1002"/>
-        <location filename="../client/desktop/management_tab.cc" line="1075"/>
-        <location filename="../client/desktop/management_tab.cc" line="2162"/>
+        <location filename="../client/desktop/management_tab.cc" line="1004"/>
+        <location filename="../client/desktop/management_tab.cc" line="1077"/>
+        <location filename="../client/desktop/management_tab.cc" line="2164"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>无法从本地数据库获取主机信息。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1039"/>
+        <location filename="../client/desktop/management_tab.cc" line="1041"/>
         <source>Failed to add the host to the local database.</source>
         <translation>无法将主机添加到本地数据库。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1079"/>
+        <location filename="../client/desktop/management_tab.cc" line="1081"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>确定要删除主机&quot;%1&quot;吗？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1089"/>
+        <location filename="../client/desktop/management_tab.cc" line="1091"/>
         <source>Unable to remove host</source>
         <translation>无法移除主机</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1147"/>
-        <location filename="../client/desktop/management_tab.cc" line="1190"/>
-        <location filename="../client/desktop/management_tab.cc" line="1215"/>
+        <location filename="../client/desktop/management_tab.cc" line="1149"/>
+        <location filename="../client/desktop/management_tab.cc" line="1192"/>
+        <location filename="../client/desktop/management_tab.cc" line="1217"/>
         <source>Copy Row</source>
         <translation>复制行</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1148"/>
-        <location filename="../client/desktop/management_tab.cc" line="1191"/>
-        <location filename="../client/desktop/management_tab.cc" line="1216"/>
+        <location filename="../client/desktop/management_tab.cc" line="1150"/>
+        <location filename="../client/desktop/management_tab.cc" line="1193"/>
+        <location filename="../client/desktop/management_tab.cc" line="1218"/>
         <source>Copy Value</source>
         <translation>复制值</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1315"/>
+        <location filename="../client/desktop/management_tab.cc" line="1317"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>确定要删除工作区&quot;%1&quot;吗？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1335"/>
+        <location filename="../client/desktop/management_tab.cc" line="1337"/>
         <source>Failed to delete the workspace.</source>
         <translation>无法删除工作区。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1430"/>
+        <location filename="../client/desktop/management_tab.cc" line="1432"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>确定要删除组&quot;%1&quot;吗？分配给该组或其子组的主机将被移动到工作区根目录。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1449"/>
+        <location filename="../client/desktop/management_tab.cc" line="1451"/>
         <source>Failed to delete the group.</source>
         <translation>无法删除组。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1488"/>
+        <location filename="../client/desktop/management_tab.cc" line="1490"/>
         <source>Import Old Address Book</source>
         <translation>导入旧版通讯簿</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1489"/>
+        <location filename="../client/desktop/management_tab.cc" line="1491"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>通讯簿 (*.aab);;所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1512"/>
-        <location filename="../client/desktop/management_tab.cc" line="1569"/>
+        <location filename="../client/desktop/management_tab.cc" line="1514"/>
+        <location filename="../client/desktop/management_tab.cc" line="1571"/>
         <source>The database is not available.</source>
         <translation>数据库不可用。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1518"/>
+        <location filename="../client/desktop/management_tab.cc" line="1520"/>
         <source>Create Backup</source>
         <translation>创建备份</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1535"/>
+        <location filename="../client/desktop/management_tab.cc" line="1537"/>
         <source>There is nothing to save.</source>
         <translation>没有可保存的内容。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2157"/>
+        <location filename="../client/desktop/management_tab.cc" line="2159"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>主机的数据已损坏。请编辑主机并重新输入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2178"/>
+        <location filename="../client/desktop/management_tab.cc" line="2180"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>路由器的数据已损坏。请编辑路由器并重新输入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1547"/>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
         <source>Failed to create the backup.</source>
         <translation>无法创建备份。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1575"/>
-        <location filename="../client/desktop/management_tab.cc" line="1601"/>
+        <location filename="../client/desktop/management_tab.cc" line="1577"/>
+        <location filename="../client/desktop/management_tab.cc" line="1603"/>
         <source>Restore from Backup</source>
         <translation>从备份恢复</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1584"/>
+        <location filename="../client/desktop/management_tab.cc" line="1586"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>当前存储的所有内容都将被删除，并替换为备份中的内容。要继续吗？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1603"/>
+        <location filename="../client/desktop/management_tab.cc" line="1605"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>该备份创建自另一个应用安装。请输入该安装使用的主密码。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1628"/>
+        <location filename="../client/desktop/management_tab.cc" line="1630"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>该备份不包含任何数据，因此未做任何更改。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1636"/>
+        <location filename="../client/desktop/management_tab.cc" line="1638"/>
         <source>The file is not a valid backup.</source>
         <translation>该文件不是有效的备份。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1640"/>
+        <location filename="../client/desktop/management_tab.cc" line="1642"/>
         <source>Failed to restore from the backup.</source>
         <translation>无法从备份恢复。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1519"/>
-        <location filename="../client/desktop/management_tab.cc" line="1576"/>
+        <location filename="../client/desktop/management_tab.cc" line="1521"/>
+        <location filename="../client/desktop/management_tab.cc" line="1578"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia 备份 (*.aspia-backup);;所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1539"/>
+        <location filename="../client/desktop/management_tab.cc" line="1541"/>
         <source>Unable to write the file.</source>
         <translation>无法写入文件。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1632"/>
+        <location filename="../client/desktop/management_tab.cc" line="1634"/>
         <source>Unable to read the file.</source>
         <translation>无法读取文件。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1552"/>
+        <location filename="../client/desktop/management_tab.cc" line="1554"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5181,22 +5181,22 @@ Credentials exported: %5</source>
 已导出凭据：%5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1543"/>
+        <location filename="../client/desktop/management_tab.cc" line="1545"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>部分记录已损坏。请修复或删除这些记录后重试。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1620"/>
+        <location filename="../client/desktop/management_tab.cc" line="1622"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>无法使用指定的密码解密文件。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1624"/>
+        <location filename="../client/desktop/management_tab.cc" line="1626"/>
         <source>Unsupported file format version.</source>
         <translation>不支持的文件格式版本。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1645"/>
+        <location filename="../client/desktop/management_tab.cc" line="1647"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5211,29 +5211,29 @@ Credentials imported: %5</source>
 已导入凭据：%5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2085"/>
-        <location filename="../client/desktop/management_tab.cc" line="2116"/>
+        <location filename="../client/desktop/management_tab.cc" line="2087"/>
+        <location filename="../client/desktop/management_tab.cc" line="2118"/>
         <source>Copy Link</source>
         <translation>复制链接</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2104"/>
-        <location filename="../client/desktop/management_tab.cc" line="2138"/>
+        <location filename="../client/desktop/management_tab.cc" line="2106"/>
+        <location filename="../client/desktop/management_tab.cc" line="2140"/>
         <source>Unable to create a link for this host.</source>
         <translation>无法为此主机创建链接。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2179"/>
+        <location filename="../client/desktop/management_tab.cc" line="2181"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>与此主机关联的路由器已被删除。请编辑主机以选择其他路由器，或改用直接连接。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2186"/>
+        <location filename="../client/desktop/management_tab.cc" line="2188"/>
         <source>The host has an invalid host ID.</source>
         <translation>主机的 ID 无效。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2195"/>
+        <location filename="../client/desktop/management_tab.cc" line="2197"/>
         <source>The host has an incorrect address.</source>
         <translation>主机的地址不正确。</translation>
     </message>
