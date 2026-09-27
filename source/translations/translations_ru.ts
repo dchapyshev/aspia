@@ -158,7 +158,7 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="158"/>
         <source>Application</source>
-        <translation>Приложения</translation>
+        <translation>Приложение</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="159"/>
@@ -409,7 +409,7 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="277"/>
         <location filename="../client/android/main_window.cc" line="321"/>
         <source>Routers</source>
-        <translation>Маршутизаторы</translation>
+        <translation>Маршрутизаторы</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="172"/>
@@ -1842,7 +1842,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="43"/>
         <source>Check all</source>
-        <translation>Выбрать все отметки</translation>
+        <translation>Отметить все</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="69"/>
@@ -2040,7 +2040,7 @@ Credentials exported: %1</source>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="81"/>
         <source>Check all</source>
-        <translation>Выбрать все отметки</translation>
+        <translation>Отметить все</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="107"/>
@@ -2619,7 +2619,7 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="605"/>
         <source>Error while receiving video stream: %1</source>
-        <translation>Ошибка при получении видео-потока: %1</translation>
+        <translation>Ошибка при получении видеопотока: %1</translation>
     </message>
 </context>
 <context>
@@ -3637,12 +3637,12 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../common/desktop/formatter.cc" line="131"/>
         <source>Gbps</source>
-        <translation>Гбит/c</translation>
+        <translation>Гбит/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="133"/>
         <source>Mbps</source>
-        <translation>Мбит/c</translation>
+        <translation>Мбит/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="135"/>
@@ -3652,7 +3652,7 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../common/desktop/formatter.cc" line="137"/>
         <source>bps</source>
-        <translation>бит/c</translation>
+        <translation>бит/с</translation>
     </message>
 </context>
 <context>
@@ -3875,7 +3875,7 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../host/ui/host_window.ui" line="301"/>
         <source>Online Help...</source>
-        <translation>Онлайн справка...</translation>
+        <translation>Онлайн-справка...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="304"/>
@@ -3967,7 +3967,7 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../host/ui/host_window.cc" line="807"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
+        <translation>Если вы выйдете из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="968"/>
@@ -3992,7 +3992,7 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../host/ui/host_window.cc" line="1059"/>
         <source>IP addresses:</source>
-        <translation>IP адреса:</translation>
+        <translation>IP-адреса:</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1063"/>
@@ -4732,7 +4732,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../client/desktop/main_window.ui" line="145"/>
         <source>Online Help...</source>
-        <translation>Онлайн справка...</translation>
+        <translation>Онлайн-справка...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
@@ -5531,7 +5531,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../client/workers/network_worker.cc" line="371"/>
         <source>Failed to connect to the relay server</source>
-        <translation>не удалось подключиться к ретранслятору</translation>
+        <translation>Не удалось подключиться к ретранслятору</translation>
     </message>
 </context>
 <context>
@@ -6644,7 +6644,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="381"/>
         <source>Are you sure you want to disconnect all relays?</source>
-        <translation>Вы действительно хотите отключить все маршрутизаторы?</translation>
+        <translation>Вы действительно хотите отключить все ретрансляторы?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="434"/>
@@ -10566,7 +10566,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="136"/>
         <source>Paused</source>
-        <translation>Простановлено</translation>
+        <translation>Приостановлено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="138"/>
@@ -10733,12 +10733,12 @@ Credentials imported: %5</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="314"/>
         <source>Audit Success</source>
-        <translation>Успех аудита</translation>
+        <translation>Аудит успеха</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="316"/>
         <source>Audit Failure</source>
-        <translation>Неудача аудита</translation>
+        <translation>Аудит отказа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="318"/>
@@ -10891,7 +10891,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>%1x%2 cm</source>
-        <translation>%1x%2 cm</translation>
+        <translation>%1x%2 см</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="193"/>
@@ -11015,7 +11015,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>MAC Address</source>
-        <translation>MAC адрес</translation>
+        <translation>MAC-адрес</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
@@ -11163,7 +11163,7 @@ Credentials imported: %5</source>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
         <source>%1 mWh</source>
-        <translation>%1 мВт/ч</translation>
+        <translation>%1 мВт·ч</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="214"/>
@@ -11340,7 +11340,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="142"/>
         <source>Paused</source>
-        <translation>Простановлено</translation>
+        <translation>Приостановлено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="144"/>
@@ -11656,7 +11656,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="232"/>
         <source>Aspia Information</source>
-        <translation>Информация о Aspia</translation>
+        <translation>Информация об Aspia</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="244"/>
@@ -12842,7 +12842,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="86"/>
         <source>Check all</source>
-        <translation>Выбрать все отметки</translation>
+        <translation>Отметить все</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="112"/>
@@ -13160,7 +13160,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Disabled</source>
-        <translation>Отключено</translation>
+        <translation>Отключен</translation>
     </message>
 </context>
 <context>
