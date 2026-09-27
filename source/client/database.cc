@@ -30,6 +30,7 @@
 #include "base/files/base_paths.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
+#include "proto/router.h"
 
 namespace {
 
@@ -95,7 +96,11 @@ Database::ReadResult readRouter(const SqlQuery& query, RouterConfig* router)
 {
     router->setRouterId(query.columnInt64(0));
     router->setDisplayName(query.columnText(1));
+#if defined(Q_OS_ANDROID)
+    router->setSessionType(proto::router::SESSION_TYPE_OPERATOR);
+#else
     router->setSessionType(static_cast<proto::router::SessionType>(query.columnInt64(2)));
+#endif
     router->setGuid(query.columnText(4));
 
     if (!router->setEncryptedData(query.columnBlob(3)))
