@@ -73,7 +73,11 @@
             <widget class="PasswordEdit" name="edit_password_retry"/>
            </item>
            <item>
-            <widget class="QComboBox" name="combo_access_level"/>
+            <widget class="QComboBox" name="combo_access_level">
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>

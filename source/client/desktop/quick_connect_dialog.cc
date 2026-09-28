@@ -204,6 +204,7 @@ void QuickConnectDialog::onLoadData()
         ui->combo_session_type->setCurrentIndex(session_type_index);
 
     updateAddressLabel();
+    setFixedHeight(sizeHint().height());
 }
 
 //--------------------------------------------------------------------------------------------------

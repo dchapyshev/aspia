@@ -90,7 +90,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="combo_users_page"/>
+            <widget class="QComboBox" name="combo_users_page">
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QToolButton" name="button_users_next">
@@ -223,7 +227,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="combo_hosts_free_page"/>
+            <widget class="QComboBox" name="combo_hosts_free_page">
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QToolButton" name="button_hosts_free_next">
@@ -335,7 +343,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="combo_hosts_in_page"/>
+            <widget class="QComboBox" name="combo_hosts_in_page">
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QToolButton" name="button_hosts_in_next">

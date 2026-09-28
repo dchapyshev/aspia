@@ -60,19 +60,6 @@
     </layout>
    </item>
    <item>
-    <spacer name="vertical_spacer">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
     <widget class="DialogButtonBox" name="button_box">
      <property name="standardButtons">
       <set>QDialogButtonBox::StandardButton::Cancel</set>

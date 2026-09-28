@@ -96,7 +96,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="combobox_type"/>
+       <widget class="QComboBox" name="combobox_type">
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

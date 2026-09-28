@@ -306,6 +306,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     if (layouts.size() > 1)
     {
         QComboBox* layout_combo = new QComboBox(this);
+        layout_combo->setSizeAdjustPolicy(QComboBox::AdjustToContents);
         const QString current = currentKeyboardLayout();
 
         for (const KeyboardLayout& layout : std::as_const(layouts))

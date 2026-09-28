@@ -73,7 +73,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="combo_video_capturer"/>
+             <widget class="QComboBox" name="combo_video_capturer">
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -110,7 +114,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="combobox_update_check_freq"/>
+             <widget class="QComboBox" name="combobox_update_check_freq">
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -124,7 +132,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="combobox_update_channel"/>
+             <widget class="QComboBox" name="combobox_update_channel">
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -270,7 +282,11 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QComboBox" name="combobox_onetime_pass_change"/>
+             <widget class="QComboBox" name="combobox_onetime_pass_change">
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_onetime_pass_chars">
@@ -280,7 +296,11 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QComboBox" name="combobox_onetime_pass_chars"/>
+             <widget class="QComboBox" name="combobox_onetime_pass_chars">
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+              </property>
+             </widget>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="label_onetime_pass_char_count">
@@ -327,7 +347,11 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QComboBox" name="combobox_conn_confirm_auto"/>
+             <widget class="QComboBox" name="combobox_conn_confirm_auto">
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_no_user_action">
@@ -337,7 +361,11 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QComboBox" name="combobox_no_user_action"/>
+             <widget class="QComboBox" name="combobox_no_user_action">
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>

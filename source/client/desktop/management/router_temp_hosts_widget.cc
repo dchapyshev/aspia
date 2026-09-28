@@ -72,9 +72,11 @@ RouterTempHostsWidget::RouterTempHostsWidget(QWidget* parent)
     button_next_->setIconOnRight(true);
 
     combo_page_ = new QComboBox(this);
+    combo_page_->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
     // The largest entry is the largest page the router serves (kMaxTempHostPageSize).
     combo_page_size_ = new QComboBox(this);
+    combo_page_size_->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     combo_page_size_->addItem("25", QVariant::fromValue<qint64>(25));
     combo_page_size_->addItem("50", QVariant::fromValue<qint64>(50));
     combo_page_size_->addItem("100", QVariant::fromValue<qint64>(100));

@@ -298,6 +298,7 @@ SearchWidget::SearchWidget(QWidget* parent)
     button_prev_->setIcon(QIcon(":/img/arrow-left.svg"));
 
     combo_page_ = new QComboBox(this);
+    combo_page_->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
     button_next_ = new IconTextButton(this);
     button_next_->setText(tr("Next"));

@@ -65,7 +65,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="combo_users_page"/>
+      <widget class="QComboBox" name="combo_users_page">
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="IconTextButton" name="button_users_next">
@@ -89,7 +93,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="combo_users_page_size"/>
+      <widget class="QComboBox" name="combo_users_page_size">
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="spacer_users_pagination">

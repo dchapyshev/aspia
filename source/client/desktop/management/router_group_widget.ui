@@ -56,7 +56,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="combo_hosts_page"/>
+      <widget class="QComboBox" name="combo_hosts_page">
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="IconTextButton" name="button_hosts_next">
@@ -80,7 +84,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="combo_hosts_page_size"/>
+      <widget class="QComboBox" name="combo_hosts_page_size">
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="spacer_hosts_pagination">

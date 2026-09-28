@@ -134,7 +134,11 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QComboBox" name="combo_language"/>
+               <widget class="QComboBox" name="combo_language">
+                <property name="sizeAdjustPolicy">
+                 <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                </property>
+               </widget>
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="label_theme">
@@ -144,7 +148,11 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QComboBox" name="combo_theme"/>
+               <widget class="QComboBox" name="combo_theme">
+                <property name="sizeAdjustPolicy">
+                 <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                </property>
+               </widget>
               </item>
               <item row="2" column="0">
                <widget class="QLabel" name="label_display_name">
@@ -204,7 +212,11 @@
                </widget>
               </item>
               <item row="2" column="1" colspan="2">
-               <widget class="QComboBox" name="combo_backup_retention"/>
+               <widget class="QComboBox" name="combo_backup_retention">
+                <property name="sizeAdjustPolicy">
+                 <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -267,7 +279,11 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QComboBox" name="combo_lock_timeout"/>
+               <widget class="QComboBox" name="combo_lock_timeout">
+                <property name="sizeAdjustPolicy">
+                 <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                </property>
+               </widget>
               </item>
               <item row="1" column="0" colspan="2">
                <widget class="QCheckBox" name="checkbox_auto_unlock">
@@ -456,6 +472,9 @@
                 </item>
                 <item>
                  <widget class="QComboBox" name="combo_resolution">
+                  <property name="sizeAdjustPolicy">
+                   <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                  </property>
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -609,7 +628,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="combobox_update_channel"/>
+                 <widget class="QComboBox" name="combobox_update_channel">
+                  <property name="sizeAdjustPolicy">
+                   <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>

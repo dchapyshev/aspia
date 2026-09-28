@@ -27,7 +27,11 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="GroupComboBox" name="combo_group"/>
+      <widget class="GroupComboBox" name="combo_group">
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_name">
@@ -51,7 +55,11 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QComboBox" name="combo_router"/>
+      <widget class="QComboBox" name="combo_router">
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+       </property>
+      </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_address">
@@ -98,7 +106,11 @@
       </widget>
      </item>
      <item row="7" column="1">
-      <widget class="QComboBox" name="combo_credential"/>
+      <widget class="QComboBox" name="combo_credential">
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
