@@ -105,7 +105,7 @@ private:
     void updateStatusLabel();
     void startDrag();
     QString workspaceNameById(qint64 workspace_id) const;
-    const RouterHost* currentHost() const;
+    QList<RouterHost> selectedHosts() const;
     void saveHostsToFile();
 
     std::unique_ptr<Ui::RouterHostsWidget> ui;

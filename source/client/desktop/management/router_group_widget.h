@@ -86,7 +86,7 @@ private:
     void updateStatusLabel();
     void updatePagination();
     void startDrag();
-    const RouterHost* currentHost() const;
+    QList<RouterHost> selectedHosts() const;
 
     std::unique_ptr<Ui::RouterGroupWidget> ui;
     qint64 router_id_ = 0;

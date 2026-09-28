@@ -106,14 +106,14 @@ public:
     RouterHostMimeData() = default;
     ~RouterHostMimeData() final = default;
 
-    void setHost(qint64 router_id, const RouterHost& host, const QString& mime_type);
+    void setHosts(qint64 router_id, const QList<RouterHost>& hosts, const QString& mime_type);
 
     qint64 routerId() const { return router_id_; }
-    const RouterHost& host() const { return host_; }
+    const QList<RouterHost>& hosts() const { return hosts_; }
 
 private:
     qint64 router_id_ = 0;
-    RouterHost host_;
+    QList<RouterHost> hosts_;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -122,7 +122,7 @@ class RouterHostDrag final : public QDrag
 public:
     explicit RouterHostDrag(QObject* drag_source = nullptr);
 
-    void setHost(qint64 router_id, const RouterHost& host, const QString& mime_type);
+    void setHosts(qint64 router_id, const QList<RouterHost>& hosts, const QString& mime_type);
 };
 
 #endif // CLIENT_DESKTOP_MANAGEMENT_DRAG_AND_DROP_H

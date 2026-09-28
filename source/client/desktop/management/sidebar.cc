@@ -35,6 +35,7 @@
 
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
+#include "base/shared_pointer.h"
 #include "base/time_types.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/tcp_channel.h"
@@ -62,6 +63,30 @@ bool isRouterAdmin(qint64 router_id)
 {
     RouterSession* session = RouterController::session(router_id);
     return session && session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The hosts that a drop onto the group |group_id| of the workspace |workspace_id| moves. A host
+// that is already there is left out. Only an administrator moves a host to another workspace, as
+// the server refuses it for anybody else.
+QList<RouterHost> hostsToMove(const QList<RouterHost>& hosts, qint64 router_id, qint64 workspace_id,
+                              qint64 group_id)
+{
+    const bool is_admin = isRouterAdmin(router_id);
+
+    QList<RouterHost> result;
+    for (const RouterHost& host : hosts)
+    {
+        if (host.workspace_id == workspace_id && host.group_id == group_id)
+            continue;
+
+        if (host.workspace_id != workspace_id && !is_admin)
+            continue;
+
+        result.append(host);
+    }
+
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1348,11 +1373,8 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
         if (!host_mime_data)
             return true;
 
-        const RouterHost& host = host_mime_data->host();
-
         // The target is either a host group or the workspace item (move to the workspace root,
-        // group id 0). A host stays within its router, and only an administrator moves it to
-        // another workspace, as the server refuses both for anybody else.
+        // group id 0). A host stays within its router.
         SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
         qint64 target_router_id = 0;
         qint64 target_workspace_id = 0;
@@ -1379,11 +1401,7 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
         if (target_router_id != host_mime_data->routerId())
             return true;
 
-        if (target_workspace_id != host.workspace_id && !isRouterAdmin(target_router_id))
-            return true;
-
-        // Don't allow drop to the place the host already sits in.
-        if (target_workspace_id == host.workspace_id && target_group_id == host.group_id)
+        if (hostsToMove(host_mime_data->hosts(), target_router_id, target_workspace_id, target_group_id).isEmpty())
             return true;
 
         tree_widget_->clearSelection();
@@ -1681,14 +1699,14 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        RouterHost host = host_mime_data->host();
         const qint64 router_id = host_mime_data->routerId();
 
         // Repeat the eligibility checks from onDragMove in case the user releases over a
         // target that wasn't validated (DragLeave without DragMove can happen).
-        if (target_router_id != router_id ||
-            (target_workspace_id != host.workspace_id && !isRouterAdmin(router_id)) ||
-            (target_workspace_id == host.workspace_id && target_group_id == host.group_id))
+        const QList<RouterHost> hosts = target_router_id == router_id ?
+            hostsToMove(host_mime_data->hosts(), router_id, target_workspace_id, target_group_id) :
+            QList<RouterHost>();
+        if (hosts.isEmpty())
         {
             restoreSelection();
             return true;
@@ -1701,18 +1719,45 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        host.workspace_id = target_workspace_id;
-        host.group_id = target_group_id;
-        session->editHost(host, { this, [this, router_id](const proto::router::HostResult& result)
+        struct Batch
         {
-            if (result.error_code() != proto::router::kErrorOk)
+            int pending = 0;
+            int failed = 0;
+        };
+
+        const int total = static_cast<int>(hosts.size());
+        SharedPointer<Batch> batch(new Batch());
+        batch->pending = total;
+
+        for (RouterHost host : hosts)
+        {
+            const HostId host_id = host.host_id;
+
+            host.workspace_id = target_workspace_id;
+            host.group_id = target_group_id;
+            session->editHost(host, { this,
+                [this, router_id, batch, total, host_id](const proto::router::HostResult& result)
             {
-                LOG(ERROR) << "Move host failed:" << result.error_code();
-                MsgBox::warning(tree_widget_, tr("Failed to move the host to the selected group."));
-                return;
-            }
-            emit sig_routerHostMoved(router_id);
-        } });
+                if (result.error_code() != proto::router::kErrorOk)
+                {
+                    LOG(ERROR) << "Move of host" << host_id << "failed:" << result.error_code();
+                    ++batch->failed;
+                }
+
+                if (--batch->pending > 0)
+                    return;
+
+                if (batch->failed > 0)
+                {
+                    MsgBox::warning(tree_widget_, total == 1 ?
+                        tr("Failed to move the host to the selected group.") :
+                        tr("Failed to move %n of the selected hosts.", "", batch->failed));
+                }
+
+                if (batch->failed < total)
+                    emit sig_routerHostMoved(router_id);
+            } });
+        }
 
         event->acceptProposedAction();
         restoreSelection();

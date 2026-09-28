@@ -110,6 +110,7 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     connect(ui->tree_host, &QWidget::customContextMenuRequested,
             this, &RouterGroupWidget::onHostContextMenu);
 
+    ui->tree_host->setSelectionMode(QAbstractItemView::ExtendedSelection);
     connect(ui->tree_host->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &RouterGroupWidget::sig_currentChanged);
 
@@ -169,14 +170,14 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id, qint64 
 //--------------------------------------------------------------------------------------------------
 bool RouterGroupWidget::hasSelectedHost() const
 {
-    return currentHost() != nullptr;
+    return selectedHosts().size() == 1;
 }
 
 //--------------------------------------------------------------------------------------------------
 RouterHost RouterGroupWidget::selectedHost() const
 {
-    const RouterHost* host = currentHost();
-    return host ? *host : RouterHost();
+    const QList<RouterHost> hosts = selectedHosts();
+    return hosts.size() == 1 ? hosts.front() : RouterHost();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -255,11 +256,11 @@ void RouterGroupWidget::deactivate(QStatusBar* statusbar)
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::onEditHost()
 {
-    const RouterHost* host = currentHost();
-    if (!host)
+    const QList<RouterHost> hosts = selectedHosts();
+    if (hosts.size() != 1)
         return;
 
-    AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(router_id_, *host, this));
+    AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(router_id_, hosts.front(), this));
     if (dialog->exec() == QDialog::Accepted)
         fetchHosts(RouterSession::CachePolicy::RELOAD);
 }
@@ -294,10 +295,9 @@ bool RouterGroupWidget::eventFilter(QObject* watched, QEvent* event)
             {
                 const int distance = (mouse_event->pos() - start_pos_).manhattanLength();
                 if (distance > QApplication::startDragDistance())
-                {
                     startDrag();
-                    return true;
-                }
+
+                return true;
             }
         }
     }
@@ -321,16 +321,29 @@ void RouterGroupWidget::onHostListReceived(const RouterHostList& list)
         return;
     }
 
-    const RouterHost* selected = currentHost();
-    const HostId selected_host_id = selected ? selected->host_id : kInvalidHostId;
+    const QList<RouterHost> selected = selectedHosts();
+    const RouterHost* current = model_->hostAt(ui->tree_host->currentIndex().row());
+    const HostId current_host_id = current ? current->host_id : kInvalidHostId;
 
     model_->setHosts(list.hosts);
 
-    // The page is replaced whole, so the row the user was on has to be found again by the host it
-    // was showing.
-    const int selected_row = model_->rowOf(selected_host_id);
-    if (selected_row >= 0)
-        ui->tree_host->setCurrentIndex(model_->index(selected_row, 0));
+    // The page is replaced whole, so the rows the user was on have to be found again by the hosts
+    // they were showing.
+    QItemSelection selection;
+    for (const RouterHost& host : std::as_const(selected))
+    {
+        const int row = model_->rowOf(host.host_id);
+        if (row >= 0)
+            selection.select(model_->index(row, 0), model_->index(row, 0));
+    }
+
+    QItemSelectionModel* selection_model = ui->tree_host->selectionModel();
+
+    const int current_row = model_->rowOf(current_host_id);
+    if (current_row >= 0)
+        selection_model->setCurrentIndex(model_->index(current_row, 0), QItemSelectionModel::NoUpdate);
+
+    selection_model->select(selection, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
 
     const bool page_moved = hosts_page_.setTotalCount(qMin(list.total_count, kMaxHostCount));
     updatePagination();
@@ -465,13 +478,18 @@ void RouterGroupWidget::startDrag()
     if (!session || session->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
         return;
 
+    // A Ctrl click takes the pressed row out of the selection, and then there is nothing under the
+    // mouse to drag.
     const QModelIndex index = ui->tree_host->indexAt(start_pos_);
-    const RouterHost* host = model_->hostAt(index.row());
-    if (!host)
+    if (!index.isValid() || !ui->tree_host->selectionModel()->isRowSelected(index.row()))
+        return;
+
+    const QList<RouterHost> hosts = selectedHosts();
+    if (hosts.isEmpty())
         return;
 
     RouterHostDrag drag(this);
-    drag.setHost(router_id_, *host, mime_type_);
+    drag.setHosts(router_id_, hosts, mime_type_);
 
     const QIcon icon = index.siblingAtColumn(0).data(Qt::DecorationRole).value<QIcon>();
     drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
@@ -480,7 +498,16 @@ void RouterGroupWidget::startDrag()
 }
 
 //--------------------------------------------------------------------------------------------------
-const RouterHost* RouterGroupWidget::currentHost() const
+QList<RouterHost> RouterGroupWidget::selectedHosts() const
 {
-    return model_->hostAt(ui->tree_host->currentIndex().row());
+    const QModelIndexList rows = ui->tree_host->selectionModel()->selectedRows();
+
+    QList<RouterHost> hosts;
+    for (const QModelIndex& index : rows)
+    {
+        if (const RouterHost* host = model_->hostAt(index.row()))
+            hosts.append(*host);
+    }
+
+    return hosts;
 }

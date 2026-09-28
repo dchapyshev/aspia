@@ -84,6 +84,7 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
                                  HostListModel::Column::LAST_CONNECT,
                                  HostListModel::Column::LAST_MODIFY,
                                  HostListModel::Column::STATUS }, this);
+    ui->tree_hosts->setSelectionMode(QAbstractItemView::ExtendedSelection);
     ui->tree_hosts->setModel(model_);
 
     // Turned on again after the model is set: the view wires the header up to the sort of whatever
@@ -188,35 +189,37 @@ void RouterHostsWidget::setMimeType(const QString& mime_type)
 //--------------------------------------------------------------------------------------------------
 bool RouterHostsWidget::hasSelectedHost() const
 {
-    return currentHost() != nullptr;
+    return selectedHosts().size() == 1;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool RouterHostsWidget::isSelectedHostOnline() const
 {
-    const RouterHost* host = currentHost();
-    return host && host->online;
+    const QList<RouterHost> hosts = selectedHosts();
+    return hosts.size() == 1 && hosts.front().online;
 }
 
 //--------------------------------------------------------------------------------------------------
 HostId RouterHostsWidget::selectedHostId() const
 {
-    const RouterHost* host = currentHost();
-    return host ? host->host_id : kInvalidHostId;
+    const QList<RouterHost> hosts = selectedHosts();
+    return hosts.size() == 1 ? hosts.front().host_id : kInvalidHostId;
 }
 
 //--------------------------------------------------------------------------------------------------
 HostConfig RouterHostsWidget::selectedHostConfig() const
 {
-    const RouterHost* host = currentHost();
-    if (!host || host->host_id == kInvalidHostId)
+    const QList<RouterHost> hosts = selectedHosts();
+    if (hosts.size() != 1 || hosts.front().host_id == kInvalidHostId)
         return HostConfig();
 
-    QString name = host->display_name;
-    if (name.isEmpty())
-        name = host->computer_name;
+    const RouterHost& host = hosts.front();
 
-    return HostConfig::forRouterHost(router_id_, host->host_id, name);
+    QString name = host.display_name;
+    if (name.isEmpty())
+        name = host.computer_name;
+
+    return HostConfig::forRouterHost(router_id_, host.host_id, name);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -332,14 +335,16 @@ void RouterHostsWidget::deactivate(QStatusBar* statusbar)
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::onModifyHost()
 {
-    const RouterHost* host = currentHost();
-    if (!host)
+    const QList<RouterHost> hosts = selectedHosts();
+    if (hosts.size() != 1)
     {
-        LOG(INFO) << "No selected host";
+        LOG(INFO) << "No single selected host";
         return;
     }
 
-    AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(router_id_, *host, this));
+    const RouterHost& host = hosts.front();
+
+    AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(router_id_, host, this));
     if (dialog->exec() == QDialog::Accepted)
         fetchHosts();
 }
@@ -347,17 +352,19 @@ void RouterHostsWidget::onModifyHost()
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::onDisconnectHost()
 {
-    const RouterHost* host = currentHost();
-    if (!host)
+    const QList<RouterHost> hosts = selectedHosts();
+    if (hosts.size() != 1)
     {
-        LOG(INFO) << "No selected host";
+        LOG(INFO) << "No single selected host";
         return;
     }
 
-    const HostId host_id = host->host_id;
+    const RouterHost& host = hosts.front();
+
+    const HostId host_id = host.host_id;
 
     if (MsgBox::question(this, tr("Are you sure you want to disconnect host \"%1\"?")
-        .arg(host->computer_name)) != MsgBox::Yes)
+        .arg(host.computer_name)) != MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Disconnect host rejected by user";
         return;
@@ -398,14 +405,16 @@ void RouterHostsWidget::onDisconnectAllHosts()
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::onRemoveHost()
 {
-    const RouterHost* host = currentHost();
-    if (!host)
+    const QList<RouterHost> hosts = selectedHosts();
+    if (hosts.size() != 1)
     {
-        LOG(INFO) << "No selected host";
+        LOG(INFO) << "No single selected host";
         return;
     }
 
-    const HostId host_id = host->host_id;
+    const RouterHost& host = hosts.front();
+
+    const HostId host_id = host.host_id;
 
     QString message = tr("Deleting a host will result in all its configuration for connecting "
                          "to the router being deleted, and the application will be uninstalled "
@@ -429,33 +438,37 @@ void RouterHostsWidget::onRemoveHost()
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::onCheckHostUpdates()
 {
-    const RouterHost* host = currentHost();
-    if (!host)
+    const QList<RouterHost> hosts = selectedHosts();
+    if (hosts.size() != 1)
     {
-        LOG(INFO) << "No selected host";
+        LOG(INFO) << "No single selected host";
         return;
     }
+
+    const RouterHost& host = hosts.front();
 
     RouterSession* session = RouterController::session(router_id_);
     if (!session)
         return;
 
     LOG(INFO) << "[ACTION] Check host updates requested by user";
-    session->checkHostUpdates(host->host_id, { this, &RouterHostsWidget::onHostResultReceived });
+    session->checkHostUpdates(host.host_id, { this, &RouterHostsWidget::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::onHostTelemetry()
 {
-    const RouterHost* host = currentHost();
-    if (!host)
+    const QList<RouterHost> hosts = selectedHosts();
+    if (hosts.size() != 1)
     {
-        LOG(INFO) << "No selected host";
+        LOG(INFO) << "No single selected host";
         return;
     }
 
+    const RouterHost& host = hosts.front();
+
     LOG(INFO) << "[ACTION] Host telemetry requested by user";
-    AutoQPointer<HostTelemetryDialog> dialog(new HostTelemetryDialog(router_id_, *host, this));
+    AutoQPointer<HostTelemetryDialog> dialog(new HostTelemetryDialog(router_id_, host, this));
     dialog->exec();
 }
 
@@ -485,10 +498,9 @@ bool RouterHostsWidget::eventFilter(QObject* watched, QEvent* event)
             {
                 const int distance = (mouse_event->pos() - start_pos_).manhattanLength();
                 if (distance > QApplication::startDragDistance())
-                {
                     startDrag();
-                    return true;
-                }
+
+                return true;
             }
         }
     }
@@ -512,17 +524,30 @@ void RouterHostsWidget::onHostListReceived(const RouterHostList& list)
         return;
     }
 
-    const RouterHost* selected = currentHost();
-    const HostId selected_host_id = selected ? selected->host_id : kInvalidHostId;
+    const QList<RouterHost> selected = selectedHosts();
+    const RouterHost* current = model_->hostAt(ui->tree_hosts->currentIndex().row());
+    const HostId current_host_id = current ? current->host_id : kInvalidHostId;
 
     model_->setWorkspaceNames(workspace_names_);
     model_->setHosts(list.hosts);
 
-    // The page is replaced whole, so the row the user was on has to be found again by the host it
-    // was showing.
-    const int selected_row = model_->rowOf(selected_host_id);
-    if (selected_row >= 0)
-        ui->tree_hosts->setCurrentIndex(model_->index(selected_row, 0));
+    // The page is replaced whole, so the rows the user was on have to be found again by the hosts
+    // they were showing.
+    QItemSelection selection;
+    for (const RouterHost& host : std::as_const(selected))
+    {
+        const int row = model_->rowOf(host.host_id);
+        if (row >= 0)
+            selection.select(model_->index(row, 0), model_->index(row, 0));
+    }
+
+    QItemSelectionModel* selection_model = ui->tree_hosts->selectionModel();
+
+    const int current_row = model_->rowOf(current_host_id);
+    if (current_row >= 0)
+        selection_model->setCurrentIndex(model_->index(current_row, 0), QItemSelectionModel::NoUpdate);
+
+    selection_model->select(selection, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
 
     const bool page_moved = hosts_page_.setTotalCount(qMin(list.total_count, kMaxHostCount));
     updateHostsPagination();
@@ -696,13 +721,18 @@ void RouterHostsWidget::updateStatusLabel()
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::startDrag()
 {
+    // A Ctrl click takes the pressed row out of the selection, and then there is nothing under the
+    // mouse to drag.
     const QModelIndex index = ui->tree_hosts->indexAt(start_pos_);
-    const RouterHost* host = model_->hostAt(index.row());
-    if (!host)
+    if (!index.isValid() || !ui->tree_hosts->selectionModel()->isRowSelected(index.row()))
+        return;
+
+    const QList<RouterHost> hosts = selectedHosts();
+    if (hosts.isEmpty())
         return;
 
     RouterHostDrag drag(this);
-    drag.setHost(router_id_, *host, mime_type_);
+    drag.setHosts(router_id_, hosts, mime_type_);
 
     const QIcon icon = index.siblingAtColumn(0).data(Qt::DecorationRole).value<QIcon>();
     drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
@@ -720,9 +750,18 @@ QString RouterHostsWidget::workspaceNameById(qint64 workspace_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-const RouterHost* RouterHostsWidget::currentHost() const
+QList<RouterHost> RouterHostsWidget::selectedHosts() const
 {
-    return model_->hostAt(ui->tree_hosts->currentIndex().row());
+    const QModelIndexList rows = ui->tree_hosts->selectionModel()->selectedRows();
+
+    QList<RouterHost> hosts;
+    for (const QModelIndex& index : rows)
+    {
+        if (const RouterHost* host = model_->hostAt(index.row()))
+            hosts.append(*host);
+    }
+
+    return hosts;
 }
 
 //--------------------------------------------------------------------------------------------------
