@@ -45,6 +45,7 @@ public:
     static int sessionGetVt(const char* session, unsigned* vtnr);
     static int sessionGetClass(const char* session, char** clazz);
     static int sessionGetType(const char* session, char** type);
+    static int sessionGetState(const char* session, char** state);
 
     static int loginMonitorNew(const char* category, sd_login_monitor** ret);
     static sd_login_monitor* loginMonitorUnref(sd_login_monitor* monitor);

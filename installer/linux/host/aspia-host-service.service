@@ -11,6 +11,7 @@ WorkingDirectory=/usr/bin
 Restart=always
 ExecStart=/usr/bin/aspia_host --service
 RestartSec=5000ms
+LimitCORE=infinity
 
 [Install]
 WantedBy=multi-user.target

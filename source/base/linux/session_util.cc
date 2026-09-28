@@ -222,6 +222,19 @@ SessionUtil::SessionClass SessionUtil::sessionClass(const QString& session_id)
 
 //--------------------------------------------------------------------------------------------------
 // static
+bool SessionUtil::isSessionClosing(const QString& session_id)
+{
+    char* state = nullptr;
+    if (LibSystemd::sessionGetState(session_id.toLocal8Bit().constData(), &state) < 0 || !state)
+        return false;
+
+    const bool closing = strcmp(state, "closing") == 0;
+    free(state);
+    return closing;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 bool SessionUtil::isGraphicalEnvReady(const QString& user_name)
 {
     const struct passwd* pw = getpwnam(user_name.toLocal8Bit().constData());
@@ -457,6 +470,14 @@ int SessionUtil::killProcesses(uid_t uid, const QByteArray& comm, const QByteArr
         const QList<QByteArray> args = readProcFile(proc_dir + "/cmdline").split('\0');
         if (!argument.isEmpty() && !args.contains(argument))
             continue;
+
+        // A process that has crashed and is handing its core to the kernel is already dying, and a
+        // SIGKILL now would cut the dump short.
+        if (readProcFile(proc_dir + "/status").contains("\nCoreDumping:\t1"))
+        {
+            LOG(INFO) << "Process" << pid << "is dumping core, not killed";
+            continue;
+        }
 
         if (kill(static_cast<pid_t>(pid), SIGKILL) == 0)
             ++killed_count;

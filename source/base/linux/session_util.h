@@ -59,6 +59,11 @@ public:
     // Returns the logind class of |session_id|, or UNKNOWN on failure / an unrecognized value.
     static SessionClass sessionClass(const QString& session_id);
 
+    // Returns true while |session_id| is logged out but still waiting for its processes to exit.
+    // Such a session stays the active one of its seat until it is gone, so nothing started for it
+    // survives. False on failure.
+    static bool isSessionClosing(const QString& session_id);
+
     // Returns true once |user_name|'s systemd user manager has imported its graphical environment
     // (DISPLAY or WAYLAND_DISPLAY). Right after the session becomes active the compositor imports these
     // a moment later, so this returns false until then and the caller should retry.

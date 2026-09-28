@@ -39,6 +39,7 @@ decltype(&sd_pid_get_session) g_pid_get_session = nullptr;
 decltype(&sd_session_get_vt) g_session_get_vt = nullptr;
 decltype(&sd_session_get_class) g_session_get_class = nullptr;
 decltype(&sd_session_get_type) g_session_get_type = nullptr;
+decltype(&sd_session_get_state) g_session_get_state = nullptr;
 decltype(&sd_login_monitor_new) g_login_monitor_new = nullptr;
 decltype(&sd_login_monitor_unref) g_login_monitor_unref = nullptr;
 decltype(&sd_login_monitor_get_fd) g_login_monitor_get_fd = nullptr;
@@ -88,6 +89,8 @@ bool LibSystemd::ensureLoaded()
         reinterpret_cast<decltype(g_session_get_class)>(dlsym(g_handle, "sd_session_get_class"));
     g_session_get_type =
         reinterpret_cast<decltype(g_session_get_type)>(dlsym(g_handle, "sd_session_get_type"));
+    g_session_get_state =
+        reinterpret_cast<decltype(g_session_get_state)>(dlsym(g_handle, "sd_session_get_state"));
     g_login_monitor_new =
         reinterpret_cast<decltype(g_login_monitor_new)>(dlsym(g_handle, "sd_login_monitor_new"));
     g_login_monitor_unref =
@@ -123,10 +126,10 @@ bool LibSystemd::ensureLoaded()
         reinterpret_cast<decltype(g_journal_test_cursor)>(dlsym(g_handle, "sd_journal_test_cursor"));
 
     if (!g_seat_get_active || !g_pid_get_session || !g_session_get_vt || !g_session_get_class ||
-        !g_session_get_type || !g_login_monitor_new || !g_login_monitor_unref || !g_login_monitor_get_fd ||
-        !g_login_monitor_flush || !g_journal_open || !g_journal_close || !g_journal_add_match ||
-        !g_journal_seek_head || !g_journal_seek_tail || !g_journal_next || !g_journal_previous ||
-        !g_journal_get_data || !g_journal_get_realtime_usec || !g_journal_seek_cursor ||
+        !g_session_get_type || !g_session_get_state || !g_login_monitor_new || !g_login_monitor_unref ||
+        !g_login_monitor_get_fd || !g_login_monitor_flush || !g_journal_open || !g_journal_close ||
+        !g_journal_add_match || !g_journal_seek_head || !g_journal_seek_tail || !g_journal_next ||
+        !g_journal_previous || !g_journal_get_data || !g_journal_get_realtime_usec || !g_journal_seek_cursor ||
         !g_journal_get_cursor || !g_journal_test_cursor)
     {
         LOG(ERROR) << "Unable to resolve libsystemd symbols";
@@ -182,6 +185,15 @@ int LibSystemd::sessionGetType(const char* session, char** type)
     if (!ensureLoaded())
         return -1;
     return g_session_get_type(session, type);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::sessionGetState(const char* session, char** state)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_session_get_state(session, state);
 }
 
 //--------------------------------------------------------------------------------------------------
