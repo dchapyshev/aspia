@@ -37,6 +37,8 @@ CheckPasswordDialog::CheckPasswordDialog(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
+    setWindowFlag(Qt::WindowStaysOnTopHint);
+
     connect(ui->button_box, &QDialogButtonBox::clicked,
             this, &CheckPasswordDialog::onButtonBoxClicked);
 
