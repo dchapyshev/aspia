@@ -25,6 +25,9 @@
 #include <QString>
 #include <QTreeView>
 
+class QStandardItem;
+class QStandardItemModel;
+
 class GroupComboBox : public QComboBox
 {
     Q_OBJECT
@@ -43,12 +46,18 @@ public:
 
     void loadGroups(const QString& root_name, const QIcon& root_icon,
                     const QList<Entry>& entries, qint64 exclude_id = -1);
+    // The groups go at the top level next to |none_name|, which stands for no group.
+    void loadGroupsWithNone(const QString& none_name, const QList<Entry>& entries);
+    void clearGroups();
     void selectGroup(qint64 group_id);
     qint64 currentGroupId() const;
 
     void showPopup() override;
 
 private:
+    static void addGroups(QStandardItem* parent_item, const QList<Entry>& entries, qint64 exclude_id);
+    void setGroupModel(QStandardItemModel* model);
+
     Q_DISABLE_COPY_MOVE(GroupComboBox)
 };
 

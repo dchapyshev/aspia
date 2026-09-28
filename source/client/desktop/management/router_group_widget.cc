@@ -151,12 +151,10 @@ RouterGroupWidget::~RouterGroupWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id,
-                                  const QString& workspace_name, qint64 group_id)
+void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id, qint64 group_id)
 {
     router_id_ = router_id;
     workspace_id_ = workspace_id;
-    workspace_name_ = workspace_name;
     group_id_ = group_id;
 
     // Another selection is another list, so its paging starts over.
@@ -260,7 +258,7 @@ void RouterGroupWidget::onEditHost()
     if (!host)
         return;
 
-    AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(router_id_, workspace_name_, *host, this));
+    AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(router_id_, *host, this));
     if (dialog->exec() == QDialog::Accepted)
         fetchHosts(RouterSession::CachePolicy::RELOAD);
 }

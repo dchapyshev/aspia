@@ -515,8 +515,7 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
             switchContent(router_group_widget_);
 
             auto* item = static_cast<SidebarRouterWorkspace*>(ui->sidebar->currentItem());
-            router_group_widget_->showGroup(item->routerId(), item->workspaceId(),
-                                            item->workspaceName(), /*group_id=*/0);
+            router_group_widget_->showGroup(item->routerId(), item->workspaceId(), /*group_id=*/0);
         }
         break;
 
@@ -525,8 +524,7 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
             switchContent(router_group_widget_);
 
             auto* item = static_cast<SidebarRouterGroup*>(ui->sidebar->currentItem());
-            router_group_widget_->showGroup(item->routerId(), item->workspaceId(),
-                                            item->workspaceName(), item->groupId());
+            router_group_widget_->showGroup(item->routerId(), item->workspaceId(), item->groupId());
         }
         break;
 
@@ -983,8 +981,7 @@ void ManagementTab::onEditHost()
             const qint64 router_id = row->host.routerId();
             const RouterHost& host = row->router_host;
 
-            AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(
-                router_id, ui->sidebar->routerWorkspaceName(router_id, host.workspace_id), host, this));
+            AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(router_id, host, this));
             if (dialog->exec() == QDialog::Accepted)
                 search_widget_->search(search_widget_->currentQuery());
             return;

@@ -22,6 +22,69 @@
 
 #include <QHash>
 #include <QStandardItemModel>
+#include <QStyle>
+#include <QStyleOption>
+#include <QStyledItemDelegate>
+
+namespace {
+
+// The marker QComboBox puts on the separators it inserts.
+const char kSeparator[] = "separator";
+
+//--------------------------------------------------------------------------------------------------
+bool isSeparator(const QModelIndex& index)
+{
+    return index.data(Qt::AccessibleDescriptionRole).toString() == QLatin1String(kSeparator);
+}
+
+// QComboBox draws separators only in the list view of its own, so the tree view of the popup
+// draws them the same way here.
+class ItemDelegate final : public QStyledItemDelegate
+{
+public:
+    ItemDelegate(QComboBox* combo_box, QObject* parent)
+        : QStyledItemDelegate(parent),
+          combo_box_(combo_box)
+    {
+        // Nothing
+    }
+
+    ~ItemDelegate() final = default;
+
+    // QStyledItemDelegate implementation.
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const final
+    {
+        if (!isSeparator(index))
+        {
+            QStyledItemDelegate::paint(painter, option, index);
+            return;
+        }
+
+        QStyleOption separator_option;
+        separator_option.rect = option.rect;
+        if (const QAbstractItemView* view = qobject_cast<const QAbstractItemView*>(option.widget))
+            separator_option.rect.setWidth(view->viewport()->width());
+
+        combo_box_->style()->drawPrimitive(
+            QStyle::PE_IndicatorToolBarSeparator, &separator_option, painter, combo_box_);
+    }
+
+    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const final
+    {
+        if (!isSeparator(index))
+            return QStyledItemDelegate::sizeHint(option, index);
+
+        const int width = combo_box_->style()->pixelMetric(QStyle::PM_DefaultFrameWidth, nullptr, combo_box_);
+        return QSize(width, width);
+    }
+
+private:
+    QComboBox* combo_box_ = nullptr;
+
+    Q_DISABLE_COPY_MOVE(ItemDelegate)
+};
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 GroupComboBox::GroupComboBox(QWidget* parent)
@@ -41,39 +104,38 @@ void GroupComboBox::loadGroups(
     root->setData(static_cast<qint64>(0), kGroupIdRole);
     model->appendRow(root);
 
-    QHash<qint64, QList<const Entry*>> children_of;
-    for (const Entry& entry : entries)
-        children_of[entry.parent_id].append(&entry);
+    addGroups(root, entries, exclude_id);
+    setGroupModel(model);
+}
 
-    const QIcon folder_icon(":/img/folder.svg");
-    std::function<void(qint64, QStandardItem*)> add =
-        [&](qint64 parent_id, QStandardItem* parent_item)
+//--------------------------------------------------------------------------------------------------
+void GroupComboBox::loadGroupsWithNone(const QString& none_name, const QList<Entry>& entries)
+{
+    QStandardItemModel* model = new QStandardItemModel(this);
+
+    QStandardItem* none = new QStandardItem(QIcon(":/img/folder.svg"), none_name);
+    none->setData(static_cast<qint64>(0), kGroupIdRole);
+    model->appendRow(none);
+
+    if (!entries.isEmpty())
     {
-        const QList<const Entry*>& children = children_of.value(parent_id);
-        for (const Entry* child : children)
-        {
-            if (child->id == exclude_id)
-                continue;
+        QStandardItem* separator = new QStandardItem();
+        separator->setData(QString::fromLatin1(kSeparator), Qt::AccessibleDescriptionRole);
+        separator->setFlags(Qt::NoItemFlags);
+        model->appendRow(separator);
+    }
 
-            QStandardItem* item = new QStandardItem(folder_icon, child->name);
-            item->setData(child->id, kGroupIdRole);
-            parent_item->appendRow(item);
+    addGroups(model->invisibleRootItem(), entries, -1);
+    setGroupModel(model);
+}
 
-            add(child->id, item);
-        }
-    };
-    add(0, root);
-
-    QTreeView* tree_view = new QTreeView(this);
-    tree_view->setHeaderHidden(true);
-    tree_view->setItemsExpandable(false);
-    tree_view->setRootIsDecorated(false);
-    tree_view->setExpandsOnDoubleClick(false);
-
-    setModel(model);
-    setView(tree_view);
-
-    tree_view->expandAll();
+//--------------------------------------------------------------------------------------------------
+void GroupComboBox::clearGroups()
+{
+    // QComboBox::clear() removes the rows of the current root only, and selectGroup() moves the root
+    // down to the parent of a nested group.
+    setRootModelIndex(QModelIndex());
+    clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -107,4 +169,48 @@ void GroupComboBox::showPopup()
 
     if (QTreeView* tv = qobject_cast<QTreeView*>(view()))
         tv->expandAll();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void GroupComboBox::addGroups(QStandardItem* parent_item, const QList<Entry>& entries, qint64 exclude_id)
+{
+    QHash<qint64, QList<const Entry*>> children_of;
+    for (const Entry& entry : entries)
+        children_of[entry.parent_id].append(&entry);
+
+    const QIcon folder_icon(":/img/folder.svg");
+    std::function<void(qint64, QStandardItem*)> add =
+        [&](qint64 parent_id, QStandardItem* parent)
+    {
+        const QList<const Entry*>& children = children_of.value(parent_id);
+        for (const Entry* child : children)
+        {
+            if (child->id == exclude_id)
+                continue;
+
+            QStandardItem* item = new QStandardItem(folder_icon, child->name);
+            item->setData(child->id, kGroupIdRole);
+            parent->appendRow(item);
+
+            add(child->id, item);
+        }
+    };
+    add(0, parent_item);
+}
+
+//--------------------------------------------------------------------------------------------------
+void GroupComboBox::setGroupModel(QStandardItemModel* model)
+{
+    QTreeView* tree_view = new QTreeView(this);
+    tree_view->setHeaderHidden(true);
+    tree_view->setItemsExpandable(false);
+    tree_view->setRootIsDecorated(false);
+    tree_view->setExpandsOnDoubleClick(false);
+    tree_view->setItemDelegate(new ItemDelegate(this, tree_view));
+
+    setModel(model);
+    setView(tree_view);
+
+    tree_view->expandAll();
 }

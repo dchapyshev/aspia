@@ -338,8 +338,7 @@ void RouterHostsWidget::onModifyHost()
         return;
     }
 
-    AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(
-        router_id_, workspaceNameById(host->workspace_id), *host, this));
+    AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(router_id_, *host, this));
     if (dialog->exec() == QDialog::Accepted)
         fetchHosts();
 }

@@ -40,11 +40,12 @@ class RouterHostDialog final : public QDialog
     Q_OBJECT
 
 public:
-    RouterHostDialog(qint64 router_id, const QString& workspace_name, const RouterHost& host,
-                     QWidget* parent);
+    RouterHostDialog(qint64 router_id, const RouterHost& host, QWidget* parent);
     ~RouterHostDialog() final;
 
 private slots:
+    void onWorkspaceListReceived(const RouterWorkspaceList& list);
+    void onWorkspaceChanged(int index);
     void onGroupListReceived(const RouterGroupList& list);
     void onHostResultReceived(const proto::router::HostResult& result);
     void onSavedCredentialsToggled(bool checked);
@@ -52,12 +53,13 @@ private slots:
     void onLoadData();
 
 private:
+    qint64 currentWorkspaceId() const;
+    void fetchGroups();
     bool saveCredentials();
     void setCredentialsEnabled(bool enable);
 
     std::unique_ptr<Ui::RouterHostDialog> ui;
     qint64 router_id_ = 0;
-    QString workspace_name_;
     RouterHost host_;
     bool credentials_loaded_ = false;
 

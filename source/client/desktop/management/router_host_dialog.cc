@@ -23,6 +23,7 @@
 #include <QIcon>
 #include <QLabel>
 #include <QPushButton>
+#include <QSignalBlocker>
 #include <QTimer>
 
 #include <algorithm>
@@ -42,12 +43,10 @@
 #include "proto/router_manager.h"
 
 //--------------------------------------------------------------------------------------------------
-RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_name,
-                                   const RouterHost& host, QWidget* parent)
+RouterHostDialog::RouterHostDialog(qint64 router_id, const RouterHost& host, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterHostDialog>()),
       router_id_(router_id),
-      workspace_name_(workspace_name),
       host_(host)
 {
     LOG(INFO) << "Ctor";
@@ -69,6 +68,9 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
         ui->combo_group->setEnabled(false);
     }
 
+    if (!session || session->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
+        ui->combo_workspace->setEnabled(false);
+
     // A temporary host id is handed out at random and comes back for another machine, so what was
     // saved under it would be sent to a host the user never gave it to. Such a host is edited like
     // any other, it just has nowhere to keep credentials.
@@ -77,10 +79,11 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
 
     connect(ui->checkbox_saved_credentials, &QCheckBox::toggled, this, &RouterHostDialog::onSavedCredentialsToggled);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterHostDialog::onButtonBoxClicked);
+    connect(ui->combo_workspace, &QComboBox::currentIndexChanged, this, &RouterHostDialog::onWorkspaceChanged);
 
     int label_width = 0;
-    for (const QLabel* label : { ui->label_group, ui->label_display_name, ui->label_username,
-                                 ui->label_password, ui->label_credential })
+    for (const QLabel* label : { ui->label_workspace, ui->label_group, ui->label_display_name,
+                                 ui->label_username, ui->label_password, ui->label_credential })
     {
         label_width = std::max(label_width, label->sizeHint().width());
     }
@@ -98,16 +101,8 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
 
     QTimer::singleShot(MilliSeconds::zero(), this, &RouterHostDialog::onLoadData);
 
-    // A host that belongs to no workspace lies in no group, and the router refuses a group list
-    // request without a workspace. Such a host is edited with the combo left empty.
-    if (host_.workspace_id <= 0)
-    {
-        ui->combo_group->setEnabled(false);
-        return;
-    }
-
-    // The group combo is populated asynchronously from listGroups(); disable Ok until the
-    // response arrives so the user cannot submit before knowing which group they have selected.
+    // The combos are populated asynchronously. Ok stays disabled until the responses arrive so the
+    // user cannot submit before knowing which workspace and group they have selected.
     ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(false);
 
     if (!session)
@@ -116,8 +111,8 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
         return;
     }
 
-    session->listGroups(RouterSession::CachePolicy::USE_CACHE, host_.workspace_id,
-                        { this, &RouterHostDialog::onGroupListReceived });
+    session->listWorkspaces(RouterSession::CachePolicy::RELOAD, 0,
+                            { this, &RouterHostDialog::onWorkspaceListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -130,8 +125,45 @@ RouterHostDialog::~RouterHostDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterHostDialog::onWorkspaceListReceived(const RouterWorkspaceList& list)
+{
+    if (list.error_code != proto::router::kErrorOk)
+    {
+        LOG(ERROR) << "Unable to get the list of the workspaces:" << list.error_code;
+        MsgBox::warning(this, tr("Failed to get list of workspaces."));
+        reject();
+        return;
+    }
+
+    const QSignalBlocker blocker(ui->combo_workspace);
+
+    const QIcon workspace_icon(":/img/workspace.svg");
+    ui->combo_workspace->addItem(workspace_icon, tr("Not assigned"), QVariant::fromValue<qint64>(0));
+
+    for (const RouterWorkspace& workspace : std::as_const(list.workspaces))
+        ui->combo_workspace->addItem(workspace_icon, workspace.name, QVariant::fromValue(workspace.entry_id));
+
+    if (!list.workspaces.isEmpty())
+        ui->combo_workspace->insertSeparator(1);
+
+    const int index = ui->combo_workspace->findData(QVariant::fromValue(host_.workspace_id));
+    ui->combo_workspace->setCurrentIndex(std::max(index, 0));
+
+    fetchGroups();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterHostDialog::onWorkspaceChanged(int /* index */)
+{
+    fetchGroups();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterHostDialog::onGroupListReceived(const RouterGroupList& list)
 {
+    if (list.workspace_id != currentWorkspaceId())
+        return;
+
     if (list.error_code != proto::router::kErrorOk)
     {
         // Without the group tree the dialog is unusable: the group combo stays empty and the
@@ -152,8 +184,8 @@ void RouterHostDialog::onGroupListReceived(const RouterGroupList& list)
         entry.name = group.name;
     }
 
-    ui->combo_group->loadGroups(workspace_name_, QIcon(":/img/workspace.svg"), entries);
-    ui->combo_group->selectGroup(host_.group_id);
+    ui->combo_group->loadGroupsWithNone(tr("Not assigned"), entries);
+    ui->combo_group->selectGroup(list.workspace_id == host_.workspace_id ? host_.group_id : 0);
 
     ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
@@ -164,8 +196,8 @@ void RouterHostDialog::onHostResultReceived(const proto::router::HostResult& res
     const std::string& error_code = result.error_code();
     if (error_code != proto::router::kErrorOk)
     {
+        setEnabled(true);
         MsgBox::warning(this, routerErrorText(error_code));
-        ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(true);
         return;
     }
 
@@ -215,9 +247,11 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    host_.display_name = ui->edit_display_name->text();
-    host_.comment      = ui->edit_comment->toPlainText();
-    host_.group_id     = ui->combo_group->currentGroupId();
+    RouterHost host = host_;
+    host.workspace_id = currentWorkspaceId();
+    host.group_id     = ui->combo_group->currentGroupId();
+    host.display_name = ui->edit_display_name->text();
+    host.comment      = ui->edit_comment->toPlainText();
 
     // The credentials live on this computer only, so they are not the router's to accept or
     // refuse. Kept for the answer, they would be lost with any error of it. A failure to keep them
@@ -236,8 +270,8 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     LOG(INFO) << "[ACTION] Edit host accepted, sending request";
-    ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(false);
-    session->editHost(host_, { this, &RouterHostDialog::onHostResultReceived });
+    setEnabled(false);
+    session->editHost(host, { this, &RouterHostDialog::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -307,6 +341,42 @@ void RouterHostDialog::onLoadData()
         LOG(ERROR) << "Credentials of host" << host_.host_id << "could not be read";
         MsgBox::warning(this, tr("The credentials of the host are damaged. Enter them again."));
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 RouterHostDialog::currentWorkspaceId() const
+{
+    return ui->combo_workspace->currentData().toLongLong();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterHostDialog::fetchGroups()
+{
+    ui->combo_group->clearGroups();
+
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
+    {
+        LOG(ERROR) << "No session for router" << router_id_;
+        return;
+    }
+
+    const qint64 workspace_id = currentWorkspaceId();
+    const bool is_operator = session->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR;
+
+    ui->combo_group->setEnabled(workspace_id > 0 && !is_operator);
+
+    // A host that belongs to no workspace lies in no group, and the router refuses a group list
+    // request without a workspace.
+    if (workspace_id <= 0)
+    {
+        ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(true);
+        return;
+    }
+
+    ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(false);
+    session->listGroups(RouterSession::CachePolicy::RELOAD, workspace_id,
+                        { this, &RouterHostDialog::onGroupListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
