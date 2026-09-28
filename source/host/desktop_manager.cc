@@ -535,7 +535,16 @@ void DesktopManager::onIpcErrorOccurred()
 void DesktopManager::onIpcDisconnected()
 {
     if (is_console_)
+    {
+#if defined(Q_OS_LINUX)
+        // The console agent dies with its display server. A display manager that reuses the VT
+        // (lightdm) brings the next session up under the same id, so no session change follows and
+        // the dead channel is the only sign of it. Restart the way a server error does.
+        dettach(FROM_HERE);
+        restart_time_ = Clock::now() + kRestartTimeout;
+#endif
         return;
+    }
 
     dettach(FROM_HERE);
     attach(FROM_HERE, activeTargetSessionId());
@@ -678,6 +687,15 @@ bool DesktopManager::startProcess()
         return false;
     }
 
+    // A logged-out session stays active on the seat while its last processes exit, and a display
+    // manager that reuses the VT (lightdm) brings the greeter up on the same session id. An agent
+    // started now would inherit a dying X server. The restart timer retries.
+    if (SessionUtil::isSessionClosing(session_id))
+    {
+        LOG(INFO) << "Active session" << session_id << "is closing; deferring agent start";
+        return false;
+    }
+
     const QString log_level = QString::fromLocal8Bit(qgetenv("ASPIA_LOG_LEVEL"));
 
     // The agent ALWAYS runs as root via a system transient unit and derives the capture type itself
@@ -712,7 +730,7 @@ bool DesktopManager::startProcess()
     }
 
     QStringList arguments;
-    arguments << "--collect";
+    arguments << "--collect" << "-p" << "LimitCORE=infinity";
 
     if (!log_level.isEmpty())
         arguments << ("--setenv=ASPIA_LOG_LEVEL=" + log_level);
