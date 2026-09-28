@@ -29,10 +29,6 @@ class IconTextButton;
 class QComboBox;
 class QTreeView;
 
-namespace proto::router {
-class HostResult;
-} // namespace proto::router
-
 class RouterTempHostsWidget final : public ContentWidget
 {
     Q_OBJECT
@@ -43,6 +39,7 @@ public:
 
     void showRouter(qint64 router_id);
     qint64 routerId() const { return router_id_; }
+    QList<RouterTempHost> selectedHosts() const;
     bool hasSelectedHost() const;
     HostConfig selectedHostConfig() const;
 
@@ -61,7 +58,6 @@ signals:
 
 private slots:
     void onTempHostListReceived(const RouterTempHostList& list);
-    void onHostResultReceived(const proto::router::HostResult& result);
     void onContextMenu(const QPoint& pos);
     void onPageSizeChanged(int index);
     void onPageChanged(int index);
@@ -72,9 +68,6 @@ private:
     void fetchTempHosts();
     void updatePagination();
     bool isAdmin() const;
-
-    // The host of the row the user is on, or null when the list is empty.
-    const RouterTempHost* currentHost() const;
 
     QTreeView* tree_ = nullptr;
     TempHostListModel* model_ = nullptr;

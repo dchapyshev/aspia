@@ -1163,7 +1163,7 @@ void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onTempHostContextMenu(const QPoint& pos)
 {
-    if (!router_temp_hosts_widget_->hasSelectedHost())
+    if (router_temp_hosts_widget_->selectedHosts().isEmpty())
         return;
 
     QMenu menu;
@@ -2014,8 +2014,8 @@ void ManagementTab::updateActionsState()
         if (session)
             session_type = session->config().sessionType();
 
-        ui->action_host_approve->setVisible(
-            has_host && session_type == proto::router::SESSION_TYPE_ADMIN);
+        ui->action_host_approve->setVisible(!router_temp_hosts_widget_->selectedHosts().isEmpty() &&
+                                            session_type == proto::router::SESSION_TYPE_ADMIN);
         ui->action_desktop_connect->setVisible(has_host);
         ui->action_file_transfer_connect->setVisible(has_host);
         ui->action_chat_connect->setVisible(has_host);

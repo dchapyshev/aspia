@@ -28,6 +28,7 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/shared_pointer.h"
 #include "base/peer/host_id.h"
 #include "client/router_controller.h"
 #include "common/desktop/icon_text_button.h"
@@ -52,7 +53,7 @@ RouterTempHostsWidget::RouterTempHostsWidget(QWidget* parent)
 
     tree_->setRootIsDecorated(false);
     tree_->setAllColumnsShowFocus(true);
-    tree_->setSelectionMode(QAbstractItemView::SingleSelection);
+    tree_->setSelectionMode(QAbstractItemView::ExtendedSelection);
     tree_->setModel(model_);
     tree_->setSortingEnabled(true);
 
@@ -143,19 +144,34 @@ void RouterTempHostsWidget::showRouter(qint64 router_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+QList<RouterTempHost> RouterTempHostsWidget::selectedHosts() const
+{
+    const QModelIndexList rows = tree_->selectionModel()->selectedRows();
+
+    QList<RouterTempHost> hosts;
+    for (const QModelIndex& index : rows)
+    {
+        if (const RouterTempHost* host = model_->hostAt(index.row()))
+            hosts.append(*host);
+    }
+
+    return hosts;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool RouterTempHostsWidget::hasSelectedHost() const
 {
-    return currentHost() != nullptr;
+    return selectedHosts().size() == 1;
 }
 
 //--------------------------------------------------------------------------------------------------
 HostConfig RouterTempHostsWidget::selectedHostConfig() const
 {
-    const RouterTempHost* host = currentHost();
-    if (!host || host->temp_id == kInvalidHostId)
+    const QList<RouterTempHost> hosts = selectedHosts();
+    if (hosts.size() != 1 || hosts.front().temp_id == kInvalidHostId)
         return HostConfig();
 
-    return HostConfig::forRouterHost(router_id_, host->temp_id, host->computer_name);
+    return HostConfig::forRouterHost(router_id_, hosts.front().temp_id, hosts.front().computer_name);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -179,19 +195,28 @@ void RouterTempHostsWidget::reload()
 //--------------------------------------------------------------------------------------------------
 void RouterTempHostsWidget::onApproveHost()
 {
-    const RouterTempHost* host = currentHost();
-    if (!host)
+    const QList<RouterTempHost> hosts = selectedHosts();
+    if (hosts.isEmpty())
     {
         LOG(INFO) << "No selected temporary host";
         return;
     }
 
-    const HostId temp_id = host->temp_id;
+    const int total = static_cast<int>(hosts.size());
 
-    if (MsgBox::question(this, tr("Approving a host will give it permanent access to the router. "
-        "Are you sure you want to approve host \"%1\"?").arg(host->computer_name)) != MsgBox::Yes)
+    if (total == 1)
     {
-        LOG(INFO) << "[ACTION] Approve temporary host rejected by user";
+        if (MsgBox::question(this, tr("Approving a host will give it permanent access to the router. "
+            "Are you sure you want to approve host \"%1\"?").arg(hosts.front().computer_name)) != MsgBox::Yes)
+        {
+            LOG(INFO) << "[ACTION] Approve temporary host rejected by user";
+            return;
+        }
+    }
+    else if (MsgBox::importantQuestion(this, tr("Approving hosts will give them permanent access to the "
+        "router. Are you sure you want to approve %n hosts?", "", total)) != MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Approve temporary hosts rejected by user";
         return;
     }
 
@@ -199,8 +224,43 @@ void RouterTempHostsWidget::onApproveHost()
     if (!session)
         return;
 
-    LOG(INFO) << "[ACTION] Approve temporary host accepted by user";
-    session->approveHost(temp_id, { this, &RouterTempHostsWidget::onHostResultReceived });
+    LOG(INFO) << "[ACTION] Approve temporary hosts accepted by user:" << total;
+
+    struct Batch
+    {
+        int pending = 0;
+        int failed = 0;
+    };
+
+    SharedPointer<Batch> batch(new Batch());
+    batch->pending = total;
+
+    for (const RouterTempHost& host : std::as_const(hosts))
+    {
+        const HostId temp_id = host.temp_id;
+
+        session->approveHost(temp_id, { this, [this, batch, total, temp_id](const proto::router::HostResult& result)
+        {
+            if (result.error_code() != proto::router::kErrorOk)
+            {
+                LOG(ERROR) << "Temporary host" << temp_id << "was not approved:" << result.error_code();
+                ++batch->failed;
+            }
+
+            if (--batch->pending > 0)
+                return;
+
+            if (batch->failed > 0)
+            {
+                if (total == 1)
+                    MsgBox::warning(this, tr("Failed to approve the host."));
+                else
+                    MsgBox::warning(this, tr("Failed to approve %n of the selected hosts.", "", batch->failed));
+            }
+
+            fetchTempHosts();
+        }});
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -213,16 +273,27 @@ void RouterTempHostsWidget::onTempHostListReceived(const RouterTempHostList& lis
         return;
     }
 
-    const RouterTempHost* selected = currentHost();
-    const HostId selected_temp_id = selected ? selected->temp_id : kInvalidHostId;
+    const QList<RouterTempHost> selected = selectedHosts();
+    const RouterTempHost* current = model_->hostAt(tree_->currentIndex().row());
+    const HostId current_temp_id = current ? current->temp_id : kInvalidHostId;
 
     model_->setHosts(list.hosts);
 
-    // The page is replaced whole, so the row the user was on has to be found again by the host it
-    // was showing.
-    const int selected_row = model_->rowOf(selected_temp_id);
-    if (selected_row >= 0)
-        tree_->setCurrentIndex(model_->index(selected_row, 0));
+    QItemSelection selection;
+    for (const RouterTempHost& host : std::as_const(selected))
+    {
+        const int row = model_->rowOf(host.temp_id);
+        if (row >= 0)
+            selection.select(model_->index(row, 0), model_->index(row, 0));
+    }
+
+    QItemSelectionModel* selection_model = tree_->selectionModel();
+
+    const int current_row = model_->rowOf(current_temp_id);
+    if (current_row >= 0)
+        selection_model->setCurrentIndex(model_->index(current_row, 0), QItemSelectionModel::NoUpdate);
+
+    selection_model->select(selection, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
 
     const bool page_moved = page_.setTotalCount(qMin(list.total_count, kMaxTempHostCount));
     updatePagination();
@@ -236,22 +307,13 @@ void RouterTempHostsWidget::onTempHostListReceived(const RouterTempHostList& lis
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterTempHostsWidget::onHostResultReceived(const proto::router::HostResult& result)
-{
-    if (result.error_code() != proto::router::kErrorOk)
-        MsgBox::warning(this, tr("Failed to approve the host."));
-
-    fetchTempHosts();
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterTempHostsWidget::onContextMenu(const QPoint& pos)
 {
     const QModelIndex index = tree_->indexAt(pos);
-    if (index.isValid())
+    if (index.isValid() && !tree_->selectionModel()->isRowSelected(index.row()))
         tree_->setCurrentIndex(index);
 
-    if (!hasSelectedHost())
+    if (selectedHosts().isEmpty())
         return;
 
     emit sig_contextMenu(tree_->viewport()->mapToGlobal(pos));
@@ -330,10 +392,4 @@ bool RouterTempHostsWidget::isAdmin() const
 {
     RouterSession* session = RouterController::session(router_id_);
     return session && session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
-}
-
-//--------------------------------------------------------------------------------------------------
-const RouterTempHost* RouterTempHostsWidget::currentHost() const
-{
-    return model_->hostAt(tree_->currentIndex().row());
 }
