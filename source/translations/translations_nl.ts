@@ -551,7 +551,7 @@ Toegevoegde routers: %4</translation>
         <translation>Aanmeldgegevens:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.ui" line="126"/>
+        <location filename="../client/desktop/authorization_dialog.ui" line="129"/>
         <source>Save sign-in data</source>
         <translation>Inloggegevens opslaan</translation>
     </message>
@@ -985,7 +985,7 @@ Toegevoegde routers: %4</translation>
         <translation>Wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../host/ui/check_password_dialog.cc" line="69"/>
+        <location filename="../host/ui/check_password_dialog.cc" line="71"/>
         <source>You entered an incorrect password.</source>
         <translation>U hebt een onjuist wachtwoord ingevoerd.</translation>
     </message>
@@ -998,17 +998,17 @@ Toegevoegde routers: %4</translation>
         <translation>Kan geen back-up maken. Sommige records van de database zijn beschadigd. Repareer of verwijder ze.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="257"/>
+        <location filename="../client/main.cc" line="261"/>
         <source>Set Master Password</source>
         <translation>Hoofdwachtwoord instellen</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="259"/>
+        <location filename="../client/main.cc" line="263"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Stel een hoofdwachtwoord in dat vereist is om de applicatie te ontgrendelen.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="267"/>
+        <location filename="../client/main.cc" line="271"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord mag niet korter zijn dan %n teken.</numerusform>
@@ -1016,12 +1016,12 @@ Toegevoegde routers: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="275"/>
+        <location filename="../client/main.cc" line="279"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Het ingevoerde wachtwoord voldoet niet aan de beveiligingseisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="277"/>
+        <location filename="../client/main.cc" line="281"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord moet kleine letters, hoofdletters en cijfers bevatten en mag niet korter zijn dan %n teken.</numerusform>
@@ -1029,12 +1029,12 @@ Toegevoegde routers: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="281"/>
+        <location filename="../client/main.cc" line="285"/>
         <source>Do you want to enter a different password?</source>
         <translation>Wilt u een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="291"/>
+        <location filename="../client/main.cc" line="295"/>
         <source>Unable to set master password.</source>
         <translation>Kan hoofdwachtwoord niet instellen.</translation>
     </message>
@@ -1184,7 +1184,7 @@ Toegevoegde routers: %4</translation>
     <name>ConfigDialog</name>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
-        <location filename="../host/ui/config_dialog.ui" line="161"/>
+        <location filename="../host/ui/config_dialog.ui" line="173"/>
         <source>Settings</source>
         <translation>Instellingen</translation>
     </message>
@@ -1194,7 +1194,7 @@ Toegevoegde routers: %4</translation>
         <translation>Basis</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="236"/>
+        <location filename="../host/ui/config_dialog.ui" line="248"/>
         <source>Change password</source>
         <translation>Wachtwoord wijzigen</translation>
     </message>
@@ -1314,94 +1314,94 @@ Toegevoegde routers: %4</translation>
         <translation>Verbinding weigeren</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="444"/>
+        <location filename="../host/ui/config_dialog.cc" line="445"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Weet u zeker dat u gebruiker &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="472"/>
-        <location filename="../host/ui/config_dialog.cc" line="506"/>
+        <location filename="../host/ui/config_dialog.cc" line="473"/>
+        <location filename="../host/ui/config_dialog.cc" line="507"/>
         <source>An error occurred while processing the password.</source>
         <translation>Er is een fout opgetreden bij het verwerken van het wachtwoord.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="489"/>
+        <location filename="../host/ui/config_dialog.cc" line="490"/>
         <source>Settings storage is unavailable.</source>
         <translation>Opslag van instellingen is niet beschikbaar.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="520"/>
+        <location filename="../host/ui/config_dialog.cc" line="521"/>
         <source>Import</source>
         <translation>Importeren</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="520"/>
-        <location filename="../host/ui/config_dialog.cc" line="537"/>
+        <location filename="../host/ui/config_dialog.cc" line="521"/>
+        <location filename="../host/ui/config_dialog.cc" line="538"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON-bestanden (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="537"/>
+        <location filename="../host/ui/config_dialog.cc" line="538"/>
         <source>Export</source>
         <translation>Exporteren</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="562"/>
+        <location filename="../host/ui/config_dialog.cc" line="563"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>De configuratie kan niet worden weggeschreven. Controleer of u voldoende schrijfrechten hebt.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="575"/>
+        <location filename="../host/ui/config_dialog.cc" line="576"/>
         <source>Incorrect router address entered.</source>
         <translation>Onjuist routeradres ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="585"/>
+        <location filename="../host/ui/config_dialog.cc" line="586"/>
         <source>Incorrect router public key entered.</source>
         <translation>Onjuiste public key van de router ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="743"/>
+        <location filename="../host/ui/config_dialog.cc" line="744"/>
         <source>Install</source>
         <translation>Installeren</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="748"/>
+        <location filename="../host/ui/config_dialog.cc" line="749"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="211"/>
+        <location filename="../host/ui/config_dialog.ui" line="223"/>
         <source>Security</source>
         <translation>Beveiliging</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="217"/>
+        <location filename="../host/ui/config_dialog.ui" line="229"/>
         <source>Password Protection of Settings</source>
         <translation>Wachtwoordbeveiliging van instellingen</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="253"/>
+        <location filename="../host/ui/config_dialog.ui" line="265"/>
         <source>One-time Password</source>
         <translation>Eenmalig wachtwoord</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="259"/>
+        <location filename="../host/ui/config_dialog.ui" line="271"/>
         <source>Enable one-time password</source>
         <translation>Eenmalig wachtwoord inschakelen</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="268"/>
+        <location filename="../host/ui/config_dialog.ui" line="280"/>
         <source>Change password:</source>
         <translation>Wachtwoord vernieuwen:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="288"/>
+        <location filename="../host/ui/config_dialog.ui" line="308"/>
         <source>Characters count:</source>
         <translation>Aantal tekens:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="278"/>
+        <location filename="../host/ui/config_dialog.ui" line="294"/>
         <source>Characters:</source>
         <translation>Tekens:</translation>
     </message>
@@ -1416,17 +1416,17 @@ Toegevoegde routers: %4</translation>
         <translation>Inkomende poort:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="350"/>
+        <location filename="../host/ui/config_dialog.ui" line="378"/>
         <source>Other</source>
         <translation>Overig</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="356"/>
+        <location filename="../host/ui/config_dialog.ui" line="384"/>
         <source>Disable Aspia shutdown</source>
         <translation>Afsluiten van Aspia uitschakelen</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="180"/>
+        <location filename="../host/ui/config_dialog.ui" line="192"/>
         <source>Import settings</source>
         <translation>Instellingen importeren</translation>
     </message>
@@ -1436,118 +1436,118 @@ Toegevoegde routers: %4</translation>
         <translation>Voorkeurs video input:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="83"/>
+        <location filename="../host/ui/config_dialog.ui" line="87"/>
         <source>Allow hardware video encoding</source>
         <translation>Hardwarematige videocodering toestaan</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="93"/>
+        <location filename="../host/ui/config_dialog.ui" line="97"/>
         <source>Updates</source>
         <translation>Updates</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="99"/>
+        <location filename="../host/ui/config_dialog.ui" line="103"/>
         <source>Automatic checking and installation of updates</source>
         <translation>Automatisch controleren op en installeren van updates</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="108"/>
+        <location filename="../host/ui/config_dialog.ui" line="112"/>
         <source>Check for updates:</source>
         <translation>Controleren op updates:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="122"/>
+        <location filename="../host/ui/config_dialog.ui" line="130"/>
         <source>Update channel:</source>
         <translation>Updatekanaal:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="187"/>
+        <location filename="../host/ui/config_dialog.ui" line="199"/>
         <source>Export settings</source>
         <translation>Instellingen exporteren</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="310"/>
+        <location filename="../host/ui/config_dialog.ui" line="330"/>
         <source>Connection Confirmation</source>
         <translation>Verbindingsbevestiging</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="316"/>
+        <location filename="../host/ui/config_dialog.ui" line="336"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>Bevestiging vereisen bij verbinding met een computer</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="325"/>
+        <location filename="../host/ui/config_dialog.ui" line="345"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>Automatische bevestiging van verbinding via:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="335"/>
+        <location filename="../host/ui/config_dialog.ui" line="359"/>
         <source>If there is no active user:</source>
         <translation>Als er geen actieve gebruiker is:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="380"/>
+        <location filename="../host/ui/config_dialog.ui" line="408"/>
         <source>Router</source>
         <translation>Router</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="386"/>
+        <location filename="../host/ui/config_dialog.ui" line="414"/>
         <source>Enable the use of a router</source>
         <translation>Gebruik een router</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="398"/>
+        <location filename="../host/ui/config_dialog.ui" line="426"/>
         <source>Address:</source>
         <translation>Adres:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="417"/>
+        <location filename="../host/ui/config_dialog.ui" line="445"/>
         <source>Public Key:</source>
         <translation>Public Key:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="431"/>
+        <location filename="../host/ui/config_dialog.ui" line="459"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Een router is vereist om verbinding te maken met een computer als er geen directe verbinding mogelijk is (NAT omzeilen). Aspia biedt geen publieke router, maar u kunt uw eigen router installeren. U kunt de router downloaden op de &lt;a href=&quot;https://aspia.org&quot;&gt;officiële website&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="448"/>
-        <location filename="../host/ui/config_dialog.ui" line="559"/>
+        <location filename="../host/ui/config_dialog.ui" line="476"/>
+        <location filename="../host/ui/config_dialog.ui" line="587"/>
         <source>Users</source>
         <translation>Gebruikers</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="462"/>
+        <location filename="../host/ui/config_dialog.ui" line="490"/>
         <source>Add new user</source>
         <translation>Nieuwe gebruiker toevoegen</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="488"/>
+        <location filename="../host/ui/config_dialog.ui" line="516"/>
         <source>Edit user</source>
         <translation>Gebruiker bewerken</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="514"/>
+        <location filename="../host/ui/config_dialog.ui" line="542"/>
         <source>Delete user</source>
         <translation>Gebruiker verwijderen</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="149"/>
+        <location filename="../host/ui/config_dialog.ui" line="161"/>
         <source>Check for updates</source>
         <translation>Controleer op updates</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="582"/>
+        <location filename="../host/ui/config_dialog.ui" line="610"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="591"/>
+        <location filename="../host/ui/config_dialog.ui" line="619"/>
         <source>Modify</source>
         <translation>Aanpassen</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="600"/>
+        <location filename="../host/ui/config_dialog.ui" line="628"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
@@ -3805,9 +3805,9 @@ Vervangen aanmeldgegevens: %2</translation>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="553"/>
-        <location filename="../host/ui/host_window.cc" line="794"/>
-        <location filename="../host/ui/host_window.cc" line="1067"/>
+        <location filename="../host/ui/host_window.cc" line="554"/>
+        <location filename="../host/ui/host_window.cc" line="795"/>
+        <location filename="../host/ui/host_window.cc" line="1068"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
@@ -3823,7 +3823,7 @@ Vervangen aanmeldgegevens: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
-        <location filename="../host/ui/host_window.cc" line="981"/>
+        <location filename="../host/ui/host_window.cc" line="982"/>
         <source>Router is disabled</source>
         <translation>Router is uitgeschakeld</translation>
     </message>
@@ -3889,7 +3889,7 @@ Vervangen aanmeldgegevens: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="329"/>
-        <location filename="../host/ui/host_window.cc" line="757"/>
+        <location filename="../host/ui/host_window.cc" line="758"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
@@ -3929,58 +3929,58 @@ Vervangen aanmeldgegevens: %2</translation>
         <translation>Chat weergeven</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="288"/>
-        <location filename="../host/ui/host_window.cc" line="752"/>
+        <location filename="../host/ui/host_window.cc" line="289"/>
+        <location filename="../host/ui/host_window.cc" line="753"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="548"/>
+        <location filename="../host/ui/host_window.cc" line="549"/>
         <source>Screen recording has started.</source>
         <translation>Schermopname is gestart.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="550"/>
+        <location filename="../host/ui/host_window.cc" line="551"/>
         <source>Screen recording stopped.</source>
         <translation>Schermopname gestopt.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="741"/>
+        <location filename="../host/ui/host_window.cc" line="742"/>
         <source>Settings storage is unavailable.</source>
         <translation>Opslag van instellingen is niet beschikbaar.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="812"/>
+        <location filename="../host/ui/host_window.cc" line="813"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Als u Aspia afsluit, is het niet mogelijk om verbinding te maken met deze computer totdat u de computer of Aspia weer handmatig inschakelt. Wilt u de applicatie echt afsluiten?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="973"/>
+        <location filename="../host/ui/host_window.cc" line="974"/>
         <source>Not connected to service</source>
         <translation>Niet verbonden met service</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="986"/>
+        <location filename="../host/ui/host_window.cc" line="987"/>
         <source>Connecting to router...</source>
         <translation>Verbinden met router...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="991"/>
+        <location filename="../host/ui/host_window.cc" line="992"/>
         <source>Connected to router</source>
         <translation>Verbonden met router</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="996"/>
+        <location filename="../host/ui/host_window.cc" line="997"/>
         <source>Connection error</source>
         <translation>Verbindingsfout</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1064"/>
+        <location filename="../host/ui/host_window.cc" line="1065"/>
         <source>IP addresses:</source>
         <translation>IP-adressen:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1068"/>
+        <location filename="../host/ui/host_window.cc" line="1069"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
@@ -3998,17 +3998,17 @@ Vervangen aanmeldgegevens: %2</translation>
         <translation>Bovenliggende groep:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.ui" line="35"/>
+        <location filename="../client/desktop/management/local_group_dialog.ui" line="39"/>
         <source>Name:</source>
         <translation>Naam:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.ui" line="42"/>
+        <location filename="../client/desktop/management/local_group_dialog.ui" line="46"/>
         <source>Display name</source>
         <translation>Weergavenaam</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.ui" line="53"/>
+        <location filename="../client/desktop/management/local_group_dialog.ui" line="57"/>
         <source>Comment:</source>
         <translation>Opmerking:</translation>
     </message>
@@ -4148,12 +4148,12 @@ Vervangen aanmeldgegevens: %2</translation>
         <translation>Statusupdate...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="161"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="170"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Kan de gegevens niet lezen. De lijst is mogelijk verouderd.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="418"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="431"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n onderliggende groep</numerusform>
@@ -4161,7 +4161,7 @@ Vervangen aanmeldgegevens: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="419"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="432"/>
         <source>%n child host(s)</source>
         <translation>
             <numerusform>%n onderliggende host</numerusform>
@@ -4182,48 +4182,48 @@ Vervangen aanmeldgegevens: %2</translation>
         <translation>Groep:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="35"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="39"/>
         <source>Name:</source>
         <translation>Naam:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="42"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="46"/>
         <source>Display name</source>
         <translation>Weergavenaam</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="49"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="53"/>
         <source>Router:</source>
         <translation>Router:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="59"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="67"/>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="401"/>
         <source>Address:</source>
         <translation>Adres:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="69"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="77"/>
         <source>Use saved credentials</source>
         <translation>Opgeslagen aanmeldgegevens gebruiken</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="76"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="84"/>
         <source>User Name:</source>
         <translation>Gebruikers Naam:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="86"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="94"/>
         <source>Password:</source>
         <translation>Wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="96"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="104"/>
         <source>Credentials:</source>
         <translation>Aanmeldgegevens:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="110"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="122"/>
         <source>Comment:</source>
         <translation>Opmerking:</translation>
     </message>
@@ -4679,39 +4679,39 @@ Aanmeldgegevens geïmporteerd: %5</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="119"/>
-        <location filename="../client/desktop/main_window.ui" line="201"/>
+        <location filename="../client/desktop/main_window.ui" line="120"/>
+        <location filename="../client/desktop/main_window.ui" line="215"/>
         <source>Tool Bar</source>
         <translation>Werkbalk</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="148"/>
+        <location filename="../client/desktop/main_window.ui" line="150"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="78"/>
+        <location filename="../client/desktop/main_window.ui" line="79"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="90"/>
+        <location filename="../client/desktop/main_window.ui" line="91"/>
         <source>View</source>
         <translation>Beeld</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="193"/>
+        <location filename="../client/desktop/main_window.ui" line="207"/>
         <source>Exit</source>
         <translation>Exit</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="145"/>
+        <location filename="../client/desktop/main_window.ui" line="147"/>
         <source>Online Help...</source>
         <translation>Online Hulp...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="407"/>
+        <location filename="../client/desktop/main_window.cc" line="421"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4721,128 +4721,138 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Bestand</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="85"/>
+        <location filename="../client/desktop/main_window.ui" line="86"/>
         <source>Edit</source>
         <translation>Bewerken</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="102"/>
+        <location filename="../client/desktop/main_window.ui" line="103"/>
         <source>Session Type</source>
         <translation>Sessietype</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="166"/>
+        <location filename="../client/desktop/main_window.ui" line="168"/>
+        <source>Quick Connect...</source>
+        <translation>Snelle verbinding...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="171"/>
+        <source>F8</source>
+        <translation>F8</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="180"/>
         <source>Credentials...</source>
         <translation>Aanmeldgegevens...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="184"/>
+        <location filename="../client/desktop/main_window.ui" line="198"/>
         <source>Lock</source>
         <translation>Vergrendelen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="209"/>
+        <location filename="../client/desktop/main_window.ui" line="223"/>
         <source>Status Bar</source>
         <translation>Statusbalk</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="217"/>
+        <location filename="../client/desktop/main_window.ui" line="231"/>
         <source>Search Field</source>
         <translation>Zoekveld</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="225"/>
+        <location filename="../client/desktop/main_window.ui" line="239"/>
         <source>Large icons</source>
         <translation>Grote pictogrammen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="233"/>
+        <location filename="../client/desktop/main_window.ui" line="247"/>
         <source>Open Sessions in Tabs</source>
         <translation>Sessies in tabbladen openen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="241"/>
+        <location filename="../client/desktop/main_window.ui" line="255"/>
         <source>Always on Top</source>
         <translation>Altijd op de voorgrond</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="157"/>
+        <location filename="../client/desktop/main_window.ui" line="159"/>
         <source>About</source>
         <translation>Over</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="107"/>
+        <location filename="../client/desktop/main_window.ui" line="108"/>
         <source>Actions</source>
         <translation>Acties</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="175"/>
+        <location filename="../client/desktop/main_window.ui" line="189"/>
         <source>Settings...</source>
         <translation>Instellingen...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="100"/>
+        <location filename="../client/desktop/main_window.cc" line="101"/>
         <source>Search...</source>
         <translation>Zoeken...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="182"/>
+        <location filename="../client/desktop/main_window.cc" line="184"/>
         <source>Management</source>
         <translation>Beheer</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="228"/>
+        <location filename="../client/desktop/main_window.cc" line="230"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Ongeldige link &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="251"/>
+        <location filename="../client/desktop/main_window.cc" line="253"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>De router waarnaar de link verwijst, staat niet bij de opgeslagen routers.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="300"/>
+        <location filename="../client/desktop/main_window.cc" line="302"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>De host waarnaar de link verwijst, staat niet bij de opgeslagen hosts.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="383"/>
+        <location filename="../client/desktop/main_window.cc" line="397"/>
         <source>Close all sessions to lock the application.</source>
         <translation>Sluit alle sessies om de applicatie te vergrendelen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="389"/>
+        <location filename="../client/desktop/main_window.cc" line="403"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>Sluit alle dialoogvensters om de applicatie te vergrendelen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="506"/>
+        <location filename="../client/desktop/main_window.cc" line="520"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Verbinding via ID is opgegeven in de eigenschappen van de host, maar de router is niet geconfigureerd. Controleer de routerinstellingen in de eigenschappen van de host.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="312"/>
+        <location filename="../client/desktop/main_window.cc" line="314"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>De router die aan deze host is gekoppeld, is verwijderd. Bewerk de host om een andere router te selecteren of schakel over op een directe verbinding.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="259"/>
-        <location filename="../client/desktop/main_window.cc" line="311"/>
+        <location filename="../client/desktop/main_window.cc" line="261"/>
+        <location filename="../client/desktop/main_window.cc" line="313"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>De gegevens van de router zijn beschadigd. Bewerk de router en voer ze opnieuw in.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="299"/>
+        <location filename="../client/desktop/main_window.cc" line="301"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>De gegevens van de host zijn beschadigd. Bewerk de host en voer ze opnieuw in.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="342"/>
+        <location filename="../client/desktop/main_window.cc" line="356"/>
         <source>Credentials</source>
         <translation>Aanmeldgegevens</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="373"/>
+        <location filename="../client/desktop/main_window.cc" line="387"/>
         <source>Settings</source>
         <translation>Instellingen</translation>
     </message>
@@ -5829,6 +5839,75 @@ Aanmeldgegevens geïmporteerd: %5</translation>
     </message>
 </context>
 <context>
+    <name>QuickConnectDialog</name>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.ui" line="14"/>
+        <source>Quick Connect</source>
+        <translation>Snelle verbinding</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.ui" line="25"/>
+        <source>Router:</source>
+        <translation>Router:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.ui" line="39"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="215"/>
+        <source>Address:</source>
+        <translation>Adres:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.ui" line="49"/>
+        <source>Session Type:</source>
+        <translation>Sessietype:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="63"/>
+        <source>Connect</source>
+        <translation>Verbinden</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="137"/>
+        <source>Select a router to connect by ID.</source>
+        <translation>Selecteer een router om via ID te verbinden.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="144"/>
+        <source>An invalid host address was entered.</source>
+        <translation>Er is een ongeldig hostadres ingevoerd.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="152"/>
+        <source>An invalid host ID was entered.</source>
+        <translation>Er is een ongeldige host-ID ingevoerd.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="165"/>
+        <source>Without Router</source>
+        <translation>Zonder router</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="172"/>
+        <source>Failed to read the list of routers.</source>
+        <translation>Kan de lijst met routers niet lezen.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="216"/>
+        <source>Host name or IP address</source>
+        <translation>Hostnaam of IP-adres</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="220"/>
+        <source>ID:</source>
+        <translation>ID:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="221"/>
+        <source>Host ID</source>
+        <translation>Host-ID</translation>
+    </message>
+</context>
+<context>
     <name>RelayListModel</name>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="141"/>
@@ -5971,17 +6050,17 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Vorige</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="70"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="74"/>
         <source>Next page</source>
         <translation>Volgende pagina</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="77"/>
         <source>Next</source>
         <translation>Volgende</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="84"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="88"/>
         <source>Items per page:</source>
         <translation>Items per pagina:</translation>
     </message>
@@ -6072,12 +6151,12 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Toegangsniveau:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.ui" line="69"/>
+        <location filename="../client/desktop/router_dialog.ui" line="73"/>
         <source>User Name:</source>
         <translation>Gebruikers Naam:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.ui" line="83"/>
+        <location filename="../client/desktop/router_dialog.ui" line="87"/>
         <source>Password:</source>
         <translation>Wachtwoord:</translation>
     </message>
@@ -6301,17 +6380,17 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Bovenliggende groep:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.ui" line="35"/>
+        <location filename="../client/desktop/management/router_group_dialog.ui" line="39"/>
         <source>Name:</source>
         <translation>Naam:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.ui" line="42"/>
+        <location filename="../client/desktop/management/router_group_dialog.ui" line="46"/>
         <source>Display name</source>
         <translation>Weergavenaam</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.ui" line="53"/>
+        <location filename="../client/desktop/management/router_group_dialog.ui" line="57"/>
         <source>Comment:</source>
         <translation>Opmerking:</translation>
     </message>
@@ -6344,7 +6423,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="441"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="454"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n host</numerusform>
@@ -6362,17 +6441,17 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Vorige</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="64"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="68"/>
         <source>Next page</source>
         <translation>Volgende pagina</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="67"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="71"/>
         <source>Next</source>
         <translation>Volgende</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="78"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="82"/>
         <source>Items per page:</source>
         <translation>Items per pagina:</translation>
     </message>
@@ -6405,7 +6484,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Gebruikers Naam:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="100"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="104"/>
         <source>The user name and the password are stored on this computer only and are not sent to the router.</source>
         <translation>De gebruikersnaam en het wachtwoord worden alleen op deze computer opgeslagen en worden niet naar de router verzonden.</translation>
     </message>
@@ -6425,7 +6504,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Aanmeldgegevens:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="112"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="116"/>
         <source>Comment:</source>
         <translation>Opmerking:</translation>
     </message>
@@ -6541,37 +6620,37 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Vorige</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="70"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="74"/>
         <source>Next page</source>
         <translation>Volgende pagina</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="73"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="77"/>
         <source>Next</source>
         <translation>Volgende</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="84"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
         <source>Items per page:</source>
         <translation>Items per pagina:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="359"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="366"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Weet u zeker dat u de verbinding met host &quot;%1&quot; wilt verbreken?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="384"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="391"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Weet u zeker dat u de verbinding met alle hosts wilt verbreken?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="410"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="419"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Als u een host verwijdert, wordt de volledige configuratie voor de verbinding met de router verwijderd en wordt de applicatie op de host gedeïnstalleerd. Deze bewerking is onomkeerbaar. Weet u zeker dat u dit wilt doen?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="693"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="718"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n host</numerusform>
@@ -6579,22 +6658,22 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="735"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="774"/>
         <source>Save File</source>
         <translation>Bestand opslaan</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="735"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="774"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-bestanden (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="746"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="785"/>
         <source>Could not open file for writing.</source>
         <translation>Kon het bestand niet openen om te schrijven.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="793"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="832"/>
         <source>Unable to write file.</source>
         <translation>Kan het bestand niet schrijven.</translation>
     </message>
@@ -6719,39 +6798,55 @@ Aanmeldgegevens geïmporteerd: %5</translation>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="63"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="64"/>
         <source>Previous</source>
         <translation>Vorige</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="64"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
         <source>Previous page</source>
         <translation>Vorige pagina</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="68"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="69"/>
         <source>Next</source>
         <translation>Volgende</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="69"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="70"/>
         <source>Next page</source>
         <translation>Volgende pagina</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="87"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="90"/>
         <source>Items per page:</source>
         <translation>Items per pagina:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="191"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="211"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
         <translation>Als u een host goedkeurt, krijgt deze permanente toegang tot de router. Weet u zeker dat u host &quot;%1&quot; wilt goedkeuren?</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="218"/>
+        <source>Approving hosts will give them permanent access to the router. Are you sure you want to approve %n hosts?</source>
+        <translation>
+            <numerusform>Als u hosts goedkeurt, krijgen deze permanente toegang tot de router. Weet u zeker dat u %n host wilt goedkeuren?</numerusform>
+            <numerusform>Als u hosts goedkeurt, krijgen deze permanente toegang tot de router. Weet u zeker dat u %n hosts wilt goedkeuren?</numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="242"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="258"/>
         <source>Failed to approve the host.</source>
         <translation>Kan de host niet goedkeuren.</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="260"/>
+        <source>Failed to approve %n of the selected hosts.</source>
+        <translation>
+            <numerusform>Kan %n van de geselecteerde hosts niet goedkeuren.</numerusform>
+            <numerusform>Kan %n van de geselecteerde hosts niet goedkeuren.</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -6787,42 +6882,42 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Toegangsniveau:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="85"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="89"/>
         <source>Disable User Account</source>
         <translation>Gebruikers account uitschakelen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="95"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="99"/>
         <source>Reset two-factor authentication</source>
         <translation>Tweefactorauthenticatie resetten</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="103"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="107"/>
         <source>Sessions</source>
         <translation>Sessies</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="119"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="123"/>
         <source>Signed in</source>
         <translation>Aangemeld</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="124"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="128"/>
         <source>Last activity</source>
         <translation>Laatste activiteit</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="129"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="133"/>
         <source>Address</source>
         <translation>Adres</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="152"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="156"/>
         <source>Sign out</source>
         <translation>Afmelden</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="159"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="163"/>
         <source>Sign out all</source>
         <translation>Alles afmelden</translation>
     </message>
@@ -6987,17 +7082,17 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Vorige</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="73"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="77"/>
         <source>Next page</source>
         <translation>Volgende pagina</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="76"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="80"/>
         <source>Next</source>
         <translation>Volgende</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="87"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="91"/>
         <source>Items per page:</source>
         <translation>Items per pagina:</translation>
     </message>
@@ -7030,17 +7125,17 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Toegang</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="178"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="182"/>
         <source>Users with access</source>
         <translation>Gebruikers met toegang</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="141"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="145"/>
         <source>Grant access to the selected user</source>
         <translation>Geselecteerde gebruiker toegang verlenen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="154"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="158"/>
         <source>Revoke access from the selected user</source>
         <translation>Toegang van de geselecteerde gebruiker intrekken</translation>
     </message>
@@ -7051,40 +7146,40 @@ Aanmeldgegevens geïmporteerd: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="88"/>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="221"/>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="333"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="225"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="341"/>
         <source>Previous page</source>
         <translation>Vorige pagina</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="108"/>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="241"/>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="353"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="112"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="249"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="365"/>
         <source>Next page</source>
         <translation>Volgende pagina</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="195"/>
         <source>Hosts</source>
         <translation>Hosts</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="311"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
         <source>Hosts in workspace</source>
         <translation>Hosts in werkruimte</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="274"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
         <source>Move the selected host into the workspace</source>
         <translation>Geselecteerde host naar de werkruimte verplaatsen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="287"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
         <source>Remove the selected host from the workspace</source>
         <translation>Geselecteerde host uit de werkruimte verwijderen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="199"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="203"/>
         <source>Unassigned hosts</source>
         <translation>Niet-toegewezen hosts</translation>
     </message>
@@ -7191,17 +7286,17 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Vorige pagina</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="303"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="304"/>
         <source>Next</source>
         <translation>Volgende</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="304"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="305"/>
         <source>Next page</source>
         <translation>Volgende pagina</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/search_widget.cc" line="807"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="808"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>%n resultaat</numerusform>
@@ -7232,22 +7327,22 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Bestand:</translation>
     </message>
     <message>
-        <location filename="../host/ui/security_log_dialog.ui" line="57"/>
+        <location filename="../host/ui/security_log_dialog.ui" line="60"/>
         <source>Refresh</source>
         <translation>Vernieuwen</translation>
     </message>
     <message>
-        <location filename="../host/ui/security_log_dialog.ui" line="83"/>
+        <location filename="../host/ui/security_log_dialog.ui" line="86"/>
         <source>Search...</source>
         <translation>Zoeken...</translation>
     </message>
     <message>
-        <location filename="../host/ui/security_log_dialog.ui" line="97"/>
+        <location filename="../host/ui/security_log_dialog.ui" line="100"/>
         <source>Events:</source>
         <translation>Gebeurtenissen:</translation>
     </message>
     <message>
-        <location filename="../host/ui/security_log_dialog.ui" line="238"/>
+        <location filename="../host/ui/security_log_dialog.ui" line="241"/>
         <source>Open Directory</source>
         <translation>Map openen</translation>
     </message>
@@ -7390,193 +7485,198 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Taal:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="142"/>
+        <location filename="../client/desktop/settings_tab.ui" line="146"/>
         <source>Theme:</source>
         <translation>Thema:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="152"/>
+        <location filename="../client/desktop/settings_tab.ui" line="160"/>
         <source>Display name when connected:</source>
         <translation>Weergavenaam bij verbinding:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="162"/>
+        <location filename="../client/desktop/settings_tab.ui" line="170"/>
         <source>Enter a name or leave the field empty</source>
         <translation>Voer een naam in of laat het veld leeg</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="172"/>
+        <location filename="../client/desktop/settings_tab.ui" line="180"/>
         <source>Backup</source>
         <translation>Back-up</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="178"/>
+        <location filename="../client/desktop/settings_tab.ui" line="186"/>
         <source>Create backups on application startup</source>
         <translation>Bij opstarten van de applicatie back-ups maken</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="185"/>
+        <location filename="../client/desktop/settings_tab.ui" line="193"/>
         <source>Directory:</source>
         <translation>Map:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="195"/>
+        <location filename="../client/desktop/settings_tab.ui" line="203"/>
         <source>Browse...</source>
         <translation>Bladeren...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="202"/>
+        <location filename="../client/desktop/settings_tab.ui" line="210"/>
         <source>Keep backups for:</source>
         <translation>Back-ups bewaren gedurende:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="215"/>
+        <location filename="../client/desktop/settings_tab.ui" line="227"/>
         <source>UDP Connections</source>
         <translation>UDP-verbindingen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="221"/>
+        <location filename="../client/desktop/settings_tab.ui" line="233"/>
         <source>Allow direct connections</source>
         <translation>Directe verbindingen toestaan</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="228"/>
+        <location filename="../client/desktop/settings_tab.ui" line="240"/>
         <source>Allow UDP Hole Punching</source>
         <translation>UDP hole punching toestaan</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="235"/>
+        <location filename="../client/desktop/settings_tab.ui" line="247"/>
         <source>Allow PCP protocol</source>
         <translation>PCP-protocol toestaan</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="242"/>
+        <location filename="../client/desktop/settings_tab.ui" line="254"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>NAT-PMP-protocol toestaan</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="249"/>
+        <location filename="../client/desktop/settings_tab.ui" line="261"/>
         <source>Allow UPnP protocol</source>
         <translation>UPnP-protocol toestaan</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="259"/>
+        <location filename="../client/desktop/settings_tab.ui" line="271"/>
         <source>Security</source>
         <translation>Beveiliging</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="265"/>
+        <location filename="../client/desktop/settings_tab.ui" line="277"/>
         <source>Lock after inactivity:</source>
         <translation>Vergrendelen na inactiviteit:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="275"/>
+        <location filename="../client/desktop/settings_tab.ui" line="291"/>
+        <source>Unlock automatically on startup</source>
+        <translation>Bij opstarten automatisch ontgrendelen</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="298"/>
         <source>Change Master Password...</source>
         <translation>Hoofdwachtwoord wijzigen...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="346"/>
+        <location filename="../client/desktop/settings_tab.ui" line="369"/>
         <source>Features</source>
         <translation>Functies</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="352"/>
+        <location filename="../client/desktop/settings_tab.ui" line="375"/>
         <source>Enable audio</source>
         <translation>Audio inschakelen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="359"/>
+        <location filename="../client/desktop/settings_tab.ui" line="382"/>
         <source>Enable clipboard</source>
         <translation>Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="366"/>
+        <location filename="../client/desktop/settings_tab.ui" line="389"/>
         <source>Show shape of remote cursor</source>
         <translation>Vorm van externe cursor weergeven</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="373"/>
+        <location filename="../client/desktop/settings_tab.ui" line="396"/>
         <source>Show position of remote cursor</source>
         <translation>Positie van externe cursor weergeven</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="380"/>
+        <location filename="../client/desktop/settings_tab.ui" line="403"/>
         <source>Disable desktop effects</source>
         <translation>Bureaubladeffecten uitschakelen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="387"/>
+        <location filename="../client/desktop/settings_tab.ui" line="410"/>
         <source>Disable desktop wallpaper</source>
         <translation>Bureaubladachtergrond uitschakelen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="394"/>
+        <location filename="../client/desktop/settings_tab.ui" line="417"/>
         <source>Lock computer at disconnect</source>
         <translation>Computer vergrendelen bij verbreken van verbinding</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="401"/>
+        <location filename="../client/desktop/settings_tab.ui" line="424"/>
         <source>Block remote input</source>
         <translation>Externe invoer blokkeren</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="408"/>
+        <location filename="../client/desktop/settings_tab.ui" line="431"/>
         <source>Send key combinations</source>
         <translation>Toetscombinaties versturen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="415"/>
+        <location filename="../client/desktop/settings_tab.ui" line="438"/>
         <source>Allow hardware video encoding</source>
         <translation>Hardwarematige videocodering toestaan</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="422"/>
+        <location filename="../client/desktop/settings_tab.ui" line="445"/>
         <source>Allow hardware video decoding</source>
         <translation>Hardwarematige videodecodering toestaan</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="438"/>
+        <location filename="../client/desktop/settings_tab.ui" line="461"/>
         <source>Screen</source>
         <translation>Scherm</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="446"/>
+        <location filename="../client/desktop/settings_tab.ui" line="469"/>
         <source>Preferred resolution:</source>
         <translation>Voorkeursresolutie:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="474"/>
+        <location filename="../client/desktop/settings_tab.ui" line="500"/>
         <source>Recording</source>
         <translation>Opname</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="480"/>
+        <location filename="../client/desktop/settings_tab.ui" line="506"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>Sessieopname automatisch starten bij verbinding</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="489"/>
+        <location filename="../client/desktop/settings_tab.ui" line="515"/>
         <source>Write path:</source>
         <translation>Schrijfpad:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="585"/>
+        <location filename="../client/desktop/settings_tab.ui" line="611"/>
         <location filename="../client/desktop/settings_tab.cc" line="130"/>
         <source>Update</source>
         <translation>Update</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="591"/>
+        <location filename="../client/desktop/settings_tab.ui" line="617"/>
         <source>Check for updates on startup</source>
         <translation>Bij opstarten controleren op updates</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="600"/>
+        <location filename="../client/desktop/settings_tab.ui" line="626"/>
         <source>Update channel:</source>
         <translation>Updatekanaal:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="627"/>
+        <location filename="../client/desktop/settings_tab.ui" line="657"/>
         <source>Check for updates</source>
         <translation>Controleer op updates</translation>
     </message>
@@ -7646,48 +7746,48 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>1 uur</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="221"/>
+        <location filename="../client/desktop/settings_tab.cc" line="231"/>
         <source>None</source>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="246"/>
+        <location filename="../client/desktop/settings_tab.cc" line="256"/>
         <source>Stable</source>
         <translation>Stabiel</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="247"/>
+        <location filename="../client/desktop/settings_tab.cc" line="257"/>
         <source>Beta</source>
         <translation>Bèta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="248"/>
+        <location filename="../client/desktop/settings_tab.cc" line="258"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="370"/>
+        <location filename="../client/desktop/settings_tab.cc" line="381"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>De nieuwe taal wordt toegepast nadat de applicatie opnieuw is gestart.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="419"/>
-        <location filename="../client/desktop/settings_tab.cc" line="497"/>
+        <location filename="../client/desktop/settings_tab.cc" line="430"/>
+        <location filename="../client/desktop/settings_tab.cc" line="529"/>
         <source>Choose path</source>
         <translation>Pad kiezen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="517"/>
+        <location filename="../client/desktop/settings_tab.cc" line="549"/>
         <source>Change Master Password</source>
         <translation>Hoofdwachtwoord wijzigen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="519"/>
+        <location filename="../client/desktop/settings_tab.cc" line="551"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Voer uw huidige wachtwoord in en kies een nieuw wachtwoord.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="527"/>
+        <location filename="../client/desktop/settings_tab.cc" line="559"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord mag niet korter zijn dan %n teken.</numerusform>
@@ -7695,12 +7795,12 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="534"/>
+        <location filename="../client/desktop/settings_tab.cc" line="566"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Het ingevoerde wachtwoord voldoet niet aan de beveiligingseisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="535"/>
+        <location filename="../client/desktop/settings_tab.cc" line="567"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord moet kleine letters, hoofdletters en cijfers bevatten en mag niet korter zijn dan %n teken.</numerusform>
@@ -7708,24 +7808,59 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="538"/>
+        <location filename="../client/desktop/settings_tab.cc" line="570"/>
         <source>Do you want to enter a different password?</source>
         <translation>Wilt u een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="551"/>
+        <location filename="../client/desktop/settings_tab.cc" line="583"/>
         <source>Invalid current password.</source>
         <translation>Ongeldig huidig wachtwoord.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="555"/>
+        <location filename="../client/desktop/settings_tab.cc" line="587"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Sommige records van de database zijn beschadigd. Repareer of verwijder ze en probeer het opnieuw.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="559"/>
+        <location filename="../client/desktop/settings_tab.cc" line="591"/>
         <source>Unable to change the password.</source>
         <translation>Kan het wachtwoord niet wijzigen.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="653"/>
+        <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
+        <translation>De sleutel van de database wordt op deze computer opgeslagen. Elk programma dat onder uw account wordt uitgevoerd, kan deze lezen, ook wanneer de applicatie niet actief is.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="656"/>
+        <source>Do you want to continue?</source>
+        <translation>Wilt u doorgaan?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="667"/>
+        <source>Unlock Automatically</source>
+        <translation>Automatisch ontgrendelen</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="669"/>
+        <source>Enter the master password to unlock the application automatically on startup.</source>
+        <translation>Voer het hoofdwachtwoord in om de applicatie bij opstarten automatisch te ontgrendelen.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="679"/>
+        <source>Invalid master password.</source>
+        <translation>Ongeldig hoofdwachtwoord.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="683"/>
+        <source>Unable to unlock the database.</source>
+        <translation>Kan de database niet ontgrendelen.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="697"/>
+        <source>Unable to turn on the automatic unlock.</source>
+        <translation>Kan het automatisch ontgrendelen niet inschakelen.</translation>
     </message>
 </context>
 <context>
@@ -8077,24 +8212,24 @@ Aanmeldgegevens geïmporteerd: %5</translation>
     <name>Sidebar</name>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="116"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="127"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="154"/>
         <source>Local</source>
         <translation>Lokaal</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="152"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="213"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="265"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="179"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="240"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="292"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Kan de gegevens niet lezen. De lijst is mogelijk verouderd.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="571"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="598"/>
         <source>Change Password</source>
         <translation>Wachtwoord wijzigen</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="579"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="606"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord mag niet korter zijn dan %n teken.</numerusform>
@@ -8102,7 +8237,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="580"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="607"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord mag niet langer zijn dan %n teken.</numerusform>
@@ -8110,12 +8245,12 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="588"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="615"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Het ingevoerde wachtwoord voldoet niet aan de beveiligingseisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="589"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="616"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord moet kleine letters, hoofdletters en cijfers bevatten en mag niet korter zijn dan %n teken.</numerusform>
@@ -8123,51 +8258,73 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="592"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="619"/>
         <source>Do you want to enter a different password?</source>
         <translation>Wilt u een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="615"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="642"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>Wachtwoord wordt gewijzigd. Wachten tot de sessie zich opnieuw aanmeldt...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="813"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="840"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Weet u zeker dat u groep &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="826"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="853"/>
         <source>Unable to remove group</source>
         <translation>Kan groep niet verwijderen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="891"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="918"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Weet u zeker dat u router &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1468"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1496"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Er bestaat al een groep met deze naam in de geselecteerde bovenliggende groep.</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/sidebar.cc" line="1603"/>
+        <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
+        <translation>
+            <numerusform>%n van de geselecteerde hosts is niet verplaatst omdat er al een host met dezelfde naam in de geselecteerde groep bestaat.</numerusform>
+            <numerusform>%n van de geselecteerde hosts zijn niet verplaatst omdat er al hosts met dezelfde namen in de geselecteerde groep bestaan.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/sidebar.cc" line="1611"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1811"/>
+        <source>Failed to move %n of the selected hosts.</source>
+        <translation>
+            <numerusform>Kan %n van de geselecteerde hosts niet verplaatsen.</numerusform>
+            <numerusform>Kan %n van de geselecteerde hosts niet verplaatsen.</numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1458"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1477"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1633"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1486"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1708"/>
         <source>Failed to move the group.</source>
         <translation>Kan de groep niet verplaatsen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1533"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1565"/>
+        <source>Failed to move the hosts to the selected group.</source>
+        <translation>Kan de hosts niet naar de geselecteerde groep verplaatsen.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/sidebar.cc" line="1602"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Er bestaat al een host met deze naam in de geselecteerde groep.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1524"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1542"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1711"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1564"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1810"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Kan de host niet naar de geselecteerde groep verplaatsen.</translation>
     </message>
@@ -8521,12 +8678,12 @@ Aanmeldgegevens geïmporteerd: %5</translation>
 <context>
     <name>SysInfoEventLogs</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="135"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="139"/>
         <source>Level</source>
         <translation>Niveau</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="130"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="134"/>
         <source>Time</source>
         <translation>Tijd</translation>
     </message>
@@ -8556,28 +8713,28 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Type gebeurtenissen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="140"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="144"/>
         <source>Event ID</source>
         <translation>Gebeurtenis-ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="145"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="149"/>
         <source>Source</source>
         <translation>Bron</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="150"/>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="177"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="181"/>
         <source>Description</source>
         <translation>Beschrijving</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="195"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="199"/>
         <source>Copy Row</source>
         <translation>Rij kopiëren</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="200"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="204"/>
         <source>Copy Value</source>
         <translation>Waarde kopiëren</translation>
     </message>
