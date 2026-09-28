@@ -498,6 +498,12 @@ int main(int argc, char* argv[])
             return runAgent(argc, argv, argv[i + 1]);
         if (qstrcmp(argv[i], "--sys-info") == 0)
             return runSysInfo(argc, argv);
+        if (qstrcmp(argv[i], "--version") == 0)
+        {
+            QTextStream out(stdout, QIODevice::WriteOnly);
+            out << ASPIA_VERSION_STRING << Qt::endl;
+            return 0;
+        }
     }
 
     for (int i = 0; i < argc; ++i)
