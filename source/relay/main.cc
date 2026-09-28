@@ -17,6 +17,7 @@
 //
 
 #include <QCommandLineParser>
+#include <QDir>
 #include <QIODevice>
 #include <QSysInfo>
 
@@ -159,6 +160,13 @@ int createConfig(QTextStream& out)
     {
         out << "Existing configuration cannot be read (corrupt or access denied). Not modifying it."
             << Qt::endl;
+        return 1;
+    }
+
+    const QString config_dir = BasePaths::appConfigDir();
+    if (!QDir().mkpath(config_dir))
+    {
+        out << "Failed to create the config directory " << config_dir << "." << Qt::endl;
         return 1;
     }
 
