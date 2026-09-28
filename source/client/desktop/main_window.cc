@@ -45,6 +45,7 @@
 #include "client/desktop/credentials_tab.h"
 #include "client/desktop/client_window.h"
 #include "client/desktop/management_tab.h"
+#include "client/desktop/quick_connect_dialog.h"
 #include "client/desktop/settings_tab.h"
 #include "client/desktop/tab_bar.h"
 #include "client/desktop/tab_widget.h"
@@ -128,6 +129,7 @@ MainWindow::MainWindow(QWidget* parent)
     setWindowFlag(Qt::WindowStaysOnTopHint, always_on_top);
     connect(ui->action_always_on_top, &QAction::toggled, this, &MainWindow::onAlwaysOnTop);
 
+    connect(ui->action_quick_connect, &QAction::triggered, this, &MainWindow::onQuickConnect);
     connect(ui->action_credentials, &QAction::triggered, this, &MainWindow::onCredentials);
     connect(ui->action_settings, &QAction::triggered, this, &MainWindow::onSettings);
     connect(ui->action_help, &QAction::triggered, this, &MainWindow::onHelp);
@@ -329,6 +331,18 @@ void MainWindow::closeEvent(QCloseEvent* /* event */)
 
     saveWindowState();
     QApplication::quit();
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onQuickConnect()
+{
+    LOG(INFO) << "[ACTION] Quick connect clicked";
+
+    AutoQPointer<QuickConnectDialog> dialog(new QuickConnectDialog(this));
+    if (dialog->exec() != QuickConnectDialog::Accepted)
+        return;
+
+    onConnect(dialog->host(), dialog->sessionType());
 }
 
 //--------------------------------------------------------------------------------------------------

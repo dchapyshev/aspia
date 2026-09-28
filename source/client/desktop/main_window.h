@@ -66,6 +66,7 @@ protected:
 
 private slots:
     void onAfterThemeChanged();
+    void onQuickConnect();
     void onCredentials();
     void onSettings();
     void onLock();

@@ -67,6 +67,7 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="action_quick_connect"/>
     <addaction name="action_credentials"/>
     <addaction name="action_settings"/>
     <addaction name="separator"/>
@@ -124,6 +125,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="action_quick_connect"/>
    <addaction name="action_credentials"/>
    <addaction name="action_settings"/>
    <addaction name="separator"/>
@@ -155,6 +157,15 @@
    </property>
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="action_quick_connect">
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/connect.svg</normaloff>:/img/connect.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Quick Connect...</string>
    </property>
   </action>
   <action name="action_credentials">

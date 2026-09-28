@@ -43,6 +43,9 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP
     tab_bar.h
     tab_widget.cc
     tab_widget.h
+    quick_connect_dialog.cc
+    quick_connect_dialog.h
+    quick_connect_dialog.ui
     router_dialog.cc
     router_dialog.h
     router_dialog.ui

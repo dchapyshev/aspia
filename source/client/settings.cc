@@ -39,6 +39,7 @@ const QString kThemeParam = "theme";
 const QString kSessionTypeParam = "session_type";
 const QString kDesktopConfigParam = "desktop_config";
 const QString kOneTimePasswordCheckedParam = "one_time_password_checked";
+const QString kQuickConnectStateParam = "quick_connect_state";
 const QString kWindowGeometryParam = "window_geometry";
 const QString kWindowStateParam = "window_state";
 const QString kLargeIconsParam = "large_icons";
@@ -175,6 +176,18 @@ bool Settings::isOneTimePasswordChecked() const
 void Settings::setOneTimePasswordChecked(bool check)
 {
     settings_.setValue(kOneTimePasswordCheckedParam, check);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray Settings::quickConnectState() const
+{
+    return settings_.value(kQuickConnectStateParam).toByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setQuickConnectState(const QByteArray& state)
+{
+    settings_.setValue(kQuickConnectStateParam, state);
 }
 
 //--------------------------------------------------------------------------------------------------
