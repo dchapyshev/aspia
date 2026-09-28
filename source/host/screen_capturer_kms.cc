@@ -18,7 +18,9 @@
 
 #include "host/screen_capturer_kms.h"
 
+#include <QFileInfo>
 #include <QString>
+#include <QStringList>
 
 #include <drm/drm_fourcc.h>
 #include <libyuv/convert_argb.h>
@@ -187,6 +189,66 @@ QList<Monitor> activeMonitors(int drm_fd)
 
     LibDrm::modeFreeResources(resources);
     return monitors;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Logs every DRM card with its driver, connected monitors and lit-up CRTCs. Tells which card really
+// scans out when the one chosen for capture has nothing lit up (e.g. a laptop with two GPUs).
+void logDrmCards()
+{
+    for (int i = 0; i < kMaxCards; ++i)
+    {
+        const QByteArray path = QByteArray("/dev/dri/card") + QByteArray::number(i);
+        const int fd = ::open(path.constData(), O_RDONLY | O_CLOEXEC);
+        if (fd < 0)
+            continue;
+
+        // Opening a card can make us its DRM master and keep the compositor from modesetting.
+        LibDrm::dropMaster(fd);
+
+        const QString driver = QFileInfo(QFileInfo(
+            QString("/sys/class/drm/card%1/device/driver").arg(i)).symLinkTarget()).fileName();
+
+        int crtc_count = 0;
+        QStringList connected;
+
+        drmModeRes* resources = LibDrm::modeGetResources(fd);
+        if (resources)
+        {
+            crtc_count = resources->count_crtcs;
+
+            for (int j = 0; j < resources->count_connectors; ++j)
+            {
+                drmModeConnector* connector =
+                    LibDrm::modeGetConnectorCurrent(fd, resources->connectors[j]);
+                if (!connector)
+                    continue;
+
+                if (connector->connection == DRM_MODE_CONNECTED)
+                {
+                    connected.append(QString("%1-%2")
+                        .arg(connectorTypeName(connector->connector_type))
+                        .arg(connector->connector_type_id));
+                }
+
+                LibDrm::modeFreeConnector(connector);
+            }
+
+            LibDrm::modeFreeResources(resources);
+        }
+
+        QStringList lit_up;
+        for (const Monitor& monitor : activeMonitors(fd))
+        {
+            lit_up.append(QString("%1 (CRTC %2, %3x%4)").arg(monitor.connector).arg(monitor.crtc_id)
+                .arg(monitor.mode_size.width()).arg(monitor.mode_size.height()));
+        }
+
+        LOG(INFO) << "DRM device:" << path.constData() << "driver:" << driver
+                  << "CRTCs:" << crtc_count << "connected:" << connected << "lit up:" << lit_up;
+
+        ::close(fd);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -675,7 +737,18 @@ bool ScreenCapturerKms::probeReadback()
 {
     const quint32 fb_id = activeFramebufferId();
     if (!fb_id)
+    {
+        // The probe repeats for as long as no capturer can be created, so describe the cards once.
+        static bool cards_logged = false;
+
+        if (!cards_logged)
+        {
+            cards_logged = true;
+            LOG(ERROR) << "KMS probe: no lit-up CRTC on the capture device";
+            logDrmCards();
+        }
         return false;
+    }
 
     // GL readback vs a CPU mapping is driver-specific, so the working method can only be found by
     // attempting a real import. Try each candidate once on a fresh framebuffer (importFb consumes the

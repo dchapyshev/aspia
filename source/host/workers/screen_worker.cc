@@ -876,12 +876,18 @@ void ScreenWorker::setupLinuxCapture()
 
     session_uid_ = uid;
 
+    const SessionUtil::SessionType session_type = SessionUtil::sessionType(session_id);
+    const SessionUtil::SessionClass session_class = SessionUtil::sessionClass(session_id);
+
+    LOG(INFO) << "Active session:" << session_id << "uid:" << uid << "type:" << session_type
+              << "class:" << session_class;
+
     // X11 session (user desktop or the login-screen greeter): use the X11 grabber. The X11 injector
     // is independent of the capturer, so InputWorker creates it (see the LINUX_X11 case). The root
     // unit has no session environment, so read the display and X authority cookie from the session's
     // own processes and export them for the X11 client libraries (in this process, so InputWorker
     // sees them too).
-    if (SessionUtil::sessionType(session_id) == SessionUtil::SessionType::X11)
+    if (session_type == SessionUtil::SessionType::X11)
     {
         QString display;
         QString xauthority;
@@ -903,8 +909,7 @@ void ScreenWorker::setupLinuxCapture()
 
     // Wayland. The compositor screen-cast interfaces are only reachable on a real user session; on the
     // login screen (greeter) capture below the compositor via DRM/KMS instead.
-    const bool is_user_session =
-        (SessionUtil::sessionClass(session_id) == SessionUtil::SessionClass::USER);
+    const bool is_user_session = (session_class == SessionUtil::SessionClass::USER);
 
     LOG(INFO) << "Wayland capture setup: is_user_session:" << is_user_session << "uid:" << uid;
 
