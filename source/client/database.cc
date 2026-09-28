@@ -53,6 +53,7 @@ constexpr auto kSettingSalt          = "master_password_salt";
 constexpr auto kSettingVerifier      = "master_password_verifier";
 constexpr auto kSettingVersion       = "master_password_version";
 constexpr auto kSettingBiometricBlob = "biometric_blob";
+constexpr auto kSettingAutoUnlock    = "auto_unlock";
 
 QString g_test_file_path;
 
@@ -1933,6 +1934,18 @@ QByteArray Database::masterPasswordVerifier() const
 quint32 Database::masterPasswordVersion() const
 {
     return readSetting(kSettingVersion).toUInt();
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray Database::autoUnlockBlob() const
+{
+    return QByteArray::fromBase64(readSetting(kSettingAutoUnlock).toLatin1());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setAutoUnlockBlob(const QByteArray& blob)
+{
+    return writeSetting(kSettingAutoUnlock, QString::fromLatin1(blob.toBase64()));
 }
 
 //--------------------------------------------------------------------------------------------------

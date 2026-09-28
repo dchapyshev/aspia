@@ -63,6 +63,7 @@ private slots:
     void onBackupRetentionChanged();
     void onUdpMethodsChanged();
     void onLockTimeoutChanged();
+    void onAutoUnlockChanged();
     void onDesktopFeatureChanged();
     void onRecordAutostartChanged();
     void onRecordingPathChanged();
@@ -74,6 +75,7 @@ private slots:
 
 private:
     void applyCategoryStyle();
+    bool enableAutoUnlock();
     void saveDesktopConfig();
 
     std::unique_ptr<Ui::SettingsTab> ui;

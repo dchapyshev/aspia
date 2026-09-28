@@ -156,6 +156,10 @@ public:
     QByteArray masterPasswordVerifier() const;
     quint32 masterPasswordVersion() const;
 
+    // Automatic unlock on startup.
+    QByteArray autoUnlockBlob() const;
+    bool setAutoUnlockBlob(const QByteArray& blob);
+
     // Biometric unlock.
     bool isBiometricUnlockEnabled() const;
     QByteArray biometricBlob() const;

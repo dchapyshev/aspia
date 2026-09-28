@@ -233,7 +233,11 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    if (MasterPassword::isSet())
+    if (MasterPassword::autoUnlock())
+    {
+        LOG(INFO) << "Unlocked automatically";
+    }
+    else if (MasterPassword::isSet())
     {
         LOG(INFO) << "Master password is set, prompting user";
 

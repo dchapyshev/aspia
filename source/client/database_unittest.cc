@@ -27,6 +27,7 @@
 
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
+#include "base/crypto/os_crypt.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/sql/sql_database.h"
@@ -2289,6 +2290,71 @@ TEST_F(DatabaseTest, MasterPasswordChangeTellsAWrongPasswordFromARecordThatDoesN
     EXPECT_EQ(MasterPassword::change(SecureString(QString("Password123")),
                                      SecureString(QString("NewPassword123"))),
               MasterPassword::Result::SUCCESS);
+
+    // Closes the file before the directory goes.
+    DatabaseTestPeer::setFilePath(file_path);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The automatic unlock keeps working after the master password is changed.
+TEST_F(DatabaseTest, AutoUnlockSurvivesAMasterPasswordChange)
+{
+    const QString file_path = QFileInfo(file_path_).dir().filePath("singleton.db3");
+    DatabaseTestPeer::setFilePath(file_path);
+    ASSERT_TRUE(Database::instance().isValid());
+
+    EXPECT_FALSE(MasterPassword::autoUnlock());
+
+    ASSERT_EQ(MasterPassword::setNew(SecureString(QString("Password123"))),
+              MasterPassword::Result::SUCCESS);
+    ASSERT_TRUE(MasterPassword::setAutoUnlockEnabled(true));
+    EXPECT_TRUE(MasterPassword::isAutoUnlockEnabled());
+
+    const SecureByteArray key = MasterPassword::currentKey();
+    DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
+    ASSERT_TRUE(MasterPassword::autoUnlock());
+    EXPECT_EQ(MasterPassword::currentKey(), key);
+
+    ASSERT_EQ(MasterPassword::change(SecureString(QString("Password123")),
+                                     SecureString(QString("NewPassword123"))),
+              MasterPassword::Result::SUCCESS);
+
+    const SecureByteArray new_key = MasterPassword::currentKey();
+    DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
+    ASSERT_TRUE(MasterPassword::autoUnlock());
+    EXPECT_EQ(MasterPassword::currentKey(), new_key);
+
+    ASSERT_TRUE(MasterPassword::setAutoUnlockEnabled(false));
+    EXPECT_FALSE(MasterPassword::isAutoUnlockEnabled());
+    EXPECT_FALSE(MasterPassword::autoUnlock());
+
+    // Closes the file before the directory goes.
+    DatabaseTestPeer::setFilePath(file_path);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A remembered key that does not open here stays for the next start, and one that no longer fits the
+// password turns the automatic unlock off.
+TEST_F(DatabaseTest, AutoUnlockIsTurnedOffOnlyByAKeyThatDoesNotFit)
+{
+    const QString file_path = QFileInfo(file_path_).dir().filePath("singleton.db3");
+    DatabaseTestPeer::setFilePath(file_path);
+
+    Database& db = Database::instance();
+    ASSERT_TRUE(db.isValid());
+
+    ASSERT_EQ(MasterPassword::setNew(SecureString(QString("Password123"))),
+              MasterPassword::Result::SUCCESS);
+
+    ASSERT_TRUE(db.setAutoUnlockBlob(Random::byteArray(64)));
+    EXPECT_FALSE(MasterPassword::autoUnlock());
+    EXPECT_TRUE(MasterPassword::isAutoUnlockEnabled());
+
+    QByteArray blob;
+    ASSERT_TRUE(OSCrypt::encryptBytes(Random::byteArray(32), &blob));
+    ASSERT_TRUE(db.setAutoUnlockBlob(blob));
+    EXPECT_FALSE(MasterPassword::autoUnlock());
+    EXPECT_FALSE(MasterPassword::isAutoUnlockEnabled());
 
     // Closes the file before the directory goes.
     DatabaseTestPeer::setFilePath(file_path);

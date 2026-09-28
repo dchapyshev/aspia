@@ -49,6 +49,15 @@ public:
     // key for biometric unlock.
     static SecureByteArray currentKey();
 
+    // Unlocks with the key remembered by setAutoUnlockEnabled(). A key that no longer fits the password
+    // turns the automatic unlock off.
+    static bool autoUnlock();
+    static bool isAutoUnlockEnabled();
+
+    // Remembers the active key for the current user of this computer, so the next start does not ask
+    // for the password.
+    static bool setAutoUnlockEnabled(bool enable);
+
     static Result setNew(const SecureString& new_password);
     static Result change(const SecureString& current_password, const SecureString& new_password);
 

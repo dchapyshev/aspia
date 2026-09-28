@@ -197,6 +197,16 @@ SettingsTab::SettingsTab(QWidget* parent)
     const int lock_index = ui->combo_lock_timeout->findData(static_cast<int>(db.lockTimeout().count()));
     ui->combo_lock_timeout->setCurrentIndex(lock_index >= 0 ? lock_index : 0);
 
+#if defined(Q_OS_LINUX)
+    // There is no keystore of the user here, and the key would be wrapped with the identity of the
+    // computer that anyone on it can read.
+    ui->checkbox_auto_unlock->hide();
+#else
+    const bool auto_unlock = MasterPassword::isAutoUnlockEnabled();
+    ui->checkbox_auto_unlock->setChecked(auto_unlock);
+    ui->combo_lock_timeout->setEnabled(!auto_unlock);
+#endif // defined(Q_OS_LINUX)
+
     const quint32 udp_methods = settings.udpMethods();
     ui->checkbox_udp_direct->setChecked(udp_methods & UDP_METHOD_DIRECT);
     ui->checkbox_udp_hole_punching->setChecked(udp_methods & UDP_METHOD_HOLE_PUNCHING);
@@ -271,6 +281,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->checkbox_udp_upnp, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
     connect(ui->combo_lock_timeout, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onLockTimeoutChanged);
+    connect(ui->checkbox_auto_unlock, &QCheckBox::toggled, this, &SettingsTab::onAutoUnlockChanged);
     connect(ui->button_change_master_password, &QPushButton::clicked,
             this, &SettingsTab::onChangeMasterPassword);
 
@@ -467,6 +478,27 @@ void SettingsTab::onLockTimeoutChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void SettingsTab::onAutoUnlockChanged()
+{
+    const bool enable = ui->checkbox_auto_unlock->isChecked();
+    LOG(INFO) << "[ACTION] Auto unlock changed:" << enable;
+
+    const bool done = enable ? enableAutoUnlock() : MasterPassword::setAutoUnlockEnabled(false);
+    const bool auto_unlock = MasterPassword::isAutoUnlockEnabled();
+
+    if (!done)
+    {
+        QSignalBlocker blocker(ui->checkbox_auto_unlock);
+        ui->checkbox_auto_unlock->setChecked(auto_unlock);
+    }
+
+    // A locked application would be unlocked by starting it again.
+    if (auto_unlock)
+        ui->combo_lock_timeout->setCurrentIndex(ui->combo_lock_timeout->findData(0));
+    ui->combo_lock_timeout->setEnabled(!auto_unlock);
+}
+
+//--------------------------------------------------------------------------------------------------
 void SettingsTab::onDesktopFeatureChanged()
 {
     LOG(INFO) << "[ACTION] Desktop feature changed";
@@ -611,6 +643,63 @@ void SettingsTab::applyCategoryStyle()
         "QToolButton:hover { background-color: %1; }"
         "QToolButton:checked { background-color: %2; color: %3; }"
     ).arg(hover.name(QColor::HexArgb), checked.name(QColor::HexArgb), checked_text.name(QColor::HexArgb)));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SettingsTab::enableAutoUnlock()
+{
+#if defined(Q_OS_WINDOWS)
+    // On macOS the keychain asks before another application reads the key.
+    QString risk = tr("The key of the database will be stored on this computer. Any program running "
+                      "under your account will be able to read it, even when the application is not "
+                      "running.");
+    QString question = tr("Do you want to continue?");
+
+    if (MsgBox::importantQuestion(this, QString("%1\n%2").arg(risk, question), Seconds(10)) != MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Auto unlock warning rejected";
+        return false;
+    }
+#endif // defined(Q_OS_WINDOWS)
+
+    // Otherwise anyone at the unlocked application could make it open without the password.
+    AutoQPointer<CredentialsDialog> dialog(new CredentialsDialog(CredentialsDialog::Type::ENTER_PASSWORD, this));
+    dialog->setWindowTitle(tr("Unlock Automatically"));
+    dialog->setHeaderIcon(":/img/lock.svg");
+    dialog->setHeaderText(tr("Enter the master password to unlock the application automatically on startup."));
+    dialog->setShowPasswordButtonVisible(true);
+    dialog->setValidator([](CredentialsDialog* d) -> bool
+    {
+        switch (MasterPassword::unlock(d->password()))
+        {
+            case MasterPassword::Result::SUCCESS:
+                return true;
+
+            case MasterPassword::Result::INVALID_PASSWORD:
+                MsgBox::warning(d, tr("Invalid master password."));
+                return false;
+
+            default:
+                MsgBox::warning(d, tr("Unable to unlock the database."));
+                return false;
+        }
+    });
+
+    if (dialog->exec() != QDialog::Accepted)
+    {
+        LOG(INFO) << "[ACTION] Auto unlock password entry rejected";
+        return false;
+    }
+
+    if (!MasterPassword::setAutoUnlockEnabled(true))
+    {
+        LOG(ERROR) << "Unable to turn on auto unlock";
+        MsgBox::warning(this, tr("Unable to turn on the automatic unlock."));
+        return false;
+    }
+
+    LOG(INFO) << "Auto unlock turned on";
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

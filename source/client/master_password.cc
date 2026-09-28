@@ -19,9 +19,11 @@
 #include "client/master_password.h"
 
 #include <optional>
+#include <utility>
 
 #include "base/logging.h"
 #include "base/crypto/data_cryptor.h"
+#include "base/crypto/os_crypt.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_string.h"
@@ -240,6 +242,63 @@ SecureByteArray MasterPassword::currentKey()
 
 //--------------------------------------------------------------------------------------------------
 // static
+bool MasterPassword::autoUnlock()
+{
+    Database& db = Database::instance();
+    if (!db.isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    const QByteArray blob = db.autoUnlockBlob();
+    if (blob.isEmpty())
+        return false;
+
+    // A refusal of the keystore may pass (a locked keychain), so the key is kept and the password is
+    // asked this time only.
+    QByteArray key;
+    if (!OSCrypt::decryptBytes(blob, &key))
+    {
+        LOG(WARNING) << "Remembered key does not open here";
+        return false;
+    }
+
+    if (unlockWithKey(SecureByteArray(std::move(key))))
+        return true;
+
+    LOG(WARNING) << "Remembered key does not unlock the database";
+    db.setAutoUnlockBlob(QByteArray());
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool MasterPassword::isAutoUnlockEnabled()
+{
+    return !Database::instance().autoUnlockBlob().isEmpty();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool MasterPassword::setAutoUnlockEnabled(bool enable)
+{
+    Database& db = Database::instance();
+    if (!enable)
+        return db.setAutoUnlockBlob(QByteArray());
+
+    QByteArray blob;
+    if (!OSCrypt::encryptBytes(currentKey().toByteArray(), &blob) || blob.isEmpty())
+    {
+        LOG(ERROR) << "Unable to wrap the key";
+        return false;
+    }
+
+    return db.setAutoUnlockBlob(blob);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 MasterPassword::Result MasterPassword::setNew(const SecureString& new_password)
 {
     if (new_password.isEmpty())
@@ -288,5 +347,11 @@ MasterPassword::Result MasterPassword::change(
     if (!verifier.has_value())
         return Result::FAILED;
 
-    return changeKeyAndReencrypt(new_key, salt, *verifier);
+    const Result result = changeKeyAndReencrypt(new_key, salt, *verifier);
+
+    // The remembered key is the old one.
+    if (result == Result::SUCCESS && isAutoUnlockEnabled())
+        setAutoUnlockEnabled(true);
+
+    return result;
 }

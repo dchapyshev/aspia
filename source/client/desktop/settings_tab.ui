@@ -269,7 +269,14 @@
               <item row="0" column="1">
                <widget class="QComboBox" name="combo_lock_timeout"/>
               </item>
-              <item row="1" column="0" colspan="2" alignment="Qt::AlignmentFlag::AlignRight">
+              <item row="1" column="0" colspan="2">
+               <widget class="QCheckBox" name="checkbox_auto_unlock">
+                <property name="text">
+                 <string>Unlock automatically on startup</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0" colspan="2" alignment="Qt::AlignmentFlag::AlignRight">
                <widget class="QPushButton" name="button_change_master_password">
                 <property name="text">
                  <string>Change Master Password...</string>
