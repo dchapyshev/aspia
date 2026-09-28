@@ -33,6 +33,8 @@
 #include <QUuid>
 #include <QVBoxLayout>
 
+#include <algorithm>
+
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "base/shared_pointer.h"
@@ -1354,9 +1356,17 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
         if (!host_mime_data)
             return true;
 
-        // Don't allow drop to the same group.
-        if (host_mime_data->host().groupId() == target_item->groupId())
+        // Don't allow drop to the group all the hosts are already in.
+        const QList<LocalHostConfig>& hosts = host_mime_data->hosts();
+        const qint64 target_group_id = target_item->groupId();
+        if (std::none_of(hosts.cbegin(), hosts.cend(),
+                         [target_group_id](const LocalHostConfig& host)
+            {
+                return host.groupId() != target_group_id;
+            }))
+        {
             return true;
+        }
 
         tree_widget_->clearSelection();
         target_tree_item->setSelected(true);
@@ -1512,8 +1522,6 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        const LocalHostConfig& dragged_host = host_mime_data->host();
-
         QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
         if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
         {
@@ -1528,43 +1536,92 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        if (dragged_host.groupId() == target_item->groupId())
+        // Repeat the check from onDragMove in case the user releases over a target that wasn't
+        // validated. The hosts already in the target group stay where they are.
+        const qint64 target_group_id = target_item->groupId();
+
+        QList<LocalHostConfig> hosts;
+        for (const LocalHostConfig& host : host_mime_data->hosts())
+        {
+            if (host.groupId() != target_group_id)
+                hosts.append(host);
+        }
+
+        if (hosts.isEmpty())
         {
             restoreSelection();
             return true;
         }
 
-        // Check if a host with the same name already exists in the target group.
+        const bool single = hosts.size() == 1;
+
+        // Check if hosts with the same names already exist in the target group.
         QList<LocalHostConfig> target_hosts;
-        if (Database::instance().localHostList(target_item->groupId(), &target_hosts) == Database::ReadResult::FAILED)
+        if (Database::instance().localHostList(target_group_id, &target_hosts) == Database::ReadResult::FAILED)
         {
             LOG(ERROR) << "Unable to read the hosts of the target group";
-            MsgBox::warning(tree_widget_, tr("Failed to move the host to the selected group."));
+            MsgBox::warning(tree_widget_, single ?
+                tr("Failed to move the host to the selected group.") :
+                tr("Failed to move the hosts to the selected group."));
             restoreSelection();
             return true;
         }
 
+        QSet<QString> target_names;
         for (const LocalHostConfig& existing : std::as_const(target_hosts))
+            target_names.insert(existing.name());
+
+        int name_conflicts = 0;
+        int failed = 0;
+        int moved = 0;
+
+        for (const LocalHostConfig& host : std::as_const(hosts))
         {
-            if (existing.name() == dragged_host.name())
+            if (target_names.contains(host.name()))
             {
-                MsgBox::warning(tree_widget_, tr("A host with this name already exists in the selected group."));
-                restoreSelection();
-                return true;
+                LOG(INFO) << "Host" << host.id() << "has a namesake in the target group";
+                ++name_conflicts;
+                continue;
             }
+
+            if (!Database::instance().moveLocalHost(host.id(), target_group_id))
+            {
+                ++failed;
+                continue;
+            }
+
+            target_names.insert(host.name());
+            ++moved;
         }
 
-        // Update the host's group in the database.
-        if (!Database::instance().moveLocalHost(dragged_host.id(), target_item->groupId()))
+        QStringList errors;
+
+        if (name_conflicts > 0)
         {
-            MsgBox::warning(tree_widget_, tr("Failed to move the host to the selected group."));
-            restoreSelection();
-            return true;
+            errors.append(single ?
+                tr("A host with this name already exists in the selected group.") :
+                tr("%n of the selected hosts were not moved because hosts with the same names already "
+                   "exist in the selected group.", "", name_conflicts));
         }
 
-        event->acceptProposedAction();
+        if (failed > 0)
+        {
+            errors.append(single ?
+                tr("Failed to move the host to the selected group.") :
+                tr("Failed to move %n of the selected hosts.", "", failed));
+        }
+
+        if (!errors.isEmpty())
+            MsgBox::warning(tree_widget_, errors.join('\n'));
+
+        if (moved > 0)
+            event->acceptProposedAction();
+
         restoreSelection();
-        emit sig_itemDropped();
+
+        if (moved > 0)
+            emit sig_itemDropped();
+
         return true;
     }
     else if (mime_data->hasFormat(router_group_mime_type_))

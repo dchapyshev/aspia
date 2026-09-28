@@ -58,13 +58,11 @@ public:
     LocalHostMimeData() = default;
     ~LocalHostMimeData() final = default;
 
-    // The record itself and not the row it is drawn on: the list is free to be refilled while the
-    // drag is still in flight.
-    void setHost(const LocalHostConfig& host, const QString& mime_type);
-    const LocalHostConfig& host() const { return host_; }
+    void setHosts(const QList<LocalHostConfig>& hosts, const QString& mime_type);
+    const QList<LocalHostConfig>& hosts() const { return hosts_; }
 
 private:
-    LocalHostConfig host_;
+    QList<LocalHostConfig> hosts_;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -73,7 +71,7 @@ class LocalHostDrag final : public QDrag
 public:
     explicit LocalHostDrag(QObject* drag_source = nullptr);
 
-    void setHost(const LocalHostConfig& host, const QString& mime_type);
+    void setHosts(const QList<LocalHostConfig>& hosts, const QString& mime_type);
 };
 
 //--------------------------------------------------------------------------------------------------

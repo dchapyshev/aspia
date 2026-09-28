@@ -722,12 +722,12 @@ void ManagementTab::onConnectAction(QAction* action)
 
     if (current_content_ == local_group_widget_)
     {
-        const LocalHostConfig* current = local_group_widget_->currentHost();
-        if (!current)
+        const QList<LocalHostConfig> hosts = local_group_widget_->selectedHosts();
+        if (hosts.size() != 1)
             return;
 
         LocalHostConfig found;
-        if (!readLocalHost(current->id(), &found))
+        if (!readLocalHost(hosts.front().id(), &found))
             return;
 
         host = HostConfig::forLocalHost(found);
@@ -1935,7 +1935,7 @@ void ManagementTab::updateActionsState()
         ui->action_delete_group->setVisible(sidebar_item->groupId() != 0);
         ui->action_edit_group->setVisible(sidebar_item->groupId() != 0);
 
-        const bool has_host = local_group_widget_->currentHost() != nullptr;
+        const bool has_host = local_group_widget_->selectedHosts().size() == 1;
 
         ui->action_add_host->setVisible(true);
         ui->action_delete_host->setVisible(has_host);
@@ -2225,8 +2225,8 @@ qint64 ManagementTab::currentHostEntryId() const
 {
     if (current_content_ == local_group_widget_)
     {
-        const LocalHostConfig* host = local_group_widget_->currentHost();
-        return host ? host->id() : -1;
+        const QList<LocalHostConfig> hosts = local_group_widget_->selectedHosts();
+        return hosts.size() == 1 ? hosts.front().id() : -1;
     }
 
     if (current_content_ == search_widget_)

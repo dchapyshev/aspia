@@ -54,6 +54,7 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     ui->setupUi(this);
 
     model_ = new LocalHostListModel(this);
+    ui->tree_host->setSelectionMode(QAbstractItemView::ExtendedSelection);
     ui->tree_host->setModel(model_);
 
     // Turned on again after the model is set: the view wires the header up to the sort of whatever
@@ -80,11 +81,10 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
             emit sig_activated(host->id());
     });
 
-    connect(ui->tree_host->selectionModel(), &QItemSelectionModel::currentChanged,
-            this, [this](const QModelIndex& current, const QModelIndex& /* previous */)
+    connect(ui->tree_host->selectionModel(), &QItemSelectionModel::selectionChanged, this, [this]()
     {
-        const LocalHostConfig* host = model_->hostAt(current.row());
-        emit sig_currentChanged(host ? host->id() : -1);
+        const QList<LocalHostConfig> hosts = selectedHosts();
+        emit sig_currentChanged(hosts.size() == 1 ? hosts.front().id() : -1);
     });
 
     connect(ui->tree_host, &QWidget::customContextMenuRequested, this, [this](const QPoint& pos)
@@ -133,9 +133,18 @@ LocalGroupWidget::~LocalGroupWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-const LocalHostConfig* LocalGroupWidget::currentHost() const
+QList<LocalHostConfig> LocalGroupWidget::selectedHosts() const
 {
-    return model_->hostAt(ui->tree_host->currentIndex().row());
+    const QModelIndexList rows = ui->tree_host->selectionModel()->selectedRows();
+
+    QList<LocalHostConfig> hosts;
+    for (const QModelIndex& index : rows)
+    {
+        if (const LocalHostConfig* host = model_->hostAt(index.row()))
+            hosts.append(*host);
+    }
+
+    return hosts;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -342,10 +351,9 @@ bool LocalGroupWidget::eventFilter(QObject* watched, QEvent* event)
             {
                 int distance = (mouse_event->pos() - start_pos_).manhattanLength();
                 if (distance > QApplication::startDragDistance())
-                {
                     startDrag();
-                    return true;
-                }
+
+                return true;
             }
         }
     }
@@ -390,13 +398,18 @@ void LocalGroupWidget::onOnlineCheckerFinished()
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::startDrag()
 {
+    // A Ctrl click takes the pressed row out of the selection, and then there is nothing under the
+    // mouse to drag.
     const QModelIndex index = ui->tree_host->indexAt(start_pos_);
-    const LocalHostConfig* host = model_->hostAt(index.row());
-    if (!host)
+    if (!index.isValid() || !ui->tree_host->selectionModel()->isRowSelected(index.row()))
+        return;
+
+    const QList<LocalHostConfig> hosts = selectedHosts();
+    if (hosts.isEmpty())
         return;
 
     LocalHostDrag drag(this);
-    drag.setHost(*host, mime_type_);
+    drag.setHosts(hosts, mime_type_);
 
     const QIcon icon = index.siblingAtColumn(0).data(Qt::DecorationRole).value<QIcon>();
     drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
