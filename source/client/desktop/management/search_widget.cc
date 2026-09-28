@@ -32,6 +32,7 @@
 #include <QLabel>
 #include <QMenu>
 #include <QPainter>
+#include <QPointer>
 #include <QSignalBlocker>
 #include <QStatusBar>
 #include <QStyledItemDelegate>
@@ -778,7 +779,7 @@ void SearchWidget::deactivate(QStatusBar* statusbar)
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::onHeaderContextMenu(const QPoint& pos)
 {
-    QHeaderView* header = tree_host_->header();
+    QPointer<QHeaderView> header = tree_host_->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
@@ -791,7 +792,7 @@ void SearchWidget::onHeaderContextMenu(const QPoint& pos)
     }
 
     ColumnAction* action = dynamic_cast<ColumnAction*>(menu.exec(header->viewport()->mapToGlobal(pos)));
-    if (!action)
+    if (!action || !header)
         return;
 
     header->setSectionHidden(action->columnIndex(), !action->isChecked());

@@ -33,6 +33,7 @@
 #include <QLabel>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QPointer>
 #include <QSaveFile>
 #include <QSignalBlocker>
 #include <QStatusBar>
@@ -579,7 +580,7 @@ void RouterHostsWidget::onHostContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::onHeaderContextMenu(const QPoint& pos)
 {
-    QHeaderView* header = ui->tree_hosts->header();
+    QPointer<QHeaderView> header = ui->tree_hosts->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
@@ -591,7 +592,7 @@ void RouterHostsWidget::onHeaderContextMenu(const QPoint& pos)
     }
 
     ColumnAction* action = dynamic_cast<ColumnAction*>(menu.exec(header->viewport()->mapToGlobal(pos)));
-    if (!action)
+    if (!action || !header)
         return;
 
     header->setSectionHidden(action->columnIndex(), !action->isChecked());

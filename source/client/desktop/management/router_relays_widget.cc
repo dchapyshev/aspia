@@ -31,6 +31,7 @@
 #include <QJsonObject>
 #include <QLabel>
 #include <QMenu>
+#include <QPointer>
 #include <QSaveFile>
 #include <QSplitter>
 #include <QStatusBar>
@@ -492,7 +493,7 @@ void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::onHeaderContextMenu(const QPoint& pos)
 {
-    QHeaderView* header = ui->tree_relays->header();
+    QPointer<QHeaderView> header = ui->tree_relays->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
@@ -504,7 +505,7 @@ void RouterRelaysWidget::onHeaderContextMenu(const QPoint& pos)
     }
 
     ColumnAction* action = dynamic_cast<ColumnAction*>(menu.exec(header->viewport()->mapToGlobal(pos)));
-    if (!action)
+    if (!action || !header)
         return;
 
     header->setSectionHidden(action->columnIndex(), !action->isChecked());

@@ -26,6 +26,7 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QMenu>
+#include <QPointer>
 #include <QStatusBar>
 
 #include "base/auto_qpointer.h"
@@ -343,7 +344,7 @@ void RouterUsersWidget::onUserContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::onHeaderContextMenu(const QPoint& pos)
 {
-    QHeaderView* header = ui->tree_users->header();
+    QPointer<QHeaderView> header = ui->tree_users->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
@@ -355,7 +356,7 @@ void RouterUsersWidget::onHeaderContextMenu(const QPoint& pos)
     }
 
     ColumnAction* action = dynamic_cast<ColumnAction*>(menu.exec(header->viewport()->mapToGlobal(pos)));
-    if (!action)
+    if (!action || !header)
         return;
 
     header->setSectionHidden(action->columnIndex(), !action->isChecked());

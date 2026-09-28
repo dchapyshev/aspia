@@ -31,6 +31,7 @@
 #include <QJsonObject>
 #include <QLabel>
 #include <QMenu>
+#include <QPointer>
 #include <QSaveFile>
 #include <QSignalBlocker>
 #include <QStatusBar>
@@ -407,7 +408,7 @@ void RouterClientsWidget::onClientContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::onHeaderContextMenu(const QPoint& pos)
 {
-    QHeaderView* header = ui->tree_clients->header();
+    QPointer<QHeaderView> header = ui->tree_clients->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
@@ -419,7 +420,7 @@ void RouterClientsWidget::onHeaderContextMenu(const QPoint& pos)
     }
 
     ColumnAction* action = dynamic_cast<ColumnAction*>(menu.exec(header->viewport()->mapToGlobal(pos)));
-    if (!action)
+    if (!action || !header)
         return;
 
     header->setSectionHidden(action->columnIndex(), !action->isChecked());
