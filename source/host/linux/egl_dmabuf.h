@@ -19,6 +19,7 @@
 #ifndef HOST_LINUX_EGL_DMABUF_H
 #define HOST_LINUX_EGL_DMABUF_H
 
+#include <QByteArray>
 #include <QList>
 #include <QRect>
 #include <QSize>
@@ -34,7 +35,9 @@ struct gbm_device;
 class EglDmaBuf
 {
 public:
-    EglDmaBuf();
+    // |render_node| is the DRM render node to create the EGL device on (e.g. "/dev/dri/renderD129").
+    // Empty picks the first one available.
+    explicit EglDmaBuf(const QByteArray& render_node = QByteArray());
     ~EglDmaBuf();
 
     struct Plane
@@ -62,6 +65,7 @@ private:
 
     bool initialize();
 
+    const QByteArray render_node_;
     int drm_fd_ = -1;
     gbm_device* gbm_device_ = nullptr;
     std::unique_ptr<Egl> egl_;

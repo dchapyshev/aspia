@@ -141,8 +141,9 @@ struct EglDmaBuf::Egl
 };
 
 //--------------------------------------------------------------------------------------------------
-EglDmaBuf::EglDmaBuf()
-    : egl_(std::make_unique<Egl>())
+EglDmaBuf::EglDmaBuf(const QByteArray& render_node)
+    : render_node_(render_node),
+      egl_(std::make_unique<Egl>())
 {
     initialized_ = initialize();
     if (!initialized_)
@@ -365,6 +366,13 @@ bool EglDmaBuf::initialize()
         dlsym(egl_->gbm_handle, "gbm_device_destroy"));
     if (!gbm_create_device_fn || !egl_->gbm_device_destroy_fn)
         return false;
+
+    if (!render_node_.isEmpty())
+    {
+        drm_fd_ = ::open(render_node_.constData(), O_RDWR | O_CLOEXEC);
+        if (drm_fd_ < 0)
+            PLOG(WARNING) << "Unable to open" << render_node_.constData();
+    }
 
     // Open a DRM render node for the off-screen GBM/EGL device. Enumerate them with libdrm; fall
     // back to the conventional paths if libdrm is unavailable.

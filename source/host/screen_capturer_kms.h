@@ -19,10 +19,12 @@
 #ifndef HOST_SCREEN_CAPTURER_KMS_H
 #define HOST_SCREEN_CAPTURER_KMS_H
 
+#include <QByteArray>
 #include <QRect>
 #include <QString>
 
 #include <memory>
+#include <vector>
 
 #include "host/screen_capturer.h"
 
@@ -36,7 +38,8 @@ typedef struct _drmModeFB2 drmModeFB2;
 // privileged process (CAP_SYS_ADMIN) can read any framebuffer via drmModeGetFB2(), export it as a
 // DMA-BUF and import it with EGL/GBM. This is compositor-independent (GNOME, KDE, X11) and needs no
 // portal or permission, which is what allows capturing the login screen. The agent therefore runs as
-// root when this capturer is used.
+// root when this capturer is used. Monitors on every DRM card are offered as screens, so a laptop
+// with two GPUs driving one monitor each shows both.
 class ScreenCapturerKms final : public ScreenCapturer
 {
 public:
@@ -67,18 +70,36 @@ protected:
     void reset() final;
 
 private:
+    enum class Readback { UNKNOWN, EGL, DMABUF_CPU, DUMB_CPU, UNUSABLE };
+
+    // One DRM card with CRTCs. The readback method is driver-specific, so it is probed per card, and
+    // the EGL import runs on the render node of the same card.
+    struct Card
+    {
+        QByteArray path;
+        int fd = -1;
+        Readback readback = Readback::UNKNOWN;
+        std::unique_ptr<EglDmaBuf> egl;
+    };
+
     bool init();
-    // Picks the readback method by importing the active scan-out once per candidate (EGL, CPU DMA-BUF
-    // mapping, CPU dumb-buffer mapping) and keeping the first that works. Called from init(), so the
-    // method is fixed before the first real frame; also confirms capture is possible at all.
+
+    // Makes |index| the captured card, probing its readback method on first use. Returns false if
+    // the card cannot be read, and the captured card is then unchanged.
+    bool switchCard(int index);
+
+    // Picks the readback method of the captured card by importing its active scan-out once per
+    // candidate (EGL, CPU DMA-BUF mapping, CPU dumb-buffer mapping) and keeping the first that works.
+    // Called before the first real frame from the card; also confirms capture is possible at all.
     bool probeReadback();
 
     // Imports framebuffer |fb| into |dst| (|dst_stride| bytes per row) as packed BGRA using the readback
     // method already chosen by probeReadback(). Releases the GEM handles drmModeGetFB2() opened for |fb|.
     bool importFb(drmModeFB2* fb, quint8* dst, int dst_stride);
 
-    // Returns the framebuffer id currently scanned out on an active CRTC, or 0 if none. Records the
-    // captured CRTC id and the active-CRTC count (a change re-triggers input-geometry detection).
+    // Returns the framebuffer id currently scanned out on an active CRTC, or 0 if none, switching to
+    // the card that has one when the captured card has none. Records the captured CRTC id and the
+    // active-CRTC count (a change re-triggers input-geometry detection).
     quint32 activeFramebufferId();
     // Reads the compositor's logical monitor layout over Wayland and computes the screen size and the
     // captured monitor's offset to report to the input injector (folding in the monitor position and
@@ -94,14 +115,15 @@ private:
     // there.
     bool findCursorPlane(quint32* fb_id, QSize* size, QPoint* position, QPoint* hotspot);
 
-    int drm_fd_ = -1;
+    Card& card() { return cards_[card_index_]; }
+
+    std::vector<Card> cards_;
+    int card_index_ = 0;
     quint32 crtc_id_ = 0;
-    // CRTC the client selected for capture (0 = none yet; the first active CRTC is captured then).
+    // Card and CRTC the client selected for capture (-1 and 0 = none yet; the first active CRTC is captured then).
+    int selected_card_ = -1;
     quint32 selected_crtc_id_ = 0;
     int active_crtc_count_ = 0;
-    std::unique_ptr<EglDmaBuf> egl_dmabuf_;
-    enum class Readback { UNKNOWN, EGL, DMABUF_CPU, DUMB_CPU };
-    Readback readback_ = Readback::UNKNOWN;
     std::unique_ptr<Differ> differ_;
     FrameQueue<Frame> queue_;
 

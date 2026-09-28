@@ -18,6 +18,7 @@
 
 #include "host/screen_capturer_kms.h"
 
+#include <QDir>
 #include <QFileInfo>
 #include <QString>
 #include <QStringList>
@@ -189,6 +190,84 @@ QList<Monitor> activeMonitors(int drm_fd)
 
     LibDrm::modeFreeResources(resources);
     return monitors;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Returns the framebuffer scanned out on |preferred_crtc| of the card at |drm_fd|, or on its first
+// lit-up CRTC when that one is not lit up (or 0 asks for any). The CRTC found goes to |crtc_id| and
+// the number of lit-up CRTCs to |active_count|. 0 if nothing is lit up.
+quint32 litFramebufferId(int drm_fd, quint32 preferred_crtc, quint32* crtc_id, int* active_count)
+{
+    *crtc_id = 0;
+    *active_count = 0;
+
+    drmModeRes* resources = LibDrm::modeGetResources(drm_fd);
+    if (!resources)
+        return 0;
+
+    quint32 first_fb_id = 0;
+    quint32 first_crtc_id = 0;
+    quint32 preferred_fb_id = 0;
+    for (int i = 0; i < resources->count_crtcs; ++i)
+    {
+        drmModeCrtc* crtc = LibDrm::modeGetCrtc(drm_fd, resources->crtcs[i]);
+        if (crtc)
+        {
+            if (crtc->mode_valid && crtc->buffer_id)
+            {
+                ++*active_count;
+                if (!first_fb_id)
+                {
+                    first_fb_id = crtc->buffer_id;
+                    first_crtc_id = resources->crtcs[i];
+                }
+                if (preferred_crtc && resources->crtcs[i] == preferred_crtc)
+                    preferred_fb_id = crtc->buffer_id;
+            }
+            LibDrm::modeFreeCrtc(crtc);
+        }
+    }
+
+    LibDrm::modeFreeResources(resources);
+
+    if (preferred_fb_id)
+    {
+        *crtc_id = preferred_crtc;
+        return preferred_fb_id;
+    }
+
+    *crtc_id = first_crtc_id;
+    return first_fb_id;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The render node of the card /dev/dri/card<index>, or empty if the card has none.
+QByteArray renderNodeForCard(int index)
+{
+    const QStringList nodes = QDir(QString("/sys/class/drm/card%1/device/drm").arg(index))
+        .entryList(QStringList() << "renderD*", QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
+    if (nodes.isEmpty())
+        return QByteArray();
+
+    return "/dev/dri/" + nodes.first().toLocal8Bit();
+}
+
+//--------------------------------------------------------------------------------------------------
+// A screen id names a CRTC on a card. CRTC ids are unique within a card only.
+ScreenCapturer::ScreenId makeScreenId(int card_index, quint32 crtc_id)
+{
+    return static_cast<ScreenCapturer::ScreenId>(
+        (static_cast<qint64>(card_index) << 32) | static_cast<qint64>(crtc_id));
+}
+
+int cardIndexOfScreen(ScreenCapturer::ScreenId screen_id)
+{
+    return static_cast<int>(static_cast<qint64>(screen_id) >> 32);
+}
+
+quint32 crtcIdOfScreen(ScreenCapturer::ScreenId screen_id)
+{
+    return static_cast<quint32>(static_cast<qint64>(screen_id) & 0xFFFFFFFF);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -374,8 +453,8 @@ ScreenCapturerKms::ScreenCapturerKms(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 ScreenCapturerKms::~ScreenCapturerKms()
 {
-    if (drm_fd_ >= 0)
-        ::close(drm_fd_);
+    for (const Card& card : cards_)
+        ::close(card.fd);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -399,7 +478,10 @@ bool ScreenCapturerKms::isAvailable()
 //--------------------------------------------------------------------------------------------------
 int ScreenCapturerKms::screenCount()
 {
-    return activeCrtcCount(drm_fd_);
+    int count = 0;
+    for (const Card& card : cards_)
+        count += activeCrtcCount(card.fd);
+    return count;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -408,59 +490,69 @@ bool ScreenCapturerKms::screenList(ScreenList* screens)
     screens->screens.clear();
     screens->resolutions.clear();
 
-    const QList<Monitor> monitors = activeMonitors(drm_fd_);
-    if (monitors.isEmpty())
+    // Positions come from the compositor's logical layout, matched to each CRTC by connector name (the
+    // captured-buffer size from DRM is the resolution). DRM alone has no cross-monitor layout.
+    QList<WaylandOutputLayout::Output> outputs;
+    bool outputs_queried = false;
+
+    // When the layout is unavailable (no compositor reachable), tile the monitors left to right so
+    // they do not all collapse onto the same origin.
+    QPoint fallback_position(0, 0);
+
+    for (size_t card_index = 0; card_index < cards_.size(); ++card_index)
+    {
+        const QList<Monitor> monitors = activeMonitors(cards_[card_index].fd);
+        if (!monitors.isEmpty() && !outputs_queried)
+        {
+            outputs = queryCompositorOutputs();
+            outputs_queried = true;
+        }
+
+        for (const Monitor& monitor : std::as_const(monitors))
+        {
+            QRect logical;
+            for (const WaylandOutputLayout::Output& output : std::as_const(outputs))
+            {
+                if (!monitor.connector.isEmpty() && output.name == monitor.connector)
+                {
+                    logical = output.logical;
+                    break;
+                }
+            }
+
+            Screen screen;
+            screen.id = makeScreenId(static_cast<int>(card_index), monitor.crtc_id);
+            screen.resolution = monitor.mode_size;
+            screen.dpi = QPoint(96, 96);
+            screen.title = monitor.connector.isEmpty() ?
+                QString("Screen %1").arg(monitor.crtc_id) : monitor.connector;
+
+            if (!logical.isEmpty())
+            {
+                screen.position = logical.topLeft();
+            }
+            else
+            {
+                screen.position = fallback_position;
+                fallback_position.rx() += monitor.mode_size.width();
+            }
+
+            screens->screens.append(screen);
+        }
+    }
+
+    if (screens->screens.isEmpty())
     {
         // No active CRTC yet: expose a single synthetic screen covering the captured framebuffer so
         // the client always has something to select.
         Screen screen;
-        screen.id = static_cast<ScreenId>(crtc_id_);
+        screen.id = makeScreenId(card_index_, crtc_id_);
         screen.position = QPoint(0, 0);
         screen.resolution = screen_rect_.size();
         screen.dpi = QPoint(96, 96);
         screen.is_primary = true;
         screens->screens.append(screen);
         return true;
-    }
-
-    // Positions come from the compositor's logical layout, matched to each CRTC by connector name (the
-    // captured-buffer size from DRM is the resolution). DRM alone has no cross-monitor layout.
-    const QList<WaylandOutputLayout::Output> outputs = queryCompositorOutputs();
-
-    // When the layout is unavailable (no compositor reachable), tile the monitors left to right so
-    // they do not all collapse onto the same origin.
-    QPoint fallback_position(0, 0);
-
-    for (const Monitor& monitor : std::as_const(monitors))
-    {
-        QRect logical;
-        for (const WaylandOutputLayout::Output& output : std::as_const(outputs))
-        {
-            if (!monitor.connector.isEmpty() && output.name == monitor.connector)
-            {
-                logical = output.logical;
-                break;
-            }
-        }
-
-        Screen screen;
-        screen.id = static_cast<ScreenId>(monitor.crtc_id);
-        screen.resolution = monitor.mode_size;
-        screen.dpi = QPoint(96, 96);
-        screen.title = monitor.connector.isEmpty() ?
-            QString("Screen %1").arg(monitor.crtc_id) : monitor.connector;
-
-        if (!logical.isEmpty())
-        {
-            screen.position = logical.topLeft();
-        }
-        else
-        {
-            screen.position = fallback_position;
-            fallback_position.rx() += monitor.mode_size.width();
-        }
-
-        screens->screens.append(screen);
     }
 
     // Exactly one screen is primary: prefer the one at the layout origin, else the first.
@@ -481,44 +573,66 @@ bool ScreenCapturerKms::screenList(ScreenList* screens)
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerKms::selectScreen(ScreenId screen_id)
 {
-    const QList<Monitor> monitors = activeMonitors(drm_fd_);
+    const int card_index = cardIndexOfScreen(screen_id);
+    const quint32 crtc_id = crtcIdOfScreen(screen_id);
+
+    if (card_index < 0 || card_index >= static_cast<int>(cards_.size()))
+    {
+        LOG(ERROR) << "KMS selectScreen: screen" << screen_id << "names no card";
+        return false;
+    }
 
     // The capturer may have no active CRTC yet (created before the compositor lit an output). Accept
     // the request and bind it on the first frame that finds the CRTC active.
-    if (monitors.isEmpty())
+    if (screenCount() == 0)
     {
-        selected_crtc_id_ = static_cast<quint32>(screen_id);
+        selected_card_ = card_index;
+        selected_crtc_id_ = crtc_id;
         queue_.reset();
         input_geometry_valid_ = false;
         input_geometry_attempts_ = 0;
         return true;
     }
 
+    const QList<Monitor> monitors = activeMonitors(cards_[card_index].fd);
     for (const Monitor& monitor : std::as_const(monitors))
     {
-        if (static_cast<ScreenId>(monitor.crtc_id) == screen_id)
+        if (monitor.crtc_id != crtc_id)
+            continue;
+
+        if (card_index != card_index_ && !switchCard(card_index))
         {
-            selected_crtc_id_ = monitor.crtc_id;
-
-            // Drop frames sized for the previously selected monitor and re-learn the input geometry
-            // for the new one.
-            queue_.reset();
-            input_geometry_valid_ = false;
-            input_geometry_attempts_ = 0;
-
-            LOG(INFO) << "KMS selected screen: CRTC" << monitor.crtc_id << monitor.connector;
-            return true;
+            LOG(ERROR) << "KMS selectScreen: card" << cards_[card_index].path.constData()
+                       << "cannot be read";
+            return false;
         }
+
+        selected_card_ = card_index;
+        selected_crtc_id_ = crtc_id;
+
+        // Drop frames sized for the previously selected monitor and re-learn the input geometry
+        // for the new one.
+        queue_.reset();
+        input_geometry_valid_ = false;
+        input_geometry_attempts_ = 0;
+
+        LOG(INFO) << "KMS selected screen: CRTC" << crtc_id << monitor.connector << "on"
+                  << cards_[card_index].path.constData();
+        return true;
     }
 
-    LOG(ERROR) << "KMS selectScreen: CRTC" << screen_id << "is not an active monitor";
+    LOG(ERROR) << "KMS selectScreen: CRTC" << crtc_id << "on"
+               << cards_[card_index].path.constData() << "is not an active monitor";
     return false;
 }
 
 //--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenId ScreenCapturerKms::currentScreen() const
 {
-    return static_cast<ScreenId>(selected_crtc_id_ ? selected_crtc_id_ : crtc_id_);
+    if (selected_crtc_id_)
+        return makeScreenId(selected_card_, selected_crtc_id_);
+
+    return makeScreenId(card_index_, crtc_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -533,7 +647,7 @@ const Frame* ScreenCapturerKms::captureFrame(Error* error)
     if (!fb_id)
         return nullptr;
 
-    drmModeFB2* fb = LibDrm::modeGetFB2(drm_fd_, fb_id);
+    drmModeFB2* fb = LibDrm::modeGetFB2(card().fd, fb_id);
     if (!fb || !fb->width || !fb->height || !fb->handles[0])
     {
         if (fb)
@@ -612,7 +726,7 @@ const MouseCursor* ScreenCapturerKms::captureCursor()
         return nullptr;
     last_cursor_fb_id_ = cursor_fb_id;
 
-    drmModeFB2* fb = LibDrm::modeGetFB2(drm_fd_, cursor_fb_id);
+    drmModeFB2* fb = LibDrm::modeGetFB2(card().fd, cursor_fb_id);
     if (!fb || !fb->handles[0])
     {
         if (fb)
@@ -675,7 +789,8 @@ bool ScreenCapturerKms::init()
     if (!LibDrm::ensureLoaded())
         return false;
 
-    // Find the KMS card that exposes CRTCs (the render node has none).
+    // Every card with CRTCs is kept. A laptop with two GPUs may drive a monitor from each, and the
+    // client picks the monitor, so the card follows the selected screen.
     for (int i = 0; i < kMaxCards; ++i)
     {
         const QByteArray path = QByteArray("/dev/dri/card") + QByteArray::number(i);
@@ -683,50 +798,114 @@ bool ScreenCapturerKms::init()
         if (fd < 0)
             continue;
 
+        // Never hold DRM master, the compositor (e.g. the greeter's gnome-shell) must be able to
+        // acquire it for modesetting. Opening a DRM node can implicitly grant master to the first
+        // client, which would block the compositor and leave the physical screen black. With
+        // CAP_SYS_ADMIN, drmModeGetFB2() reads the scanout buffer without holding master.
+        if (LibDrm::dropMaster(fd) != 0)
+            LOG(INFO) << "drmDropMaster: not master (expected)";
+
+        bool has_crtcs = false;
         drmModeRes* resources = LibDrm::modeGetResources(fd);
-        if (resources && resources->count_crtcs > 0)
+        if (resources)
         {
+            has_crtcs = resources->count_crtcs > 0;
             LibDrm::modeFreeResources(resources);
-            drm_fd_ = fd;
-            LOG(INFO) << "KMS capture device:" << path.constData();
-            // Never hold DRM master: the compositor (e.g. the greeter's gnome-shell) must be able to
-            // acquire it for modesetting. Opening a DRM node can implicitly grant master to the first
-            // client, which would block the compositor and leave the physical screen black. With
-            // CAP_SYS_ADMIN, drmModeGetFB2() reads the scanout buffer without holding master.
-            if (LibDrm::dropMaster(fd) != 0)
-                LOG(INFO) << "drmDropMaster: not master (expected)";
-            break;
         }
 
-        if (resources)
-            LibDrm::modeFreeResources(resources);
-        ::close(fd);
+        // The render node has no CRTCs.
+        if (!has_crtcs)
+        {
+            ::close(fd);
+            continue;
+        }
+
+        // Enumerate all planes (primary, cursor, overlay), not just overlays, so the hardware cursor
+        // plane can be found in captureCursor().
+        if (LibDrm::setClientCap(fd, DRM_CLIENT_CAP_UNIVERSAL_PLANES, 1) != 0)
+            LOG(INFO) << "DRM universal planes unavailable; hardware cursor will not be captured";
+
+        Card card;
+        card.path = path;
+        card.fd = fd;
+        cards_.push_back(std::move(card));
     }
 
-    if (drm_fd_ < 0)
+    if (cards_.empty())
     {
         LOG(ERROR) << "No KMS-capable DRM device found";
         return false;
     }
 
-    // Enumerate all planes (primary, cursor, overlay), not just overlays, so the hardware cursor
-    // plane can be found in captureCursor().
-    if (LibDrm::setClientCap(drm_fd_, DRM_CLIENT_CAP_UNIVERSAL_PLANES, 1) != 0)
-        LOG(INFO) << "DRM universal planes unavailable; hardware cursor will not be captured";
-
-    egl_dmabuf_ = std::make_unique<EglDmaBuf>();
-    if (!egl_dmabuf_->isInitialized())
+    // Start on a card that scans out to a monitor. A card with nothing lit up cannot be probed and
+    // is tried only after the others, for a display that is off at probe time (the probe is retried).
+    std::vector<int> order;
+    for (size_t i = 0; i < cards_.size(); ++i)
     {
-        LOG(ERROR) << "EGL/GBM import not available for KMS capture";
+        if (activeCrtcCount(cards_[i].fd) > 0)
+            order.push_back(static_cast<int>(i));
+    }
+    for (size_t i = 0; i < cards_.size(); ++i)
+    {
+        if (activeCrtcCount(cards_[i].fd) == 0)
+            order.push_back(static_cast<int>(i));
+    }
+
+    for (int index : order)
+    {
+        if (switchCard(index))
+        {
+            LOG(INFO) << "KMS capture device:" << card().path.constData();
+            return true;
+        }
+    }
+
+    LOG(ERROR) << "KMS scan-out readback probe failed";
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ScreenCapturerKms::switchCard(int index)
+{
+    Card& card = cards_[static_cast<size_t>(index)];
+    if (card.readback == Readback::UNUSABLE)
+        return false;
+
+    if (!card.egl)
+    {
+        // The scan-out of a card imports into EGL on the render node of the same card. A card whose
+        // render node EGL cannot use (e.g. a driver without GBM) gets whatever node EGL picks itself.
+        card.egl = std::make_unique<EglDmaBuf>(renderNodeForCard(index));
+        if (!card.egl->isInitialized())
+            card.egl = std::make_unique<EglDmaBuf>();
+
+        if (!card.egl->isInitialized())
+        {
+            LOG(ERROR) << "EGL/GBM import not available for KMS capture on" << card.path.constData();
+            card.readback = Readback::UNUSABLE;
+            return false;
+        }
+    }
+
+    const int previous = card_index_;
+    card_index_ = index;
+
+    if (card.readback == Readback::UNKNOWN && !probeReadback())
+    {
+        card_index_ = previous;
         return false;
     }
 
-    // Confirm the active scan-out can really be read (so we never commit to a KMS capturer that yields
-    // only black frames) and fix the readback method before the first real frame.
-    if (!probeReadback())
+    if (index != previous)
     {
-        LOG(ERROR) << "KMS scan-out readback probe failed";
-        return false;
+        // The frames, the differ and the cursor framebuffer id all belong to the previous card.
+        queue_.reset();
+        differ_.reset();
+        last_cursor_fb_id_ = 0;
+        input_geometry_valid_ = false;
+        input_geometry_attempts_ = 0;
+
+        LOG(INFO) << "KMS capture device:" << card.path.constData();
     }
 
     return true;
@@ -735,7 +914,9 @@ bool ScreenCapturerKms::init()
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerKms::probeReadback()
 {
-    const quint32 fb_id = activeFramebufferId();
+    quint32 crtc_id = 0;
+    int active_count = 0;
+    const quint32 fb_id = litFramebufferId(card().fd, 0, &crtc_id, &active_count);
     if (!fb_id)
     {
         // The probe repeats for as long as no capturer can be created, so describe the cards once.
@@ -744,7 +925,7 @@ bool ScreenCapturerKms::probeReadback()
         if (!cards_logged)
         {
             cards_logged = true;
-            LOG(ERROR) << "KMS probe: no lit-up CRTC on the capture device";
+            LOG(ERROR) << "KMS probe: no lit-up CRTC on" << card().path.constData();
             logDrmCards();
         }
         return false;
@@ -762,7 +943,7 @@ bool ScreenCapturerKms::probeReadback()
                            (method == Readback::DMABUF_CPU) ? "CPU DMA-BUF mapping" :
                                                               "CPU dumb-buffer mapping";
 
-        drmModeFB2* fb = LibDrm::modeGetFB2(drm_fd_, fb_id);
+        drmModeFB2* fb = LibDrm::modeGetFB2(card().fd, fb_id);
         if (!fb || !fb->width || !fb->height || !fb->handles[0])
         {
             LOG(ERROR) << "KMS probe: framebuffer" << fb_id << "not readable: handle0="
@@ -771,26 +952,28 @@ bool ScreenCapturerKms::probeReadback()
                        << (fb ? fb->pixel_format : 0);
             if (fb)
                 LibDrm::modeFreeFB2(fb);
+            card().readback = Readback::UNKNOWN;
             return false;
         }
 
         const int stride = static_cast<int>(fb->width) * 4;
         QByteArray scratch(static_cast<qsizetype>(stride) * fb->height, Qt::Uninitialized);
 
-        readback_ = method;
+        card().readback = method;
         const bool ok = importFb(fb, reinterpret_cast<quint8*>(scratch.data()), stride);
         LibDrm::modeFreeFB2(fb);
 
         if (ok)
         {
-            LOG(INFO) << "KMS readback method:" << name;
+            LOG(INFO) << "KMS readback method:" << name << "on" << card().path.constData();
             return true;
         }
 
         LOG(INFO) << "KMS probe: readback method" << name << "did not work, trying next";
     }
 
-    readback_ = Readback::UNKNOWN;
+    // No method reads this card, so it is not tried again.
+    card().readback = Readback::UNUSABLE;
     return false;
 }
 
@@ -799,10 +982,10 @@ bool ScreenCapturerKms::importFb(drmModeFB2* fb, quint8* dst, int dst_stride)
 {
     bool ok = false;
 
-    if (readback_ == Readback::DUMB_CPU)
+    if (card().readback == Readback::DUMB_CPU)
     {
         // The driver cannot PRIME-export the scan-out: map the GEM handle as a dumb buffer instead.
-        ok = readDumbBufferCpu(drm_fd_, fb, dst, dst_stride);
+        ok = readDumbBufferCpu(card().fd, fb, dst, dst_stride);
     }
     else
     {
@@ -823,7 +1006,7 @@ bool ScreenCapturerKms::importFb(drmModeFB2* fb, quint8* dst, int dst_stride)
                 continue;
 
             int prime_fd = -1;
-            if (LibDrm::primeHandleToFD(drm_fd_, fb->handles[i], DRM_CLOEXEC, &prime_fd) != 0 ||
+            if (LibDrm::primeHandleToFD(card().fd, fb->handles[i], DRM_CLOEXEC, &prime_fd) != 0 ||
                 prime_fd < 0)
             {
                 break;
@@ -836,12 +1019,12 @@ bool ScreenCapturerKms::importFb(drmModeFB2* fb, quint8* dst, int dst_stride)
             ++plane_count;
         }
 
-        if (readback_ == Readback::EGL && plane_count > 0)
+        if (card().readback == Readback::EGL && plane_count > 0)
         {
-            ok = egl_dmabuf_->imageFromDmaBuf(size, fourcc, planes.data(), plane_count, modifier,
+            ok = card().egl->imageFromDmaBuf(size, fourcc, planes.data(), plane_count, modifier,
                                               QRect(QPoint(0, 0), size), dst, dst_stride);
         }
-        else if (readback_ == Readback::DMABUF_CPU && plane_count == 1 && prime_fds[0] >= 0)
+        else if (card().readback == Readback::DMABUF_CPU && plane_count == 1 && prime_fds[0] >= 0)
         {
             ok = readDmaBufCpu(prime_fds[0], fb, dst, dst_stride);
         }
@@ -869,7 +1052,7 @@ bool ScreenCapturerKms::importFb(drmModeFB2* fb, quint8* dst, int dst_stride)
             }
         }
         if (!duplicate)
-            LibDrm::closeBufferHandle(drm_fd_, fb->handles[i]);
+            LibDrm::closeBufferHandle(card().fd, fb->handles[i]);
     }
 
     return ok;
@@ -878,35 +1061,41 @@ bool ScreenCapturerKms::importFb(drmModeFB2* fb, quint8* dst, int dst_stride)
 //--------------------------------------------------------------------------------------------------
 quint32 ScreenCapturerKms::activeFramebufferId()
 {
-    drmModeRes* resources = LibDrm::modeGetResources(drm_fd_);
-    if (!resources)
-        return 0;
-
-    quint32 first_fb_id = 0;
-    quint32 first_crtc_id = 0;
-    quint32 selected_fb_id = 0;
-    int active = 0;
-    for (int i = 0; i < resources->count_crtcs; ++i)
+    // The selected card first, then the captured one, then the rest.
+    std::vector<int> order;
+    if (selected_card_ >= 0)
+        order.push_back(selected_card_);
+    if (card_index_ != selected_card_)
+        order.push_back(card_index_);
+    for (size_t i = 0; i < cards_.size(); ++i)
     {
-        drmModeCrtc* crtc = LibDrm::modeGetCrtc(drm_fd_, resources->crtcs[i]);
-        if (crtc)
-        {
-            if (crtc->mode_valid && crtc->buffer_id)
-            {
-                ++active;
-                if (!first_fb_id)
-                {
-                    first_fb_id = crtc->buffer_id;
-                    first_crtc_id = resources->crtcs[i];
-                }
-                if (selected_crtc_id_ && resources->crtcs[i] == selected_crtc_id_)
-                    selected_fb_id = crtc->buffer_id;
-            }
-            LibDrm::modeFreeCrtc(crtc);
-        }
+        const int index = static_cast<int>(i);
+        if (index != selected_card_ && index != card_index_)
+            order.push_back(index);
     }
 
-    LibDrm::modeFreeResources(resources);
+    int active = 0;
+    quint32 found_fb_id = 0;
+    quint32 found_crtc_id = 0;
+
+    for (int index : order)
+    {
+        const quint32 preferred_crtc = (index == selected_card_) ? selected_crtc_id_ : 0;
+        quint32 crtc_id = 0;
+        int card_active = 0;
+        const quint32 fb_id = litFramebufferId(cards_[static_cast<size_t>(index)].fd,
+                                               preferred_crtc, &crtc_id, &card_active);
+        active += card_active;
+
+        // Capture the client-selected monitor; fall back to the first active CRTC when nothing is
+        // selected yet or the selected monitor is no longer lit up, then to another card that can be
+        // read.
+        if (fb_id && !found_fb_id && (index == card_index_ || switchCard(index)))
+        {
+            found_fb_id = fb_id;
+            found_crtc_id = crtc_id;
+        }
+    }
 
     // A change in the active-CRTC count means a monitor was connected or disconnected, so the logical
     // layout changed: re-read the input geometry.
@@ -917,16 +1106,11 @@ quint32 ScreenCapturerKms::activeFramebufferId()
         input_geometry_attempts_ = 0;
     }
 
-    // Capture the client-selected monitor; fall back to the first active CRTC when nothing is selected
-    // yet or the selected monitor is no longer lit up.
-    if (selected_fb_id)
-    {
-        crtc_id_ = selected_crtc_id_;
-        return selected_fb_id;
-    }
+    if (!found_fb_id)
+        return 0;
 
-    crtc_id_ = first_crtc_id;
-    return first_fb_id;
+    crtc_id_ = found_crtc_id;
+    return found_fb_id;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1002,11 +1186,11 @@ QString ScreenCapturerKms::capturedConnectorName()
     if (!crtc_id_)
         return QString();
 
-    drmModeRes* resources = LibDrm::modeGetResources(drm_fd_);
+    drmModeRes* resources = LibDrm::modeGetResources(card().fd);
     if (!resources)
         return QString();
 
-    const QString name = connectorNameForCrtc(drm_fd_, resources, crtc_id_);
+    const QString name = connectorNameForCrtc(card().fd, resources, crtc_id_);
     LibDrm::modeFreeResources(resources);
     return name;
 }
@@ -1014,7 +1198,7 @@ QString ScreenCapturerKms::capturedConnectorName()
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* position, QPoint* hotspot)
 {
-    drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(drm_fd_);
+    drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(card().fd);
     if (!plane_res)
         return false;
 
@@ -1025,7 +1209,7 @@ bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* pos
     // the cursor on the captured CRTC counts - on another output it is not on the screen we serve.
     for (uint32_t i = 0; i < plane_res->count_planes && !found; ++i)
     {
-        drmModePlane* plane = LibDrm::modeGetPlane(drm_fd_, plane_res->planes[i]);
+        drmModePlane* plane = LibDrm::modeGetPlane(card().fd, plane_res->planes[i]);
         if (!plane)
             continue;
 
@@ -1033,7 +1217,7 @@ bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* pos
             plane->crtc_id && (crtc_id_ == 0 || plane->crtc_id == crtc_id_);
         if (plane->fb_id && on_captured_crtc)
         {
-            drmModeFB2* fb = LibDrm::modeGetFB2(drm_fd_, plane->fb_id);
+            drmModeFB2* fb = LibDrm::modeGetFB2(card().fd, plane->fb_id);
             if (fb && fb->width && fb->height &&
                 fb->width <= kMaxCursorSize && fb->height <= kMaxCursorSize)
             {
@@ -1049,12 +1233,12 @@ bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* pos
                     // Paravirtual drivers (vmwgfx) report the cursor hotspot in plane properties rather
                     // than via the plane position.
                     drmModeObjectProperties* props = LibDrm::modeObjectGetProperties(
-                        drm_fd_, plane->plane_id, DRM_MODE_OBJECT_PLANE);
+                        card().fd, plane->plane_id, DRM_MODE_OBJECT_PLANE);
                     if (props)
                     {
                         for (uint32_t p = 0; p < props->count_props; ++p)
                         {
-                            drmModePropertyRes* prop = LibDrm::modeGetProperty(drm_fd_, props->props[p]);
+                            drmModePropertyRes* prop = LibDrm::modeGetProperty(card().fd, props->props[p]);
                             if (!prop)
                                 continue;
 
