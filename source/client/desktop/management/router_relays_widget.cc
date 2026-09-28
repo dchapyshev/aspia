@@ -452,8 +452,9 @@ void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
     QAction* copy_row_action = menu.addAction(tr("Copy Row"));
     QAction* copy_value_action = menu.addAction(tr("Copy Value"));
 
+    QPointer<RouterRelaysWidget> self(this);
     QAction* selected = menu.exec(global_pos);
-    if (!selected)
+    if (!selected || !self)
         return;
 
     if (selected == disconnect_action)

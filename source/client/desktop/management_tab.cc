@@ -25,6 +25,7 @@
 #include <QEvent>
 #include <QIODevice>
 #include <QMenu>
+#include <QPointer>
 #include <QStatusBar>
 #include <QTimer>
 
@@ -1148,8 +1149,9 @@ void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
     QAction* copy_row = menu.addAction(copy_icon, tr("Copy Row"));
     QAction* copy_col = menu.addAction(copy_icon, tr("Copy Value"));
 
+    QPointer<ManagementTab> self(this);
     QAction* action = menu.exec(pos);
-    if (!action)
+    if (!action || !self)
         return;
 
     if (action == copy_row)
@@ -1191,8 +1193,9 @@ void ManagementTab::onClientContextMenu(const QPoint& pos, int column)
     QAction* copy_row = menu.addAction(copy_icon, tr("Copy Row"));
     QAction* copy_col = menu.addAction(copy_icon, tr("Copy Value"));
 
+    QPointer<ManagementTab> self(this);
     QAction* action = menu.exec(pos);
-    if (!action)
+    if (!action || !self)
         return;
 
     if (action == copy_row)
@@ -1216,8 +1219,9 @@ void ManagementTab::onRelayContextMenu(const QPoint& pos, int column)
     QAction* copy_row = menu.addAction(copy_icon, tr("Copy Row"));
     QAction* copy_col = menu.addAction(copy_icon, tr("Copy Value"));
 
+    QPointer<ManagementTab> self(this);
     QAction* action = menu.exec(pos);
-    if (!action)
+    if (!action || !self)
         return;
 
     if (action == copy_row)

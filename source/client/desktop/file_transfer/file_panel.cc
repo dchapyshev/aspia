@@ -23,6 +23,7 @@
 #include <QLineEdit>
 #include <QKeyEvent>
 #include <QMenu>
+#include <QPointer>
 
 #include "base/logging.h"
 #include "client/file_error_code.h"
@@ -356,8 +357,9 @@ void FilePanel::onListContextMenu(const QPoint& point)
 
     menu.addAction(add_folder_action.get());
 
+    QPointer<FilePanel> self(this);
     QAction* selected_action = menu.exec(ui->list->viewport()->mapToGlobal(point));
-    if (!selected_action)
+    if (!selected_action || !self)
         return;
 
     if (selected_action == delete_action.get())
