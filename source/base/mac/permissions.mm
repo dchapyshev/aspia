@@ -26,10 +26,16 @@
 //--------------------------------------------------------------------------------------------------
 static bool hasFullDiskAccess()
 {
-    // There is no API for Full Disk Access. As a proxy, FDA is what lets a process read the user's TCC
-    // database; probe it for read access.
-    NSString* path = [NSHomeDirectory()
-        stringByAppendingPathComponent:@"Library/Application Support/com.apple.TCC/TCC.db"];
+    // There is no API for Full Disk Access. As a proxy, FDA is what lets a process read the TCC
+    // database; probe it for read access. macOS 27 no longer has the per-user database, only the
+    // system one.
+    NSString* path = @"/Library/Application Support/com.apple.TCC/TCC.db";
+    if (![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:{ 27, 0, 0 }])
+    {
+        path = [NSHomeDirectory()
+            stringByAppendingPathComponent:@"Library/Application Support/com.apple.TCC/TCC.db"];
+    }
+
     return access(path.fileSystemRepresentation, R_OK) == 0;
 }
 
