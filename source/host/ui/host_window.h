@@ -90,6 +90,7 @@ private:
     void createTrayIcon();
     void updateStatusBar();
     void updateTrayIconTooltip();
+    QString lastKnownHostId() const;
     quint32 calcOneTimeSessions();
 
     std::unique_ptr<Ui::HostWindow> ui;
