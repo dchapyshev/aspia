@@ -506,16 +506,6 @@ void signalHandler(int sig, siginfo_t* info, void* /* context */)
 
     writeRawToCrashLog(buffer, pos);
 
-    // The raw return addresses; symbolization is left to the developer (addr2line/atos), doing it
-    // here would not be async-signal-safe.
-    void* frames[kMaxFrames];
-    const int count = backtrace(frames, kMaxFrames);
-
-    const int fd = g_crash_log_fd.load(std::memory_order_relaxed);
-    if (fd != -1)
-        backtrace_symbols_fd(frames, count, fd);
-    backtrace_symbols_fd(frames, count, STDERR_FILENO);
-
     // Re-raise with the default disposition so the OS produces a core dump (systemd-coredump on
     // Linux, ReportCrash on macOS) - the platform analogue of the Windows minidump.
     signal(sig, SIG_DFL);
@@ -578,11 +568,6 @@ void installCrashHandler(const QString& /* dump_file_prefix */)
 {
     // The prefix is not used: crash artifacts on these platforms are the OS core dumps, named by
     // the system.
-
-    // The first backtrace() call loads the unwinder library, which allocates; do it now so the
-    // call inside the signal handler is async-signal-safe.
-    void* warmup[2];
-    backtrace(warmup, 2);
 
     stack_t alt_stack = {};
     alt_stack.ss_sp = g_alt_stack;
