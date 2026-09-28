@@ -19,6 +19,7 @@
 #ifndef HOST_INPUT_INJECTOR_MAC_H
 #define HOST_INPUT_INJECTOR_MAC_H
 
+#include <QElapsedTimer>
 #include <QPoint>
 #include <QSet>
 
@@ -42,6 +43,20 @@ public:
     void releaseAllInput() final;
 
 private:
+    void injectButtons(const QPoint& pos, quint32 buttons);
+
+    // The login window accepts mouse input only from the deprecated CGPostMouseEvent.
+    const bool use_post_mouse_event_;
+
+    // Number of the last button press. The press, the drags and the release that follows carry it.
+    qint64 event_number_ = 0;
+
+    // Click count of the last button press (2 for a double click), used for double-click detection.
+    qint64 click_state_ = 0;
+    quint32 last_click_button_ = 0;
+    QPoint last_click_pos_;
+    QElapsedTimer last_click_timer_;
+
     // Global display coordinates (top-left of the main display is the origin) the capturer/client
     // coordinates map into.
     QPoint screen_offset_;
