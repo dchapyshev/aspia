@@ -245,6 +245,7 @@ border-radius: 2px;
     </property>
     <addaction name="action_show_chat"/>
     <addaction name="action_security_log"/>
+    <addaction name="action_uninstall"/>
     <addaction name="action_settings"/>
     <addaction name="separator"/>
     <addaction name="action_show_hide"/>
@@ -294,6 +295,11 @@ border-radius: 2px;
   <action name="action_exit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="action_uninstall">
+   <property name="text">
+    <string>Uninstall Application</string>
    </property>
   </action>
   <action name="action_help">

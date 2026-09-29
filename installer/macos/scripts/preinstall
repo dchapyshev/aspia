@@ -10,6 +10,9 @@
 DAEMON_LABEL="org.aspia.host-service"
 AGENT_LABEL="org.aspia.host-loginwindow"
 
+# The bundle is about to be replaced, which is not a removal. postinstall starts the job again.
+launchctl bootout "system/org.aspia.host-uninstall" 2>/dev/null || true
+
 # launchd holds the daemon of the old version until it is told to let it go.
 launchctl bootout "system/$DAEMON_LABEL" 2>/dev/null || true
 

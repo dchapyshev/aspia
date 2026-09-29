@@ -150,6 +150,10 @@ HostWindow::HostWindow(QWidget* parent)
 
     connect(ui->menu_access, &QMenu::triggered, this, &HostWindow::onOneTimeSessionsChanged);
 
+#if !defined(Q_OS_MACOS)
+    ui->action_uninstall->setVisible(false);
+#endif // !defined(Q_OS_MACOS)
+
     createLanguageMenu(GuiApplication::instance()->locale());
     createThemeMenu(user_settings.theme());
 
@@ -161,6 +165,7 @@ HostWindow::HostWindow(QWidget* parent)
     connect(ui->action_security_log, &QAction::triggered, this, &HostWindow::onSecurityLog);
     connect(ui->action_settings, &QAction::triggered, this, &HostWindow::onSettings);
     connect(ui->action_show_hide, &QAction::triggered, this, &HostWindow::onShowHide);
+    connect(ui->action_uninstall, &QAction::triggered, this, &HostWindow::onUninstall);
     connect(ui->action_exit, &QAction::triggered, this, &HostWindow::onExit);
     connect(ui->action_help, &QAction::triggered, this, &HostWindow::onHelp);
     connect(ui->action_about_system, &QAction::triggered, this, &HostWindow::onAboutSystem);
@@ -794,6 +799,33 @@ void HostWindow::onAbout()
     LOG(INFO) << "[ACTION] About";
     AutoQPointer<AboutDialog> dialog(new AboutDialog(tr("Aspia Host"), this));
     dialog->exec();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostWindow::onUninstall()
+{
+#if defined(Q_OS_MACOS)
+    LOG(INFO) << "[ACTION] Uninstall";
+
+    if (MsgBox::importantQuestion(this,
+            tr("Aspia Host will be removed from this computer. The settings of the host will be kept. "
+               "Do you really want to uninstall the application?"), Seconds(10)) != MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] User rejected uninstall";
+        return;
+    }
+
+    // A removal ends every process of the host, this one included, so only a failure is reported.
+    if (elevate_util_ && elevate_util_->runElevated({ "--uninstall" }, winId(), [this](int exit_code)
+    {
+        ui->action_uninstall->setEnabled(true);
+        if (exit_code != 0)
+            MsgBox::warning(this, tr("Unable to uninstall the application."));
+    }))
+    {
+        ui->action_uninstall->setEnabled(false);
+    }
+#endif // defined(Q_OS_MACOS)
 }
 
 //--------------------------------------------------------------------------------------------------

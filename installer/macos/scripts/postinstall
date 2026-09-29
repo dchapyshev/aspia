@@ -47,4 +47,43 @@ account    required       pam_opendirectory.so
 PAM_EOF
 chmod 644 /etc/pam.d/aspia-terminal
 
+# Dragging the bundle to the Trash is the way to remove it. Finder asks for an administrator for a
+# bundle of root, and this job removes the rest once the bundle is gone (uninstall.sh).
+UNINSTALL_LABEL="org.aspia.host-uninstall"
+UNINSTALL_SCRIPT="/Library/PrivilegedHelperTools/$UNINSTALL_LABEL"
+UNINSTALL_PLIST="/Library/LaunchDaemons/$UNINSTALL_LABEL.plist"
+
+mkdir -p /Library/PrivilegedHelperTools
+cp "$(dirname "$0")/uninstall.sh" "$UNINSTALL_SCRIPT"
+chown root:wheel "$UNINSTALL_SCRIPT"
+chmod 755 "$UNINSTALL_SCRIPT"
+
+cat > "$UNINSTALL_PLIST" <<PLIST_EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>$UNINSTALL_LABEL</string>
+    <key>AssociatedBundleIdentifiers</key>
+    <array>
+        <string>org.aspia.host</string>
+    </array>
+    <key>ProgramArguments</key>
+    <array>
+        <string>$UNINSTALL_SCRIPT</string>
+    </array>
+    <key>WatchPaths</key>
+    <array>
+        <string>$APP</string>
+    </array>
+</dict>
+</plist>
+PLIST_EOF
+chown root:wheel "$UNINSTALL_PLIST"
+chmod 644 "$UNINSTALL_PLIST"
+
+launchctl bootout "system/$UNINSTALL_LABEL" 2>/dev/null || true
+launchctl bootstrap system "$UNINSTALL_PLIST" 2>/dev/null || true
+
 exit 0

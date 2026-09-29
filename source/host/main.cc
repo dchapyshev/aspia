@@ -67,8 +67,13 @@
 #endif // defined(Q_OS_LINUX)
 
 #if defined(Q_OS_MACOS)
+#include <QDir>
+
+#include <csignal>
+
 #include "base/mac/login_utils.h"
 #include "base/process_util.h"
+#include "common/desktop/elevate_util.h"
 #include "host/screen_capturer_mac.h"
 #endif // defined(Q_OS_MACOS)
 
@@ -301,6 +306,27 @@ int runServiceCommand(int& argc, char* argv[], int (*command)(QTextStream& out))
     return command(out);
 }
 
+#if defined(Q_OS_MACOS)
+//--------------------------------------------------------------------------------------------------
+// Started elevated by the "Uninstall Application" menu item. Removing the bundle is all it does: the
+// job the installer registered for that (installer/macos/scripts/uninstall.sh) stops the service and
+// every process of the host and removes the rest.
+int uninstallApplication(char* argv[])
+{
+    ProcessUtil::restartAsRoot(argv);
+
+    // The job asks every process of the host to quit, and this one finishes the removal first.
+    signal(SIGTERM, SIG_IGN);
+
+    const bool removed = QDir(QStringLiteral("/Applications/Aspia Host.app")).removeRecursively();
+    if (!removed)
+        LOG(ERROR) << "Unable to remove the application bundle";
+
+    ElevateUtil::reportExitCode(removed ? 0 : 1);
+    return removed ? 0 : 1;
+}
+#endif // defined(Q_OS_MACOS)
+
 //--------------------------------------------------------------------------------------------------
 int runSysInfo(int& argc, char* argv[])
 {
@@ -498,6 +524,10 @@ int main(int argc, char* argv[])
             return runAgent(argc, argv, argv[i + 1]);
         if (qstrcmp(argv[i], "--sys-info") == 0)
             return runSysInfo(argc, argv);
+#if defined(Q_OS_MACOS)
+        if (qstrcmp(argv[i], "--uninstall") == 0)
+            return uninstallApplication(argv);
+#endif // defined(Q_OS_MACOS)
 #if !defined(Q_OS_WINDOWS)
         if (qstrcmp(argv[i], "--version") == 0)
         {

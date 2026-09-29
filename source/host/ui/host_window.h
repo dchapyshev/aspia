@@ -78,6 +78,7 @@ private slots:
     void onHelp();
     void onAboutSystem();
     void onAbout();
+    void onUninstall();
     void onExit();
     void onSettingsChanged();
     void onKillSession(quint32 session_id);
