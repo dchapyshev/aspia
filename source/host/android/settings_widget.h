@@ -84,6 +84,7 @@ private:
     void addSectionHeader(QVBoxLayout* layout, const QString& text);
 
     void buildInterfaceSection(QVBoxLayout* layout);
+    void buildBackgroundSection(QVBoxLayout* layout);
     void buildSecuritySection(QVBoxLayout* layout);
     void buildRouterSection(QVBoxLayout* layout);
     void buildUpdateSection(QVBoxLayout* layout);

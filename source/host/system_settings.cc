@@ -30,6 +30,7 @@ const QString kApplicationShutdown = "application_shutdown";
 const QString kPreferredVideoCapturer = "preferred_video_capturer";
 const QString kHardwareVideoEncoding = "hardware_video_encoding";
 const QString kWaylandRestoreToken = "wayland_restore_token";
+const QString kBackgroundMode = "background_mode";
 
 const QString kUpdateChannel = "update/channel";
 const QString kUpdateAutoUpdate = "update/auto_update";
@@ -135,6 +136,18 @@ bool SystemSettings::isApplicationShutdownDisabled() const
 void SystemSettings::setApplicationShutdownDisabled(bool value)
 {
     settings_.setValue(kApplicationShutdown, value);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SystemSettings::isBackgroundModeEnabled() const
+{
+    return settings_.value(kBackgroundMode, false).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemSettings::setBackgroundModeEnabled(bool enable)
+{
+    settings_.setValue(kBackgroundMode, enable);
 }
 
 //--------------------------------------------------------------------------------------------------

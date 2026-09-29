@@ -214,6 +214,7 @@ void SettingsWidget::buildSettings()
     layout->setSpacing(kRowSpacing);
 
     buildInterfaceSection(layout);
+    buildBackgroundSection(layout);
     buildSecuritySection(layout);
     buildRouterSection(layout);
     buildUpdateSection(layout);
@@ -251,6 +252,22 @@ void SettingsWidget::buildInterfaceSection(QVBoxLayout* layout)
         GuiApplication::instance()->setTheme(id);
     });
     layout->addWidget(theme);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::buildBackgroundSection(QVBoxLayout* layout)
+{
+    addSectionHeader(layout, tr("Background"));
+
+    Switch* enable = new Switch(tr("Work in the background"));
+    enable->setChecked(SystemSettings().isBackgroundModeEnabled());
+    connect(enable, &QCheckBox::toggled, this, [](bool checked)
+    {
+        SystemSettings settings;
+        settings.setBackgroundModeEnabled(checked);
+        settings.sync();
+    });
+    layout->addWidget(enable);
 }
 
 //--------------------------------------------------------------------------------------------------

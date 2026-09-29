@@ -54,6 +54,10 @@ public:
     bool isApplicationShutdownDisabled() const;
     void setApplicationShutdownDisabled(bool value);
 
+    // Android only. The host keeps working while the application is not on the screen.
+    bool isBackgroundModeEnabled() const;
+    void setBackgroundModeEnabled(bool enable);
+
     bool isAutoUpdateEnabled() const;
     void setAutoUpdateEnabled(bool enable);
 
