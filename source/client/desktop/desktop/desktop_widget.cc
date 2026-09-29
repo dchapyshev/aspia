@@ -20,6 +20,7 @@
 
 #include <QApplication>
 #include <QPainter>
+#include <QPainterPath>
 #include <QResizeEvent>
 #include <QSvgRenderer>
 #include <QWheelEvent>
@@ -560,10 +561,11 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
     }
     else
     {
-        const int kTableWidth = 400;
+        const int kTableWidth = 480;
         const int kTableHeight = 100;
         const int kBorderSize = 1;
         const int kTitleHeight = 30;
+        const qreal kCornerRadius = 8;
 
         const QRect table_rect(width() / 2 - kTableWidth / 2,
                                height() / 2 - kTableHeight / 2,
@@ -583,9 +585,25 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
         if (error_image_)
             painter.drawImage(rect(), *error_image_);
 
-        painter.fillRect(table_rect, QColor(167, 167, 167));
-        painter.fillRect(title_rect, QColor(207, 207, 207));
-        painter.fillRect(message_rect, QColor(255, 255, 255));
+        painter.save();
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(QColor(167, 167, 167));
+        painter.drawRoundedRect(table_rect, kCornerRadius, kCornerRadius);
+
+        QPainterPath inner_path;
+        inner_path.addRoundedRect(
+            QRectF(table_rect).adjusted(kBorderSize, kBorderSize, -kBorderSize, -kBorderSize),
+            kCornerRadius - kBorderSize, kCornerRadius - kBorderSize);
+
+        QPainterPath title_path;
+        title_path.addRect(title_rect);
+        painter.fillPath(inner_path.intersected(title_path), QColor(207, 207, 207));
+
+        QPainterPath message_path;
+        message_path.addRect(message_rect);
+        painter.fillPath(inner_path.intersected(message_path), QColor(255, 255, 255));
+        painter.restore();
 
         QImage icon = GuiApplication::svgImage(":/img/computer.svg", QSize(24, 24));
         QPoint icon_pos(title_rect.x() + 8, title_rect.y() + (kTitleHeight / 2) - (icon.height() / 2));
