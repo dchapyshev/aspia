@@ -286,8 +286,8 @@ void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
     layout->addWidget(auto_confirm);
 
     Label* auto_confirm_hint = new Label(
-        tr("The screen capture starts without asking for confirmation. The system dialog still appears "
-           "for a moment. Requires the accessibility service."), Label::Role::CAPTION);
+        tr("The screen capture request is confirmed automatically. The system window briefly appears "
+           "on the screen."), Label::Role::CAPTION);
     auto_confirm_hint->setWordWrap(true);
     layout->addWidget(auto_confirm_hint);
 
