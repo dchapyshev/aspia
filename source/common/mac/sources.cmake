@@ -17,6 +17,8 @@
 #
 
 collect_sources(SOURCE_COMMON_MAC
+    dock_icon.mm
+    dock_icon.h
     file_data_provider.mm
     file_data_provider.h
     file_promise_writer.mm

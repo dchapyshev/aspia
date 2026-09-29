@@ -23,6 +23,7 @@
 #include <QCoreApplication>
 #include <QCursor>
 #include <QDesktopServices>
+#include <QHideEvent>
 #include <QMenuBar>
 #include <QNetworkInterface>
 #include <QProcess>
@@ -57,6 +58,7 @@
 #include "proto/user.h"
 
 #if defined(Q_OS_MACOS)
+#include "common/mac/dock_icon.h"
 #include "host/ui/permission_dialog.h"
 #endif // defined(Q_OS_MACOS)
 
@@ -97,7 +99,6 @@ HostWindow::HostWindow(QWidget* parent)
 
     ui->setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
-    setWindowFlag(Qt::WindowStaysOnTopHint, true);
 
 #if defined(Q_OS_MACOS)
     // The host GUI is a menu-bar (LSUIElement) agent and has no system menu bar, so render the window
@@ -280,6 +281,7 @@ void HostWindow::activateHost(bool hidden)
     if (!hidden)
     {
         show();
+        raise();
         activateWindow();
     }
 
@@ -339,6 +341,8 @@ void HostWindow::showEvent(QShowEvent* event)
     }
 
 #if defined(Q_OS_MACOS)
+    setDockIconVisible(true);
+
     // When the window is brought up (never on a silent --hidden start, which does not show it), prompt
     // for the privacy permissions the host needs if any are still missing. The dialog is modeless so it
     // never blocks the event loop - the app must stay able to quit (e.g. macOS "Quit & Reopen" restarts
@@ -359,6 +363,18 @@ void HostWindow::showEvent(QShowEvent* event)
         permission_dialog_->setAttribute(Qt::WA_DeleteOnClose);
         permission_dialog_->show();
     });
+#endif // defined(Q_OS_MACOS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostWindow::hideEvent(QHideEvent* event)
+{
+    QMainWindow::hideEvent(event);
+
+#if defined(Q_OS_MACOS)
+    // A minimized window stays in the Dock.
+    if (!event->spontaneous())
+        setDockIconVisible(false);
 #endif // defined(Q_OS_MACOS)
 }
 
@@ -762,6 +778,8 @@ void HostWindow::onShowHide()
     {
         ui->action_show_hide->setText(tr("Hide"));
         setVisible(true);
+        raise();
+        activateWindow();
     }
 }
 

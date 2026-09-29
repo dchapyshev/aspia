@@ -102,8 +102,6 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    setWindowFlag(Qt::WindowStaysOnTopHint);
-
     //---------------------------------------------------------------------------------------------
     // General Tab
     //---------------------------------------------------------------------------------------------

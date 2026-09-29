@@ -57,6 +57,7 @@ protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) final;
     void showEvent(QShowEvent* event) final;
+    void hideEvent(QHideEvent* event) final;
 
 private slots:
     void onStatusChanged(UserIpcWorker::Status status);
