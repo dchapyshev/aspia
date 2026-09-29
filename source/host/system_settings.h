@@ -58,6 +58,11 @@ public:
     bool isBackgroundModeEnabled() const;
     void setBackgroundModeEnabled(bool enable);
 
+    // Android only. The accessibility service confirms the screen capture consent dialog, so the
+    // capture starts without the user having to tap it.
+    bool isCaptureAutoConfirmEnabled() const;
+    void setCaptureAutoConfirmEnabled(bool enable);
+
     bool isAutoUpdateEnabled() const;
     void setAutoUpdateEnabled(bool enable);
 

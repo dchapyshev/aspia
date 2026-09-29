@@ -28,6 +28,7 @@
 #include "base/logging.h"
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/region.h"
+#include "host/system_settings.h"
 
 namespace {
 
@@ -120,8 +121,12 @@ bool ScreenCapturerAndroid::start()
     if (size.isEmpty())
         return false;
 
+    // When enabled, the accessibility service confirms the consent dialog so the capture starts
+    // without a user tap. The flag is passed down so the auto-confirm only applies to this request.
+    const bool auto_confirm = SystemSettings().isCaptureAutoConfirmEnabled();
+
     QJniObject::callStaticMethod<void>(kCapturerClass, "requestCapture",
-        "(Landroid/content/Context;)V", context.object());
+        "(Landroid/content/Context;Z)V", context.object(), static_cast<jboolean>(auto_confirm));
 
     active_ = true;
     screen_rect_ = QRect(QPoint(0, 0), size);

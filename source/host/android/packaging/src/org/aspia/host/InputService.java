@@ -37,6 +37,8 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
 
+import java.util.List;
+
 // Accessibility service backing InputInjectorAndroid. It is bound by the system once the user enables it
 // in the accessibility settings; the native side calls the static entry points to dispatch gestures and
 // global actions. Gestures must be dispatched from the service instance, so all calls are posted to the
@@ -80,10 +82,57 @@ public final class InputService extends AccessibilityService
         super.onDestroy();
     }
 
+    // Number of attempts and the delay between them while the consent dialog lays out.
+    private static final int CONSENT_CLICK_ATTEMPTS = 5;
+    private static final long CONSENT_CLICK_RETRY_MS = 200;
+
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event)
     {
-        // The service is used only to dispatch gestures, not to observe events.
+        // Only used to confirm the screen capture consent dialog when the user enabled auto-confirm;
+        // see confirmScreenShareConsent().
+        if (event.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED)
+            return;
+
+        CharSequence pkg = event.getPackageName();
+        if (pkg == null || !"com.android.systemui".contentEquals(pkg))
+            return;
+
+        if (MediaProjection.shouldAutoConfirm())
+            confirmScreenShareConsent(CONSENT_CLICK_ATTEMPTS);
+    }
+
+    // Confirms the system screen capture consent dialog on behalf of the user. Only called while this
+    // host is the one waiting for consent (MediaProjection.shouldAutoConfirm()), so no other
+    // application's capture dialog is ever confirmed. Retries a few times because the dialog content
+    // may still be laying out when the window event arrives.
+    private void confirmScreenShareConsent(int attempts_left)
+    {
+        if (!MediaProjection.shouldAutoConfirm())
+            return;
+
+        AccessibilityNodeInfo root = getRootInActiveWindow();
+        if (root != null)
+        {
+            List<AccessibilityNodeInfo> dialog = root.findAccessibilityNodeInfosByViewId(
+                "com.android.systemui:id/screen_share_permission_dialog");
+            if (dialog != null && !dialog.isEmpty())
+            {
+                List<AccessibilityNodeInfo> buttons =
+                    root.findAccessibilityNodeInfosByViewId("android:id/button1");
+                for (AccessibilityNodeInfo button : buttons)
+                {
+                    if (button.isClickable() && button.isEnabled())
+                    {
+                        button.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                        return;
+                    }
+                }
+            }
+        }
+
+        if (attempts_left > 1)
+            sHandler.postDelayed(() -> confirmScreenShareConsent(attempts_left - 1), CONSENT_CLICK_RETRY_MS);
     }
 
     @Override

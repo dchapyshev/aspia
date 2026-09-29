@@ -214,7 +214,6 @@ void SettingsWidget::buildSettings()
     layout->setSpacing(kRowSpacing);
 
     buildInterfaceSection(layout);
-    buildBackgroundSection(layout);
     buildSecuritySection(layout);
     buildRouterSection(layout);
     buildUpdateSection(layout);
@@ -255,26 +254,42 @@ void SettingsWidget::buildInterfaceSection(QVBoxLayout* layout)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::buildBackgroundSection(QVBoxLayout* layout)
+void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
 {
-    addSectionHeader(layout, tr("Background"));
+    addSectionHeader(layout, tr("Security"));
 
-    Switch* enable = new Switch(tr("Work in the background"));
-    enable->setChecked(SystemSettings().isBackgroundModeEnabled());
-    connect(enable, &QCheckBox::toggled, this, [this](bool checked)
+    Switch* background = new Switch(tr("Work in the background"));
+    background->setChecked(SystemSettings().isBackgroundModeEnabled());
+    connect(background, &QCheckBox::toggled, this, [this](bool checked)
     {
         SystemSettings settings;
         settings.setBackgroundModeEnabled(checked);
         settings.sync();
         emit sig_backgroundModeChanged();
     });
-    layout->addWidget(enable);
-}
+    layout->addWidget(background);
 
-//--------------------------------------------------------------------------------------------------
-void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
-{
-    addSectionHeader(layout, tr("Security"));
+    Label* background_hint = new Label(
+        tr("The host stays connected to the router while the application is not on the screen, so it "
+           "can be reached at any time."), Label::Role::CAPTION);
+    background_hint->setWordWrap(true);
+    layout->addWidget(background_hint);
+
+    Switch* auto_confirm = new Switch(tr("Confirm screen capture automatically"));
+    auto_confirm->setChecked(SystemSettings().isCaptureAutoConfirmEnabled());
+    connect(auto_confirm, &QCheckBox::toggled, this, [](bool checked)
+    {
+        SystemSettings settings;
+        settings.setCaptureAutoConfirmEnabled(checked);
+        settings.sync();
+    });
+    layout->addWidget(auto_confirm);
+
+    Label* auto_confirm_hint = new Label(
+        tr("The screen capture starts without asking for confirmation. The system dialog still appears "
+           "for a moment. Requires the accessibility service."), Label::Role::CAPTION);
+    auto_confirm_hint->setWordWrap(true);
+    layout->addWidget(auto_confirm_hint);
 
     Button* manage = new Button(tr("Manage users"), Button::Role::FILLED);
     connect(manage, &Button::clicked, this, &SettingsWidget::showUsers);

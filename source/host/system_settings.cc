@@ -31,6 +31,7 @@ const QString kPreferredVideoCapturer = "preferred_video_capturer";
 const QString kHardwareVideoEncoding = "hardware_video_encoding";
 const QString kWaylandRestoreToken = "wayland_restore_token";
 const QString kBackgroundMode = "background_mode";
+const QString kCaptureAutoConfirm = "capture_auto_confirm";
 
 const QString kUpdateChannel = "update/channel";
 const QString kUpdateAutoUpdate = "update/auto_update";
@@ -148,6 +149,18 @@ bool SystemSettings::isBackgroundModeEnabled() const
 void SystemSettings::setBackgroundModeEnabled(bool enable)
 {
     settings_.setValue(kBackgroundMode, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SystemSettings::isCaptureAutoConfirmEnabled() const
+{
+    return settings_.value(kCaptureAutoConfirm, false).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemSettings::setCaptureAutoConfirmEnabled(bool enable)
+{
+    settings_.setValue(kCaptureAutoConfirm, enable);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -59,6 +59,11 @@ public final class MediaProjection
     // then the capture must not start. Guarded by the class monitor.
     private static boolean sRequested = false;
 
+    // Set while this host waits for consent and the user enabled auto-confirm. Bounds the window in
+    // which the accessibility service may confirm the consent dialog to exactly our own request, so
+    // other applications' capture dialogs are never confirmed. Guarded by the class monitor.
+    private static boolean sAutoConfirm = false;
+
     // Screen capture state.
     private static VirtualDisplay sVirtualDisplay = null;
     private static ImageReader sReader = null;
@@ -132,11 +137,12 @@ public final class MediaProjection
 
     // Launches the transparent consent Activity. On consent it starts the foreground service that owns the
     // projection; on refusal notifyDenied() reports the failure to the native side.
-    public static void requestCapture(Context context)
+    public static void requestCapture(Context context, boolean autoConfirm)
     {
         synchronized (MediaProjection.class)
         {
             sRequested = true;
+            sAutoConfirm = autoConfirm;
         }
 
         Intent intent = new Intent(context, MediaProjectionPermissionActivity.class);
@@ -147,8 +153,20 @@ public final class MediaProjection
     // Reports that the user declined the screen capture consent.
     public static void notifyDenied()
     {
+        synchronized (MediaProjection.class)
+        {
+            sAutoConfirm = false;
+        }
+
         Log.i(TAG, "Screen capture consent denied");
         nativeOnStarted(false, 0, 0, 0);
+    }
+
+    // Whether the accessibility service should confirm the screen capture consent dialog now. True
+    // only between requestCapture() with auto-confirm and the moment consent is resolved.
+    public static synchronized boolean shouldAutoConfirm()
+    {
+        return sAutoConfirm;
     }
 
     // Obtains the projection and begins delivering screen frames. Called from the foreground service so the
@@ -156,6 +174,10 @@ public final class MediaProjection
     // chosen virtual display geometry through nativeOnStarted().
     public static synchronized void startProjection(Context context, int resultCode, Intent data)
     {
+        // Consent is resolved by the time the service starts the projection; close the auto-confirm
+        // window so a later capture dialog from another application is not confirmed.
+        sAutoConfirm = false;
+
         try
         {
             if (data == null)
@@ -248,6 +270,7 @@ public final class MediaProjection
         synchronized (MediaProjection.class)
         {
             sRequested = false;
+            sAutoConfirm = false;
         }
 
         try
