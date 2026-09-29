@@ -19,6 +19,7 @@
 #include "client/desktop/quick_connect_dialog.h"
 
 #include <QDataStream>
+#include <QLayout>
 #include <QPushButton>
 #include <QTimer>
 
@@ -204,6 +205,11 @@ void QuickConnectDialog::onLoadData()
         ui->combo_session_type->setCurrentIndex(session_type_index);
 
     updateAddressLabel();
+
+    // The combo boxes only compute their content-based size hint once the layout has been activated for
+    // the populated items; without this the dialog size hint uses the empty combo heights and fixing the
+    // height to it squeezes the fields below their natural size.
+    layout()->activate();
     setFixedHeight(sizeHint().height());
 }
 
