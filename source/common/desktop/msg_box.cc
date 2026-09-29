@@ -133,6 +133,12 @@ int MsgBox::importantQuestion(QWidget* parent, const QString& text, Seconds dela
     MsgBox* message_box = new MsgBox(QMessageBox::Question, tr("Confirmation"), text, buttons, parent);
     message_box->setTextFormat(Qt::PlainText);
 
+#if defined(Q_OS_MACOS)
+    // The native dialog of macOS builds its own buttons and shows neither the countdown nor the
+    // disabled state.
+    message_box->setOption(QMessageBox::Option::DontUseNativeDialog);
+#endif // defined(Q_OS_MACOS)
+
     // The safe button is made default, the countdown is set on the accepting one.
     if (message_box->button(No))
         message_box->setDefaultButton(No);
