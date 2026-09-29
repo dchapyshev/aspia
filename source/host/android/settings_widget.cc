@@ -261,11 +261,12 @@ void SettingsWidget::buildBackgroundSection(QVBoxLayout* layout)
 
     Switch* enable = new Switch(tr("Work in the background"));
     enable->setChecked(SystemSettings().isBackgroundModeEnabled());
-    connect(enable, &QCheckBox::toggled, this, [](bool checked)
+    connect(enable, &QCheckBox::toggled, this, [this](bool checked)
     {
         SystemSettings settings;
         settings.setBackgroundModeEnabled(checked);
         settings.sync();
+        emit sig_backgroundModeChanged();
     });
     layout->addWidget(enable);
 }

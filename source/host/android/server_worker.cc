@@ -40,6 +40,7 @@
 #include "host/host_storage.h"
 #include "host/host_user_list.h"
 #include "host/router_manager.h"
+#include "host/system_settings.h"
 #include "host/user_settings.h"
 #include "host/android/desktop_agent.h"
 #include "host/android/desktop_client.h"
@@ -372,6 +373,12 @@ void ServerWorker::onUpdateSettingsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ServerWorker::onBackgroundModeChanged()
+{
+    updateRouterConnection();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ServerWorker::onUsersChanged()
 {
     if (router_manager_)
@@ -494,12 +501,14 @@ void ServerWorker::updateRouterConnection()
     // password stays on the screen. An active session keeps the connection regardless: it holds the app
     // alive through its foreground service, and its relay leg must not be torn down. Otherwise Android
     // would freeze the process in the background anyway and the router would drop the host by timeout,
-    // so the connection is closed now for a clean, immediate offline state.
+    // so the connection is closed now for a clean, immediate offline state. The background mode is
+    // chosen by the user and keeps the host online all the time.
     // Without the permissions a session would not work, so the host stays offline. A session that has
     // already started keeps going.
     const bool waiting_after_share = (share_wait_end_ != TimePoint::min());
+    const bool in_foreground = screen_on_ && (app_active_ || waiting_after_share);
     const bool should_be_online =
-        (permissions_granted_ && screen_on_ && (app_active_ || waiting_after_share)) ||
+        (permissions_granted_ && (in_foreground || SystemSettings().isBackgroundModeEnabled())) ||
         !connected_clients_.isEmpty();
 
     if (should_be_online)

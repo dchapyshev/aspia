@@ -64,6 +64,7 @@ public slots:
     void onNewPassword();
     void onRouterSettingsChanged();
     void onUpdateSettingsChanged();
+    void onBackgroundModeChanged();
     void onUsersChanged();
     void onPasswordProtectionChanged();
 
@@ -113,8 +114,8 @@ private:
     ScopedQPointer<DesktopAgent> desktop_agent_;
 
     // The host is reachable through the router only while in the foreground with the screen on, or for
-    // a while after the share; an active session keeps it connected regardless. Both are seeded with
-    // the live state in start().
+    // a while after the share, or always in the background mode; an active session keeps it connected
+    // regardless. Both are seeded with the live state in start().
     bool app_active_ = true;
     bool screen_on_ = true;
 

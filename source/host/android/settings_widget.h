@@ -64,6 +64,9 @@ signals:
     // Emitted after the update settings are stored.
     void sig_updateSettingsChanged();
 
+    // Emitted after the background mode is turned on or off.
+    void sig_backgroundModeChanged();
+
     // Emitted after a user is created, modified or deleted.
     void sig_usersChanged();
 
