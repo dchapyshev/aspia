@@ -258,7 +258,7 @@ void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
 {
     addSectionHeader(layout, tr("Security"));
 
-    Switch* background = new Switch(tr("Work in the background"));
+    Switch* background = new Switch(tr("Background mode"));
     background->setChecked(SystemSettings().isBackgroundModeEnabled());
     connect(background, &QCheckBox::toggled, this, [this](bool checked)
     {
