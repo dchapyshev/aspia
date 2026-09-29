@@ -121,12 +121,7 @@ bool ScreenCapturerAndroid::start()
     if (size.isEmpty())
         return false;
 
-    // When enabled, the accessibility service confirms the consent dialog so the capture starts
-    // without a user tap. The flag is passed down so the auto-confirm only applies to this request.
-    const bool auto_confirm = SystemSettings().isCaptureAutoConfirmEnabled();
-
-    QJniObject::callStaticMethod<void>(kCapturerClass, "requestCapture",
-        "(Landroid/content/Context;Z)V", context.object(), static_cast<jboolean>(auto_confirm));
+    requestCapture();
 
     active_ = true;
     screen_rect_ = QRect(QPoint(0, 0), size);
@@ -154,6 +149,22 @@ void ScreenCapturerAndroid::stop()
     QMutexLocker locker(&frame_mutex_);
     queue_.reset();
     has_new_frame_ = false;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void ScreenCapturerAndroid::requestCapture()
+{
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (!context.isValid())
+        return;
+
+    // When enabled, the accessibility service confirms the consent dialog so the capture starts
+    // without a user tap. The flag is passed down so the auto-confirm only applies to this request.
+    const bool auto_confirm = SystemSettings().isCaptureAutoConfirmEnabled();
+
+    QJniObject::callStaticMethod<void>(kCapturerClass, "requestCapture",
+        "(Landroid/content/Context;Z)V", context.object(), static_cast<jboolean>(auto_confirm));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -209,8 +220,20 @@ void ScreenCapturerAndroid::onStarted(bool success, const QSize& size, const QPo
 
     if (!success)
     {
-        // Consent was declined or the projection could not start; captureFrame() will report it.
-        consent_failed_ = true;
+        // The system stops a running projection when the device gets locked; the capture is requested
+        // again after the unlock. Anything else (consent declined, the projection could not start or
+        // was stopped by the user) is final; captureFrame() will report it.
+        if (started_ && isDeviceLocked())
+        {
+            LOG(INFO) << "Screen capture stopped on the device lock";
+            started_ = false;
+            restart_pending_ = true;
+            has_new_frame_ = false;
+        }
+        else
+        {
+            consent_failed_ = true;
+        }
         return;
     }
 
@@ -305,7 +328,20 @@ const Frame* ScreenCapturerAndroid::captureFrame(Error* error)
     {
         // Still waiting for consent. Tell the client whether it is blocked on a locked screen (a secure
         // keyguard that only the user can dismiss) or just on the confirmation, so it can show the reason.
-        *error = isDeviceLocked() ? Error::SCREEN_LOCKED : Error::CONFIRMATION_PENDING;
+        const bool locked = isDeviceLocked();
+        *error = locked ? Error::SCREEN_LOCKED : Error::CONFIRMATION_PENDING;
+
+        if (restart_pending_ && !locked)
+        {
+            restart_pending_ = false;
+
+            // Outside the lock: the Java side calls back into onStarted() while holding its class
+            // monitor, which requestCapture() takes as well.
+            locker.unlock();
+
+            LOG(INFO) << "Device unlocked, requesting the screen capture again";
+            requestCapture();
+        }
         return nullptr;
     }
 

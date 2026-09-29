@@ -69,6 +69,9 @@ private:
     bool start();
     void stop();
 
+    // Launches the consent flow for the projection; frames arrive once it is granted.
+    static void requestCapture();
+
     // Whether the device screen is locked with a secure keyguard (only the user can dismiss it).
     static bool isDeviceLocked();
 
@@ -110,6 +113,11 @@ private:
     // Set (under |frame_mutex_|) once the projection has started. Until then captureFrame() reports that
     // it is still waiting for the confirmation (or that the screen is locked), not a plain temporary error.
     bool started_ = false;
+
+    // Set (under |frame_mutex_|) when the system stopped a running projection because the device got
+    // locked. captureFrame() then reports the locked screen and requests the capture again once the
+    // device is unlocked.
+    bool restart_pending_ = false;
 
     Q_DISABLE_COPY_MOVE(ScreenCapturerAndroid)
 };

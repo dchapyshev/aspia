@@ -20,8 +20,10 @@ package org.aspia.host;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
@@ -70,6 +72,12 @@ public final class MediaProjection
     // display, and a mirrored dozing display would only produce black frames. Held from requestCapture()
     // until the capture is torn down.
     private static PowerManager.WakeLock sWakeLock = null;
+
+    // The power button turns the screen off despite the wake lock, and the projection would then mirror a
+    // dark display. While capturing, a screen that goes off is woken back. Registered on the capture
+    // thread: the main Looper is blocked while the app is in the background, which it is during a session.
+    private static BroadcastReceiver sScreenOffReceiver = null;
+    private static Context sScreenOffContext = null;
 
     // Screen capture state.
     private static VirtualDisplay sVirtualDisplay = null;
@@ -180,6 +188,24 @@ public final class MediaProjection
             sWakeLock.release();
     }
 
+    // Turns the screen back on after it went off during the capture. The lock still counts as held on
+    // this side, so it is released and acquired again for ACQUIRE_CAUSES_WAKEUP to take effect. A lock
+    // released by the teardown means the capture is over and the screen is left off.
+    private static synchronized void wakeScreen(Context context)
+    {
+        if (sWakeLock == null || !sWakeLock.isHeld())
+            return;
+
+        // A secure keyguard locks as the screen goes off and the system stops the projection on it; a
+        // woken screen would only show the lock screen, which the remote side cannot dismiss.
+        if (isDeviceLocked(context))
+            return;
+
+        Log.i(TAG, "Screen turned off during capture, waking it");
+        sWakeLock.release();
+        sWakeLock.acquire();
+    }
+
     // Reports that the user declined the screen capture consent.
     public static void notifyDenied()
     {
@@ -255,6 +281,29 @@ public final class MediaProjection
                 }
             }, sHandler);
 
+            sScreenOffReceiver = new BroadcastReceiver()
+            {
+                @Override
+                public void onReceive(Context context, Intent intent)
+                {
+                    wakeScreen(context);
+                }
+            };
+            sScreenOffContext = context.getApplicationContext();
+
+            // SCREEN_OFF is a protected system broadcast, so no exported flag is required; it is passed
+            // on API 33+ anyway to satisfy the stricter registration checks.
+            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            {
+                sScreenOffContext.registerReceiver(
+                    sScreenOffReceiver, filter, null, sHandler, Context.RECEIVER_NOT_EXPORTED);
+            }
+            else
+            {
+                sScreenOffContext.registerReceiver(sScreenOffReceiver, filter, null, sHandler);
+            }
+
             DisplayMetrics metrics = realMetrics(context);
             final int width = metrics.widthPixels;
             final int height = metrics.heightPixels;
@@ -291,6 +340,16 @@ public final class MediaProjection
 
             sVirtualDisplay = sProjection.createVirtualDisplay("AspiaScreenCapture", width, height, dpi,
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, sReader.getSurface(), null, sHandler);
+
+            // The playback capture is bound to the projection. After a restart (the system stopped the
+            // previous projection on the device lock) the audio the session had running is dead, its
+            // record still set by the reader that failed on the old projection: start it again here.
+            if (sRecord != null)
+            {
+                Log.i(TAG, "Restarting audio capture on the new projection");
+                stopAudioCapture();
+                startAudioCapture(context);
+            }
 
             Log.i(TAG, "Screen capture started: " + width + "x" + height + " @ " + dpi + " dpi");
             nativeOnStarted(true, width, height, dpi);
@@ -358,6 +417,13 @@ public final class MediaProjection
     // teardown never races another lifecycle operation.
     private static void releaseInternal()
     {
+        if (sScreenOffReceiver != null)
+        {
+            sScreenOffContext.unregisterReceiver(sScreenOffReceiver);
+            sScreenOffReceiver = null;
+            sScreenOffContext = null;
+        }
+
         if (sVirtualDisplay != null)
         {
             sVirtualDisplay.release();
