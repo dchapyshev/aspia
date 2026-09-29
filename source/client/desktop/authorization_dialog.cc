@@ -42,6 +42,7 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
 
     ui->edit_password->setShowPasswordButtonVisible(true);
     ui->edit_one_time_password->setShowPasswordButtonVisible(true);
+    ui->edit_one_time_password->setShowPassword(true);
 
     connect(ui->buttonbox, &QDialogButtonBox::clicked,
             this, &AuthorizationDialog::onButtonBoxClicked);
