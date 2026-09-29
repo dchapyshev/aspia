@@ -21,6 +21,7 @@
 #include <ApplicationServices/ApplicationServices.h>
 #import <AppKit/AppKit.h>
 
+#include <fcntl.h>
 #include <unistd.h>
 
 //--------------------------------------------------------------------------------------------------
@@ -36,7 +37,14 @@ static bool hasFullDiskAccess()
             stringByAppendingPathComponent:@"Library/Application Support/com.apple.TCC/TCC.db"];
     }
 
-    return access(path.fileSystemRepresentation, R_OK) == 0;
+    // Opening goes through TCC, unlike access(), and a refused attempt is what lists the application
+    // in the Full Disk Access pane for the user to allow.
+    const int fd = open(path.fileSystemRepresentation, O_RDONLY);
+    if (fd < 0)
+        return false;
+
+    close(fd);
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
