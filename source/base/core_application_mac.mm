@@ -19,13 +19,17 @@
 #include "base/core_application.h"
 
 #include <QDir>
+#include <QFileInfo>
 #include <QProcess>
 
 #include <AppKit/AppKit.h>
 
 #include "base/logging.h"
+#include "base/process_util.h"
 
 namespace {
+
+int g_appkit_exit_code = 0;
 
 //--------------------------------------------------------------------------------------------------
 void startNewInstance()
@@ -58,6 +62,28 @@ void startNewInstance()
     return YES;
 }
 
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication*)application
+{
+    Q_UNUSED(application)
+
+    NSAppleEventDescriptor* event = [[NSAppleEventManager sharedAppleEventManager] currentAppleEvent];
+    const OSType reason = [[event attributeDescriptorForKeyword:kAEQuitReason] enumCodeValue];
+    const pid_t sender = [[event attributeDescriptorForKeyword:keySenderPIDAttr] int32Value];
+    const QString sender_path = sender > 0 ? ProcessUtil::filePath(static_cast<quint32>(sender)) : QString();
+
+    LOG(INFO) << "Quit requested (reason:" << QString::number(reason, 16) << "sender:" << sender_path << ")";
+
+    // The end of the session comes from loginwindow and is left as it is. The system restarting the
+    // application to apply a privacy permission just given sends the same reasons.
+    if (QFileInfo(sender_path).fileName() == "loginwindow")
+        return NSTerminateNow;
+
+    // launchd starts this process again only after a failed exit.
+    g_appkit_exit_code = 1;
+    CoreApplication::quit();
+    return NSTerminateCancel;
+}
+
 @end
 
 //--------------------------------------------------------------------------------------------------
@@ -76,7 +102,7 @@ int CoreApplication::execAppKitLoop()
     [NSApp run];
 
     LOG(INFO) << "The loop of AppKit finished";
-    return 0;
+    return g_appkit_exit_code;
 }
 
 //--------------------------------------------------------------------------------------------------
