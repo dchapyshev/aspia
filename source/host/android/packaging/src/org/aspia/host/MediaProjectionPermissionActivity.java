@@ -19,9 +19,12 @@
 package org.aspia.host;
 
 import android.app.Activity;
+import android.app.KeyguardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 // Transparent Activity that requests the MediaProjection consent. It exists because the consent dialog
 // must be launched with startActivityForResult from an Activity; on grant it hands the result to the
@@ -34,6 +37,26 @@ public final class MediaProjectionPermissionActivity extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        // Wake the screen and show over the keyguard, so the consent dialog renders (and can be
+        // auto-confirmed) even when the screen was off or the device is locked.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
+        {
+            setShowWhenLocked(true);
+            setTurnScreenOn(true);
+        }
+        else
+        {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        }
+
+        // Dismiss a non-secure keyguard so the consent dialog is reachable on a locked device. A secure
+        // keyguard (PIN, pattern, password) cannot be dismissed without the user's credentials and is
+        // left in place; remote access while such a device is locked is not possible.
+        KeyguardManager keyguard = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        if (keyguard != null)
+            keyguard.requestDismissKeyguard(this, null);
 
         startActivityForResult(MediaProjection.createPermissionIntent(this), REQUEST_CODE);
     }

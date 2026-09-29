@@ -35,6 +35,7 @@ import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.PowerManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -63,6 +64,11 @@ public final class MediaProjection
     // which the accessibility service may confirm the consent dialog to exactly our own request, so
     // other applications' capture dialogs are never confirmed. Guarded by the class monitor.
     private static boolean sAutoConfirm = false;
+
+    // Wakes the screen and keeps it on for the capture. The consent dialog does not render on a dozing
+    // display, and a mirrored dozing display would only produce black frames. Held from requestCapture()
+    // until the capture is torn down.
+    private static PowerManager.WakeLock sWakeLock = null;
 
     // Screen capture state.
     private static VirtualDisplay sVirtualDisplay = null;
@@ -145,9 +151,32 @@ public final class MediaProjection
             sAutoConfirm = autoConfirm;
         }
 
+        acquireWakeLock(context);
+
         Intent intent = new Intent(context, MediaProjectionPermissionActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    // Wakes the display and holds it on. Not reference counted, so a single release is enough.
+    private static synchronized void acquireWakeLock(Context context)
+    {
+        if (sWakeLock == null)
+        {
+            PowerManager power = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            sWakeLock = power.newWakeLock(
+                PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "aspia:capture");
+            sWakeLock.setReferenceCounted(false);
+        }
+
+        if (!sWakeLock.isHeld())
+            sWakeLock.acquire();
+    }
+
+    private static synchronized void releaseWakeLock()
+    {
+        if (sWakeLock != null && sWakeLock.isHeld())
+            sWakeLock.release();
     }
 
     // Reports that the user declined the screen capture consent.
@@ -157,6 +186,8 @@ public final class MediaProjection
         {
             sAutoConfirm = false;
         }
+
+        releaseWakeLock();
 
         Log.i(TAG, "Screen capture consent denied");
         nativeOnStarted(false, 0, 0, 0);
@@ -349,6 +380,8 @@ public final class MediaProjection
             sHandlerThread = null;
             sHandler = null;
         }
+
+        releaseWakeLock();
     }
 
     // Captures the device's playback (system) audio through an AudioRecord built from the projection. The
