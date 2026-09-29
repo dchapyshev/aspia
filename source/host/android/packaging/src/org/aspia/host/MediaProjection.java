@@ -19,6 +19,7 @@
 package org.aspia.host;
 
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -198,6 +199,14 @@ public final class MediaProjection
     public static synchronized boolean shouldAutoConfirm()
     {
         return sAutoConfirm;
+    }
+
+    // Whether the screen is locked with a secure keyguard. An insecure keyguard is dismissed by the
+    // consent activity, so only a secure one (which only the user can unlock) is reported as locked.
+    public static boolean isDeviceLocked(Context context)
+    {
+        KeyguardManager keyguard = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        return keyguard != null && keyguard.isKeyguardLocked() && keyguard.isDeviceSecure();
     }
 
     // Obtains the projection and begins delivering screen frames. Called from the foreground service so the

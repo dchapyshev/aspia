@@ -213,6 +213,14 @@ void DesktopWidget::setDesktopFrameError(proto::video::ErrorCode error_code)
     LOG(INFO) << "Video error detected:" << error_code;
     last_error_code_ = error_code;
 
+    if (!frame_.isValid())
+    {
+        current_error_code_ = error_code;
+        error_timer_->stop();
+        update();
+        return;
+    }
+
     error_timer_->start(MilliSeconds(1500));
 }
 
@@ -600,6 +608,12 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
                 break;
             case proto::video::ERROR_CODE_PERMANENT:
                 message = tr("The session is permanently unavailable");
+                break;
+            case proto::video::ERROR_CODE_CONFIRMATION_PENDING:
+                message = tr("Waiting for the remote user to confirm screen capture");
+                break;
+            case proto::video::ERROR_CODE_SCREEN_LOCKED:
+                message = tr("The remote device screen is locked");
                 break;
             default:
                 message = tr("Error while receiving video stream: %1").arg(last_error_code_);

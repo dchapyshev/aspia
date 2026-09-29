@@ -59,9 +59,11 @@ public:
 
     enum class Error
     {
-        SUCCEEDED = 0,
-        PERMANENT = 1,
-        TEMPORARY = 2
+        SUCCEEDED            = 0,
+        PERMANENT            = 1,
+        TEMPORARY            = 2,
+        CONFIRMATION_PENDING = 3,
+        SCREEN_LOCKED        = 4
     };
     Q_ENUM(Error)
 

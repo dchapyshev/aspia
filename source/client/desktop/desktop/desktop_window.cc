@@ -487,6 +487,9 @@ void DesktopWindow::onMetricsRequest()
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::onFrameError(proto::video::ErrorCode error_code)
 {
+    if (!desktop_->hasFrame())
+        desktop_->resize(scroll_area_->viewport()->size());
+
     desktop_->setDesktopFrameError(error_code);
     desktop_->update();
 }

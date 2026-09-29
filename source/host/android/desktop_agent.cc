@@ -247,19 +247,33 @@ void DesktopAgent::onCaptureScreen()
     const Frame* frame = screen_capturer_->captureFrame(&error);
     if (!frame)
     {
-        const bool permanent = (error == ScreenCapturer::Error::PERMANENT);
+        proto::video::ErrorCode error_code;
+        switch (error)
+        {
+            case ScreenCapturer::Error::PERMANENT:
+                error_code = proto::video::ERROR_CODE_PERMANENT;
+                break;
+            case ScreenCapturer::Error::CONFIRMATION_PENDING:
+                error_code = proto::video::ERROR_CODE_CONFIRMATION_PENDING;
+                break;
+            case ScreenCapturer::Error::SCREEN_LOCKED:
+                error_code = proto::video::ERROR_CODE_SCREEN_LOCKED;
+                break;
+            default:
+                error_code = proto::video::ERROR_CODE_TEMPORARY;
+                break;
+        }
 
         proto::video::HostToClient& message = outgoing_message_.newMessage<proto::video::HostToClient>();
-        message.mutable_packet()->set_error_code(permanent ? proto::video::ERROR_CODE_PERMANENT
-                                                           : proto::video::ERROR_CODE_TEMPORARY);
+        message.mutable_packet()->set_error_code(error_code);
         const QByteArray& buffer = outgoing_message_.serialize<proto::video::HostToClient>();
         for (auto* client : std::as_const(clients_))
             client->onVideoData(buffer, false);
 
         // A permanent error (e.g. the user declined the capture consent) will not recover, so stop the
-        // loop instead of resending the error every tick. A temporary one just waits for the first
-        // frame (the projection is still being granted).
-        if (!permanent)
+        // loop instead of resending the error every tick. The others just wait: for the confirmation, for
+        // the screen to be unlocked, or for the first frame while the projection is being granted.
+        if (error != ScreenCapturer::Error::PERMANENT)
             capture_timer_->start(kCaptureInterval);
         return;
     }

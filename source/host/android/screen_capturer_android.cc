@@ -158,6 +158,18 @@ void ScreenCapturerAndroid::stop()
 
 //--------------------------------------------------------------------------------------------------
 // static
+bool ScreenCapturerAndroid::isDeviceLocked()
+{
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (!context.isValid())
+        return false;
+
+    return QJniObject::callStaticMethod<jboolean>(
+        kCapturerClass, "isDeviceLocked", "(Landroid/content/Context;)Z", context.object());
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 void JNICALL ScreenCapturerAndroid::nativeOnStarted(
     JNIEnv* /* env */, jclass /* clazz */, jboolean success, jint width, jint height, jint dpi)
 {
@@ -201,6 +213,8 @@ void ScreenCapturerAndroid::onStarted(bool success, const QSize& size, const QPo
         consent_failed_ = true;
         return;
     }
+
+    started_ = true;
 
     if (!size.isEmpty())
     {
@@ -284,6 +298,14 @@ const Frame* ScreenCapturerAndroid::captureFrame(Error* error)
     if (consent_failed_)
     {
         *error = Error::PERMANENT;
+        return nullptr;
+    }
+
+    if (!started_)
+    {
+        // Still waiting for consent. Tell the client whether it is blocked on a locked screen (a secure
+        // keyguard that only the user can dismiss) or just on the confirmation, so it can show the reason.
+        *error = isDeviceLocked() ? Error::SCREEN_LOCKED : Error::CONFIRMATION_PENDING;
         return nullptr;
     }
 

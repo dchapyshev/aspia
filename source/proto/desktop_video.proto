@@ -71,10 +71,12 @@ message PacketFormat
 
 enum ErrorCode
 {
-    ERROR_CODE_OK        = 0;
-    ERROR_CODE_PAUSED    = 1;
-    ERROR_CODE_TEMPORARY = 2;
-    ERROR_CODE_PERMANENT = 3;
+    ERROR_CODE_OK                   = 0;
+    ERROR_CODE_PAUSED               = 1;
+    ERROR_CODE_TEMPORARY            = 2;
+    ERROR_CODE_PERMANENT            = 3;
+    ERROR_CODE_CONFIRMATION_PENDING = 4;
+    ERROR_CODE_SCREEN_LOCKED        = 5;
 }
 
 enum PacketFlags

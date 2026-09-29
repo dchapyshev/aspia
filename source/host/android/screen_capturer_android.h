@@ -69,6 +69,9 @@ private:
     bool start();
     void stop();
 
+    // Whether the device screen is locked with a secure keyguard (only the user can dismiss it).
+    static bool isDeviceLocked();
+
     // JNI trampolines routing to the single live capturer, guarded so they never touch a destroyed
     // instance. nativeOnStarted arrives on the Android main thread, nativeOnFrame on the ImageReader
     // listener thread.
@@ -103,6 +106,10 @@ private:
     // Set (under |frame_mutex_|) when the user declined the screen capture consent; captureFrame() then
     // reports a permanent error so the caller stops instead of waiting for frames that never arrive.
     bool consent_failed_ = false;
+
+    // Set (under |frame_mutex_|) once the projection has started. Until then captureFrame() reports that
+    // it is still waiting for the confirmation (or that the screen is locked), not a plain temporary error.
+    bool started_ = false;
 
     Q_DISABLE_COPY_MOVE(ScreenCapturerAndroid)
 };
