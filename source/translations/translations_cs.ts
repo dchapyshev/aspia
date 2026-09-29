@@ -417,7 +417,7 @@ Přidané routery: %4</translation>
         <location filename="../client/android/main_window.cc" line="342"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="386"/>
+        <location filename="../host/android/main_window.cc" line="388"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
     </message>
@@ -489,12 +489,12 @@ Přidané routery: %4</translation>
         <location filename="../client/android/main_window.cc" line="1011"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="384"/>
+        <location filename="../host/android/main_window.cc" line="386"/>
         <source>Connection</source>
         <translation>Připojení</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="350"/>
+        <location filename="../host/android/main_window.cc" line="352"/>
         <source>Permissions</source>
         <translation>Oprávnění</translation>
     </message>
@@ -556,13 +556,13 @@ Přidané routery: %4</translation>
         <translation>Uložit údaje pro přihlášení</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="208"/>
-        <location filename="../client/desktop/authorization_dialog.cc" line="224"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="209"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="225"/>
         <source>Password cannot be empty.</source>
         <translation>Heslo nemůže být prázdné.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="217"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="218"/>
         <source>User name cannot be empty.</source>
         <translation>Uživatelské jméno nemůže být prázdné.</translation>
     </message>
@@ -1383,174 +1383,174 @@ Přidané routery: %4</translation>
         <translation>Kontrolovat aktualizace:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="117"/>
+        <location filename="../host/ui/config_dialog.cc" line="115"/>
         <source>Once a day</source>
         <translation>Jednou denně</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="118"/>
+        <location filename="../host/ui/config_dialog.cc" line="116"/>
         <source>Once a week</source>
         <translation>Jednou týdně</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="119"/>
+        <location filename="../host/ui/config_dialog.cc" line="117"/>
         <source>Once a month</source>
         <translation>Jednou měsíčně</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="121"/>
+        <location filename="../host/ui/config_dialog.cc" line="119"/>
         <source>Stable</source>
         <translation>Stabilní</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="122"/>
+        <location filename="../host/ui/config_dialog.cc" line="120"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="123"/>
+        <location filename="../host/ui/config_dialog.cc" line="121"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="150"/>
+        <location filename="../host/ui/config_dialog.cc" line="148"/>
         <source>Default</source>
         <translation>Výchozí</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="197"/>
+        <location filename="../host/ui/config_dialog.cc" line="195"/>
         <source>On reboot</source>
         <translation>Při restartu</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="198"/>
+        <location filename="../host/ui/config_dialog.cc" line="196"/>
         <source>Every 5 minutes</source>
         <translation>Každých 5 minut</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="199"/>
+        <location filename="../host/ui/config_dialog.cc" line="197"/>
         <source>Every 30 minutes</source>
         <translation>Každých 30 minut</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="200"/>
+        <location filename="../host/ui/config_dialog.cc" line="198"/>
         <source>Every 1 hour</source>
         <translation>Každou hodinu</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="201"/>
+        <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>Every 6 hours</source>
         <translation>Každých 6 hodin</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="202"/>
+        <location filename="../host/ui/config_dialog.cc" line="200"/>
         <source>Every 12 hours</source>
         <translation>Každých 12 hodin</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="210"/>
+        <location filename="../host/ui/config_dialog.cc" line="208"/>
         <source>Letters and digits</source>
         <translation>Písmena a číslice</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="213"/>
+        <location filename="../host/ui/config_dialog.cc" line="211"/>
         <source>Letters</source>
         <translation>Písmena</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="215"/>
+        <location filename="../host/ui/config_dialog.cc" line="213"/>
         <source>Digits</source>
         <translation>Číslice</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="232"/>
+        <location filename="../host/ui/config_dialog.cc" line="230"/>
         <source>Never</source>
         <translation>Nikdy</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="233"/>
+        <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>15 seconds</source>
         <translation>15 sekund</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="234"/>
+        <location filename="../host/ui/config_dialog.cc" line="232"/>
         <source>30 seconds</source>
         <translation>30 sekund</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="235"/>
+        <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>45 seconds</source>
         <translation>45 sekund</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="236"/>
+        <location filename="../host/ui/config_dialog.cc" line="234"/>
         <source>60 seconds</source>
         <translation>60 sekund</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="244"/>
+        <location filename="../host/ui/config_dialog.cc" line="242"/>
         <source>Accept connection</source>
         <translation>Přijmout připojení</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="245"/>
+        <location filename="../host/ui/config_dialog.cc" line="243"/>
         <source>Reject connection</source>
         <translation>Odmítnout připojení</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="445"/>
+        <location filename="../host/ui/config_dialog.cc" line="443"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit uživatele &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="473"/>
-        <location filename="../host/ui/config_dialog.cc" line="507"/>
+        <location filename="../host/ui/config_dialog.cc" line="471"/>
+        <location filename="../host/ui/config_dialog.cc" line="505"/>
         <source>An error occurred while processing the password.</source>
         <translation>Při zpracování hesla došlo k chybě.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="490"/>
+        <location filename="../host/ui/config_dialog.cc" line="488"/>
         <source>Settings storage is unavailable.</source>
         <translation>Úložiště nastavení není k dispozici.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="521"/>
+        <location filename="../host/ui/config_dialog.cc" line="519"/>
         <source>Import</source>
         <translation>Importovat</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="521"/>
-        <location filename="../host/ui/config_dialog.cc" line="538"/>
+        <location filename="../host/ui/config_dialog.cc" line="519"/>
+        <location filename="../host/ui/config_dialog.cc" line="536"/>
         <source>JSON-files (*.json)</source>
         <translation>Soubory JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="538"/>
+        <location filename="../host/ui/config_dialog.cc" line="536"/>
         <source>Export</source>
         <translation>Exportovat</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="563"/>
+        <location filename="../host/ui/config_dialog.cc" line="561"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Konfiguraci nelze zapsat. Ujistěte se, že máte dostatečná práva k zápisu.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="576"/>
+        <location filename="../host/ui/config_dialog.cc" line="574"/>
         <source>Incorrect router address entered.</source>
         <translation>Byla zadána nesprávná adresa routeru.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="586"/>
+        <location filename="../host/ui/config_dialog.cc" line="584"/>
         <source>Incorrect router public key entered.</source>
         <translation>Byl zadán nesprávný veřejný klíč routeru.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="744"/>
+        <location filename="../host/ui/config_dialog.cc" line="742"/>
         <source>Install</source>
         <translation>Nainstalovat</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="749"/>
+        <location filename="../host/ui/config_dialog.cc" line="747"/>
         <source>Remove</source>
         <translation>Odebrat</translation>
     </message>
@@ -2299,17 +2299,17 @@ Nahrazené přihlašovací údaje: %2</translation>
         <translation>Odstranit přihlašovací údaje</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="178"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="180"/>
         <source>Are you sure you want to delete credentials &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit přihlašovací údaje &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="186"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="188"/>
         <source>Unable to delete credentials.</source>
         <translation>Nelze odstranit přihlašovací údaje.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="231"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="233"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Nepodařilo se načíst data. Seznam může být zastaralý.</translation>
     </message>
@@ -2602,22 +2602,32 @@ Nahrazené přihlašovací údaje: %2</translation>
 <context>
     <name>DesktopWidget</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="596"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="604"/>
         <source>The session was paused by a remote user</source>
         <translation>Relace byla pozastavena vzdáleným uživatelem</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="599"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="607"/>
         <source>The session is temporarily unavailable</source>
         <translation>Relace je dočasně nedostupná</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="602"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="610"/>
         <source>The session is permanently unavailable</source>
         <translation>Relace je trvale nedostupná</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="605"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="613"/>
+        <source>Waiting for the remote user to confirm screen capture</source>
+        <translation>Čekání na potvrzení zachytávání obrazovky vzdáleným uživatelem</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="616"/>
+        <source>The remote device screen is locked</source>
+        <translation>Obrazovka vzdáleného zařízení je uzamčena</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="619"/>
         <source>Error while receiving video stream: %1</source>
         <translation>Chyba při příjmu video streamu: %1</translation>
     </message>
@@ -2625,17 +2635,17 @@ Nahrazené přihlašovací údaje: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="973"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="976"/>
         <source>Save File</source>
         <translation>Uložit soubor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="974"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="977"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>Obrázek PNG (*.png);;Obrázek BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1005"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1008"/>
         <source>Could not save image</source>
         <translation>Nelze uložit obrázek</translation>
     </message>
@@ -3676,8 +3686,8 @@ Nahrazené přihlašovací údaje: %2</translation>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="619"/>
-        <location filename="../host/main.cc" line="654"/>
+        <location filename="../host/main.cc" line="649"/>
+        <location filename="../host/main.cc" line="684"/>
         <source>Settings storage is unavailable.</source>
         <translation>Úložiště nastavení není k dispozici.</translation>
     </message>
@@ -3758,32 +3768,32 @@ Nahrazené přihlašovací údaje: %2</translation>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="556"/>
+        <location filename="../host/main.cc" line="586"/>
         <source>Launch the application hidden.</source>
         <translation>Spustí aplikaci skrytě.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="558"/>
+        <location filename="../host/main.cc" line="588"/>
         <source>Export parameters to file.</source>
         <translation>Exportuje parametry do souboru.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="560"/>
+        <location filename="../host/main.cc" line="590"/>
         <source>Import parameters from file.</source>
         <translation>Importuje parametry ze souboru.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="562"/>
+        <location filename="../host/main.cc" line="592"/>
         <source>Do not display any messages during import and export.</source>
         <translation>Nezobrazovat žádné zprávy během importu a exportu.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="564"/>
+        <location filename="../host/main.cc" line="594"/>
         <source>Calling the settings dialog.</source>
         <translation>Otevře dialog nastavení.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="566"/>
+        <location filename="../host/main.cc" line="596"/>
         <source>Calling the security log dialog.</source>
         <translation>Otevře dialog protokolu zabezpečení.</translation>
     </message>
@@ -3820,9 +3830,9 @@ Nahrazené přihlašovací údaje: %2</translation>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="554"/>
-        <location filename="../host/ui/host_window.cc" line="795"/>
-        <location filename="../host/ui/host_window.cc" line="1068"/>
+        <location filename="../host/ui/host_window.cc" line="575"/>
+        <location filename="../host/ui/host_window.cc" line="818"/>
+        <location filename="../host/ui/host_window.cc" line="1118"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
@@ -3838,164 +3848,179 @@ Nahrazené přihlašovací údaje: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
-        <location filename="../host/ui/host_window.cc" line="982"/>
+        <location filename="../host/ui/host_window.cc" line="1032"/>
         <source>Router is disabled</source>
         <translation>Router je zakázán</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="255"/>
+        <location filename="../host/ui/host_window.ui" line="256"/>
         <source>Help</source>
         <translation>Nápověda</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="264"/>
+        <location filename="../host/ui/host_window.ui" line="265"/>
         <source>Access</source>
         <translation>Přístup</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="274"/>
+        <location filename="../host/ui/host_window.ui" line="275"/>
         <source>View</source>
         <translation>Zobrazení</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="278"/>
+        <location filename="../host/ui/host_window.ui" line="279"/>
         <source>Language</source>
         <translation>Jazyk</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="283"/>
+        <location filename="../host/ui/host_window.ui" line="284"/>
         <source>Theme</source>
         <translation>Motiv</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="296"/>
+        <location filename="../host/ui/host_window.ui" line="297"/>
         <source>Exit</source>
         <translation>Ukončit</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="301"/>
+        <location filename="../host/ui/host_window.ui" line="302"/>
+        <source>Uninstall Application</source>
+        <translation>Odinstalovat aplikaci</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_window.ui" line="307"/>
         <source>Online Help...</source>
         <translation>Online nápověda...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="304"/>
+        <location filename="../host/ui/host_window.ui" line="310"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="309"/>
+        <location filename="../host/ui/host_window.ui" line="315"/>
         <source>About System</source>
         <translation>O systému</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="314"/>
+        <location filename="../host/ui/host_window.ui" line="320"/>
         <source>About</source>
         <translation>O aplikaci</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="319"/>
+        <location filename="../host/ui/host_window.ui" line="325"/>
         <source>Security Log...</source>
         <translation>Protokol zabezpečení...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="324"/>
+        <location filename="../host/ui/host_window.ui" line="330"/>
         <source>Settings...</source>
         <translation>Nastavení...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="329"/>
-        <location filename="../host/ui/host_window.cc" line="758"/>
+        <location filename="../host/ui/host_window.ui" line="335"/>
+        <location filename="../host/ui/host_window.cc" line="779"/>
         <source>Hide</source>
         <translation>Skrýt</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="340"/>
+        <location filename="../host/ui/host_window.ui" line="346"/>
         <source>Desktop</source>
         <translation>Plocha</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="351"/>
+        <location filename="../host/ui/host_window.ui" line="357"/>
         <source>Terminal</source>
         <translation>Terminál</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="362"/>
+        <location filename="../host/ui/host_window.ui" line="368"/>
         <source>Desktop View</source>
         <translation>Zobrazení plochy</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="373"/>
+        <location filename="../host/ui/host_window.ui" line="379"/>
         <source>File Transfer</source>
         <translation>Přenos souborů</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="384"/>
+        <location filename="../host/ui/host_window.ui" line="390"/>
         <source>System Information</source>
         <translation>Systémové informace</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="395"/>
+        <location filename="../host/ui/host_window.ui" line="401"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="400"/>
+        <location filename="../host/ui/host_window.ui" line="406"/>
         <source>Show chat</source>
         <translation>Zobrazit chat</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="289"/>
-        <location filename="../host/ui/host_window.cc" line="753"/>
+        <location filename="../host/ui/host_window.cc" line="296"/>
+        <location filename="../host/ui/host_window.cc" line="774"/>
         <source>Show</source>
         <translation>Zobrazit</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="549"/>
+        <location filename="../host/ui/host_window.cc" line="570"/>
         <source>Screen recording has started.</source>
         <translation>Nahrávání obrazovky bylo spuštěno.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="551"/>
+        <location filename="../host/ui/host_window.cc" line="572"/>
         <source>Screen recording stopped.</source>
         <translation>Nahrávání obrazovky bylo zastaveno.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="742"/>
+        <location filename="../host/ui/host_window.cc" line="763"/>
         <source>Settings storage is unavailable.</source>
         <translation>Úložiště nastavení není k dispozici.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="813"/>
+        <location filename="../host/ui/host_window.cc" line="829"/>
+        <source>Aspia Host will be removed from this computer. The settings of the host will be kept. Do you really want to uninstall the application?</source>
+        <translation>Aspia Host bude z tohoto počítače odstraněn. Nastavení hostitele zůstane zachováno. Opravdu chcete aplikaci odinstalovat?</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_window.cc" line="841"/>
+        <source>Unable to uninstall the application.</source>
+        <translation>Nelze odinstalovat aplikaci.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_window.cc" line="863"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Pokud ukončíte Aspia, nebude možné se k tomuto počítači připojit, dokud počítač nebo Aspia znovu ručně nezapnete. Opravdu chcete aplikaci ukončit?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="974"/>
+        <location filename="../host/ui/host_window.cc" line="1024"/>
         <source>Not connected to service</source>
         <translation>Nepřipojeno ke službě</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="987"/>
+        <location filename="../host/ui/host_window.cc" line="1037"/>
         <source>Connecting to router...</source>
         <translation>Připojování k routeru...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="992"/>
+        <location filename="../host/ui/host_window.cc" line="1042"/>
         <source>Connected to router</source>
         <translation>Připojeno k routeru</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="997"/>
+        <location filename="../host/ui/host_window.cc" line="1047"/>
         <source>Connection error</source>
         <translation>Chyba připojení</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1065"/>
+        <location filename="../host/ui/host_window.cc" line="1115"/>
         <source>IP addresses:</source>
         <translation>IP adresy:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1069"/>
+        <location filename="../host/ui/host_window.cc" line="1119"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
@@ -5878,7 +5903,7 @@ Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.ui" line="39"/>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="215"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="221"/>
         <source>Address:</source>
         <translation>Adresa:</translation>
     </message>
@@ -5888,47 +5913,47 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Typ relace:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="63"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="64"/>
         <source>Connect</source>
         <translation>Připojit</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="137"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="138"/>
         <source>Select a router to connect by ID.</source>
         <translation>Pro připojení podle ID vyberte router.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="144"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="145"/>
         <source>An invalid host address was entered.</source>
         <translation>Byla zadána neplatná adresa hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="152"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="153"/>
         <source>An invalid host ID was entered.</source>
         <translation>Bylo zadáno neplatné ID hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="165"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="166"/>
         <source>Without Router</source>
         <translation>Bez routeru</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="172"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="173"/>
         <source>Failed to read the list of routers.</source>
         <translation>Nepodařilo se načíst seznam routerů.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="216"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="222"/>
         <source>Host name or IP address</source>
         <translation>Název hostitele nebo IP adresa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="220"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="226"/>
         <source>ID:</source>
         <translation>ID:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="221"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="227"/>
         <source>Host ID</source>
         <translation>ID hostitele</translation>
     </message>
@@ -8118,7 +8143,7 @@ Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="392"/>
-        <location filename="../host/android/settings_widget.cc" line="381"/>
+        <location filename="../host/android/settings_widget.cc" line="414"/>
         <source>Updates</source>
         <translation>Aktualizace</translation>
     </message>
@@ -8129,31 +8154,31 @@ Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="403"/>
-        <location filename="../host/android/settings_widget.cc" line="384"/>
+        <location filename="../host/android/settings_widget.cc" line="417"/>
         <source>Update channel</source>
         <translation>Kanál aktualizací</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="404"/>
-        <location filename="../host/android/settings_widget.cc" line="385"/>
+        <location filename="../host/android/settings_widget.cc" line="418"/>
         <source>Stable</source>
         <translation>Stabilní</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="405"/>
-        <location filename="../host/android/settings_widget.cc" line="386"/>
+        <location filename="../host/android/settings_widget.cc" line="419"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="406"/>
-        <location filename="../host/android/settings_widget.cc" line="387"/>
+        <location filename="../host/android/settings_widget.cc" line="420"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="414"/>
-        <location filename="../host/android/settings_widget.cc" line="398"/>
+        <location filename="../host/android/settings_widget.cc" line="431"/>
         <source>Check for updates</source>
         <translation>Zkontrolovat aktualizace</translation>
     </message>
@@ -8184,68 +8209,88 @@ Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="261"/>
+        <source>Background mode</source>
+        <translation>Režim na pozadí</translation>
+    </message>
+    <message>
+        <location filename="../host/android/settings_widget.cc" line="273"/>
+        <source>The host stays connected to the router while the application is not on the screen, so it can be reached at any time.</source>
+        <translation>Hostitel zůstává připojen k routeru, i když aplikace není na obrazovce, takže se k němu lze kdykoli připojit.</translation>
+    </message>
+    <message>
+        <location filename="../host/android/settings_widget.cc" line="278"/>
+        <source>Confirm screen capture automatically</source>
+        <translation>Automaticky potvrzovat zachytávání obrazovky</translation>
+    </message>
+    <message>
+        <location filename="../host/android/settings_widget.cc" line="289"/>
+        <source>The screen capture request is confirmed automatically. The system window briefly appears on the screen.</source>
+        <translation>Žádost o zachytávání obrazovky se potvrdí automaticky. Systémové okno se na okamžik zobrazí na obrazovce.</translation>
+    </message>
+    <message>
+        <location filename="../host/android/settings_widget.cc" line="294"/>
         <source>Manage users</source>
         <translation>Spravovat uživatele</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="269"/>
+        <location filename="../host/android/settings_widget.cc" line="302"/>
         <source>Change password</source>
         <translation>Změnit heslo</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="273"/>
+        <location filename="../host/android/settings_widget.cc" line="306"/>
         <source>Disable password protection</source>
         <translation>Zakázat ochranu heslem</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="282"/>
+        <location filename="../host/android/settings_widget.cc" line="315"/>
         <source>Enable password protection</source>
         <translation>Povolit ochranu heslem</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="297"/>
+        <location filename="../host/android/settings_widget.cc" line="330"/>
         <source>Router</source>
         <translation>Router</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="302"/>
+        <location filename="../host/android/settings_widget.cc" line="335"/>
         <source>Enable the use of a router</source>
         <translation>Povolit použití routeru</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="307"/>
+        <location filename="../host/android/settings_widget.cc" line="340"/>
         <source>Address</source>
         <translation>Adresa</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="313"/>
+        <location filename="../host/android/settings_widget.cc" line="346"/>
         <source>Public Key</source>
         <translation>Veřejný klíč</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="318"/>
+        <location filename="../host/android/settings_widget.cc" line="351"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Router je vyžadován pro připojení k počítači, pokud není k dispozici přímé připojení (obejití NAT). Aspia neposkytuje veřejný router, ale můžete si nainstalovat vlastní. Router si můžete stáhnout na &lt;a href=&quot;https://aspia.org&quot;&gt;oficiálních stránkách&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="433"/>
+        <location filename="../host/android/settings_widget.cc" line="445"/>
+        <location filename="../host/android/settings_widget.cc" line="466"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="412"/>
-        <location filename="../host/android/settings_widget.cc" line="433"/>
+        <location filename="../host/android/settings_widget.cc" line="445"/>
+        <location filename="../host/android/settings_widget.cc" line="466"/>
         <source>An error occurred while processing the password.</source>
         <translation>Při zpracování hesla došlo k chybě.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="455"/>
+        <location filename="../host/android/settings_widget.cc" line="488"/>
         <source>Import</source>
         <translation>Importovat</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="455"/>
+        <location filename="../host/android/settings_widget.cc" line="488"/>
         <source>JSON files (*.json)</source>
         <translation>Soubory JSON (*.json)</translation>
     </message>
