@@ -134,13 +134,15 @@ UpdateWidget::~UpdateWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpdateWidget::check(const QString& channel)
+void UpdateWidget::check(const QString& server, const QByteArray& public_key, const QString& channel)
 {
     // The screen is left and entered again while the update it started is downloading, and a check
     // over it would take away the package the installation is waiting for.
     if (downloader_)
         return;
 
+    server_ = server;
+    public_key_ = public_key;
     channel_ = channel;
     update_info_ = UpdateInfo();
 
@@ -162,6 +164,9 @@ void UpdateWidget::check(const QString& channel)
     button_check_->setVisible(false);
 
     checker_ = new UpdateChecker(channel_, package_, this);
+    checker_->setServer(server_);
+    if (!public_key_.isEmpty())
+        checker_->setPublicKeys({ public_key_ });
 
     connect(checker_, &UpdateChecker::sig_checkFinished, this, &UpdateWidget::onCheckFinished);
     connect(checker_, &UpdateChecker::sig_checkFailed, this, &UpdateWidget::onCheckFailed);
@@ -292,7 +297,7 @@ void UpdateWidget::onUpdateClicked()
 void UpdateWidget::onCheckClicked()
 {
     LOG(INFO) << "[ACTION] Check for updates again";
-    check(channel_);
+    check(server_, public_key_, channel_);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -21,6 +21,7 @@
 #include <QByteArray>
 #include <QFileDialog>
 #include <QStackedWidget>
+#include <QUrl>
 #include <QVBoxLayout>
 
 #include <optional>
@@ -53,6 +54,24 @@ namespace {
 constexpr int kContentMargin = 16;
 constexpr int kRowSpacing = 8;
 constexpr int kSectionSpacing = 24;
+constexpr int kUpdatePublicKeyLength = 64;
+
+//--------------------------------------------------------------------------------------------------
+bool isValidUpdateServer(const QString& server)
+{
+    if (server.isEmpty())
+        return true;
+
+    QUrl url(server, QUrl::StrictMode);
+    return url.isValid() && !url.host().isEmpty() &&
+           (url.scheme() == "https" || url.scheme() == "http");
+}
+
+//--------------------------------------------------------------------------------------------------
+bool isValidUpdatePublicKey(const QByteArray& hex)
+{
+    return hex.size() == kUpdatePublicKeyLength && QByteArray::fromHex(hex).toHex() == hex;
+}
 
 } // namespace
 
@@ -173,7 +192,8 @@ void SettingsWidget::showUserEditor(qint64 entry_id)
 //--------------------------------------------------------------------------------------------------
 void SettingsWidget::showUpdate()
 {
-    update_page_->check(SystemSettings().updateChannel());
+    SystemSettings settings;
+    update_page_->check(settings.updateServer(), settings.updatePublicKey(), settings.updateChannel());
 
     stack_->setCurrentWidget(update_page_);
     emit sig_titleChanged(tr("Update"), true);
@@ -427,6 +447,62 @@ void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
         emit sig_updateSettingsChanged();
     });
     layout->addWidget(channel);
+
+    SystemSettings settings;
+
+    LineEdit* server = new LineEdit();
+    server->setLabel(tr("Update server"));
+    server->setText(settings.updateServer());
+    layout->addWidget(server);
+
+    LineEdit* public_key = new LineEdit();
+    public_key->setLabel(tr("Public key"));
+    public_key->setMaxLength(kUpdatePublicKeyLength);
+    public_key->setText(QString::fromLatin1(settings.updatePublicKey().toHex()));
+    layout->addWidget(public_key);
+
+    Label* hint = new Label(tr("If the update server is not specified, the default one is used. "
+                               "If the public key is not specified, the built-in one is used."),
+                            Label::Role::CAPTION);
+    hint->setWordWrap(true);
+    layout->addWidget(hint);
+
+    connect(server, &QLineEdit::editingFinished, this, [server]()
+    {
+        SystemSettings settings;
+        const QString value = server->text().trimmed();
+
+        QSignalBlocker blocker(server);
+        if (isValidUpdateServer(value) && (!value.isEmpty() || settings.updatePublicKey().isEmpty()))
+        {
+            settings.setUpdateServer(value);
+            settings.sync();
+            server->setText(value);
+        }
+        else
+        {
+            server->setText(settings.updateServer());
+        }
+    });
+
+    connect(public_key, &QLineEdit::editingFinished, this, [public_key]()
+    {
+        SystemSettings settings;
+        const QByteArray value = public_key->text().trimmed().toLower().toLatin1();
+
+        QSignalBlocker blocker(public_key);
+        if (value.isEmpty() ||
+            (isValidUpdatePublicKey(value) && !settings.updateServer().isEmpty()))
+        {
+            settings.setUpdatePublicKey(QByteArray::fromHex(value));
+            settings.sync();
+            public_key->setText(QString::fromLatin1(value));
+        }
+        else
+        {
+            public_key->setText(QString::fromLatin1(settings.updatePublicKey().toHex()));
+        }
+    });
 
     Button* check = new Button(tr("Check for updates"), Button::Role::FILLED);
     connect(check, &Button::clicked, this, &SettingsWidget::showUpdate);

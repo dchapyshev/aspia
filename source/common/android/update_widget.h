@@ -39,7 +39,7 @@ public:
     explicit UpdateWidget(const QString& package, QWidget* parent = nullptr);
     ~UpdateWidget() final;
 
-    void check(const QString& channel);
+    void check(const QString& server, const QByteArray& public_key, const QString& channel);
 
 private slots:
     void onCheckFinished(const UpdateInfo& update_info);
@@ -76,6 +76,8 @@ private:
     Label* label_whats_new_ = nullptr;
     Label* label_description_ = nullptr;
 
+    QString server_;
+    QByteArray public_key_;
     QString channel_;
     UpdateInfo update_info_;
 
