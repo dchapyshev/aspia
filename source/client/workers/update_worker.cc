@@ -22,6 +22,7 @@
 #include "base/logging.h"
 #include "base/update/update_checker.h"
 #include "client/database.h"
+#include "client/system_settings.h"
 
 //--------------------------------------------------------------------------------------------------
 UpdateWorker::UpdateWorker()
@@ -47,7 +48,13 @@ void UpdateWorker::onPrepare()
         return;
     }
 
+    SystemSettings settings;
+    QByteArray public_key = settings.updatePublicKey();
+
     update_checker_ = new UpdateChecker(db.updateChannel(), kClientUpdatePackage, this);
+    update_checker_->setServer(settings.updateServer());
+    if (!public_key.isEmpty())
+        update_checker_->setPublicKeys({ public_key });
 
     connect(update_checker_, &UpdateChecker::sig_checkFinished,
             this, &UpdateWorker::onUpdateCheckFinished);

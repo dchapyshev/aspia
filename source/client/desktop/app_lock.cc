@@ -30,6 +30,7 @@
 #include "client/settings.h"
 #include "client/desktop/main_window.h"
 #include "common/desktop/credentials_dialog.h"
+#include "common/desktop/elevate_util.h"
 #include "common/desktop/msg_box.h"
 
 namespace {
@@ -193,5 +194,6 @@ void AppLock::onCheck()
 //--------------------------------------------------------------------------------------------------
 bool AppLock::canLock() const
 {
-    return main_window_ && !main_window_->hasSessions() && !hasOpenDialogs();
+    return main_window_ && !main_window_->hasSessions() && !hasOpenDialogs() &&
+           !main_window_->findChild<ElevateUtil*>();
 }

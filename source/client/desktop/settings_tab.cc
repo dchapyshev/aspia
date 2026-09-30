@@ -38,14 +38,18 @@
 #include "base/build_config.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/process_util.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/udp_channel.h"
 #include "client/application.h"
 #include "client/database.h"
 #include "client/master_password.h"
 #include "client/settings.h"
+#include "client/system_settings.h"
 #include "client/desktop/ui_settings_tab.h"
+#include "client/desktop/update_server_dialog.h"
 #include "common/desktop/credentials_dialog.h"
+#include "common/desktop/elevate_util.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/update_dialog.h"
 #include "proto/desktop_control.h"
@@ -260,6 +264,8 @@ SettingsTab::SettingsTab(QWidget* parent)
     int channel_index = ui->combobox_update_channel->findData(db.updateChannel());
     ui->combobox_update_channel->setCurrentIndex(channel_index >= 0 ? channel_index : 0);
 
+    loadUpdateServer();
+
     // Wire signals after initial values are loaded to avoid spurious saves.
     connect(category_group_, &QButtonGroup::idClicked, this, &SettingsTab::onCategoryChanged);
 
@@ -307,6 +313,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->combobox_update_channel, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onUpdateChannelChanged);
     connect(ui->button_check_for_updates, &QPushButton::clicked, this, &SettingsTab::onCheckForUpdatesClicked);
+    connect(ui->button_update_server, &QPushButton::clicked, this, &SettingsTab::onUpdateServerClicked);
 
     if (QAbstractButton* first = category_group_->button(0))
         first->setChecked(true);
@@ -616,9 +623,61 @@ void SettingsTab::onUpdateChannelChanged()
 void SettingsTab::onCheckForUpdatesClicked()
 {
     LOG(INFO) << "[ACTION] Check for updates";
+    SystemSettings settings;
     AutoQPointer<UpdateDialog> dialog(new UpdateDialog(
+        settings.updateServer(), settings.updatePublicKey(),
         ui->combobox_update_channel->currentData().toString(), "client", UpdateDialog::Action::ASK, this));
     dialog->exec();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onUpdateServerClicked()
+{
+    LOG(INFO) << "[ACTION] Update server";
+
+    if (ProcessUtil::isPrivileged())
+    {
+        AutoQPointer<UpdateServerDialog> dialog(new UpdateServerDialog(this));
+        dialog->exec();
+        loadUpdateServer();
+        return;
+    }
+
+    elevate_util_ = ElevateUtil::create(this);
+    ui->button_update_server->setEnabled(false);
+
+    QStringList arguments;
+    arguments << "--update-server";
+    arguments << "--locale=" + GuiApplication::instance()->locale();
+
+    bool started = elevate_util_ && elevate_util_->runElevated(arguments, window()->winId(), [this](int /* exit_code */)
+    {
+        elevate_util_.reset();
+        ui->button_update_server->setEnabled(true);
+        loadUpdateServer();
+    });
+
+    if (!started)
+    {
+        elevate_util_.reset();
+        ui->button_update_server->setEnabled(true);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::loadUpdateServer()
+{
+    SystemSettings settings;
+    QString server = settings.updateServer();
+    QString public_key = QString::fromLatin1(settings.updatePublicKey().toHex());
+
+    ui->label_update_server_value->setText(server);
+    ui->label_update_public_key_value->setText(public_key);
+
+    ui->label_update_server->setVisible(!server.isEmpty());
+    ui->label_update_server_value->setVisible(!server.isEmpty());
+    ui->label_update_public_key->setVisible(!server.isEmpty() && !public_key.isEmpty());
+    ui->label_update_public_key_value->setVisible(!server.isEmpty() && !public_key.isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------

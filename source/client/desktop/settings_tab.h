@@ -21,12 +21,14 @@
 
 #include <memory>
 
+#include "base/scoped_qpointer.h"
 #include "client/desktop/tab.h"
 
 namespace Ui {
 class SettingsTab;
 } // namespace Ui
 
+class ElevateUtil;
 class QButtonGroup;
 
 class SettingsTab final : public Tab
@@ -72,14 +74,17 @@ private slots:
     void onCheckUpdatesChanged();
     void onUpdateChannelChanged();
     void onCheckForUpdatesClicked();
+    void onUpdateServerClicked();
 
 private:
+    void loadUpdateServer();
     void applyCategoryStyle();
     bool enableAutoUnlock();
     void saveDesktopConfig();
 
     std::unique_ptr<Ui::SettingsTab> ui;
     QButtonGroup* category_group_ = nullptr;
+    ScopedQPointer<ElevateUtil> elevate_util_;
 
     Q_DISABLE_COPY_MOVE(SettingsTab)
 };

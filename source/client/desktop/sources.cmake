@@ -53,4 +53,7 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP
     status_overlay.h
     settings_tab.cc
     settings_tab.h
-    settings_tab.ui)
+    settings_tab.ui
+    update_server_dialog.cc
+    update_server_dialog.h
+    update_server_dialog.ui)

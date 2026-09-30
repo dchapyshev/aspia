@@ -43,8 +43,10 @@
 #include "client/database.h"
 #include "client/host_url.h"
 #include "client/master_password.h"
+#include "client/system_settings.h"
 #include "client/desktop/app_lock.h"
 #include "client/desktop/main_window.h"
+#include "client/desktop/update_server_dialog.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/update_dialog.h"
@@ -161,8 +163,9 @@ int main(int argc, char* argv[])
 
         QString channel = option_value(argv[1], "--channel=");
         QString locale = option_value(argv[2], "--locale=");
+        bool update_server = qstrcmp(argv[1], "--update-server") == 0;
 
-        if (!channel.isEmpty() && !locale.isEmpty())
+        if ((!channel.isEmpty() || update_server) && !locale.isEmpty())
         {
 #if defined(Q_OS_LINUX)
             qputenv("QT_QPA_PLATFORM", "xcb");
@@ -171,7 +174,15 @@ int main(int argc, char* argv[])
             GuiApplication application(argc, argv);
             application.setLocale(locale);
 
-            UpdateDialog dialog(channel, "client", UpdateDialog::Action::INSTALL);
+            if (update_server)
+            {
+                UpdateServerDialog dialog;
+                return dialog.exec() == QDialog::Accepted ? 0 : 1;
+            }
+
+            SystemSettings settings;
+            UpdateDialog dialog(settings.updateServer(), settings.updatePublicKey(), channel, "client",
+                                UpdateDialog::Action::INSTALL);
 
             return dialog.exec() == QDialog::Accepted ?
                 UpdateDialog::kInstalledExitCode : UpdateDialog::kClosedExitCode;

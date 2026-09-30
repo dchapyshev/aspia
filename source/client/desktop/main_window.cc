@@ -40,6 +40,7 @@
 #include "client/host_url.h"
 #include "client/router_controller.h"
 #include "client/settings.h"
+#include "client/system_settings.h"
 #include "client/desktop/app_lock.h"
 #include "client/desktop/client_tab.h"
 #include "client/desktop/credentials_tab.h"
@@ -166,8 +167,10 @@ MainWindow::MainWindow(QWidget* parent)
     connect(GuiApplication::findWorker<UpdateWorker>(), &UpdateWorker::sig_updateAvailable,
             this, [this](const UpdateInfo& /* update_info */)
     {
-        AutoQPointer<UpdateDialog> dialog(
-            new UpdateDialog(Database::instance().updateChannel(), "client", UpdateDialog::Action::ASK, this));
+        SystemSettings settings;
+        AutoQPointer<UpdateDialog> dialog(new UpdateDialog(
+            settings.updateServer(), settings.updatePublicKey(), Database::instance().updateChannel(),
+            "client", UpdateDialog::Action::ASK, this));
         dialog->exec();
     }, Qt::QueuedConnection);
 

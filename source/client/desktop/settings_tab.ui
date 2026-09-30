@@ -619,18 +619,46 @@
                </widget>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
-                <item>
+               <layout class="QGridLayout" name="layout_update_source">
+                <item row="0" column="0">
                  <widget class="QLabel" name="label_update_channel">
                   <property name="text">
                    <string>Update channel:</string>
                   </property>
                  </widget>
                 </item>
-                <item>
+                <item row="0" column="1">
                  <widget class="QComboBox" name="combobox_update_channel">
                   <property name="sizeAdjustPolicy">
                    <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_update_server">
+                  <property name="text">
+                   <string>Update server:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="label_update_server_value">
+                  <property name="textInteractionFlags">
+                   <set>Qt::TextInteractionFlag::TextSelectableByMouse</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_update_public_key">
+                  <property name="text">
+                   <string>Public key:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="label_update_public_key_value">
+                  <property name="textInteractionFlags">
+                   <set>Qt::TextInteractionFlag::TextSelectableByMouse</set>
                   </property>
                  </widget>
                 </item>
@@ -638,6 +666,13 @@
               </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_check_updates">
+                <item>
+                 <widget class="QPushButton" name="button_update_server">
+                  <property name="text">
+                   <string>Change Update Server...</string>
+                  </property>
+                 </widget>
+                </item>
                 <item>
                  <spacer name="horizontalSpacer_check_updates">
                   <property name="orientation">
