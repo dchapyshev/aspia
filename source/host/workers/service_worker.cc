@@ -37,6 +37,7 @@
 #include "host/desktop_client.h"
 #include "host/desktop_manager.h"
 #include "host/file_client.h"
+#include "host/host_constants.h"
 #include "host/host_storage.h"
 #include "host/host_user_list.h"
 #include "host/host_utils.h"
@@ -141,7 +142,7 @@ void ServiceWorker::onPrepare()
     connect(user_session_, &UserSession::sig_chatMessage, this, &ServiceWorker::onUserChatMessage);
     connect(user_session_, &UserSession::sig_stopClient, this, &ServiceWorker::onStopClient);
 
-    desktop_manager_ = new DesktopManager(this);
+    desktop_manager_ = new DesktopManager(kDesktopAgentChannelId, this);
     connect(user_session_, &UserSession::sig_pauseChanged, desktop_manager_, &DesktopManager::onUserPause);
     connect(user_session_, &UserSession::sig_lockMouseChanged, desktop_manager_, &DesktopManager::onUserLockMouse);
     connect(user_session_, &UserSession::sig_lockKeyboardChanged, desktop_manager_, &DesktopManager::onUserLockKeyboard);

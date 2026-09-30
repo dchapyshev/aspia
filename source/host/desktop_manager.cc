@@ -169,7 +169,38 @@ bool createSessionToken(DWORD session_id, ScopedHandle* token_out)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool startProcessWithToken(HANDLE token, const QString& command_line)
+// Builds the environment block of |token| with |name|=|value| appended, as a double-null-terminated
+// string suitable for CREATE_UNICODE_ENVIRONMENT.
+std::wstring createEnvironment(HANDLE token, const QString& name, const QString& value)
+{
+    void* environment = nullptr;
+    if (!CreateEnvironmentBlock(&environment, token, FALSE))
+    {
+        PLOG(ERROR) << "CreateEnvironmentBlock failed";
+        return {};
+    }
+
+    const wchar_t* base = reinterpret_cast<const wchar_t*>(environment);
+
+    // Walk the entries of base (each null-terminated; the block ends with an extra null).
+    size_t entries_chars = 0;
+    while (base[entries_chars] != L'\0')
+    {
+        while (base[entries_chars] != L'\0')
+            ++entries_chars;
+        ++entries_chars;
+    }
+
+    std::wstring result(base, entries_chars);
+    result += qUtf16Printable(name + '=' + value);
+    result += L'\0';
+
+    DestroyEnvironmentBlock(environment);
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool startProcessWithToken(HANDLE token, const QString& command_line, const QString& channel_id)
 {
     STARTUPINFOW startup_info;
     memset(&startup_info, 0, sizeof(startup_info));
@@ -177,10 +208,11 @@ bool startProcessWithToken(HANDLE token, const QString& command_line)
     startup_info.cb = sizeof(startup_info);
     startup_info.lpDesktop = const_cast<wchar_t*>(kDefaultDesktopName);
 
-    void* environment = nullptr;
-    if (!CreateEnvironmentBlock(&environment, token, FALSE))
+    // The agent reads the IPC channel to connect to from the environment.
+    std::wstring environment = createEnvironment(token, IpcServer::kChannelIdEnvVar, channel_id);
+    if (environment.empty())
     {
-        PLOG(ERROR) << "CreateEnvironmentBlock failed";
+        LOG(ERROR) << "Unable to create environment";
         return false;
     }
 
@@ -190,9 +222,7 @@ bool startProcessWithToken(HANDLE token, const QString& command_line)
     const BOOL result = CreateProcessAsUserW(
         token, nullptr, const_cast<wchar_t*>(qUtf16Printable(command_line)),
         nullptr, nullptr, FALSE, CREATE_UNICODE_ENVIRONMENT | HIGH_PRIORITY_CLASS,
-        environment, nullptr, &startup_info, &process_info);
-
-    DestroyEnvironmentBlock(environment);
+        environment.data(), nullptr, &startup_info, &process_info);
 
     if (!result)
     {
@@ -232,8 +262,9 @@ SessionId activeTargetSessionId()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DesktopManager::DesktopManager(QObject* parent)
-    : QObject(parent)
+DesktopManager::DesktopManager(const QString& ipc_channel_id, QObject* parent)
+    : QObject(parent),
+      ipc_channel_id_(ipc_channel_id)
 {
     LOG(INFO) << "Ctor";
 
@@ -270,7 +301,7 @@ void DesktopManager::start()
     const IpcServer::AccessMode access_mode = IpcServer::AccessMode::SYSTEM_ONLY;
 #endif // defined(Q_OS_MACOS)
 
-    if (!ipc_server_->start(kDesktopAgentChannelId, access_mode))
+    if (!ipc_server_->start(ipc_channel_id_, access_mode))
     {
         LOG(ERROR) << "Failed to start the desktop agent IPC server";
         return;
@@ -660,7 +691,7 @@ bool DesktopManager::startProcess()
 
     const QString command_line = QString("\"%1\" --agent desktop").arg(
         QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
-    if (!startProcessWithToken(session_token, command_line))
+    if (!startProcessWithToken(session_token, command_line, ipc_channel_id_))
     {
         LOG(ERROR) << "startProcessWithToken failed (session_id:" << session_id_ << ")";
         return false;

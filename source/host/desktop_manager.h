@@ -24,6 +24,7 @@
 #include "base/scoped_qpointer.h"
 #include "base/session_id.h"
 #include "base/time_types.h"
+#include "host/host_constants.h"
 
 class IpcChannel;
 class IpcServer;
@@ -34,7 +35,8 @@ class DesktopManager final : public QObject
     Q_OBJECT
 
 public:
-    explicit DesktopManager(QObject* parent = nullptr);
+    explicit DesktopManager(const QString& ipc_channel_id = kDesktopAgentChannelId,
+                            QObject* parent = nullptr);
     ~DesktopManager() final;
 
     enum class State
@@ -82,6 +84,7 @@ private:
     bool startProcess();
     void sendMessage(const QByteArray& buffer);
 
+    const QString ipc_channel_id_;
     State state_ = State::DETTACHED;
     SessionId session_id_ = kInvalidSessionId;
     bool is_console_ = true;

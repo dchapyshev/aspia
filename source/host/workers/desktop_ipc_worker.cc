@@ -26,8 +26,13 @@
 #include "base/logging.h"
 #include "base/power_controller.h"
 #include "base/ipc/ipc_channel.h"
+#include "base/ipc/ipc_server.h"
 #include "host/desktop_agent_client.h"
 #include "host/host_constants.h"
+
+#if defined(Q_OS_WINDOWS)
+#include "host/win/portable_host.h"
+#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 DesktopIpcWorker::DesktopIpcWorker()
@@ -393,7 +398,18 @@ void DesktopIpcWorker::connectToService()
     connect(ipc_channel_, &IpcChannel::sig_errorOccurred, this, &DesktopIpcWorker::onIpcErrorOccurred);
     connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &DesktopIpcWorker::onIpcMessageReceived);
 
-    ipc_channel_->connectTo(kDesktopAgentChannelId);
+    QString channel_id = kDesktopAgentChannelId;
+
+#if defined(Q_OS_WINDOWS)
+    if (PortableHost::isActive())
+    {
+        const QString portable_channel = qEnvironmentVariable(IpcServer::kChannelIdEnvVar);
+        if (!portable_channel.isEmpty())
+            channel_id = portable_channel;
+    }
+#endif // defined(Q_OS_WINDOWS)
+
+    ipc_channel_->connectTo(channel_id);
 }
 
 //--------------------------------------------------------------------------------------------------
