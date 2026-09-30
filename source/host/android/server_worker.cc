@@ -39,6 +39,7 @@
 #include "host/database.h"
 #include "host/host_storage.h"
 #include "host/host_user_list.h"
+#include "host/router_config_provider.h"
 #include "host/router_manager.h"
 #include "host/system_settings.h"
 #include "host/user_settings.h"
@@ -454,7 +455,7 @@ void ServerWorker::connectToRouter()
     if (router_manager_)
         return;
 
-    router_manager_ = new RouterManager(Database::instance(), this);
+    router_manager_ = new RouterManager(std::make_unique<DatabaseConfigProvider>(Database::instance()), this);
 
     connect(router_manager_, &RouterManager::sig_clientConnected,
             this, &ServerWorker::onNewRelayConnection);

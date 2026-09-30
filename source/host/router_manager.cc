@@ -46,11 +46,11 @@ const Minutes kCountCheckInterval{ 30 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RouterManager::RouterManager(Database& database, QObject* parent)
+RouterManager::RouterManager(std::unique_ptr<ConfigProvider> config, QObject* parent)
     : QObject(parent),
-      database_(database),
+      config_(std::move(config)),
       peer_manager_(new RelayPeerManager(this)),
-      user_list_(new HostUserList(database))
+      user_list_(config_->createUserList())
 {
     LOG(INFO) << "Ctor";
 
@@ -92,8 +92,8 @@ void RouterManager::start()
 //--------------------------------------------------------------------------------------------------
 void RouterManager::onSettingsChanged()
 {
-    Address new_address = database_.routerAddress();
-    QByteArray new_public_key = database_.routerPublicKey();
+    Address new_address = config_->routerAddress();
+    QByteArray new_public_key = config_->routerPublicKey();
 
     // Check if the connection parameters have changed.
     if (router_address_ != new_address || public_key_ != new_public_key)
@@ -110,7 +110,7 @@ void RouterManager::onSettingsChanged()
         connectToRouter();
     }
 
-    if (!database_.oneTimePassword())
+    if (!config_->oneTimePassword())
     {
         LOG(INFO) << "One-time password is disabled";
         password_expire_time_ = TimePoint::max();
@@ -142,7 +142,7 @@ void RouterManager::onOneTimeSessionsChanged(quint32 one_time_sessions)
 //--------------------------------------------------------------------------------------------------
 void RouterManager::onNewOneTimePassword()
 {
-    if (!database_.oneTimePassword())
+    if (!config_->oneTimePassword())
     {
         LOG(INFO) << "One-time password is disabled";
         return;
@@ -253,7 +253,7 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
         if (!host_key.isEmpty())
         {
             LOG(INFO) << "New host key received";
-            database_.setHostKey(host_key);
+            config_->setHostKey(host_key);
         }
 
         LOG(INFO) << "Host ID received:" << host_id_;
@@ -438,7 +438,7 @@ void RouterManager::hostIdRequest()
         return;
     }
 
-    QByteArray host_key = database_.hostKey();
+    QByteArray host_key = config_->hostKey();
 
     proto::router::HostToRouter message;
     proto::router::HostIdRequest* host_id_request = message.mutable_host_id_request();
@@ -505,7 +505,7 @@ void RouterManager::sendTelemetry()
         update.insert("last_check_result", check_result);
 #endif
 
-    const QVector<User> user_list = database_.userList();
+    const QVector<User> user_list = config_->userList();
 
     int enabled_users = 0;
     for (const User& user : user_list)
@@ -519,7 +519,7 @@ void RouterManager::sendTelemetry()
     users.insert("enabled", enabled_users);
 
     // Nothing is sent when the database is not readable.
-    const Database::PasswordProtection protection = database_.passwordProtectionState();
+    const Database::PasswordProtection protection = config_->passwordProtectionState();
 
     QJsonObject security;
     if (protection != Database::PasswordProtection::UNAVAILABLE)
@@ -583,12 +583,12 @@ void RouterManager::readConnectionOffer(const proto::router::ConnectionOffer& of
 void RouterManager::renewOneTimePassword()
 {
     PasswordGenerator generator;
-    generator.setCharacters(database_.oneTimePasswordCharacters());
-    generator.setLength(database_.oneTimePasswordLength());
+    generator.setCharacters(config_->oneTimePasswordCharacters());
+    generator.setLength(config_->oneTimePasswordLength());
 
     one_time_password_ = generator.result();
 
-    MilliSeconds expire_interval = database_.oneTimePasswordExpire();
+    MilliSeconds expire_interval = config_->oneTimePasswordExpire();
     if (expire_interval > MilliSeconds(0))
         password_expire_time_ = Clock::now() + expire_interval;
     else

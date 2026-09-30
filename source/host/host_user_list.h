@@ -30,12 +30,11 @@ public:
     explicit HostUserList(Database& database);
     ~HostUserList() final = default;
 
-    // UserListBase implementation.
+    // UserList implementation.
     User find(const QString& username) const final;
     QByteArray seedKey() const final;
     void setSeedKey(const QByteArray& seed_key) final;
-
-    void setOneTimeUser(const User& user);
+    void setOneTimeUser(const User& user) final;
 
 private:
     Database& database_;

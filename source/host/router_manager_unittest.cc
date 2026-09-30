@@ -51,6 +51,7 @@
 #include "base/threading/worker.h"
 #include "host/database.h"
 #include "host/host_storage.h"
+#include "host/router_config_provider.h"
 #include "host/system_settings.h"
 #include "proto/key_exchange.h"
 #include "proto/peer.h"
@@ -564,7 +565,7 @@ protected:
             ASSERT_TRUE(database.setOneTimePassword(one_time_password));
             ASSERT_TRUE(database.setOneTimePasswordExpire(kPasswordExpire));
 
-            manager_ = new RouterManager(database);
+            manager_ = new RouterManager(std::make_unique<DatabaseConfigProvider>(database));
 
             QObject::connect(manager_, &RouterManager::sig_credentialsChanged, manager_,
                              [this](HostId host_id, const SecureString& password)

@@ -40,6 +40,7 @@
 #include "host/host_storage.h"
 #include "host/host_user_list.h"
 #include "host/host_utils.h"
+#include "host/router_config_provider.h"
 #include "host/router_manager.h"
 #include "host/system_info_client.h"
 #include "host/chat_client.h"
@@ -755,7 +756,7 @@ void ServiceWorker::connectToRouter(const Location& location)
     }
 
     LOG(INFO) << "Connecting to router from" << location;
-    router_manager_ = new RouterManager(Database::instance(), this);
+    router_manager_ = new RouterManager(std::make_unique<DatabaseConfigProvider>(Database::instance()), this);
 
     connect(router_manager_, &RouterManager::sig_routerStateChanged, user_session_, &UserSession::onRouterStateChanged);
     connect(router_manager_, &RouterManager::sig_credentialsChanged, user_session_, &UserSession::onUpdateCredentials);

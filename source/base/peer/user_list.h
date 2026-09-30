@@ -31,6 +31,7 @@ public:
     virtual User find(const QString& username) const = 0;
     virtual QByteArray seedKey() const = 0;
     virtual void setSeedKey(const QByteArray& seed_key) = 0;
+    virtual void setOneTimeUser(const User& /* user */) {}
 };
 
 #endif // BASE_PEER_USER_LIST_BASE_H

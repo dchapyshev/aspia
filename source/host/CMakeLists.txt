@@ -31,6 +31,8 @@ if (ANDROID)
         host_user_list.cc
         host_user_list.h
         input_injector.h
+        router_config_provider.cc
+        router_config_provider.h
         router_manager.cc
         router_manager.h
         scale_reducer.cc
@@ -116,6 +118,8 @@ list(APPEND SOURCE_HOST_CORE
     license_reader.h
     process_monitor.cc
     process_monitor.h
+    router_config_provider.cc
+    router_config_provider.h
     router_manager.cc
     router_manager.h
     scale_reducer.cc

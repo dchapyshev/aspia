@@ -31,14 +31,14 @@
 #include "base/net/address.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
-#include "host/host_user_list.h"
+#include "base/peer/user_list.h"
+#include "host/database.h"
 #include "proto/user.h"
 
 namespace proto::router {
 class ConnectionOffer;
 } // namespace proto::router
 
-class Database;
 class RelayPeerManager;
 
 class RouterManager final : public QObject
@@ -46,8 +46,29 @@ class RouterManager final : public QObject
     Q_OBJECT
 
 public:
-    // |database| belongs to the thread the manager runs in and outlives it.
-    explicit RouterManager(Database& database, QObject* parent = nullptr);
+    class ConfigProvider
+    {
+    public:
+        virtual ~ConfigProvider() = default;
+
+        virtual Address routerAddress() const = 0;
+        virtual QByteArray routerPublicKey() const = 0;
+
+        virtual bool oneTimePassword() const = 0;
+        virtual quint32 oneTimePasswordCharacters() const = 0;
+        virtual int oneTimePasswordLength() const = 0;
+        virtual MilliSeconds oneTimePasswordExpire() const = 0;
+
+        virtual QByteArray hostKey() const = 0;
+        virtual bool setHostKey(const QByteArray& key) = 0;
+
+        virtual QVector<User> userList() const = 0;
+        virtual Database::PasswordProtection passwordProtectionState() const = 0;
+
+        virtual SharedPointer<UserList> createUserList() const = 0;
+    };
+
+    explicit RouterManager(std::unique_ptr<ConfigProvider> config, QObject* parent = nullptr);
     ~RouterManager() final;
 
     const Address& routerAddress() const { return router_address_; }
@@ -95,7 +116,7 @@ private:
     void renewOneTimePassword();
     User createOneTimeUser() const;
 
-    Database& database_;
+    std::unique_ptr<ConfigProvider> config_;
 
     ScopedQPointer<TcpChannel> tcp_channel_;
     RelayPeerManager* peer_manager_ = nullptr;
@@ -108,7 +129,7 @@ private:
     SecureString one_time_password_;
     quint32 one_time_sessions_ = 0;
 
-    SharedPointer<HostUserList> user_list_;
+    SharedPointer<UserList> user_list_;
 
     HostId host_id_ = kInvalidHostId;
     proto::user::RouterState router_state_;
