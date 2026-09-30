@@ -73,6 +73,8 @@ list(APPEND SOURCE_CLIENT_CORE
     session_state.h
     settings.cc
     settings.h
+    system_settings.cc
+    system_settings.h
     telemetry_model.cc
     telemetry_model.h
     udp_attempt.cc
