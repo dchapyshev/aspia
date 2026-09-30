@@ -27,6 +27,7 @@ namespace proto::user {
 class RouterState;
 } // namespace proto::user
 
+class DesktopManager;
 class RouterManager;
 class SecureString;
 
@@ -50,6 +51,7 @@ private slots:
 
 private:
     ScopedQPointer<RouterManager> router_manager_;
+    ScopedQPointer<DesktopManager> desktop_manager_;
 
     Q_DISABLE_COPY_MOVE(PortableServiceWorker)
 };

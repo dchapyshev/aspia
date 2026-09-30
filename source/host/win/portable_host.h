@@ -36,6 +36,9 @@ public:
     // Name of the temporary service of the portable host this process belongs to.
     static QString serviceName();
 
+    // IPC channel of this run's desktop agent (unique, for coexistence with the installed host).
+    static QString desktopAgentChannelId();
+
 private:
     Q_DISABLE_COPY_MOVE(PortableHost)
 };

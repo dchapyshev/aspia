@@ -35,6 +35,7 @@
 #include "base/win/scoped_co_mem.h"
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
+#include "host/host_constants.h"
 #include "host/win/portable_package.h"
 
 namespace {
@@ -348,4 +349,11 @@ bool PortableHost::isActive()
 QString PortableHost::serviceName()
 {
     return ::serviceName(runId());
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString PortableHost::desktopAgentChannelId()
+{
+    return QString::fromLatin1(kDesktopAgentChannelId) + '-' + runId();
 }

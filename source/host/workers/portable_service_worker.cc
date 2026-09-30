@@ -21,8 +21,10 @@
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "base/peer/host_id.h"
+#include "host/desktop_manager.h"
 #include "host/router_config_provider.h"
 #include "host/router_manager.h"
+#include "host/win/portable_host.h"
 #include "proto/user.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -47,11 +49,14 @@ void PortableServiceWorker::onPrepare()
             this, &PortableServiceWorker::onRouterStateChanged);
     connect(router_manager_, &RouterManager::sig_credentialsChanged,
             this, &PortableServiceWorker::onCredentialsChanged);
+
+    desktop_manager_ = new DesktopManager(PortableHost::desktopAgentChannelId(), this);
 }
 
 //--------------------------------------------------------------------------------------------------
 void PortableServiceWorker::onStart()
 {
+    desktop_manager_->start();
     router_manager_->start();
 }
 
@@ -59,6 +64,7 @@ void PortableServiceWorker::onStart()
 void PortableServiceWorker::onStop()
 {
     router_manager_.reset();
+    desktop_manager_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
