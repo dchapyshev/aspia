@@ -127,6 +127,9 @@ bool AppLock::hasOpenDialogs()
         // timers of Qt keep firing.
         if (qobject_cast<const QFileDialog*>(widget))
             return true;
+
+        if (widget->findChild<ElevateUtil*>())
+            return true;
     }
 
     return false;
@@ -194,6 +197,5 @@ void AppLock::onCheck()
 //--------------------------------------------------------------------------------------------------
 bool AppLock::canLock() const
 {
-    return main_window_ && !main_window_->hasSessions() && !hasOpenDialogs() &&
-           !main_window_->findChild<ElevateUtil*>();
+    return main_window_ && !main_window_->hasSessions() && !hasOpenDialogs();
 }

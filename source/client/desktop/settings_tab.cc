@@ -25,6 +25,7 @@
 #include <QFileDialog>
 #include <QGuiApplication>
 #include <QPalette>
+#include <QPointer>
 #include <QPushButton>
 #include <QScreen>
 #include <QScrollArea>
@@ -643,23 +644,32 @@ void SettingsTab::onUpdateServerClicked()
         return;
     }
 
-    elevate_util_ = ElevateUtil::create(this);
+    // The tab can be closed while the dialog is open, so the process belongs to the main window.
+    ElevateUtil* elevate_util = ElevateUtil::create(window()).release();
+    if (!elevate_util)
+        return;
+
     ui->button_update_server->setEnabled(false);
 
     QStringList arguments;
     arguments << "--update-server";
     arguments << "--locale=" + GuiApplication::instance()->locale();
 
-    bool started = elevate_util_ && elevate_util_->runElevated(arguments, window()->winId(), [this](int /* exit_code */)
+    QPointer<SettingsTab> self(this);
+    bool started = elevate_util->runElevated(arguments, window()->winId(),
+        [elevate_util, self](int /* exit_code */)
     {
-        elevate_util_.reset();
-        ui->button_update_server->setEnabled(true);
-        loadUpdateServer();
+        elevate_util->deleteLater();
+        if (!self)
+            return;
+
+        self->ui->button_update_server->setEnabled(true);
+        self->loadUpdateServer();
     });
 
     if (!started)
     {
-        elevate_util_.reset();
+        elevate_util->deleteLater();
         ui->button_update_server->setEnabled(true);
     }
 }
