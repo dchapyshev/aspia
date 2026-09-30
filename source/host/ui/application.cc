@@ -79,7 +79,7 @@ bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message,
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Application::Application(int& argc, char* argv[])
+Application::Application(int& argc, char* argv[], const QString& ipc_channel_id)
     : GuiApplication(argc, argv)
 {
     LOG(INFO) << "Ctor";
@@ -132,7 +132,7 @@ Application::Application(int& argc, char* argv[])
     setTheme(user_settings.theme());
     setLocale(locale);
 
-    addWorker(std::make_unique<UserIpcWorker>());
+    addWorker(std::make_unique<UserIpcWorker>(ipc_channel_id));
 }
 
 //--------------------------------------------------------------------------------------------------

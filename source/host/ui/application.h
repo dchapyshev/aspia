@@ -20,13 +20,14 @@
 #define HOST_UI_APPLICATION_H
 
 #include "base/gui_application.h"
+#include "host/host_constants.h"
 
 class Application final : public GuiApplication
 {
     Q_OBJECT
 
 public:
-    Application(int& argc, char* argv[]);
+    Application(int& argc, char* argv[], const QString& ipc_channel_id = kHostUiChannelId);
     virtual ~Application() final;
 
     static Application* instance();

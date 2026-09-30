@@ -25,6 +25,7 @@
 #include "base/serialization.h"
 #include "base/threading/worker.h"
 #include "common/clipboard.h"
+#include "host/host_constants.h"
 #include "proto/user.h"
 
 class ClipboardFileTransfer;
@@ -66,7 +67,7 @@ public:
 
     using ClientList = QVector<Client>;
 
-    UserIpcWorker();
+    explicit UserIpcWorker(const QString& ipc_channel_id = kHostUiChannelId);
     ~UserIpcWorker() final;
 
 public slots:
@@ -110,6 +111,8 @@ private slots:
 private:
     void sendServiceMessage();
     void sendNetworkMessage(quint8 net_channel_id, const QByteArray& buffer);
+
+    const QString ipc_channel_id_;
 
     ScopedQPointer<ClipboardFileTransfer> clipboard_file_transfer_;
     ScopedQPointer<IpcChannel> ipc_channel_;

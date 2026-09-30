@@ -35,8 +35,9 @@ volatile auto g_clientListType = qRegisterMetaType<UserIpcWorker::ClientList>();
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UserIpcWorker::UserIpcWorker()
-    : Worker(Thread::AsioDispatcher)
+UserIpcWorker::UserIpcWorker(const QString& ipc_channel_id)
+    : Worker(Thread::AsioDispatcher),
+      ipc_channel_id_(ipc_channel_id)
 {
     LOG(INFO) << "Ctor";
 #if defined(Q_OS_WINDOWS)
@@ -55,7 +56,7 @@ UserIpcWorker::~UserIpcWorker()
 //--------------------------------------------------------------------------------------------------
 void UserIpcWorker::onConnectToService()
 {
-    LOG(INFO) << "Starting user session agent (channel:" << kHostUiChannelId << ")";
+    LOG(INFO) << "Starting user session agent (channel:" << ipc_channel_id_ << ")";
 
     ipc_channel_ = new IpcChannel(this);
 
@@ -64,7 +65,7 @@ void UserIpcWorker::onConnectToService()
     connect(ipc_channel_, &IpcChannel::sig_errorOccurred, this, &UserIpcWorker::onIpcErrorOccurred);
     connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &UserIpcWorker::onIpcMessageReceived);
 
-    ipc_channel_->connectTo(kHostUiChannelId);
+    ipc_channel_->connectTo(ipc_channel_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
