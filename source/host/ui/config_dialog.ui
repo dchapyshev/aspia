@@ -252,6 +252,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="button_export_installer">
+            <property name="text">
+             <string>Export installer</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

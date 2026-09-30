@@ -44,6 +44,10 @@
 #include "host/ui/ui_config_dialog.h"
 #include "host/ui/user_dialog.h"
 
+#if defined(Q_OS_WINDOWS)
+#include "host/win/msi_package.h"
+#endif // defined(Q_OS_WINDOWS)
+
 #if defined(Q_OS_MACOS)
 #include <QComboBox>
 #include <QHBoxLayout>
@@ -114,6 +118,11 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui->button_import, &QPushButton::clicked, this, &ConfigDialog::onImport);
     connect(ui->button_export, &QPushButton::clicked, this, &ConfigDialog::onExport);
+#if defined(Q_OS_WINDOWS)
+    connect(ui->button_export_installer, &QPushButton::clicked, this, &ConfigDialog::onExportInstaller);
+#else
+    ui->button_export_installer->hide();
+#endif // defined(Q_OS_WINDOWS)
 
     ui->combobox_update_check_freq->addItem(tr("Once a day"), 1);
     ui->combobox_update_check_freq->addItem(tr("Once a week"), 7);
@@ -552,6 +561,41 @@ void ConfigDialog::onExport()
     }
 
     SettingsUtil::exportToFile(file_path, false, this);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ConfigDialog::onExportInstaller()
+{
+#if defined(Q_OS_WINDOWS)
+    LOG(INFO) << "[ACTION] Export installer";
+
+    QString file_path =
+        QFileDialog::getSaveFileName(this, tr("Export Installer"), QString(), tr("MSI-files (*.msi)"));
+    if (file_path.isEmpty())
+    {
+        LOG(INFO) << "No selected file path";
+        return;
+    }
+
+    switch (MsiPackage::exportWithSettings(file_path))
+    {
+        case MsiPackage::Result::SUCCESS:
+            MsgBox::information(this, tr("The installer was successfully exported."));
+            break;
+
+        case MsiPackage::Result::NO_PACKAGE:
+            MsgBox::warning(this, tr("The installed host package was not found."));
+            break;
+
+        case MsiPackage::Result::UNSUPPORTED_PACKAGE:
+            MsgBox::warning(this, tr("The installed version of the host does not support exporting the installer."));
+            break;
+
+        case MsiPackage::Result::FAILED:
+            MsgBox::warning(this, tr("Unable to export the installer."));
+            break;
+    }
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
