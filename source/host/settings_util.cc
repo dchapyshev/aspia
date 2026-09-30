@@ -24,6 +24,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QSaveFile>
+#include <QUrl>
 
 #include "base/build_config.h"
 #include "base/logging.h"
@@ -50,6 +51,8 @@ const char kHardwareVideoEncodingEnabled[] = "hardware_video_encoding_enabled";
 const char kApplicationShutdownDisabled[] = "application_shutdown_disabled";
 const char kAutoUpdateEnabled[] = "auto_update_enabled";
 const char kUpdateCheckFrequency[] = "update_check_frequency";
+const char kUpdateServer[] = "update_server";
+const char kUpdatePublicKey[] = "update_public_key";
 
 const char kSeedKey[] = "seed_key";
 const char kTcpPort[] = "tcp_port";
@@ -74,6 +77,8 @@ const char kUserVerifier[] = "verifier";
 const char kUserSessions[] = "sessions";
 const char kUserFlags[] = "flags";
 
+const int kUpdatePublicKeySize = 32;
+
 //--------------------------------------------------------------------------------------------------
 QJsonObject exportSystemSettings()
 {
@@ -86,6 +91,8 @@ QJsonObject exportSystemSettings()
     obj[kApplicationShutdownDisabled] = settings.isApplicationShutdownDisabled();
     obj[kAutoUpdateEnabled] = settings.isAutoUpdateEnabled();
     obj[kUpdateCheckFrequency] = settings.updateCheckFrequency();
+    obj[kUpdateServer] = settings.updateServer();
+    obj[kUpdatePublicKey] = QString::fromLatin1(settings.updatePublicKey().toHex());
     return obj;
 }
 
@@ -145,6 +152,29 @@ void importSystemSettings(const QJsonObject& obj)
         settings.setAutoUpdateEnabled(obj[kAutoUpdateEnabled].toBool());
     if (obj.contains(kUpdateCheckFrequency))
         settings.setUpdateCheckFrequency(obj[kUpdateCheckFrequency].toInt());
+
+    if (obj.contains(kUpdateServer))
+    {
+        const QString server = obj[kUpdateServer].toString().trimmed();
+        const QByteArray key_hex = obj[kUpdatePublicKey].toString().trimmed().toLower().toLatin1();
+        const QByteArray key = QByteArray::fromHex(key_hex);
+
+        const QUrl url(server, QUrl::StrictMode);
+        const bool server_valid = server.isEmpty() || (url.isValid() && !url.host().isEmpty() &&
+            (url.scheme() == "https" || url.scheme() == "http"));
+        const bool key_valid = key_hex.isEmpty() ||
+            (key.size() == kUpdatePublicKeySize && key.toHex() == key_hex);
+
+        if (!server_valid || !key_valid || (server.isEmpty() && !key.isEmpty()))
+        {
+            LOG(WARNING) << "Skipping invalid update server:" << server;
+        }
+        else
+        {
+            settings.setUpdateServer(server);
+            settings.setUpdatePublicKey(key);
+        }
+    }
 
     settings.sync();
 }
