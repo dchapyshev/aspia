@@ -59,6 +59,7 @@
 #if defined(Q_OS_WINDOWS)
 #include "base/process_util.h"
 #include "base/win/desktop.h"
+#include "host/workers/portable_service_worker.h"
 #include "host/win/portable_host.h"
 #include "host/win/portable_package.h"
 #include "host/win/portable_service.h"
@@ -373,7 +374,10 @@ int runService(int& argc, char* argv[])
 
 #if defined(Q_OS_WINDOWS)
     if (PortableHost::isActive())
+    {
+        application.addWorker(std::make_unique<PortableServiceWorker>());
         return PortableService().exec(application);
+    }
 #endif // defined(Q_OS_WINDOWS)
 
     application.addWorker(std::make_unique<ServiceWorker>());

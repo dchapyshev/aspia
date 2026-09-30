@@ -43,6 +43,8 @@ collect_sources(SOURCE_HOST_WORKERS_TESTS
 
 if (WIN32)
     collect_sources(SOURCE_HOST_WORKERS
+        portable_service_worker.cc
+        portable_service_worker.h
         tools_worker_win.cc)
 endif()
 
