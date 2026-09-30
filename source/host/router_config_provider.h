@@ -34,6 +34,7 @@ public:
     ~DatabaseConfigProvider() final;
 
     // RouterManager::ConfigProvider implementation.
+    bool isPortable() const final;
     Address routerAddress() const final;
     QByteArray routerPublicKey() const final;
     bool oneTimePassword() const final;
@@ -60,6 +61,7 @@ public:
     ~PortableConfigProvider() final;
 
     // RouterManager::ConfigProvider implementation.
+    bool isPortable() const final;
     Address routerAddress() const final;
     QByteArray routerPublicKey() const final;
     bool oneTimePassword() const final;

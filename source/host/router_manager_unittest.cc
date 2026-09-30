@@ -80,6 +80,31 @@ const qint64 kServiceStartPeriod = 7 * 24 * 60 * 60;
 constexpr quint16 kFirstPort = 48111;
 constexpr quint16 kPortCount = 50;
 
+// A config that behaves exactly like the database one but reports the host as portable, so the test
+// can exercise the portable branch of the ID request without an embedded resource.
+class PortableTestConfigProvider final : public RouterManager::ConfigProvider
+{
+public:
+    explicit PortableTestConfigProvider(Database& database) : inner_(database) {}
+
+    bool isPortable() const final { return true; }
+    Address routerAddress() const final { return inner_.routerAddress(); }
+    QByteArray routerPublicKey() const final { return inner_.routerPublicKey(); }
+    bool oneTimePassword() const final { return inner_.oneTimePassword(); }
+    quint32 oneTimePasswordCharacters() const final { return inner_.oneTimePasswordCharacters(); }
+    int oneTimePasswordLength() const final { return inner_.oneTimePasswordLength(); }
+    MilliSeconds oneTimePasswordExpire() const final { return inner_.oneTimePasswordExpire(); }
+    QByteArray hostKey() const final { return inner_.hostKey(); }
+    bool setHostKey(const QByteArray& key) final { return inner_.setHostKey(key); }
+    QVector<User> userList() const final { return inner_.userList(); }
+    Database::PasswordProtection passwordProtectionState() const final
+        { return inner_.passwordProtectionState(); }
+    SharedPointer<UserList> createUserList() const final { return inner_.createUserList(); }
+
+private:
+    DatabaseConfigProvider inner_;
+};
+
 } // namespace
 
 // A real worker thread of the host: it carries the database connection of its own thread and the
@@ -547,9 +572,9 @@ protected:
 
     // Creates the manager in its worker thread, pointed at the stand, with the one-time password
     // switched by |one_time_password|.
-    void startManager(bool one_time_password = false)
+    void startManager(bool one_time_password = false, bool portable = false)
     {
-        host_worker_->invoke([this, one_time_password]()
+        host_worker_->invoke([this, one_time_password, portable]()
         {
             Database& database = host_worker_->database();
 
@@ -565,7 +590,13 @@ protected:
             ASSERT_TRUE(database.setOneTimePassword(one_time_password));
             ASSERT_TRUE(database.setOneTimePasswordExpire(kPasswordExpire));
 
-            manager_ = new RouterManager(std::make_unique<DatabaseConfigProvider>(database));
+            std::unique_ptr<RouterManager::ConfigProvider> config;
+            if (portable)
+                config = std::make_unique<PortableTestConfigProvider>(database);
+            else
+                config = std::make_unique<DatabaseConfigProvider>(database);
+
+            manager_ = new RouterManager(std::move(config));
 
             QObject::connect(manager_, &RouterManager::sig_credentialsChanged, manager_,
                              [this](HostId host_id, const SecureString& password)
@@ -647,6 +678,9 @@ TEST_F(RouterManagerTest, NewHostAsksForANewIdAndKeepsTheIssuedKey)
     EXPECT_EQ(last_request_.type(), proto::router::HostIdRequest::NEW_ID);
     EXPECT_FALSE(last_request_.hw_id().empty());
 
+    // An installed host is never portable.
+    EXPECT_FALSE(last_request_.portable());
+
     sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
 
     ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kHostId; }));
@@ -662,6 +696,19 @@ TEST_F(RouterManagerTest, NewHostAsksForANewIdAndKeepsTheIssuedKey)
 //--------------------------------------------------------------------------------------------------
 // A host with a stored key presents it. A router that does not know the key sends the host down
 // the new-id path, so a wiped router database heals by itself.
+//--------------------------------------------------------------------------------------------------
+// A portable host asks for a new id and marks the request portable, so the router issues a temporary
+// id that cannot be approved.
+TEST_F(RouterManagerTest, PortableHostMarksTheRequestPortable)
+{
+    startManager(false, /* portable */ true);
+
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+    EXPECT_EQ(last_request_.type(), proto::router::HostIdRequest::NEW_ID);
+    EXPECT_TRUE(last_request_.portable());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST_F(RouterManagerTest, UnknownKeyIsResetAndANewIdIsRequested)
 {
     host_worker_->invoke([this]()

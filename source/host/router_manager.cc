@@ -448,6 +448,7 @@ void RouterManager::hostIdRequest()
     {
         LOG(INFO) << "Host key is empty. Request for a new ID";
         host_id_request->set_type(proto::router::HostIdRequest::NEW_ID);
+        host_id_request->set_portable(config_->isPortable());
     }
     else
     {

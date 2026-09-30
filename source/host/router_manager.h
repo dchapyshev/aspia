@@ -51,6 +51,8 @@ public:
     public:
         virtual ~ConfigProvider() = default;
 
+        virtual bool isPortable() const = 0;
+
         virtual Address routerAddress() const = 0;
         virtual QByteArray routerPublicKey() const = 0;
 

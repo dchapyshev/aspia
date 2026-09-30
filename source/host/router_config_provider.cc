@@ -78,6 +78,12 @@ DatabaseConfigProvider::DatabaseConfigProvider(Database& database)
 DatabaseConfigProvider::~DatabaseConfigProvider() = default;
 
 //--------------------------------------------------------------------------------------------------
+bool DatabaseConfigProvider::isPortable() const
+{
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
 Address DatabaseConfigProvider::routerAddress() const
 {
     return database_.routerAddress();
@@ -153,6 +159,12 @@ PortableConfigProvider::PortableConfigProvider()
 
 //--------------------------------------------------------------------------------------------------
 PortableConfigProvider::~PortableConfigProvider() = default;
+
+//--------------------------------------------------------------------------------------------------
+bool PortableConfigProvider::isPortable() const
+{
+    return true;
+}
 
 //--------------------------------------------------------------------------------------------------
 Address PortableConfigProvider::routerAddress() const
