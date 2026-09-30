@@ -1226,23 +1226,28 @@ Eklenen yönlendiriciler: %4</translation>
         <translation>Güncelleme sunucusu belirtilmezse varsayılan sunucu kullanılır. Ortak anahtar belirtilmezse yerleşik anahtar kullanılır.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="528"/>
-        <location filename="../host/ui/config_dialog.ui" line="639"/>
+        <location filename="../host/ui/config_dialog.ui" line="258"/>
+        <source>Export installer</source>
+        <translation>Yükleyiciyi dışa aktar</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="535"/>
+        <location filename="../host/ui/config_dialog.ui" line="646"/>
         <source>Users</source>
         <translation>Kullanıcılar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="542"/>
+        <location filename="../host/ui/config_dialog.ui" line="549"/>
         <source>Add new user</source>
         <translation>Yeni kullanıcı ekle</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="568"/>
+        <location filename="../host/ui/config_dialog.ui" line="575"/>
         <source>Edit user</source>
         <translation>Kullanıcıyı düzenle</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="594"/>
+        <location filename="../host/ui/config_dialog.ui" line="601"/>
         <source>Delete user</source>
         <translation>Kullanıcıyı sil</translation>
     </message>
@@ -1252,102 +1257,102 @@ Eklenen yönlendiriciler: %4</translation>
         <translation>Güncellemeleri denetle</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="662"/>
+        <location filename="../host/ui/config_dialog.ui" line="669"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="671"/>
+        <location filename="../host/ui/config_dialog.ui" line="678"/>
         <source>Modify</source>
         <translation>Değiştir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="680"/>
+        <location filename="../host/ui/config_dialog.ui" line="687"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="460"/>
+        <location filename="../host/ui/config_dialog.ui" line="467"/>
         <source>Router</source>
         <translation>Yönlendirici</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="466"/>
+        <location filename="../host/ui/config_dialog.ui" line="473"/>
         <source>Enable the use of a router</source>
         <translation>Yönlendirici kullanımını etkinleştir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="478"/>
+        <location filename="../host/ui/config_dialog.ui" line="485"/>
         <source>Address:</source>
         <translation>Adres:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="497"/>
+        <location filename="../host/ui/config_dialog.ui" line="504"/>
         <source>Public Key:</source>
         <translation>Ortak Anahtar:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="300"/>
+        <location filename="../host/ui/config_dialog.ui" line="307"/>
         <source>Change password</source>
         <translation>Parolayı değiştir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="275"/>
+        <location filename="../host/ui/config_dialog.ui" line="282"/>
         <source>Security</source>
         <translation>Güvenlik</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="281"/>
+        <location filename="../host/ui/config_dialog.ui" line="288"/>
         <source>Password Protection of Settings</source>
         <translation>Ayarların Parola Koruması</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="317"/>
+        <location filename="../host/ui/config_dialog.ui" line="324"/>
         <source>One-time Password</source>
         <translation>Tek Kullanımlık Parola</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="323"/>
+        <location filename="../host/ui/config_dialog.ui" line="330"/>
         <source>Enable one-time password</source>
         <translation>Tek kullanımlık parolayı etkinleştir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="360"/>
+        <location filename="../host/ui/config_dialog.ui" line="367"/>
         <source>Characters count:</source>
         <translation>Karakter sayısı:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="346"/>
+        <location filename="../host/ui/config_dialog.ui" line="353"/>
         <source>Characters:</source>
         <translation>Karakterler:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="382"/>
+        <location filename="../host/ui/config_dialog.ui" line="389"/>
         <source>Connection Confirmation</source>
         <translation>Bağlantı Onayı</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="388"/>
+        <location filename="../host/ui/config_dialog.ui" line="395"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>Bilgisayara bağlanıldığında onay iste</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="397"/>
+        <location filename="../host/ui/config_dialog.ui" line="404"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>Bağlantının otomatik onaylanma süresi:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="332"/>
+        <location filename="../host/ui/config_dialog.ui" line="339"/>
         <source>Change password:</source>
         <translation>Parolayı yenileme sıklığı:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="411"/>
+        <location filename="../host/ui/config_dialog.ui" line="418"/>
         <source>If there is no active user:</source>
         <translation>Etkin kullanıcı yoksa:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="511"/>
+        <location filename="../host/ui/config_dialog.ui" line="518"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Doğrudan bağlantı olmadığında (NAT arkasında) bir bilgisayara bağlanmak için yönlendirici gereklidir. Aspia genel bir yönlendirici sağlamaz, ancak kendi yönlendiricinizi kurabilirsiniz. Yönlendiriciyi &lt;a href=&quot;https://aspia.org&quot;&gt;resmi web sitesinden&lt;/a&gt; indirebilirsiniz.</translation>
     </message>
@@ -1362,12 +1367,12 @@ Eklenen yönlendiriciler: %4</translation>
         <translation>Gelen bağlantı noktası:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="436"/>
+        <location filename="../host/ui/config_dialog.ui" line="443"/>
         <source>Disable Aspia shutdown</source>
         <translation>Aspia&apos;nın kapatılmasını devre dışı bırak</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="430"/>
+        <location filename="../host/ui/config_dialog.ui" line="437"/>
         <source>Other</source>
         <translation>Diğer</translation>
     </message>
@@ -1392,189 +1397,219 @@ Eklenen yönlendiriciler: %4</translation>
         <translation>Güncellemeleri denetleme sıklığı:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="118"/>
+        <location filename="../host/ui/config_dialog.cc" line="127"/>
         <source>Once a day</source>
         <translation>Günde bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="119"/>
+        <location filename="../host/ui/config_dialog.cc" line="128"/>
         <source>Once a week</source>
         <translation>Haftada bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="120"/>
+        <location filename="../host/ui/config_dialog.cc" line="129"/>
         <source>Once a month</source>
         <translation>Ayda bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="122"/>
+        <location filename="../host/ui/config_dialog.cc" line="131"/>
         <source>Stable</source>
         <translation>Kararlı</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="123"/>
+        <location filename="../host/ui/config_dialog.cc" line="132"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="124"/>
+        <location filename="../host/ui/config_dialog.cc" line="133"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="159"/>
+        <location filename="../host/ui/config_dialog.cc" line="168"/>
         <source>Default</source>
         <translation>Varsayılan</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="206"/>
+        <location filename="../host/ui/config_dialog.cc" line="215"/>
         <source>On reboot</source>
         <translation>Yeniden başlatıldığında</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="207"/>
+        <location filename="../host/ui/config_dialog.cc" line="216"/>
         <source>Every 5 minutes</source>
         <translation>5 dakikada bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="208"/>
+        <location filename="../host/ui/config_dialog.cc" line="217"/>
         <source>Every 30 minutes</source>
         <translation>30 dakikada bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="209"/>
+        <location filename="../host/ui/config_dialog.cc" line="218"/>
         <source>Every 1 hour</source>
         <translation>Saatte bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="210"/>
+        <location filename="../host/ui/config_dialog.cc" line="219"/>
         <source>Every 6 hours</source>
         <translation>6 saatte bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="211"/>
+        <location filename="../host/ui/config_dialog.cc" line="220"/>
         <source>Every 12 hours</source>
         <translation>12 saatte bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="219"/>
+        <location filename="../host/ui/config_dialog.cc" line="228"/>
         <source>Letters and digits</source>
         <translation>Harfler ve rakamlar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="222"/>
+        <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>Letters</source>
         <translation>Harfler</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="224"/>
+        <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>Digits</source>
         <translation>Rakamlar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="241"/>
+        <location filename="../host/ui/config_dialog.cc" line="250"/>
         <source>Never</source>
         <translation>Hiçbir zaman</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="242"/>
+        <location filename="../host/ui/config_dialog.cc" line="251"/>
         <source>15 seconds</source>
         <translation>15 saniye</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="243"/>
+        <location filename="../host/ui/config_dialog.cc" line="252"/>
         <source>30 seconds</source>
         <translation>30 saniye</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="244"/>
+        <location filename="../host/ui/config_dialog.cc" line="253"/>
         <source>45 seconds</source>
         <translation>45 saniye</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="245"/>
+        <location filename="../host/ui/config_dialog.cc" line="254"/>
         <source>60 seconds</source>
         <translation>60 saniye</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="253"/>
+        <location filename="../host/ui/config_dialog.cc" line="262"/>
         <source>Accept connection</source>
         <translation>Bağlantıyı kabul et</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="254"/>
+        <location filename="../host/ui/config_dialog.cc" line="263"/>
         <source>Reject connection</source>
         <translation>Bağlantıyı reddet</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="454"/>
+        <location filename="../host/ui/config_dialog.cc" line="463"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; kullanıcısını silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="482"/>
-        <location filename="../host/ui/config_dialog.cc" line="516"/>
+        <location filename="../host/ui/config_dialog.cc" line="491"/>
+        <location filename="../host/ui/config_dialog.cc" line="525"/>
         <source>An error occurred while processing the password.</source>
         <translation>Parola işlenirken bir hata oluştu.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="499"/>
+        <location filename="../host/ui/config_dialog.cc" line="508"/>
         <source>Settings storage is unavailable.</source>
         <translation>Ayar depolama alanı kullanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="530"/>
+        <location filename="../host/ui/config_dialog.cc" line="539"/>
         <source>Import</source>
         <translation>İçe Aktar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="530"/>
-        <location filename="../host/ui/config_dialog.cc" line="547"/>
+        <location filename="../host/ui/config_dialog.cc" line="539"/>
+        <location filename="../host/ui/config_dialog.cc" line="556"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON dosyaları (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="547"/>
+        <location filename="../host/ui/config_dialog.cc" line="556"/>
         <source>Export</source>
         <translation>Dışa Aktar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="572"/>
+        <location filename="../host/ui/config_dialog.cc" line="573"/>
+        <source>Export Installer</source>
+        <translation>Yükleyiciyi Dışa Aktar</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="573"/>
+        <source>MSI-files (*.msi)</source>
+        <translation>MSI dosyaları (*.msi)</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="583"/>
+        <source>The installer was successfully exported.</source>
+        <translation>Yükleyici başarıyla dışa aktarıldı.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="587"/>
+        <source>The installed host package was not found.</source>
+        <translation>Yüklü ana bilgisayar paketi bulunamadı.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="591"/>
+        <source>The installed version of the host does not support exporting the installer.</source>
+        <translation>Ana bilgisayarın yüklü sürümü yükleyicinin dışa aktarılmasını desteklemiyor.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="595"/>
+        <source>Unable to export the installer.</source>
+        <translation>Yükleyici dışa aktarılamıyor.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="616"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Yapılandırma yazılamıyor. Yazma için yeterli haklara sahip olduğunuzdan emin olun.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="588"/>
+        <location filename="../host/ui/config_dialog.cc" line="632"/>
         <source>An invalid update server address was entered.</source>
         <translation>Geçersiz bir güncelleme sunucusu adresi girildi.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="596"/>
+        <location filename="../host/ui/config_dialog.cc" line="640"/>
         <source>Enter the update server address.</source>
         <translation>Güncelleme sunucusu adresini girin.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="606"/>
+        <location filename="../host/ui/config_dialog.cc" line="650"/>
         <source>An invalid public key was entered.</source>
         <translation>Geçersiz bir ortak anahtar girildi.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="618"/>
+        <location filename="../host/ui/config_dialog.cc" line="662"/>
         <source>Incorrect router address entered.</source>
         <translation>Hatalı yönlendirici adresi girildi.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="628"/>
+        <location filename="../host/ui/config_dialog.cc" line="672"/>
         <source>Incorrect router public key entered.</source>
         <translation>Hatalı yönlendirici ortak anahtarı girildi.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="791"/>
+        <location filename="../host/ui/config_dialog.cc" line="835"/>
         <source>Install</source>
         <translation>Yükle</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="796"/>
+        <location filename="../host/ui/config_dialog.cc" line="840"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
@@ -7894,73 +7929,73 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/settings_util.cc" line="284"/>
+        <location filename="../host/settings_util.cc" line="314"/>
         <source>The configuration was successfully imported.</source>
         <translation>Yapılandırma başarıyla içe aktarıldı.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="333"/>
+        <location filename="../host/settings_util.cc" line="363"/>
         <source>The configuration was successfully exported.</source>
         <translation>Yapılandırma başarıyla dışa aktarıldı.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="343"/>
+        <location filename="../host/settings_util.cc" line="373"/>
         <source>Warning</source>
         <translation>Uyarı</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="250"/>
+        <location filename="../host/settings_util.cc" line="280"/>
         <source>Unable to open the source file.</source>
         <translation>Kaynak dosya açılamıyor.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="262"/>
+        <location filename="../host/settings_util.cc" line="292"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Kaynak dosya okunamıyor: dosya hasarlı veya bilinmeyen bir biçimde.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="279"/>
+        <location filename="../host/settings_util.cc" line="309"/>
         <source>Unable to write the secure database.</source>
         <translation>Güvenli veritabanına yazılamıyor.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="299"/>
+        <location filename="../host/settings_util.cc" line="329"/>
         <source>Unable to read the secure database.</source>
         <translation>Güvenli veritabanı okunamıyor.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="320"/>
+        <location filename="../host/settings_util.cc" line="350"/>
         <source>Unable to open the target file.</source>
         <translation>Hedef dosya açılamıyor.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="328"/>
+        <location filename="../host/settings_util.cc" line="358"/>
         <source>Unable to write the target file.</source>
         <translation>Hedef dosyaya yazılamıyor.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="344"/>
+        <location filename="../host/settings_util.cc" line="374"/>
         <source>Continue</source>
         <translation>Devam Et</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="356"/>
+        <location filename="../host/settings_util.cc" line="386"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="367"/>
+        <location filename="../host/settings_util.cc" line="397"/>
         <source>Aspia</source>
         <translation>Aspia</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="241"/>
+        <location filename="../host/settings_util.cc" line="271"/>
         <source>Source settings file does not exist.</source>
         <translation>Kaynak ayar dosyası yok.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="344"/>
-        <location filename="../host/settings_util.cc" line="346"/>
+        <location filename="../host/settings_util.cc" line="374"/>
+        <location filename="../host/settings_util.cc" line="376"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>Mevcut ayarların üzerine yazılacak. Devam edilsin mi?</translation>
     </message>

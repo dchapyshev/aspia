@@ -1229,23 +1229,28 @@ Routers adicionados: %4</translation>
         <translation>Se o servidor de atualizações não for especificado, é utilizado o servidor predefinido. Se a chave pública não for especificada, é utilizada a chave incorporada.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="528"/>
-        <location filename="../host/ui/config_dialog.ui" line="639"/>
+        <location filename="../host/ui/config_dialog.ui" line="258"/>
+        <source>Export installer</source>
+        <translation>Exportar instalador</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="535"/>
+        <location filename="../host/ui/config_dialog.ui" line="646"/>
         <source>Users</source>
         <translation>Utilizadores</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="542"/>
+        <location filename="../host/ui/config_dialog.ui" line="549"/>
         <source>Add new user</source>
         <translation>Adicionar novo utilizador</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="568"/>
+        <location filename="../host/ui/config_dialog.ui" line="575"/>
         <source>Edit user</source>
         <translation>Editar utilizador</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="594"/>
+        <location filename="../host/ui/config_dialog.ui" line="601"/>
         <source>Delete user</source>
         <translation>Eliminar utilizador</translation>
     </message>
@@ -1255,102 +1260,102 @@ Routers adicionados: %4</translation>
         <translation>Procurar atualizações</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="662"/>
+        <location filename="../host/ui/config_dialog.ui" line="669"/>
         <source>Add</source>
         <translation>Adicionar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="671"/>
+        <location filename="../host/ui/config_dialog.ui" line="678"/>
         <source>Modify</source>
         <translation>Modificar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="680"/>
+        <location filename="../host/ui/config_dialog.ui" line="687"/>
         <source>Delete</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="460"/>
+        <location filename="../host/ui/config_dialog.ui" line="467"/>
         <source>Router</source>
         <translation>Router</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="466"/>
+        <location filename="../host/ui/config_dialog.ui" line="473"/>
         <source>Enable the use of a router</source>
         <translation>Ativar a utilização de um router</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="478"/>
+        <location filename="../host/ui/config_dialog.ui" line="485"/>
         <source>Address:</source>
         <translation>Endereço:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="497"/>
+        <location filename="../host/ui/config_dialog.ui" line="504"/>
         <source>Public Key:</source>
         <translation>Chave pública:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="300"/>
+        <location filename="../host/ui/config_dialog.ui" line="307"/>
         <source>Change password</source>
         <translation>Alterar palavra-passe</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="275"/>
+        <location filename="../host/ui/config_dialog.ui" line="282"/>
         <source>Security</source>
         <translation>Segurança</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="281"/>
+        <location filename="../host/ui/config_dialog.ui" line="288"/>
         <source>Password Protection of Settings</source>
         <translation>Proteção das definições por palavra-passe</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="317"/>
+        <location filename="../host/ui/config_dialog.ui" line="324"/>
         <source>One-time Password</source>
         <translation>Palavra-passe única</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="323"/>
+        <location filename="../host/ui/config_dialog.ui" line="330"/>
         <source>Enable one-time password</source>
         <translation>Ativar palavra-passe única</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="360"/>
+        <location filename="../host/ui/config_dialog.ui" line="367"/>
         <source>Characters count:</source>
         <translation>Número de caracteres:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="346"/>
+        <location filename="../host/ui/config_dialog.ui" line="353"/>
         <source>Characters:</source>
         <translation>Caracteres:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="382"/>
+        <location filename="../host/ui/config_dialog.ui" line="389"/>
         <source>Connection Confirmation</source>
         <translation>Confirmação de ligação</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="388"/>
+        <location filename="../host/ui/config_dialog.ui" line="395"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>Exigir confirmação ao ligar a um computador</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="397"/>
+        <location filename="../host/ui/config_dialog.ui" line="404"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>Confirmação automática da ligação através de:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="332"/>
+        <location filename="../host/ui/config_dialog.ui" line="339"/>
         <source>Change password:</source>
         <translation>Alterar palavra-passe:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="411"/>
+        <location filename="../host/ui/config_dialog.ui" line="418"/>
         <source>If there is no active user:</source>
         <translation>Se não existir um utilizador ativo:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="511"/>
+        <location filename="../host/ui/config_dialog.ui" line="518"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>É necessário um router para ligar a um computador quando não existe ligação direta (contornar NAT). O Aspia não disponibiliza um router público, mas pode instalar o seu próprio. Pode transferir o router no &lt;a href=&quot;https://aspia.org&quot;&gt;site oficial&lt;/a&gt;.</translation>
     </message>
@@ -1365,12 +1370,12 @@ Routers adicionados: %4</translation>
         <translation>Porta de entrada:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="436"/>
+        <location filename="../host/ui/config_dialog.ui" line="443"/>
         <source>Disable Aspia shutdown</source>
         <translation>Impedir o encerramento do Aspia</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="430"/>
+        <location filename="../host/ui/config_dialog.ui" line="437"/>
         <source>Other</source>
         <translation>Outro</translation>
     </message>
@@ -1395,189 +1400,219 @@ Routers adicionados: %4</translation>
         <translation>Procurar atualizações:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="118"/>
+        <location filename="../host/ui/config_dialog.cc" line="127"/>
         <source>Once a day</source>
         <translation>Uma vez por dia</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="119"/>
+        <location filename="../host/ui/config_dialog.cc" line="128"/>
         <source>Once a week</source>
         <translation>Uma vez por semana</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="120"/>
+        <location filename="../host/ui/config_dialog.cc" line="129"/>
         <source>Once a month</source>
         <translation>Uma vez por mês</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="122"/>
+        <location filename="../host/ui/config_dialog.cc" line="131"/>
         <source>Stable</source>
         <translation>Estável</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="123"/>
+        <location filename="../host/ui/config_dialog.cc" line="132"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="124"/>
+        <location filename="../host/ui/config_dialog.cc" line="133"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="159"/>
+        <location filename="../host/ui/config_dialog.cc" line="168"/>
         <source>Default</source>
         <translation>Predefinido</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="206"/>
+        <location filename="../host/ui/config_dialog.cc" line="215"/>
         <source>On reboot</source>
         <translation>Ao reiniciar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="207"/>
+        <location filename="../host/ui/config_dialog.cc" line="216"/>
         <source>Every 5 minutes</source>
         <translation>A cada 5 minutos</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="208"/>
+        <location filename="../host/ui/config_dialog.cc" line="217"/>
         <source>Every 30 minutes</source>
         <translation>A cada 30 minutos</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="209"/>
+        <location filename="../host/ui/config_dialog.cc" line="218"/>
         <source>Every 1 hour</source>
         <translation>A cada 1 hora</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="210"/>
+        <location filename="../host/ui/config_dialog.cc" line="219"/>
         <source>Every 6 hours</source>
         <translation>A cada 6 horas</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="211"/>
+        <location filename="../host/ui/config_dialog.cc" line="220"/>
         <source>Every 12 hours</source>
         <translation>A cada 12 horas</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="219"/>
+        <location filename="../host/ui/config_dialog.cc" line="228"/>
         <source>Letters and digits</source>
         <translation>Letras e dígitos</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="222"/>
+        <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>Letters</source>
         <translation>Letras</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="224"/>
+        <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>Digits</source>
         <translation>Dígitos</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="241"/>
+        <location filename="../host/ui/config_dialog.cc" line="250"/>
         <source>Never</source>
         <translation>Nunca</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="242"/>
+        <location filename="../host/ui/config_dialog.cc" line="251"/>
         <source>15 seconds</source>
         <translation>15 segundos</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="243"/>
+        <location filename="../host/ui/config_dialog.cc" line="252"/>
         <source>30 seconds</source>
         <translation>30 segundos</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="244"/>
+        <location filename="../host/ui/config_dialog.cc" line="253"/>
         <source>45 seconds</source>
         <translation>45 segundos</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="245"/>
+        <location filename="../host/ui/config_dialog.cc" line="254"/>
         <source>60 seconds</source>
         <translation>60 segundos</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="253"/>
+        <location filename="../host/ui/config_dialog.cc" line="262"/>
         <source>Accept connection</source>
         <translation>Aceitar ligação</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="254"/>
+        <location filename="../host/ui/config_dialog.cc" line="263"/>
         <source>Reject connection</source>
         <translation>Rejeitar ligação</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="454"/>
+        <location filename="../host/ui/config_dialog.cc" line="463"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Tem a certeza de que pretende eliminar o utilizador &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="482"/>
-        <location filename="../host/ui/config_dialog.cc" line="516"/>
+        <location filename="../host/ui/config_dialog.cc" line="491"/>
+        <location filename="../host/ui/config_dialog.cc" line="525"/>
         <source>An error occurred while processing the password.</source>
         <translation>Ocorreu um erro ao processar a palavra-passe.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="499"/>
+        <location filename="../host/ui/config_dialog.cc" line="508"/>
         <source>Settings storage is unavailable.</source>
         <translation>O armazenamento de definições não está disponível.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="530"/>
+        <location filename="../host/ui/config_dialog.cc" line="539"/>
         <source>Import</source>
         <translation>Importar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="530"/>
-        <location filename="../host/ui/config_dialog.cc" line="547"/>
+        <location filename="../host/ui/config_dialog.cc" line="539"/>
+        <location filename="../host/ui/config_dialog.cc" line="556"/>
         <source>JSON-files (*.json)</source>
         <translation>Ficheiros JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="547"/>
+        <location filename="../host/ui/config_dialog.cc" line="556"/>
         <source>Export</source>
         <translation>Exportar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="572"/>
+        <location filename="../host/ui/config_dialog.cc" line="573"/>
+        <source>Export Installer</source>
+        <translation>Exportar instalador</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="573"/>
+        <source>MSI-files (*.msi)</source>
+        <translation>Ficheiros MSI (*.msi)</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="583"/>
+        <source>The installer was successfully exported.</source>
+        <translation>O instalador foi exportado com êxito.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="587"/>
+        <source>The installed host package was not found.</source>
+        <translation>O pacote instalado do anfitrião não foi encontrado.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="591"/>
+        <source>The installed version of the host does not support exporting the installer.</source>
+        <translation>A versão instalada do anfitrião não suporta a exportação do instalador.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="595"/>
+        <source>Unable to export the installer.</source>
+        <translation>Não é possível exportar o instalador.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="616"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Não é possível escrever a configuração. Certifique-se de que tem permissões suficientes para escrever.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="588"/>
+        <location filename="../host/ui/config_dialog.cc" line="632"/>
         <source>An invalid update server address was entered.</source>
         <translation>Foi introduzido um endereço de servidor de atualizações inválido.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="596"/>
+        <location filename="../host/ui/config_dialog.cc" line="640"/>
         <source>Enter the update server address.</source>
         <translation>Introduza o endereço do servidor de atualizações.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="606"/>
+        <location filename="../host/ui/config_dialog.cc" line="650"/>
         <source>An invalid public key was entered.</source>
         <translation>Foi introduzida uma chave pública inválida.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="618"/>
+        <location filename="../host/ui/config_dialog.cc" line="662"/>
         <source>Incorrect router address entered.</source>
         <translation>O endereço do router introduzido está incorreto.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="628"/>
+        <location filename="../host/ui/config_dialog.cc" line="672"/>
         <source>Incorrect router public key entered.</source>
         <translation>A chave pública do router introduzida está incorreta.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="791"/>
+        <location filename="../host/ui/config_dialog.cc" line="835"/>
         <source>Install</source>
         <translation>Instalar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="796"/>
+        <location filename="../host/ui/config_dialog.cc" line="840"/>
         <source>Remove</source>
         <translation>Remover</translation>
     </message>
@@ -7936,73 +7971,73 @@ Credenciais importadas: %5</translation>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/settings_util.cc" line="284"/>
+        <location filename="../host/settings_util.cc" line="314"/>
         <source>The configuration was successfully imported.</source>
         <translation>A configuração foi importada com êxito.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="333"/>
+        <location filename="../host/settings_util.cc" line="363"/>
         <source>The configuration was successfully exported.</source>
         <translation>A configuração foi exportada com êxito.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="343"/>
+        <location filename="../host/settings_util.cc" line="373"/>
         <source>Warning</source>
         <translation>Aviso</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="250"/>
+        <location filename="../host/settings_util.cc" line="280"/>
         <source>Unable to open the source file.</source>
         <translation>Não é possível abrir o ficheiro de origem.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="262"/>
+        <location filename="../host/settings_util.cc" line="292"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Não é possível ler o ficheiro de origem: o ficheiro está danificado ou tem um formato desconhecido.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="279"/>
+        <location filename="../host/settings_util.cc" line="309"/>
         <source>Unable to write the secure database.</source>
         <translation>Não é possível escrever a base de dados segura.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="299"/>
+        <location filename="../host/settings_util.cc" line="329"/>
         <source>Unable to read the secure database.</source>
         <translation>Não é possível ler a base de dados segura.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="320"/>
+        <location filename="../host/settings_util.cc" line="350"/>
         <source>Unable to open the target file.</source>
         <translation>Não é possível abrir o ficheiro de destino.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="328"/>
+        <location filename="../host/settings_util.cc" line="358"/>
         <source>Unable to write the target file.</source>
         <translation>Não é possível escrever o ficheiro de destino.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="344"/>
+        <location filename="../host/settings_util.cc" line="374"/>
         <source>Continue</source>
         <translation>Continuar</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="356"/>
+        <location filename="../host/settings_util.cc" line="386"/>
         <source>Error</source>
         <translation>Erro</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="367"/>
+        <location filename="../host/settings_util.cc" line="397"/>
         <source>Aspia</source>
         <translation>Aspia</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="241"/>
+        <location filename="../host/settings_util.cc" line="271"/>
         <source>Source settings file does not exist.</source>
         <translation>O ficheiro de definições de origem não existe.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="344"/>
-        <location filename="../host/settings_util.cc" line="346"/>
+        <location filename="../host/settings_util.cc" line="374"/>
+        <location filename="../host/settings_util.cc" line="376"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>As definições existentes serão substituídas. Continuar?</translation>
     </message>

@@ -1261,320 +1261,355 @@ Routers added: %4</source>
         <translation>設定のエクスポート</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="275"/>
+        <location filename="../host/ui/config_dialog.ui" line="258"/>
+        <source>Export installer</source>
+        <translation>インストーラーのエクスポート</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="282"/>
         <source>Security</source>
         <translation>セキュリティ</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="281"/>
+        <location filename="../host/ui/config_dialog.ui" line="288"/>
         <source>Password Protection of Settings</source>
         <translation>設定のパスワード保護</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="300"/>
+        <location filename="../host/ui/config_dialog.ui" line="307"/>
         <source>Change password</source>
         <translation>パスワードの変更</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="317"/>
+        <location filename="../host/ui/config_dialog.ui" line="324"/>
         <source>One-time Password</source>
         <translation>ワンタイム パスワード</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="323"/>
+        <location filename="../host/ui/config_dialog.ui" line="330"/>
         <source>Enable one-time password</source>
         <translation>ワンタイム パスワードを有効にする</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="332"/>
+        <location filename="../host/ui/config_dialog.ui" line="339"/>
         <source>Change password:</source>
         <translation>パスワードの変更:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="346"/>
+        <location filename="../host/ui/config_dialog.ui" line="353"/>
         <source>Characters:</source>
         <translation>文字の種類:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="360"/>
+        <location filename="../host/ui/config_dialog.ui" line="367"/>
         <source>Characters count:</source>
         <translation>文字数:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="382"/>
+        <location filename="../host/ui/config_dialog.ui" line="389"/>
         <source>Connection Confirmation</source>
         <translation>接続の確認</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="388"/>
+        <location filename="../host/ui/config_dialog.ui" line="395"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>コンピューターへの接続時に確認を要求する</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="397"/>
+        <location filename="../host/ui/config_dialog.ui" line="404"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>接続の自動確認までの時間:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="411"/>
+        <location filename="../host/ui/config_dialog.ui" line="418"/>
         <source>If there is no active user:</source>
         <translation>アクティブなユーザーがいない場合:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="430"/>
+        <location filename="../host/ui/config_dialog.ui" line="437"/>
         <source>Other</source>
         <translation>その他</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="436"/>
+        <location filename="../host/ui/config_dialog.ui" line="443"/>
         <source>Disable Aspia shutdown</source>
         <translation>Aspia の終了を無効にする</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="460"/>
+        <location filename="../host/ui/config_dialog.ui" line="467"/>
         <source>Router</source>
         <translation>ルーター</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="466"/>
+        <location filename="../host/ui/config_dialog.ui" line="473"/>
         <source>Enable the use of a router</source>
         <translation>ルーターの使用を有効にする</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="478"/>
+        <location filename="../host/ui/config_dialog.ui" line="485"/>
         <source>Address:</source>
         <translation>アドレス:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="497"/>
+        <location filename="../host/ui/config_dialog.ui" line="504"/>
         <source>Public Key:</source>
         <translation>公開キー:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="511"/>
+        <location filename="../host/ui/config_dialog.ui" line="518"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>直接接続ができない場合 (NAT 越え)、コンピューターへの接続にはルーターが必要です。Aspia は公開ルーターを提供していませんが、独自のルーターをインストールできます。ルーターは&lt;a href=&quot;https://aspia.org&quot;&gt;公式サイト&lt;/a&gt;からダウンロードできます。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="528"/>
-        <location filename="../host/ui/config_dialog.ui" line="639"/>
+        <location filename="../host/ui/config_dialog.ui" line="535"/>
+        <location filename="../host/ui/config_dialog.ui" line="646"/>
         <source>Users</source>
         <translation>ユーザー</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="542"/>
+        <location filename="../host/ui/config_dialog.ui" line="549"/>
         <source>Add new user</source>
         <translation>新しいユーザーを追加</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="568"/>
+        <location filename="../host/ui/config_dialog.ui" line="575"/>
         <source>Edit user</source>
         <translation>ユーザーを編集</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="594"/>
+        <location filename="../host/ui/config_dialog.ui" line="601"/>
         <source>Delete user</source>
         <translation>ユーザーを削除</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="662"/>
+        <location filename="../host/ui/config_dialog.ui" line="669"/>
         <source>Add</source>
         <translation>追加</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="671"/>
+        <location filename="../host/ui/config_dialog.ui" line="678"/>
         <source>Modify</source>
         <translation>変更</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="680"/>
+        <location filename="../host/ui/config_dialog.ui" line="687"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="118"/>
+        <location filename="../host/ui/config_dialog.cc" line="127"/>
         <source>Once a day</source>
         <translation>1 日 1 回</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="119"/>
+        <location filename="../host/ui/config_dialog.cc" line="128"/>
         <source>Once a week</source>
         <translation>週 1 回</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="120"/>
+        <location filename="../host/ui/config_dialog.cc" line="129"/>
         <source>Once a month</source>
         <translation>月 1 回</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="122"/>
+        <location filename="../host/ui/config_dialog.cc" line="131"/>
         <source>Stable</source>
         <translation>安定版</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="123"/>
+        <location filename="../host/ui/config_dialog.cc" line="132"/>
         <source>Beta</source>
         <translation>ベータ版</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="124"/>
+        <location filename="../host/ui/config_dialog.cc" line="133"/>
         <source>Alpha</source>
         <translation>アルファ版</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="159"/>
+        <location filename="../host/ui/config_dialog.cc" line="168"/>
         <source>Default</source>
         <translation>既定</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="206"/>
+        <location filename="../host/ui/config_dialog.cc" line="215"/>
         <source>On reboot</source>
         <translation>再起動時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="207"/>
+        <location filename="../host/ui/config_dialog.cc" line="216"/>
         <source>Every 5 minutes</source>
         <translation>5 分ごと</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="208"/>
+        <location filename="../host/ui/config_dialog.cc" line="217"/>
         <source>Every 30 minutes</source>
         <translation>30 分ごと</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="209"/>
+        <location filename="../host/ui/config_dialog.cc" line="218"/>
         <source>Every 1 hour</source>
         <translation>1 時間ごと</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="210"/>
+        <location filename="../host/ui/config_dialog.cc" line="219"/>
         <source>Every 6 hours</source>
         <translation>6 時間ごと</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="211"/>
+        <location filename="../host/ui/config_dialog.cc" line="220"/>
         <source>Every 12 hours</source>
         <translation>12 時間ごと</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="219"/>
+        <location filename="../host/ui/config_dialog.cc" line="228"/>
         <source>Letters and digits</source>
         <translation>英字と数字</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="222"/>
+        <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>Letters</source>
         <translation>英字</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="224"/>
+        <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>Digits</source>
         <translation>数字</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="241"/>
+        <location filename="../host/ui/config_dialog.cc" line="250"/>
         <source>Never</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="242"/>
+        <location filename="../host/ui/config_dialog.cc" line="251"/>
         <source>15 seconds</source>
         <translation>15 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="243"/>
+        <location filename="../host/ui/config_dialog.cc" line="252"/>
         <source>30 seconds</source>
         <translation>30 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="244"/>
+        <location filename="../host/ui/config_dialog.cc" line="253"/>
         <source>45 seconds</source>
         <translation>45 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="245"/>
+        <location filename="../host/ui/config_dialog.cc" line="254"/>
         <source>60 seconds</source>
         <translation>60 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="253"/>
+        <location filename="../host/ui/config_dialog.cc" line="262"/>
         <source>Accept connection</source>
         <translation>接続を受け入れる</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="254"/>
+        <location filename="../host/ui/config_dialog.cc" line="263"/>
         <source>Reject connection</source>
         <translation>接続を拒否する</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="454"/>
+        <location filename="../host/ui/config_dialog.cc" line="463"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>ユーザー &quot;%1&quot; を削除してもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="482"/>
-        <location filename="../host/ui/config_dialog.cc" line="516"/>
+        <location filename="../host/ui/config_dialog.cc" line="491"/>
+        <location filename="../host/ui/config_dialog.cc" line="525"/>
         <source>An error occurred while processing the password.</source>
         <translation>パスワードの処理中にエラーが発生しました。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="499"/>
+        <location filename="../host/ui/config_dialog.cc" line="508"/>
         <source>Settings storage is unavailable.</source>
         <translation>設定ストレージを利用できません。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="530"/>
+        <location filename="../host/ui/config_dialog.cc" line="539"/>
         <source>Import</source>
         <translation>インポート</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="530"/>
-        <location filename="../host/ui/config_dialog.cc" line="547"/>
+        <location filename="../host/ui/config_dialog.cc" line="539"/>
+        <location filename="../host/ui/config_dialog.cc" line="556"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON ファイル (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="547"/>
+        <location filename="../host/ui/config_dialog.cc" line="556"/>
         <source>Export</source>
         <translation>エクスポート</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="572"/>
+        <location filename="../host/ui/config_dialog.cc" line="573"/>
+        <source>Export Installer</source>
+        <translation>インストーラーのエクスポート</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="573"/>
+        <source>MSI-files (*.msi)</source>
+        <translation>MSI ファイル (*.msi)</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="583"/>
+        <source>The installer was successfully exported.</source>
+        <translation>インストーラーが正常にエクスポートされました。</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="587"/>
+        <source>The installed host package was not found.</source>
+        <translation>インストールされているホスト パッケージが見つかりませんでした。</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="591"/>
+        <source>The installed version of the host does not support exporting the installer.</source>
+        <translation>インストールされているホストのバージョンは、インストーラーのエクスポートをサポートしていません。</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="595"/>
+        <source>Unable to export the installer.</source>
+        <translation>インストーラーをエクスポートできません。</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="616"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>構成を書き込めません。書き込みに十分な権限があることを確認してください。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="588"/>
+        <location filename="../host/ui/config_dialog.cc" line="632"/>
         <source>An invalid update server address was entered.</source>
         <translation>無効な更新サーバー アドレスが入力されました。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="596"/>
+        <location filename="../host/ui/config_dialog.cc" line="640"/>
         <source>Enter the update server address.</source>
         <translation>更新サーバー アドレスを入力してください。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="606"/>
+        <location filename="../host/ui/config_dialog.cc" line="650"/>
         <source>An invalid public key was entered.</source>
         <translation>無効な公開キーが入力されました。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="618"/>
+        <location filename="../host/ui/config_dialog.cc" line="662"/>
         <source>Incorrect router address entered.</source>
         <translation>入力されたルーター アドレスが正しくありません。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="628"/>
+        <location filename="../host/ui/config_dialog.cc" line="672"/>
         <source>Incorrect router public key entered.</source>
         <translation>入力されたルーターの公開キーが正しくありません。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="791"/>
+        <location filename="../host/ui/config_dialog.cc" line="835"/>
         <source>Install</source>
         <translation>インストール</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="796"/>
+        <location filename="../host/ui/config_dialog.cc" line="840"/>
         <source>Remove</source>
         <translation>削除</translation>
     </message>
@@ -7894,73 +7929,73 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/settings_util.cc" line="241"/>
+        <location filename="../host/settings_util.cc" line="271"/>
         <source>Source settings file does not exist.</source>
         <translation>ソース設定ファイルが存在しません。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="250"/>
+        <location filename="../host/settings_util.cc" line="280"/>
         <source>Unable to open the source file.</source>
         <translation>ソース ファイルを開けません。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="262"/>
+        <location filename="../host/settings_util.cc" line="292"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>ソース ファイルを読み取れません: ファイルが破損しているか、不明な形式です。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="279"/>
+        <location filename="../host/settings_util.cc" line="309"/>
         <source>Unable to write the secure database.</source>
         <translation>セキュア データベースに書き込めません。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="284"/>
+        <location filename="../host/settings_util.cc" line="314"/>
         <source>The configuration was successfully imported.</source>
         <translation>構成が正常にインポートされました。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="299"/>
+        <location filename="../host/settings_util.cc" line="329"/>
         <source>Unable to read the secure database.</source>
         <translation>セキュア データベースを読み取れません。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="320"/>
+        <location filename="../host/settings_util.cc" line="350"/>
         <source>Unable to open the target file.</source>
         <translation>ターゲット ファイルを開けません。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="328"/>
+        <location filename="../host/settings_util.cc" line="358"/>
         <source>Unable to write the target file.</source>
         <translation>ターゲット ファイルに書き込めません。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="333"/>
+        <location filename="../host/settings_util.cc" line="363"/>
         <source>The configuration was successfully exported.</source>
         <translation>構成が正常にエクスポートされました。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="343"/>
+        <location filename="../host/settings_util.cc" line="373"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="344"/>
-        <location filename="../host/settings_util.cc" line="346"/>
+        <location filename="../host/settings_util.cc" line="374"/>
+        <location filename="../host/settings_util.cc" line="376"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>既存の設定は上書きされます。続行しますか？</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="344"/>
+        <location filename="../host/settings_util.cc" line="374"/>
         <source>Continue</source>
         <translation>続行</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="356"/>
+        <location filename="../host/settings_util.cc" line="386"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="367"/>
+        <location filename="../host/settings_util.cc" line="397"/>
         <source>Aspia</source>
         <translation>Aspia</translation>
     </message>

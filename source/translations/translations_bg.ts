@@ -1264,320 +1264,355 @@ Routers added: %4</source>
         <translation>Експортиране на настройки</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="275"/>
+        <location filename="../host/ui/config_dialog.ui" line="258"/>
+        <source>Export installer</source>
+        <translation>Експортиране на инсталатор</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="282"/>
         <source>Security</source>
         <translation>Защита</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="281"/>
+        <location filename="../host/ui/config_dialog.ui" line="288"/>
         <source>Password Protection of Settings</source>
         <translation>Защита на настройките с парола</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="300"/>
+        <location filename="../host/ui/config_dialog.ui" line="307"/>
         <source>Change password</source>
         <translation>Промяна на паролата</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="317"/>
+        <location filename="../host/ui/config_dialog.ui" line="324"/>
         <source>One-time Password</source>
         <translation>Еднократна парола</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="323"/>
+        <location filename="../host/ui/config_dialog.ui" line="330"/>
         <source>Enable one-time password</source>
         <translation>Включване на еднократна парола</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="332"/>
+        <location filename="../host/ui/config_dialog.ui" line="339"/>
         <source>Change password:</source>
         <translation>Честота на смяна на паролата:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="346"/>
+        <location filename="../host/ui/config_dialog.ui" line="353"/>
         <source>Characters:</source>
         <translation>Знаци:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="360"/>
+        <location filename="../host/ui/config_dialog.ui" line="367"/>
         <source>Characters count:</source>
         <translation>Брой знаци:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="382"/>
+        <location filename="../host/ui/config_dialog.ui" line="389"/>
         <source>Connection Confirmation</source>
         <translation>Потвърждение на свързването</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="388"/>
+        <location filename="../host/ui/config_dialog.ui" line="395"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>Изискване на потвърждение при свързване с компютъра</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="397"/>
+        <location filename="../host/ui/config_dialog.ui" line="404"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>Автоматично потвърждение на свързването след:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="411"/>
+        <location filename="../host/ui/config_dialog.ui" line="418"/>
         <source>If there is no active user:</source>
         <translation>Ако няма активен потребител:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="430"/>
+        <location filename="../host/ui/config_dialog.ui" line="437"/>
         <source>Other</source>
         <translation>Други</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="436"/>
+        <location filename="../host/ui/config_dialog.ui" line="443"/>
         <source>Disable Aspia shutdown</source>
         <translation>Забраняване на затварянето на Aspia</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="460"/>
+        <location filename="../host/ui/config_dialog.ui" line="467"/>
         <source>Router</source>
         <translation>Рутер</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="466"/>
+        <location filename="../host/ui/config_dialog.ui" line="473"/>
         <source>Enable the use of a router</source>
         <translation>Включване на използването на рутер</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="478"/>
+        <location filename="../host/ui/config_dialog.ui" line="485"/>
         <source>Address:</source>
         <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="497"/>
+        <location filename="../host/ui/config_dialog.ui" line="504"/>
         <source>Public Key:</source>
         <translation>Публичен ключ:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="511"/>
+        <location filename="../host/ui/config_dialog.ui" line="518"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Необходим е рутер за свързване с компютър, когато няма директна връзка (заобикаляне на NAT). Aspia не предоставя публичен рутер, но можете да инсталирате свой собствен. Можете да изтеглите рутера от &lt;a href=&quot;https://aspia.org&quot;&gt;официалния уебсайт&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="528"/>
-        <location filename="../host/ui/config_dialog.ui" line="639"/>
+        <location filename="../host/ui/config_dialog.ui" line="535"/>
+        <location filename="../host/ui/config_dialog.ui" line="646"/>
         <source>Users</source>
         <translation>Потребители</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="542"/>
+        <location filename="../host/ui/config_dialog.ui" line="549"/>
         <source>Add new user</source>
         <translation>Добавяне на нов потребител</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="568"/>
+        <location filename="../host/ui/config_dialog.ui" line="575"/>
         <source>Edit user</source>
         <translation>Редактиране на потребител</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="594"/>
+        <location filename="../host/ui/config_dialog.ui" line="601"/>
         <source>Delete user</source>
         <translation>Изтриване на потребител</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="662"/>
+        <location filename="../host/ui/config_dialog.ui" line="669"/>
         <source>Add</source>
         <translation>Добавяне</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="671"/>
+        <location filename="../host/ui/config_dialog.ui" line="678"/>
         <source>Modify</source>
         <translation>Промяна</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="680"/>
+        <location filename="../host/ui/config_dialog.ui" line="687"/>
         <source>Delete</source>
         <translation>Изтриване</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="118"/>
+        <location filename="../host/ui/config_dialog.cc" line="127"/>
         <source>Once a day</source>
         <translation>Веднъж дневно</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="119"/>
+        <location filename="../host/ui/config_dialog.cc" line="128"/>
         <source>Once a week</source>
         <translation>Веднъж седмично</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="120"/>
+        <location filename="../host/ui/config_dialog.cc" line="129"/>
         <source>Once a month</source>
         <translation>Веднъж месечно</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="122"/>
+        <location filename="../host/ui/config_dialog.cc" line="131"/>
         <source>Stable</source>
         <translation>Стабилен</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="123"/>
+        <location filename="../host/ui/config_dialog.cc" line="132"/>
         <source>Beta</source>
         <translation>Бета</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="124"/>
+        <location filename="../host/ui/config_dialog.cc" line="133"/>
         <source>Alpha</source>
         <translation>Алфа</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="159"/>
+        <location filename="../host/ui/config_dialog.cc" line="168"/>
         <source>Default</source>
         <translation>По подразбиране</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="206"/>
+        <location filename="../host/ui/config_dialog.cc" line="215"/>
         <source>On reboot</source>
         <translation>При рестартиране</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="207"/>
+        <location filename="../host/ui/config_dialog.cc" line="216"/>
         <source>Every 5 minutes</source>
         <translation>На всеки 5 минути</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="208"/>
+        <location filename="../host/ui/config_dialog.cc" line="217"/>
         <source>Every 30 minutes</source>
         <translation>На всеки 30 минути</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="209"/>
+        <location filename="../host/ui/config_dialog.cc" line="218"/>
         <source>Every 1 hour</source>
         <translation>На всеки 1 час</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="210"/>
+        <location filename="../host/ui/config_dialog.cc" line="219"/>
         <source>Every 6 hours</source>
         <translation>На всеки 6 часа</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="211"/>
+        <location filename="../host/ui/config_dialog.cc" line="220"/>
         <source>Every 12 hours</source>
         <translation>На всеки 12 часа</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="219"/>
+        <location filename="../host/ui/config_dialog.cc" line="228"/>
         <source>Letters and digits</source>
         <translation>Букви и цифри</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="222"/>
+        <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>Letters</source>
         <translation>Букви</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="224"/>
+        <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>Digits</source>
         <translation>Цифри</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="241"/>
+        <location filename="../host/ui/config_dialog.cc" line="250"/>
         <source>Never</source>
         <translation>Никога</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="242"/>
+        <location filename="../host/ui/config_dialog.cc" line="251"/>
         <source>15 seconds</source>
         <translation>15 секунди</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="243"/>
+        <location filename="../host/ui/config_dialog.cc" line="252"/>
         <source>30 seconds</source>
         <translation>30 секунди</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="244"/>
+        <location filename="../host/ui/config_dialog.cc" line="253"/>
         <source>45 seconds</source>
         <translation>45 секунди</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="245"/>
+        <location filename="../host/ui/config_dialog.cc" line="254"/>
         <source>60 seconds</source>
         <translation>60 секунди</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="253"/>
+        <location filename="../host/ui/config_dialog.cc" line="262"/>
         <source>Accept connection</source>
         <translation>Приемане на връзката</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="254"/>
+        <location filename="../host/ui/config_dialog.cc" line="263"/>
         <source>Reject connection</source>
         <translation>Отхвърляне на връзката</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="454"/>
+        <location filename="../host/ui/config_dialog.cc" line="463"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Наистина ли искате да изтриете потребителя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="482"/>
-        <location filename="../host/ui/config_dialog.cc" line="516"/>
+        <location filename="../host/ui/config_dialog.cc" line="491"/>
+        <location filename="../host/ui/config_dialog.cc" line="525"/>
         <source>An error occurred while processing the password.</source>
         <translation>Възникна грешка при обработка на паролата.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="499"/>
+        <location filename="../host/ui/config_dialog.cc" line="508"/>
         <source>Settings storage is unavailable.</source>
         <translation>Хранилището на настройките е недостъпно.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="530"/>
+        <location filename="../host/ui/config_dialog.cc" line="539"/>
         <source>Import</source>
         <translation>Импортиране</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="530"/>
-        <location filename="../host/ui/config_dialog.cc" line="547"/>
+        <location filename="../host/ui/config_dialog.cc" line="539"/>
+        <location filename="../host/ui/config_dialog.cc" line="556"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON файлове (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="547"/>
+        <location filename="../host/ui/config_dialog.cc" line="556"/>
         <source>Export</source>
         <translation>Експортиране</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="572"/>
+        <location filename="../host/ui/config_dialog.cc" line="573"/>
+        <source>Export Installer</source>
+        <translation>Експортиране на инсталатор</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="573"/>
+        <source>MSI-files (*.msi)</source>
+        <translation>MSI файлове (*.msi)</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="583"/>
+        <source>The installer was successfully exported.</source>
+        <translation>Инсталаторът е експортиран успешно.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="587"/>
+        <source>The installed host package was not found.</source>
+        <translation>Инсталираният пакет на хоста не е намерен.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="591"/>
+        <source>The installed version of the host does not support exporting the installer.</source>
+        <translation>Инсталираната версия на хоста не поддържа експортиране на инсталатора.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="595"/>
+        <source>Unable to export the installer.</source>
+        <translation>Неуспешно експортиране на инсталатора.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="616"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Конфигурацията не може да бъде записана. Уверете се, че имате достатъчно права за запис.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="588"/>
+        <location filename="../host/ui/config_dialog.cc" line="632"/>
         <source>An invalid update server address was entered.</source>
         <translation>Въведен е невалиден адрес на сървъра за актуализации.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="596"/>
+        <location filename="../host/ui/config_dialog.cc" line="640"/>
         <source>Enter the update server address.</source>
         <translation>Въведете адреса на сървъра за актуализации.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="606"/>
+        <location filename="../host/ui/config_dialog.cc" line="650"/>
         <source>An invalid public key was entered.</source>
         <translation>Въведен е невалиден публичен ключ.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="618"/>
+        <location filename="../host/ui/config_dialog.cc" line="662"/>
         <source>Incorrect router address entered.</source>
         <translation>Въведен е неправилен адрес на рутера.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="628"/>
+        <location filename="../host/ui/config_dialog.cc" line="672"/>
         <source>Incorrect router public key entered.</source>
         <translation>Въведен е неправилен публичен ключ на рутера.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="791"/>
+        <location filename="../host/ui/config_dialog.cc" line="835"/>
         <source>Install</source>
         <translation>Инсталиране</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="796"/>
+        <location filename="../host/ui/config_dialog.cc" line="840"/>
         <source>Remove</source>
         <translation>Премахване</translation>
     </message>
@@ -7936,73 +7971,73 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/settings_util.cc" line="241"/>
+        <location filename="../host/settings_util.cc" line="271"/>
         <source>Source settings file does not exist.</source>
         <translation>Изходният файл с настройки не съществува.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="250"/>
+        <location filename="../host/settings_util.cc" line="280"/>
         <source>Unable to open the source file.</source>
         <translation>Неуспешно отваряне на изходния файл.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="262"/>
+        <location filename="../host/settings_util.cc" line="292"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Неуспешно четене на изходния файл: файлът е повреден или е в неизвестен формат.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="279"/>
+        <location filename="../host/settings_util.cc" line="309"/>
         <source>Unable to write the secure database.</source>
         <translation>Неуспешно записване на защитената база данни.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="284"/>
+        <location filename="../host/settings_util.cc" line="314"/>
         <source>The configuration was successfully imported.</source>
         <translation>Конфигурацията е импортирана успешно.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="299"/>
+        <location filename="../host/settings_util.cc" line="329"/>
         <source>Unable to read the secure database.</source>
         <translation>Неуспешно четене на защитената база данни.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="320"/>
+        <location filename="../host/settings_util.cc" line="350"/>
         <source>Unable to open the target file.</source>
         <translation>Неуспешно отваряне на целевия файл.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="328"/>
+        <location filename="../host/settings_util.cc" line="358"/>
         <source>Unable to write the target file.</source>
         <translation>Неуспешно записване на целевия файл.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="333"/>
+        <location filename="../host/settings_util.cc" line="363"/>
         <source>The configuration was successfully exported.</source>
         <translation>Конфигурацията е експортирана успешно.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="343"/>
+        <location filename="../host/settings_util.cc" line="373"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="344"/>
-        <location filename="../host/settings_util.cc" line="346"/>
+        <location filename="../host/settings_util.cc" line="374"/>
+        <location filename="../host/settings_util.cc" line="376"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>Съществуващите настройки ще бъдат презаписани. Да се продължи ли?</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="344"/>
+        <location filename="../host/settings_util.cc" line="374"/>
         <source>Continue</source>
         <translation>Продължаване</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="356"/>
+        <location filename="../host/settings_util.cc" line="386"/>
         <source>Error</source>
         <translation>Грешка</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="367"/>
+        <location filename="../host/settings_util.cc" line="397"/>
         <source>Aspia</source>
         <translation>Aspia</translation>
     </message>
