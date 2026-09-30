@@ -493,6 +493,7 @@ void RouterManager::sendTelemetry()
 
     QJsonObject update;
     update.insert("channel", settings.updateChannel());
+    update.insert("address", settings.updateServer());
 #if !defined(Q_OS_ANDROID)
     // The mobile host checks for updates only on request.
     update.insert("auto_update", settings.isAutoUpdateEnabled());

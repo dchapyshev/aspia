@@ -722,6 +722,7 @@ TEST_F(RouterManagerTest, TelemetryIsSentWithTheIdAndOnSettingsChanges)
     settings.setUpdateChannel("beta");
     settings.setAutoUpdateEnabled(false);
     settings.setUpdateCheckFrequency(3);
+    settings.setUpdateServer("https://updates.example.com");
     settings.sync();
 
     HostStorage storage;
@@ -741,6 +742,8 @@ TEST_F(RouterManagerTest, TelemetryIsSentWithTheIdAndOnSettingsChanges)
         QJsonDocument::fromJson(QByteArray::fromStdString(last_telemetry_.json())).object();
     EXPECT_EQ(telemetry.value("version").toInt(), proto::router::kTelemetryVersion);
     EXPECT_EQ(telemetry.value("update").toObject().value("channel").toString(), "beta");
+    EXPECT_EQ(telemetry.value("update").toObject().value("address").toString(),
+              "https://updates.example.com");
     EXPECT_FALSE(telemetry.value("update").toObject().value("auto_update").toBool(true));
     EXPECT_EQ(telemetry.value("update").toObject().value("check_frequency").toInt(), 3);
     EXPECT_EQ(telemetry.value("update").toObject().value("last_check_time").toInteger(), 1000);

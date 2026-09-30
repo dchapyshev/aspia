@@ -313,6 +313,13 @@ void TelemetryModel::parseUpdateGroup(const QJsonObject& update, QList<Group>* g
     if (channel.isString())
         group.parameters.append({ tr("Update channel"), updateChannelName(channel.toString()) });
 
+    const QJsonValue address = update.value("address");
+    if (address.isString())
+    {
+        const QString value = address.toString();
+        group.parameters.append({ tr("Update server"), value.isEmpty() ? tr("Default") : value });
+    }
+
     const QJsonValue auto_update = update.value("auto_update");
     if (auto_update.isBool())
     {
