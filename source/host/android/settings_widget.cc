@@ -192,6 +192,10 @@ void SettingsWidget::showUserEditor(qint64 entry_id)
 //--------------------------------------------------------------------------------------------------
 void SettingsWidget::showUpdate()
 {
+    // The button does not take the focus, so a field still being edited is saved here first.
+    if (QWidget* widget = focusWidget())
+        widget->clearFocus();
+
     SystemSettings settings;
     update_page_->check(settings.updateServer(), settings.updatePublicKey(), settings.updateChannel());
 
