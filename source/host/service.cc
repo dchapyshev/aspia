@@ -27,6 +27,7 @@
 #include "base/logging.h"
 #include "base/security_log.h"
 #include "host/database.h"
+#include "host/system_settings.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -60,6 +61,10 @@ constexpr char kSecureFullDacl[] = "O:SYG:SYD:P(A;OICI;GA;;;SY)(A;OICI;GA;;;BA)"
 // tamper with files. Used for the security log directory so its contents are read-only for
 // admins viewing the log dialog and writable only by the service running as SYSTEM.
 constexpr char kSecureReadOnlyDacl[] = "O:SYG:SYD:P(A;OICI;GA;;;SY)(A;OICI;GR;;;BA)";
+
+// The files of SystemSettings and HostStorage: SYSTEM and Administrators have full control, users
+// can only read them.
+constexpr char kSettingsFileDacl[] = "O:SYG:SYD:P(A;;FA;;;SY)(A;;FA;;;BA)(A;;FR;;;BU)";
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
@@ -99,6 +104,55 @@ bool applyPathSecurity(const QString& path, bool /* is_dir */, const char* sddl)
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool isOwnedByAdministrators(const QString& path)
+{
+    PSID owner = nullptr;
+    PSECURITY_DESCRIPTOR sd = nullptr;
+
+    DWORD result = GetNamedSecurityInfoW(qUtf16Printable(QDir::toNativeSeparators(path)),
+        SE_FILE_OBJECT, OWNER_SECURITY_INFORMATION, &owner, nullptr, nullptr, nullptr, &sd);
+    if (result != ERROR_SUCCESS)
+    {
+        LOG(ERROR) << "GetNamedSecurityInfoW failed for" << path << "error:" << result;
+        return false;
+    }
+
+    const bool owned = IsWellKnownSid(owner, WinLocalSystemSid) ||
+                       IsWellKnownSid(owner, WinBuiltinAdministratorsSid);
+    LocalFree(sd);
+    return owned;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool applySettingsFileSecurity(const QString& file_path)
+{
+    if (QFile::exists(file_path) && !isOwnedByAdministrators(file_path))
+    {
+        LOG(ERROR) << "Settings file is not owned by administrators, it is removed:" << file_path;
+
+        if (!QFile::remove(file_path))
+        {
+            LOG(ERROR) << "Unable to remove" << file_path;
+            return false;
+        }
+    }
+
+    if (!QFile::exists(file_path))
+    {
+        QDir().mkpath(QFileInfo(file_path).absolutePath());
+
+        QFile file(file_path);
+        if (!file.open(QIODevice::WriteOnly))
+        {
+            LOG(ERROR) << "Unable to create" << file_path << ":" << file.errorString();
+            return false;
+        }
+    }
+
+    return applyPathSecurity(file_path, false, kSettingsFileDacl);
 }
 #endif // defined(Q_OS_WINDOWS)
 
@@ -197,6 +251,12 @@ void Service::onStart()
         LOG(ERROR) << "Unable to apply secure permissions on security log directory";
 
 #if defined(Q_OS_WINDOWS)
+    if (!applySettingsFileSecurity(SystemSettings().filePath()))
+        LOG(ERROR) << "Unable to apply secure permissions on system settings";
+
+    if (!applySettingsFileSecurity(HostStorage().filePath()))
+        LOG(ERROR) << "Unable to apply secure permissions on host storage";
+
     if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
         PLOG(ERROR) << "SetPriorityClass failed";
 

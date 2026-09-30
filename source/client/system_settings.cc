@@ -27,7 +27,7 @@
 
 namespace {
 
-const QString kUpdateServerParam = "update/server";
+const QString kUpdateServerParam = "update/address";
 const QString kUpdatePublicKeyParam = "update/public_key";
 
 //--------------------------------------------------------------------------------------------------

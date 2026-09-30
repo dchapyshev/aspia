@@ -69,6 +69,12 @@ public:
     int updateCheckFrequency() const;
     void setUpdateCheckFrequency(int days);
 
+    QString updateServer() const;
+    void setUpdateServer(const QString& server);
+
+    QByteArray updatePublicKey() const;
+    void setUpdatePublicKey(const QByteArray& key);
+
 private:
     mutable QSettings settings_;
 

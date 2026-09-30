@@ -141,6 +141,58 @@
            </layout>
           </item>
           <item>
+           <layout class="QHBoxLayout" name="layout_update_server">
+            <item>
+             <widget class="QLabel" name="label_update_server">
+              <property name="text">
+               <string>Update server:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="edit_update_server">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="layout_update_public_key">
+            <item>
+             <widget class="QLabel" name="label_update_public_key">
+              <property name="text">
+               <string>Public key:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="edit_update_public_key">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_update_server_hint">
+            <property name="text">
+             <string>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_7">
             <item>
              <spacer name="horizontalSpacer_3">

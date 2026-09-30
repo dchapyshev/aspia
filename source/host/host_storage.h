@@ -29,6 +29,8 @@ public:
     HostStorage();
     ~HostStorage();
 
+    QString filePath() const;
+
     HostId lastHostId() const;
     void setLastHostId(HostId host_id);
 

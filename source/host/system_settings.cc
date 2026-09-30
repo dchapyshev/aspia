@@ -36,6 +36,8 @@ const QString kCaptureAutoConfirm = "capture_auto_confirm";
 const QString kUpdateChannel = "update/channel";
 const QString kUpdateAutoUpdate = "update/auto_update";
 const QString kUpdateCheckFrequency = "update/check_frequency";
+const QString kUpdateServerAddress = "update/address";
+const QString kUpdatePublicKey = "update/public_key";
 
 } // namespace
 
@@ -50,7 +52,8 @@ SystemSettings::SystemSettings()
     : settings_(QSettings::IniFormat, QSettings::SystemScope, kOrganization, kApplication)
 #endif
 {
-    // Nothing
+    // The file of the whole organization lies where any user can create it.
+    settings_.setFallbacksEnabled(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -185,4 +188,28 @@ int SystemSettings::updateCheckFrequency() const
 void SystemSettings::setUpdateCheckFrequency(int days)
 {
     settings_.setValue(kUpdateCheckFrequency, days);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SystemSettings::updateServer() const
+{
+    return settings_.value(kUpdateServerAddress).toString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemSettings::setUpdateServer(const QString& server)
+{
+    settings_.setValue(kUpdateServerAddress, server);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray SystemSettings::updatePublicKey() const
+{
+    return QByteArray::fromHex(settings_.value(kUpdatePublicKey).toString().toLatin1());
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemSettings::setUpdatePublicKey(const QByteArray& key)
+{
+    settings_.setValue(kUpdatePublicKey, QString::fromLatin1(key.toHex()));
 }

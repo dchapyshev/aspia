@@ -23,6 +23,7 @@
 #include <QMenu>
 #include <QTimer>
 #include <QTranslator>
+#include <QUrl>
 
 #include "base/auto_qpointer.h"
 #include "base/build_config.h"
@@ -51,6 +52,8 @@
 #endif // defined(Q_OS_MACOS)
 
 namespace {
+
+const int kUpdatePublicKeyLength = 64;
 
 class UserTreeItem final : public QTreeWidgetItem
 {
@@ -137,10 +140,18 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui->combobox_update_channel, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ConfigDialog::onConfigChanged);
 
+    ui->edit_update_server->setPlaceholderText(kUpdateServer);
+    ui->edit_update_public_key->setMaxLength(kUpdatePublicKeyLength);
+
+    connect(ui->edit_update_server, &QLineEdit::textChanged, this, &ConfigDialog::onConfigChanged);
+    connect(ui->edit_update_public_key, &QLineEdit::textChanged, this, &ConfigDialog::onConfigChanged);
+
     connect(ui->button_check_updates, &QPushButton::clicked, this, [this]()
     {
+        SystemSettings settings;
         AutoQPointer<UpdateDialog> dialog(
-            new UpdateDialog(SystemSettings().updateChannel(), "host", UpdateDialog::Action::ASK, this));
+            new UpdateDialog(settings.updateServer(), settings.updatePublicKey(),
+                             settings.updateChannel(), "host", UpdateDialog::Action::ASK, this));
         dialog->exec();
     });
 
@@ -565,6 +576,39 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
+        const QString update_server = ui->edit_update_server->text().trimmed();
+        const QString update_public_key = ui->edit_update_public_key->text().trimmed();
+
+        if (!update_server.isEmpty())
+        {
+            QUrl url(update_server, QUrl::StrictMode);
+            if (!url.isValid() || url.host().isEmpty() ||
+                (url.scheme() != "https" && url.scheme() != "http"))
+            {
+                MsgBox::warning(this, tr("An invalid update server address was entered."));
+                ui->edit_update_server->setFocus();
+                ui->edit_update_server->selectAll();
+                return;
+            }
+        }
+        else if (!update_public_key.isEmpty())
+        {
+            MsgBox::warning(this, tr("Enter the update server address."));
+            ui->edit_update_server->setFocus();
+            return;
+        }
+
+        const QByteArray update_public_key_hex = update_public_key.toLower().toLatin1();
+        if (!update_public_key.isEmpty() &&
+            (update_public_key.size() != kUpdatePublicKeyLength ||
+             QByteArray::fromHex(update_public_key_hex).toHex() != update_public_key_hex))
+        {
+            MsgBox::warning(this, tr("An invalid public key was entered."));
+            ui->edit_update_public_key->setFocus();
+            ui->edit_update_public_key->selectAll();
+            return;
+        }
+
         if (ui->checkbox_enable_router->isChecked())
         {
             Address router_address = Address::fromString(
@@ -602,6 +646,8 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setAutoUpdateEnabled(ui->checkbox_auto_update->isChecked());
         settings.setUpdateCheckFrequency(ui->combobox_update_check_freq->currentData().toInt());
         settings.setUpdateChannel(ui->combobox_update_channel->currentData().toString());
+        settings.setUpdateServer(update_server);
+        settings.setUpdatePublicKey(QByteArray::fromHex(update_public_key_hex));
         settings.setPreferredVideoCapturer(ui->combo_video_capturer->currentData().toUInt());
         settings.setHardwareVideoEncodingEnabled(ui->checkbox_hardware_encoding->isChecked());
 
@@ -735,6 +781,9 @@ void ConfigDialog::reloadAll()
 
     int channel_index = ui->combobox_update_channel->findData(settings.updateChannel());
     ui->combobox_update_channel->setCurrentIndex(channel_index >= 0 ? channel_index : 0);
+
+    ui->edit_update_server->setText(settings.updateServer());
+    ui->edit_update_public_key->setText(QString::fromLatin1(settings.updatePublicKey().toHex()));
 
     switch (db.passwordProtectionState())
     {

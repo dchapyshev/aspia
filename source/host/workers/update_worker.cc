@@ -80,7 +80,13 @@ void UpdateWorker::onCheckUpdates()
     storage.setUpdateCheckResult(QString());
     storage.setUpdateInstallVersion(QString());
 
-    update_checker_ = new UpdateChecker(SystemSettings().updateChannel(), kHostUpdatePackage, this);
+    SystemSettings settings;
+    QByteArray public_key = settings.updatePublicKey();
+
+    update_checker_ = new UpdateChecker(settings.updateChannel(), kHostUpdatePackage, this);
+    update_checker_->setServer(settings.updateServer());
+    if (!public_key.isEmpty())
+        update_checker_->setPublicKeys({ public_key });
 
     connect(update_checker_, &UpdateChecker::sig_checkFinished,
             this, &UpdateWorker::onUpdateCheckFinished);

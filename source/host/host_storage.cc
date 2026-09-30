@@ -87,11 +87,18 @@ HostStorage::HostStorage()
     : impl_(QSettings::IniFormat, QSettings::SystemScope, "aspia", "host_storage")
 #endif
 {
-    // Nothing
+    // The file of the whole organization lies where any user can create it.
+    impl_.setFallbacksEnabled(false);
 }
 
 //--------------------------------------------------------------------------------------------------
 HostStorage::~HostStorage() = default;
+
+//--------------------------------------------------------------------------------------------------
+QString HostStorage::filePath() const
+{
+    return impl_.fileName();
+}
 
 //--------------------------------------------------------------------------------------------------
 HostId HostStorage::lastHostId() const
