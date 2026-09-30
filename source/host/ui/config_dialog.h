@@ -53,6 +53,7 @@ private slots:
     void onImport();
     void onExport();
     void onExportInstaller();
+    void onExportPortable();
     void onConfigChanged() { setConfigChanged(FROM_HERE, true); }
     void onButtonBoxClicked(QAbstractButton* button);
 

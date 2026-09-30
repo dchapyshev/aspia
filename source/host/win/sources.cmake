@@ -41,6 +41,8 @@ collect_sources(SOURCE_HOST_WIN
     dxgi_texture_staging.h
     msi_package.cc
     msi_package.h
+    portable_package.cc
+    portable_package.h
     safe_mode_util.cc
     safe_mode_util.h
     screen_capture_utils.cc

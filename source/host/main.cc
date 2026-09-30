@@ -59,6 +59,7 @@
 #if defined(Q_OS_WINDOWS)
 #include "base/process_util.h"
 #include "base/win/desktop.h"
+#include "host/win/portable_package.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
@@ -507,6 +508,11 @@ int main(int argc, char* argv[])
     LoggingSettings logging_settings;
 
     ScopedLogging scoped_logging(logging_settings);
+
+#if defined(Q_OS_WINDOWS)
+    if (PortablePackage::builtInSettings())
+        LOG(INFO) << "Built-in portable settings found";
+#endif // defined(Q_OS_WINDOWS)
 
     for (int i = 1; i < argc; ++i)
     {

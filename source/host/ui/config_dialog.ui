@@ -259,6 +259,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="button_export_portable">
+            <property name="text">
+             <string>Export portable</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

@@ -46,6 +46,7 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "host/win/msi_package.h"
+#include "host/win/portable_package.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_MACOS)
@@ -120,8 +121,10 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui->button_export, &QPushButton::clicked, this, &ConfigDialog::onExport);
 #if defined(Q_OS_WINDOWS)
     connect(ui->button_export_installer, &QPushButton::clicked, this, &ConfigDialog::onExportInstaller);
+    connect(ui->button_export_portable, &QPushButton::clicked, this, &ConfigDialog::onExportPortable);
 #else
     ui->button_export_installer->hide();
+    ui->button_export_portable->hide();
 #endif // defined(Q_OS_WINDOWS)
 
     ui->combobox_update_check_freq->addItem(tr("Once a day"), 1);
@@ -593,6 +596,37 @@ void ConfigDialog::onExportInstaller()
 
         case MsiPackage::Result::FAILED:
             MsgBox::warning(this, tr("Unable to export the installer."));
+            break;
+    }
+#endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void ConfigDialog::onExportPortable()
+{
+#if defined(Q_OS_WINDOWS)
+    LOG(INFO) << "[ACTION] Export portable";
+
+    QString file_path = QFileDialog::getSaveFileName(
+        this, tr("Export Portable"), QString(), tr("Executable files (*.exe)"));
+    if (file_path.isEmpty())
+    {
+        LOG(INFO) << "No selected file path";
+        return;
+    }
+
+    switch (PortablePackage::exportWithSettings(file_path))
+    {
+        case PortablePackage::Result::SUCCESS:
+            MsgBox::information(this, tr("The portable version was successfully exported."));
+            break;
+
+        case PortablePackage::Result::NO_ROUTER:
+            MsgBox::warning(this, tr("The portable version works only through a router. Set up the connection to the router and save the settings."));
+            break;
+
+        case PortablePackage::Result::FAILED:
+            MsgBox::warning(this, tr("Unable to export the portable version."));
             break;
     }
 #endif // defined(Q_OS_WINDOWS)
