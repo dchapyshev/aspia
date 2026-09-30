@@ -43,10 +43,10 @@ pushd %SRC_DIR%
 
 rem Locale list (excluding en-us which is always the base).
 rem Format: culture:lcid
-set LOCALES=cs-cz:1029 da-dk:1030 de-de:1031 el-gr:1032 es-es:1034 fr-fr:1036 he-il:1037 hu-hu:1038 it-it:1040 ja-jp:1041 ko-kr:1042 nl-nl:1043 nb-no:1044 pl-pl:1045 pt-br:1046 pt-pt:2070 ru-ru:1049 sv-se:1053 tr-tr:1055 uk-ua:1058 zh-cn:2052 zh-tw:1028
+set LOCALES=bg-bg:1026 cs-cz:1029 da-dk:1030 de-de:1031 el-gr:1032 es-es:1034 fr-fr:1036 he-il:1037 hu-hu:1038 it-it:1040 ja-jp:1041 ko-kr:1042 nl-nl:1043 nb-no:1044 pl-pl:1045 pt-br:1046 pt-pt:2070 ru-ru:1049 sv-se:1053 tr-tr:1055 uk-ua:1058 zh-cn:2052 zh-tw:1028
 
 rem LCID list for wilangid.vbs (en-us=1033 + all others + 0 for neutral).
-set ALL_LCIDS=1033,1029,1030,1031,1032,1034,1036,1037,1038,1040,1041,1042,1043,1044,1045,1046,2070,1049,1053,1055,1058,2052,1028,0
+set ALL_LCIDS=1033,1026,1029,1030,1031,1032,1034,1036,1037,1038,1040,1041,1042,1043,1044,1045,1046,2070,1049,1053,1055,1058,2052,1028,0
 
 set WISUBSTG="%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs"
 set WILANGID="%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs"

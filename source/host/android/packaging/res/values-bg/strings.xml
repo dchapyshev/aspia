@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Хост Aspia</string>
+    <string name="accessibility_service_description">Позволява на Хост Aspia да предава отдалечени докосвания, плъзгания и действия с клавиши по време на сесия.</string>
+    <string name="menu_sync_clipboard">Синхронизиране на клипборда</string>
+    <string name="menu_back">Назад</string>
+    <string name="menu_home">Начало</string>
+    <string name="menu_recents">Скорошни</string>
+</resources>

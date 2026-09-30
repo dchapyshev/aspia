@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="bg-bg" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+    <String Id="Locale" Overridable="yes">bg</String>
+    <String Id="ProductName" Overridable="yes">Хост Aspia</String>
+    <String Id="DowngradeErrorMessage" Overridable="yes">Вече е инсталирана по-нова версия на приложението.</String>
+    <String Id="CreateDesktopShortcut" Overridable="yes">Създаване на пряк път на работния плот</String>
+    <String Id="CreateProgramMenuShortcut" Overridable="yes">Създаване на пряк път в менюто "Старт"</String>
+    <String Id="ShortcutsDlgTitle" Overridable="yes">{\WixUI_Font_Title}Преки пътища</String>
+    <String Id="ShortcutsDlgDescription" Overridable="yes">Изберете къде да бъдат създадени преки пътища към приложението.</String>
+</WixLocalization>

@@ -1,38 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="it">
+<TS version="2.1" language="bg_BG">
 <context>
     <name>AabImporter</name>
     <message>
         <location filename="../client/aab_importer.cc" line="144"/>
         <source>%1 (Imported)</source>
-        <translation>%1 (importata)</translation>
+        <translation>%1 (импортиран)</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="314"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
-        <translation>Impossibile aprire il file &quot;%1&quot;: %2</translation>
+        <translation>Неуспешно отваряне на файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="323"/>
         <source>Selected file is empty.</source>
-        <translation>Il file selezionato è vuoto.</translation>
+        <translation>Избраният файл е празен.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="330"/>
         <location filename="../client/aab_importer.cc" line="379"/>
         <source>The address book file is corrupted or has an unknown format.</source>
-        <translation>Il file della rubrica è danneggiato o ha un formato sconosciuto.</translation>
+        <translation>Файлът на адресната книга е повреден или е в неизвестен формат.</translation>
+    </message>
+    <message>
+        <location filename="../client/aab_importer.cc" line="346"/>
+        <source>Unlock</source>
+        <translation>Отключване</translation>
+    </message>
+    <message>
+        <location filename="../client/aab_importer.cc" line="348"/>
+        <source>Address book is encrypted. To open, you must enter a password.</source>
+        <translation>Адресната книга е шифрована. За да я отворите, трябва да въведете парола.</translation>
+    </message>
+    <message>
+        <location filename="../client/aab_importer.cc" line="363"/>
+        <source>Unable to decrypt the address book with the specified password.</source>
+        <translation>Неуспешно дешифроване на адресната книга с посочената парола.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="371"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation>Il file della rubrica è cifrato con un tipo di cifratura non supportato.</translation>
+        <translation>Файлът на адресната книга е шифрован с неподдържан тип шифроване.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="390"/>
         <source>Failed to read data from the local database.</source>
-        <translation>Impossibile leggere i dati dal database locale.</translation>
+        <translation>Неуспешно четене на данни от локалната база данни.</translation>
+    </message>
+    <message>
+        <location filename="../client/aab_importer.cc" line="404"/>
+        <source>Nothing was imported.</source>
+        <translation>Нищо не беше импортирано.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="409"/>
@@ -41,31 +61,11 @@ Groups added: %1
 Hosts added: %2
 Hosts skipped: %3
 Routers added: %4</source>
-        <translation>Importazione completata con successo.
-Gruppi aggiunti: %1
-Host aggiunti: %2
-Host saltati: %3
-Router aggiunti: %4</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="363"/>
-        <source>Unable to decrypt the address book with the specified password.</source>
-        <translation>Impossibile decifrare la rubrica con la password specificata.</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="346"/>
-        <source>Unlock</source>
-        <translation>Sblocca</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="348"/>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation>La rubrica è cifrata. Per aprirla è necessario inserire una password.</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="404"/>
-        <source>Nothing was imported.</source>
-        <translation>Non è stato importato nulla.</translation>
+        <translation>Импортирането завърши успешно.
+Добавени групи: %1
+Добавени хостове: %2
+Пропуснати хостове: %3
+Добавени рутери: %4</translation>
     </message>
 </context>
 <context>
@@ -73,142 +73,142 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="14"/>
         <source>About</source>
-        <translation>Informazioni</translation>
+        <translation>Относно</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="60"/>
         <source>General</source>
-        <translation>Generale</translation>
+        <translation>Общи</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="90"/>
         <source>Service Information</source>
-        <translation>Informazioni Servizio</translation>
+        <translation>Служебна информация</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="112"/>
         <source>Donate!</source>
-        <translation>Donazione!</translation>
+        <translation>Дарете!</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="136"/>
         <source>Close</source>
-        <translation>Chiudi</translation>
+        <translation>Затваряне</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="104"/>
         <source>Version: %1 (%2)</source>
-        <translation>Versione: %1 (%2)</translation>
+        <translation>Версия: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="109"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation>Aspia è software libero rilasciato sotto licenza GNU General Public License 3.</translation>
+        <translation>Aspia е свободен софтуер, разпространяван под лиценза GNU General Public License 3.</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="110"/>
         <source>You can get a copy of license here:</source>
-        <translation>Puoi ottenere una copia della licenza qui:</translation>
+        <translation>Можете да получите копие на лиценза тук:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="115"/>
         <source>You can also get a translation of GNU GPL license here:</source>
-        <translation>Puoi anche ottenere una traduzione della licenza GNU GPL qui:</translation>
+        <translation>Можете да получите и превод на лиценза GNU GPL тук:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="119"/>
         <source>Links</source>
-        <translation>Collegamenti</translation>
+        <translation>Връзки</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="120"/>
         <source>Home page:</source>
-        <translation>Pagina web:</translation>
+        <translation>Начална страница:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="121"/>
         <source>GitHub page:</source>
-        <translation>Pagina GitHub:</translation>
+        <translation>Страница в GitHub:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="124"/>
         <source>Developers</source>
-        <translation>Sviluppatori</translation>
+        <translation>Разработчици</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="126"/>
         <source>Translators</source>
-        <translation>Traduttori</translation>
+        <translation>Преводачи</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="128"/>
         <source>Third-party components</source>
-        <translation>Componenti di terze parti</translation>
+        <translation>Компоненти на трети страни</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="130"/>
         <source>Graphics and images</source>
-        <translation>Grafica e immagini</translation>
+        <translation>Графики и изображения</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="131"/>
         <source>Icons by %1</source>
-        <translation>Icone di %1</translation>
+        <translation>Икони от %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="158"/>
         <source>Application</source>
-        <translation>Applicazione</translation>
+        <translation>Приложение</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="159"/>
         <source>Path: %1</source>
-        <translation>Percorso: %1</translation>
+        <translation>Път: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="160"/>
         <source>Logging directory: %1</source>
-        <translation>Directory dei log: %1</translation>
+        <translation>Папка на регистрационните файлове: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="162"/>
         <source>Logging file: %1</source>
-        <translation>File di log: %1</translation>
+        <translation>Регистрационен файл: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="167"/>
         <source>Build Information</source>
-        <translation>Informazioni build</translation>
+        <translation>Информация за компилацията</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="168"/>
         <source>Git branch: %1</source>
-        <translation>Ramo Git: %1</translation>
+        <translation>Клон на Git: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="170"/>
         <source>Git commit: %1</source>
-        <translation>Commit Git: %1</translation>
+        <translation>Къмит на Git: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="175"/>
         <source>Compilation</source>
-        <translation>Compilazione</translation>
+        <translation>Компилация</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="176"/>
         <source>Compilation date: %1</source>
-        <translation>Data di compilazione: %1</translation>
+        <translation>Дата на компилиране: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="177"/>
         <source>Compilation time: %1</source>
-        <translation>Ora di compilazione: %1</translation>
+        <translation>Час на компилиране: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="206"/>
         <source>Version Information</source>
-        <translation>Informazioni versione</translation>
+        <translation>Информация за версиите</translation>
     </message>
 </context>
 <context>
@@ -218,67 +218,67 @@ Router aggiunti: %4</translation>
         <location filename="../common/android/about_widget.cc" line="135"/>
         <location filename="../common/android/about_widget.cc" line="139"/>
         <source>Logs</source>
-        <translation>Log</translation>
+        <translation>Регистрационни файлове</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="131"/>
         <source>The logs are saved to &quot;%1&quot;.</source>
-        <translation>I log sono stati salvati in &quot;%1&quot;.</translation>
+        <translation>Регистрационните файлове са запазени в &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="135"/>
         <source>There are no logs to save.</source>
-        <translation>Non ci sono log da salvare.</translation>
+        <translation>Няма регистрационни файлове за запазване.</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="139"/>
         <source>Unable to save the logs.</source>
-        <translation>Impossibile salvare i log.</translation>
+        <translation>Неуспешно запазване на регистрационните файлове.</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="148"/>
         <source>Version: %1 (%2)</source>
-        <translation>Versione: %1 (%2)</translation>
+        <translation>Версия: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="151"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation>Aspia è software libero rilasciato sotto licenza GNU General Public License 3.</translation>
+        <translation>Aspia е свободен софтуер, разпространяван под лиценза GNU General Public License 3.</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="152"/>
         <source>You can get a copy of license here:</source>
-        <translation>Puoi ottenere una copia della licenza qui:</translation>
+        <translation>Можете да получите копие на лиценза тук:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="155"/>
         <source>Links</source>
-        <translation>Collegamenti</translation>
+        <translation>Връзки</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="155"/>
         <source>Home page:</source>
-        <translation>Pagina web:</translation>
+        <translation>Начална страница:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="155"/>
         <source>GitHub page:</source>
-        <translation>Pagina GitHub:</translation>
+        <translation>Страница в GitHub:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="162"/>
         <source>Developers</source>
-        <translation>Sviluppatori</translation>
+        <translation>Разработчици</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="163"/>
         <source>Translators</source>
-        <translation>Traduttori</translation>
+        <translation>Преводачи</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="164"/>
         <source>Third-party components</source>
-        <translation>Componenti di terze parti</translation>
+        <translation>Компоненти на трети страни</translation>
     </message>
 </context>
 <context>
@@ -286,7 +286,7 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar.cc" line="55"/>
         <source>An incorrect path to the folder was entered.</source>
-        <translation>È stato inserito un percorso della cartella errato.</translation>
+        <translation>Въведен е неправилен път до папката.</translation>
     </message>
 </context>
 <context>
@@ -295,97 +295,97 @@ Router aggiunti: %4</translation>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="82"/>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="469"/>
         <source>Home Folder</source>
-        <translation>Cartella home</translation>
+        <translation>Домашна папка</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="86"/>
         <source>Desktop</source>
-        <translation>Desktop</translation>
+        <translation>Работен плот</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="90"/>
         <source>Downloads</source>
-        <translation>Download</translation>
+        <translation>Изтегляния</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="94"/>
         <source>Documents</source>
-        <translation>Documenti</translation>
+        <translation>Документи</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="98"/>
         <source>Pictures</source>
-        <translation>Immagini</translation>
+        <translation>Картини</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="302"/>
         <source>Computer</source>
-        <translation>Computer</translation>
+        <translation>Компютър</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="417"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="420"/>
         <source>Type</source>
-        <translation>Tipo</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="454"/>
         <source>Optical Drive</source>
-        <translation>Unità ottica</translation>
+        <translation>Оптично устройство</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="457"/>
         <source>Removable Drive</source>
-        <translation>Unità rimovibile</translation>
+        <translation>Сменяемо устройство</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="460"/>
         <source>Fixed Drive</source>
-        <translation>Unità fissa</translation>
+        <translation>Локален диск</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="463"/>
         <source>Network Drive</source>
-        <translation>Unità di rete</translation>
+        <translation>Мрежово устройство</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="466"/>
         <source>RAM Drive</source>
-        <translation>Unità RAM</translation>
+        <translation>RAM диск</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="472"/>
         <source>Desktop Folder</source>
-        <translation>Cartella Desktop</translation>
+        <translation>Папка на работния плот</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="475"/>
         <source>Downloads Folder</source>
-        <translation>Cartella Download</translation>
+        <translation>Папка с изтегляния</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="478"/>
         <source>Documents Folder</source>
-        <translation>Cartella Documenti</translation>
+        <translation>Папка с документи</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="481"/>
         <source>Pictures Folder</source>
-        <translation>Cartella Immagini</translation>
+        <translation>Папка с картини</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="484"/>
         <source>Root Directory</source>
-        <translation>Directory radice</translation>
+        <translation>Коренна папка</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="487"/>
         <source>Unknown Drive</source>
-        <translation>Unità sconosciuta</translation>
+        <translation>Неизвестно устройство</translation>
     </message>
 </context>
 <context>
@@ -395,21 +395,21 @@ Router aggiunti: %4</translation>
         <location filename="../client/android/main_window.cc" line="270"/>
         <location filename="../client/android/main_window.cc" line="312"/>
         <source>Local</source>
-        <translation>Locale</translation>
+        <translation>Локални</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="171"/>
         <location filename="../client/android/main_window.cc" line="274"/>
         <location filename="../client/android/main_window.cc" line="332"/>
         <source>Remote</source>
-        <translation>Remoto</translation>
+        <translation>Отдалечени</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="172"/>
         <location filename="../client/android/main_window.cc" line="278"/>
         <location filename="../client/android/main_window.cc" line="322"/>
         <source>Routers</source>
-        <translation>Router</translation>
+        <translation>Рутери</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="173"/>
@@ -419,64 +419,7 @@ Router aggiunti: %4</translation>
         <location filename="../host/android/main_window.cc" line="98"/>
         <location filename="../host/android/main_window.cc" line="388"/>
         <source>Settings</source>
-        <translation>Impostazioni</translation>
-    </message>
-    <message>
-        <location filename="../client/android/main_window.cc" line="696"/>
-        <source>Update</source>
-        <translation>Aggiornamento</translation>
-    </message>
-    <message>
-        <location filename="../client/android/main_window.cc" line="697"/>
-        <source>Version %1 is available.</source>
-        <translation>La versione %1 è disponibile.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/main_window.cc" line="746"/>
-        <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation>Il router associato a questo host è stato eliminato. Modifica l&apos;host per selezionare un altro router o passa alla connessione diretta.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/main_window.cc" line="556"/>
-        <source>Two-Factor Authentication - %1</source>
-        <translation>Autenticazione a due fattori - %1</translation>
-    </message>
-    <message>
-        <location filename="../client/android/main_window.cc" line="434"/>
-        <location filename="../client/android/main_window.cc" line="1013"/>
-        <source>The data of the host is damaged. Edit the host and enter it again.</source>
-        <translation>I dati dell&apos;host sono danneggiati. Modifica l&apos;host e inseriscili di nuovo.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/main_window.cc" line="745"/>
-        <location filename="../client/android/main_window.cc" line="971"/>
-        <source>The data of the router is damaged. Edit the router and enter it again.</source>
-        <translation>I dati del router sono danneggiati. Modifica il router e inseriscili di nuovo.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/main_window.cc" line="923"/>
-        <source>Invalid link.</source>
-        <translation>Collegamento non valido.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/main_window.cc" line="931"/>
-        <source>Another session is active. Close it and open the link again.</source>
-        <translation>Un&apos;altra sessione è attiva. Chiudila e apri di nuovo il collegamento.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/main_window.cc" line="941"/>
-        <source>The session type from the link is not supported on this device.</source>
-        <translation>Il tipo di sessione del collegamento non è supportato su questo dispositivo.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/main_window.cc" line="962"/>
-        <source>The router referenced by the link is not among the saved routers.</source>
-        <translation>Il router a cui fa riferimento il collegamento non è tra i router salvati.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/main_window.cc" line="1014"/>
-        <source>The host referenced by the link is not among the saved hosts.</source>
-        <translation>L&apos;host a cui fa riferimento il collegamento non è tra gli host salvati.</translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="433"/>
@@ -491,17 +434,74 @@ Router aggiunti: %4</translation>
         <location filename="../host/android/main_window.cc" line="97"/>
         <location filename="../host/android/main_window.cc" line="386"/>
         <source>Connection</source>
-        <translation>Connessione</translation>
+        <translation>Връзка</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="352"/>
-        <source>Permissions</source>
-        <translation>Autorizzazioni</translation>
+        <location filename="../client/android/main_window.cc" line="434"/>
+        <location filename="../client/android/main_window.cc" line="1013"/>
+        <source>The data of the host is damaged. Edit the host and enter it again.</source>
+        <translation>Данните на хоста са повредени. Редактирайте хоста и ги въведете отново.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="556"/>
+        <source>Two-Factor Authentication - %1</source>
+        <translation>Двуфакторно удостоверяване - %1</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="696"/>
+        <source>Update</source>
+        <translation>Актуализиране</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="697"/>
+        <source>Version %1 is available.</source>
+        <translation>Налична е версия %1.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="697"/>
         <source>Open</source>
-        <translation>Apri</translation>
+        <translation>Отваряне</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="745"/>
+        <location filename="../client/android/main_window.cc" line="971"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Данните на рутера са повредени. Редактирайте рутера и ги въведете отново.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="746"/>
+        <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
+        <translation>Рутерът, свързан с този хост, е изтрит. Редактирайте хоста, за да изберете друг рутер, или превключете на директна връзка.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="923"/>
+        <source>Invalid link.</source>
+        <translation>Невалидна връзка.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="931"/>
+        <source>Another session is active. Close it and open the link again.</source>
+        <translation>Друга сесия е активна. Затворете я и отворете връзката отново.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="941"/>
+        <source>The session type from the link is not supported on this device.</source>
+        <translation>Типът на сесията от връзката не се поддържа на това устройство.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="962"/>
+        <source>The router referenced by the link is not among the saved routers.</source>
+        <translation>Рутерът, посочен във връзката, не е сред запазените рутери.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="1014"/>
+        <source>The host referenced by the link is not among the saved hosts.</source>
+        <translation>Хостът, посочен във връзката, не е сред запазените хостове.</translation>
+    </message>
+    <message>
+        <location filename="../host/android/main_window.cc" line="352"/>
+        <source>Permissions</source>
+        <translation>Разрешения</translation>
     </message>
 </context>
 <context>
@@ -509,7 +509,7 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../common/android/app_bar.cc" line="55"/>
         <source>Search</source>
-        <translation>Cerca</translation>
+        <translation>Търсене</translation>
     </message>
 </context>
 <context>
@@ -517,54 +517,54 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
         <source>Authorization</source>
-        <translation>Autorizzazione</translation>
+        <translation>Оторизация</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="22"/>
         <source>Enter user name and password</source>
-        <translation>Inserisci nome utente e password</translation>
+        <translation>Въведете потребителско име и парола</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="32"/>
         <source>User Name:</source>
-        <translation>Nome Utente:</translation>
+        <translation>Потребителско име:</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="45"/>
         <location filename="../client/desktop/authorization_dialog.ui" line="72"/>
         <source>Password:</source>
-        <translation>Password:</translation>
+        <translation>Парола:</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="65"/>
         <source>One-time password connection</source>
-        <translation>Password per singola connessione</translation>
+        <translation>Свързване с еднократна парола</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="92"/>
         <source>Use saved credentials</source>
-        <translation>Usa credenziali salvate</translation>
+        <translation>Използване на запазени идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="99"/>
         <source>Credentials:</source>
-        <translation>Credenziali:</translation>
+        <translation>Идентификационни данни:</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="129"/>
         <source>Save sign-in data</source>
-        <translation>Salva i dati di accesso</translation>
+        <translation>Запазване на данните за влизане</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.cc" line="209"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="225"/>
         <source>Password cannot be empty.</source>
-        <translation>La password non può essere vuota.</translation>
+        <translation>Паролата не може да бъде празна.</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.cc" line="218"/>
         <source>User name cannot be empty.</source>
-        <translation>Il nome utente non può essere vuoto.</translation>
+        <translation>Потребителското име не може да бъде празно.</translation>
     </message>
 </context>
 <context>
@@ -572,108 +572,108 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../client/android/authorization_window.cc" line="72"/>
         <source>Enter user name and password</source>
-        <translation>Inserisci nome utente e password</translation>
+        <translation>Въведете потребителско име и парола</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="73"/>
         <source>One-time password connection</source>
-        <translation>Password per singola connessione</translation>
+        <translation>Свързване с еднократна парола</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="74"/>
         <source>Use saved credentials</source>
-        <translation>Usa credenziali salvate</translation>
+        <translation>Използване на запазени идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>Authorization</source>
-        <translation>Autorizzazione</translation>
+        <translation>Оторизация</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="92"/>
         <source>User Name</source>
-        <translation>Nome utente</translation>
-    </message>
-    <message>
-        <location filename="../client/android/authorization_window.cc" line="137"/>
-        <source>Save sign-in data</source>
-        <translation>Salva i dati di accesso</translation>
-    </message>
-    <message>
-        <location filename="../client/android/authorization_window.cc" line="235"/>
-        <source>User name cannot be empty.</source>
-        <translation>Il nome utente non può essere vuoto.</translation>
+        <translation>Потребителско име</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="95"/>
         <location filename="../client/android/authorization_window.cc" line="98"/>
         <source>Password</source>
-        <translation>Password</translation>
+        <translation>Парола</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="101"/>
         <source>Credentials</source>
-        <translation>Credenziali</translation>
+        <translation>Идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="105"/>
         <source>Connect</source>
-        <translation>Connetti</translation>
+        <translation>Свързване</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="137"/>
+        <source>Save sign-in data</source>
+        <translation>Запазване на данните за влизане</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="226"/>
         <location filename="../client/android/authorization_window.cc" line="242"/>
         <source>Password cannot be empty.</source>
-        <translation>La password non può essere vuota.</translation>
+        <translation>Паролата не може да бъде празна.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="235"/>
+        <source>User name cannot be empty.</source>
+        <translation>Потребителското име не може да бъде празно.</translation>
     </message>
 </context>
 <context>
     <name>ChangePasswordDialog</name>
     <message>
+        <location filename="../host/ui/change_password_dialog.ui" line="14"/>
+        <source>Change Password</source>
+        <translation>Промяна на паролата</translation>
+    </message>
+    <message>
         <location filename="../host/ui/change_password_dialog.ui" line="22"/>
         <source>Old password:</source>
-        <translation>Vecchia password:</translation>
+        <translation>Стара парола:</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="36"/>
         <source>New password:</source>
-        <translation>Nuova password:</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/change_password_dialog.ui" line="14"/>
-        <source>Change Password</source>
-        <translation>Cambia Password</translation>
+        <translation>Нова парола:</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="50"/>
         <source>New password (repeat):</source>
-        <translation>Nuova password (ripeti):</translation>
+        <translation>Нова парола (повторно):</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="94"/>
         <source>Password cannot be empty.</source>
-        <translation>La password non può essere vuota.</translation>
+        <translation>Паролата не може да бъде празна.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="103"/>
         <location filename="../host/ui/change_password_dialog.cc" line="145"/>
         <source>The passwords entered do not match.</source>
-        <translation>Le password inserite non corrispondono.</translation>
+        <translation>Въведените пароли не съвпадат.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="120"/>
         <source>You must enter your old password.</source>
-        <translation>Devi inserire la tua vecchia password.</translation>
+        <translation>Трябва да въведете старата си парола.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="128"/>
         <source>You entered an incorrect old password.</source>
-        <translation>Hai inserito una vecchia password errata.</translation>
+        <translation>Въведохте неправилна стара парола.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="137"/>
         <source>New password cannot be empty.</source>
-        <translation>La nuova password non può essere vuota.</translation>
+        <translation>Новата парола не може да бъде празна.</translation>
     </message>
 </context>
 <context>
@@ -681,7 +681,7 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../common/desktop/chat_incoming_message.ui" line="187"/>
         <source>Time</source>
-        <translation>Ora</translation>
+        <translation>Час</translation>
     </message>
 </context>
 <context>
@@ -689,7 +689,7 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../common/desktop/chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
-        <translation>Ora</translation>
+        <translation>Час</translation>
     </message>
 </context>
 <context>
@@ -697,7 +697,7 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../client/android/chat_view.cc" line="199"/>
         <source>Message</source>
-        <translation>Messaggio</translation>
+        <translation>Съобщение</translation>
     </message>
 </context>
 <context>
@@ -705,17 +705,17 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="20"/>
         <source>Aspia Chat</source>
-        <translation>Chat Aspia</translation>
+        <translation>Чат Aspia</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="175"/>
         <source>Send message</source>
-        <translation>Invia messaggio</translation>
+        <translation>Изпращане на съобщение</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="204"/>
         <source>Tools</source>
-        <translation>Strumenti</translation>
+        <translation>Инструменти</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="210"/>
@@ -726,71 +726,71 @@ Router aggiunti: %4</translation>
         <location filename="../common/desktop/chat_widget.cc" line="134"/>
         <location filename="../common/desktop/chat_widget.cc" line="309"/>
         <source>Save chat...</source>
-        <translation>Salva chat...</translation>
+        <translation>Запазване на чата...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="135"/>
         <location filename="../common/desktop/chat_widget.cc" line="310"/>
         <source>Clear chat</source>
-        <translation>Pulisci chat</translation>
+        <translation>Изчистване на чата</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="206"/>
         <source>%1 is typing...</source>
-        <translation>%1 sta scrivendo...</translation>
+        <translation>%1 пише...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="209"/>
         <source>User %1 has joined the chat (%2)</source>
-        <translation>L&apos;utente %1 si è unito alla chat (%2)</translation>
+        <translation>Потребителят %1 се присъедини към чата (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="212"/>
         <source>User %1 has left the chat (%2)</source>
-        <translation>L&apos;utente %1 ha lasciato la chat (%2)</translation>
+        <translation>Потребителят %1 напусна чата (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="215"/>
         <source>User %1 is logged in (%2)</source>
-        <translation>L&apos;utente %1 è connesso (%2)</translation>
+        <translation>Потребителят %1 е влязъл в системата (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="218"/>
         <source>User %1 is not logged in (%2)</source>
-        <translation>L&apos;utente %1 non è connesso (%2)</translation>
+        <translation>Потребителят %1 не е влязъл в системата (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="221"/>
         <source>There are no connected users (%1)</source>
-        <translation>Non ci sono utenti connessi (%1)</translation>
+        <translation>Няма свързани потребители (%1)</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/chat_widget.cc" line="370"/>
+        <source>Save File</source>
+        <translation>Запазване на файл</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/chat_widget.cc" line="370"/>
+        <source>TXT files (*.txt)</source>
+        <translation>TXT файлове (*.txt)</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/chat_widget.cc" line="383"/>
+        <source>Could not open file for writing.</source>
+        <translation>Неуспешно отваряне на файла за запис.</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="431"/>
         <source>Unable to write file.</source>
-        <translation>Impossibile scrivere il file.</translation>
+        <translation>Неуспешно записване на файла.</translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/chat_widget.cc" line="447"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation>
-            <numerusform>Il messaggio è troppo lungo. La lunghezza massima del messaggio è di %n carattere.</numerusform>
-            <numerusform>Il messaggio è troppo lungo. La lunghezza massima del messaggio è di %n caratteri.</numerusform>
+            <numerusform>Съобщението е твърде дълго. Максималната дължина на съобщението е %n знак.</numerusform>
+            <numerusform>Съобщението е твърде дълго. Максималната дължина на съобщението е %n знака.</numerusform>
         </translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/chat_widget.cc" line="370"/>
-        <source>Save File</source>
-        <translation>Salva file</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/chat_widget.cc" line="370"/>
-        <source>TXT files (*.txt)</source>
-        <translation>File TXT (*.txt)</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/chat_widget.cc" line="383"/>
-        <source>Could not open file for writing.</source>
-        <translation>Impossibile aprire il file in scrittura.</translation>
     </message>
 </context>
 <context>
@@ -798,17 +798,17 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="14"/>
         <source>System Information</source>
-        <translation>Informazioni Sistema</translation>
+        <translation>Системна информация</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="42"/>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>Запазване</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="45"/>
         <source>Save (Ctrl+S)</source>
-        <translation>Salva (Ctrl+S)</translation>
+        <translation>Запазване (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="48"/>
@@ -818,37 +818,37 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="57"/>
         <source>Print</source>
-        <translation>Stampa</translation>
+        <translation>Печат</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="60"/>
         <source>Print (Ctrl+P)</source>
-        <translation>Stampa (Ctrl+P)</translation>
+        <translation>Печат (Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="68"/>
         <source>Copy Row</source>
-        <translation>Copia riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="73"/>
         <source>Copy Name</source>
-        <translation>Copia nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="78"/>
         <source>Copy Value</source>
-        <translation>Copia valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="87"/>
         <source>Refresh</source>
-        <translation>Aggiorna</translation>
+        <translation>Обновяване</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="90"/>
         <source>Refresh (F5)</source>
-        <translation>Aggiorna (F5)</translation>
+        <translation>Обновяване (F5)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="93"/>
@@ -858,113 +858,113 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../client/android/chat_window.cc" line="137"/>
         <source>User %1 has joined the chat</source>
-        <translation>L&apos;utente %1 si è unito alla chat</translation>
+        <translation>Потребителят %1 се присъедини към чата</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="140"/>
         <source>User %1 has left the chat</source>
-        <translation>L&apos;utente %1 ha lasciato la chat</translation>
+        <translation>Потребителят %1 напусна чата</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="143"/>
         <source>User %1 is logged in</source>
-        <translation>L&apos;utente %1 è connesso</translation>
+        <translation>Потребителят %1 е влязъл в системата</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="146"/>
         <source>User %1 is not logged in</source>
-        <translation>L&apos;utente %1 non è connesso</translation>
+        <translation>Потребителят %1 не е влязъл в системата</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="149"/>
         <source>There are no connected users</source>
-        <translation>Non ci sono utenti connessi</translation>
+        <translation>Няма свързани потребители</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="177"/>
         <location filename="../client/android/chat_window.cc" line="361"/>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Чат</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="254"/>
         <source>Connecting to host %1...</source>
-        <translation>Connessione all&apos;host %1...</translation>
+        <translation>Свързване с хоста %1...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="272"/>
         <source>The connection to the host has been lost.</source>
-        <translation>La connessione all&apos;host è stata persa.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/chat_window.cc" line="489"/>
-        <source>The specified router is unavailable.</source>
-        <translation>Il router specificato non è disponibile.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/chat_window.cc" line="528"/>
-        <source>Error requesting connection via router.</source>
-        <translation>Errore nella richiesta di connessione tramite il router.</translation>
+        <translation>Връзката с хоста е загубена.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="284"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation>La versione dell&apos;host è più recente di quella del client. Aggiorna l&apos;applicazione.</translation>
+        <translation>Версията на хоста е по-нова от тази на клиента. Актуализирайте приложението.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="312"/>
         <source>%1 is typing...</source>
-        <translation>%1 sta scrivendo...</translation>
-    </message>
-    <message>
-        <location filename="../client/android/chat_window.cc" line="465"/>
-        <source>Connecting...</source>
-        <translation>Connessione...</translation>
-    </message>
-    <message>
-        <location filename="../client/android/chat_window.cc" line="488"/>
-        <source>The data of the router is damaged. Edit the router and enter it again.</source>
-        <translation>I dati del router sono danneggiati. Modifica il router e inseriscili di nuovo.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/chat_window.cc" line="495"/>
-        <source>Connecting to router...</source>
-        <translation>Connessione al router...</translation>
-    </message>
-    <message>
-        <location filename="../client/android/chat_window.cc" line="516"/>
-        <source>Requesting connection to the host...</source>
-        <translation>Richiesta di connessione all&apos;host...</translation>
+        <translation>%1 пише...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="354"/>
         <source>Save Chat</source>
-        <translation>Salva chat</translation>
+        <translation>Запазване на чата</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="354"/>
         <source>Text files (*.txt)</source>
-        <translation>File di testo (*.txt)</translation>
+        <translation>Текстови файлове (*.txt)</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="361"/>
         <source>Could not open the file for writing.</source>
-        <translation>Impossibile aprire il file in scrittura.</translation>
+        <translation>Неуспешно отваряне на файла за запис.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="384"/>
         <source>Clear Chat</source>
-        <translation>Pulisci chat</translation>
+        <translation>Изчистване на чата</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="384"/>
         <source>Clear the chat history?</source>
-        <translation>Cancellare la cronologia della chat?</translation>
+        <translation>Да се изчисти ли историята на чата?</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="384"/>
         <source>Clear</source>
-        <translation>Pulisci</translation>
+        <translation>Изчистване</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="465"/>
+        <source>Connecting...</source>
+        <translation>Свързване...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="488"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Данните на рутера са повредени. Редактирайте рутера и ги въведете отново.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="489"/>
+        <source>The specified router is unavailable.</source>
+        <translation>Посоченият рутер е недостъпен.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="495"/>
+        <source>Connecting to router...</source>
+        <translation>Свързване с рутера...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="516"/>
+        <source>Requesting connection to the host...</source>
+        <translation>Заявяване на връзка с хоста...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="528"/>
+        <source>Error requesting connection via router.</source>
+        <translation>Грешка при заявяване на връзка чрез рутера.</translation>
     </message>
 </context>
 <context>
@@ -972,111 +972,111 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="14"/>
         <source>Password Protection</source>
-        <translation>Protezione Password</translation>
+        <translation>Защита с парола</translation>
     </message>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="20"/>
         <source>The configuration is password protected. Enter the password to view and change the configuration.</source>
-        <translation>La configurazione è protetta da password. Digitare la password per visualizzare e gestire la configurazione.</translation>
+        <translation>Конфигурацията е защитена с парола. Въведете паролата, за да прегледате и промените конфигурацията.</translation>
     </message>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="36"/>
         <source>Password:</source>
-        <translation>Password:</translation>
+        <translation>Парола:</translation>
     </message>
     <message>
         <location filename="../host/ui/check_password_dialog.cc" line="71"/>
         <source>You entered an incorrect password.</source>
-        <translation>Hai inserito una password errata.</translation>
+        <translation>Въведохте неправилна парола.</translation>
     </message>
 </context>
 <context>
     <name>Client</name>
     <message>
+        <location filename="../client/desktop/app_lock.cc" line="64"/>
+        <source>Unlock</source>
+        <translation>Отключване</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="66"/>
+        <source>Enter the master password to unlock the application.</source>
+        <translation>Въведете главната парола, за да отключите приложението.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="100"/>
+        <source>Unable to unlock the database.</source>
+        <translation>Неуспешно отключване на базата данни.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="105"/>
+        <source>Invalid master password.</source>
+        <translation>Невалидна главна парола.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="74"/>
+        <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
+        <translation>Неуспешно създаване на резервно копие в папката &quot;%1&quot;.</translation>
+    </message>
+    <message>
         <location filename="../client/main.cc" line="80"/>
         <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
-        <translation>Impossibile creare il backup. Alcuni record del database sono danneggiati. Correggili o eliminali.</translation>
+        <translation>Неуспешно създаване на резервно копие. Някои записи в базата данни са повредени. Поправете ги или ги изтрийте.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="86"/>
+        <source>Unable to create a backup.</source>
+        <translation>Неуспешно създаване на резервно копие.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="213"/>
+        <source>Aspia Client</source>
+        <translation>Клиент Aspia</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="217"/>
+        <source>An aspia:// link to connect to a host.</source>
+        <translation>Връзка aspia:// за свързване с хост.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="272"/>
         <source>Set Master Password</source>
-        <translation>Imposta password principale</translation>
+        <translation>Задаване на главна парола</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="274"/>
         <source>Set a master password required to unlock the application.</source>
-        <translation>Imposta una password principale necessaria per sbloccare l&apos;applicazione.</translation>
+        <translation>Задайте главна парола, необходима за отключване на приложението.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/main.cc" line="282"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="290"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation>La password inserita non soddisfa i requisiti di sicurezza!</translation>
+        <translation>Въведената парола не отговаря на изискванията за защита!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/main.cc" line="292"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="296"/>
         <source>Do you want to enter a different password?</source>
-        <translation>Vuoi inserire una password diversa?</translation>
+        <translation>Искате ли да въведете друга парола?</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="306"/>
         <source>Unable to set master password.</source>
-        <translation>Impossibile impostare la password principale.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="64"/>
-        <source>Unlock</source>
-        <translation>Sblocca</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="74"/>
-        <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
-        <translation>Impossibile creare il backup nella directory &quot;%1&quot;.</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="86"/>
-        <source>Unable to create a backup.</source>
-        <translation>Impossibile creare il backup.</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="217"/>
-        <source>An aspia:// link to connect to a host.</source>
-        <translation>Un collegamento aspia:// per connettersi a un host.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="66"/>
-        <source>Enter the master password to unlock the application.</source>
-        <translation>Inserisci la password principale per sbloccare l&apos;applicazione.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="100"/>
-        <source>Unable to unlock the database.</source>
-        <translation>Impossibile sbloccare il database.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="105"/>
-        <source>Invalid master password.</source>
-        <translation>Password principale non valida.</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="213"/>
-        <source>Aspia Client</source>
-        <translation>Aspia Client</translation>
+        <translation>Неуспешно задаване на главната парола.</translation>
     </message>
 </context>
 <context>
@@ -1084,100 +1084,100 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="141"/>
         <source>Computer Name</source>
-        <translation>Nome computer</translation>
+        <translation>Име на компютъра</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
         <source>IP Address</source>
-        <translation>Indirizzo IP</translation>
+        <translation>IP адрес</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>Connect Time</source>
-        <translation>Ora di connessione</translation>
+        <translation>Час на свързване</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation>Versione</translation>
+        <translation>Версия</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Architecture</source>
-        <translation>Architettura</translation>
+        <translation>Архитектура</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Operating System</source>
-        <translation>Sistema operativo</translation>
+        <translation>Операционна система</translation>
     </message>
 </context>
 <context>
     <name>ClientWindow</name>
     <message>
+        <location filename="../client/desktop/client_window.cc" line="76"/>
+        <source>Timeout waiting for reconnection to host.</source>
+        <translation>Изтече времето за изчакване на повторното свързване с хоста.</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/client_window.cc" line="269"/>
         <source>Session started.</source>
-        <translation>Sessione avviata.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/client_window.cc" line="516"/>
-        <source>The specified router is unavailable.</source>
-        <translation>Il router specificato non è disponibile.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/client_window.cc" line="518"/>
-        <source>The data of the router is damaged. Edit the router and enter it again.</source>
-        <translation>I dati del router sono danneggiati. Modifica il router e inseriscili di nuovo.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/client_window.cc" line="520"/>
-        <source>The specified router is offline.</source>
-        <translation>Il router specificato non è in linea.</translation>
+        <translation>Сесията е стартирана.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="281"/>
         <source>Connecting to host %1...</source>
-        <translation>Connessione all&apos;host %1...</translation>
+        <translation>Свързване с хоста %1...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="285"/>
         <source>Connecting to host %1:%2...</source>
-        <translation>Connessione all&apos;host %1:%2...</translation>
+        <translation>Свързване с хоста %1:%2...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="315"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
-        <translation>L&apos;host non è ancora disponibile. In attesa di riconnessione...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/client_window.cc" line="76"/>
-        <source>Timeout waiting for reconnection to host.</source>
-        <translation>Tempo di attesa per la riconnessione all&apos;host scaduto.</translation>
+        <translation>Хостът все още е недостъпен. Изчакване за повторно свързване...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="335"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
-        <translation>La versione dell&apos;host è più recente di quella del client (%1 &gt; %2). Aggiorna l&apos;applicazione.</translation>
+        <translation>Версията на хоста е по-нова от версията на клиента (%1 &gt; %2). Актуализирайте приложението.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="341"/>
         <source>Attempting to connect in compatibility mode...</source>
-        <translation>Tentativo di connessione in modalità compatibilità...</translation>
+        <translation>Опит за свързване в режим на съвместимост...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/client_window.cc" line="516"/>
+        <source>The specified router is unavailable.</source>
+        <translation>Посоченият рутер е недостъпен.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/client_window.cc" line="518"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Данните на рутера са повредени. Редактирайте рутера и ги въведете отново.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/client_window.cc" line="520"/>
+        <source>The specified router is offline.</source>
+        <translation>Посоченият рутер е офлайн.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="527"/>
         <source>Requesting connection to the host...</source>
-        <translation>Richiesta di connessione all&apos;host...</translation>
+        <translation>Заявяване на връзка с хоста...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="535"/>
         <source>Connection offer received.</source>
-        <translation>Offerta di connessione ricevuta.</translation>
+        <translation>Получено е предложение за свързване.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="552"/>
         <source>Error requesting connection via router.</source>
-        <translation>Errore nella richiesta di connessione tramite il router.</translation>
+        <translation>Грешка при заявяване на връзка чрез рутера.</translation>
     </message>
 </context>
 <context>
@@ -1186,400 +1186,400 @@ Router aggiunti: %4</translation>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
         <location filename="../host/ui/config_dialog.ui" line="225"/>
         <source>Settings</source>
-        <translation>Impostazioni</translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="24"/>
         <source>General</source>
-        <translation>Generale</translation>
+        <translation>Общи</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="30"/>
+        <source>Common</source>
+        <translation>Общи</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="36"/>
+        <source>Incoming port:</source>
+        <translation>Входящ порт:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="71"/>
         <source>Preferred video capturer:</source>
-        <translation>Cattura video preferita:</translation>
+        <translation>Предпочитан метод за заснемане на видео:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="87"/>
         <source>Allow hardware video encoding</source>
-        <translation>Consenti codifica video hardware</translation>
+        <translation>Разрешаване на хардуерно кодиране на видео</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="97"/>
         <source>Updates</source>
-        <translation>Aggiornamenti</translation>
+        <translation>Актуализации</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="103"/>
+        <source>Automatic checking and installation of updates</source>
+        <translation>Автоматична проверка и инсталиране на актуализации</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="112"/>
+        <source>Check for updates:</source>
+        <translation>Проверка за актуализации:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="130"/>
         <source>Update channel:</source>
-        <translation>Canale di aggiornamento:</translation>
+        <translation>Канал за актуализации:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="148"/>
         <source>Update server:</source>
-        <translation>Server di aggiornamento:</translation>
+        <translation>Сървър за актуализации:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="169"/>
         <source>Public key:</source>
-        <translation>Chiave pubblica:</translation>
+        <translation>Публичен ключ:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="188"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
-        <translation>Se il server di aggiornamento non è specificato, viene utilizzato quello predefinito. Se la chiave pubblica non è specificata, viene utilizzata quella integrata.</translation>
+        <translation>Ако не е посочен сървър за актуализации, се използва сървърът по подразбиране. Ако не е посочен публичен ключ, се използва вграденият ключ.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="213"/>
+        <source>Check for updates</source>
+        <translation>Проверка за актуализации</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="244"/>
+        <source>Import settings</source>
+        <translation>Импортиране на настройки</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="251"/>
+        <source>Export settings</source>
+        <translation>Експортиране на настройки</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="275"/>
+        <source>Security</source>
+        <translation>Защита</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="281"/>
+        <source>Password Protection of Settings</source>
+        <translation>Защита на настройките с парола</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="300"/>
+        <source>Change password</source>
+        <translation>Промяна на паролата</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="317"/>
+        <source>One-time Password</source>
+        <translation>Еднократна парола</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="323"/>
+        <source>Enable one-time password</source>
+        <translation>Включване на еднократна парола</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="332"/>
+        <source>Change password:</source>
+        <translation>Честота на смяна на паролата:</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="346"/>
+        <source>Characters:</source>
+        <translation>Знаци:</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="360"/>
+        <source>Characters count:</source>
+        <translation>Брой знаци:</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="382"/>
+        <source>Connection Confirmation</source>
+        <translation>Потвърждение на свързването</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="388"/>
+        <source>Require confirmation when connected to a computer</source>
+        <translation>Изискване на потвърждение при свързване с компютъра</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="397"/>
+        <source>Automatic confirmation of connection via:</source>
+        <translation>Автоматично потвърждение на свързването след:</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="411"/>
+        <source>If there is no active user:</source>
+        <translation>Ако няма активен потребител:</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="430"/>
+        <source>Other</source>
+        <translation>Други</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="436"/>
+        <source>Disable Aspia shutdown</source>
+        <translation>Забраняване на затварянето на Aspia</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="460"/>
+        <source>Router</source>
+        <translation>Рутер</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="466"/>
+        <source>Enable the use of a router</source>
+        <translation>Включване на използването на рутер</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="478"/>
+        <source>Address:</source>
+        <translation>Адрес:</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="497"/>
+        <source>Public Key:</source>
+        <translation>Публичен ключ:</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="511"/>
+        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
+        <translation>Необходим е рутер за свързване с компютър, когато няма директна връзка (заобикаляне на NAT). Aspia не предоставя публичен рутер, но можете да инсталирате свой собствен. Можете да изтеглите рутера от &lt;a href=&quot;https://aspia.org&quot;&gt;официалния уебсайт&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="528"/>
         <location filename="../host/ui/config_dialog.ui" line="639"/>
         <source>Users</source>
-        <translation>Utenti</translation>
+        <translation>Потребители</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="542"/>
         <source>Add new user</source>
-        <translation>Aggiungi nuovo utente</translation>
+        <translation>Добавяне на нов потребител</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="568"/>
         <source>Edit user</source>
-        <translation>Modifica utente</translation>
+        <translation>Редактиране на потребител</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="594"/>
         <source>Delete user</source>
-        <translation>Elimina utente</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="213"/>
-        <source>Check for updates</source>
-        <translation>Controlla aggiornamenti</translation>
+        <translation>Изтриване на потребител</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="662"/>
         <source>Add</source>
-        <translation>Aggiungi</translation>
+        <translation>Добавяне</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="671"/>
         <source>Modify</source>
-        <translation>Modifica</translation>
+        <translation>Промяна</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="680"/>
         <source>Delete</source>
-        <translation>Elimina</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="460"/>
-        <source>Router</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="466"/>
-        <source>Enable the use of a router</source>
-        <translation>Abilita l&apos;utilizzo di un router</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="478"/>
-        <source>Address:</source>
-        <translation>Indirizzo:</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="497"/>
-        <source>Public Key:</source>
-        <translation>Chiave pubblica:</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="300"/>
-        <source>Change password</source>
-        <translation>Cambia password</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="275"/>
-        <source>Security</source>
-        <translation>Sicurezza</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="281"/>
-        <source>Password Protection of Settings</source>
-        <translation>Proteggi Impostazioni con Password</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="317"/>
-        <source>One-time Password</source>
-        <translation>Password Usa e Getta</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="323"/>
-        <source>Enable one-time password</source>
-        <translation>Abilita password usa e getta</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="360"/>
-        <source>Characters count:</source>
-        <translation>Conteggio caratteri:</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="346"/>
-        <source>Characters:</source>
-        <translation>Caratteri:</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="382"/>
-        <source>Connection Confirmation</source>
-        <translation>Conferma Connessione</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="388"/>
-        <source>Require confirmation when connected to a computer</source>
-        <translation>Richiedi conferma quando connesso al computer</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="397"/>
-        <source>Automatic confirmation of connection via:</source>
-        <translation>Conferma automatica della connessione attraverso:</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="332"/>
-        <source>Change password:</source>
-        <translation>Cambia password:</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="411"/>
-        <source>If there is no active user:</source>
-        <translation>Se non c&apos;è un utente attivo:</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="511"/>
-        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>E&apos; necessario un router per connettersi ad un computer in assenza di connessione diretta (NAT). Aspia non fornisce un router pubblico, ma è possibile installarne uno proprio. Potete scaricare il router presso il &lt;a href=&quot;https://aspia.org&quot;&gt;sito ufficiale&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="30"/>
-        <source>Common</source>
-        <translation>Comune</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="36"/>
-        <source>Incoming port:</source>
-        <translation>Porta in Ingresso:</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="436"/>
-        <source>Disable Aspia shutdown</source>
-        <translation>Disabilita spegnimento Aspia</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="430"/>
-        <source>Other</source>
-        <translation>Altro</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="244"/>
-        <source>Import settings</source>
-        <translation>Importa impostazioni</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="251"/>
-        <source>Export settings</source>
-        <translation>Esporta impostazioni</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="103"/>
-        <source>Automatic checking and installation of updates</source>
-        <translation>Controllo e installazione automatici degli aggiornamenti</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="112"/>
-        <source>Check for updates:</source>
-        <translation>Controlla aggiornamenti:</translation>
+        <translation>Изтриване</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="118"/>
         <source>Once a day</source>
-        <translation>Una volta al giorno</translation>
+        <translation>Веднъж дневно</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="119"/>
         <source>Once a week</source>
-        <translation>Una volta alla settimana</translation>
+        <translation>Веднъж седмично</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="120"/>
         <source>Once a month</source>
-        <translation>Una volta al mese</translation>
+        <translation>Веднъж месечно</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="122"/>
         <source>Stable</source>
-        <translation>Stabile</translation>
+        <translation>Стабилен</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="123"/>
         <source>Beta</source>
-        <translation>Beta</translation>
+        <translation>Бета</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="124"/>
         <source>Alpha</source>
-        <translation>Alpha</translation>
+        <translation>Алфа</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="159"/>
         <source>Default</source>
-        <translation>Predefinito</translation>
+        <translation>По подразбиране</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="206"/>
         <source>On reboot</source>
-        <translation>Al riavvio</translation>
+        <translation>При рестартиране</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="207"/>
         <source>Every 5 minutes</source>
-        <translation>Ogni 5 minuti</translation>
+        <translation>На всеки 5 минути</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="208"/>
         <source>Every 30 minutes</source>
-        <translation>Ogni 30 minuti</translation>
+        <translation>На всеки 30 минути</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="209"/>
         <source>Every 1 hour</source>
-        <translation>Ogni ora</translation>
+        <translation>На всеки 1 час</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="210"/>
         <source>Every 6 hours</source>
-        <translation>Ogni 6 ore</translation>
+        <translation>На всеки 6 часа</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="211"/>
         <source>Every 12 hours</source>
-        <translation>Ogni 12 ore</translation>
+        <translation>На всеки 12 часа</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="219"/>
         <source>Letters and digits</source>
-        <translation>Lettere e cifre</translation>
+        <translation>Букви и цифри</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="222"/>
         <source>Letters</source>
-        <translation>Lettere</translation>
+        <translation>Букви</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="224"/>
         <source>Digits</source>
-        <translation>Cifre</translation>
+        <translation>Цифри</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="241"/>
         <source>Never</source>
-        <translation>Mai</translation>
+        <translation>Никога</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="242"/>
         <source>15 seconds</source>
-        <translation>15 secondi</translation>
+        <translation>15 секунди</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="243"/>
         <source>30 seconds</source>
-        <translation>30 secondi</translation>
+        <translation>30 секунди</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="244"/>
         <source>45 seconds</source>
-        <translation>45 secondi</translation>
+        <translation>45 секунди</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="245"/>
         <source>60 seconds</source>
-        <translation>60 secondi</translation>
+        <translation>60 секунди</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="253"/>
         <source>Accept connection</source>
-        <translation>Accetta connessione</translation>
+        <translation>Приемане на връзката</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="254"/>
         <source>Reject connection</source>
-        <translation>Rifiuta connessione</translation>
+        <translation>Отхвърляне на връзката</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="454"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation>Eliminare l&apos;utente &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да изтриете потребителя &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="482"/>
         <location filename="../host/ui/config_dialog.cc" line="516"/>
         <source>An error occurred while processing the password.</source>
-        <translation>Si è verificato un errore durante l&apos;elaborazione della password.</translation>
+        <translation>Възникна грешка при обработка на паролата.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="499"/>
         <source>Settings storage is unavailable.</source>
-        <translation>L&apos;archivio delle impostazioni non è disponibile.</translation>
+        <translation>Хранилището на настройките е недостъпно.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="530"/>
         <source>Import</source>
-        <translation>Importa</translation>
+        <translation>Импортиране</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="530"/>
         <location filename="../host/ui/config_dialog.cc" line="547"/>
         <source>JSON-files (*.json)</source>
-        <translation>File JSON (*.json)</translation>
+        <translation>JSON файлове (*.json)</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="547"/>
         <source>Export</source>
-        <translation>Esporta</translation>
+        <translation>Експортиране</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="572"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation>La configurazione non può essere scritta. Assicurati di avere diritti di scrittura sufficienti.</translation>
+        <translation>Конфигурацията не може да бъде записана. Уверете се, че имате достатъчно права за запис.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="588"/>
         <source>An invalid update server address was entered.</source>
-        <translation>È stato inserito un indirizzo del server di aggiornamento non valido.</translation>
+        <translation>Въведен е невалиден адрес на сървъра за актуализации.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="596"/>
         <source>Enter the update server address.</source>
-        <translation>Inserisci l&apos;indirizzo del server di aggiornamento.</translation>
+        <translation>Въведете адреса на сървъра за актуализации.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="606"/>
         <source>An invalid public key was entered.</source>
-        <translation>È stata inserita una chiave pubblica non valida.</translation>
+        <translation>Въведен е невалиден публичен ключ.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="618"/>
         <source>Incorrect router address entered.</source>
-        <translation>Indirizzo router inserito errato.</translation>
+        <translation>Въведен е неправилен адрес на рутера.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="628"/>
         <source>Incorrect router public key entered.</source>
-        <translation>Chiave pubblica del router inserita errata.</translation>
+        <translation>Въведен е неправилен публичен ключ на рутера.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="791"/>
         <source>Install</source>
-        <translation>Installa</translation>
+        <translation>Инсталиране</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="796"/>
         <source>Remove</source>
-        <translation>Rimuovi</translation>
+        <translation>Премахване</translation>
     </message>
 </context>
 <context>
@@ -1587,32 +1587,32 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.ui" line="14"/>
         <source>Confirmation of connection</source>
-        <translation>Conferma della connessione</translation>
+        <translation>Потвърждение на свързването</translation>
     </message>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.cc" line="63"/>
         <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
-        <translation>L&apos;utente %1 (%2) sta tentando di connettersi al tuo computer con il tipo di sessione %3.</translation>
+        <translation>Потребителят %1 (%2) се опитва да се свърже с вашия компютър с тип на сесията %3.</translation>
     </message>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.cc" line="65"/>
         <source>Allow the connection?</source>
-        <translation>Consentire la connessione?</translation>
+        <translation>Да се разреши ли връзката?</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/connect_confirm_dialog.cc" line="140"/>
         <source>The connection will be automatically accepted after %n seconds.</source>
         <translation>
-            <numerusform>La connessione verrà accettata automaticamente dopo %n secondo.</numerusform>
-            <numerusform>La connessione verrà accettata automaticamente dopo %n secondi.</numerusform>
+            <numerusform>Връзката ще бъде приета автоматично след %n секунда.</numerusform>
+            <numerusform>Връзката ще бъде приета автоматично след %n секунди.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/connect_confirm_dialog.cc" line="145"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
         <translation>
-            <numerusform>La connessione verrà rifiutata automaticamente dopo %n secondo.</numerusform>
-            <numerusform>La connessione verrà rifiutata automaticamente dopo %n secondi.</numerusform>
+            <numerusform>Връзката ще бъде отхвърлена автоматично след %n секунда.</numerusform>
+            <numerusform>Връзката ще бъде отхвърлена автоматично след %n секунди.</numerusform>
         </translation>
     </message>
 </context>
@@ -1621,74 +1621,74 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../host/android/connection_widget.cc" line="244"/>
         <source>Your ID</source>
-        <translation>Il tuo ID</translation>
+        <translation>Вашият ID</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>One-time password</source>
-        <translation>Password usa e getta</translation>
+        <translation>Еднократна парола</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>Access</source>
-        <translation>Accesso</translation>
+        <translation>Достъп</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Desktop</source>
-        <translation>Desktop</translation>
+        <translation>Работен плот</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>File Transfer</source>
-        <translation>Trasferimento File</translation>
+        <translation>Прехвърляне на файлове</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="370"/>
         <source>Waiting for a connection</source>
-        <translation>In attesa di connessione</translation>
+        <translation>Изчакване на връзка</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="370"/>
         <source>Stop</source>
-        <translation>Arresta</translation>
+        <translation>Спиране</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="373"/>
         <source>Aspia ID: %1
 Password: %2</source>
-        <translation>ID Aspia: %1
-Password: %2</translation>
+        <translation>Aspia ID: %1
+Парола: %2</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="416"/>
         <source>Router is disabled</source>
-        <translation>Il router è disabilitato</translation>
+        <translation>Рутерът е изключен</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="419"/>
         <source>Connecting to router...</source>
-        <translation>Connessione al router...</translation>
+        <translation>Свързване с рутера...</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="420"/>
         <source>Connecting to router %1...</source>
-        <translation>Connessione al router %1...</translation>
+        <translation>Свързване с рутера %1...</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="423"/>
         <source>Connected to router</source>
-        <translation>Connesso al router</translation>
+        <translation>Свързано с рутера</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="424"/>
         <source>Connected to router %1</source>
-        <translation>Connesso al router %1</translation>
+        <translation>Свързано с рутера %1</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="427"/>
         <source>Failed to connect to router</source>
-        <translation>Impossibile connettersi al router</translation>
+        <translation>Неуспешно свързване с рутера</translation>
     </message>
 </context>
 <context>
@@ -1696,80 +1696,80 @@ Password: %2</translation>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.ui" line="14"/>
         <source>Credentials</source>
-        <translation>Credenziali</translation>
+        <translation>Идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.ui" line="25"/>
         <source>Name:</source>
-        <translation>Nome:</translation>
+        <translation>Име:</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.ui" line="32"/>
         <source>Display name</source>
-        <translation>Nome visualizzato</translation>
+        <translation>Показвано име</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.ui" line="39"/>
         <source>User Name:</source>
-        <translation>Nome Utente:</translation>
+        <translation>Потребителско име:</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.ui" line="49"/>
         <source>Password:</source>
-        <translation>Password:</translation>
+        <translation>Парола:</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="43"/>
         <source>Edit Credentials</source>
-        <translation>Modifica credenziali</translation>
+        <translation>Редактиране на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="43"/>
         <source>Add Credentials</source>
-        <translation>Aggiungi credenziali</translation>
+        <translation>Добавяне на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="69"/>
         <source>Name cannot be empty.</source>
-        <translation>Il nome non può essere vuoto.</translation>
+        <translation>Името не може да бъде празно.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="77"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n caratteri.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знак.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="87"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
+        <translation>Потребителското име не може да бъде празно и може да съдържа само букви, цифри и знаците &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="96"/>
         <source>Password cannot be empty.</source>
-        <translation>La password non può essere vuota.</translation>
+        <translation>Паролата не може да бъде празна.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="114"/>
         <source>Unable to add credentials</source>
-        <translation>Impossibile aggiungere le credenziali</translation>
+        <translation>Неуспешно добавяне на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="125"/>
         <source>Unable to modify credentials</source>
-        <translation>Impossibile modificare le credenziali</translation>
+        <translation>Неуспешна промяна на идентификационните данни</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="145"/>
         <source>Failed to read the credentials.</source>
-        <translation>Impossibile leggere le credenziali.</translation>
+        <translation>Неуспешно четене на идентификационните данни.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="157"/>
         <source>The credentials are damaged. Enter them again.</source>
-        <translation>Le credenziali sono danneggiate. Inseriscile di nuovo.</translation>
+        <translation>Идентификационните данни са повредени. Въведете ги отново.</translation>
     </message>
 </context>
 <context>
@@ -1777,76 +1777,76 @@ Password: %2</translation>
     <message>
         <location filename="../client/android/credential_editor.cc" line="50"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="51"/>
         <source>User Name</source>
-        <translation>Nome utente</translation>
+        <translation>Потребителско име</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="52"/>
         <source>Password</source>
-        <translation>Password</translation>
+        <translation>Парола</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="61"/>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>Запазване</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="64"/>
         <location filename="../client/android/credential_editor.cc" line="199"/>
         <source>Delete</source>
-        <translation>Elimina</translation>
+        <translation>Изтриване</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="133"/>
         <source>The credentials are damaged. Enter them again.</source>
-        <translation>Le credenziali sono danneggiate. Inseriscile di nuovo.</translation>
+        <translation>Идентификационните данни са повредени. Въведете ги отново.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="145"/>
         <source>Name cannot be empty.</source>
-        <translation>Il nome non può essere vuoto.</translation>
+        <translation>Името не може да бъде празно.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/credential_editor.cc" line="152"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n caratteri.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знак.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="161"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
+        <translation>Потребителското име не може да бъде празно и може да съдържа само букви, цифри и знаците &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="170"/>
         <source>Password cannot be empty.</source>
-        <translation>La password non può essere vuota.</translation>
+        <translation>Паролата не може да бъде празна.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="188"/>
         <source>Failed to save the credentials.</source>
-        <translation>Impossibile salvare le credenziali.</translation>
+        <translation>Неуспешно запазване на идентификационните данни.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="198"/>
         <source>Delete Credentials</source>
-        <translation>Elimina credenziali</translation>
+        <translation>Изтриване на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="199"/>
         <source>Delete the credentials &quot;%1&quot;?</source>
-        <translation>Eliminare le credenziali &quot;%1&quot;?</translation>
+        <translation>Да се изтрият ли идентификационните данни &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/android/credential_editor.cc" line="206"/>
         <source>Failed to delete the credentials.</source>
-        <translation>Impossibile eliminare le credenziali.</translation>
+        <translation>Неуспешно изтриване на идентификационните данни.</translation>
     </message>
 </context>
 <context>
@@ -1855,90 +1855,90 @@ Password: %2</translation>
         <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="14"/>
         <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="107"/>
         <source>Export Credentials</source>
-        <translation>Esporta credenziali</translation>
+        <translation>Експортиране на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="23"/>
         <source>Select the credentials to export and enter a password. The file will be encrypted, and the same password will be required to import it.</source>
-        <translation>Seleziona le credenziali da esportare e inserisci una password. Il file verrà cifrato e la stessa password sarà necessaria per importarlo.</translation>
+        <translation>Изберете идентификационните данни за експортиране и въведете парола. Файлът ще бъде шифрован и за импортирането му ще е необходима същата парола.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="43"/>
         <source>Check all</source>
-        <translation>Seleziona tutto</translation>
+        <translation>Отмятане на всички</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="69"/>
         <source>Uncheck all</source>
-        <translation>Deseleziona tutto</translation>
+        <translation>Премахване на отметките</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="114"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="119"/>
         <source>User Name</source>
-        <translation>Nome utente</translation>
+        <translation>Потребителско име</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="131"/>
         <source>Password:</source>
-        <translation>Password:</translation>
+        <translation>Парола:</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="108"/>
         <source>Aspia Credentials (*.aspia-credentials);;All files (*)</source>
-        <translation>Credenziali Aspia (*.aspia-credentials);;Tutti i file (*)</translation>
+        <translation>Идентификационни данни на Aspia (*.aspia-credentials);;Всички файлове (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="122"/>
         <source>Unable to write the file.</source>
-        <translation>Impossibile scrivere il file.</translation>
+        <translation>Неуспешно записване на файла.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="126"/>
         <source>Failed to export the credentials.</source>
-        <translation>Impossibile esportare le credenziali.</translation>
+        <translation>Неуспешно експортиране на идентификационните данни.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="130"/>
         <source>Export completed successfully.
 Credentials exported: %1</source>
-        <translation>Esportazione completata con successo.
-Credenziali esportate: %1</translation>
+        <translation>Експортирането завърши успешно.
+Експортирани идентификационни данни: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="141"/>
         <source>Failed to read the credentials.</source>
-        <translation>Impossibile leggere le credenziali.</translation>
+        <translation>Неуспешно четене на идентификационните данни.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="207"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="215"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation>La password inserita non soddisfa i requisiti di sicurezza!</translation>
+        <translation>Въведената парола не отговаря на изискванията за защита!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="216"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="219"/>
         <source>Do you want to enter a different password?</source>
-        <translation>Vuoi inserire una password diversa?</translation>
+        <translation>Искате ли да въведете друга парола?</translation>
     </message>
 </context>
 <context>
@@ -1946,81 +1946,81 @@ Credenziali esportate: %1</translation>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="59"/>
         <source>The file will be encrypted with this password.</source>
-        <translation>Il file verrà cifrato con questa password.</translation>
+        <translation>Файлът ще бъде шифрован с тази парола.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="63"/>
         <source>Password</source>
-        <translation>Password</translation>
+        <translation>Парола</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="110"/>
         <source>Failed to read the credentials.</source>
-        <translation>Impossibile leggere le credenziali.</translation>
+        <translation>Неуспешно четене на идентификационните данни.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="127"/>
         <source>Damaged</source>
-        <translation>Danneggiata</translation>
+        <translation>Повредени</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="153"/>
         <location filename="../client/android/credential_export_widget.cc" line="172"/>
         <source>Export Credentials</source>
-        <translation>Esporta credenziali</translation>
+        <translation>Експортиране на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="154"/>
         <source>Aspia Credentials (*.aspia-credentials)</source>
-        <translation>Credenziali Aspia (*.aspia-credentials)</translation>
+        <translation>Идентификационни данни на Aspia (*.aspia-credentials)</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="164"/>
         <source>Unable to write the file.</source>
-        <translation>Impossibile scrivere il file.</translation>
+        <translation>Неуспешно записване на файла.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="168"/>
         <source>Failed to export the credentials.</source>
-        <translation>Impossibile esportare le credenziali.</translation>
+        <translation>Неуспешно експортиране на идентификационните данни.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="173"/>
         <source>Export completed successfully.
 Credentials exported: %1</source>
-        <translation>Esportazione completata con successo.
-Credenziali esportate: %1</translation>
+        <translation>Експортирането завърши успешно.
+Експортирани идентификационни данни: %1</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="182"/>
         <source>Save (%1)</source>
-        <translation>Salva (%1)</translation>
+        <translation>Запазване (%1)</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/credential_export_widget.cc" line="204"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/credential_export_widget.cc" line="213"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="216"/>
         <source>Weak Password</source>
-        <translation>Password debole</translation>
+        <translation>Слаба парола</translation>
     </message>
     <message>
         <location filename="../client/android/credential_export_widget.cc" line="216"/>
         <source>Continue</source>
-        <translation>Continua</translation>
+        <translation>Продължаване</translation>
     </message>
 </context>
 <context>
@@ -2029,120 +2029,120 @@ Credenziali esportate: %1</translation>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="14"/>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="88"/>
         <source>Import Credentials</source>
-        <translation>Importa credenziali</translation>
+        <translation>Импортиране на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="23"/>
         <source>Select a file, enter the password it was exported with and open it. The checked credentials will be imported, and the ones that already exist will be replaced.</source>
-        <translation>Seleziona un file, inserisci la password con cui è stato esportato e aprilo. Le credenziali selezionate verranno importate e quelle già esistenti verranno sostituite.</translation>
+        <translation>Изберете файл, въведете паролата, с която е бил експортиран, и го отворете. Отметнатите идентификационни данни ще бъдат импортирани, а вече съществуващите ще бъдат заместени.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="35"/>
         <source>File:</source>
-        <translation>File:</translation>
+        <translation>Файл:</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="45"/>
         <source>Browse...</source>
-        <translation>Sfoglia...</translation>
+        <translation>Преглед...</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="52"/>
         <source>Password:</source>
-        <translation>Password:</translation>
+        <translation>Парола:</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="62"/>
         <source>Open</source>
-        <translation>Apri</translation>
+        <translation>Отваряне</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="81"/>
         <source>Check all</source>
-        <translation>Seleziona tutto</translation>
+        <translation>Отмятане на всички</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="107"/>
         <source>Uncheck all</source>
-        <translation>Deseleziona tutto</translation>
+        <translation>Премахване на отметките</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="152"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="157"/>
         <source>User Name</source>
-        <translation>Nome utente</translation>
+        <translation>Потребителско име</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="162"/>
         <source>Status</source>
-        <translation>Stato</translation>
+        <translation>Състояние</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="54"/>
         <source>Import</source>
-        <translation>Importa</translation>
+        <translation>Импортиране</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="89"/>
         <source>Aspia Credentials (*.aspia-credentials);;All files (*)</source>
-        <translation>Credenziali Aspia (*.aspia-credentials);;Tutti i file (*)</translation>
+        <translation>Идентификационни данни на Aspia (*.aspia-credentials);;Всички файлове (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="113"/>
         <source>Unable to decrypt the file with the specified password.</source>
-        <translation>Impossibile decifrare il file con la password specificata.</translation>
+        <translation>Неуспешно дешифроване на файла с посочената парола.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="119"/>
         <source>Unable to read the file.</source>
-        <translation>Impossibile leggere il file.</translation>
+        <translation>Неуспешно четене на файла.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="123"/>
         <source>Unsupported file format version.</source>
-        <translation>Versione del formato file non supportata.</translation>
+        <translation>Неподдържана версия на файловия формат.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="127"/>
         <source>The file is not a valid credentials file.</source>
-        <translation>Il file non è un file di credenziali valido.</translation>
+        <translation>Файлът не е валиден файл с идентификационни данни.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="131"/>
         <source>Failed to import the credentials.</source>
-        <translation>Impossibile importare le credenziali.</translation>
+        <translation>Неуспешно импортиране на идентификационните данни.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
         <source>Exists</source>
-        <translation>Esistente</translation>
+        <translation>Съществуват</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
         <source>New</source>
-        <translation>Nuova</translation>
+        <translation>Нови</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="220"/>
         <source>Unable to write credentials &quot;%1&quot;. The import was interrupted.
 Credentials added: %2
 Credentials replaced: %3</source>
-        <translation>Impossibile scrivere le credenziali &quot;%1&quot;. L&apos;importazione è stata interrotta.
-Credenziali aggiunte: %2
-Credenziali sostituite: %3</translation>
+        <translation>Неуспешно записване на идентификационните данни &quot;%1&quot;. Импортирането е прекъснато.
+Добавени идентификационни данни: %2
+Заместени идентификационни данни: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="230"/>
         <source>Import completed successfully.
 Credentials added: %1
 Credentials replaced: %2</source>
-        <translation>Importazione completata con successo.
-Credenziali aggiunte: %1
-Credenziali sostituite: %2</translation>
+        <translation>Импортирането завърши успешно.
+Добавени идентификационни данни: %1
+Заместени идентификационни данни: %2</translation>
     </message>
 </context>
 <context>
@@ -2150,91 +2150,91 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="51"/>
         <source>Open</source>
-        <translation>Apri</translation>
+        <translation>Отваряне</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="61"/>
         <source>Password</source>
-        <translation>Password</translation>
+        <translation>Парола</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="130"/>
         <source>Password cannot be empty.</source>
-        <translation>La password non può essere vuota.</translation>
+        <translation>Паролата не може да бъде празна.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="143"/>
         <source>Unable to decrypt the file with the specified password.</source>
-        <translation>Impossibile decifrare il file con la password specificata.</translation>
+        <translation>Неуспешно дешифроване на файла с посочената парола.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="149"/>
         <source>Unable to read the file.</source>
-        <translation>Impossibile leggere il file.</translation>
+        <translation>Неуспешно четене на файла.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="153"/>
         <source>Unsupported file format version.</source>
-        <translation>Versione del formato file non supportata.</translation>
+        <translation>Неподдържана версия на файловия формат.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="157"/>
         <source>The file is not a valid credentials file.</source>
-        <translation>Il file non è un file di credenziali valido.</translation>
+        <translation>Файлът не е валиден файл с идентификационни данни.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="161"/>
         <source>Failed to import the credentials.</source>
-        <translation>Impossibile importare le credenziali.</translation>
+        <translation>Неуспешно импортиране на идентификационните данни.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="183"/>
         <source>Exists</source>
-        <translation>Esistente</translation>
+        <translation>Съществуват</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="183"/>
         <source>New</source>
-        <translation>Nuova</translation>
+        <translation>Нови</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="231"/>
         <location filename="../client/android/credential_import_widget.cc" line="241"/>
         <source>Import Credentials</source>
-        <translation>Importa credenziali</translation>
+        <translation>Импортиране на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="232"/>
         <source>Unable to write credentials &quot;%1&quot;. The import was interrupted.
 Credentials added: %2
 Credentials replaced: %3</source>
-        <translation>Impossibile scrivere le credenziali &quot;%1&quot;. L&apos;importazione è stata interrotta.
-Credenziali aggiunte: %2
-Credenziali sostituite: %3</translation>
+        <translation>Неуспешно записване на идентификационните данни &quot;%1&quot;. Импортирането е прекъснато.
+Добавени идентификационни данни: %2
+Заместени идентификационни данни: %3</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="242"/>
         <source>Import completed successfully.
 Credentials added: %1
 Credentials replaced: %2</source>
-        <translation>Importazione completata con successo.
-Credenziali aggiunte: %1
-Credenziali sostituite: %2</translation>
+        <translation>Импортирането завърши успешно.
+Добавени идентификационни данни: %1
+Заместени идентификационни данни: %2</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="252"/>
         <source>The checked credentials will be imported, and the ones that already exist will be replaced.</source>
-        <translation>Le credenziali selezionate verranno importate e quelle già esistenti verranno sostituite.</translation>
+        <translation>Отметнатите идентификационни данни ще бъдат импортирани, а вече съществуващите ще бъдат заместени.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="254"/>
         <source>Enter the password the file was exported with.</source>
-        <translation>Inserisci la password con cui è stato esportato il file.</translation>
+        <translation>Въведете паролата, с която е бил експортиран файлът.</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="267"/>
         <source>Import (%1)</source>
-        <translation>Importa (%1)</translation>
+        <translation>Импортиране (%1)</translation>
     </message>
 </context>
 <context>
@@ -2242,12 +2242,12 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/credentials/credential_list_model.cc" line="123"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_list_model.cc" line="126"/>
         <source>User Name</source>
-        <translation>Nome utente</translation>
+        <translation>Потребителско име</translation>
     </message>
 </context>
 <context>
@@ -2255,39 +2255,39 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="79"/>
         <source>Current password:</source>
-        <translation>Password attuale:</translation>
+        <translation>Текуща парола:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="89"/>
         <location filename="../common/desktop/credentials_dialog.cc" line="51"/>
         <source>Password:</source>
-        <translation>Password:</translation>
+        <translation>Парола:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="99"/>
         <source>Confirm password:</source>
-        <translation>Conferma password:</translation>
+        <translation>Потвърждаване на паролата:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="57"/>
         <location filename="../common/desktop/credentials_dialog.cc" line="61"/>
         <source>New password:</source>
-        <translation>Nuova password:</translation>
+        <translation>Нова парола:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="195"/>
         <source>Enter the current password.</source>
-        <translation>Inserisci la password attuale.</translation>
+        <translation>Въведете текущата парола.</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="202"/>
         <source>Password cannot be empty.</source>
-        <translation>La password non può essere vuota.</translation>
+        <translation>Паролата не може да бъде празна.</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="209"/>
         <source>Passwords do not match.</source>
-        <translation>Le password non corrispondono.</translation>
+        <translation>Паролите не съвпадат.</translation>
     </message>
 </context>
 <context>
@@ -2295,42 +2295,42 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/credentials_tab.ui" line="58"/>
         <source>Export Credentials...</source>
-        <translation>Esporta credenziali...</translation>
+        <translation>Експортиране на идентификационни данни...</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials_tab.ui" line="67"/>
         <source>Import Credentials...</source>
-        <translation>Importa credenziali...</translation>
+        <translation>Импортиране на идентификационни данни...</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials_tab.ui" line="76"/>
         <source>Add Credentials</source>
-        <translation>Aggiungi credenziali</translation>
+        <translation>Добавяне на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials_tab.ui" line="85"/>
         <source>Edit Credentials</source>
-        <translation>Modifica credenziali</translation>
+        <translation>Редактиране на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials_tab.ui" line="94"/>
         <source>Delete Credentials</source>
-        <translation>Elimina credenziali</translation>
+        <translation>Изтриване на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials_tab.cc" line="180"/>
         <source>Are you sure you want to delete credentials &quot;%1&quot;?</source>
-        <translation>Eliminare le credenziali &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да изтриете идентификационните данни &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials_tab.cc" line="188"/>
         <source>Unable to delete credentials.</source>
-        <translation>Impossibile eliminare le credenziali.</translation>
+        <translation>Неуспешно изтриване на идентификационните данни.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials_tab.cc" line="233"/>
         <source>Failed to read data. The list may be out of date.</source>
-        <translation>Impossibile leggere i dati. L&apos;elenco potrebbe non essere aggiornato.</translation>
+        <translation>Неуспешно четене на данните. Списъкът може да не е актуален.</translation>
     </message>
 </context>
 <context>
@@ -2338,35 +2338,35 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/android/credentials_widget.cc" line="160"/>
         <source>Add Credentials</source>
-        <translation>Aggiungi credenziali</translation>
+        <translation>Добавяне на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/android/credentials_widget.cc" line="170"/>
         <location filename="../client/android/credentials_widget.cc" line="200"/>
         <location filename="../client/android/credentials_widget.cc" line="206"/>
         <source>Import Credentials</source>
-        <translation>Importa credenziali</translation>
+        <translation>Импортиране на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/android/credentials_widget.cc" line="171"/>
         <location filename="../client/android/credentials_widget.cc" line="192"/>
         <source>Export Credentials</source>
-        <translation>Esporta credenziali</translation>
+        <translation>Експортиране на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/android/credentials_widget.cc" line="200"/>
         <source>Aspia Credentials (*.aspia-credentials)</source>
-        <translation>Credenziali Aspia (*.aspia-credentials)</translation>
+        <translation>Идентификационни данни на Aspia (*.aspia-credentials)</translation>
     </message>
     <message>
         <location filename="../client/android/credentials_widget.cc" line="217"/>
         <source>Edit Credentials</source>
-        <translation>Modifica credenziali</translation>
+        <translation>Редактиране на идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/android/credentials_widget.cc" line="236"/>
         <source>Credentials</source>
-        <translation>Credenziali</translation>
+        <translation>Идентификационни данни</translation>
     </message>
 </context>
 <context>
@@ -2375,32 +2375,32 @@ Credenziali sostituite: %2</translation>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="119"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="122"/>
         <source>Lock toolbar</source>
-        <translation>Blocca barra strumenti</translation>
+        <translation>Заключване на лентата с инструменти</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="131"/>
         <source>Auto size</source>
-        <translation>Dimensione automatica</translation>
+        <translation>Автоматичен размер</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="134"/>
         <source>Automatic window size</source>
-        <translation>Dimensionamento finestra automatico</translation>
+        <translation>Автоматичен размер на прозореца</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="146"/>
         <source>Full screen</source>
-        <translation>Schermo intero</translation>
+        <translation>Цял екран</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="149"/>
         <source>Switch to full screen mode or back</source>
-        <translation>Passa a schermo intero o finestra</translation>
+        <translation>Превключване в режим на цял екран и обратно</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="160"/>
         <source>Automatic scrolling</source>
-        <translation>Scorrimento automatico</translation>
+        <translation>Автоматично превъртане</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="172"/>
@@ -2410,212 +2410,212 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="175"/>
         <source>Send Ctrl+Alt+Delete</source>
-        <translation>Invia Ctrl+Alt+Delete</translation>
+        <translation>Изпращане на Ctrl+Alt+Delete</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="187"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="190"/>
         <source>Advanced menu</source>
-        <translation>Menu avanzato</translation>
+        <translation>Разширено меню</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="195"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="198"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="201"/>
         <source>Save screenshot...</source>
-        <translation>Salva schermata...</translation>
+        <translation>Запазване на екранна снимка...</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="210"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="213"/>
         <source>Terminal</source>
-        <translation>Terminale</translation>
+        <translation>Терминал</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="222"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="225"/>
         <source>File transfer</source>
-        <translation>Trasferimento file</translation>
+        <translation>Прехвърляне на файлове</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="983"/>
         <source>Scale</source>
-        <translation>Scala</translation>
+        <translation>Мащаб</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="242"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="245"/>
         <source>Power control</source>
-        <translation>Spegnimento / Disconnesione</translation>
+        <translation>Управление на захранването</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="257"/>
         <source>Shutdown</source>
-        <translation>Spegni</translation>
+        <translation>Изключване</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="266"/>
         <source>Reboot</source>
-        <translation>Riavvia</translation>
+        <translation>Рестартиране</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="275"/>
         <source>Logoff</source>
-        <translation>Disconnetti</translation>
+        <translation>Излизане</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="284"/>
         <source>Lock</source>
-        <translation>Blocca</translation>
+        <translation>Заключване</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="293"/>
         <source>System Information</source>
-        <translation>Informazioni Sistema</translation>
+        <translation>Системна информация</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="302"/>
         <source>Close</source>
-        <translation>Chiudi</translation>
+        <translation>Затваряне</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="305"/>
         <source>Close session</source>
-        <translation>Chiudi sessione</translation>
+        <translation>Затваряне на сесията</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="364"/>
         <source>Fit window</source>
-        <translation>Adatta finestra</translation>
+        <translation>Побиране в прозореца</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="373"/>
         <source>Minimize</source>
-        <translation>Minimizza</translation>
+        <translation>Минимизиране</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="376"/>
         <source>Minimize window</source>
-        <translation>Minimizza finestra</translation>
+        <translation>Минимизиране на прозореца</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="381"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="384"/>
         <source>Statistics</source>
-        <translation>Statistiche</translation>
+        <translation>Статистика</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="396"/>
         <source>Reboot (Safe mode)</source>
-        <translation>Riavvia (modalità sicura)</translation>
+        <translation>Рестартиране (безопасен режим)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="399"/>
         <source>Reboot in safe mode</source>
-        <translation>Riavvia in modalità sicura</translation>
+        <translation>Рестартиране в безопасен режим</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="411"/>
         <source>Paste clipboard as keystrokes</source>
-        <translation>Incolla appunti come digitazione</translation>
+        <translation>Поставяне на клипборда като натискания на клавиши</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="420"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="423"/>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Чат</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="585"/>
         <source>Start recording</source>
-        <translation>Avvia registrazione</translation>
+        <translation>Започване на записа</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="447"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="450"/>
         <source>Task Manager</source>
-        <translation>Gestione Attività</translation>
+        <translation>Диспечер на задачите</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="462"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="465"/>
         <source>Tools</source>
-        <translation>Strumenti</translation>
+        <translation>Инструменти</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="477"/>
         <source>Switch Session</source>
-        <translation>Cambia sessione</translation>
+        <translation>Превключване на сесията</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="372"/>
         <source>Resolution selection</source>
-        <translation>Selezione risoluzione</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1158"/>
-        <source>Session %1</source>
-        <translation>Sessione %1</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1158"/>
-        <source>Session %1 (%2)</source>
-        <translation>Sessione %1 (%2)</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="580"/>
-        <source>Stop recording</source>
-        <translation>Arresta registrazione</translation>
+        <translation>Избор на разделителна способност</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="485"/>
         <source>Scripts</source>
-        <translation>Script</translation>
+        <translation>Скриптове</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="548"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
-        <translation>Eseguire lo script &quot;%1&quot; sul computer remoto?</translation>
+        <translation>Наистина ли искате да изпълните &quot;%1&quot; на отдалечения компютър?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="580"/>
+        <source>Stop recording</source>
+        <translation>Спиране на записа</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="812"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation>Spegnere il computer remoto?</translation>
+        <translation>Наистина ли искате да изключите отдалечения компютър?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="827"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="853"/>
         <source>Confirmation</source>
-        <translation>Conferma</translation>
+        <translation>Потвърждение</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation>Riavviare il computer remoto?</translation>
+        <translation>Наистина ли искате да рестартирате отдалечения компютър?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="833"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="859"/>
         <source>Wait for host</source>
-        <translation>Attendi l&apos;host</translation>
+        <translation>Изчакване на хоста</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="854"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation>Riavviare il computer remoto in modalità sicura?</translation>
+        <translation>Наистина ли искате да рестартирате отдалечения компютър в безопасен режим?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="879"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation>Terminare la sessione dell&apos;utente sul computer remoto?</translation>
+        <translation>Наистина ли искате да прекратите потребителската сесия на отдалечения компютър?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="894"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation>Bloccare la sessione dell&apos;utente sul computer remoto?</translation>
+        <translation>Наистина ли искате да заключите потребителската сесия на отдалечения компютър?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1158"/>
+        <source>Session %1</source>
+        <translation>Сесия %1</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1158"/>
+        <source>Session %1 (%2)</source>
+        <translation>Сесия %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -2623,125 +2623,60 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="622"/>
         <source>The session was paused by a remote user</source>
-        <translation>La sessione è stata messa in pausa da un utente remoto</translation>
+        <translation>Сесията е поставена на пауза от отдалечения потребител</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="625"/>
         <source>The session is temporarily unavailable</source>
-        <translation>La sessione non è temporaneamente disponibile</translation>
+        <translation>Сесията е временно недостъпна</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="628"/>
         <source>The session is permanently unavailable</source>
-        <translation>La sessione non è disponibile in modo permanente</translation>
+        <translation>Сесията е трайно недостъпна</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="631"/>
         <source>Waiting for the remote user to confirm screen capture</source>
-        <translation>In attesa che l&apos;utente remoto confermi l&apos;acquisizione dello schermo</translation>
+        <translation>Изчакване на отдалечения потребител да потвърди заснемането на екрана</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="634"/>
         <source>The remote device screen is locked</source>
-        <translation>Lo schermo del dispositivo remoto è bloccato</translation>
+        <translation>Екранът на отдалеченото устройство е заключен</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="637"/>
         <source>Error while receiving video stream: %1</source>
-        <translation>Errore durante la ricezione del flusso video: %1</translation>
+        <translation>Грешка при получаване на видеопотока: %1</translation>
     </message>
 </context>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="976"/>
-        <source>Save File</source>
-        <translation>Salva file</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="977"/>
-        <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation>Immagine PNG (*.png);;Immagine BMP (*.bmp)</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1008"/>
-        <source>Could not save image</source>
-        <translation>Impossibile salvare l&apos;immagine</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="513"/>
-        <source>Connecting...</source>
-        <translation>Connessione...</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="537"/>
-        <source>The specified router is unavailable.</source>
-        <translation>Il router specificato non è disponibile.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="564"/>
-        <source>Requesting connection to the host...</source>
-        <translation>Richiesta di connessione all&apos;host...</translation>
-    </message>
-    <message>
         <location filename="../client/android/desktop_window.cc" line="81"/>
         <source>Session %1</source>
-        <translation>Sessione %1</translation>
+        <translation>Сесия %1</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="82"/>
         <source>Session %1 (%2)</source>
-        <translation>Sessione %1 (%2)</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="536"/>
-        <source>The data of the router is damaged. Edit the router and enter it again.</source>
-        <translation>I dati del router sono danneggiati. Modifica il router e inseriscili di nuovo.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="543"/>
-        <source>Connecting to router...</source>
-        <translation>Connessione al router...</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="771"/>
-        <source>Connecting to host %1...</source>
-        <translation>Connessione all&apos;host %1...</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="777"/>
-        <source>Connection established.</source>
-        <translation>Connessione stabilita.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="790"/>
-        <source>The connection to the host has been lost.</source>
-        <translation>La connessione all&apos;host è stata persa.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="803"/>
-        <source>The host version is newer than the client. Please update the application.</source>
-        <translation>La versione dell&apos;host è più recente di quella del client. Aggiorna l&apos;applicazione.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="807"/>
-        <source>Legacy hosts are not supported.</source>
-        <translation>Gli host obsoleti non sono supportati.</translation>
+        <translation>Сесия %1 (%2)</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="361"/>
         <source>Monitor %1</source>
-        <translation>Monitor %1</translation>
+        <translation>Монитор %1</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="369"/>
         <source>Power</source>
-        <translation>Alimentazione</translation>
+        <translation>Захранване</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="373"/>
         <source>Keyboard</source>
-        <translation>Tastiera</translation>
+        <translation>Клавиатура</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="378"/>
@@ -2751,78 +2686,143 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/android/desktop_window.cc" line="385"/>
         <source>Users</source>
-        <translation>Utenti</translation>
+        <translation>Потребители</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="390"/>
         <source>Disconnect</source>
-        <translation>Disconnetti</translation>
+        <translation>Прекъсване на връзката</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="513"/>
+        <source>Connecting...</source>
+        <translation>Свързване...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Данните на рутера са повредени. Редактирайте рутера и ги въведете отново.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="537"/>
+        <source>The specified router is unavailable.</source>
+        <translation>Посоченият рутер е недостъпен.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="543"/>
+        <source>Connecting to router...</source>
+        <translation>Свързване с рутера...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="564"/>
+        <source>Requesting connection to the host...</source>
+        <translation>Заявяване на връзка с хоста...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="661"/>
         <location filename="../client/android/desktop_window.cc" line="715"/>
         <source>Back</source>
-        <translation>Indietro</translation>
+        <translation>Назад</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="662"/>
         <source>Shutdown</source>
-        <translation>Spegni</translation>
+        <translation>Изключване</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="663"/>
         <source>Reboot</source>
-        <translation>Riavvia</translation>
+        <translation>Рестартиране</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="665"/>
         <source>Safe Mode</source>
-        <translation>Modalità sicura</translation>
+        <translation>Безопасен режим</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="666"/>
         <source>Logoff</source>
-        <translation>Disconnetti</translation>
+        <translation>Излизане</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="667"/>
         <source>Lock</source>
-        <translation>Blocca</translation>
+        <translation>Заключване</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="683"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation>Spegnere il computer remoto?</translation>
+        <translation>Наистина ли искате да изключите отдалечения компютър?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="687"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation>Riavviare il computer remoto?</translation>
+        <translation>Наистина ли искате да рестартирате отдалечения компютър?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="691"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation>Riavviare il computer remoto in modalità sicura?</translation>
+        <translation>Наистина ли искате да рестартирате отдалечения компютър в безопасен режим?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="695"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation>Terminare la sessione dell&apos;utente sul computer remoto?</translation>
+        <translation>Наистина ли искате да прекратите потребителската сесия на отдалечения компютър?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="699"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation>Bloccare la sessione dell&apos;utente sul computer remoto?</translation>
+        <translation>Наистина ли искате да заключите потребителската сесия на отдалечения компютър?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="754"/>
         <source>Confirmation</source>
-        <translation>Conferma</translation>
+        <translation>Потвърждение</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="754"/>
         <source>Yes</source>
-        <translation>Sì</translation>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="771"/>
+        <source>Connecting to host %1...</source>
+        <translation>Свързване с хоста %1...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="777"/>
+        <source>Connection established.</source>
+        <translation>Връзката е установена.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="790"/>
+        <source>The connection to the host has been lost.</source>
+        <translation>Връзката с хоста е загубена.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="803"/>
+        <source>The host version is newer than the client. Please update the application.</source>
+        <translation>Версията на хоста е по-нова от тази на клиента. Актуализирайте приложението.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="807"/>
+        <source>Legacy hosts are not supported.</source>
+        <translation>Остарелите хостове не се поддържат.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="976"/>
+        <source>Save File</source>
+        <translation>Запазване на файл</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="977"/>
+        <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
+        <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1008"/>
+        <source>Could not save image</source>
+        <translation>Неуспешно запазване на изображението</translation>
     </message>
 </context>
 <context>
@@ -2835,87 +2835,87 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="81"/>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Отказ</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="82"/>
         <source>Yes</source>
-        <translation>Sì</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="83"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Не</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="84"/>
         <source>Apply</source>
-        <translation>Applica</translation>
+        <translation>Прилагане</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="85"/>
         <source>Close</source>
-        <translation>Chiudi</translation>
+        <translation>Затваряне</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="86"/>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>Запазване</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="87"/>
         <source>Discard</source>
-        <translation>Scarta</translation>
+        <translation>Отхвърляне</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="88"/>
         <source>Reset</source>
-        <translation>Resettato</translation>
+        <translation>Нулиране</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="89"/>
         <source>Help</source>
-        <translation>Aiuto</translation>
+        <translation>Помощ</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="90"/>
         <source>Abort</source>
-        <translation>Interrompi</translation>
+        <translation>Прекратяване</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="91"/>
         <source>Retry</source>
-        <translation>Riprova</translation>
+        <translation>Нов опит</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="92"/>
         <source>Ignore</source>
-        <translation>Ignora</translation>
+        <translation>Пренебрегване</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="93"/>
         <source>Restore Defaults</source>
-        <translation>Ripristina predefiniti</translation>
+        <translation>По подразбиране</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="94"/>
         <source>Save All</source>
-        <translation>Salva tutto</translation>
+        <translation>Запазване на всичко</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="95"/>
         <source>Open</source>
-        <translation>Apri</translation>
+        <translation>Отваряне</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="96"/>
         <source>Yes to All</source>
-        <translation>Sì a tutto</translation>
+        <translation>Да за всички</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="97"/>
         <source>No to All</source>
-        <translation>No a tutto</translation>
+        <translation>Не за всички</translation>
     </message>
 </context>
 <context>
@@ -2923,77 +2923,77 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/file_error_code.cc" line="33"/>
         <source>Successfully completed</source>
-        <translation>Completato con successo</translation>
+        <translation>Успешно завършено</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="37"/>
         <source>Invalid request</source>
-        <translation>Richiesta non valida</translation>
+        <translation>Невалидна заявка</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="41"/>
         <source>Invalid directory or file name</source>
-        <translation>Cartella o nome file non validi</translation>
+        <translation>Невалидно име на папка или файл</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="45"/>
         <source>Path not found</source>
-        <translation>Cartella non trovata</translation>
+        <translation>Пътят не е намерен</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="49"/>
         <source>Path already exists</source>
-        <translation>La cartellla esiste già</translation>
+        <translation>Пътят вече съществува</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="53"/>
         <source>No drives found</source>
-        <translation>Nessun disco trovato</translation>
+        <translation>Няма намерени дискове</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="57"/>
         <source>Disk full</source>
-        <translation>Disco pieno</translation>
+        <translation>Няма достатъчно свободно място на диска</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="61"/>
         <source>Access denied</source>
-        <translation>Accesso rifiutato</translation>
+        <translation>Достъпът е отказан</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="65"/>
         <source>Could not open file for reading</source>
-        <translation>Non è stato possibile aprire il file in lettura</translation>
+        <translation>Неуспешно отваряне на файла за четене</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="69"/>
         <source>Could not create or replace file</source>
-        <translation>Non è stato possibile creare o sostituire il file</translation>
+        <translation>Неуспешно създаване или заместване на файла</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="73"/>
         <source>Could not write to file</source>
-        <translation>Non è  stato possibile scrivere il file</translation>
+        <translation>Неуспешно записване във файла</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="77"/>
         <source>Could not read file</source>
-        <translation>Non è stato possibile leggere il file</translation>
+        <translation>Неуспешно четене на файла</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="81"/>
         <source>Drive not ready</source>
-        <translation>Disco non pronto</translation>
+        <translation>Дискът не е готов</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="85"/>
         <source>No logged in user</source>
-        <translation>Nessun utente connesso</translation>
+        <translation>Няма влязъл в системата потребител</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="89"/>
         <source>Unknown error code</source>
-        <translation>Codice errore sconosciuto</translation>
+        <translation>Неизвестен код на грешка</translation>
     </message>
 </context>
 <context>
@@ -3001,27 +3001,27 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="101"/>
         <source>Folder</source>
-        <translation>Cartella</translation>
+        <translation>Папка</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="378"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="381"/>
         <source>Size</source>
-        <translation>Dimensione</translation>
+        <translation>Размер</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="384"/>
         <source>Type</source>
-        <translation>Tipo</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="387"/>
         <source>Modified</source>
-        <translation>Modificato</translation>
+        <translation>Променен</translation>
     </message>
 </context>
 <context>
@@ -3029,7 +3029,7 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/file_transfer/file_item_delegate.cc" line="54"/>
         <source>The name can not contain characters %1.</source>
-        <translation>Il nome non può contenere i caratteri %1.</translation>
+        <translation>Името не може да съдържа знаците %1.</translation>
     </message>
 </context>
 <context>
@@ -3037,109 +3037,109 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="145"/>
         <source>Up</source>
-        <translation>Precedente</translation>
+        <translation>Нагоре</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="148"/>
         <source>Browse to parent folder (Backspace)</source>
-        <translation>Visualizza cartella padre (Backspace)</translation>
+        <translation>Преминаване към родителската папка (Backspace)</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="157"/>
         <source>Refresh</source>
-        <translation>Aggiorna</translation>
+        <translation>Обновяване</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="160"/>
         <source>Refresh (F5)</source>
-        <translation>Aggiorna (F5)</translation>
+        <translation>Обновяване (F5)</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="172"/>
         <source>New Folder</source>
-        <translation>Nuova Cartella</translation>
+        <translation>Нова папка</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="175"/>
         <source>Create a new folder</source>
-        <translation>Crea nuova cartella</translation>
+        <translation>Създаване на нова папка</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="187"/>
         <source>Delete</source>
-        <translation>Elimina</translation>
+        <translation>Изтриване</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="190"/>
         <source>Delete selected object(s) (Delete)</source>
-        <translation>Elimina oggetto/i selezionato/i (Delete)</translation>
+        <translation>Изтриване на избраните обекти (Delete)</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="202"/>
         <source>Send</source>
-        <translation>Invia</translation>
+        <translation>Изпращане</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="205"/>
         <source>Send selected object(s) (F11)</source>
-        <translation>Invia oggetto/i selezionato/i (F11)</translation>
+        <translation>Изпращане на избраните обекти (F11)</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="118"/>
         <source>Failed to get list of drives: %1</source>
-        <translation>Impossibile ottenere l&apos;elenco delle unità: %1</translation>
+        <translation>Неуспешно получаване на списъка с дискове: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="135"/>
         <source>Failed to get list of files: %1</source>
-        <translation>Impossibile ottenere l&apos;elenco dei file: %1</translation>
+        <translation>Неуспешно получаване на списъка с файлове: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="160"/>
         <source>Failed to create directory: %1</source>
-        <translation>Impossibile creare la directory: %1</translation>
+        <translation>Неуспешно създаване на папка: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="172"/>
         <source>Failed to rename item: %1</source>
-        <translation>Impossibile rinominare l&apos;elemento: %1</translation>
+        <translation>Неуспешно преименуване на елемента: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="317"/>
         <source>%1 object(s) selected</source>
-        <translation>%1 oggetto/i selezionato/i</translation>
+        <translation>Избрани обекти: %1</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="345"/>
+        <source>&amp;Send	F11</source>
+        <translation>&amp;Изпращане	F11</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="346"/>
+        <source>&amp;Delete	Delete</source>
+        <translation>&amp;Изтриване	Delete</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="356"/>
+        <source>&amp;Create Folder</source>
+        <translation>&amp;Създаване на папка</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="378"/>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="397"/>
         <source>Folder name can not be empty.</source>
-        <translation>Il nome della cartella non può essere vuoto.</translation>
+        <translation>Името на папката не може да бъде празно.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="384"/>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="403"/>
         <source>Name contains invalid characters.</source>
-        <translation>Il nome contiene caratteri non validi.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="345"/>
-        <source>&amp;Send	F11</source>
-        <translation>&amp;Envoyer	F11</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="346"/>
-        <source>&amp;Delete	Delete</source>
-        <translation>&amp;Supprimer	Delete</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="356"/>
-        <source>&amp;Create Folder</source>
-        <translation>&amp;Crea cartella</translation>
+        <translation>Името съдържа невалидни знаци.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="458"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation>Eliminare gli elementi selezionati?</translation>
+        <translation>Наистина ли искате да изтриете избраните елементи?</translation>
     </message>
 </context>
 <context>
@@ -3147,82 +3147,82 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="155"/>
         <source>Failed to get list of drives: %1</source>
-        <translation>Impossibile ottenere l&apos;elenco delle unità: %1</translation>
+        <translation>Неуспешно получаване на списъка с дискове: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="174"/>
         <source>Home Folder</source>
-        <translation>Cartella home</translation>
+        <translation>Домашна папка</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="178"/>
         <source>Desktop</source>
-        <translation>Desktop</translation>
+        <translation>Работен плот</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="182"/>
         <source>Internal Storage</source>
-        <translation>Memoria interna</translation>
+        <translation>Вътрешно хранилище</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="186"/>
         <source>SD Card</source>
-        <translation>Scheda SD</translation>
+        <translation>SD карта</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="190"/>
         <source>Downloads</source>
-        <translation>Download</translation>
+        <translation>Изтегляния</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="194"/>
         <source>Camera</source>
-        <translation>Fotocamera</translation>
+        <translation>Камера</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="198"/>
         <source>Pictures</source>
-        <translation>Immagini</translation>
+        <translation>Картини</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="202"/>
         <source>Documents</source>
-        <translation>Documenti</translation>
+        <translation>Документи</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="231"/>
         <source>Failed to get list of files: %1</source>
-        <translation>Impossibile ottenere l&apos;elenco dei file: %1</translation>
+        <translation>Неуспешно получаване на списъка с файлове: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="274"/>
         <source>Failed to create directory: %1</source>
-        <translation>Impossibile creare la directory: %1</translation>
+        <translation>Неуспешно създаване на папка: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="343"/>
         <source>Create Folder</source>
-        <translation>Crea cartella</translation>
+        <translation>Създаване на папка</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="346"/>
         <source>Folder name</source>
-        <translation>Nome cartella</translation>
+        <translation>Име на папката</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="349"/>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Отказ</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="350"/>
         <source>Create</source>
-        <translation>Crea</translation>
+        <translation>Създаване</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="363"/>
         <source>Name contains invalid characters.</source>
-        <translation>Il nome contiene caratteri non validi.</translation>
+        <translation>Името съдържа невалидни знаци.</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="389"/>
@@ -3231,32 +3231,32 @@ Credenziali sostituite: %2</translation>
         <location filename="../client/android/file_panel_widget.cc" line="528"/>
         <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete</source>
-        <translation>Elimina</translation>
+        <translation>Изтриване</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="389"/>
         <source>Delete the selected items?</source>
-        <translation>Eliminare gli elementi selezionati?</translation>
+        <translation>Да се изтрият ли избраните елементи?</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Upload</source>
-        <translation>Carica</translation>
+        <translation>Качване</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Download</source>
-        <translation>Scarica</translation>
+        <translation>Изтегляне</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete &quot;%1&quot;?</source>
-        <translation>Eliminare &quot;%1&quot;?</translation>
+        <translation>Да се изтрие ли &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="544"/>
         <source>Error</source>
-        <translation>Errore</translation>
+        <translation>Грешка</translation>
     </message>
 </context>
 <context>
@@ -3264,7 +3264,7 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/android/file_progress_sheet.cc" line="47"/>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Отказ</translation>
     </message>
 </context>
 <context>
@@ -3272,23 +3272,23 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="35"/>
         <source>File Removal</source>
-        <translation>Eliminazione file</translation>
+        <translation>Изтриване на файлове</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="43"/>
         <source>Current Task:</source>
-        <translation>Attività corrente:</translation>
+        <translation>Текуща задача:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="56"/>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="72"/>
         <source>Creating a list of files to delete...</source>
-        <translation>Creazione dell&apos;elenco dei file da eliminare...</translation>
+        <translation>Създаване на списък с файлове за изтриване...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="63"/>
         <source>Deleting:</source>
-        <translation>Eliminazione:</translation>
+        <translation>Изтриване:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="76"/>
@@ -3298,47 +3298,47 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="103"/>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Отказ</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="95"/>
         <source>Cancel removal of files.</source>
-        <translation>Annulla l&apos;eliminazione dei file.</translation>
+        <translation>Отмяна на изтриването на файловете.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="134"/>
         <source>Deleting items.</source>
-        <translation>Eliminazione degli elementi.</translation>
+        <translation>Изтриване на елементи.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="161"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation>Si è verificato un errore durante il recupero dell&apos;elenco dei file: %1</translation>
+        <translation>Възникна грешка при получаване на списъка с файлове: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="166"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation>Impossibile eliminare &quot;%1&quot;: %2.</translation>
+        <translation>Неуспешно изтриване на &quot;%1&quot;: %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="173"/>
         <source>Warning</source>
-        <translation>Attenzione</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="182"/>
         <source>Skip</source>
-        <translation>Salta</translation>
+        <translation>Пропускане</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="185"/>
         <source>Skip All</source>
-        <translation>Salta tutto</translation>
+        <translation>Пропускане на всички</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="188"/>
         <source>Abort</source>
-        <translation>Interrompi</translation>
+        <translation>Прекратяване</translation>
     </message>
 </context>
 <context>
@@ -3346,23 +3346,23 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="35"/>
         <source>File Transfer</source>
-        <translation>Trasferimento File</translation>
+        <translation>Прехвърляне на файлове</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="43"/>
         <source>Current Task:</source>
-        <translation>Attività corrente:</translation>
+        <translation>Текуща задача:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="56"/>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="78"/>
         <source>Creating a list of files to copy...</source>
-        <translation>Creazione dell&apos;elenco dei file da copiare...</translation>
+        <translation>Създаване на списък с файлове за копиране...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="63"/>
         <source>From:</source>
-        <translation>Da:</translation>
+        <translation>От:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="76"/>
@@ -3374,121 +3374,106 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="83"/>
         <source>To:</source>
-        <translation>A:</translation>
+        <translation>Към:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="103"/>
         <source>Speed:</source>
-        <translation>Velocità:</translation>
+        <translation>Скорост:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="129"/>
         <source>Total:</source>
-        <translation>Totale:</translation>
+        <translation>Общо:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="136"/>
         <source>Item:</source>
-        <translation>Elemento:</translation>
+        <translation>Елемент:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="180"/>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Отказ</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="108"/>
         <source>Cancel transfer of files.</source>
-        <translation>Annulla il trasferimento dei file.</translation>
+        <translation>Отмяна на прехвърлянето на файловете.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="144"/>
         <source>Copying items.</source>
-        <translation>Copia degli elementi.</translation>
+        <translation>Копиране на елементи.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="191"/>
         <source>Warning</source>
-        <translation>Attenzione</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="204"/>
         <source>Skip</source>
-        <translation>Salta</translation>
+        <translation>Пропускане</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="207"/>
         <source>Skip All</source>
-        <translation>Salta tutto</translation>
+        <translation>Пропускане на всички</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="210"/>
         <source>Replace</source>
-        <translation>Sostituisci</translation>
+        <translation>Заместване</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="213"/>
         <source>Replace All</source>
-        <translation>Sostituisci tutto</translation>
+        <translation>Заместване на всички</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="216"/>
         <source>Abort</source>
-        <translation>Interrompi</translation>
+        <translation>Прекратяване</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="272"/>
         <source>An error occurred while building the file queue for copying</source>
-        <translation>Si è verificato un errore durante la creazione della coda di file da copiare</translation>
+        <translation>Възникна грешка при изграждане на опашката от файлове за копиране</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="277"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation>Impossibile creare la directory &quot;%1&quot;: %2</translation>
+        <translation>Неуспешно създаване на папката &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="284"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation>Impossibile creare il file &quot;%1&quot;: %2</translation>
+        <translation>Неуспешно създаване на файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="290"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation>Impossibile aprire il file &quot;%1&quot;: %2</translation>
+        <translation>Неуспешно отваряне на файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="296"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation>Impossibile scrivere il file &quot;%1&quot;: %2</translation>
+        <translation>Неуспешно записване на файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="302"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation>Impossibile leggere il file &quot;%1&quot;: %2</translation>
+        <translation>Неуспешно четене на файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="308"/>
         <source>Unknown error type while copying files</source>
-        <translation>Tipo di errore sconosciuto durante la copia dei file</translation>
+        <translation>Неизвестен тип грешка при копиране на файлове</translation>
     </message>
 </context>
 <context>
     <name>FileTransferWindow</name>
-    <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="45"/>
-        <source>Local Computer</source>
-        <translation>Computer locale</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="46"/>
-        <source>Remote Computer</source>
-        <translation>Computer remoto</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="183"/>
-        <source>Session error: %1</source>
-        <translation>Errore di sessione: %1</translation>
-    </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="62"/>
         <location filename="../client/android/file_transfer_window.cc" line="187"/>
@@ -3496,83 +3481,98 @@ Credenziali sostituite: %2</translation>
         <location filename="../client/android/file_transfer_window.cc" line="462"/>
         <location filename="../client/android/file_transfer_window.cc" line="473"/>
         <source>File Transfer</source>
-        <translation>Trasferimento File</translation>
+        <translation>Прехвърляне на файлове</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="67"/>
         <location filename="../client/android/file_transfer_window.cc" line="80"/>
         <source>This Device</source>
-        <translation>Questo dispositivo</translation>
-    </message>
-    <message>
-        <location filename="../client/android/file_transfer_window.cc" line="270"/>
-        <source>To browse files on this device, allow access to all files on the next screen.</source>
-        <translation>Per sfogliare i file su questo dispositivo, consenti l&apos;accesso a tutti i file nella schermata successiva.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/file_transfer_window.cc" line="271"/>
-        <source>Allow</source>
-        <translation>Consenti</translation>
+        <translation>Това устройство</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="146"/>
         <source>Connecting to host %1...</source>
-        <translation>Connessione all&apos;host %1...</translation>
+        <translation>Свързване с хоста %1...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="166"/>
         <source>The connection to the host has been lost.</source>
-        <translation>La connessione all&apos;host è stata persa.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/file_transfer_window.cc" line="330"/>
-        <source>The data of the router is damaged. Edit the router and enter it again.</source>
-        <translation>I dati del router sono danneggiati. Modifica il router e inseriscili di nuovo.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/file_transfer_window.cc" line="331"/>
-        <source>The specified router is unavailable.</source>
-        <translation>Il router specificato non è disponibile.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/file_transfer_window.cc" line="370"/>
-        <source>Error requesting connection via router.</source>
-        <translation>Errore nella richiesta di connessione tramite il router.</translation>
+        <translation>Връзката с хоста е загубена.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="176"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation>La versione dell&apos;host è più recente di quella del client. Aggiorna l&apos;applicazione.</translation>
+        <translation>Версията на хоста е по-нова от тази на клиента. Актуализирайте приложението.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="188"/>
         <source>There is no logged in user on the host. The session is unavailable.</source>
-        <translation>Nessun utente è connesso sull&apos;host. La sessione non è disponibile.</translation>
+        <translation>На хоста няма влязъл в системата потребител. Сесията е недостъпна.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="270"/>
+        <source>To browse files on this device, allow access to all files on the next screen.</source>
+        <translation>За да разглеждате файловете на това устройство, разрешете достъпа до всички файлове на следващия екран.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="271"/>
+        <source>Allow</source>
+        <translation>Разрешаване</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="307"/>
         <source>Connecting...</source>
-        <translation>Connessione...</translation>
+        <translation>Свързване...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="330"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Данните на рутера са повредени. Редактирайте рутера и ги въведете отново.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="331"/>
+        <source>The specified router is unavailable.</source>
+        <translation>Посоченият рутер е недостъпен.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="337"/>
         <source>Connecting to router...</source>
-        <translation>Connessione al router...</translation>
+        <translation>Свързване с рутера...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="358"/>
         <source>Requesting connection to the host...</source>
-        <translation>Richiesta di connessione all&apos;host...</translation>
+        <translation>Заявяване на връзка с хоста...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="370"/>
+        <source>Error requesting connection via router.</source>
+        <translation>Грешка при заявяване на връзка чрез рутера.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="463"/>
         <source>Open a destination folder on the other side first.</source>
-        <translation>Apri prima una cartella di destinazione sull&apos;altro lato.</translation>
+        <translation>Първо отворете папка местоназначение от другата страна.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="516"/>
         <source>Deleting</source>
-        <translation>Eliminazione</translation>
+        <translation>Изтриване</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="45"/>
+        <source>Local Computer</source>
+        <translation>Локален компютър</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="46"/>
+        <source>Remote Computer</source>
+        <translation>Отдалечен компютър</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="183"/>
+        <source>Session error: %1</source>
+        <translation>Грешка в сесията: %1</translation>
     </message>
 </context>
 <context>
@@ -3580,104 +3580,104 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../common/desktop/formatter.cc" line="45"/>
         <source>TB</source>
-        <translation>TB</translation>
+        <translation>ТБ</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="47"/>
         <source>GB</source>
-        <translation>GB</translation>
+        <translation>ГБ</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="49"/>
         <source>MB</source>
-        <translation>MB</translation>
+        <translation>МБ</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="51"/>
         <source>kB</source>
-        <translation>kB</translation>
+        <translation>КБ</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="53"/>
         <source>B</source>
-        <translation>B</translation>
+        <translation>Б</translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="70"/>
         <source>%n seconds</source>
         <translation>
-            <numerusform>%n secondo</numerusform>
-            <numerusform>%n secondi</numerusform>
+            <numerusform>%n секунда</numerusform>
+            <numerusform>%n секунди</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="71"/>
         <source>%n minutes</source>
         <translation>
-            <numerusform>%n minuto</numerusform>
-            <numerusform>%n minuti</numerusform>
+            <numerusform>%n минута</numerusform>
+            <numerusform>%n минути</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="72"/>
         <source>%n hours</source>
         <translation>
-            <numerusform>%n ora</numerusform>
-            <numerusform>%n ore</numerusform>
+            <numerusform>%n час</numerusform>
+            <numerusform>%n часа</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="76"/>
         <source>%n days</source>
         <translation>
-            <numerusform>%n giorno</numerusform>
-            <numerusform>%n giorni</numerusform>
+            <numerusform>%n ден</numerusform>
+            <numerusform>%n дни</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="108"/>
         <source>TB/s</source>
-        <translation>TB/s</translation>
+        <translation>ТБ/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="110"/>
         <source>GB/s</source>
-        <translation>GB/s</translation>
+        <translation>ГБ/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="112"/>
         <source>MB/s</source>
-        <translation>MB/s</translation>
+        <translation>МБ/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="114"/>
         <source>kB/s</source>
-        <translation>kB/s</translation>
+        <translation>КБ/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="116"/>
         <source>B/s</source>
-        <translation>B/s</translation>
+        <translation>Б/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="131"/>
         <source>Gbps</source>
-        <translation>Gbps</translation>
+        <translation>Гбит/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="133"/>
         <source>Mbps</source>
-        <translation>Mbps</translation>
+        <translation>Мбит/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="135"/>
         <source>Kbps</source>
-        <translation>Kbps</translation>
+        <translation>Кбит/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="137"/>
         <source>bps</source>
-        <translation>bps</translation>
+        <translation>бит/с</translation>
     </message>
 </context>
 <context>
@@ -3685,17 +3685,17 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../base/gui_application.cc" line="541"/>
         <source>Dark</source>
-        <translation>Scuro</translation>
+        <translation>Тъмна</translation>
     </message>
     <message>
         <location filename="../base/gui_application.cc" line="543"/>
         <source>Light</source>
-        <translation>Chiaro</translation>
+        <translation>Светла</translation>
     </message>
     <message>
         <location filename="../base/gui_application.cc" line="544"/>
         <source>Auto</source>
-        <translation>Automatico</translation>
+        <translation>Автоматично</translation>
     </message>
 </context>
 <context>
@@ -3704,7 +3704,7 @@ Credenziali sostituite: %2</translation>
         <location filename="../host/main.cc" line="649"/>
         <location filename="../host/main.cc" line="684"/>
         <source>Settings storage is unavailable.</source>
-        <translation>L&apos;archivio delle impostazioni non è disponibile.</translation>
+        <translation>Хранилището на настройките е недостъпно.</translation>
     </message>
 </context>
 <context>
@@ -3712,72 +3712,72 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
         <source>Host ID</source>
-        <translation>ID host</translation>
+        <translation>ID на хоста</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Display Name</source>
-        <translation>Nome visualizzato</translation>
+        <translation>Показвано име</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Computer Name</source>
-        <translation>Nome computer</translation>
+        <translation>Име на компютъра</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Address</source>
-        <translation>Indirizzo</translation>
+        <translation>Адрес</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Comment</source>
-        <translation>Commento</translation>
+        <translation>Коментар</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Workspace</source>
-        <translation>Area di lavoro</translation>
+        <translation>Работно пространство</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Operating System</source>
-        <translation>Sistema operativo</translation>
+        <translation>Операционна система</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Version</source>
-        <translation>Versione</translation>
+        <translation>Версия</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Architecture</source>
-        <translation>Architettura</translation>
+        <translation>Архитектура</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Last Online</source>
-        <translation>Ultima volta online</translation>
+        <translation>Последно онлайн</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Modify</source>
-        <translation>Ultima modifica</translation>
+        <translation>Последна промяна</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Status</source>
-        <translation>Stato</translation>
+        <translation>Състояние</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Online</source>
-        <translation>In linea</translation>
+        <translation>Онлайн</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Offline</source>
-        <translation>Non in linea</translation>
+        <translation>Офлайн</translation>
     </message>
 </context>
 <context>
@@ -3785,32 +3785,32 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../host/main.cc" line="586"/>
         <source>Launch the application hidden.</source>
-        <translation>Avvia l&apos;applicazione nascosta.</translation>
+        <translation>Стартиране на приложението в скрит режим.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="588"/>
         <source>Export parameters to file.</source>
-        <translation>Esporta i parametri su file.</translation>
+        <translation>Експортиране на параметрите във файл.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="590"/>
         <source>Import parameters from file.</source>
-        <translation>Importa i parametri da file.</translation>
+        <translation>Импортиране на параметрите от файл.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="592"/>
         <source>Do not display any messages during import and export.</source>
-        <translation>Non mostrare messaggi durante l&apos;importazione e l&apos;esportazione.</translation>
+        <translation>Без показване на съобщения при импортиране и експортиране.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="594"/>
         <source>Calling the settings dialog.</source>
-        <translation>Apre la finestra delle impostazioni.</translation>
+        <translation>Извикване на диалоговия прозорец с настройки.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="596"/>
         <source>Calling the security log dialog.</source>
-        <translation>Apre la finestra del registro di sicurezza.</translation>
+        <translation>Извикване на диалоговия прозорец с регистрационния файл на защитата.</translation>
     </message>
 </context>
 <context>
@@ -3818,27 +3818,27 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/management/host_telemetry_dialog.ui" line="14"/>
         <source>Telemetry</source>
-        <translation>Telemetria</translation>
+        <translation>Телеметрия</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_telemetry_dialog.ui" line="51"/>
         <source>Refresh</source>
-        <translation>Aggiorna</translation>
+        <translation>Обновяване</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="121"/>
         <source>The host has not reported telemetry yet.</source>
-        <translation>L&apos;host non ha ancora inviato la telemetria.</translation>
+        <translation>Хостът все още не е изпратил телеметрия.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="125"/>
         <source>The telemetry of the host could not be read.</source>
-        <translation>Impossibile leggere la telemetria dell&apos;host.</translation>
+        <translation>Неуспешно четене на телеметрията на хоста.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="129"/>
         <source>The telemetry of the host is in a newer format. Update the client to view it.</source>
-        <translation>La telemetria dell&apos;host è in un formato più recente. Aggiorna il client per visualizzarla.</translation>
+        <translation>Телеметрията на хоста е в по-нов формат. Актуализирайте клиента, за да я видите.</translation>
     </message>
 </context>
 <context>
@@ -3849,63 +3849,63 @@ Credenziali sostituite: %2</translation>
         <location filename="../host/ui/host_window.cc" line="818"/>
         <location filename="../host/ui/host_window.cc" line="1118"/>
         <source>Aspia Host</source>
-        <translation>Aspia Host</translation>
+        <translation>Хост Aspia</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="72"/>
         <source>Your ID</source>
-        <translation>Il tuo ID</translation>
+        <translation>Вашият ID</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="95"/>
         <source>Password</source>
-        <translation>Password</translation>
+        <translation>Парола</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
         <location filename="../host/ui/host_window.cc" line="1032"/>
         <source>Router is disabled</source>
-        <translation>Il router è disabilitato</translation>
+        <translation>Рутерът е изключен</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="256"/>
         <source>Help</source>
-        <translation>Aiuto</translation>
+        <translation>Помощ</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="265"/>
         <source>Access</source>
-        <translation>Accesso</translation>
+        <translation>Достъп</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="275"/>
         <source>View</source>
-        <translation>Visualizza</translation>
+        <translation>Изглед</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="279"/>
         <source>Language</source>
-        <translation>Lingua</translation>
+        <translation>Език</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="284"/>
         <source>Theme</source>
-        <translation>Tema</translation>
+        <translation>Тема</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="297"/>
         <source>Exit</source>
-        <translation>Esci</translation>
+        <translation>Изход</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="302"/>
         <source>Uninstall Application</source>
-        <translation>Disinstalla applicazione</translation>
+        <translation>Деинсталиране на приложението</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="307"/>
         <source>Online Help...</source>
-        <translation>Aiuto in linea...</translation>
+        <translation>Онлайн помощ...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="310"/>
@@ -3915,124 +3915,124 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../host/ui/host_window.ui" line="315"/>
         <source>About System</source>
-        <translation>Informazioni sul sistema</translation>
+        <translation>За системата</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="320"/>
         <source>About</source>
-        <translation>Informazioni</translation>
+        <translation>Относно</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="325"/>
         <source>Security Log...</source>
-        <translation>Registro di sicurezza...</translation>
+        <translation>Регистрационен файл на защитата...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="330"/>
         <source>Settings...</source>
-        <translation>Impostazioni...</translation>
+        <translation>Настройки...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="335"/>
         <location filename="../host/ui/host_window.cc" line="779"/>
         <source>Hide</source>
-        <translation>Nascondi</translation>
+        <translation>Скриване</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="346"/>
         <source>Desktop</source>
-        <translation>Desktop</translation>
+        <translation>Работен плот</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="357"/>
         <source>Terminal</source>
-        <translation>Terminale</translation>
+        <translation>Терминал</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="368"/>
         <source>Desktop View</source>
-        <translation>Vista desktop</translation>
+        <translation>Преглед на работния плот</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="379"/>
         <source>File Transfer</source>
-        <translation>Trasferimento File</translation>
+        <translation>Прехвърляне на файлове</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="390"/>
         <source>System Information</source>
-        <translation>Informazioni Sistema</translation>
+        <translation>Системна информация</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="401"/>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Чат</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="406"/>
         <source>Show chat</source>
-        <translation>Mostra chat</translation>
+        <translation>Показване на чата</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="296"/>
         <location filename="../host/ui/host_window.cc" line="774"/>
         <source>Show</source>
-        <translation>Mostra</translation>
+        <translation>Показване</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="570"/>
         <source>Screen recording has started.</source>
-        <translation>La registrazione dello schermo è iniziata.</translation>
+        <translation>Записването на екрана започна.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="572"/>
         <source>Screen recording stopped.</source>
-        <translation>La registrazione dello schermo è stata interrotta.</translation>
+        <translation>Записването на екрана спря.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="763"/>
         <source>Settings storage is unavailable.</source>
-        <translation>L&apos;archivio delle impostazioni non è disponibile.</translation>
+        <translation>Хранилището на настройките е недостъпно.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="829"/>
         <source>Aspia Host will be removed from this computer. The settings of the host will be kept. Do you really want to uninstall the application?</source>
-        <translation>Aspia Host verrà rimosso da questo computer. Le impostazioni dell&apos;host verranno mantenute. Disinstallare l&apos;applicazione?</translation>
+        <translation>Хост Aspia ще бъде деинсталиран от този компютър. Настройките на хоста ще бъдат запазени. Наистина ли искате да деинсталирате приложението?</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="841"/>
         <source>Unable to uninstall the application.</source>
-        <translation>Impossibile disinstallare l&apos;applicazione.</translation>
+        <translation>Неуспешно деинсталиране на приложението.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="863"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation>Se esci da Aspia, non sarà possibile connettersi a questo computer finché non riaccenderai il computer o Aspia manualmente. Uscire dall&apos;applicazione?</translation>
+        <translation>Ако излезете от Aspia, няма да можете да се свържете с този компютър, докато не включите отново компютъра или Aspia ръчно. Наистина ли искате да излезете от приложението?</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1024"/>
         <source>Not connected to service</source>
-        <translation>Non connesso al servizio</translation>
+        <translation>Няма връзка с услугата</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1037"/>
         <source>Connecting to router...</source>
-        <translation>Connessione al router...</translation>
+        <translation>Свързване с рутера...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1042"/>
         <source>Connected to router</source>
-        <translation>Connesso al router</translation>
+        <translation>Свързано с рутера</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1047"/>
         <source>Connection error</source>
-        <translation>Errore di connessione</translation>
+        <translation>Грешка при свързване</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1115"/>
         <source>IP addresses:</source>
-        <translation>Indirizzi IP:</translation>
+        <translation>IP адреси:</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1119"/>
@@ -4045,89 +4045,89 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="14"/>
         <source>Group</source>
-        <translation>Gruppo</translation>
+        <translation>Група</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="25"/>
         <source>Parent Group:</source>
-        <translation>Gruppo padre:</translation>
+        <translation>Родителска група:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="39"/>
         <source>Name:</source>
-        <translation>Nome:</translation>
+        <translation>Име:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="46"/>
         <source>Display name</source>
-        <translation>Nome visualizzato</translation>
+        <translation>Показвано име</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="57"/>
         <source>Comment:</source>
-        <translation>Commento:</translation>
+        <translation>Коментар:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="53"/>
         <source>Edit Group</source>
-        <translation>Modifica gruppo</translation>
+        <translation>Редактиране на група</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="53"/>
         <source>Add Group</source>
-        <translation>Aggiungi gruppo</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="170"/>
-        <source>Failed to read the group.</source>
-        <translation>Impossibile leggere il gruppo.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="201"/>
-        <source>Local</source>
-        <translation>Locale</translation>
+        <translation>Добавяне на група</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="82"/>
         <source>Name cannot be empty.</source>
-        <translation>Il nome non può essere vuoto.</translation>
+        <translation>Името не може да бъде празно.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_dialog.cc" line="90"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n caratteri.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знак.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знака.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_dialog.cc" line="101"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
-            <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n carattere.</numerusform>
-            <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n caratteri.</numerusform>
+            <numerusform>Коментарът е твърде дълъг. Максималната дължина на коментара е %n знак.</numerusform>
+            <numerusform>Коментарът е твърде дълъг. Максималната дължина на коментара е %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="114"/>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="185"/>
         <source>Failed to read the list of groups.</source>
-        <translation>Impossibile leggere l&apos;elenco dei gruppi.</translation>
+        <translation>Неуспешно четене на списъка с групи.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="123"/>
         <source>A group with this name already exists in the selected parent group.</source>
-        <translation>Un gruppo con questo nome esiste già nel gruppo padre selezionato.</translation>
+        <translation>Група с това име вече съществува в избраната родителска група.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="141"/>
         <source>Unable to add group</source>
-        <translation>Impossibile aggiungere il gruppo</translation>
+        <translation>Неуспешно добавяне на група</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="150"/>
         <source>Unable to modify group</source>
-        <translation>Impossibile modificare il gruppo</translation>
+        <translation>Неуспешна промяна на групата</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="170"/>
+        <source>Failed to read the group.</source>
+        <translation>Неуспешно четене на групата.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="201"/>
+        <source>Local</source>
+        <translation>Локални</translation>
     </message>
 </context>
 <context>
@@ -4135,64 +4135,64 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="48"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="49"/>
         <source>Comment</source>
-        <translation>Commento</translation>
+        <translation>Коментар</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="57"/>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>Запазване</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="60"/>
         <location filename="../client/android/local_group_editor.cc" line="175"/>
         <source>Delete</source>
-        <translation>Elimina</translation>
+        <translation>Изтриване</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="132"/>
         <source>Name cannot be empty.</source>
-        <translation>Il nome non può essere vuoto.</translation>
+        <translation>Името не може да бъде празно.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="139"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n caratteri.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знак.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знака.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="148"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
-            <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n carattere.</numerusform>
-            <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n caratteri.</numerusform>
+            <numerusform>Коментарът е твърде дълъг. Максималната дължина на коментара е %n знак.</numerusform>
+            <numerusform>Коментарът е твърде дълъг. Максималната дължина на коментара е %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="164"/>
         <source>Failed to save the group.</source>
-        <translation>Impossibile salvare il gruppo.</translation>
+        <translation>Неуспешно запазване на групата.</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="174"/>
         <source>Delete Group</source>
-        <translation>Elimina gruppo</translation>
+        <translation>Изтриване на група</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="175"/>
         <source>Delete the group &quot;%1&quot;?</source>
-        <translation>Eliminare il gruppo &quot;%1&quot;?</translation>
+        <translation>Да се изтрие ли групата &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="182"/>
         <source>Failed to delete the group.</source>
-        <translation>Impossibile eliminare il gruppo.</translation>
+        <translation>Неуспешно изтриване на групата.</translation>
     </message>
 </context>
 <context>
@@ -4200,27 +4200,27 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
         <source>Status update...</source>
-        <translation>Aggiornamento dello stato...</translation>
+        <translation>Обновяване на състоянието...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="170"/>
         <source>Failed to read data. The list may be out of date.</source>
-        <translation>Impossibile leggere i dati. L&apos;elenco potrebbe non essere aggiornato.</translation>
+        <translation>Неуспешно четене на данните. Списъкът може да не е актуален.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_widget.cc" line="431"/>
         <source>%n child group(s)</source>
         <translation>
-            <numerusform>%n gruppo figlio</numerusform>
-            <numerusform>%n gruppi figli</numerusform>
+            <numerusform>%n дъщерна група</numerusform>
+            <numerusform>%n дъщерни групи</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_widget.cc" line="432"/>
         <source>%n child host(s)</source>
         <translation>
-            <numerusform>%n host figlio</numerusform>
-            <numerusform>%n host figli</numerusform>
+            <numerusform>%n дъщерен хост</numerusform>
+            <numerusform>%n дъщерни хоста</numerusform>
         </translation>
     </message>
 </context>
@@ -4229,174 +4229,174 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="14"/>
         <source>Host</source>
-        <translation>Host</translation>
+        <translation>Хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="25"/>
         <source>Group:</source>
-        <translation>Gruppo:</translation>
+        <translation>Група:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="39"/>
         <source>Name:</source>
-        <translation>Nome:</translation>
+        <translation>Име:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="46"/>
         <source>Display name</source>
-        <translation>Nome visualizzato</translation>
+        <translation>Показвано име</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="53"/>
         <source>Router:</source>
-        <translation>Router:</translation>
+        <translation>Рутер:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="67"/>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="401"/>
         <source>Address:</source>
-        <translation>Indirizzo:</translation>
+        <translation>Адрес:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="77"/>
         <source>Use saved credentials</source>
-        <translation>Usa credenziali salvate</translation>
+        <translation>Използване на запазени идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="84"/>
         <source>User Name:</source>
-        <translation>Nome Utente:</translation>
+        <translation>Потребителско име:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="94"/>
         <source>Password:</source>
-        <translation>Password:</translation>
+        <translation>Парола:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="104"/>
         <source>Credentials:</source>
-        <translation>Credenziali:</translation>
+        <translation>Идентификационни данни:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="122"/>
         <source>Comment:</source>
-        <translation>Commento:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="264"/>
-        <source>Without Router</source>
-        <translation>Senza router</translation>
+        <translation>Коментар:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="62"/>
         <source>Edit Host</source>
-        <translation>Modifica host</translation>
+        <translation>Редактиране на хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="62"/>
         <source>Add Host</source>
-        <translation>Aggiungi host</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="372"/>
-        <source>&lt;deleted router&gt;</source>
-        <translation>&lt;router eliminato&gt;</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="331"/>
-        <source>Local</source>
-        <translation>Locale</translation>
+        <translation>Добавяне на хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="131"/>
         <source>Name cannot be empty.</source>
-        <translation>Il nome non può essere vuoto.</translation>
+        <translation>Името не може да бъде празно.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="139"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n caratteri.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знак.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="154"/>
         <source>An invalid host address was entered.</source>
-        <translation>È stato inserito un indirizzo host non valido.</translation>
+        <translation>Въведен е невалиден адрес на хоста.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="164"/>
         <source>An invalid host ID was entered.</source>
-        <translation>È stato inserito un ID host non valido.</translation>
+        <translation>Въведен е невалиден ID на хоста.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
+        <translation>Потребителското име не може да бъде празно и може да съдържа само букви, цифри и знаците &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="186"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation>Inserire sia il nome utente che la password, oppure lasciare entrambi vuoti.</translation>
+        <translation>Въведете и потребителското име, и паролата, или оставете и двете празни.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="194"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
-            <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n carattere.</numerusform>
-            <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n caratteri.</numerusform>
+            <numerusform>Коментарът е твърде дълъг. Максималната дължина на коментара е %n знак.</numerusform>
+            <numerusform>Коментарът е твърде дълъг. Максималната дължина на коментара е %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
         <source>Failed to read data from the local database.</source>
-        <translation>Impossibile leggere i dati dal database locale.</translation>
+        <translation>Неуспешно четене на данни от локалната база данни.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="216"/>
         <source>A host with this name already exists in the selected group.</source>
-        <translation>Un host con questo nome esiste già nel gruppo selezionato.</translation>
+        <translation>Хост с това име вече съществува в избраната група.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="240"/>
         <source>Unable to add host</source>
-        <translation>Impossibile aggiungere l&apos;host</translation>
+        <translation>Неуспешно добавяне на хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="250"/>
         <source>Unable to modify host</source>
-        <translation>Impossibile modificare l&apos;host</translation>
+        <translation>Неуспешна промяна на хоста</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="264"/>
+        <source>Without Router</source>
+        <translation>Без рутер</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="272"/>
         <source>Failed to read the list of routers.</source>
-        <translation>Impossibile leggere l&apos;elenco dei router.</translation>
+        <translation>Неуспешно четене на списъка с рутери.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="293"/>
         <source>Failed to read the list of credentials.</source>
-        <translation>Impossibile leggere l&apos;elenco delle credenziali.</translation>
+        <translation>Неуспешно четене на списъка с идентификационни данни.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="315"/>
         <source>Failed to read the list of groups.</source>
-        <translation>Impossibile leggere l&apos;elenco dei gruppi.</translation>
+        <translation>Неуспешно четене на списъка с групи.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="331"/>
+        <source>Local</source>
+        <translation>Локални</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="344"/>
         <source>Failed to retrieve host information from the local database.</source>
-        <translation>Impossibile recuperare le informazioni dell&apos;host dal database locale.</translation>
+        <translation>Неуспешно извличане на информацията за хоста от локалната база данни.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="372"/>
+        <source>&lt;deleted router&gt;</source>
+        <translation>&lt;изтрит рутер&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="392"/>
         <source>The data of the host is damaged. Enter it again.</source>
-        <translation>I dati dell&apos;host sono danneggiati. Inseriscili di nuovo.</translation>
+        <translation>Данните на хоста са повредени. Въведете ги отново.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="402"/>
         <source>Host name or IP address</source>
-        <translation>Nome host o indirizzo IP</translation>
+        <translation>Име на хост или IP адрес</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="406"/>
@@ -4406,7 +4406,7 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="407"/>
         <source>Host ID</source>
-        <translation>ID host</translation>
+        <translation>ID на хоста</translation>
     </message>
 </context>
 <context>
@@ -4414,71 +4414,71 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="55"/>
         <source>Use existing</source>
-        <translation>Usa esistenti</translation>
+        <translation>Използване на съществуващи</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="62"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="63"/>
         <source>Router</source>
-        <translation>Router</translation>
+        <translation>Рутер</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="64"/>
         <location filename="../client/android/local_host_editor.cc" line="248"/>
         <source>Address</source>
-        <translation>Indirizzo</translation>
+        <translation>Адрес</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="65"/>
         <source>User Name</source>
-        <translation>Nome Utente</translation>
+        <translation>Потребителско име</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="66"/>
         <source>Password</source>
-        <translation>Password</translation>
+        <translation>Парола</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="68"/>
         <source>Credentials</source>
-        <translation>Credenziali</translation>
+        <translation>Идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="69"/>
         <source>Comment</source>
-        <translation>Commento</translation>
+        <translation>Коментар</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="77"/>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>Запазване</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="80"/>
         <location filename="../client/android/local_host_editor.cc" line="365"/>
         <source>Delete</source>
-        <translation>Elimina</translation>
+        <translation>Изтриване</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="174"/>
         <source>The data of the host is damaged. Enter it again.</source>
-        <translation>I dati dell&apos;host sono danneggiati. Inseriscili di nuovo.</translation>
+        <translation>Данните на хоста са повредени. Въведете ги отново.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="184"/>
         <source>Without Router</source>
-        <translation>Senza router</translation>
+        <translation>Без рутер</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="191"/>
         <location filename="../client/android/local_host_editor.cc" line="216"/>
         <location filename="../client/android/local_host_editor.cc" line="271"/>
         <source>Failed to read data from the local database.</source>
-        <translation>Impossibile leggere i dati dal database locale.</translation>
+        <translation>Неуспешно четене на данни от локалната база данни.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="248"/>
@@ -4488,63 +4488,63 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="278"/>
         <source>Name cannot be empty.</source>
-        <translation>Il nome non può essere vuoto.</translation>
+        <translation>Името не може да бъде празно.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="285"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n caratteri.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знак.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знака.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="294"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
-            <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n carattere.</numerusform>
-            <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n caratteri.</numerusform>
+            <numerusform>Коментарът е твърде дълъг. Максималната дължина на коментара е %n знак.</numerusform>
+            <numerusform>Коментарът е твърде дълъг. Максималната дължина на коментара е %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="307"/>
         <source>An invalid host address was entered.</source>
-        <translation>È stato inserito un indirizzo host non valido.</translation>
+        <translation>Въведен е невалиден адрес на хоста.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="315"/>
         <source>An invalid host ID was entered.</source>
-        <translation>È stato inserito un ID host non valido.</translation>
+        <translation>Въведен е невалиден ID на хоста.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="326"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
+        <translation>Потребителското име не може да бъде празно и може да съдържа само букви, цифри и знаците &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="335"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation>Inserire sia il nome utente che la password, oppure lasciare entrambi vuoti.</translation>
+        <translation>Въведете и потребителското име, и паролата, или оставете и двете празни.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="354"/>
         <source>Failed to save the host.</source>
-        <translation>Impossibile salvare l&apos;host.</translation>
+        <translation>Неуспешно запазване на хоста.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="364"/>
         <source>Delete Host</source>
-        <translation>Elimina host</translation>
+        <translation>Изтриване на хост</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="365"/>
         <source>Delete the host &quot;%1&quot;?</source>
-        <translation>Eliminare l&apos;host &quot;%1&quot;?</translation>
+        <translation>Да се изтрие ли хостът &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="372"/>
         <source>Failed to delete the host.</source>
-        <translation>Impossibile eliminare l&apos;host.</translation>
+        <translation>Неуспешно изтриване на хоста.</translation>
     </message>
 </context>
 <context>
@@ -4552,52 +4552,52 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="239"/>
         <source>Address / ID</source>
-        <translation>Indirizzo / ID</translation>
+        <translation>Адрес / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="242"/>
         <source>Comment</source>
-        <translation>Commento</translation>
+        <translation>Коментар</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="245"/>
         <source>Created</source>
-        <translation>Creato</translation>
+        <translation>Създаден</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="248"/>
         <source>Modified</source>
-        <translation>Modificato</translation>
+        <translation>Променен</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="251"/>
         <source>Last Connect</source>
-        <translation>Ultima connessione</translation>
+        <translation>Последно свързване</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="254"/>
         <source>Status</source>
-        <translation>Stato</translation>
+        <translation>Състояние</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="337"/>
         <source>Online</source>
-        <translation>In linea</translation>
+        <translation>Онлайн</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="340"/>
         <source>Offline</source>
-        <translation>Non in linea</translation>
+        <translation>Офлайн</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="343"/>
         <source>Skipped</source>
-        <translation>Saltato</translation>
+        <translation>Не е проверен</translation>
     </message>
 </context>
 <context>
@@ -4606,47 +4606,13 @@ Credenziali sostituite: %2</translation>
         <location filename="../client/android/local_widget.cc" line="295"/>
         <location filename="../client/android/local_widget.cc" line="438"/>
         <source>Add Group</source>
-        <translation>Aggiungi gruppo</translation>
+        <translation>Добавяне на група</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="296"/>
         <location filename="../client/android/local_widget.cc" line="448"/>
         <source>Add Host</source>
-        <translation>Aggiungi host</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="355"/>
-        <source>Invalid password.</source>
-        <translation>Password non valida.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="359"/>
-        <source>The file was created by a newer version and cannot be imported.</source>
-        <translation>Il file è stato creato da una versione più recente e non può essere importato.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="378"/>
-        <source>Routers imported: %1
-Groups imported: %2
-Hosts imported: %3
-Saved passwords imported: %4
-Credentials imported: %5</source>
-        <translation>Router importati: %1
-Gruppi importati: %2
-Host importati: %3
-Password salvate importate: %4
-Credenziali importate: %5</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="320"/>
-        <location filename="../client/android/local_widget.cc" line="392"/>
-        <source>Aspia Backup (*.aspia-backup)</source>
-        <translation>Backup Aspia (*.aspia-backup)</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="409"/>
-        <source>Unable to write the file.</source>
-        <translation>Impossibile scrivere il file.</translation>
+        <translation>Добавяне на хост</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="297"/>
@@ -4655,7 +4621,7 @@ Credenziali importate: %5</translation>
         <location filename="../client/android/local_widget.cc" line="373"/>
         <location filename="../client/android/local_widget.cc" line="377"/>
         <source>Restore from Backup</source>
-        <translation>Ripristina da backup</translation>
+        <translation>Възстановяване от резервно копие</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="298"/>
@@ -4663,81 +4629,156 @@ Credenziali importate: %5</translation>
         <location filename="../client/android/local_widget.cc" line="423"/>
         <location filename="../client/android/local_widget.cc" line="427"/>
         <source>Create Backup</source>
-        <translation>Crea backup</translation>
+        <translation>Създаване на резервно копие</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="320"/>
+        <location filename="../client/android/local_widget.cc" line="392"/>
+        <source>Aspia Backup (*.aspia-backup)</source>
+        <translation>Резервно копие на Aspia (*.aspia-backup)</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="325"/>
         <source>Everything stored now is deleted and replaced with what the backup holds.</source>
-        <translation>Tutto il contenuto attuale verrà eliminato e sostituito con quello del backup.</translation>
+        <translation>Всички текущи данни ще бъдат изтрити и заменени със съдържанието на резервното копие.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="326"/>
         <source>Restore</source>
-        <translation>Ripristina</translation>
+        <translation>Възстановяване</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="355"/>
+        <source>Invalid password.</source>
+        <translation>Невалидна парола.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="359"/>
+        <source>The file was created by a newer version and cannot be imported.</source>
+        <translation>Файлът е създаден с по-нова версия и не може да бъде импортиран.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="363"/>
         <source>The backup carries no data, so nothing was changed.</source>
-        <translation>Il backup non contiene alcun dato, quindi non è stato modificato nulla.</translation>
+        <translation>Резервното копие не съдържа данни, затова нищо не е променено.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="367"/>
         <source>Failed to restore from the backup.</source>
-        <translation>Impossibile ripristinare dal backup.</translation>
+        <translation>Неуспешно възстановяване от резервното копие.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="378"/>
+        <source>Routers imported: %1
+Groups imported: %2
+Hosts imported: %3
+Saved passwords imported: %4
+Credentials imported: %5</source>
+        <translation>Импортирани рутери: %1
+Импортирани групи: %2
+Импортирани хостове: %3
+Импортирани запазени пароли: %4
+Импортирани идентификационни данни: %5</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="405"/>
         <source>There is nothing to save.</source>
-        <translation>Non c&apos;è nulla da salvare.</translation>
+        <translation>Няма нищо за запазване.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="409"/>
+        <source>Unable to write the file.</source>
+        <translation>Неуспешно записване на файла.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="413"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
-        <translation>Alcuni record del database sono danneggiati. Correggili o eliminali e riprova.</translation>
+        <translation>Някои записи в базата данни са повредени. Поправете ги или ги изтрийте и опитайте отново.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="417"/>
         <source>Failed to create the backup.</source>
-        <translation>Impossibile creare il backup.</translation>
+        <translation>Неуспешно създаване на резервното копие.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="428"/>
         <source>The file is written to %1. To open it elsewhere the master password of this installation is needed.</source>
-        <translation>Il file è stato scritto in %1. Per aprirlo altrove è necessaria la password principale di questa installazione.</translation>
+        <translation>Файлът е записан в %1. За да го отворите на друго място, е необходима главната парола на тази инсталация.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="536"/>
         <source>Edit Group</source>
-        <translation>Modifica gruppo</translation>
+        <translation>Редактиране на група</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="547"/>
         <source>Edit Host</source>
-        <translation>Modifica host</translation>
+        <translation>Редактиране на хост</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="657"/>
         <source>Desktop</source>
-        <translation>Desktop</translation>
+        <translation>Работен плот</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="659"/>
         <source>File Transfer</source>
-        <translation>Trasferimento File</translation>
+        <translation>Прехвърляне на файлове</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="661"/>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Чат</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
+        <location filename="../client/desktop/main_window.ui" line="20"/>
+        <location filename="../client/desktop/main_window.cc" line="424"/>
+        <source>Aspia Client</source>
+        <translation>Клиент Aspia</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="68"/>
+        <source>File</source>
+        <translation>Файл</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="79"/>
+        <source>Help</source>
+        <translation>Помощ</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="86"/>
+        <source>Edit</source>
+        <translation>Редактиране</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="91"/>
+        <source>View</source>
+        <translation>Изглед</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="103"/>
+        <source>Session Type</source>
+        <translation>Тип на сесията</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="108"/>
+        <source>Actions</source>
+        <translation>Действия</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/main_window.ui" line="120"/>
         <location filename="../client/desktop/main_window.ui" line="215"/>
         <source>Tool Bar</source>
-        <translation>Barra degli strumenti</translation>
+        <translation>Лента с инструменти</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="147"/>
+        <source>Online Help...</source>
+        <translation>Онлайн помощ...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="150"/>
@@ -4745,45 +4786,14 @@ Credenziali importate: %5</translation>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="79"/>
-        <source>Help</source>
-        <translation>Aiuto</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="207"/>
-        <source>Exit</source>
-        <translation>Uscita</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="147"/>
-        <source>Online Help...</source>
-        <translation>Aiuto in linea...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="424"/>
-        <source>Aspia Client</source>
-        <translation>Aspia Client</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="68"/>
-        <source>File</source>
-        <translation>File</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="86"/>
-        <source>Edit</source>
-        <translation>Modifica</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="103"/>
-        <source>Session Type</source>
-        <translation>Tipo di sessione</translation>
+        <location filename="../client/desktop/main_window.ui" line="159"/>
+        <source>About</source>
+        <translation>Относно</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="168"/>
         <source>Quick Connect...</source>
-        <translation>Connessione rapida...</translation>
+        <translation>Бързо свързване...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="171"/>
@@ -4793,123 +4803,113 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/main_window.ui" line="180"/>
         <source>Credentials...</source>
-        <translation>Credenziali...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="198"/>
-        <source>Lock</source>
-        <translation>Blocca</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="223"/>
-        <source>Status Bar</source>
-        <translation>Barra di stato</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="231"/>
-        <source>Search Field</source>
-        <translation>Campo di ricerca</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="239"/>
-        <source>Large icons</source>
-        <translation>Icone grandi</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="247"/>
-        <source>Open Sessions in Tabs</source>
-        <translation>Apri le sessioni in schede</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="255"/>
-        <source>Always on Top</source>
-        <translation>Sempre in primo piano</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="159"/>
-        <source>About</source>
-        <translation>Informazioni</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="108"/>
-        <source>Actions</source>
-        <translation>Azioni</translation>
+        <translation>Идентификационни данни...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="189"/>
         <source>Settings...</source>
-        <translation>Impostazioni...</translation>
+        <translation>Настройки...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="91"/>
-        <source>View</source>
-        <translation>Visualizza</translation>
+        <location filename="../client/desktop/main_window.ui" line="198"/>
+        <source>Lock</source>
+        <translation>Заключване</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="207"/>
+        <source>Exit</source>
+        <translation>Изход</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="223"/>
+        <source>Status Bar</source>
+        <translation>Лента на състоянието</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="231"/>
+        <source>Search Field</source>
+        <translation>Поле за търсене</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="239"/>
+        <source>Large icons</source>
+        <translation>Големи икони</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="247"/>
+        <source>Open Sessions in Tabs</source>
+        <translation>Отваряне на сесиите в раздели</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="255"/>
+        <source>Always on Top</source>
+        <translation>Винаги най-отгоре</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="102"/>
         <source>Search...</source>
-        <translation>Cerca...</translation>
+        <translation>Търсене...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="187"/>
         <source>Management</source>
-        <translation>Gestione</translation>
+        <translation>Управление</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="233"/>
         <source>Invalid link &quot;%1&quot;.</source>
-        <translation>Collegamento non valido &quot;%1&quot;.</translation>
+        <translation>Невалидна връзка &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="256"/>
         <source>The router referenced by the link is not among the saved routers.</source>
-        <translation>Il router a cui fa riferimento il collegamento non è tra i router salvati.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.cc" line="305"/>
-        <source>The host referenced by the link is not among the saved hosts.</source>
-        <translation>L&apos;host a cui fa riferimento il collegamento non è tra gli host salvati.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.cc" line="400"/>
-        <source>Close all sessions to lock the application.</source>
-        <translation>Chiudi tutte le sessioni per bloccare l&apos;applicazione.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.cc" line="406"/>
-        <source>Close all dialogs to lock the application.</source>
-        <translation>Chiudi tutte le finestre di dialogo per bloccare l&apos;applicazione.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.cc" line="523"/>
-        <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
-        <translation>La connessione tramite ID è specificata nelle proprietà dell&apos;host, ma il router non è configurato. Verifica i parametri del router nelle proprietà dell&apos;host.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.cc" line="317"/>
-        <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation>Il router associato a questo host è stato eliminato. Modifica l&apos;host per selezionare un altro router o passa alla connessione diretta.</translation>
+        <translation>Рутерът, посочен във връзката, не е сред запазените рутери.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="264"/>
         <location filename="../client/desktop/main_window.cc" line="316"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
-        <translation>I dati del router sono danneggiati. Modifica il router e inseriscili di nuovo.</translation>
+        <translation>Данните на рутера са повредени. Редактирайте рутера и ги въведете отново.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="304"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
-        <translation>I dati dell&apos;host sono danneggiati. Modifica l&apos;host e inseriscili di nuovo.</translation>
+        <translation>Данните на хоста са повредени. Редактирайте хоста и ги въведете отново.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="305"/>
+        <source>The host referenced by the link is not among the saved hosts.</source>
+        <translation>Хостът, посочен във връзката, не е сред запазените хостове.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="317"/>
+        <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
+        <translation>Рутерът, свързан с този хост, е изтрит. Редактирайте хоста, за да изберете друг рутер, или превключете на директна връзка.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="359"/>
         <source>Credentials</source>
-        <translation>Credenziali</translation>
+        <translation>Идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="390"/>
         <source>Settings</source>
-        <translation>Impostazioni</translation>
+        <translation>Настройки</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="400"/>
+        <source>Close all sessions to lock the application.</source>
+        <translation>Затворете всички сесии, за да заключите приложението.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="406"/>
+        <source>Close all dialogs to lock the application.</source>
+        <translation>Затворете всички диалогови прозорци, за да заключите приложението.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="523"/>
+        <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
+        <translation>В свойствата на хоста е зададено свързване по ID, но рутерът не е конфигуриран. Проверете параметрите на рутера в свойствата на хоста.</translation>
     </message>
 </context>
 <context>
@@ -4917,62 +4917,62 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="56"/>
         <source>Add Group</source>
-        <translation>Aggiungi gruppo</translation>
+        <translation>Добавяне на група</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="65"/>
         <source>Delete Group</source>
-        <translation>Elimina gruppo</translation>
+        <translation>Изтриване на група</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="74"/>
         <source>Edit Group</source>
-        <translation>Modifica gruppo</translation>
+        <translation>Редактиране на група</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="83"/>
         <source>Add Router</source>
-        <translation>Aggiungi router</translation>
+        <translation>Добавяне на рутер</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="92"/>
         <source>Edit Router</source>
-        <translation>Modifica router</translation>
+        <translation>Редактиране на рутер</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="101"/>
         <source>Delete Router</source>
-        <translation>Elimina router</translation>
+        <translation>Изтриване на рутер</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="110"/>
         <source>Change Password</source>
-        <translation>Cambia Password</translation>
+        <translation>Промяна на паролата</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="119"/>
         <source>Clear Events</source>
-        <translation>Pulisci eventi</translation>
+        <translation>Изчистване на събитията</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="128"/>
         <source>Add Host</source>
-        <translation>Aggiungi host</translation>
+        <translation>Добавяне на хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="137"/>
         <source>Delete Host</source>
-        <translation>Elimina host</translation>
+        <translation>Изтриване на хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="146"/>
         <source>Edit Host</source>
-        <translation>Modifica host</translation>
+        <translation>Редактиране на хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="155"/>
         <source>Copy Host</source>
-        <translation>Copia host</translation>
+        <translation>Копиране на хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="167"/>
@@ -4980,96 +4980,96 @@ Credenziali importate: %5</translation>
         <location filename="../client/desktop/management_tab.ui" line="215"/>
         <location filename="../client/desktop/management_tab.ui" line="218"/>
         <source>Desktop</source>
-        <translation>Desktop</translation>
+        <translation>Работен плот</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="182"/>
         <location filename="../client/desktop/management_tab.ui" line="227"/>
         <source>File Transfer</source>
-        <translation>Trasferimento File</translation>
+        <translation>Прехвърляне на файлове</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="194"/>
         <location filename="../client/desktop/management_tab.ui" line="236"/>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Чат</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="206"/>
         <location filename="../client/desktop/management_tab.ui" line="245"/>
         <source>System Information</source>
-        <translation>Informazioni Sistema</translation>
+        <translation>Системна информация</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="257"/>
         <location filename="../client/desktop/management_tab.ui" line="266"/>
         <source>Terminal</source>
-        <translation>Terminale</translation>
+        <translation>Терминал</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="275"/>
         <source>Add Workspace</source>
-        <translation>Aggiungi area di lavoro</translation>
+        <translation>Добавяне на работно пространство</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="284"/>
         <source>Edit Workspace</source>
-        <translation>Modifica area di lavoro</translation>
+        <translation>Редактиране на работно пространство</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="293"/>
         <source>Delete Workspace</source>
-        <translation>Elimina area di lavoro</translation>
+        <translation>Изтриване на работно пространство</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="302"/>
         <source>Add User</source>
-        <translation>Aggiungi utente</translation>
+        <translation>Добавяне на потребител</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="311"/>
         <source>Edit User</source>
-        <translation>Modifica utente</translation>
+        <translation>Редактиране на потребител</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="320"/>
         <source>Delete User</source>
-        <translation>Elimina utente</translation>
+        <translation>Изтриване на потребител</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="329"/>
         <source>Disconnect</source>
-        <translation>Disconnetti</translation>
+        <translation>Прекъсване на връзката</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="338"/>
         <source>Disconnect All</source>
-        <translation>Disconnetti tutto</translation>
+        <translation>Прекъсване на всички</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="347"/>
         <source>Remove</source>
-        <translation>Rimuovi</translation>
+        <translation>Премахване</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="356"/>
         <source>Check for Updates</source>
-        <translation>Controlla aggiornamenti</translation>
+        <translation>Проверка за актуализации</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="365"/>
         <source>Telemetry</source>
-        <translation>Telemetria</translation>
+        <translation>Телеметрия</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="374"/>
         <source>Approve</source>
-        <translation>Approva</translation>
+        <translation>Одобряване</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="383"/>
         <source>Save...</source>
-        <translation>Salva...</translation>
+        <translation>Запазване...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="386"/>
@@ -5079,7 +5079,7 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="395"/>
         <source>Reload</source>
-        <translation>Ricarica</translation>
+        <translation>Презареждане</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="398"/>
@@ -5089,171 +5089,130 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="407"/>
         <source>Import Old Address Book...</source>
-        <translation>Importa vecchia rubrica...</translation>
+        <translation>Импортиране на стара адресна книга...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="416"/>
         <source>Create Backup...</source>
-        <translation>Crea backup...</translation>
+        <translation>Създаване на резервно копие...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="425"/>
         <source>Restore from Backup...</source>
-        <translation>Ripristina da backup...</translation>
+        <translation>Възстановяване от резервно копие...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="433"/>
         <source>Auto-refresh Status</source>
-        <translation>Aggiornamento automatico dello stato</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1035"/>
-        <source>(copy)</source>
-        <translation>(copia)</translation>
+        <translation>Автоматично обновяване на състоянието</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1003"/>
         <location filename="../client/desktop/management_tab.cc" line="1077"/>
         <location filename="../client/desktop/management_tab.cc" line="2174"/>
         <source>Failed to retrieve host information from the local database.</source>
-        <translation>Impossibile recuperare le informazioni dell&apos;host dal database locale.</translation>
+        <translation>Неуспешно извличане на информацията за хоста от локалната база данни.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1035"/>
+        <source>(copy)</source>
+        <translation>(копие)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1040"/>
         <source>Failed to add the host to the local database.</source>
-        <translation>Impossibile aggiungere l&apos;host al database locale.</translation>
+        <translation>Неуспешно добавяне на хоста в локалната база данни.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1081"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
-        <translation>Eliminare l&apos;host &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да изтриете хоста &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1091"/>
         <source>Unable to remove host</source>
-        <translation>Impossibile rimuovere l&apos;host</translation>
+        <translation>Неуспешно изтриване на хоста</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1149"/>
         <location filename="../client/desktop/management_tab.cc" line="1193"/>
         <location filename="../client/desktop/management_tab.cc" line="1219"/>
         <source>Copy Row</source>
-        <translation>Copia riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1150"/>
         <location filename="../client/desktop/management_tab.cc" line="1194"/>
         <location filename="../client/desktop/management_tab.cc" line="1220"/>
         <source>Copy Value</source>
-        <translation>Copia valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1321"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation>Eliminare l&apos;area di lavoro &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да изтриете работното пространство &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1341"/>
         <source>Failed to delete the workspace.</source>
-        <translation>Impossibile eliminare l&apos;area di lavoro.</translation>
+        <translation>Неуспешно изтриване на работното пространство.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1443"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation>Eliminare il gruppo &quot;%1&quot;? Gli host assegnati a questo gruppo o ai suoi sottogruppi verranno spostati nella radice dell&apos;area di lavoro.</translation>
+        <translation>Наистина ли искате да изтриете групата &quot;%1&quot;? Хостовете, присвоени на тази група или на нейните подгрупи, ще бъдат преместени в корена на работното пространство.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1461"/>
         <source>Failed to delete the group.</source>
-        <translation>Impossibile eliminare il gruppo.</translation>
+        <translation>Неуспешно изтриване на групата.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1500"/>
         <source>Import Old Address Book</source>
-        <translation>Importa vecchia rubrica</translation>
+        <translation>Импортиране на стара адресна книга</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1501"/>
         <source>Address Book (*.aab);;All files (*)</source>
-        <translation>Rubrica (*.aab);;Tutti i file (*)</translation>
+        <translation>Адресна книга (*.aab);;Всички файлове (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1524"/>
         <location filename="../client/desktop/management_tab.cc" line="1581"/>
         <source>The database is not available.</source>
-        <translation>Il database non è disponibile.</translation>
+        <translation>Базата данни не е достъпна.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1530"/>
         <source>Create Backup</source>
-        <translation>Crea backup</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1547"/>
-        <source>There is nothing to save.</source>
-        <translation>Non c&apos;è nulla da salvare.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="2169"/>
-        <source>The data of the host is damaged. Edit the host and enter it again.</source>
-        <translation>I dati dell&apos;host sono danneggiati. Modifica l&apos;host e inseriscili di nuovo.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="2190"/>
-        <source>The data of the router is damaged. Edit the router and enter it again.</source>
-        <translation>I dati del router sono danneggiati. Modifica il router e inseriscili di nuovo.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1559"/>
-        <source>Failed to create the backup.</source>
-        <translation>Impossibile creare il backup.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1587"/>
-        <location filename="../client/desktop/management_tab.cc" line="1613"/>
-        <source>Restore from Backup</source>
-        <translation>Ripristina da backup</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1596"/>
-        <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
-        <translation>Tutto il contenuto attuale verrà eliminato e sostituito con quello del backup. Continuare?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1615"/>
-        <source>The backup was made on another installation. Enter the master password used there.</source>
-        <translation>Il backup è stato creato su un&apos;altra installazione. Inserire la password principale utilizzata su di essa.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1640"/>
-        <source>The backup carries no data, so nothing was changed.</source>
-        <translation>Il backup non contiene alcun dato, quindi non è stato modificato nulla.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1648"/>
-        <source>The file is not a valid backup.</source>
-        <translation>Il file non è un backup valido.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1652"/>
-        <source>Failed to restore from the backup.</source>
-        <translation>Impossibile ripristinare dal backup.</translation>
+        <translation>Създаване на резервно копие</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1531"/>
         <location filename="../client/desktop/management_tab.cc" line="1588"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
-        <translation>Backup Aspia (*.aspia-backup);;Tutti i file (*)</translation>
+        <translation>Резервно копие на Aspia (*.aspia-backup);;Всички файлове (*)</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1547"/>
+        <source>There is nothing to save.</source>
+        <translation>Няма нищо за запазване.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1551"/>
         <source>Unable to write the file.</source>
-        <translation>Impossibile scrivere il file.</translation>
+        <translation>Неуспешно записване на файла.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1644"/>
-        <source>Unable to read the file.</source>
-        <translation>Impossibile leggere il file.</translation>
+        <location filename="../client/desktop/management_tab.cc" line="1555"/>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>Някои записи в базата данни са повредени. Поправете ги или ги изтрийте и опитайте отново.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1559"/>
+        <source>Failed to create the backup.</source>
+        <translation>Неуспешно създаване на резервното копие.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1564"/>
@@ -5263,27 +5222,58 @@ Groups exported: %2
 Hosts exported: %3
 Saved passwords exported: %4
 Credentials exported: %5</source>
-        <translation>Esportazione completata con successo.
-Router esportati: %1
-Gruppi esportati: %2
-Host esportati: %3
-Password salvate esportate: %4
-Credenziali esportate: %5</translation>
+        <translation>Експортирането завърши успешно.
+Експортирани рутери: %1
+Експортирани групи: %2
+Експортирани хостове: %3
+Експортирани запазени пароли: %4
+Експортирани идентификационни данни: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1555"/>
-        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
-        <translation>Alcuni record del database sono danneggiati. Correggili o eliminali e riprova.</translation>
+        <location filename="../client/desktop/management_tab.cc" line="1587"/>
+        <location filename="../client/desktop/management_tab.cc" line="1613"/>
+        <source>Restore from Backup</source>
+        <translation>Възстановяване от резервно копие</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1596"/>
+        <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
+        <translation>Всички текущи данни ще бъдат изтрити и заменени със съдържанието на резервното копие. Да се продължи ли?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1615"/>
+        <source>The backup was made on another installation. Enter the master password used there.</source>
+        <translation>Резервното копие е създадено в друга инсталация. Въведете главната парола, използвана там.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1632"/>
         <source>Unable to decrypt the file with the specified password.</source>
-        <translation>Impossibile decifrare il file con la password specificata.</translation>
+        <translation>Неуспешно дешифроване на файла с посочената парола.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1636"/>
         <source>Unsupported file format version.</source>
-        <translation>Versione del formato file non supportata.</translation>
+        <translation>Неподдържана версия на файловия формат.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1640"/>
+        <source>The backup carries no data, so nothing was changed.</source>
+        <translation>Резервното копие не съдържа данни, затова нищо не е променено.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1644"/>
+        <source>Unable to read the file.</source>
+        <translation>Неуспешно четене на файла.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1648"/>
+        <source>The file is not a valid backup.</source>
+        <translation>Файлът не е валидно резервно копие.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1652"/>
+        <source>Failed to restore from the backup.</source>
+        <translation>Неуспешно възстановяване от резервното копие.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1657"/>
@@ -5293,39 +5283,49 @@ Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4
 Credentials imported: %5</source>
-        <translation>Importazione completata con successo.
-Router importati: %1
-Gruppi importati: %2
-Host importati: %3
-Password salvate importate: %4
-Credenziali importate: %5</translation>
+        <translation>Импортирането завърши успешно.
+Импортирани рутери: %1
+Импортирани групи: %2
+Импортирани хостове: %3
+Импортирани запазени пароли: %4
+Импортирани идентификационни данни: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2097"/>
         <location filename="../client/desktop/management_tab.cc" line="2128"/>
         <source>Copy Link</source>
-        <translation>Copia collegamento</translation>
+        <translation>Копиране на връзката</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2116"/>
         <location filename="../client/desktop/management_tab.cc" line="2150"/>
         <source>Unable to create a link for this host.</source>
-        <translation>Impossibile creare un collegamento per questo host.</translation>
+        <translation>Неуспешно създаване на връзка за този хост.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="2169"/>
+        <source>The data of the host is damaged. Edit the host and enter it again.</source>
+        <translation>Данните на хоста са повредени. Редактирайте хоста и ги въведете отново.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="2190"/>
+        <source>The data of the router is damaged. Edit the router and enter it again.</source>
+        <translation>Данните на рутера са повредени. Редактирайте рутера и ги въведете отново.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2191"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation>Il router associato a questo host è stato eliminato. Modifica l&apos;host per selezionare un altro router o passa alla connessione diretta.</translation>
+        <translation>Рутерът, свързан с този хост, е изтрит. Редактирайте хоста, за да изберете друг рутер, или превключете на директна връзка.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2198"/>
         <source>The host has an invalid host ID.</source>
-        <translation>L&apos;host ha un ID host non valido.</translation>
+        <translation>Хостът има невалиден ID.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2207"/>
         <source>The host has an incorrect address.</source>
-        <translation>L&apos;host ha un indirizzo errato.</translation>
+        <translation>Хостът има неправилен адрес.</translation>
     </message>
 </context>
 <context>
@@ -5333,63 +5333,63 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="51"/>
         <source>Set Master Password</source>
-        <translation>Imposta password principale</translation>
+        <translation>Задаване на главна парола</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="52"/>
         <source>Set a master password required to unlock the application.</source>
-        <translation>Imposta una password principale necessaria per sbloccare l&apos;applicazione.</translation>
+        <translation>Задайте главна парола, необходима за отключване на приложението.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
         <location filename="../client/android/master_password_dialog.cc" line="213"/>
         <source>Unlock</source>
-        <translation>Sblocca</translation>
+        <translation>Отключване</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="57"/>
         <source>Enter the master password.</source>
-        <translation>Inserisci la password principale.</translation>
+        <translation>Въведете главната парола.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="61"/>
         <source>Change Master Password</source>
-        <translation>Cambia password principale</translation>
+        <translation>Промяна на главната парола</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="62"/>
         <source>Enter your current password and choose a new one.</source>
-        <translation>Inserisci la tua password attuale e scegline una nuova.</translation>
+        <translation>Въведете текущата си парола и изберете нова.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="66"/>
         <source>New Password</source>
-        <translation>Nuova password</translation>
+        <translation>Нова парола</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="66"/>
         <source>Password</source>
-        <translation>Password</translation>
+        <translation>Парола</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="81"/>
         <source>Current Password</source>
-        <translation>Password attuale</translation>
+        <translation>Текуща парола</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="91"/>
         <source>Confirm Password</source>
-        <translation>Conferma password</translation>
+        <translation>Потвърждаване на паролата</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="96"/>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Отказ</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="97"/>
         <source>Change</source>
-        <translation>Cambia</translation>
+        <translation>Промяна</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="97"/>
@@ -5399,61 +5399,61 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="133"/>
         <source>Invalid master password.</source>
-        <translation>Password principale non valida.</translation>
+        <translation>Невалидна главна парола.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="139"/>
         <source>Unable to unlock the database.</source>
-        <translation>Impossibile sbloccare il database.</translation>
+        <translation>Неуспешно отключване на базата данни.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/master_password_dialog.cc" line="150"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="158"/>
         <source>The entered passwords do not match.</source>
-        <translation>Le password inserite non corrispondono.</translation>
+        <translation>Въведените пароли не съвпадат.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="168"/>
         <source>Unable to set master password.</source>
-        <translation>Impossibile impostare la password principale.</translation>
+        <translation>Неуспешно задаване на главната парола.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="181"/>
         <source>Invalid current password.</source>
-        <translation>La password attuale non è valida.</translation>
+        <translation>Невалидна текуща парола.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="187"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
-        <translation>Alcuni record del database sono danneggiati. Correggili o eliminali e riprova.</translation>
+        <translation>Някои записи в базата данни са повредени. Поправете ги или ги изтрийте и опитайте отново.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="191"/>
         <source>Unable to change the password.</source>
-        <translation>Impossibile modificare la password.</translation>
+        <translation>Неуспешна промяна на паролата.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="214"/>
         <source>Use password</source>
-        <translation>Usa password</translation>
+        <translation>Използване на парола</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="231"/>
         <location filename="../client/android/master_password_dialog.cc" line="239"/>
         <source>Biometric unlock failed. Enter the master password.</source>
-        <translation>Sblocco biometrico non riuscito. Inserisci la password principale.</translation>
+        <translation>Неуспешно отключване с биометрия. Въведете главната парола.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="235"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
-        <translation>La biometria è cambiata. Inserisci la password principale per continuare.</translation>
+        <translation>Биометричните данни са променени. Въведете главната парола, за да продължите.</translation>
     </message>
 </context>
 <context>
@@ -5466,103 +5466,103 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="74"/>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Отказ</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="75"/>
         <source>Yes</source>
-        <translation>Sì</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="76"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Не</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="77"/>
         <source>Apply</source>
-        <translation>Applica</translation>
+        <translation>Прилагане</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="78"/>
         <source>Close</source>
-        <translation>Chiudi</translation>
+        <translation>Затваряне</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="79"/>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>Запазване</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="80"/>
         <source>Discard</source>
-        <translation>Scarta</translation>
+        <translation>Отхвърляне</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="81"/>
         <source>Reset</source>
-        <translation>Resettato</translation>
+        <translation>Нулиране</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="82"/>
         <source>Help</source>
-        <translation>Aiuto</translation>
+        <translation>Помощ</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="83"/>
         <source>Abort</source>
-        <translation>Interrompi</translation>
+        <translation>Прекратяване</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="84"/>
         <source>Retry</source>
-        <translation>Riprova</translation>
+        <translation>Нов опит</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="85"/>
         <source>Ignore</source>
-        <translation>Ignora</translation>
+        <translation>Пренебрегване</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="86"/>
         <source>Restore Defaults</source>
-        <translation>Ripristina predefiniti</translation>
+        <translation>По подразбиране</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="87"/>
         <source>Save All</source>
-        <translation>Salva tutto</translation>
+        <translation>Запазване на всичко</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="88"/>
         <source>Open</source>
-        <translation>Apri</translation>
+        <translation>Отваряне</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="89"/>
         <source>Yes to All</source>
-        <translation>Sì a tutto</translation>
+        <translation>Да за всички</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="90"/>
         <source>No to All</source>
-        <translation>No a tutto</translation>
+        <translation>Не за всички</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="107"/>
         <source>Warning</source>
-        <translation>Attenzione</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="115"/>
         <source>Information</source>
-        <translation>Informazione</translation>
+        <translation>Информация</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="123"/>
         <location filename="../common/desktop/msg_box.cc" line="133"/>
         <source>Confirmation</source>
-        <translation>Conferma</translation>
+        <translation>Потвърждение</translation>
     </message>
 </context>
 <context>
@@ -5570,58 +5570,58 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/workers/network_worker.cc" line="371"/>
         <source>Failed to connect to the relay server</source>
-        <translation>Impossibile connettersi al server relay</translation>
+        <translation>Неуспешно свързване с ретранслатора</translation>
     </message>
 </context>
 <context>
     <name>NotifierWindow</name>
     <message>
-        <location filename="../host/ui/notifier_window.ui" line="345"/>
-        <location filename="../host/ui/notifier_window.cc" line="318"/>
-        <source>Pause</source>
-        <translation>Sospendi</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/notifier_window.ui" line="371"/>
-        <source>Disconnect all</source>
-        <translation>Disconnetti tutti</translation>
-    </message>
-    <message>
         <location filename="../host/ui/notifier_window.ui" line="293"/>
         <location filename="../host/ui/notifier_window.cc" line="302"/>
         <source>Lock mouse</source>
-        <translation>Blocca mouse</translation>
+        <translation>Блокиране на мишката</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="319"/>
         <location filename="../host/ui/notifier_window.cc" line="310"/>
         <source>Lock keyboard</source>
-        <translation>Blocca tastiera</translation>
+        <translation>Блокиране на клавиатурата</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/notifier_window.ui" line="345"/>
+        <location filename="../host/ui/notifier_window.cc" line="318"/>
+        <source>Pause</source>
+        <translation>Пауза</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/notifier_window.ui" line="371"/>
+        <source>Disconnect all</source>
+        <translation>Прекъсване на всички</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="269"/>
         <source>Disconnect</source>
-        <translation>Disconnetti</translation>
+        <translation>Прекъсване на връзката</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="302"/>
         <source>Unlock mouse</source>
-        <translation>Sblocca mouse</translation>
+        <translation>Деблокиране на мишката</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="310"/>
         <source>Unlock keyboard</source>
-        <translation>Sblocca tastiera</translation>
+        <translation>Деблокиране на клавиатурата</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="318"/>
         <source>Resume</source>
-        <translation>Riprendi</translation>
+        <translation>Възобновяване</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="543"/>
         <source>Aspia Host</source>
-        <translation>Aspia Host</translation>
+        <translation>Хост Aspia</translation>
     </message>
 </context>
 <context>
@@ -5630,41 +5630,41 @@ Credenziali importate: %5</translation>
         <location filename="../client/android/password_dialog.cc" line="37"/>
         <location filename="../host/android/password_dialog.cc" line="89"/>
         <source>Set Password</source>
-        <translation>Imposta password</translation>
+        <translation>Задаване на парола</translation>
+    </message>
+    <message>
+        <location filename="../client/android/password_dialog.cc" line="38"/>
+        <source>Enter a password to encrypt your data.</source>
+        <translation>Въведете парола за шифроване на вашите данни.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="42"/>
         <location filename="../host/android/password_dialog.cc" line="51"/>
         <source>Enter Password</source>
-        <translation>Inserisci password</translation>
-    </message>
-    <message>
-        <location filename="../client/android/password_dialog.cc" line="38"/>
-        <source>Enter a password to encrypt your data.</source>
-        <translation>Inserisci una password per cifrare i tuoi dati.</translation>
+        <translation>Въвеждане на парола</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="43"/>
         <source>Enter the password to decrypt the backup.</source>
-        <translation>Inserisci la password per decifrare il backup.</translation>
+        <translation>Въведете паролата за дешифроване на резервното копие.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="46"/>
         <location filename="../host/android/password_dialog.cc" line="54"/>
         <source>Password</source>
-        <translation>Password</translation>
+        <translation>Парола</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="59"/>
         <source>Confirm Password</source>
-        <translation>Conferma password</translation>
+        <translation>Потвърждаване на паролата</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="64"/>
         <location filename="../host/android/password_dialog.cc" line="62"/>
         <location filename="../host/android/password_dialog.cc" line="105"/>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Отказ</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="65"/>
@@ -5676,37 +5676,37 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/android/password_dialog.cc" line="85"/>
         <source>Password cannot be empty.</source>
-        <translation>La password non può essere vuota.</translation>
+        <translation>Паролата не може да бъде празна.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="92"/>
         <source>Passwords do not match.</source>
-        <translation>Le password non corrispondono.</translation>
+        <translation>Паролите не съвпадат.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="74"/>
         <source>You entered an incorrect password.</source>
-        <translation>Hai inserito una password errata.</translation>
+        <translation>Въведохте неправилна парола.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="92"/>
         <source>New password</source>
-        <translation>Nuova password</translation>
+        <translation>Нова парола</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="96"/>
         <source>Repeat password</source>
-        <translation>Ripeti password</translation>
+        <translation>Парола (повторно)</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="115"/>
         <source>The password can not be empty.</source>
-        <translation>La password non può essere vuota.</translation>
+        <translation>Паролата не може да бъде празна.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="123"/>
         <source>The passwords you entered do not match.</source>
-        <translation>Le password inserite non corrispondono.</translation>
+        <translation>Въведените пароли не съвпадат.</translation>
     </message>
 </context>
 <context>
@@ -5714,37 +5714,37 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="140"/>
         <source>User Name</source>
-        <translation>Nome utente</translation>
+        <translation>Потребителско име</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="143"/>
         <source>Host ID</source>
-        <translation>ID host</translation>
+        <translation>ID на хоста</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="146"/>
         <source>Host Address</source>
-        <translation>Indirizzo host</translation>
+        <translation>Адрес на хоста</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="149"/>
         <source>Client Address</source>
-        <translation>Indirizzo client</translation>
+        <translation>Адрес на клиента</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="152"/>
         <source>Transferred</source>
-        <translation>Dati trasferiti</translation>
+        <translation>Прехвърлени</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="155"/>
         <source>Duration</source>
-        <translation>Durata</translation>
+        <translation>Продължителност</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="158"/>
         <source>Idle</source>
-        <translation>Inattività</translation>
+        <translation>Бездействие</translation>
     </message>
 </context>
 <context>
@@ -5752,73 +5752,73 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="40"/>
         <source>Review System Access</source>
-        <translation>Verifica accesso al sistema</translation>
+        <translation>Преглед на достъпа до системата</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="45"/>
         <source>Aspia Host requires your permission to access system capabilities.</source>
-        <translation>Aspia Host richiede la tua autorizzazione per accedere alle funzionalità di sistema.</translation>
+        <translation>Хост Aspia се нуждае от вашето разрешение за достъп до системните възможности.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="51"/>
         <source>Review the permissions below and grant the ones that are missing.</source>
-        <translation>Verifica le autorizzazioni qui sotto e concedi quelle mancanti.</translation>
+        <translation>Прегледайте разрешенията по-долу и предоставете липсващите.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="64"/>
         <source>Screen Recording</source>
-        <translation>Registrazione dello schermo</translation>
+        <translation>Записване на екрана</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="65"/>
         <source>Required so a remote user can see this screen.</source>
-        <translation>Necessario affinché un utente remoto possa vedere questo schermo.</translation>
+        <translation>Необходимо е, за да може отдалечен потребител да вижда този екран.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="65"/>
         <location filename="../host/ui/permission_dialog.cc" line="67"/>
         <source>Request Access...</source>
-        <translation>Richiedi accesso...</translation>
+        <translation>Заявяване на достъп...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="66"/>
         <source>Accessibility</source>
-        <translation>Accessibilità</translation>
+        <translation>Достъпност</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="67"/>
         <source>Required so a remote user can control the mouse and keyboard.</source>
-        <translation>Necessario affinché un utente remoto possa controllare mouse e tastiera.</translation>
+        <translation>Необходимо е, за да може отдалечен потребител да управлява мишката и клавиатурата.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="68"/>
         <source>Full Disk Access</source>
-        <translation>Accesso completo al disco</translation>
+        <translation>Пълен достъп до диска</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="69"/>
         <source>Required to transfer files from protected folders.</source>
-        <translation>Necessario per trasferire file da cartelle protette.</translation>
+        <translation>Необходимо е за прехвърляне на файлове от защитени папки.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="69"/>
         <source>Open Preferences...</source>
-        <translation>Apri Preferenze...</translation>
+        <translation>Отваряне на предпочитанията...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="122"/>
         <source>Open Settings...</source>
-        <translation>Apri Impostazioni...</translation>
+        <translation>Отваряне на настройките...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Granted</source>
-        <translation>Concesso</translation>
+        <translation>Предоставено</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Denied</source>
-        <translation>Negato</translation>
+        <translation>Отказано</translation>
     </message>
 </context>
 <context>
@@ -5826,37 +5826,37 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../host/android/permissions_widget.cc" line="80"/>
         <source>The following permissions are required for the app to work. Grant them in the system settings.</source>
-        <translation>Per il funzionamento dell&apos;applicazione sono necessarie le seguenti autorizzazioni. Concedile nelle impostazioni di sistema.</translation>
+        <translation>За работата на приложението са необходими следните разрешения. Предоставете ги в системните настройки.</translation>
     </message>
     <message>
         <location filename="../host/android/permissions_widget.cc" line="93"/>
         <source>Accessibility service</source>
-        <translation>Servizio di accessibilità</translation>
+        <translation>Услуга за достъпност</translation>
     </message>
     <message>
         <location filename="../host/android/permissions_widget.cc" line="94"/>
         <source>Display over other apps</source>
-        <translation>Mostra sopra altre app</translation>
+        <translation>Показване върху други приложения</translation>
     </message>
     <message>
         <location filename="../host/android/permissions_widget.cc" line="95"/>
         <source>All files access</source>
-        <translation>Accesso a tutti i file</translation>
+        <translation>Достъп до всички файлове</translation>
     </message>
     <message>
         <location filename="../host/android/permissions_widget.cc" line="96"/>
         <source>Notifications</source>
-        <translation>Notifiche</translation>
+        <translation>Известия</translation>
     </message>
     <message>
         <location filename="../host/android/permissions_widget.cc" line="108"/>
         <source>Open</source>
-        <translation>Apri</translation>
+        <translation>Отваряне</translation>
     </message>
     <message>
         <location filename="../host/android/permissions_widget.cc" line="109"/>
         <source>Granted</source>
-        <translation>Concesso</translation>
+        <translation>Предоставено</translation>
     </message>
 </context>
 <context>
@@ -5864,12 +5864,12 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="90"/>
         <source>System Idle Process</source>
-        <translation>Processo Inattivo Sistema</translation>
+        <translation>Неактивен процес на системата</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="92"/>
         <source>Unknown Process</source>
-        <translation>Processo Sconosciuto</translation>
+        <translation>Неизвестен процес</translation>
     </message>
 </context>
 <context>
@@ -5885,7 +5885,7 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/android/message_dialog.cc" line="34"/>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Отказ</translation>
     </message>
     <message>
         <location filename="../common/android/message_dialog.cc" line="51"/>
@@ -5898,58 +5898,58 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.ui" line="14"/>
         <source>Quick Connect</source>
-        <translation>Connessione rapida</translation>
+        <translation>Бързо свързване</translation>
     </message>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.ui" line="25"/>
         <source>Router:</source>
-        <translation>Router:</translation>
+        <translation>Рутер:</translation>
     </message>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.ui" line="39"/>
         <location filename="../client/desktop/quick_connect_dialog.cc" line="221"/>
         <source>Address:</source>
-        <translation>Indirizzo:</translation>
+        <translation>Адрес:</translation>
     </message>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.ui" line="49"/>
         <source>Session Type:</source>
-        <translation>Tipo di sessione:</translation>
+        <translation>Тип на сесията:</translation>
     </message>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.cc" line="64"/>
         <source>Connect</source>
-        <translation>Connetti</translation>
+        <translation>Свързване</translation>
     </message>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.cc" line="138"/>
         <source>Select a router to connect by ID.</source>
-        <translation>Seleziona un router per la connessione tramite ID.</translation>
+        <translation>Изберете рутер за свързване по ID.</translation>
     </message>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.cc" line="145"/>
         <source>An invalid host address was entered.</source>
-        <translation>È stato inserito un indirizzo host non valido.</translation>
+        <translation>Въведен е невалиден адрес на хоста.</translation>
     </message>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.cc" line="153"/>
         <source>An invalid host ID was entered.</source>
-        <translation>È stato inserito un ID host non valido.</translation>
+        <translation>Въведен е невалиден ID на хоста.</translation>
     </message>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.cc" line="166"/>
         <source>Without Router</source>
-        <translation>Senza router</translation>
+        <translation>Без рутер</translation>
     </message>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.cc" line="173"/>
         <source>Failed to read the list of routers.</source>
-        <translation>Impossibile leggere l&apos;elenco dei router.</translation>
+        <translation>Неуспешно четене на списъка с рутери.</translation>
     </message>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.cc" line="222"/>
         <source>Host name or IP address</source>
-        <translation>Nome host o indirizzo IP</translation>
+        <translation>Име на хост или IP адрес</translation>
     </message>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.cc" line="226"/>
@@ -5959,7 +5959,7 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.cc" line="227"/>
         <source>Host ID</source>
-        <translation>ID host</translation>
+        <translation>ID на хоста</translation>
     </message>
 </context>
 <context>
@@ -5967,37 +5967,37 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="141"/>
         <source>Address</source>
-        <translation>Indirizzo</translation>
+        <translation>Адрес</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="144"/>
         <source>Connect Time</source>
-        <translation>Ora di connessione</translation>
+        <translation>Час на свързване</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="147"/>
         <source>Pool Size</source>
-        <translation>Dimensione pool</translation>
+        <translation>Размер на пула</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation>Versione</translation>
+        <translation>Версия</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="153"/>
         <source>Computer Name</source>
-        <translation>Nome computer</translation>
+        <translation>Име на компютъра</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="156"/>
         <source>Architecture</source>
-        <translation>Architettura</translation>
+        <translation>Архитектура</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="159"/>
         <source>Operating System</source>
-        <translation>Sistema operativo</translation>
+        <translation>Операционна система</translation>
     </message>
 </context>
 <context>
@@ -6005,34 +6005,34 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/android/remote_widget.cc" line="693"/>
         <source>Unapproved Hosts</source>
-        <translation>Host non approvati</translation>
+        <translation>Неодобрени хостове</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="829"/>
         <location filename="../client/android/remote_widget.cc" line="850"/>
         <source>Show more</source>
-        <translation>Mostra altro</translation>
+        <translation>Показване на още</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="829"/>
         <location filename="../client/android/remote_widget.cc" line="850"/>
         <source>%1 of %2</source>
-        <translation>%1 di %2</translation>
+        <translation>%1 от %2</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="913"/>
         <source>Desktop</source>
-        <translation>Desktop</translation>
+        <translation>Работен плот</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="915"/>
         <source>File Transfer</source>
-        <translation>Trasferimento File</translation>
+        <translation>Прехвърляне на файлове</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="917"/>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Чат</translation>
     </message>
 </context>
 <context>
@@ -6041,83 +6041,83 @@ Credenziali importate: %5</translation>
         <location filename="../client/android/router_card.cc" line="179"/>
         <location filename="../client/android/router_card.cc" line="229"/>
         <source>Enter Code</source>
-        <translation>Inserisci codice</translation>
+        <translation>Въвеждане на код</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="227"/>
         <source>Blocked</source>
-        <translation>Bloccato</translation>
+        <translation>Блокирано</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="229"/>
         <source>Set Up</source>
-        <translation>Configura</translation>
+        <translation>Настройване</translation>
     </message>
 </context>
 <context>
     <name>RouterClientsWidget</name>
     <message>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
+        <source>Previous page</source>
+        <translation>Предишна страница</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
+        <source>Previous</source>
+        <translation>Назад</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="74"/>
+        <source>Next page</source>
+        <translation>Следваща страница</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="77"/>
+        <source>Next</source>
+        <translation>Напред</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="88"/>
+        <source>Items per page:</source>
+        <translation>Елементи на страница:</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="231"/>
         <source>Save File</source>
-        <translation>Salva file</translation>
+        <translation>Запазване на файл</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="231"/>
         <source>JSON files (*.json)</source>
-        <translation>File JSON (*.json)</translation>
+        <translation>JSON файлове (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="242"/>
         <source>Could not open file for writing.</source>
-        <translation>Impossibile aprire il file in scrittura.</translation>
+        <translation>Неуспешно отваряне на файла за запис.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="277"/>
         <source>Unable to write file.</source>
-        <translation>Impossibile scrivere il file.</translation>
+        <translation>Неуспешно записване на файла.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="316"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
-        <translation>Disconnettere il client &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да прекъснете връзката с клиента &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="341"/>
         <source>Are you sure you want to disconnect all clients?</source>
-        <translation>Disconnettere tutti i client?</translation>
+        <translation>Наистина ли искате да прекъснете връзката с всички клиенти?</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="502"/>
         <source>%n client(s)</source>
         <translation>
-            <numerusform>%n client</numerusform>
-            <numerusform>%n client</numerusform>
+            <numerusform>%n клиент</numerusform>
+            <numerusform>%n клиента</numerusform>
         </translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
-        <source>Previous page</source>
-        <translation>Pagina precedente</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
-        <source>Previous</source>
-        <translation>Precedente</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="74"/>
-        <source>Next page</source>
-        <translation>Pagina successiva</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="77"/>
-        <source>Next</source>
-        <translation>Successivo</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="88"/>
-        <source>Items per page:</source>
-        <translation>Elementi per pagina:</translation>
     </message>
 </context>
 <context>
@@ -6125,7 +6125,7 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/config.cc" line="130"/>
         <source>&lt;unreadable router&gt;</source>
-        <translation>&lt;router illeggibile&gt;</translation>
+        <translation>&lt;нечетим рутер&gt;</translation>
     </message>
 </context>
 <context>
@@ -6135,42 +6135,42 @@ Credenziali importate: %5</translation>
         <location filename="../client/router_controller.cc" line="242"/>
         <location filename="../client/router_controller.cc" line="442"/>
         <source>Connecting to router %1...</source>
-        <translation>Connessione al router %1...</translation>
+        <translation>Свързване с рутера %1...</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="265"/>
         <source>Event history cleared.</source>
-        <translation>Cronologia degli eventi cancellata.</translation>
+        <translation>Историята на събитията е изчистена.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="310"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
-        <translation>Troppi tentativi falliti. Il router %1 accetterà di nuovo i codici tra circa %2 min.</translation>
+        <translation>Твърде много неуспешни опити. Рутерът %1 ще приема кодове отново след около %2 мин.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="318"/>
         <source>The code was not accepted by router %1.</source>
-        <translation>Il codice non è stato accettato dal router %1.</translation>
+        <translation>Кодът не е приет от рутера %1.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="321"/>
         <source>Router %1 is waiting for a two-factor code.</source>
-        <translation>Il router %1 è in attesa di un codice a due fattori.</translation>
+        <translation>Рутерът %1 очаква код за двуфакторно удостоверяване.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="350"/>
         <source>Connection to router %1 established.</source>
-        <translation>Connessione al router %1 stabilita.</translation>
+        <translation>Установена е връзка с рутера %1.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="395"/>
         <source>Network error: %1</source>
-        <translation>Errore di rete: %1</translation>
+        <translation>Мрежова грешка: %1</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="409"/>
         <source>Disconnected from router %1.</source>
-        <translation>Disconnesso dal router %1.</translation>
+        <translation>Връзката с рутера %1 е прекъсната.</translation>
     </message>
 </context>
 <context>
@@ -6178,97 +6178,97 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="14"/>
         <source>Router</source>
-        <translation>Router</translation>
+        <translation>Рутер</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="25"/>
         <source>Address:</source>
-        <translation>Indirizzo:</translation>
+        <translation>Адрес:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="35"/>
         <source>Host name or IP address</source>
-        <translation>Nome host o indirizzo IP</translation>
+        <translation>Име на хост или IP адрес</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="42"/>
         <source>Display Name:</source>
-        <translation>Nome visualizzato:</translation>
+        <translation>Показвано име:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="52"/>
         <source>Enter a name or leave the field empty</source>
-        <translation>Inserisci un nome o lascia il campo vuoto</translation>
+        <translation>Въведете име или оставете полето празно</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="59"/>
         <source>Access Level:</source>
-        <translation>Livello di accesso:</translation>
+        <translation>Ниво на достъп:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="73"/>
         <source>User Name:</source>
-        <translation>Nome Utente:</translation>
+        <translation>Потребителско име:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="87"/>
         <source>Password:</source>
-        <translation>Password:</translation>
+        <translation>Парола:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="46"/>
         <source>Administrator</source>
-        <translation>Amministratore</translation>
+        <translation>Администратор</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Manager</source>
-        <translation>Gestore</translation>
+        <translation>Мениджър</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="48"/>
         <source>Operator</source>
-        <translation>Operatore</translation>
+        <translation>Оператор</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/router_dialog.cc" line="76"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n caratteri.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знак.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="88"/>
         <source>An invalid router address was entered.</source>
-        <translation>È stato inserito un indirizzo router non valido.</translation>
+        <translation>Въведен е невалиден адрес на рутера.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="98"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri _, -, .</translation>
+        <translation>Потребителското име не може да бъде празно и може да съдържа само букви, цифри и знаците _, -, .</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="109"/>
         <source>Password cannot be empty.</source>
-        <translation>La password non può essere vuota.</translation>
+        <translation>Паролата не може да бъде празна.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="131"/>
         <location filename="../client/desktop/router_dialog.cc" line="148"/>
         <location filename="../client/desktop/router_dialog.cc" line="157"/>
         <source>Failed to save the router.</source>
-        <translation>Impossibile salvare il router.</translation>
+        <translation>Неуспешно запазване на рутера.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="177"/>
         <source>Failed to read the router.</source>
-        <translation>Impossibile leggere il router.</translation>
+        <translation>Неуспешно четене на рутера.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="195"/>
         <source>The data of the router is damaged. Enter it again.</source>
-        <translation>I dati del router sono danneggiati. Inseriscili di nuovo.</translation>
+        <translation>Данните на рутера са повредени. Въведете ги отново.</translation>
     </message>
 </context>
 <context>
@@ -6276,82 +6276,82 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/android/router_editor.cc" line="54"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="55"/>
         <source>Address</source>
-        <translation>Indirizzo</translation>
+        <translation>Адрес</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="56"/>
         <source>User Name</source>
-        <translation>Nome Utente</translation>
+        <translation>Потребителско име</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="57"/>
         <source>Password</source>
-        <translation>Password</translation>
+        <translation>Парола</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="66"/>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>Запазване</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="69"/>
         <location filename="../client/android/router_editor.cc" line="232"/>
         <source>Delete</source>
-        <translation>Elimina</translation>
+        <translation>Изтриване</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="141"/>
         <source>The data of the router is damaged. Enter it again.</source>
-        <translation>I dati del router sono danneggiati. Inseriscili di nuovo.</translation>
+        <translation>Данните на рутера са повредени. Въведете ги отново.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="152"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
-            <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n caratteri.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знак.</numerusform>
+            <numerusform>Името е твърде дълго. Максималната дължина на името е %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="163"/>
         <source>An invalid router address was entered.</source>
-        <translation>È stato inserito un indirizzo router non valido.</translation>
+        <translation>Въведен е невалиден адрес на рутера.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="172"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
+        <translation>Потребителското име не може да бъде празно и може да съдържа само букви, цифри и знаците &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="182"/>
         <source>Password cannot be empty.</source>
-        <translation>La password non può essere vuota.</translation>
+        <translation>Паролата не може да бъде празна.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="211"/>
         <location filename="../client/android/router_editor.cc" line="221"/>
         <source>Failed to save the router.</source>
-        <translation>Impossibile salvare il router.</translation>
+        <translation>Неуспешно запазване на рутера.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="231"/>
         <source>Delete Router</source>
-        <translation>Elimina router</translation>
+        <translation>Изтриване на рутер</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="232"/>
         <source>Delete the router &quot;%1&quot;?</source>
-        <translation>Eliminare il router &quot;%1&quot;?</translation>
+        <translation>Да се изтрие ли рутерът &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="239"/>
         <source>Failed to delete the router.</source>
-        <translation>Impossibile eliminare il router.</translation>
+        <translation>Неуспешно изтриване на рутера.</translation>
     </message>
 </context>
 <context>
@@ -6359,67 +6359,67 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/desktop/router_error.cc" line="33"/>
         <source>The router rejected the request.</source>
-        <translation>Il router ha rifiutato la richiesta.</translation>
+        <translation>Рутерът отхвърли заявката.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="35"/>
         <source>Unknown internal error.</source>
-        <translation>Errore interno sconosciuto.</translation>
+        <translation>Неизвестна вътрешна грешка.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="37"/>
         <source>Invalid entry id.</source>
-        <translation>ID della voce non valido.</translation>
+        <translation>Невалиден ID на записа.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="39"/>
         <source>Invalid data was passed.</source>
-        <translation>Sono stati passati dati non validi.</translation>
+        <translation>Подадени са невалидни данни.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="41"/>
         <source>A record with the specified name already exists.</source>
-        <translation>Esiste già un record con il nome specificato.</translation>
+        <translation>Вече съществува запис с посоченото име.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="43"/>
         <source>Record not found. The list may be out of date.</source>
-        <translation>Record non trovato. L&apos;elenco potrebbe non essere aggiornato.</translation>
+        <translation>Записът не е намерен. Списъкът може да не е актуален.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="45"/>
         <source>Access denied.</source>
-        <translation>Accesso rifiutato.</translation>
+        <translation>Достъпът е отказан.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="47"/>
         <source>The data has changed on the router. Refresh the list and try again.</source>
-        <translation>I dati sono cambiati sul router. Aggiornare l&apos;elenco e riprovare.</translation>
+        <translation>Данните на рутера са променени. Обновете списъка и опитайте отново.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="50"/>
         <source>Connection to the router lost.</source>
-        <translation>Connessione al router persa.</translation>
+        <translation>Връзката с рутера е загубена.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="52"/>
         <source>The host with the specified ID is not online.</source>
-        <translation>L&apos;host con l&apos;ID specificato non è in linea.</translation>
+        <translation>Хостът с посочения ID не е онлайн.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="54"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation>Non ci sono relay disponibili oppure il pool di chiavi è vuoto.</translation>
+        <translation>Няма налични ретранслатори или пулът от ключове е празен.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="57"/>
         <source>Too many connection requests. Try again later.</source>
-        <translation>Troppe richieste di connessione. Riprovare più tardi.</translation>
+        <translation>Твърде много заявки за свързване. Опитайте отново по-късно.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="59"/>
         <source>Unknown error type.</source>
-        <translation>Tipo di errore sconosciuto.</translation>
+        <translation>Неизвестен тип грешка.</translation>
     </message>
 </context>
 <context>
@@ -6427,88 +6427,88 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="14"/>
         <source>Group</source>
-        <translation>Gruppo</translation>
+        <translation>Група</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="25"/>
         <source>Parent Group:</source>
-        <translation>Gruppo padre:</translation>
+        <translation>Родителска група:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="39"/>
         <source>Name:</source>
-        <translation>Nome:</translation>
+        <translation>Име:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="46"/>
         <source>Display name</source>
-        <translation>Nome visualizzato</translation>
+        <translation>Показвано име</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="57"/>
         <source>Comment:</source>
-        <translation>Commento:</translation>
+        <translation>Коментар:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
         <source>Edit Group</source>
-        <translation>Modifica gruppo</translation>
+        <translation>Редактиране на група</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
         <source>Add Group</source>
-        <translation>Aggiungi gruppo</translation>
+        <translation>Добавяне на група</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="97"/>
         <source>Failed to get list of groups.</source>
-        <translation>Impossibile ottenere l&apos;elenco dei gruppi.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="179"/>
-        <source>Unknown internal error.</source>
-        <translation>Errore interno sconosciuto.</translation>
+        <translation>Неуспешно получаване на списъка с групи.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="163"/>
         <source>Group name cannot be empty.</source>
-        <translation>Il nome del gruppo non può essere vuoto.</translation>
+        <translation>Името на групата не може да бъде празно.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="179"/>
+        <source>Unknown internal error.</source>
+        <translation>Неизвестна вътрешна грешка.</translation>
     </message>
 </context>
 <context>
     <name>RouterGroupWidget</name>
-    <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="454"/>
-        <source>%n host(s)</source>
-        <translation>
-            <numerusform>%n host</numerusform>
-            <numerusform>%n host</numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
         <source>Previous page</source>
-        <translation>Pagina precedente</translation>
+        <translation>Предишна страница</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Previous</source>
-        <translation>Precedente</translation>
+        <translation>Назад</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="68"/>
         <source>Next page</source>
-        <translation>Pagina successiva</translation>
+        <translation>Следваща страница</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="71"/>
         <source>Next</source>
-        <translation>Successivo</translation>
+        <translation>Напред</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="82"/>
         <source>Items per page:</source>
-        <translation>Elementi per pagina:</translation>
+        <translation>Елементи на страница:</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_group_widget.cc" line="454"/>
+        <source>%n host(s)</source>
+        <translation>
+            <numerusform>%n хост</numerusform>
+            <numerusform>%n хоста</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -6516,150 +6516,150 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="14"/>
         <source>Host Properties</source>
-        <translation>Proprietà host</translation>
+        <translation>Свойства на хоста</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
         <source>Workspace:</source>
-        <translation>Area di lavoro:</translation>
+        <translation>Работно пространство:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="39"/>
         <source>Group:</source>
-        <translation>Gruppo:</translation>
+        <translation>Група:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="53"/>
         <source>Display Name:</source>
-        <translation>Nome visualizzato:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="70"/>
-        <source>User Name:</source>
-        <translation>Nome Utente:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="104"/>
-        <source>The user name and the password are stored on this computer only and are not sent to the router.</source>
-        <translation>Il nome utente e la password vengono memorizzati solo su questo computer e non vengono inviati al router.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="80"/>
-        <source>Password:</source>
-        <translation>Password:</translation>
+        <translation>Показвано име:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="63"/>
         <source>Use saved credentials</source>
-        <translation>Usa credenziali salvate</translation>
+        <translation>Използване на запазени идентификационни данни</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="70"/>
+        <source>User Name:</source>
+        <translation>Потребителско име:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="80"/>
+        <source>Password:</source>
+        <translation>Парола:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="90"/>
         <source>Credentials:</source>
-        <translation>Credenziali:</translation>
+        <translation>Идентификационни данни:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="104"/>
+        <source>The user name and the password are stored on this computer only and are not sent to the router.</source>
+        <translation>Потребителското име и паролата се съхраняват само на този компютър и не се изпращат към рутера.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="116"/>
         <source>Comment:</source>
-        <translation>Commento:</translation>
+        <translation>Коментар:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="133"/>
         <source>Failed to get list of workspaces.</source>
-        <translation>Impossibile ottenere l&apos;elenco delle aree di lavoro.</translation>
+        <translation>Неуспешно получаване на списъка с работни пространства.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="141"/>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="187"/>
         <source>Not assigned</source>
-        <translation>Nessuna assegnazione</translation>
+        <translation>Не е присвоено</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="172"/>
         <source>Failed to get list of groups.</source>
-        <translation>Impossibile ottenere l&apos;elenco dei gruppi.</translation>
+        <translation>Неуспешно получаване на списъка с групи.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="246"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation>Inserire sia il nome utente che la password, oppure lasciare entrambi vuoti.</translation>
+        <translation>Въведете и потребителското име, и паролата, или оставете и двете празни.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="261"/>
         <source>Failed to save the credentials.</source>
-        <translation>Impossibile salvare le credenziali.</translation>
+        <translation>Неуспешно запазване на идентификационните данни.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="291"/>
         <source>Failed to read the list of credentials.</source>
-        <translation>Impossibile leggere l&apos;elenco delle credenziali.</translation>
+        <translation>Неуспешно четене на списъка с идентификационни данни.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="337"/>
         <source>Failed to read the credentials of the host.</source>
-        <translation>Impossibile leggere le credenziali dell&apos;host.</translation>
+        <translation>Неуспешно четене на идентификационните данни на хоста.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="342"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
-        <translation>Le credenziali dell&apos;host sono danneggiate. Inseriscile di nuovo.</translation>
+        <translation>Идентификационните данни на хоста са повредени. Въведете ги отново.</translation>
     </message>
 </context>
 <context>
     <name>RouterHostEditor</name>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="55"/>
-        <source>User Name</source>
-        <translation>Nome utente</translation>
-    </message>
-    <message>
-        <location filename="../client/android/router_host_editor.cc" line="57"/>
-        <source>Password</source>
-        <translation>Password</translation>
+        <location filename="../client/android/router_host_editor.cc" line="46"/>
+        <source>Use existing</source>
+        <translation>Използване на съществуващи</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="49"/>
         <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
-        <translation>Il nome utente e la password vengono memorizzati solo su questo dispositivo e non vengono inviati al router. Lasciare entrambi vuoti per dimenticarli.</translation>
+        <translation>Потребителското име и паролата се съхраняват само на това устройство и не се изпращат към рутера. Оставете двете полета празни, за да бъдат забравени.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="46"/>
-        <source>Use existing</source>
-        <translation>Usa esistenti</translation>
+        <location filename="../client/android/router_host_editor.cc" line="55"/>
+        <source>User Name</source>
+        <translation>Потребителско име</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_host_editor.cc" line="57"/>
+        <source>Password</source>
+        <translation>Парола</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="60"/>
         <source>Credentials</source>
-        <translation>Credenziali</translation>
+        <translation>Идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="68"/>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>Запазване</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="135"/>
         <location filename="../client/android/router_host_editor.cc" line="157"/>
         <location filename="../client/android/router_host_editor.cc" line="204"/>
         <source>Failed to read data from the local database.</source>
-        <translation>Impossibile leggere i dati dal database locale.</translation>
+        <translation>Неуспешно четене на данни от локалната база данни.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="141"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
-        <translation>Le credenziali dell&apos;host sono danneggiate. Inseriscile di nuovo.</translation>
+        <translation>Идентификационните данни на хоста са повредени. Въведете ги отново.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_host_editor.cc" line="215"/>
+        <source>Enter both the user name and the password, or leave both empty.</source>
+        <translation>Въведете и потребителското име, и паролата, или оставете и двете празни.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="226"/>
         <location filename="../client/android/router_host_editor.cc" line="240"/>
         <location filename="../client/android/router_host_editor.cc" line="264"/>
         <source>Failed to save the credentials.</source>
-        <translation>Impossibile salvare le credenziali.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/router_host_editor.cc" line="215"/>
-        <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation>Inserire sia il nome utente che la password, oppure lasciare entrambi vuoti.</translation>
+        <translation>Неуспешно запазване на идентификационните данни.</translation>
     </message>
 </context>
 <context>
@@ -6667,70 +6667,70 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Previous page</source>
-        <translation>Pagina precedente</translation>
+        <translation>Предишна страница</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="56"/>
         <source>Previous</source>
-        <translation>Precedente</translation>
+        <translation>Назад</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="74"/>
         <source>Next page</source>
-        <translation>Pagina successiva</translation>
+        <translation>Следваща страница</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="77"/>
         <source>Next</source>
-        <translation>Successivo</translation>
+        <translation>Напред</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
         <source>Items per page:</source>
-        <translation>Elementi per pagina:</translation>
+        <translation>Елементи на страница:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="366"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
-        <translation>Disconnettere l&apos;host &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да прекъснете връзката с хоста &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="391"/>
         <source>Are you sure you want to disconnect all hosts?</source>
-        <translation>Disconnettere tutti gli host?</translation>
+        <translation>Наистина ли искате да прекъснете връзката с всички хостове?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="419"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
-        <translation>L&apos;eliminazione di un host comporterà l&apos;eliminazione di tutta la sua configurazione di connessione al router e la disinstallazione dell&apos;applicazione sull&apos;host. Questa operazione è irreversibile. Procedere?</translation>
+        <translation>Изтриването на хост ще доведе до изтриване на цялата му конфигурация за свързване с рутера, а приложението на хоста ще бъде деинсталирано. Тази операция е необратима. Наистина ли искате да направите това?</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="718"/>
         <source>%n host(s)</source>
         <translation>
-            <numerusform>%n host</numerusform>
-            <numerusform>%n host</numerusform>
+            <numerusform>%n хост</numerusform>
+            <numerusform>%n хоста</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="774"/>
         <source>Save File</source>
-        <translation>Salva file</translation>
+        <translation>Запазване на файл</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="774"/>
         <source>JSON files (*.json)</source>
-        <translation>File JSON (*.json)</translation>
+        <translation>JSON файлове (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="785"/>
         <source>Could not open file for writing.</source>
-        <translation>Impossibile aprire il file in scrittura.</translation>
+        <translation>Неуспешно отваряне на файла за запис.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="832"/>
         <source>Unable to write file.</source>
-        <translation>Impossibile scrivere il file.</translation>
+        <translation>Неуспешно записване на файла.</translation>
     </message>
 </context>
 <context>
@@ -6738,59 +6738,59 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="247"/>
         <source>Save File</source>
-        <translation>Salva file</translation>
+        <translation>Запазване на файл</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="247"/>
         <source>JSON files (*.json)</source>
-        <translation>File JSON (*.json)</translation>
+        <translation>JSON файлове (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="258"/>
         <source>Could not open file for writing.</source>
-        <translation>Impossibile aprire il file in scrittura.</translation>
+        <translation>Неуспешно отваряне на файла за запис.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="320"/>
         <source>Unable to write file.</source>
-        <translation>Impossibile scrivere il file.</translation>
+        <translation>Неуспешно записване на файла.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="359"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
-        <translation>Disconnettere il relay &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да прекъснете връзката с ретранслатора &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="384"/>
         <source>Are you sure you want to disconnect all relays?</source>
-        <translation>Disconnettere tutti i relay?</translation>
+        <translation>Наистина ли искате да прекъснете връзката с всички ретранслатори?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="450"/>
         <source>Disconnect</source>
-        <translation>Disconnetti</translation>
+        <translation>Прекъсване на връзката</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="452"/>
         <source>Copy Row</source>
-        <translation>Copia riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="453"/>
         <source>Copy Value</source>
-        <translation>Copia valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="462"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
-        <translation>Disconnettere il peer &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да прекъснете връзката с възела &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="602"/>
         <source>%n relay(s)</source>
         <translation>
-            <numerusform>%n relay</numerusform>
-            <numerusform>%n relay</numerusform>
+            <numerusform>%n ретранслатор</numerusform>
+            <numerusform>%n ретранслатора</numerusform>
         </translation>
     </message>
 </context>
@@ -6799,7 +6799,7 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/router_session.cc" line="163"/>
         <source>The router accepted the new password, but the record was not updated.</source>
-        <translation>Il router ha accettato la nuova password, ma il record non è stato aggiornato.</translation>
+        <translation>Рутерът прие новата парола, но записът не беше актуализиран.</translation>
     </message>
 </context>
 <context>
@@ -6808,46 +6808,46 @@ Credenziali importate: %5</translation>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="230"/>
         <source>The router is waiting for a two-factor code.</source>
-        <translation>Il router è in attesa di un codice a due fattori.</translation>
+        <translation>Рутерът очаква код за двуфакторно удостоверяване.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="231"/>
         <source>Enter Code</source>
-        <translation>Inserisci codice</translation>
+        <translation>Въвеждане на код</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="94"/>
         <source>Date and time</source>
-        <translation>Data e ora</translation>
+        <translation>Дата и час</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="99"/>
         <source>Event</source>
-        <translation>Evento</translation>
+        <translation>Събитие</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_status_widget.cc" line="200"/>
         <source>%n event(s)</source>
         <translation>
-            <numerusform>%n evento</numerusform>
-            <numerusform>%n eventi</numerusform>
+            <numerusform>%n събитие</numerusform>
+            <numerusform>%n събития</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="218"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
-        <translation>L&apos;autenticazione a due fattori è bloccata dopo troppi tentativi falliti.</translation>
+        <translation>Двуфакторното удостоверяване е блокирано след твърде много неуспешни опити.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="235"/>
         <source>Two-factor authentication has to be set up for this router.</source>
-        <translation>L&apos;autenticazione a due fattori deve essere configurata per questo router.</translation>
+        <translation>За този рутер трябва да се настрои двуфакторно удостоверяване.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="236"/>
         <source>Set Up</source>
-        <translation>Configura</translation>
+        <translation>Настройване</translation>
     </message>
 </context>
 <context>
@@ -6855,52 +6855,52 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="64"/>
         <source>Previous</source>
-        <translation>Precedente</translation>
+        <translation>Назад</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
         <source>Previous page</source>
-        <translation>Pagina precedente</translation>
+        <translation>Предишна страница</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="69"/>
         <source>Next</source>
-        <translation>Successivo</translation>
+        <translation>Напред</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="70"/>
         <source>Next page</source>
-        <translation>Pagina successiva</translation>
+        <translation>Следваща страница</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="90"/>
         <source>Items per page:</source>
-        <translation>Elementi per pagina:</translation>
+        <translation>Елементи на страница:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="211"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
-        <translation>L&apos;approvazione di un host gli concederà l&apos;accesso permanente al router. Approvare l&apos;host &quot;%1&quot;?</translation>
+        <translation>Одобряването на хост ще му предостави постоянен достъп до рутера. Наистина ли искате да одобрите хоста &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="218"/>
         <source>Approving hosts will give them permanent access to the router. Are you sure you want to approve %n hosts?</source>
         <translation>
-            <numerusform>L&apos;approvazione degli host concederà loro l&apos;accesso permanente al router. Approvare %n host?</numerusform>
-            <numerusform>L&apos;approvazione degli host concederà loro l&apos;accesso permanente al router. Approvare %n host?</numerusform>
+            <numerusform>Одобряването на хостове ще им предостави постоянен достъп до рутера. Наистина ли искате да одобрите %n хост?</numerusform>
+            <numerusform>Одобряването на хостове ще им предостави постоянен достъп до рутера. Наистина ли искате да одобрите %n хоста?</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="258"/>
         <source>Failed to approve the host.</source>
-        <translation>Impossibile approvare l&apos;host.</translation>
+        <translation>Неуспешно одобряване на хоста.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="260"/>
         <source>Failed to approve %n of the selected hosts.</source>
         <translation>
-            <numerusform>Impossibile approvare %n degli host selezionati.</numerusform>
-            <numerusform>Impossibile approvare %n degli host selezionati.</numerusform>
+            <numerusform>Неуспешно одобряване на %n от избраните хостове.</numerusform>
+            <numerusform>Неуспешно одобряване на %n от избраните хостове.</numerusform>
         </translation>
     </message>
 </context>
@@ -6909,247 +6909,247 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="14"/>
         <source>User Properties</source>
-        <translation>Proprietà Utente</translation>
+        <translation>Свойства на потребителя</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="27"/>
         <source>General</source>
-        <translation>Generale</translation>
+        <translation>Общи</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation>Nome:</translation>
+        <translation>Име:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="44"/>
         <source>Password:</source>
-        <translation>Password:</translation>
+        <translation>Парола:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="51"/>
         <source>Password (retry):</source>
-        <translation>Password (ripeti):</translation>
+        <translation>Парола (повторно):</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="58"/>
         <source>Access Level:</source>
-        <translation>Livello di accesso:</translation>
+        <translation>Ниво на достъп:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="89"/>
         <source>Disable User Account</source>
-        <translation>Disabilita Account Utente</translation>
+        <translation>Изключване на потребителския акаунт</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="99"/>
         <source>Reset two-factor authentication</source>
-        <translation>Reimposta autenticazione a due fattori</translation>
+        <translation>Нулиране на двуфакторното удостоверяване</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="107"/>
         <source>Sessions</source>
-        <translation>Sessioni</translation>
+        <translation>Сесии</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="123"/>
         <source>Signed in</source>
-        <translation>Connesso</translation>
+        <translation>Влизане</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="128"/>
         <source>Last activity</source>
-        <translation>Ultima attività</translation>
+        <translation>Последна активност</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="133"/>
         <source>Address</source>
-        <translation>Indirizzo</translation>
+        <translation>Адрес</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="156"/>
         <source>Sign out</source>
-        <translation>Disconnetti</translation>
+        <translation>Излизане</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="163"/>
         <source>Sign out all</source>
-        <translation>Disconnetti tutte le sessioni</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="340"/>
-        <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
-        <translation>La reimpostazione dell&apos;autenticazione a due fattori disconnetterà questo utente da tutte le sessioni e lo costringerà a registrarsi di nuovo al prossimo accesso. Continuare?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="395"/>
-        <source>Are you sure you want to sign this user out of this session?</source>
-        <translation>Disconnettere questo utente da questa sessione?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="420"/>
-        <source>Are you sure you want to sign this user out of all sessions?</source>
-        <translation>Disconnettere questo utente da tutte le sessioni?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="534"/>
-        <source>The passwords you entered do not match.</source>
-        <translation>Le password inserite non corrispondono.</translation>
+        <translation>Излизане от всички</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="206"/>
         <source>Failed to get list of users.</source>
-        <translation>Impossibile ottenere l&apos;elenco degli utenti.</translation>
+        <translation>Неуспешно получаване на списъка с потребители.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="236"/>
         <source>The user was deleted from another console.</source>
-        <translation>L&apos;utente è stato eliminato da un&apos;altra console.</translation>
+        <translation>Потребителят е изтрит от друга конзола.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="338"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
-        <translation>La reimpostazione dell&apos;autenticazione a due fattori disconnetterà tutte le sessioni e richiederà una nuova registrazione al prossimo accesso. Continuare?</translation>
+        <translation>Нулирането на двуфакторното удостоверяване ще доведе до излизането ви от всички сесии и ще изисква ново регистриране при следващото влизане. Да се продължи ли?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="340"/>
+        <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
+        <translation>Нулирането на двуфакторното удостоверяване ще доведе до излизането на този потребител от всички сесии и ще изисква ново регистриране при следващото влизане. Да се продължи ли?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="394"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
-        <translation>Questo è il token della sessione corrente. La sua revoca comporterà la disconnessione. Continuare?</translation>
+        <translation>Това е токенът на текущата ви сесия. Отнемането му ще прекъсне връзката ви. Да се продължи ли?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="395"/>
+        <source>Are you sure you want to sign this user out of this session?</source>
+        <translation>Наистина ли искате да прекратите тази сесия на потребителя?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="420"/>
+        <source>Are you sure you want to sign this user out of all sessions?</source>
+        <translation>Наистина ли искате да прекратите всички сесии на този потребител?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="521"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri _, -, ., @. Non può essere composto solo da cifre.</translation>
+        <translation>Потребителското име не може да бъде празно и може да съдържа само букви, цифри и знаците _, -, ., @. Не може да се състои само от цифри.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="534"/>
+        <source>The passwords you entered do not match.</source>
+        <translation>Въведените пароли не съвпадат.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="546"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
-            <numerusform>La password non deve superare %n carattere.</numerusform>
-            <numerusform>La password non deve superare %n caratteri.</numerusform>
+            <numerusform>Паролата не може да бъде по-дълга от %n знак.</numerusform>
+            <numerusform>Паролата не може да бъде по-дълга от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation>La password inserita non soddisfa i requisiti di sicurezza!</translation>
+        <translation>Въведената парола не отговаря на изискванията за защита!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="558"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="562"/>
         <source>Do you want to enter a different password?</source>
-        <translation>Vuoi inserire una password diversa?</translation>
+        <translation>Искате ли да въведете друга парола?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="565"/>
         <source>Warning</source>
-        <translation>Attenzione</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="585"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation>Errore interno sconosciuto durante la creazione o la modifica di un utente.</translation>
+        <translation>Неизвестна вътрешна грешка при създаване или промяна на потребител.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="649"/>
         <source>The user name you entered already exists.</source>
-        <translation>Il nome utente inserito esiste già.</translation>
+        <translation>Въведеното потребителско име вече съществува.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="735"/>
         <source>Double-click to change</source>
-        <translation>Doppio clic per modificare</translation>
+        <translation>Щракнете двукратно за промяна</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="791"/>
         <source>The token of your current session.</source>
-        <translation>Il token della sessione corrente.</translation>
+        <translation>Токенът на текущата ви сесия.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="824"/>
         <source>Administrator</source>
-        <translation>Amministratore</translation>
+        <translation>Администратор</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="828"/>
         <source>Manager</source>
-        <translation>Gestore</translation>
+        <translation>Мениджър</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="832"/>
         <source>Operator</source>
-        <translation>Operatore</translation>
+        <translation>Оператор</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="850"/>
         <source>Never</source>
-        <translation>Mai</translation>
+        <translation>Никога</translation>
     </message>
 </context>
 <context>
     <name>RouterUsersWidget</name>
     <message>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
+        <source>Previous page</source>
+        <translation>Предишна страница</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
+        <source>Previous</source>
+        <translation>Назад</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="77"/>
+        <source>Next page</source>
+        <translation>Следваща страница</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="80"/>
+        <source>Next</source>
+        <translation>Напред</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="91"/>
+        <source>Items per page:</source>
+        <translation>Елементи на страница:</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="230"/>
         <source>You cannot delete a built-in user.</source>
-        <translation>Non è possibile eliminare un utente integrato.</translation>
+        <translation>Не можете да изтриете вграден потребител.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="235"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation>Eliminare l&apos;utente &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да изтриете потребителя &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="293"/>
         <source>Failed to get list of users.</source>
-        <translation>Impossibile ottenere l&apos;elenco degli utenti.</translation>
+        <translation>Неуспешно получаване на списъка с потребители.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="436"/>
         <source>%n user(s)</source>
         <translation>
-            <numerusform>%n utente</numerusform>
-            <numerusform>%n utenti</numerusform>
+            <numerusform>%n потребител</numerusform>
+            <numerusform>%n потребители</numerusform>
         </translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
-        <source>Previous page</source>
-        <translation>Pagina precedente</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
-        <source>Previous</source>
-        <translation>Precedente</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="77"/>
-        <source>Next page</source>
-        <translation>Pagina successiva</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="80"/>
-        <source>Next</source>
-        <translation>Successivo</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="91"/>
-        <source>Items per page:</source>
-        <translation>Elementi per pagina:</translation>
     </message>
 </context>
 <context>
@@ -7157,121 +7157,121 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
         <source>Workspace Properties</source>
-        <translation>Proprietà dell&apos;area di lavoro</translation>
+        <translation>Свойства на работното пространство</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="27"/>
         <source>General</source>
-        <translation>Generale</translation>
+        <translation>Общи</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation>Nome:</translation>
+        <translation>Име:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="47"/>
         <source>Comment:</source>
-        <translation>Commento:</translation>
+        <translation>Коментар:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="58"/>
         <source>Access</source>
-        <translation>Accesso</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="182"/>
-        <source>Users with access</source>
-        <translation>Utenti con accesso</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="145"/>
-        <source>Grant access to the selected user</source>
-        <translation>Concedi l&apos;accesso all&apos;utente selezionato</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="158"/>
-        <source>Revoke access from the selected user</source>
-        <translation>Revoca l&apos;accesso all&apos;utente selezionato</translation>
+        <translation>Достъп</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="66"/>
         <source>Available users</source>
-        <translation>Utenti disponibili</translation>
+        <translation>Налични потребители</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="88"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="225"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="341"/>
         <source>Previous page</source>
-        <translation>Pagina precedente</translation>
+        <translation>Предишна страница</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="112"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="249"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="365"/>
         <source>Next page</source>
-        <translation>Pagina successiva</translation>
+        <translation>Следваща страница</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="145"/>
+        <source>Grant access to the selected user</source>
+        <translation>Предоставяне на достъп на избрания потребител</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="158"/>
+        <source>Revoke access from the selected user</source>
+        <translation>Отнемане на достъпа от избрания потребител</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="182"/>
+        <source>Users with access</source>
+        <translation>Потребители с достъп</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="195"/>
         <source>Hosts</source>
-        <translation>Host</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
-        <source>Hosts in workspace</source>
-        <translation>Host nell&apos;area di lavoro</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
-        <source>Move the selected host into the workspace</source>
-        <translation>Sposta l&apos;host selezionato nell&apos;area di lavoro</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
-        <source>Remove the selected host from the workspace</source>
-        <translation>Rimuovi l&apos;host selezionato dall&apos;area di lavoro</translation>
+        <translation>Хостове</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="203"/>
         <source>Unassigned hosts</source>
-        <translation>Host non assegnati</translation>
+        <translation>Неприсвоени хостове</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
+        <source>Move the selected host into the workspace</source>
+        <translation>Преместване на избрания хост в работното пространство</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
+        <source>Remove the selected host from the workspace</source>
+        <translation>Премахване на избрания хост от работното пространство</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
+        <source>Hosts in workspace</source>
+        <translation>Хостове в работното пространство</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="238"/>
         <source>Failed to get list of workspaces.</source>
-        <translation>Impossibile ottenere l&apos;elenco delle aree di lavoro.</translation>
+        <translation>Неуспешно получаване на списъка с работни пространства.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="265"/>
         <source>The workspace was deleted from another console.</source>
-        <translation>L&apos;area di lavoro è stata eliminata da un&apos;altra console.</translation>
+        <translation>Работното пространство е изтрито от друга конзола.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="306"/>
         <source>Failed to get list of users.</source>
-        <translation>Impossibile ottenere l&apos;elenco degli utenti.</translation>
+        <translation>Неуспешно получаване на списъка с потребители.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="428"/>
         <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation>L&apos;area di lavoro è stata modificata da un&apos;altra console. Gli elenchi sono in fase di aggiornamento - verificare le modifiche e salvare di nuovo.</translation>
+        <translation>Работното пространство е променено от друга конзола. Списъците се обновяват - проверете промените и запазете отново.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="534"/>
         <source>Are you sure you want to remove the host from the workspace?</source>
-        <translation>Rimuovere l&apos;host dall&apos;area di lavoro?</translation>
+        <translation>Наистина ли искате да премахнете хоста от работното пространство?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="917"/>
         <source>Workspace name cannot be empty.</source>
-        <translation>Il nome dell&apos;area di lavoro non può essere vuoto.</translation>
+        <translation>Името на работното пространство не може да бъде празно.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="928"/>
         <source>A workspace with the specified name already exists.</source>
-        <translation>Un&apos;area di lavoro con il nome specificato esiste già.</translation>
+        <translation>Вече съществува работно пространство с посоченото име.</translation>
     </message>
 </context>
 <context>
@@ -7279,17 +7279,17 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/android/routers_widget.cc" line="127"/>
         <source>No routers added</source>
-        <translation>Nessun router aggiunto</translation>
+        <translation>Няма добавени рутери</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="206"/>
         <source>Add Router</source>
-        <translation>Aggiungi router</translation>
+        <translation>Добавяне на рутер</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="243"/>
         <source>Edit Router</source>
-        <translation>Modifica router</translation>
+        <translation>Редактиране на рутер</translation>
     </message>
 </context>
 <context>
@@ -7297,12 +7297,12 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/search_dialog.ui" line="14"/>
         <source>Search</source>
-        <translation>Cerca</translation>
+        <translation>Търсене</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_dialog.ui" line="20"/>
         <source>Search...</source>
-        <translation>Cerca...</translation>
+        <translation>Търсене...</translation>
     </message>
 </context>
 <context>
@@ -7310,63 +7310,63 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
         <source>Address / ID</source>
-        <translation>Indirizzo / ID</translation>
+        <translation>Адрес / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
         <source>Group</source>
-        <translation>Gruppo</translation>
+        <translation>Група</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="192"/>
         <source>Comment</source>
-        <translation>Commento</translation>
+        <translation>Коментар</translation>
     </message>
 </context>
 <context>
     <name>SearchWidget</name>
     <message>
+        <location filename="../client/android/search_widget.cc" line="181"/>
+        <source>Nothing found</source>
+        <translation>Няма намерени резултати</translation>
+    </message>
+    <message>
+        <location filename="../client/android/search_widget.cc" line="240"/>
+        <source>%1 of %2</source>
+        <translation>%1 от %2</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous</source>
-        <translation>Precedente</translation>
+        <translation>Назад</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="297"/>
         <source>Previous page</source>
-        <translation>Pagina precedente</translation>
+        <translation>Предишна страница</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="304"/>
         <source>Next</source>
-        <translation>Successivo</translation>
+        <translation>Напред</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="305"/>
         <source>Next page</source>
-        <translation>Pagina successiva</translation>
+        <translation>Следваща страница</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="808"/>
         <source>%n result(s)</source>
         <translation>
-            <numerusform>%n risultato</numerusform>
-            <numerusform>%n risultati</numerusform>
+            <numerusform>%n резултат</numerusform>
+            <numerusform>%n резултата</numerusform>
         </translation>
-    </message>
-    <message>
-        <location filename="../client/android/search_widget.cc" line="181"/>
-        <source>Nothing found</source>
-        <translation>Nessun risultato</translation>
-    </message>
-    <message>
-        <location filename="../client/android/search_widget.cc" line="240"/>
-        <source>%1 of %2</source>
-        <translation>%1 di %2</translation>
     </message>
 </context>
 <context>
@@ -7374,47 +7374,47 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="14"/>
         <source>Security Log</source>
-        <translation>Registro di sicurezza</translation>
+        <translation>Регистрационен файл на защитата</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="34"/>
         <source>File:</source>
-        <translation>File:</translation>
+        <translation>Файл:</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="60"/>
         <source>Refresh</source>
-        <translation>Aggiorna</translation>
+        <translation>Обновяване</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="86"/>
         <source>Search...</source>
-        <translation>Cerca...</translation>
+        <translation>Търсене...</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="100"/>
         <source>Events:</source>
-        <translation>Eventi:</translation>
+        <translation>Събития:</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="241"/>
         <source>Open Directory</source>
-        <translation>Apri directory</translation>
+        <translation>Отваряне на папката</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="352"/>
         <source>Time</source>
-        <translation>Ora</translation>
+        <translation>Час</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="353"/>
         <source>Event</source>
-        <translation>Evento</translation>
+        <translation>Събитие</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="354"/>
         <source>Details</source>
-        <translation>Dettagli</translation>
+        <translation>Подробности</translation>
     </message>
 </context>
 <context>
@@ -7422,12 +7422,12 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="38"/>
         <source>Monitor %1 (primary)</source>
-        <translation>Monitor %1 (principale)</translation>
+        <translation>Монитор %1 (основен)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
         <source>Monitor %1</source>
-        <translation>Monitor %1</translation>
+        <translation>Монитор %1</translation>
     </message>
 </context>
 <context>
@@ -7435,68 +7435,68 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="192"/>
         <source>Continue Pending</source>
-        <translation>Continua in  Sospeso</translation>
+        <translation>Възобновяване</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="194"/>
         <source>Pause Pending</source>
-        <translation>Pausa in Sospeso</translation>
+        <translation>Поставяне на пауза</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="196"/>
         <source>Paused</source>
-        <translation>In Pausa</translation>
+        <translation>Поставено на пауза</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="198"/>
         <source>Running</source>
-        <translation>Attivo</translation>
+        <translation>Изпълнява се</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="200"/>
         <source>Start Pending</source>
-        <translation>Avvio in Sospeso</translation>
+        <translation>Стартиране</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="202"/>
         <source>Stop Pending</source>
-        <translation>Arresto in Sospeso</translation>
+        <translation>Спиране</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="204"/>
         <source>Stopped</source>
-        <translation>Arrestato</translation>
+        <translation>Спряно</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="206"/>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="226"/>
         <source>Unknown</source>
-        <translation>Sconosciuto</translation>
+        <translation>Неизвестно</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="216"/>
         <source>Auto Start</source>
-        <translation>Avvio Automatico</translation>
+        <translation>Автоматично</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="218"/>
         <source>Demand Start</source>
-        <translation>Avvio su Richiesta</translation>
+        <translation>Ръчно</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="220"/>
         <source>Disabled</source>
-        <translation>Disabilitato</translation>
+        <translation>Изключено</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="222"/>
         <source>Boot Start</source>
-        <translation>Avvio Accensione</translation>
+        <translation>При зареждане</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="224"/>
         <source>System Start</source>
-        <translation>Avvio Sistema</translation>
+        <translation>При стартиране на системата</translation>
     </message>
 </context>
 <context>
@@ -7504,27 +7504,27 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/desktop/session_type.cc" line="33"/>
         <source>Desktop</source>
-        <translation>Desktop</translation>
+        <translation>Работен плот</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="36"/>
         <source>File Transfer</source>
-        <translation>Trasferimento File</translation>
+        <translation>Прехвърляне на файлове</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="39"/>
         <source>System Information</source>
-        <translation>Imformazioni di Sistema</translation>
+        <translation>Системна информация</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="42"/>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Чат</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="45"/>
         <source>Terminal</source>
-        <translation>Terminale</translation>
+        <translation>Терминал</translation>
     </message>
 </context>
 <context>
@@ -7532,479 +7532,479 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="126"/>
         <source>Interface</source>
-        <translation>Interfaccia</translation>
+        <translation>Интерфейс</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="132"/>
         <source>Language:</source>
-        <translation>Lingua:</translation>
+        <translation>Език:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="146"/>
         <source>Theme:</source>
-        <translation>Tema:</translation>
+        <translation>Тема:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="160"/>
         <source>Display name when connected:</source>
-        <translation>Nome visualizzato durante la connessione:</translation>
+        <translation>Показвано име при свързване:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="170"/>
         <source>Enter a name or leave the field empty</source>
-        <translation>Inserisci un nome o lascia il campo vuoto</translation>
+        <translation>Въведете име или оставете полето празно</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="180"/>
         <source>Backup</source>
-        <translation>Backup</translation>
+        <translation>Резервни копия</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="186"/>
         <source>Create backups on application startup</source>
-        <translation>Crea backup all&apos;avvio dell&apos;applicazione</translation>
+        <translation>Създаване на резервни копия при стартиране на приложението</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="193"/>
         <source>Directory:</source>
-        <translation>Directory:</translation>
+        <translation>Папка:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="203"/>
         <source>Browse...</source>
-        <translation>Sfoglia...</translation>
+        <translation>Преглед...</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="210"/>
         <source>Keep backups for:</source>
-        <translation>Conserva i backup per:</translation>
+        <translation>Срок на съхранение на резервните копия:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="227"/>
         <source>UDP Connections</source>
-        <translation>Connessioni UDP</translation>
+        <translation>UDP връзки</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="233"/>
         <source>Allow direct connections</source>
-        <translation>Consenti connessioni dirette</translation>
+        <translation>Разрешаване на директни връзки</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="240"/>
         <source>Allow UDP Hole Punching</source>
-        <translation>Consenti UDP Hole Punching</translation>
+        <translation>Разрешаване на UDP Hole Punching</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="247"/>
         <source>Allow PCP protocol</source>
-        <translation>Consenti protocollo PCP</translation>
+        <translation>Разрешаване на протокола PCP</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="254"/>
         <source>Allow NAT-PMP protocol</source>
-        <translation>Consenti protocollo NAT-PMP</translation>
+        <translation>Разрешаване на протокола NAT-PMP</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="261"/>
         <source>Allow UPnP protocol</source>
-        <translation>Consenti protocollo UPnP</translation>
+        <translation>Разрешаване на протокола UPnP</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="271"/>
         <source>Security</source>
-        <translation>Sicurezza</translation>
+        <translation>Защита</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="277"/>
         <source>Lock after inactivity:</source>
-        <translation>Blocca dopo inattività:</translation>
+        <translation>Заключване след бездействие:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="291"/>
         <source>Unlock automatically on startup</source>
-        <translation>Sblocca automaticamente all&apos;avvio</translation>
+        <translation>Автоматично отключване при стартиране</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="298"/>
         <source>Change Master Password...</source>
-        <translation>Cambia password principale...</translation>
+        <translation>Промяна на главната парола...</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="369"/>
         <source>Features</source>
-        <translation>Caratteristiche</translation>
+        <translation>Възможности</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="375"/>
         <source>Enable audio</source>
-        <translation>Abilita audio</translation>
+        <translation>Включване на звука</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="382"/>
         <source>Enable clipboard</source>
-        <translation>Abilita appunti</translation>
+        <translation>Включване на клипборда</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="389"/>
         <source>Show shape of remote cursor</source>
-        <translation>Mostra la forma del cursore remoto</translation>
+        <translation>Показване на формата на отдалечения курсор</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="396"/>
         <source>Show position of remote cursor</source>
-        <translation>Mostra la posizione del cursore remoto</translation>
+        <translation>Показване на позицията на отдалечения курсор</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="403"/>
         <source>Disable desktop effects</source>
-        <translation>Disabilita effetti del desktop</translation>
+        <translation>Изключване на ефектите на работния плот</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="410"/>
         <source>Disable desktop wallpaper</source>
-        <translation>Disabilita sfondo del desktop</translation>
+        <translation>Изключване на тапета на работния плот</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="417"/>
         <source>Lock computer at disconnect</source>
-        <translation>Blocca il computer alla disconnessione</translation>
+        <translation>Заключване на компютъра при прекъсване на връзката</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="424"/>
         <source>Block remote input</source>
-        <translation>Blocca input remoto</translation>
+        <translation>Блокиране на отдалечения вход</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="431"/>
         <source>Send key combinations</source>
-        <translation>Invia combinazioni di tasti</translation>
+        <translation>Изпращане на клавишни комбинации</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="438"/>
         <source>Allow hardware video encoding</source>
-        <translation>Consenti codifica video hardware</translation>
+        <translation>Разрешаване на хардуерно кодиране на видео</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="445"/>
         <source>Allow hardware video decoding</source>
-        <translation>Consenti decodifica video hardware</translation>
+        <translation>Разрешаване на хардуерно декодиране на видео</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="461"/>
         <source>Screen</source>
-        <translation>Schermo</translation>
+        <translation>Екран</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="469"/>
         <source>Preferred resolution:</source>
-        <translation>Risoluzione preferita:</translation>
+        <translation>Предпочитана разделителна способност:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="500"/>
         <source>Recording</source>
-        <translation>Registrazione</translation>
+        <translation>Запис</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="506"/>
         <source>Automatically start recording sessions on connection</source>
-        <translation>Avvia automaticamente la registrazione delle sessioni alla connessione</translation>
+        <translation>Автоматично започване на записа на сесиите при свързване</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="515"/>
         <source>Write path:</source>
-        <translation>Percorso di registrazione:</translation>
+        <translation>Път за запис:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="611"/>
         <location filename="../client/desktop/settings_tab.cc" line="135"/>
         <source>Update</source>
-        <translation>Aggiornamento</translation>
+        <translation>Актуализиране</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="617"/>
         <source>Check for updates on startup</source>
-        <translation>Controlla aggiornamenti all&apos;avvio</translation>
+        <translation>Проверка за актуализации при стартиране</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="626"/>
         <source>Update channel:</source>
-        <translation>Canale di aggiornamento:</translation>
+        <translation>Канал за актуализации:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="640"/>
         <source>Update server:</source>
-        <translation>Server di aggiornamento:</translation>
+        <translation>Сървър за актуализации:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="654"/>
         <source>Public key:</source>
-        <translation>Chiave pubblica:</translation>
+        <translation>Публичен ключ:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="672"/>
         <source>Change Update Server...</source>
-        <translation>Cambia server di aggiornamento...</translation>
+        <translation>Промяна на сървъра за актуализации...</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="692"/>
         <source>Check for updates</source>
-        <translation>Controlla aggiornamenti</translation>
+        <translation>Проверка за актуализации</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="133"/>
         <source>General</source>
-        <translation>Generale</translation>
+        <translation>Общи</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="134"/>
         <source>Desktop</source>
-        <translation>Desktop</translation>
+        <translation>Работен плот</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="187"/>
         <source>1 week</source>
-        <translation>1 settimana</translation>
+        <translation>1 седмица</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="188"/>
         <source>2 weeks</source>
-        <translation>2 settimane</translation>
+        <translation>2 седмици</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="189"/>
         <source>1 month</source>
-        <translation>1 mese</translation>
+        <translation>1 месец</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="190"/>
         <source>6 months</source>
-        <translation>6 mesi</translation>
+        <translation>6 месеца</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="191"/>
         <source>1 year</source>
-        <translation>1 anno</translation>
+        <translation>1 година</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="195"/>
         <source>Do not lock</source>
-        <translation>Non bloccare</translation>
+        <translation>Без заключване</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="196"/>
         <source>1 minute</source>
-        <translation>1 minuto</translation>
+        <translation>1 минута</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="197"/>
         <source>5 minutes</source>
-        <translation>5 minuti</translation>
+        <translation>5 минути</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="198"/>
         <source>10 minutes</source>
-        <translation>10 minuti</translation>
+        <translation>10 минути</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="199"/>
         <source>30 minutes</source>
-        <translation>30 minuti</translation>
+        <translation>30 минути</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="200"/>
         <source>1 hour</source>
-        <translation>1 ora</translation>
+        <translation>1 час</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="236"/>
         <source>None</source>
-        <translation>Nessuno</translation>
+        <translation>Няма</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="261"/>
         <source>Stable</source>
-        <translation>Stabile</translation>
+        <translation>Стабилен</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="262"/>
         <source>Beta</source>
-        <translation>Beta</translation>
+        <translation>Бета</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="263"/>
         <source>Alpha</source>
-        <translation>Alpha</translation>
+        <translation>Алфа</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="389"/>
         <source>The new language will be applied after the application is restarted.</source>
-        <translation>La nuova lingua verrà applicata dopo il riavvio dell&apos;applicazione.</translation>
+        <translation>Новият език ще бъде приложен след рестартиране на приложението.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="438"/>
         <location filename="../client/desktop/settings_tab.cc" line="537"/>
         <source>Choose path</source>
-        <translation>Scegli percorso</translation>
+        <translation>Избор на път</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="557"/>
         <source>Change Master Password</source>
-        <translation>Cambia password principale</translation>
+        <translation>Промяна на главната парола</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="559"/>
         <source>Enter your current password and choose a new one.</source>
-        <translation>Inserisci la tua password attuale e scegline una nuova.</translation>
+        <translation>Въведете текущата си парола и изберете нова.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/settings_tab.cc" line="567"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="574"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation>La password inserita non soddisfa i requisiti di sicurezza!</translation>
+        <translation>Въведената парола не отговаря на изискванията за защита!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/settings_tab.cc" line="575"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="578"/>
         <source>Do you want to enter a different password?</source>
-        <translation>Vuoi inserire una password diversa?</translation>
+        <translation>Искате ли да въведете друга парола?</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="591"/>
         <source>Invalid current password.</source>
-        <translation>La password attuale non è valida.</translation>
+        <translation>Невалидна текуща парола.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="595"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
-        <translation>Alcuni record del database sono danneggiati. Correggili o eliminali e riprova.</translation>
+        <translation>Някои записи в базата данни са повредени. Поправете ги или ги изтрийте и опитайте отново.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="599"/>
         <source>Unable to change the password.</source>
-        <translation>Impossibile modificare la password.</translation>
+        <translation>Неуспешна промяна на паролата.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="722"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
-        <translation>La chiave del database verrà memorizzata su questo computer. Qualsiasi programma in esecuzione con il tuo account potrà leggerla, anche quando l&apos;applicazione non è in esecuzione.</translation>
+        <translation>Ключът на базата данни ще се съхранява на този компютър. Всяка програма, изпълнявана под вашия акаунт, ще може да го прочете, дори когато приложението не работи.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="725"/>
         <source>Do you want to continue?</source>
-        <translation>Vuoi continuare?</translation>
+        <translation>Искате ли да продължите?</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="736"/>
         <source>Unlock Automatically</source>
-        <translation>Sblocco automatico</translation>
+        <translation>Автоматично отключване</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="738"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
-        <translation>Inserisci la password principale per sbloccare l&apos;applicazione automaticamente all&apos;avvio.</translation>
+        <translation>Въведете главната парола, за да се отключва приложението автоматично при стартиране.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="748"/>
         <source>Invalid master password.</source>
-        <translation>Password principale non valida.</translation>
+        <translation>Невалидна главна парола.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="752"/>
         <source>Unable to unlock the database.</source>
-        <translation>Impossibile sbloccare il database.</translation>
+        <translation>Неуспешно отключване на базата данни.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="766"/>
         <source>Unable to turn on the automatic unlock.</source>
-        <translation>Impossibile attivare lo sblocco automatico.</translation>
+        <translation>Неуспешно включване на автоматичното отключване.</translation>
     </message>
 </context>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/settings_util.cc" line="284"/>
-        <source>The configuration was successfully imported.</source>
-        <translation>La configurazione è stata importata con successo.</translation>
-    </message>
-    <message>
-        <location filename="../host/settings_util.cc" line="333"/>
-        <source>The configuration was successfully exported.</source>
-        <translation>La configurazione è stata esportata con successo.</translation>
-    </message>
-    <message>
-        <location filename="../host/settings_util.cc" line="343"/>
-        <source>Warning</source>
-        <translation>Attenzione</translation>
+        <location filename="../host/settings_util.cc" line="241"/>
+        <source>Source settings file does not exist.</source>
+        <translation>Изходният файл с настройки не съществува.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="250"/>
         <source>Unable to open the source file.</source>
-        <translation>Impossibile aprire il file di origine.</translation>
+        <translation>Неуспешно отваряне на изходния файл.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="262"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation>Lettura file origine fallita: il file è danneggiato o in un formato sconosciuto.</translation>
+        <translation>Неуспешно четене на изходния файл: файлът е повреден или е в неизвестен формат.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="279"/>
         <source>Unable to write the secure database.</source>
-        <translation>Impossibile scrivere il database sicuro.</translation>
+        <translation>Неуспешно записване на защитената база данни.</translation>
+    </message>
+    <message>
+        <location filename="../host/settings_util.cc" line="284"/>
+        <source>The configuration was successfully imported.</source>
+        <translation>Конфигурацията е импортирана успешно.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="299"/>
         <source>Unable to read the secure database.</source>
-        <translation>Impossibile leggere il database sicuro.</translation>
+        <translation>Неуспешно четене на защитената база данни.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="320"/>
         <source>Unable to open the target file.</source>
-        <translation>Impossibile aprire il file di destinazione.</translation>
+        <translation>Неуспешно отваряне на целевия файл.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="328"/>
         <source>Unable to write the target file.</source>
-        <translation>Scrittura sul file di destinazione fallita.</translation>
+        <translation>Неуспешно записване на целевия файл.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="344"/>
-        <source>Continue</source>
-        <translation>Continua</translation>
+        <location filename="../host/settings_util.cc" line="333"/>
+        <source>The configuration was successfully exported.</source>
+        <translation>Конфигурацията е експортирана успешно.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="356"/>
-        <source>Error</source>
-        <translation>Errore</translation>
-    </message>
-    <message>
-        <location filename="../host/settings_util.cc" line="367"/>
-        <source>Aspia</source>
-        <translation>Aspia</translation>
-    </message>
-    <message>
-        <location filename="../host/settings_util.cc" line="241"/>
-        <source>Source settings file does not exist.</source>
-        <translation>File impostazioni di origine non esiste.</translation>
+        <location filename="../host/settings_util.cc" line="343"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="344"/>
         <location filename="../host/settings_util.cc" line="346"/>
         <source>The existing settings will be overwritten. Continue?</source>
-        <translation>Le impostazioni attive saranno sovrascritte. Continuo?</translation>
+        <translation>Съществуващите настройки ще бъдат презаписани. Да се продължи ли?</translation>
+    </message>
+    <message>
+        <location filename="../host/settings_util.cc" line="344"/>
+        <source>Continue</source>
+        <translation>Продължаване</translation>
+    </message>
+    <message>
+        <location filename="../host/settings_util.cc" line="356"/>
+        <source>Error</source>
+        <translation>Грешка</translation>
+    </message>
+    <message>
+        <location filename="../host/settings_util.cc" line="367"/>
+        <source>Aspia</source>
+        <translation>Aspia</translation>
     </message>
 </context>
 <context>
@@ -8013,307 +8013,307 @@ Credenziali importate: %5</translation>
         <location filename="../client/android/settings_widget.cc" line="166"/>
         <location filename="../host/android/settings_widget.cc" line="203"/>
         <source>Update</source>
-        <translation>Aggiornamento</translation>
+        <translation>Актуализиране</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="189"/>
         <source>Credentials</source>
-        <translation>Credenziali</translation>
+        <translation>Идентификационни данни</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="197"/>
         <location filename="../host/android/settings_widget.cc" line="170"/>
         <source>About</source>
-        <translation>Informazioni</translation>
+        <translation>Относно</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="261"/>
         <location filename="../host/android/settings_widget.cc" line="262"/>
         <source>Interface</source>
-        <translation>Interfaccia</translation>
+        <translation>Интерфейс</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="264"/>
         <location filename="../host/android/settings_widget.cc" line="267"/>
         <source>Theme</source>
-        <translation>Tema</translation>
+        <translation>Тема</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="277"/>
         <source>Display name when connected</source>
-        <translation>Nome visualizzato durante la connessione</translation>
+        <translation>Показвано име при свързване</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="289"/>
         <location filename="../host/android/settings_widget.cc" line="283"/>
         <source>Security</source>
-        <translation>Sicurezza</translation>
+        <translation>Защита</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="291"/>
         <source>Change Master Password</source>
-        <translation>Cambia password principale</translation>
+        <translation>Промяна на главната парола</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="303"/>
         <source>Unlock with biometrics</source>
-        <translation>Sblocca con la biometria</translation>
+        <translation>Отключване с биометрия</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="328"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
-        <translation>Configura un&apos;impronta digitale nelle impostazioni di sistema per usare questa funzione.</translation>
+        <translation>Настройте пръстов отпечатък в системните настройки, за да използвате тази функция.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="330"/>
         <source>Biometrics are not available on this device.</source>
-        <translation>La biometria non è disponibile su questo dispositivo.</translation>
+        <translation>Биометрията не е налична на това устройство.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="341"/>
         <source>UDP Connections</source>
-        <translation>Connessioni UDP</translation>
+        <translation>UDP връзки</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="355"/>
         <source>Allow direct connections</source>
-        <translation>Consenti connessioni dirette</translation>
+        <translation>Разрешаване на директни връзки</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="356"/>
         <source>Allow UDP Hole Punching</source>
-        <translation>Consenti UDP Hole Punching</translation>
+        <translation>Разрешаване на UDP Hole Punching</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="357"/>
         <source>Allow PCP protocol</source>
-        <translation>Consenti protocollo PCP</translation>
+        <translation>Разрешаване на протокола PCP</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="358"/>
         <source>Allow NAT-PMP protocol</source>
-        <translation>Consenti protocollo NAT-PMP</translation>
+        <translation>Разрешаване на протокола NAT-PMP</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="359"/>
         <source>Allow UPnP protocol</source>
-        <translation>Consenti protocollo UPnP</translation>
+        <translation>Разрешаване на протокола UPnP</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="365"/>
         <source>Remote Desktop</source>
-        <translation>Desktop remoto</translation>
+        <translation>Отдалечен работен плот</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="367"/>
         <source>Enable audio</source>
-        <translation>Abilita audio</translation>
+        <translation>Включване на звука</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="372"/>
         <source>Enable clipboard</source>
-        <translation>Abilita appunti</translation>
+        <translation>Включване на клипборда</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="377"/>
         <source>Show shape of remote cursor</source>
-        <translation>Mostra la forma del cursore remoto</translation>
+        <translation>Показване на формата на отдалечения курсор</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="383"/>
         <source>Show position of remote cursor</source>
-        <translation>Mostra la posizione del cursore remoto</translation>
+        <translation>Показване на позицията на отдалечения курсор</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="389"/>
         <source>Disable desktop effects</source>
-        <translation>Disabilita effetti del desktop</translation>
+        <translation>Изключване на ефектите на работния плот</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="395"/>
         <source>Disable desktop wallpaper</source>
-        <translation>Disabilita sfondo del desktop</translation>
+        <translation>Изключване на тапета на работния плот</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="401"/>
         <source>Lock computer at disconnect</source>
-        <translation>Blocca il computer alla disconnessione</translation>
+        <translation>Заключване на компютъра при прекъсване на връзката</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="407"/>
         <source>Block remote input</source>
-        <translation>Blocca input remoto</translation>
+        <translation>Блокиране на отдалечения вход</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="418"/>
         <location filename="../host/android/settings_widget.cc" line="438"/>
         <source>Updates</source>
-        <translation>Aggiornamenti</translation>
+        <translation>Актуализации</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="422"/>
         <source>Check for updates on startup</source>
-        <translation>Controlla aggiornamenti all&apos;avvio</translation>
+        <translation>Проверка за актуализации при стартиране</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="429"/>
         <location filename="../host/android/settings_widget.cc" line="441"/>
         <source>Update channel</source>
-        <translation>Canale di aggiornamento</translation>
+        <translation>Канал за актуализации</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="430"/>
         <location filename="../host/android/settings_widget.cc" line="442"/>
         <source>Stable</source>
-        <translation>Stabile</translation>
+        <translation>Стабилен</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="431"/>
         <location filename="../host/android/settings_widget.cc" line="443"/>
         <source>Beta</source>
-        <translation>Beta</translation>
+        <translation>Бета</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="432"/>
         <location filename="../host/android/settings_widget.cc" line="444"/>
         <source>Alpha</source>
-        <translation>Alpha</translation>
+        <translation>Алфа</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="443"/>
         <location filename="../host/android/settings_widget.cc" line="458"/>
         <source>Update server</source>
-        <translation>Server di aggiornamento</translation>
+        <translation>Сървър за актуализации</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="448"/>
         <location filename="../host/android/settings_widget.cc" line="463"/>
         <source>Public key</source>
-        <translation>Chiave pubblica</translation>
+        <translation>Публичен ключ</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="454"/>
         <location filename="../host/android/settings_widget.cc" line="469"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
-        <translation>Se il server di aggiornamento non è specificato, viene utilizzato quello predefinito. Se la chiave pubblica non è specificata, viene utilizzata quella integrata.</translation>
+        <translation>Ако не е посочен сървър за актуализации, се използва сървърът по подразбиране. Ако не е посочен публичен ключ, се използва вграденият ключ.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="508"/>
         <location filename="../host/android/settings_widget.cc" line="523"/>
         <source>Check for updates</source>
-        <translation>Controlla aggiornamenti</translation>
+        <translation>Проверка за актуализации</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="532"/>
         <source>Enable biometric unlock</source>
-        <translation>Abilita sblocco biometrico</translation>
+        <translation>Включване на отключването с биометрия</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="533"/>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Отказ</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="179"/>
         <source>Users</source>
-        <translation>Utenti</translation>
+        <translation>Потребители</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="188"/>
         <source>Edit User</source>
-        <translation>Modifica utente</translation>
+        <translation>Редактиране на потребител</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="188"/>
         <source>Add User</source>
-        <translation>Aggiungi utente</translation>
+        <translation>Добавяне на потребител</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="285"/>
         <source>Background mode</source>
-        <translation>Modalità in background</translation>
+        <translation>Фонов режим</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="297"/>
         <source>The host stays connected to the router while the application is not on the screen, so it can be reached at any time.</source>
-        <translation>L&apos;host resta connesso al router quando l&apos;applicazione non è sullo schermo, quindi è possibile connettersi in qualsiasi momento.</translation>
+        <translation>Хостът остава свързан с рутера, докато приложението не е на екрана, така че е достъпен по всяко време.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="302"/>
         <source>Confirm screen capture automatically</source>
-        <translation>Conferma automaticamente l&apos;acquisizione dello schermo</translation>
+        <translation>Автоматично потвърждаване на заснемането на екрана</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="313"/>
         <source>The screen capture request is confirmed automatically. The system window briefly appears on the screen.</source>
-        <translation>La richiesta di acquisizione dello schermo viene confermata automaticamente. La finestra di sistema appare brevemente sullo schermo.</translation>
+        <translation>Заявката за заснемане на екрана се потвърждава автоматично. Системният прозорец се появява за кратко на екрана.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="318"/>
         <source>Manage users</source>
-        <translation>Gestisci utenti</translation>
+        <translation>Управление на потребителите</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="326"/>
         <source>Change password</source>
-        <translation>Cambia password</translation>
+        <translation>Промяна на паролата</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="330"/>
         <source>Disable password protection</source>
-        <translation>Disabilita protezione con password</translation>
+        <translation>Изключване на защитата с парола</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="339"/>
         <source>Enable password protection</source>
-        <translation>Abilita protezione con password</translation>
+        <translation>Включване на защитата с парола</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="354"/>
         <source>Router</source>
-        <translation>Router</translation>
+        <translation>Рутер</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="359"/>
         <source>Enable the use of a router</source>
-        <translation>Abilita l&apos;utilizzo di un router</translation>
+        <translation>Включване на използването на рутер</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="364"/>
         <source>Address</source>
-        <translation>Indirizzo</translation>
+        <translation>Адрес</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="370"/>
         <source>Public Key</source>
-        <translation>Chiave pubblica</translation>
+        <translation>Публичен ключ</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="375"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>E&apos; necessario un router per connettersi ad un computer in assenza di connessione diretta (NAT). Aspia non fornisce un router pubblico, ma è possibile installarne uno proprio. Potete scaricare il router presso il &lt;a href=&quot;https://aspia.org&quot;&gt;sito ufficiale&lt;/a&gt;.</translation>
+        <translation>Необходим е рутер за свързване с компютър, когато няма директна връзка (заобикаляне на NAT). Aspia не предоставя публичен рутер, но можете да инсталирате свой собствен. Можете да изтеглите рутера от &lt;a href=&quot;https://aspia.org&quot;&gt;официалния уебсайт&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="537"/>
         <location filename="../host/android/settings_widget.cc" line="558"/>
         <source>Error</source>
-        <translation>Errore</translation>
+        <translation>Грешка</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="537"/>
         <location filename="../host/android/settings_widget.cc" line="558"/>
         <source>An error occurred while processing the password.</source>
-        <translation>Si è verificato un errore durante l&apos;elaborazione della password.</translation>
+        <translation>Възникна грешка при обработка на паролата.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="580"/>
         <source>Import</source>
-        <translation>Importa</translation>
+        <translation>Импортиране</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="580"/>
         <source>JSON files (*.json)</source>
-        <translation>File JSON (*.json)</translation>
+        <translation>JSON файлове (*.json)</translation>
     </message>
 </context>
 <context>
@@ -8322,85 +8322,109 @@ Credenziali importate: %5</translation>
         <location filename="../client/desktop/management/search_widget.cc" line="116"/>
         <location filename="../client/desktop/management/sidebar.cc" line="154"/>
         <source>Local</source>
-        <translation>Locale</translation>
+        <translation>Локални</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="179"/>
         <location filename="../client/desktop/management/sidebar.cc" line="240"/>
         <location filename="../client/desktop/management/sidebar.cc" line="292"/>
         <source>Failed to read data. The list may be out of date.</source>
-        <translation>Impossibile leggere i dati. L&apos;elenco potrebbe non essere aggiornato.</translation>
+        <translation>Неуспешно четене на данните. Списъкът може да не е актуален.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="598"/>
         <source>Change Password</source>
-        <translation>Cambia Password</translation>
+        <translation>Промяна на паролата</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/sidebar.cc" line="606"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/sidebar.cc" line="607"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
-            <numerusform>La password non deve superare %n carattere.</numerusform>
-            <numerusform>La password non deve superare %n caratteri.</numerusform>
+            <numerusform>Паролата не може да бъде по-дълга от %n знак.</numerusform>
+            <numerusform>Паролата не може да бъде по-дълга от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="615"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation>La password inserita non soddisfa i requisiti di sicurezza!</translation>
+        <translation>Въведената парола не отговаря на изискванията за защита!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/sidebar.cc" line="616"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="619"/>
         <source>Do you want to enter a different password?</source>
-        <translation>Vuoi inserire una password diversa?</translation>
+        <translation>Искате ли да въведете друга парола?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="642"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
-        <translation>Modifica della password in corso. In attesa che la sessione effettui nuovamente l&apos;accesso...</translation>
+        <translation>Промяна на паролата. Изчакване на повторното влизане на сесията...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="840"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
-        <translation>Eliminare il gruppo &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да изтриете групата &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="853"/>
         <source>Unable to remove group</source>
-        <translation>Impossibile rimuovere il gruppo</translation>
+        <translation>Неуспешно изтриване на групата</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="918"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
-        <translation>Eliminare il router &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да изтриете рутера &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/sidebar.cc" line="1486"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1708"/>
+        <source>Failed to move the group.</source>
+        <translation>Неуспешно преместване на групата.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1496"/>
         <source>A group with this name already exists in the selected parent group.</source>
-        <translation>Un gruppo con questo nome esiste già nel gruppo padre selezionato.</translation>
+        <translation>Група с това име вече съществува в избраната родителска група.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/sidebar.cc" line="1564"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1810"/>
+        <source>Failed to move the host to the selected group.</source>
+        <translation>Неуспешно преместване на хоста в избраната група.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/sidebar.cc" line="1565"/>
+        <source>Failed to move the hosts to the selected group.</source>
+        <translation>Неуспешно преместване на хостовете в избраната група.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/sidebar.cc" line="1602"/>
+        <source>A host with this name already exists in the selected group.</source>
+        <translation>Хост с това име вече съществува в избраната група.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/sidebar.cc" line="1603"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
-            <numerusform>%n degli host selezionati non è stato spostato perché nel gruppo selezionato esiste già un host con lo stesso nome.</numerusform>
-            <numerusform>%n degli host selezionati non sono stati spostati perché nel gruppo selezionato esistono già host con gli stessi nomi.</numerusform>
+            <numerusform>%n от избраните хостове не беше преместен, тъй като в избраната група вече съществуват хостове със същите имена.</numerusform>
+            <numerusform>%n от избраните хостове не бяха преместени, тъй като в избраната група вече съществуват хостове със същите имена.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -8408,33 +8432,9 @@ Credenziali importate: %5</translation>
         <location filename="../client/desktop/management/sidebar.cc" line="1811"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
-            <numerusform>Impossibile spostare %n degli host selezionati.</numerusform>
-            <numerusform>Impossibile spostare %n degli host selezionati.</numerusform>
+            <numerusform>Неуспешно преместване на %n от избраните хостове.</numerusform>
+            <numerusform>Неуспешно преместване на %n от избраните хостове.</numerusform>
         </translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1486"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1708"/>
-        <source>Failed to move the group.</source>
-        <translation>Impossibile spostare il gruppo.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1565"/>
-        <source>Failed to move the hosts to the selected group.</source>
-        <translation>Impossibile spostare gli host nel gruppo selezionato.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1602"/>
-        <source>A host with this name already exists in the selected group.</source>
-        <translation>Un host con questo nome esiste già nel gruppo selezionato.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1564"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1810"/>
-        <source>Failed to move the host to the selected group.</source>
-        <translation>Impossibile spostare l&apos;host nel gruppo selezionato.</translation>
     </message>
 </context>
 <context>
@@ -8442,7 +8442,7 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="207"/>
         <source>Clients</source>
-        <translation>Client</translation>
+        <translation>Клиенти</translation>
     </message>
 </context>
 <context>
@@ -8450,7 +8450,7 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="189"/>
         <source>Approved Hosts</source>
-        <translation>Host approvati</translation>
+        <translation>Одобрени хостове</translation>
     </message>
 </context>
 <context>
@@ -8458,7 +8458,7 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="216"/>
         <source>Relays</source>
-        <translation>Relay</translation>
+        <translation>Ретранслатори</translation>
     </message>
 </context>
 <context>
@@ -8466,7 +8466,7 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="225"/>
         <source>Unapproved Hosts</source>
-        <translation>Host non approvati</translation>
+        <translation>Неодобрени хостове</translation>
     </message>
 </context>
 <context>
@@ -8474,7 +8474,7 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="198"/>
         <source>Users</source>
-        <translation>Utenti</translation>
+        <translation>Потребители</translation>
     </message>
 </context>
 <context>
@@ -8483,22 +8483,22 @@ Credenziali importate: %5</translation>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
         <location filename="../client/android/statistics_dialog.cc" line="174"/>
         <source>Statistics</source>
-        <translation>Statistiche</translation>
+        <translation>Статистика</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="33"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="38"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../client/android/statistics_dialog.cc" line="207"/>
         <source>Close</source>
-        <translation>Chiudi</translation>
+        <translation>Затваряне</translation>
     </message>
 </context>
 <context>
@@ -8506,7 +8506,7 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/status_overlay.cc" line="46"/>
         <source>Close</source>
-        <translation>Chiudi</translation>
+        <translation>Затваряне</translation>
     </message>
 </context>
 <context>
@@ -8514,32 +8514,32 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="48"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="53"/>
         <source>Version</source>
-        <translation>Versione</translation>
+        <translation>Версия</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="58"/>
         <source>Publisher</source>
-        <translation>Produttore</translation>
+        <translation>Издател</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="66"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="71"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="76"/>
         <source>Search in Google</source>
-        <translation>Ricerca su Google</translation>
+        <translation>Търсене в Google</translation>
     </message>
 </context>
 <context>
@@ -8547,47 +8547,47 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="48"/>
         <source>Process Name</source>
-        <translation>Nome Processo</translation>
+        <translation>Име на процеса</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="53"/>
         <source>Protocol</source>
-        <translation>Protocollo</translation>
+        <translation>Протокол</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="58"/>
         <source>Local Address</source>
-        <translation>Indirizzo Lovale</translation>
+        <translation>Локален адрес</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="63"/>
         <source>Local Port</source>
-        <translation>Porta Locale</translation>
+        <translation>Локален порт</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="68"/>
         <source>Remote Address</source>
-        <translation>Indirizzo Remoto</translation>
+        <translation>Отдалечен адрес</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="73"/>
         <source>Remote Port</source>
-        <translation>Porta Remota</translation>
+        <translation>Отдалечен порт</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="78"/>
         <source>State</source>
-        <translation>Stato</translation>
+        <translation>Състояние</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="86"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="91"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -8595,27 +8595,27 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="39"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="44"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="52"/>
         <source>Copy Row</source>
-        <translation>Copia riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="57"/>
         <source>Copy Name</source>
-        <translation>Copia nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="62"/>
         <source>Copy Value</source>
-        <translation>Copia valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -8623,32 +8623,32 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="48"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="53"/>
         <source>Driver Vendor</source>
-        <translation>Produttore Driver</translation>
+        <translation>Доставчик на драйвера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="58"/>
         <source>Device ID</source>
-        <translation>ID Dispositivo</translation>
+        <translation>ID на устройството</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="66"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="71"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="76"/>
         <source>Search in Google</source>
-        <translation>Ricerca su Google</translation>
+        <translation>Търсене в Google</translation>
     </message>
 </context>
 <context>
@@ -8656,32 +8656,32 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="43"/>
         <source>Table</source>
-        <translation>Tabella</translation>
+        <translation>Таблица</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="56"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="61"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="70"/>
         <source>Copy Row</source>
-        <translation>Copia riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="75"/>
         <source>Copy Name</source>
-        <translation>Copia nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="80"/>
         <source>Copy Value</source>
-        <translation>Copia valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -8689,42 +8689,42 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="48"/>
         <source>Display Name</source>
-        <translation>Nome Visualizzato</translation>
+        <translation>Показвано име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="53"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="58"/>
         <source>Description</source>
-        <translation>Descrizione</translation>
+        <translation>Описание</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="63"/>
         <source>Status</source>
-        <translation>Stato</translation>
+        <translation>Състояние</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="68"/>
         <source>Startup Type</source>
-        <translation>Tipo Avvio</translation>
+        <translation>Тип на стартиране</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="73"/>
         <source>Executable File</source>
-        <translation>File Eseguibile</translation>
+        <translation>Изпълним файл</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="81"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="86"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -8732,27 +8732,27 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="39"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="44"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="52"/>
         <source>Copy Row</source>
-        <translation>Copia riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="57"/>
         <source>Copy Name</source>
-        <translation>Copia nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="62"/>
         <source>Copy Value</source>
-        <translation>Copia valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -8760,91 +8760,91 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="45"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="50"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="58"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="63"/>
         <source>Copy Name</source>
-        <translation>Copia Nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="68"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
     <name>SysInfoEventLogs</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="139"/>
-        <source>Level</source>
-        <translation>Livello</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="134"/>
-        <source>Time</source>
-        <translation>Ora</translation>
-    </message>
-    <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="53"/>
         <source>First</source>
-        <translation>Primo</translation>
+        <translation>Към началото</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="60"/>
         <source>Previous</source>
-        <translation>Precedente</translation>
+        <translation>Назад</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="67"/>
         <source>Next</source>
-        <translation>Successivo</translation>
+        <translation>Напред</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="74"/>
         <source>Last</source>
-        <translation>Ultimo</translation>
+        <translation>Към края</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="94"/>
         <source>Events type</source>
-        <translation>Tipo evento</translation>
+        <translation>Тип на събитията</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="134"/>
+        <source>Time</source>
+        <translation>Час</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="139"/>
+        <source>Level</source>
+        <translation>Ниво</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="144"/>
         <source>Event ID</source>
-        <translation>ID Evento</translation>
+        <translation>ID на събитието</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="149"/>
         <source>Source</source>
-        <translation>Origine</translation>
+        <translation>Източник</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="154"/>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="181"/>
         <source>Description</source>
-        <translation>Descrizione</translation>
+        <translation>Описание</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="199"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="204"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -8852,27 +8852,27 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="39"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="44"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="52"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="57"/>
         <source>Copy Name</source>
-        <translation>Copia Nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="62"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -8880,22 +8880,22 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="42"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="50"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="55"/>
         <source>Copy Name</source>
-        <translation>Copia Nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="60"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -8903,27 +8903,27 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="39"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="44"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="52"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="57"/>
         <source>Copy Name</source>
-        <translation>Copia Nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="62"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -8931,27 +8931,27 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="39"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="44"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="52"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="57"/>
         <source>Copy Name</source>
-        <translation>Copia Nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="62"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -8959,27 +8959,27 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="39"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="44"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="52"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="57"/>
         <source>Copy Name</source>
-        <translation>Copia Nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="62"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -8987,55 +8987,55 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="39"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="44"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="52"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="57"/>
         <source>Copy Name</source>
-        <translation>Copia Nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="62"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
     <name>SysInfoOpenFiles</name>
     <message>
+        <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="48"/>
+        <source>File Path</source>
+        <translation>Път до файла</translation>
+    </message>
+    <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="53"/>
         <source>User Name</source>
-        <translation>Nome Utente</translation>
+        <translation>Потребителско име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="58"/>
         <source>Lock Count</source>
-        <translation>Conteggio Blocchi</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="48"/>
-        <source>File Path</source>
-        <translation>Cartella File</translation>
+        <translation>Брой заключвания</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="66"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="71"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -9043,27 +9043,27 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="42"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="47"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="55"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="60"/>
         <source>Copy Name</source>
-        <translation>Copia Nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="65"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -9071,27 +9071,27 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="39"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="44"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="52"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="57"/>
         <source>Copy Name</source>
-        <translation>Copia Nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="62"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -9099,7 +9099,7 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="45"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="50"/>
@@ -9109,37 +9109,37 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="55"/>
         <source>Memory</source>
-        <translation>Memoria</translation>
+        <translation>Памет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="60"/>
         <source>Session ID</source>
-        <translation>ID Sessione</translation>
+        <translation>ID на сесията</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="65"/>
         <source>User Name</source>
-        <translation>Nome Utente</translation>
+        <translation>Потребителско име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="70"/>
         <source>Path</source>
-        <translation>Percorso</translation>
+        <translation>Път</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="78"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="83"/>
         <source>Copy Name</source>
-        <translation>Copia Nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="88"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -9147,32 +9147,32 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="48"/>
         <source>Destonation</source>
-        <translation>Destinazione</translation>
+        <translation>Местоназначение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="53"/>
         <source>Mask</source>
-        <translation>Maschera</translation>
+        <translation>Маска</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="58"/>
         <source>Gateway</source>
-        <translation>Gateway</translation>
+        <translation>Шлюз</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="63"/>
         <source>Metric</source>
-        <translation>Metrica</translation>
+        <translation>Метрика</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="71"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="76"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -9180,47 +9180,47 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="48"/>
         <source>Display Name</source>
-        <translation>Nome Visualizzato</translation>
+        <translation>Показвано име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="53"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="58"/>
         <source>Description</source>
-        <translation>Descrizione</translation>
+        <translation>Описание</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="63"/>
         <source>Status</source>
-        <translation>Stato</translation>
+        <translation>Състояние</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="68"/>
         <source>Startup Type</source>
-        <translation>Tipo Avvio</translation>
+        <translation>Тип на стартиране</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="73"/>
         <source>Account</source>
-        <translation>Account</translation>
+        <translation>Акаунт</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="78"/>
         <source>Executable File</source>
-        <translation>File Eseguibile</translation>
+        <translation>Изпълним файл</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="86"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="91"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -9228,32 +9228,32 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="46"/>
         <source>Drive</source>
-        <translation>Disco</translation>
+        <translation>Диск</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="62"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="67"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="76"/>
         <source>Copy Row</source>
-        <translation>Copia riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="81"/>
         <source>Copy Name</source>
-        <translation>Copia nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="86"/>
         <source>Copy Value</source>
-        <translation>Copia valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -9261,27 +9261,27 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="39"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="44"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="52"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="57"/>
         <source>Copy Name</source>
-        <translation>Copia Nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="62"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -9289,27 +9289,27 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="39"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="44"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="52"/>
         <source>Copy Row</source>
-        <translation>Copia Riga</translation>
+        <translation>Копиране на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="57"/>
         <source>Copy Name</source>
-        <translation>Copia Nome</translation>
+        <translation>Копиране на името</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="62"/>
         <source>Copy Value</source>
-        <translation>Copia Valore</translation>
+        <translation>Копиране на стойността</translation>
     </message>
 </context>
 <context>
@@ -9317,12 +9317,12 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="102"/>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>Запазване</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="105"/>
         <source>Save (Ctrl+S)</source>
-        <translation>Salva (Ctrl+S)</translation>
+        <translation>Запазване (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="108"/>
@@ -9332,12 +9332,12 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="117"/>
         <source>Print</source>
-        <translation>Stampa</translation>
+        <translation>Печат</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="120"/>
         <source>Print (Ctrl+P)</source>
-        <translation>Stampa (Ctrl+P)</translation>
+        <translation>Печат (Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="123"/>
@@ -9347,12 +9347,12 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="132"/>
         <source>Refresh</source>
-        <translation>Aggiorna</translation>
+        <translation>Обновяване</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="135"/>
         <source>Refresh (F5)</source>
-        <translation>Aggiorna (F5)</translation>
+        <translation>Обновяване (F5)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="138"/>
@@ -9362,27 +9362,27 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="342"/>
         <source>HTML File</source>
-        <translation>File HTML</translation>
+        <translation>HTML файл</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="342"/>
         <source>HTML File (*.html)</source>
-        <translation>File HTML (*.html)</translation>
+        <translation>HTML файл (*.html)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="352"/>
         <source>Failed to save file: %1</source>
-        <translation>Impossibile salvare il file: %1</translation>
+        <translation>Неуспешно запазване на файла: %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="377"/>
         <source>Summary</source>
-        <translation>Riepilogo</translation>
+        <translation>Обобщение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="384"/>
         <source>Hardware</source>
-        <translation>Hardware</translation>
+        <translation>Хардуер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="387"/>
@@ -9392,17 +9392,17 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="390"/>
         <source>Processor</source>
-        <translation>Processore</translation>
+        <translation>Процесор</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="393"/>
         <source>Devices</source>
-        <translation>Dispositivi</translation>
+        <translation>Устройства</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="396"/>
         <source>Drives</source>
-        <translation>Dischi</translation>
+        <translation>Дискове</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="399"/>
@@ -9412,107 +9412,107 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="402"/>
         <source>Video Adapters</source>
-        <translation>Schede video</translation>
+        <translation>Видеоадаптери</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="405"/>
         <source>Monitors</source>
-        <translation>Monitor</translation>
+        <translation>Монитори</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="408"/>
         <source>Printers</source>
-        <translation>Stampanti</translation>
+        <translation>Принтери</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="411"/>
         <source>Power Options</source>
-        <translation>Opzioni di alimentazione</translation>
+        <translation>Опции на захранването</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="428"/>
         <source>Software</source>
-        <translation>Software</translation>
+        <translation>Софтуер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="431"/>
         <source>Applications</source>
-        <translation>Applicazioni</translation>
+        <translation>Приложения</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="434"/>
         <source>Drivers</source>
-        <translation>Driver</translation>
+        <translation>Драйвери</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="437"/>
         <source>Services</source>
-        <translation>Servizi</translation>
+        <translation>Услуги</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="440"/>
         <source>Processes</source>
-        <translation>Processi</translation>
+        <translation>Процеси</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="443"/>
         <source>Licenses</source>
-        <translation>Licenze</translation>
+        <translation>Лицензи</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="456"/>
         <source>Network</source>
-        <translation>Rete</translation>
+        <translation>Мрежа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="459"/>
         <source>Network Adapters</source>
-        <translation>Schede di rete</translation>
+        <translation>Мрежови адаптери</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="462"/>
         <source>Routes</source>
-        <translation>Rotte</translation>
+        <translation>Маршрути</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="465"/>
         <source>Connections</source>
-        <translation>Connessioni</translation>
+        <translation>Връзки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="468"/>
         <source>Network Shares</source>
-        <translation>Condivisioni di rete</translation>
+        <translation>Споделени ресурси</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="471"/>
         <source>Open Files</source>
-        <translation>File aperti</translation>
+        <translation>Отворени файлове</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="484"/>
         <source>Operating System</source>
-        <translation>Sistema operativo</translation>
+        <translation>Операционна система</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="487"/>
         <source>Environment Variables</source>
-        <translation>Variabili d&apos;ambiente</translation>
+        <translation>Променливи на средата</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="490"/>
         <source>Event Logs</source>
-        <translation>Registri eventi</translation>
+        <translation>Регистрационни файлове на събития</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="493"/>
         <source>Users</source>
-        <translation>Utenti</translation>
+        <translation>Потребители</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="496"/>
         <source>User Groups</source>
-        <translation>Gruppi di utenti</translation>
+        <translation>Групи потребители</translation>
     </message>
 </context>
 <context>
@@ -9520,57 +9520,57 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="162"/>
         <source>Processor Properties</source>
-        <translation>Proprietà del processore</translation>
+        <translation>Свойства на процесора</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="166"/>
         <source>Caches</source>
-        <translation>Cache</translation>
+        <translation>Кешове</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="170"/>
         <source>Instruction Set</source>
-        <translation>Set di istruzioni</translation>
+        <translation>Набор от инструкции</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="171"/>
         <source>Security Features</source>
-        <translation>Funzioni di sicurezza</translation>
+        <translation>Възможности за защита</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="172"/>
         <source>Power Management Features</source>
-        <translation>Funzioni di risparmio energetico</translation>
+        <translation>Възможности за управление на захранването</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="173"/>
         <source>Virtualization Features</source>
-        <translation>Funzioni di virtualizzazione</translation>
+        <translation>Възможности за виртуализация</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="174"/>
         <source>Other Features</source>
-        <translation>Altre caratteristiche</translation>
+        <translation>Други възможности</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="245"/>
         <source>Packages</source>
-        <translation>Socket</translation>
+        <translation>Физически процесори</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="248"/>
         <source>Physical Cores</source>
-        <translation>Core fisici</translation>
+        <translation>Физически ядра</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="251"/>
         <source>Logical Cores</source>
-        <translation>Core logici</translation>
+        <translation>Логически ядра</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
         <source>Temperature</source>
-        <translation>Temperatura</translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="256"/>
@@ -9580,73 +9580,73 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="278"/>
         <source>L%1 Data Cache</source>
-        <translation>Cache dati L%1</translation>
+        <translation>Кеш за данни L%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
         <source>L%1 Instruction Cache</source>
-        <translation>Cache istruzioni L%1</translation>
+        <translation>Кеш за инструкции L%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
         <source>L%1 Cache</source>
-        <translation>Cache L%1</translation>
+        <translation>Кеш L%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="293"/>
         <source>Size</source>
-        <translation>Dimensione</translation>
+        <translation>Размер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="299"/>
         <source>Associativity</source>
-        <translation>Associatività</translation>
+        <translation>Асоциативност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
         <source>Fully associative</source>
-        <translation>Completamente associativa</translation>
+        <translation>Напълно асоциативен</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="299"/>
         <source>%1-way</source>
-        <translation>%1 vie</translation>
+        <translation>%1-канален</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="302"/>
         <source>Line Size</source>
-        <translation>Dimensione linea</translation>
+        <translation>Размер на реда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="302"/>
         <source>%1 bytes</source>
-        <translation>%1 byte</translation>
+        <translation>%1 байта</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="305"/>
         <source>Sets</source>
-        <translation>Set</translation>
+        <translation>Набори</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="308"/>
         <source>Shared By</source>
-        <translation>Condivisa da</translation>
+        <translation>Споделен от</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="308"/>
         <source>%1 threads</source>
-        <translation>%1 thread</translation>
+        <translation>%1 нишки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="332"/>
         <source>Yes</source>
-        <translation>Sì</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="332"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Не</translation>
     </message>
 </context>
 <context>
@@ -9660,139 +9660,139 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="225"/>
         <source>Motherboard</source>
-        <translation>Scheda madre</translation>
+        <translation>Дънна платка</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="232"/>
         <source>Chassis</source>
-        <translation>Chassis</translation>
+        <translation>Кутия</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="239"/>
         <source>Processors</source>
-        <translation>Processori</translation>
+        <translation>Процесори</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="246"/>
         <source>Caches</source>
-        <translation>Cache</translation>
+        <translation>Кешове</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="254"/>
         <source>Port Connectors</source>
-        <translation>Connettori porte</translation>
+        <translation>Конектори на портове</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="263"/>
         <source>System Slots</source>
-        <translation>Slot di sistema</translation>
+        <translation>Системни слотове</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="271"/>
         <source>On-board Devices</source>
-        <translation>Dispositivi integrati</translation>
+        <translation>Вградени устройства</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="630"/>
         <source>OEM Strings</source>
-        <translation>Stringhe OEM</translation>
+        <translation>OEM низове</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="635"/>
         <source>Configuration Options</source>
-        <translation>Opzioni di configurazione</translation>
+        <translation>Опции за конфигуриране</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="289"/>
         <source>Memory Arrays</source>
-        <translation>Array di memoria</translation>
+        <translation>Масиви памет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="297"/>
         <source>Memory Devices</source>
-        <translation>Dispositivi di memoria</translation>
+        <translation>Модули памет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="306"/>
         <source>Memory Errors</source>
-        <translation>Errori di memoria</translation>
+        <translation>Грешки в паметта</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="315"/>
         <source>Memory Array Addresses</source>
-        <translation>Indirizzi array di memoria</translation>
+        <translation>Адреси на масиви памет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="325"/>
         <source>Memory Device Addresses</source>
-        <translation>Indirizzi dispositivi di memoria</translation>
+        <translation>Адреси на модули памет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="333"/>
         <source>Voltage Probes</source>
-        <translation>Sonde di tensione</translation>
+        <translation>Сензори за напрежение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="341"/>
         <source>Cooling Devices</source>
-        <translation>Dispositivi di raffreddamento</translation>
+        <translation>Охлаждащи устройства</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="351"/>
         <source>Temperature Probes</source>
-        <translation>Sonde di temperatura</translation>
+        <translation>Сензори за температура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="360"/>
         <source>Current Probes</source>
-        <translation>Sonde di corrente</translation>
+        <translation>Сензори за ток</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="729"/>
         <source>System Boot</source>
-        <translation>Avvio del sistema</translation>
+        <translation>Зареждане на системата</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="371"/>
         <source>Additional Information</source>
-        <translation>Informazioni aggiuntive</translation>
+        <translation>Допълнителна информация</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="380"/>
         <source>TPM Device</source>
-        <translation>Dispositivo TPM</translation>
+        <translation>TPM устройство</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="389"/>
         <source>Processor Additional Information</source>
-        <translation>Informazioni aggiuntive sul processore</translation>
+        <translation>Допълнителна информация за процесора</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="398"/>
         <source>Firmware Inventory</source>
-        <translation>Inventario firmware</translation>
+        <translation>Опис на фърмуера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
         <source>Misc</source>
-        <translation>Varie</translation>
+        <translation>Разни</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="746"/>
         <source>DMI Properties</source>
-        <translation>Proprietà DMI</translation>
+        <translation>Свойства на DMI</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="841"/>
         <source>Vendor</source>
-        <translation>Fornitore</translation>
+        <translation>Доставчик</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="844"/>
@@ -9801,45 +9801,45 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1028"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1903"/>
         <source>Version</source>
-        <translation>Versione</translation>
+        <translation>Версия</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="847"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1915"/>
         <source>Release Date</source>
-        <translation>Data di rilascio</translation>
+        <translation>Дата на издаване</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="851"/>
         <source>Address</source>
-        <translation>Indirizzo</translation>
+        <translation>Адрес</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="856"/>
         <source>ROM Size</source>
-        <translation>Dimensione ROM</translation>
+        <translation>Размер на ROM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="859"/>
         <source>Revision</source>
-        <translation>Revisione</translation>
+        <translation>Ревизия</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="863"/>
         <source>Firmware Revision</source>
-        <translation>Revisione firmware</translation>
+        <translation>Ревизия на фърмуера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="873"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1275"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1874"/>
         <source>Characteristics</source>
-        <translation>Caratteristiche</translation>
+        <translation>Характеристики</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="889"/>
         <source>Board %1</source>
-        <translation>Scheda %1</translation>
+        <translation>Платка %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="899"/>
@@ -9848,12 +9848,12 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1552"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1900"/>
         <source>Manufacturer</source>
-        <translation>Produttore</translation>
+        <translation>Производител</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="902"/>
         <source>Product</source>
-        <translation>Prodotto</translation>
+        <translation>Продукт</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="908"/>
@@ -9861,7 +9861,7 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1085"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1603"/>
         <source>Serial Number</source>
-        <translation>Numero di serie</translation>
+        <translation>Сериен номер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="911"/>
@@ -9869,12 +9869,12 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1088"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1606"/>
         <source>Asset Tag</source>
-        <translation>Numero inventario</translation>
+        <translation>Инвентарен номер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="914"/>
         <source>Location in Chassis</source>
-        <translation>Posizione nello chassis</translation>
+        <translation>Местоположение в кутията</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="917"/>
@@ -9887,12 +9887,12 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1558"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1650"/>
         <source>Type</source>
-        <translation>Tipo</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
         <source>Hosting Board</source>
-        <translation>Scheda principale</translation>
+        <translation>Носеща платка</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
@@ -9923,7 +9923,7 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <source>Yes</source>
-        <translation>Sì</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
@@ -9956,72 +9956,72 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Не</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <source>Requires Daughter Board</source>
-        <translation>Richiede scheda figlia</translation>
+        <translation>Изисква дъщерна платка</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <source>Removable</source>
-        <translation>Rimovibile</translation>
+        <translation>Сменяемо</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <source>Replaceable</source>
-        <translation>Sostituibile</translation>
+        <translation>Заменяемо</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
         <source>Hot Swappable</source>
-        <translation>Sostituibile a caldo</translation>
+        <translation>С гореща смяна</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="928"/>
         <source>Features</source>
-        <translation>Caratteristiche</translation>
+        <translation>Възможности</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="944"/>
         <source>Chassis %1</source>
-        <translation>Chassis %1</translation>
+        <translation>Кутия %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
         <source>Lock Present</source>
-        <translation>Serratura presente</translation>
+        <translation>Наличие на ключалка</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="971"/>
         <source>SKU Number</source>
-        <translation>Numero SKU</translation>
+        <translation>SKU номер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="974"/>
         <source>Boot-up State</source>
-        <translation>Stato all&apos;avvio</translation>
+        <translation>Състояние при зареждане</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="978"/>
         <source>Power Supply State</source>
-        <translation>Stato dell&apos;alimentatore</translation>
+        <translation>Състояние на захранващия блок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="983"/>
         <source>Thermal State</source>
-        <translation>Stato termico</translation>
+        <translation>Термично състояние</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="986"/>
         <source>Security Status</source>
-        <translation>Stato di sicurezza</translation>
+        <translation>Състояние на защитата</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="990"/>
         <source>Height</source>
-        <translation>Altezza</translation>
+        <translation>Височина</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="990"/>
@@ -10031,46 +10031,46 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="993"/>
         <source>Power Cords</source>
-        <translation>Cavi di alimentazione</translation>
+        <translation>Захранващи кабели</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1009"/>
         <source>Processor %1</source>
-        <translation>Processore %1</translation>
+        <translation>Процесор %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1020"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1547"/>
         <source>Installed</source>
-        <translation>Installato</translation>
+        <translation>Инсталирано</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1031"/>
         <source>Family</source>
-        <translation>Famiglia</translation>
+        <translation>Семейство</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1037"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1401"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1453"/>
         <source>Status</source>
-        <translation>Stato</translation>
+        <translation>Състояние</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1041"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1125"/>
         <source>Socket Designation</source>
-        <translation>Designazione socket</translation>
+        <translation>Обозначение на сокета</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1046"/>
         <source>Socket</source>
-        <translation>Socket</translation>
+        <translation>Сокет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1049"/>
         <source>Socket Type</source>
-        <translation>Tipo socket</translation>
+        <translation>Тип на сокета</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1052"/>
@@ -10082,110 +10082,110 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1055"/>
         <source>Voltage</source>
-        <translation>Tensione</translation>
+        <translation>Напрежение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1055"/>
         <source>%1 V</source>
-        <translation>%1 V</translation>
+        <translation>%1 В</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1059"/>
         <source>External Clock</source>
-        <translation>Clock esterno</translation>
+        <translation>Външна честота</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1059"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1064"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1068"/>
         <source>%1 MHz</source>
-        <translation>%1 MHz</translation>
+        <translation>%1 МХц</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1064"/>
         <source>Max Speed</source>
-        <translation>Velocità massima</translation>
+        <translation>Максимална честота</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1068"/>
         <source>Current Speed</source>
-        <translation>Velocità attuale</translation>
+        <translation>Текуща честота</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1073"/>
         <source>Core Count</source>
-        <translation>Numero di core</translation>
+        <translation>Брой ядра</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1076"/>
         <source>Cores Enabled</source>
-        <translation>Core abilitati</translation>
+        <translation>Включени ядра</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1079"/>
         <source>Thread Count</source>
-        <translation>Numero di thread</translation>
+        <translation>Брой нишки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1082"/>
         <source>Threads Enabled</source>
-        <translation>Thread abilitati</translation>
+        <translation>Включени нишки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1091"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1600"/>
         <source>Part Number</source>
-        <translation>Numero di parte</translation>
+        <translation>Каталожен номер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
         <source>64-bit Capable</source>
-        <translation>Compatibile 64 bit</translation>
+        <translation>Поддръжка на 64 бита</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <source>Multi-Core</source>
-        <translation>Multi-core</translation>
+        <translation>Многоядреност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
         <source>Hardware Thread</source>
-        <translation>Thread hardware</translation>
+        <translation>Хардуерни нишки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1097"/>
         <source>Execute Protection</source>
-        <translation>Protezione esecuzione</translation>
+        <translation>Защита от изпълнение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
         <source>Enhanced Virtualization</source>
-        <translation>Virtualizzazione avanzata</translation>
+        <translation>Разширена виртуализация</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
         <source>Power/Performance Control</source>
-        <translation>Controllo alimentazione/prestazioni</translation>
+        <translation>Управление на захранването/производителността</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1115"/>
         <source>L%1 Cache</source>
-        <translation>Cache L%1</translation>
+        <translation>Кеш L%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1127"/>
         <source>Level</source>
-        <translation>Livello</translation>
+        <translation>Ниво</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1133"/>
         <source>Installed Size</source>
-        <translation>Dimensione installata</translation>
+        <translation>Инсталиран размер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1136"/>
         <source>Maximum Size</source>
-        <translation>Dimensione massima</translation>
+        <translation>Максимален размер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1139"/>
@@ -10193,150 +10193,150 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1496"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1539"/>
         <source>Location</source>
-        <translation>Posizione</translation>
+        <translation>Местоположение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1142"/>
         <source>Operational Mode</source>
-        <translation>Modalità operativa</translation>
+        <translation>Режим на работа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1145"/>
         <source>SRAM Type</source>
-        <translation>Tipo SRAM</translation>
+        <translation>Тип на SRAM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1149"/>
         <source>Supported SRAM Types</source>
-        <translation>Tipi SRAM supportati</translation>
+        <translation>Поддържани типове SRAM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1155"/>
         <source>Error Correction Type</source>
-        <translation>Tipo di correzione errori</translation>
+        <translation>Тип на корекцията на грешки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1160"/>
         <source>Associativity</source>
-        <translation>Associatività</translation>
+        <translation>Асоциативност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1164"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1570"/>
         <source>Speed</source>
-        <translation>Velocità</translation>
+        <translation>Скорост</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1164"/>
         <source>%1 ns</source>
-        <translation>%1 ns</translation>
+        <translation>%1 нс</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
         <source>Enabled</source>
-        <translation>Abilitato</translation>
+        <translation>Включено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
         <source>Socketed</source>
-        <translation>Su socket</translation>
+        <translation>В сокет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1186"/>
         <source>Port %1</source>
-        <translation>Porta %1</translation>
+        <translation>Порт %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1196"/>
         <source>Port Type</source>
-        <translation>Tipo porta</translation>
+        <translation>Тип на порта</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1200"/>
         <source>Internal Designator</source>
-        <translation>Designatore interno</translation>
+        <translation>Вътрешно обозначение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1206"/>
         <source>Internal Connector Type</source>
-        <translation>Tipo connettore interno</translation>
+        <translation>Тип на вътрешния конектор</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1212"/>
         <source>External Designator</source>
-        <translation>Designatore esterno</translation>
+        <translation>Външно обозначение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1218"/>
         <source>External Connector Type</source>
-        <translation>Tipo connettore esterno</translation>
+        <translation>Тип на външния конектор</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1236"/>
         <source>Slot %1</source>
-        <translation>Slot %1</translation>
+        <translation>Слот %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1246"/>
         <source>Designation</source>
-        <translation>Designazione</translation>
+        <translation>Обозначение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1252"/>
         <source>Data Bus Width</source>
-        <translation>Larghezza bus dati</translation>
+        <translation>Ширина на шината за данни</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1255"/>
         <source>Current Usage</source>
-        <translation>Utilizzo attuale</translation>
+        <translation>Текущо използване</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1258"/>
         <source>Length</source>
-        <translation>Lunghezza</translation>
+        <translation>Дължина</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1261"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1311"/>
         <source>Bus Address</source>
-        <translation>Indirizzo bus</translation>
+        <translation>Адрес на шината</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
         <source>5 V Provided</source>
-        <translation>Alimentazione 5 V</translation>
+        <translation>Захранване 5 В</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <source>3.3 V Provided</source>
-        <translation>Alimentazione 3.3 V</translation>
+        <translation>Захранване 3,3 В</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <source>Shared</source>
-        <translation>Condiviso</translation>
+        <translation>Споделен</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <source>PME Signal</source>
-        <translation>Segnale PME</translation>
+        <translation>Сигнал PME</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <source>Hot Plug</source>
-        <translation>Collegamento a caldo</translation>
+        <translation>Горещо включване</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <source>SMBus Signal</source>
-        <translation>Segnale SMBus</translation>
+        <translation>Сигнал SMBus</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
         <source>Bifurcation</source>
-        <translation>Biforcazione</translation>
+        <translation>Бифуркация</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1291"/>
@@ -10344,7 +10344,7 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1529"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1844"/>
         <source>Device %1</source>
-        <translation>Dispositivo %1</translation>
+        <translation>Устройство %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1301"/>
@@ -10352,32 +10352,32 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1447"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1854"/>
         <source>Description</source>
-        <translation>Descrizione</translation>
+        <translation>Описание</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1308"/>
         <source>Type Instance</source>
-        <translation>Istanza tipo</translation>
+        <translation>Екземпляр на типа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1325"/>
         <source>String %1</source>
-        <translation>Stringa %1</translation>
+        <translation>Низ %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1339"/>
         <source>Option %1</source>
-        <translation>Opzione %1</translation>
+        <translation>Опция %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1357"/>
         <source>Probe %1</source>
-        <translation>Sonda %1</translation>
+        <translation>Сензор %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1368"/>
         <source>mV</source>
-        <translation>mV</translation>
+        <translation>мВ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1370"/>
@@ -10387,110 +10387,110 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1372"/>
         <source>mA</source>
-        <translation>mA</translation>
+        <translation>мА</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1404"/>
         <source>Nominal Value</source>
-        <translation>Valore nominale</translation>
+        <translation>Номинална стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1407"/>
         <source>Maximum Value</source>
-        <translation>Valore massimo</translation>
+        <translation>Максимална стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1410"/>
         <source>Minimum Value</source>
-        <translation>Valore minimo</translation>
+        <translation>Минимална стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1413"/>
         <source>Tolerance</source>
-        <translation>Tolleranza</translation>
+        <translation>Допуск</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1416"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1678"/>
         <source>Resolution</source>
-        <translation>Risoluzione</translation>
+        <translation>Разделителна способност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1420"/>
         <source>Accuracy</source>
-        <translation>Precisione</translation>
+        <translation>Точност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1457"/>
         <source>Cooling Unit Group</source>
-        <translation>Gruppo unità di raffreddamento</translation>
+        <translation>Група охлаждащи устройства</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1460"/>
         <source>Nominal Speed</source>
-        <translation>Velocità nominale</translation>
+        <translation>Номинална скорост</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1460"/>
         <source>%1 rpm</source>
-        <translation>%1 giri/min</translation>
+        <translation>%1 об./мин</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1470"/>
         <source>Boot Status</source>
-        <translation>Stato di avvio</translation>
+        <translation>Състояние на зареждането</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1486"/>
         <source>Array %1</source>
-        <translation>Array %1</translation>
+        <translation>Масив %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1499"/>
         <source>Use</source>
-        <translation>Utilizzo</translation>
+        <translation>Предназначение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1503"/>
         <source>Error Correction</source>
-        <translation>Correzione errori</translation>
+        <translation>Корекция на грешки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1509"/>
         <source>Maximum Capacity</source>
-        <translation>Capacità massima</translation>
+        <translation>Максимален капацитет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1513"/>
         <source>Number of Devices</source>
-        <translation>Numero di dispositivi</translation>
+        <translation>Брой устройства</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1542"/>
         <source>Bank</source>
-        <translation>Banco</translation>
+        <translation>Банка</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1555"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1710"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1749"/>
         <source>Size</source>
-        <translation>Dimensione</translation>
+        <translation>Размер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1561"/>
         <source>Type Detail</source>
-        <translation>Dettaglio tipo</translation>
+        <translation>Подробности за типа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1564"/>
         <source>Form Factor</source>
-        <translation>Fattore di forma</translation>
+        <translation>Форм-фактор</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1567"/>
         <source>Technology</source>
-        <translation>Tecnologia</translation>
+        <translation>Технология</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1570"/>
@@ -10501,291 +10501,291 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1574"/>
         <source>Configured Speed</source>
-        <translation>Velocità configurata</translation>
+        <translation>Конфигурирана скорост</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1579"/>
         <source>Total Width</source>
-        <translation>Larghezza totale</translation>
+        <translation>Обща ширина</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1579"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1582"/>
         <source>%1 bit</source>
-        <translation>%1 bit</translation>
+        <translation>%1 бит</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1582"/>
         <source>Data Width</source>
-        <translation>Larghezza dati</translation>
+        <translation>Ширина на данните</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1585"/>
         <source>Rank</source>
-        <translation>Rank</translation>
+        <translation>Ранг</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1588"/>
         <source>Minimum Voltage</source>
-        <translation>Tensione minima</translation>
+        <translation>Минимално напрежение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1588"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1591"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
         <source>%1 mV</source>
-        <translation>%1 mV</translation>
+        <translation>%1 мВ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1591"/>
         <source>Maximum Voltage</source>
-        <translation>Tensione massima</translation>
+        <translation>Максимално напрежение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1595"/>
         <source>Configured Voltage</source>
-        <translation>Tensione configurata</translation>
+        <translation>Конфигурирано напрежение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1610"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1863"/>
         <source>Firmware Version</source>
-        <translation>Versione firmware</translation>
+        <translation>Версия на фърмуера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1616"/>
         <source>Non-volatile Size</source>
-        <translation>Dimensione non volatile</translation>
+        <translation>Размер на енергонезависимата памет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1622"/>
         <source>Volatile Size</source>
-        <translation>Dimensione volatile</translation>
+        <translation>Размер на енергозависимата памет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1627"/>
         <source>Cache Size</source>
-        <translation>Dimensione cache</translation>
+        <translation>Размер на кеша</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1630"/>
         <source>Logical Size</source>
-        <translation>Dimensione logica</translation>
+        <translation>Логически размер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1640"/>
         <source>Record %1</source>
-        <translation>Record %1</translation>
+        <translation>Запис %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1653"/>
         <source>Granularity</source>
-        <translation>Granularità</translation>
+        <translation>Гранулярност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1656"/>
         <source>Operation</source>
-        <translation>Operazione</translation>
+        <translation>Операция</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1661"/>
         <source>Vendor Syndrome</source>
-        <translation>Sindrome del fornitore</translation>
+        <translation>Синдром на доставчика</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1667"/>
         <source>Memory Array Address</source>
-        <translation>Indirizzo array di memoria</translation>
+        <translation>Адрес на масива памет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1673"/>
         <source>Device Address</source>
-        <translation>Indirizzo dispositivo</translation>
+        <translation>Адрес на устройството</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1678"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1959"/>
         <source>%1 bytes</source>
-        <translation>%1 byte</translation>
+        <translation>%1 байта</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1691"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1729"/>
         <source>Range %1</source>
-        <translation>Intervallo %1</translation>
+        <translation>Диапазон %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1701"/>
         <source>Array</source>
-        <translation>Array</translation>
+        <translation>Масив</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1706"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1745"/>
         <source>Starting Address</source>
-        <translation>Indirizzo iniziale</translation>
+        <translation>Начален адрес</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1708"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1747"/>
         <source>Ending Address</source>
-        <translation>Indirizzo finale</translation>
+        <translation>Краен адрес</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1715"/>
         <source>Partition Width</source>
-        <translation>Larghezza partizione</translation>
+        <translation>Ширина на дяла</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1740"/>
         <source>Device</source>
-        <translation>Dispositivo</translation>
+        <translation>Устройство</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1753"/>
         <source>Partition Row Position</source>
-        <translation>Posizione riga partizione</translation>
+        <translation>Позиция на реда в дяла</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1757"/>
         <source>Interleave Position</source>
-        <translation>Posizione interleave</translation>
+        <translation>Позиция на преплитане</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1763"/>
         <source>Interleaved Data Depth</source>
-        <translation>Profondità dati interleave</translation>
+        <translation>Дълбочина на преплетените данни</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1778"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1813"/>
         <source>Entry %1</source>
-        <translation>Voce %1</translation>
+        <translation>Елемент %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1788"/>
         <source>String</source>
-        <translation>Stringa</translation>
+        <translation>Низ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1791"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1794"/>
         <source>Referenced Handle</source>
-        <translation>Handle referenziato</translation>
+        <translation>Манипулатор на препратката</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1796"/>
         <source>Referenced Offset</source>
-        <translation>Offset referenziato</translation>
+        <translation>Отместване на препратката</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1825"/>
         <source>Processor</source>
-        <translation>Processore</translation>
+        <translation>Процесор</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1828"/>
         <source>Architecture</source>
-        <translation>Architettura</translation>
+        <translation>Архитектура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1857"/>
         <source>Vendor ID</source>
-        <translation>ID fornitore</translation>
+        <translation>ID на доставчика</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1860"/>
         <source>Specification Version</source>
-        <translation>Versione della specifica</translation>
+        <translation>Версия на спецификацията</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1867"/>
         <source>Configurable by Firmware</source>
-        <translation>Configurabile dal firmware</translation>
+        <translation>Конфигурира се от фърмуера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
         <source>Configurable by Software</source>
-        <translation>Configurabile dal software</translation>
+        <translation>Конфигурира се от софтуера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
         <source>Configurable by OEM</source>
-        <translation>Configurabile dall&apos;OEM</translation>
+        <translation>Конфигурира се от OEM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1887"/>
         <source>Firmware %1</source>
-        <translation>Firmware %1</translation>
+        <translation>Фърмуер %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1897"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1906"/>
         <source>Version Format</source>
-        <translation>Formato versione</translation>
+        <translation>Формат на версията</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1910"/>
         <source>Lowest Supported Version</source>
-        <translation>Versione minima supportata</translation>
+        <translation>Най-ниска поддържана версия</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1921"/>
         <source>ID Format</source>
-        <translation>Formato ID</translation>
+        <translation>Формат на ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1924"/>
         <source>State</source>
-        <translation>Stato</translation>
+        <translation>Състояние</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1927"/>
         <source>Image Size</source>
-        <translation>Dimensione immagine</translation>
+        <translation>Размер на образа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
         <source>Updatable</source>
-        <translation>Aggiornabile</translation>
+        <translation>Може да се актуализира</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <source>Write-protected</source>
-        <translation>Protetto da scrittura</translation>
+        <translation>Защитено от запис</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1936"/>
         <source>Component %1</source>
-        <translation>Componente %1</translation>
+        <translation>Компонент %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1941"/>
         <source>Associated Components</source>
-        <translation>Componenti associati</translation>
+        <translation>Свързани компоненти</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1953"/>
         <source>SMBIOS Version</source>
-        <translation>Versione SMBIOS</translation>
+        <translation>Версия на SMBIOS</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1956"/>
         <source>Structures</source>
-        <translation>Strutture</translation>
+        <translation>Структури</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1959"/>
         <source>Structures Size</source>
-        <translation>Dimensione delle strutture</translation>
+        <translation>Размер на структурите</translation>
     </message>
 </context>
 <context>
@@ -10793,68 +10793,68 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="132"/>
         <source>Continue Pending</source>
-        <translation>Ripresa in sospeso</translation>
+        <translation>Възобновяване</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="134"/>
         <source>Pause Pending</source>
-        <translation>Pausa in sospeso</translation>
+        <translation>Поставяне на пауза</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="136"/>
         <source>Paused</source>
-        <translation>In pausa</translation>
+        <translation>Поставено на пауза</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="138"/>
         <source>Running</source>
-        <translation>In esecuzione</translation>
+        <translation>Изпълнява се</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="140"/>
         <source>Start Pending</source>
-        <translation>Avvio in sospeso</translation>
+        <translation>Стартиране</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="142"/>
         <source>Stop Pending</source>
-        <translation>Arresto in sospeso</translation>
+        <translation>Спиране</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="144"/>
         <source>Stopped</source>
-        <translation>Arrestato</translation>
+        <translation>Спряно</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="146"/>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="168"/>
         <source>Unknown</source>
-        <translation>Sconosciuto</translation>
+        <translation>Неизвестно</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="158"/>
         <source>Auto Start</source>
-        <translation>Avvio automatico</translation>
+        <translation>Автоматично</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="160"/>
         <source>Demand Start</source>
-        <translation>Avvio manuale</translation>
+        <translation>Ръчно</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="162"/>
         <source>Disabled</source>
-        <translation>Disabilitato</translation>
+        <translation>Изключено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="164"/>
         <source>Boot Start</source>
-        <translation>Avvio al boot</translation>
+        <translation>При зареждане</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="166"/>
         <source>System Start</source>
-        <translation>Avvio del sistema</translation>
+        <translation>При стартиране на системата</translation>
     </message>
 </context>
 <context>
@@ -10862,77 +10862,77 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="159"/>
         <source>Path</source>
-        <translation>Percorso</translation>
+        <translation>Път</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="162"/>
         <source>Model</source>
-        <translation>Modello</translation>
+        <translation>Модел</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="165"/>
         <source>Serial Number</source>
-        <translation>Numero di serie</translation>
+        <translation>Сериен номер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="168"/>
         <source>Firmware Revision</source>
-        <translation>Revisione firmware</translation>
+        <translation>Ревизия на фърмуера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="172"/>
         <source>Bus Type</source>
-        <translation>Tipo bus</translation>
+        <translation>Тип на шината</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="175"/>
         <source>Size</source>
-        <translation>Dimensione</translation>
+        <translation>Размер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="180"/>
         <source>Media Type</source>
-        <translation>Tipo di supporto</translation>
+        <translation>Тип на носителя</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
         <source>Solid State</source>
-        <translation>Stato solido</translation>
+        <translation>Твърдотелен</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
         <source>Rotating</source>
-        <translation>Rotazionale</translation>
+        <translation>Въртящ се</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
         <source>Rotation Rate</source>
-        <translation>Velocità di rotazione</translation>
+        <translation>Скорост на въртене</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
         <source>%1 RPM</source>
-        <translation>%1 giri/min</translation>
+        <translation>%1 об./мин</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="190"/>
         <source>Cache Size</source>
-        <translation>Dimensione cache</translation>
+        <translation>Размер на кеша</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>Removable</source>
-        <translation>Rimovibile</translation>
+        <translation>Сменяемо</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>Yes</source>
-        <translation>Sì</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Не</translation>
     </message>
 </context>
 <context>
@@ -10940,47 +10940,47 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="68"/>
         <source>Application</source>
-        <translation>Applicazione</translation>
+        <translation>Приложение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="70"/>
         <source>Security</source>
-        <translation>Sicurezza</translation>
+        <translation>Защита</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="72"/>
         <source>System</source>
-        <translation>Sistema</translation>
+        <translation>Система</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="308"/>
         <source>Information</source>
-        <translation>Informazione</translation>
+        <translation>Информация</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="310"/>
         <source>Warning</source>
-        <translation>Attenzione</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="312"/>
         <source>Error</source>
-        <translation>Errore</translation>
+        <translation>Грешка</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="314"/>
         <source>Audit Success</source>
-        <translation>Controllo riuscito</translation>
+        <translation>Успешен одит</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="316"/>
         <source>Audit Failure</source>
-        <translation>Controllo non riuscito</translation>
+        <translation>Неуспешен одит</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="318"/>
         <source>Unknown</source>
-        <translation>Sconosciuto</translation>
+        <translation>Неизвестно</translation>
     </message>
 </context>
 <context>
@@ -10988,37 +10988,37 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="138"/>
         <source>License Type</source>
-        <translation>Tipo di licenza</translation>
+        <translation>Тип на лиценза</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="141"/>
         <source>License Version</source>
-        <translation>Versione licenza</translation>
+        <translation>Версия на лиценза</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="144"/>
         <source>Organization</source>
-        <translation>Organizzazione</translation>
+        <translation>Организация</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="147"/>
         <source>Owner</source>
-        <translation>Proprietario</translation>
+        <translation>Собственик</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="150"/>
         <source>Product ID</source>
-        <translation>ID prodotto</translation>
+        <translation>ID на продукта</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="153"/>
         <source>Product Key</source>
-        <translation>Codice prodotto</translation>
+        <translation>Продуктов ключ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="156"/>
         <source>Unknown Field</source>
-        <translation>Campo sconosciuto</translation>
+        <translation>Неизвестно поле</translation>
     </message>
 </context>
 <context>
@@ -11026,56 +11026,56 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="147"/>
         <source>Full Name</source>
-        <translation>Nome completo</translation>
+        <translation>Пълно име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="150"/>
         <source>Home Directory</source>
-        <translation>Directory home</translation>
+        <translation>Домашна папка</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <source>Disabled</source>
-        <translation>Disabilitato</translation>
+        <translation>Изключено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Yes</source>
-        <translation>Sì</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Не</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <source>Password Expired</source>
-        <translation>Password scaduta</translation>
+        <translation>Паролата е изтекла</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Don&apos;t Expire Password</source>
-        <translation>La password non scade</translation>
+        <translation>Без изтичане на паролата</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="158"/>
         <source>Never</source>
-        <translation>Mai</translation>
+        <translation>Никога</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="162"/>
         <source>Last Logon</source>
-        <translation>Ultimo accesso</translation>
+        <translation>Последно влизане</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="174"/>
         <source>Groups</source>
-        <translation>Gruppi</translation>
+        <translation>Групи</translation>
     </message>
 </context>
 <context>
@@ -11083,103 +11083,103 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="154"/>
         <source>Monitor Name</source>
-        <translation>Nome monitor</translation>
+        <translation>Име на монитора</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="157"/>
         <source>Manufacturer Name</source>
-        <translation>Nome produttore</translation>
+        <translation>Производител</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="160"/>
         <source>Monitor ID</source>
-        <translation>ID monitor</translation>
+        <translation>ID на монитора</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="163"/>
         <source>Serial Number</source>
-        <translation>Numero di serie</translation>
+        <translation>Сериен номер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="167"/>
         <source>EDID Version</source>
-        <translation>Versione EDID</translation>
+        <translation>Версия на EDID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="173"/>
         <source>Date Of Manufacture</source>
-        <translation>Data di produzione</translation>
+        <translation>Дата на производство</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="174"/>
         <source>Week %1 / %2</source>
-        <translation>Settimana %1 / %2</translation>
+        <translation>Седмица %1 / %2</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="179"/>
         <source>Gamma</source>
-        <translation>Gamma</translation>
+        <translation>Гама</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="183"/>
         <source>Image Size</source>
-        <translation>Dimensione immagine</translation>
+        <translation>Размер на изображението</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>%1x%2 cm</source>
-        <translation>%1x%2 cm</translation>
+        <translation>%1x%2 см</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="193"/>
         <source>Diagonal Size</source>
-        <translation>Dimensione diagonale</translation>
+        <translation>Размер на диагонала</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="198"/>
         <source>Resolution</source>
-        <translation>Risoluzione</translation>
+        <translation>Разделителна способност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="205"/>
         <source>Horizontal Frequency</source>
-        <translation>Frequenza orizzontale</translation>
+        <translation>Хоризонтална честота</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="206"/>
         <source>%1 - %2 kHz</source>
-        <translation>%1 - %2 kHz</translation>
+        <translation>%1 - %2 кХц</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="212"/>
         <source>Vertical Frequency</source>
-        <translation>Frequenza verticale</translation>
+        <translation>Вертикална честота</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="213"/>
         <source>%1 - %2 Hz</source>
-        <translation>%1 - %2 Hz</translation>
+        <translation>%1 - %2 Хц</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <source>Pixel Clock</source>
-        <translation>Clock pixel</translation>
+        <translation>Пикселна честота</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>%1 MHz</source>
-        <translation>%1 MHz</translation>
+        <translation>%1 МХц</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>Maximum Pixel Clock</source>
-        <translation>Clock pixel massimo</translation>
+        <translation>Максимална пикселна честота</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="223"/>
         <source>Input Signal Type</source>
-        <translation>Tipo segnale di ingresso</translation>
+        <translation>Тип на входния сигнал</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
@@ -11189,7 +11189,7 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
         <source>Yes</source>
-        <translation>Sì</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
@@ -11199,37 +11199,37 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Не</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="234"/>
         <source>Supported Features</source>
-        <translation>Funzionalità supportate</translation>
+        <translation>Поддържани възможности</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="243"/>
         <source>%1 Hz</source>
-        <translation>%1 Hz</translation>
+        <translation>%1 Хц</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="247"/>
         <source>Supported Video Modes</source>
-        <translation>Modalità video supportate</translation>
+        <translation>Поддържани видеорежими</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="293"/>
         <source>Digital</source>
-        <translation>Digitale</translation>
+        <translation>Цифров</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="295"/>
         <source>Analog</source>
-        <translation>Analogico</translation>
+        <translation>Аналогов</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="297"/>
         <source>Unknown</source>
-        <translation>Sconosciuto</translation>
+        <translation>Неизвестно</translation>
     </message>
 </context>
 <context>
@@ -11237,67 +11237,67 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="140"/>
         <source>Adapter Name</source>
-        <translation>Nome scheda</translation>
+        <translation>Име на адаптера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="143"/>
         <source>Interface Type</source>
-        <translation>Tipo interfaccia</translation>
+        <translation>Тип на интерфейса</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="146"/>
         <source>Connection Speed</source>
-        <translation>Velocità di connessione</translation>
+        <translation>Скорост на връзката</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>MAC Address</source>
-        <translation>Indirizzo MAC</translation>
+        <translation>MAC адрес</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>DHCP Enabled</source>
-        <translation>DHCP abilitato</translation>
+        <translation>DHCP включен</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>Yes</source>
-        <translation>Sì</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Не</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
         <source>DHCP Server #%1</source>
-        <translation>Server DHCP #%1</translation>
+        <translation>DHCP сървър #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
         <source>DHCP Server</source>
-        <translation>Server DHCP</translation>
+        <translation>DHCP сървър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
         <source>Address #%1</source>
-        <translation>Indirizzo #%1</translation>
+        <translation>Адрес #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
         <source>Address</source>
-        <translation>Indirizzo</translation>
+        <translation>Адрес</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
         <source>Gateway #%1</source>
-        <translation>Gateway #%1</translation>
+        <translation>Шлюз #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
         <source>Gateway</source>
-        <translation>Gateway</translation>
+        <translation>Шлюз</translation>
     </message>
 </context>
 <context>
@@ -11305,32 +11305,32 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="133"/>
         <source>Description</source>
-        <translation>Descrizione</translation>
+        <translation>Описание</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="136"/>
         <source>Type</source>
-        <translation>Tipo</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="139"/>
         <source>Local Path</source>
-        <translation>Percorso locale</translation>
+        <translation>Локален път</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="141"/>
         <source>Current Uses</source>
-        <translation>Utilizzi attuali</translation>
+        <translation>Текущ брой използвания</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="144"/>
         <source>Not limited</source>
-        <translation>Senza limiti</translation>
+        <translation>Неограничено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="145"/>
         <source>Maximum Uses</source>
-        <translation>Utilizzi massimi</translation>
+        <translation>Максимален брой използвания</translation>
     </message>
 </context>
 <context>
@@ -11338,105 +11338,105 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="156"/>
         <source>Power Source</source>
-        <translation>Fonte di alimentazione</translation>
+        <translation>Източник на захранване</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="158"/>
         <source>Battery Status</source>
-        <translation>Stato batteria</translation>
+        <translation>Състояние на батерията</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="164"/>
         <source>Battery Life Percent</source>
-        <translation>Percentuale batteria</translation>
+        <translation>Ниво на заряда</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="170"/>
         <source>Full Battery Life Time</source>
-        <translation>Durata totale della batteria</translation>
+        <translation>Пълно време на работа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="177"/>
         <source>Remaining Battery Life Time</source>
-        <translation>Tempo di batteria rimanente</translation>
+        <translation>Оставащо време на работа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="193"/>
         <source>Device Name</source>
-        <translation>Nome dispositivo</translation>
+        <translation>Име на устройството</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="196"/>
         <source>Manufacturer</source>
-        <translation>Produttore</translation>
+        <translation>Производител</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="199"/>
         <source>Manufacture Date</source>
-        <translation>Data di produzione</translation>
+        <translation>Дата на производство</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="202"/>
         <source>Unique Id</source>
-        <translation>Identificatore univoco</translation>
+        <translation>Уникален ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="205"/>
         <source>Serial Number</source>
-        <translation>Numero di serie</translation>
+        <translation>Сериен номер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="208"/>
         <source>Temperature</source>
-        <translation>Temperatura</translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
         <source>Design Capacity</source>
-        <translation>Capacità di progetto</translation>
+        <translation>Проектен капацитет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
         <source>%1 mWh</source>
-        <translation>%1 mWh</translation>
+        <translation>%1 мВтч</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="214"/>
         <source>Type</source>
-        <translation>Tipo</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
         <source>Full Charged Capacity</source>
-        <translation>Capacità a piena carica</translation>
+        <translation>Пълен капацитет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="220"/>
         <source>Depreciation</source>
-        <translation>Usura</translation>
+        <translation>Степен на износване</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
         <source>Current Capacity</source>
-        <translation>Capacità attuale</translation>
+        <translation>Текущ капацитет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
         <source>Voltage</source>
-        <translation>Tensione</translation>
+        <translation>Напрежение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
         <source>%1 mV</source>
-        <translation>%1 mV</translation>
+        <translation>%1 мВ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="315"/>
         <source>Charging</source>
-        <translation>In carica</translation>
+        <translation>Зареждане</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
@@ -11444,64 +11444,64 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
         <source>Yes</source>
-        <translation>Sì</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="313"/>
         <source>Critical</source>
-        <translation>Critico</translation>
+        <translation>Критично</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
         <source>Discharging</source>
-        <translation>In scarica</translation>
+        <translation>Разреждане</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
         <source>Power OnLine</source>
-        <translation>Alimentazione collegata</translation>
+        <translation>Захранване от мрежата</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="245"/>
         <source>State</source>
-        <translation>Stato</translation>
+        <translation>Състояние</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="250"/>
         <source>Battery #%1</source>
-        <translation>Batteria #%1</translation>
+        <translation>Батерия #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="291"/>
         <source>DC Battery</source>
-        <translation>Batteria</translation>
+        <translation>Батерия за постоянен ток</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="294"/>
         <source>AC Line</source>
-        <translation>Rete elettrica</translation>
+        <translation>Променливотокова мрежа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="297"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="319"/>
         <source>Unknown</source>
-        <translation>Sconosciuto</translation>
+        <translation>Неизвестно</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="309"/>
         <source>High</source>
-        <translation>Alto</translation>
+        <translation>Висок заряд</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="311"/>
         <source>Low</source>
-        <translation>Basso</translation>
+        <translation>Нисък заряд</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="317"/>
         <source>No Battery</source>
-        <translation>Nessuna batteria</translation>
+        <translation>Няма батерия</translation>
     </message>
 </context>
 <context>
@@ -11509,44 +11509,44 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <source>Default</source>
-        <translation>Predefinito</translation>
+        <translation>По подразбиране</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Yes</source>
-        <translation>Sì</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Не</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="141"/>
         <source>Port</source>
-        <translation>Porta</translation>
+        <translation>Порт</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="144"/>
         <source>Driver</source>
-        <translation>Driver</translation>
+        <translation>Драйвер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Shared</source>
-        <translation>Condiviso</translation>
+        <translation>Споделен</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="149"/>
         <source>Share Name</source>
-        <translation>Nome condivisione</translation>
+        <translation>Име на споделен ресурс</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="151"/>
         <source>Jobs Count</source>
-        <translation>Numero di processi di stampa</translation>
+        <translation>Брой задания</translation>
     </message>
 </context>
 <context>
@@ -11554,12 +11554,12 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.cc" line="144"/>
         <source>System Idle Process</source>
-        <translation>Processo di inattività del sistema</translation>
+        <translation>Неактивен процес на системата</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.cc" line="146"/>
         <source>Unknown Process</source>
-        <translation>Processo sconosciuto</translation>
+        <translation>Неизвестен процес</translation>
     </message>
 </context>
 <context>
@@ -11567,68 +11567,68 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="138"/>
         <source>Continue Pending</source>
-        <translation>Ripresa in sospeso</translation>
+        <translation>Възобновяване</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="140"/>
         <source>Pause Pending</source>
-        <translation>Pausa in sospeso</translation>
+        <translation>Поставяне на пауза</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="142"/>
         <source>Paused</source>
-        <translation>In pausa</translation>
+        <translation>Поставено на пауза</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="144"/>
         <source>Running</source>
-        <translation>In esecuzione</translation>
+        <translation>Изпълнява се</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="146"/>
         <source>Start Pending</source>
-        <translation>Avvio in sospeso</translation>
+        <translation>Стартиране</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="148"/>
         <source>Stop Pending</source>
-        <translation>Arresto in sospeso</translation>
+        <translation>Спиране</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="150"/>
         <source>Stopped</source>
-        <translation>Arrestato</translation>
+        <translation>Спряно</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="174"/>
         <source>Unknown</source>
-        <translation>Sconosciuto</translation>
+        <translation>Неизвестно</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="164"/>
         <source>Auto Start</source>
-        <translation>Avvio automatico</translation>
+        <translation>Автоматично</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="166"/>
         <source>Demand Start</source>
-        <translation>Avvio manuale</translation>
+        <translation>Ръчно</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="168"/>
         <source>Disabled</source>
-        <translation>Disabilitato</translation>
+        <translation>Изключено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="170"/>
         <source>Boot Start</source>
-        <translation>Avvio al boot</translation>
+        <translation>При зареждане</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="172"/>
         <source>System Start</source>
-        <translation>Avvio del sistema</translation>
+        <translation>При стартиране на системата</translation>
     </message>
 </context>
 <context>
@@ -11636,24 +11636,24 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Attribute</source>
-        <translation>Attributo</translation>
+        <translation>Атрибут</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Worst</source>
-        <translation>Peggiore</translation>
+        <translation>Най-лошо</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Threshold</source>
-        <translation>Soglia</translation>
+        <translation>Праг</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
@@ -11664,93 +11664,93 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
         <source>Status</source>
-        <translation>Stato</translation>
+        <translation>Състояние</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
         <source>Health Data</source>
-        <translation>Dati sullo stato</translation>
+        <translation>Данни за състоянието</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
         <source>Not available</source>
-        <translation>Non disponibile</translation>
+        <translation>Не са налични</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="425"/>
         <source>OK. Always passed</source>
-        <translation>OK. Sempre superato</translation>
+        <translation>OK. Винаги успешно</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="427"/>
         <source>OK. Value is normal</source>
-        <translation>OK. Valore normale</translation>
+        <translation>OK. Стойността е нормална</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="429"/>
         <source>Warning. Value is pre-failure</source>
-        <translation>Avviso. Valore di pre-guasto</translation>
+        <translation>Предупреждение. Състояние преди отказ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="431"/>
         <source>Warning. Value is not normal</source>
-        <translation>Avviso. Valore anomalo</translation>
+        <translation>Предупреждение. Стойността не е нормална</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="438"/>
         <source>Unknown Attribute</source>
-        <translation>Attributo sconosciuto</translation>
+        <translation>Неизвестен атрибут</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="461"/>
         <source>Spare capacity is below the threshold</source>
-        <translation>La capacità di riserva è sotto la soglia</translation>
+        <translation>Резервният капацитет е под прага</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="463"/>
         <source>Temperature is outside of the operating range</source>
-        <translation>La temperatura è fuori dall&apos;intervallo operativo</translation>
+        <translation>Температурата е извън работния диапазон</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="465"/>
         <source>Reliability is degraded</source>
-        <translation>L&apos;affidabilità è degradata</translation>
+        <translation>Надеждността е намалена</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="467"/>
         <source>Media is in read-only mode</source>
-        <translation>Il supporto è in modalità di sola lettura</translation>
+        <translation>Носителят е в режим само за четене</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="469"/>
         <source>Volatile memory backup device failed</source>
-        <translation>Il dispositivo di backup della memoria volatile è guasto</translation>
+        <translation>Отказ на устройството за резервно захранване на енергозависимата памет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="471"/>
         <source>Persistent memory region is unreliable</source>
-        <translation>La regione di memoria persistente non è affidabile</translation>
+        <translation>Областта на постоянната памет е ненадеждна</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="475"/>
         <source>Critical Warning</source>
-        <translation>Avviso critico</translation>
+        <translation>Критично предупреждение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="476"/>
         <source>None</source>
-        <translation>Nessuno</translation>
+        <translation>Няма</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="481"/>
         <source>Temperature</source>
-        <translation>Temperatura</translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="482"/>
@@ -11761,12 +11761,12 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="497"/>
         <source>Temperature Sensor %1</source>
-        <translation>Sensore di temperatura %1</translation>
+        <translation>Температурен сензор %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
         <source>Available Spare</source>
-        <translation>Riserva disponibile</translation>
+        <translation>Наличен резерв</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
@@ -11778,72 +11778,72 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="504"/>
         <source>Available Spare Threshold</source>
-        <translation>Soglia riserva disponibile</translation>
+        <translation>Праг на наличния резерв</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
         <source>Percentage Used</source>
-        <translation>Percentuale utilizzata</translation>
+        <translation>Използван ресурс</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="510"/>
         <source>Data Read</source>
-        <translation>Dati letti</translation>
+        <translation>Прочетени данни</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="513"/>
         <source>Data Written</source>
-        <translation>Dati scritti</translation>
+        <translation>Записани данни</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="517"/>
         <source>Host Read Commands</source>
-        <translation>Comandi di lettura host</translation>
+        <translation>Команди за четене от хоста</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="519"/>
         <source>Host Write Commands</source>
-        <translation>Comandi di scrittura host</translation>
+        <translation>Команди за запис от хоста</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="521"/>
         <source>Controller Busy Time</source>
-        <translation>Tempo di occupazione del controller</translation>
+        <translation>Време на заетост на контролера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="524"/>
         <source>Power Cycles</source>
-        <translation>Cicli di accensione</translation>
+        <translation>Брой цикли на включване</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="526"/>
         <source>Power-On Time</source>
-        <translation>Tempo di funzionamento</translation>
+        <translation>Време на работа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="529"/>
         <source>Unsafe Shutdowns</source>
-        <translation>Arresti non sicuri</translation>
+        <translation>Небезопасни изключвания</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="531"/>
         <source>Media Errors</source>
-        <translation>Errori del supporto</translation>
+        <translation>Грешки на носителя</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="533"/>
         <source>Error Log Entries</source>
-        <translation>Voci del registro errori</translation>
+        <translation>Записи в регистрационния файл на грешките</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="536"/>
         <source>Warning Temperature Time</source>
-        <translation>Tempo a temperatura di avviso</translation>
+        <translation>Време при прегряване</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="539"/>
         <source>Critical Temperature Time</source>
-        <translation>Tempo a temperatura critica</translation>
+        <translation>Време при критично прегряване</translation>
     </message>
 </context>
 <context>
@@ -11852,148 +11852,143 @@ Credenziali importate: %5</translation>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="200"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="241"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="203"/>
         <source>Domain</source>
-        <translation>Dominio</translation>
+        <translation>Домейн</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="206"/>
         <source>Workgroup</source>
-        <translation>Gruppo di lavoro</translation>
+        <translation>Работна група</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="209"/>
         <source>Uptime</source>
-        <translation>Tempo di attività</translation>
+        <translation>Време на работа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="212"/>
         <source>Computer</source>
-        <translation>Computer</translation>
+        <translation>Компютър</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="219"/>
         <source>Host Version</source>
-        <translation>Versione host</translation>
+        <translation>Версия на хоста</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="222"/>
         <source>Client Version</source>
-        <translation>Versione client</translation>
+        <translation>Версия на клиента</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="227"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
         <source>Router Version</source>
-        <translation>Versione router</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="232"/>
-        <source>Aspia Information</source>
-        <translation>Informazioni Aspia</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="244"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="316"/>
-        <source>Version</source>
-        <translation>Versione</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="247"/>
-        <source>Architecture</source>
-        <translation>Architettura</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="250"/>
-        <source>License Key</source>
-        <translation>Chiave di licenza</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="253"/>
-        <source>Install Date</source>
-        <translation>Data di installazione</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="258"/>
-        <source>Operating System</source>
-        <translation>Sistema operativo</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="268"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="340"/>
-        <source>Manufacturer</source>
-        <translation>Produttore</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="271"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="286"/>
-        <source>Model</source>
-        <translation>Modello</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="276"/>
-        <source>Motherboard</source>
-        <translation>Scheda madre</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="289"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="313"/>
-        <source>Vendor</source>
-        <translation>Fornitore</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="292"/>
-        <source>Packages</source>
-        <translation>Socket</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="295"/>
-        <source>Cores</source>
-        <translation>Core</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="298"/>
-        <source>Threads</source>
-        <translation>Processi</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="303"/>
-        <source>Processor</source>
-        <translation>Processore</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="319"/>
-        <source>Date</source>
-        <translation>Data</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="343"/>
-        <source>Size</source>
-        <translation>Dimensione</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
-        <source>Speed</source>
-        <translation>Velocità</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="346"/>
-        <source>Type</source>
-        <translation>Tipo</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
-        <source>Installed</source>
-        <translation>Installato</translation>
+        <translation>Версия на рутера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Не</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="232"/>
+        <source>Aspia Information</source>
+        <translation>Информация за Aspia</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="244"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="316"/>
+        <source>Version</source>
+        <translation>Версия</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="247"/>
+        <source>Architecture</source>
+        <translation>Архитектура</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="250"/>
+        <source>License Key</source>
+        <translation>Лицензен ключ</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="253"/>
+        <source>Install Date</source>
+        <translation>Дата на инсталиране</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="258"/>
+        <source>Operating System</source>
+        <translation>Операционна система</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="268"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="340"/>
+        <source>Manufacturer</source>
+        <translation>Производител</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="271"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="286"/>
+        <source>Model</source>
+        <translation>Модел</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="276"/>
+        <source>Motherboard</source>
+        <translation>Дънна платка</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="289"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="313"/>
+        <source>Vendor</source>
+        <translation>Доставчик</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="292"/>
+        <source>Packages</source>
+        <translation>Физически процесори</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="295"/>
+        <source>Cores</source>
+        <translation>Ядра</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="298"/>
+        <source>Threads</source>
+        <translation>Нишки</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="303"/>
+        <source>Processor</source>
+        <translation>Процесор</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="319"/>
+        <source>Date</source>
+        <translation>Дата</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="343"/>
+        <source>Size</source>
+        <translation>Размер</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="346"/>
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
+        <source>Speed</source>
+        <translation>Скорост</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
@@ -12001,19 +11996,24 @@ Credenziali importate: %5</translation>
         <translation>%1 MT/s</translation>
     </message>
     <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
+        <source>Installed</source>
+        <translation>Инсталирано</translation>
+    </message>
+    <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="363"/>
         <source>Memory</source>
-        <translation>Memoria</translation>
+        <translation>Памет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="392"/>
         <source>%1 (%2 free)</source>
-        <translation>%1 (%2 liberi)</translation>
+        <translation>%1 (%2 свободни)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="402"/>
         <source>Logical Drives</source>
-        <translation>Unità logiche</translation>
+        <translation>Логически дискове</translation>
     </message>
 </context>
 <context>
@@ -12026,72 +12026,87 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="150"/>
         <source>Description</source>
-        <translation>Descrizione</translation>
+        <translation>Описание</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="153"/>
         <source>Adapter String</source>
-        <translation>Stringa scheda</translation>
+        <translation>Низ на адаптера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="156"/>
         <source>BIOS String</source>
-        <translation>Stringa BIOS</translation>
+        <translation>Низ на BIOS</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="159"/>
         <source>Chip Type</source>
-        <translation>Tipo chip</translation>
+        <translation>Тип на чипа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="162"/>
         <source>DAC Type</source>
-        <translation>Tipo DAC</translation>
+        <translation>Тип на ЦАП</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
         <source>Location</source>
-        <translation>Posizione</translation>
+        <translation>Местоположение</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
         <source>Bus %1, device %2, function %3</source>
-        <translation>Bus %1, dispositivo %2, funzione %3</translation>
+        <translation>Шина %1, устройство %2, функция %3</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="175"/>
         <source>Memory Size</source>
-        <translation>Dimensione della memoria</translation>
+        <translation>Размер на паметта</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="181"/>
         <source>Memory Used</source>
-        <translation>Memoria utilizzata</translation>
+        <translation>Използвана памет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="187"/>
         <source>Shared Memory Size</source>
-        <translation>Dimensione memoria condivisa</translation>
+        <translation>Размер на споделената памет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="193"/>
         <source>Shared Memory Used</source>
-        <translation>Memoria condivisa utilizzata</translation>
+        <translation>Използвана споделена памет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="199"/>
         <source>Memory Frequency</source>
-        <translation>Frequenza della memoria</translation>
+        <translation>Честота на паметта</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="200"/>
         <source>%1 MHz</source>
-        <translation>%1 MHz</translation>
+        <translation>%1 МХц</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="204"/>
+        <source>Driver Date</source>
+        <translation>Дата на драйвера</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="207"/>
+        <source>Driver Version</source>
+        <translation>Версия на драйвера</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="210"/>
+        <source>Driver Provider</source>
+        <translation>Доставчик на драйвера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
         <source>Driver Model</source>
-        <translation>Modello driver</translation>
+        <translation>Модел на драйвера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
@@ -12101,53 +12116,38 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="221"/>
         <source>Temperature</source>
-        <translation>Temperatura</translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="227"/>
         <source>Maximum Temperature</source>
-        <translation>Temperatura massima</translation>
+        <translation>Максимална температура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
         <source>Fan Speed</source>
-        <translation>Velocità ventola</translation>
+        <translation>Скорост на вентилатора</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
         <source>%1 RPM</source>
-        <translation>%1 giri/min</translation>
+        <translation>%1 об./мин</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
         <source>Maximum Fan Speed</source>
-        <translation>Velocità massima ventola</translation>
+        <translation>Максимална скорост на вентилатора</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="242"/>
         <source>Power Usage</source>
-        <translation>Consumo energetico</translation>
+        <translation>Консумирана мощност</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="243"/>
         <source>%1%</source>
         <translation>%1%</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="204"/>
-        <source>Driver Date</source>
-        <translation>Data driver</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="207"/>
-        <source>Driver Version</source>
-        <translation>Versione driver</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="210"/>
-        <source>Driver Provider</source>
-        <translation>Fornitore driver</translation>
     </message>
 </context>
 <context>
@@ -12156,155 +12156,114 @@ Credenziali importate: %5</translation>
         <location filename="../client/desktop/sys_info/system_info_window.cc" line="40"/>
         <location filename="../host/ui/system_info_window.cc" line="46"/>
         <source>System Information</source>
-        <translation>Informazioni Sistema</translation>
+        <translation>Системна информация</translation>
     </message>
     <message>
         <location filename="../client/desktop/sys_info/system_info_window.cc" line="133"/>
         <source>System information is not available for hosts older than version 3.0.0.</source>
-        <translation>Le informazioni di sistema non sono disponibili per gli host con versione precedente alla 3.0.0.</translation>
+        <translation>Системната информация не е достъпна за хостове с версия, по-стара от 3.0.0.</translation>
     </message>
 </context>
 <context>
     <name>TaskManagerWindow</name>
     <message>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="14"/>
+        <source>Task Manager</source>
+        <translation>Диспечер на задачите</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="37"/>
         <source>Processes</source>
-        <translation>Processi</translation>
+        <translation>Процеси</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="65"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="188"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="237"/>
         <source>Name</source>
-        <translation>Nome</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="80"/>
-        <source>User Name</source>
-        <translation>Nome Utente</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="85"/>
-        <source>CPU</source>
-        <translation>CPU</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="70"/>
         <source>Process ID</source>
-        <translation>ID Processo</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="14"/>
-        <source>Task Manager</source>
-        <translation>Gestione Attività</translation>
+        <translation>ID на процеса</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="75"/>
         <source>Session ID</source>
-        <translation>ID Sessione</translation>
+        <translation>ID на сесията</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="80"/>
+        <source>User Name</source>
+        <translation>Потребителско име</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="85"/>
+        <source>CPU</source>
+        <translation>ЦП</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="90"/>
         <source>Memory (private working set)</source>
-        <translation>Memoria (picco set privato)</translation>
+        <translation>Памет (частен работен набор)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="98"/>
         <source>Memory (working set)</source>
-        <translation>Memoria (set di lavoro)</translation>
+        <translation>Памет (работен набор)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="106"/>
         <source>Memory (peak working set)</source>
-        <translation>Memoria (picco set di lavoro)</translation>
+        <translation>Памет (пиков работен набор)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="114"/>
         <source>Memory (working set delta)</source>
-        <translation>Memoria (differenza set di lavoro)</translation>
+        <translation>Памет (промяна в работния набор)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="122"/>
         <source>Threads</source>
-        <translation>Processi</translation>
+        <translation>Нишки</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="127"/>
         <source>Image Path</source>
-        <translation>Cartella Immagine</translation>
+        <translation>Път до образа</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="153"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="308"/>
         <source>End Task</source>
-        <translation>Termina Attività</translation>
+        <translation>Край на задачата</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="163"/>
         <source>Services</source>
-        <translation>Servizi</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="198"/>
-        <source>Startup type</source>
-        <translation>Tipo Avvio</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="203"/>
-        <source>Description</source>
-        <translation>Descrizione</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="293"/>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="328"/>
-        <source>Logoff</source>
-        <translation>Scollegato</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="313"/>
-        <source>Start</source>
-        <translation>Avvia</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="318"/>
-        <source>Stop</source>
-        <translation>Arresta</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="365"/>
-        <source>Disabled</source>
-        <translation>Disabilitato</translation>
+        <translation>Услуги</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="193"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="247"/>
         <source>Status</source>
-        <translation>Stato</translation>
+        <translation>Състояние</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="336"/>
-        <source>High</source>
-        <translation>Alto</translation>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="198"/>
+        <source>Startup type</source>
+        <translation>Тип на стартиране</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="344"/>
-        <source>Medium</source>
-        <translation>Medio</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="352"/>
-        <source>Low</source>
-        <translation>Basso</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/task_manager_window.ui" line="357"/>
-        <source>Update</source>
-        <translation>Aggiorna</translation>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="203"/>
+        <source>Description</source>
+        <translation>Описание</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="212"/>
         <source>Users</source>
-        <translation>Utenti</translation>
+        <translation>Потребители</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="242"/>
@@ -12314,53 +12273,94 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="252"/>
         <source>Client name</source>
-        <translation>Nome client</translation>
+        <translation>Име на клиента</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="257"/>
         <source>Session name</source>
-        <translation>Nome sessione</translation>
+        <translation>Име на сесията</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="283"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="323"/>
         <source>Disconnect</source>
-        <translation>Disconnesso</translation>
+        <translation>Прекъсване на връзката</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="293"/>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="328"/>
+        <source>Logoff</source>
+        <translation>Излизане</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="313"/>
+        <source>Start</source>
+        <translation>Стартиране</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="318"/>
+        <source>Stop</source>
+        <translation>Спиране</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="336"/>
+        <source>High</source>
+        <translation>Висока</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="344"/>
+        <source>Medium</source>
+        <translation>Средна</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="352"/>
+        <source>Low</source>
+        <translation>Ниска</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="357"/>
+        <source>Update</source>
+        <translation>Обновяване</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/task_manager_window.ui" line="365"/>
+        <source>Disabled</source>
+        <translation>Изключено</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="657"/>
         <source>Do you really want to end &quot;%1&quot; process?</source>
-        <translation>Terminare il processo &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да прекратите процеса &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="711"/>
         <source>Do you really want to disconnect user &quot;%1&quot; session?</source>
-        <translation>Disconnettere la sessione dell&apos;utente &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да прекъснете сесията на потребителя &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="737"/>
         <source>Do you really want to end user &quot;%1&quot; session?</source>
-        <translation>Terminare la sessione dell&apos;utente &quot;%1&quot;?</translation>
+        <translation>Наистина ли искате да прекратите сесията на потребителя &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="955"/>
         <source>Processes: %1</source>
-        <translation>Processi: %1</translation>
+        <translation>Процеси: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="961"/>
         <source>CPU loading: %1%</source>
-        <translation>Carico CPU: %1%</translation>
+        <translation>Натоварване на ЦП: %1%</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="967"/>
         <source>Physical memory: %1%</source>
-        <translation>Memoria fisica: %1%</translation>
+        <translation>Физическа памет: %1%</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="973"/>
         <source>Update Speed</source>
-        <translation>Velocità di aggiornamento</translation>
+        <translation>Скорост на обновяване</translation>
     </message>
 </context>
 <context>
@@ -12368,67 +12368,67 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="67"/>
         <source>Violation of the communication protocol.</source>
-        <translation>Violazione del protocollo di comunicazione.</translation>
+        <translation>Нарушение на комуникационния протокол.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="71"/>
         <source>Wrong user name or password.</source>
-        <translation>Nome utente o password errati.</translation>
+        <translation>Грешно потребителско име или парола.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="75"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
-        <translation>Errore di crittografia (cifratura o decifratura del messaggio non riuscita).</translation>
+        <translation>Криптографска грешка (неуспешно шифроване или дешифроване на съобщението).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="79"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation>Il tipo di sessione specificato non è consentito per l&apos;utente.</translation>
+        <translation>Посоченият тип на сесията не е разрешен за потребителя.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="83"/>
         <source>Version of the application you are connecting to is less than the minimum supported version.</source>
-        <translation>La versione dell&apos;applicazione a cui ti stai connettendo è inferiore alla versione minima supportata.</translation>
+        <translation>Версията на приложението, с което се свързвате, е по-ниска от минималната поддържана версия.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="88"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation>Si è verificato un errore di rete (ad esempio, il cavo di rete è stato scollegato accidentalmente).</translation>
+        <translation>Възникна грешка в мрежата (например мрежовият кабел е бил случайно изключен).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="92"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation>La connessione è stata rifiutata dal peer (o è scaduta).</translation>
+        <translation>Връзката е отказана от отсрещната страна (или времето за изчакване е изтекло).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="96"/>
         <source>Remote host closed the connection.</source>
-        <translation>L&apos;host remoto ha chiuso la connessione.</translation>
+        <translation>Отдалеченият възел затвори връзката.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="100"/>
         <source>Host address was not found.</source>
-        <translation>Indirizzo dell&apos;host non trovato.</translation>
+        <translation>Адресът на отдалечения възел не е намерен.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="104"/>
         <source>Socket operation timed out.</source>
-        <translation>L&apos;operazione socket è scaduta.</translation>
+        <translation>Времето за изчакване на операцията със сокета изтече.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="108"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation>L&apos;indirizzo specificato è già in uso ed è stato impostato come esclusivo.</translation>
+        <translation>Посоченият адрес вече се използва и е зададен като изключителен.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="112"/>
         <source>Address specified does not belong to the host.</source>
-        <translation>L&apos;indirizzo specificato non appartiene all&apos;host.</translation>
+        <translation>Посоченият адрес не принадлежи на възела.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="122"/>
         <source>An unknown error occurred.</source>
-        <translation>Si è verificato un errore sconosciuto.</translation>
+        <translation>Възникна неизвестна грешка.</translation>
     </message>
 </context>
 <context>
@@ -12436,247 +12436,247 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/telemetry_model.cc" line="150"/>
         <source>Parameter</source>
-        <translation>Parametro</translation>
+        <translation>Параметър</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="153"/>
         <source>Value</source>
-        <translation>Valore</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="229"/>
         <source>General</source>
-        <translation>Generale</translation>
+        <translation>Общи</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="233"/>
         <source>Service start time</source>
-        <translation>Ora di avvio del servizio</translation>
+        <translation>Час на стартиране на услугата</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="237"/>
         <source>Service starts in 7 days</source>
-        <translation>Avvii del servizio negli ultimi 7 giorni</translation>
+        <translation>Стартирания на услугата за 7 дни</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="248"/>
         <source>Connections</source>
-        <translation>Connessioni</translation>
+        <translation>Връзки</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="254"/>
         <source>Last incoming connection</source>
-        <translation>Ultima connessione in ingresso</translation>
-    </message>
-    <message>
-        <location filename="../client/telemetry_model.cc" line="270"/>
-        <source>Failed logins in 7 days</source>
-        <translation>Accessi non riusciti negli ultimi 7 giorni</translation>
-    </message>
-    <message>
-        <location filename="../client/telemetry_model.cc" line="275"/>
-        <source>Failed logins since service start</source>
-        <translation>Accessi non riusciti dall&apos;avvio del servizio</translation>
-    </message>
-    <message>
-        <location filename="../client/telemetry_model.cc" line="310"/>
-        <source>Updates</source>
-        <translation>Aggiornamenti</translation>
-    </message>
-    <message>
-        <location filename="../client/telemetry_model.cc" line="314"/>
-        <source>Update channel</source>
-        <translation>Canale di aggiornamento</translation>
-    </message>
-    <message>
-        <location filename="../client/telemetry_model.cc" line="327"/>
-        <source>Automatic updates</source>
-        <translation>Aggiornamenti automatici</translation>
-    </message>
-    <message>
-        <location filename="../client/telemetry_model.cc" line="327"/>
-        <source>Enabled</source>
-        <translation>Abilitati</translation>
-    </message>
-    <message>
-        <location filename="../client/telemetry_model.cc" line="327"/>
-        <source>Disabled</source>
-        <translation>Disabilitati</translation>
-    </message>
-    <message>
-        <location filename="../client/telemetry_model.cc" line="334"/>
-        <source>Update check frequency</source>
-        <translation>Frequenza di controllo degli aggiornamenti</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../client/telemetry_model.cc" line="419"/>
-        <source>Every %n days</source>
-        <translation>
-            <numerusform>Ogni %n giorno</numerusform>
-            <numerusform>Ogni %n giorni</numerusform>
-        </translation>
-    </message>
-    <message>
-        <location filename="../client/telemetry_model.cc" line="339"/>
-        <source>Last update check</source>
-        <translation>Ultimo controllo degli aggiornamenti</translation>
+        <translation>Последна входяща връзка</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="259"/>
         <source>Successful logins in 7 days</source>
-        <translation>Accessi riusciti negli ultimi 7 giorni</translation>
+        <translation>Успешни влизания за 7 дни</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="264"/>
         <source>Successful logins since service start</source>
-        <translation>Accessi riusciti dall&apos;avvio del servizio</translation>
+        <translation>Успешни влизания от стартирането на услугата</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="270"/>
+        <source>Failed logins in 7 days</source>
+        <translation>Неуспешни влизания за 7 дни</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="275"/>
+        <source>Failed logins since service start</source>
+        <translation>Неуспешни влизания от стартирането на услугата</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="288"/>
         <source>Router</source>
-        <translation>Router</translation>
+        <translation>Рутер</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="292"/>
         <source>Connections in 7 days</source>
-        <translation>Connessioni negli ultimi 7 giorni</translation>
+        <translation>Връзки за 7 дни</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="297"/>
         <source>Connections since service start</source>
-        <translation>Connessioni dall&apos;avvio del servizio</translation>
+        <translation>Връзки от стартирането на услугата</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="310"/>
+        <source>Updates</source>
+        <translation>Актуализации</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="314"/>
+        <source>Update channel</source>
+        <translation>Канал за актуализации</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Update server</source>
-        <translation>Server di aggiornamento</translation>
+        <translation>Сървър за актуализации</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="320"/>
         <source>Default</source>
-        <translation>Predefinito</translation>
+        <translation>По подразбиране</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="327"/>
+        <source>Automatic updates</source>
+        <translation>Автоматични актуализации</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="327"/>
+        <source>Enabled</source>
+        <translation>Включено</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="327"/>
+        <source>Disabled</source>
+        <translation>Изключено</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="334"/>
+        <source>Update check frequency</source>
+        <translation>Честота на проверката за актуализации</translation>
+    </message>
+    <message>
+        <location filename="../client/telemetry_model.cc" line="339"/>
+        <source>Last update check</source>
+        <translation>Последна проверка за актуализации</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="345"/>
         <source>Last update check result</source>
-        <translation>Risultato dell&apos;ultimo controllo degli aggiornamenti</translation>
+        <translation>Резултат от последната проверка за актуализации</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="357"/>
         <source>Users</source>
-        <translation>Utenti</translation>
+        <translation>Потребители</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="361"/>
         <source>Total users</source>
-        <translation>Utenti totali</translation>
+        <translation>Общо потребители</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="365"/>
         <source>Enabled users</source>
-        <translation>Utenti abilitati</translation>
+        <translation>Включени потребители</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="376"/>
         <source>Security</source>
-        <translation>Sicurezza</translation>
+        <translation>Защита</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="383"/>
         <source>Settings password protection</source>
-        <translation>Protezione delle impostazioni con password</translation>
+        <translation>Защита на настройките с парола</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="384"/>
         <source>Enabled</source>
         <comment>password protection</comment>
-        <translation>Abilitata</translation>
+        <translation>Включено</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="385"/>
         <source>Disabled</source>
         <comment>password protection</comment>
-        <translation>Disabilitata</translation>
+        <translation>Изключено</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="397"/>
         <source>Stable</source>
-        <translation>Stabile</translation>
+        <translation>Стабилен</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="399"/>
         <source>Beta</source>
-        <translation>Beta</translation>
+        <translation>Бета</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="401"/>
         <source>Alpha</source>
-        <translation>Alpha</translation>
+        <translation>Алфа</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="413"/>
         <source>Once a day</source>
-        <translation>Una volta al giorno</translation>
+        <translation>Веднъж дневно</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="415"/>
         <source>Once a week</source>
-        <translation>Una volta alla settimana</translation>
+        <translation>Веднъж седмично</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="417"/>
         <source>Once a month</source>
-        <translation>Una volta al mese</translation>
+        <translation>Веднъж месечно</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/telemetry_model.cc" line="419"/>
+        <source>Every %n days</source>
+        <translation>
+            <numerusform>На всеки %n ден</numerusform>
+            <numerusform>На всеки %n дни</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="427"/>
         <source>No updates</source>
-        <translation>Nessun aggiornamento</translation>
+        <translation>Няма актуализации</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="429"/>
         <source>Check failed</source>
-        <translation>Controllo non riuscito</translation>
+        <translation>Неуспешна проверка</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="431"/>
         <source>Unsupported package</source>
-        <translation>Pacchetto non supportato</translation>
+        <translation>Неподдържан пакет</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="433"/>
         <source>Download failed</source>
-        <translation>Download non riuscito</translation>
+        <translation>Неуспешно изтегляне</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="435"/>
         <source>Damaged package</source>
-        <translation>Pacchetto danneggiato</translation>
+        <translation>Повреден пакет</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="437"/>
         <source>Installation failed</source>
-        <translation>Installazione non riuscita</translation>
+        <translation>Неуспешно инсталиране</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="439"/>
         <source>Installation started</source>
-        <translation>Installazione avviata</translation>
+        <translation>Инсталирането е започнало</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="441"/>
         <source>Installation succeeded</source>
-        <translation>Installazione riuscita</translation>
+        <translation>Инсталирането е успешно</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="451"/>
         <source>%1 or more</source>
-        <translation>%1 o più</translation>
+        <translation>%1 или повече</translation>
     </message>
     <message>
         <location filename="../client/telemetry_model.cc" line="461"/>
         <source>Never</source>
-        <translation>Mai</translation>
+        <translation>Никога</translation>
     </message>
 </context>
 <context>
@@ -12689,22 +12689,22 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="134"/>
         <source>Computer Name</source>
-        <translation>Nome computer</translation>
+        <translation>Име на компютъра</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="137"/>
         <source>Operating System</source>
-        <translation>Sistema operativo</translation>
+        <translation>Операционна система</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="140"/>
         <source>Version</source>
-        <translation>Versione</translation>
+        <translation>Версия</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
         <source>Address</source>
-        <translation>Indirizzo</translation>
+        <translation>Адрес</translation>
     </message>
 </context>
 <context>
@@ -12712,38 +12712,38 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="244"/>
         <source>Authentication failed.</source>
-        <translation>Autenticazione non riuscita.</translation>
+        <translation>Неуспешно удостоверяване.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="245"/>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1139"/>
         <source>User name</source>
-        <translation>Nome utente</translation>
+        <translation>Потребителско име</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1083"/>
         <source>Copy</source>
-        <translation>Copia</translation>
+        <translation>Копиране</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1086"/>
         <source>Paste</source>
-        <translation>Incolla</translation>
+        <translation>Поставяне</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1089"/>
         <source>Select All</source>
-        <translation>Seleziona tutto</translation>
+        <translation>Избиране на всичко</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1137"/>
         <source>Enter your user name and password to authenticate on the remote computer.</source>
-        <translation>Inserisci nome utente e password per autenticarti sul computer remoto.</translation>
+        <translation>Въведете потребителското си име и паролата, за да се удостоверите на отдалечения компютър.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1151"/>
         <source>Password</source>
-        <translation>Password</translation>
+        <translation>Парола</translation>
     </message>
 </context>
 <context>
@@ -12751,55 +12751,55 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.ui" line="14"/>
         <source>Two-Factor Authentication</source>
-        <translation>Autenticazione a due fattori</translation>
+        <translation>Двуфакторно удостоверяване</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.ui" line="50"/>
         <source>Enter the 6-digit code from your authenticator app.</source>
-        <translation>Inserisci il codice a 6 cifre dalla tua app di autenticazione.</translation>
+        <translation>Въведете 6-цифрения код от приложението за удостоверяване.</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.cc" line="40"/>
         <source>The previous code was not accepted.</source>
-        <translation>Il codice precedente non è stato accettato.</translation>
+        <translation>Предишният код не беше приет.</translation>
     </message>
 </context>
 <context>
     <name>TwoFactorDialog</name>
     <message>
-        <location filename="../client/android/two_factor_dialog.cc" line="70"/>
-        <source>Two-Factor Authentication</source>
-        <translation>Autenticazione a due fattori</translation>
-    </message>
-    <message>
         <location filename="../client/android/two_factor_dialog.cc" line="64"/>
         <source>Add the setup key below to an authenticator app, then enter the 6-digit code it shows to confirm.</source>
-        <translation>Aggiungi la chiave di configurazione qui sotto a un&apos;app di autenticazione, quindi inserisci il codice a 6 cifre mostrato per confermare.</translation>
+        <translation>Добавете ключа за настройка по-долу в приложение за удостоверяване, след което въведете показания от него 6-цифрен код за потвърждение.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="66"/>
         <source>Enter the 6-digit code from your authenticator app.</source>
-        <translation>Inserisci il codice a 6 cifre dalla tua app di autenticazione.</translation>
+        <translation>Въведете 6-цифрения код от приложението за удостоверяване.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="68"/>
         <source>The previous code was not accepted.</source>
-        <translation>Il codice precedente non è stato accettato.</translation>
+        <translation>Предишният код не беше приет.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/two_factor_dialog.cc" line="70"/>
+        <source>Two-Factor Authentication</source>
+        <translation>Двуфакторно удостоверяване</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="78"/>
         <source>Setup Key</source>
-        <translation>Chiave di configurazione</translation>
+        <translation>Ключ за настройка</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="84"/>
         <source>Code</source>
-        <translation>Codice</translation>
+        <translation>Код</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="91"/>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Отказ</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="92"/>
@@ -12812,27 +12812,27 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="14"/>
         <source>Enable Two-Factor Authentication</source>
-        <translation>Abilita autenticazione a due fattori</translation>
+        <translation>Включване на двуфакторно удостоверяване</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="20"/>
         <source>Open a TOTP authenticator app (Google Authenticator, Microsoft Authenticator or any compatible alternative) and add a new account by scanning the QR code below. If QR scanning is unavailable, type the setup key into the app instead.</source>
-        <translation>Apri un&apos;app di autenticazione TOTP (Google Authenticator, Microsoft Authenticator o qualsiasi alternativa compatibile) e aggiungi un nuovo account scansionando il codice QR qui sotto. Se la scansione del codice QR non è disponibile, digita la chiave di configurazione nell&apos;app.</translation>
+        <translation>Отворете приложение за удостоверяване с TOTP (Google Authenticator, Microsoft Authenticator или друго съвместимо приложение) и добавете нов акаунт, като сканирате QR кода по-долу. Ако сканирането на QR код не е възможно, въведете ключа за настройка в приложението ръчно.</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="43"/>
         <source>Setup key:</source>
-        <translation>Chiave di configurazione:</translation>
+        <translation>Ключ за настройка:</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="62"/>
         <source>Enter the 6-digit code shown by the app to confirm:</source>
-        <translation>Inserisci il codice a 6 cifre mostrato dall&apos;app per confermare:</translation>
+        <translation>Въведете 6-цифрения код, показан от приложението, за потвърждение:</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.cc" line="87"/>
         <source>The previous code was not accepted.</source>
-        <translation>Il codice precedente non è stato accettato.</translation>
+        <translation>Предишният код не беше приет.</translation>
     </message>
 </context>
 <context>
@@ -12840,77 +12840,67 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="14"/>
         <source>Update</source>
-        <translation>Aggiornamento</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/update_dialog.cc" line="368"/>
-        <source>Checking for updates</source>
-        <translation>Controllo presenza aggiornamenti</translation>
+        <translation>Актуализиране</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="59"/>
         <source>Current version:</source>
-        <translation>Versione corrente:</translation>
+        <translation>Текуща версия:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="66"/>
         <source>Available version:</source>
-        <translation>Versione disponibile:</translation>
+        <translation>Налична версия:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="75"/>
         <source>URL:</source>
-        <translation></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="136"/>
         <source>Update description:</source>
-        <translation>Descrizione aggiornamento:</translation>
+        <translation>Описание на актуализацията:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="185"/>
         <source>Downloading update in progress...</source>
-        <translation>Scaricamento aggiornamento in corso...</translation>
+        <translation>Изтегляне на актуализацията...</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="223"/>
         <source>Update now!</source>
-        <translation>Aggiorna adesso!</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/update_dialog.cc" line="373"/>
-        <source>Close</source>
-        <translation>Chiudi</translation>
+        <translation>Актуализиране сега!</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="71"/>
         <source>Receiving information...</source>
-        <translation>Ricezione delle informazioni...</translation>
+        <translation>Получаване на информация...</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="156"/>
         <source>Install the update yourself: %1</source>
-        <translation>Installare l&apos;aggiornamento manualmente: %1</translation>
+        <translation>Инсталирайте актуализацията ръчно: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="162"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
-        <translation>Verrà scaricato un aggiornamento. Al termine del download l&apos;applicazione si chiuderà automaticamente.</translation>
+        <translation>Актуализацията ще бъде изтеглена. След завършване на изтеглянето приложението ще се затвори автоматично.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="164"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
-        <translation>Tutte le sessioni connesse verranno terminate. Non sarà possibile stabilire una connessione finché l&apos;aggiornamento non sarà completato.</translation>
+        <translation>Всички свързани сесии ще бъдат прекратени. Няма да можете да установите връзка, докато актуализацията не завърши.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="166"/>
         <source>All unsaved data will be lost.</source>
-        <translation>Tutti i dati non salvati andranno persi.</translation>
+        <translation>Всички незапазени данни ще бъдат загубени.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="167"/>
         <source>Continue?</source>
-        <translation>Continuare?</translation>
+        <translation>Да се продължи ли?</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="197"/>
@@ -12918,47 +12908,57 @@ Credenziali importate: %5</translation>
         <location filename="../common/desktop/update_dialog.cc" line="239"/>
         <location filename="../common/desktop/update_dialog.cc" line="335"/>
         <source>An error occurred while installing the update.</source>
-        <translation>Si è verificato un errore durante l&apos;installazione dell&apos;aggiornamento.</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/update_dialog.cc" line="308"/>
-        <source>An error occurred while downloading the update: %1</source>
-        <translation>Si è verificato un errore durante il download dell&apos;aggiornamento: %1</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/update_dialog.cc" line="333"/>
-        <source>The downloaded file is damaged.</source>
-        <translation>Il file scaricato è danneggiato.</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/update_dialog.cc" line="368"/>
-        <source>Downloading the update</source>
-        <translation>Scaricamento dell&apos;aggiornamento</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/update_dialog.cc" line="373"/>
-        <source>Cancel</source>
-        <translation>Annulla</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/update_dialog.cc" line="285"/>
-        <source>Unknown</source>
-        <translation>Sconosciuto</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/update_dialog.cc" line="286"/>
-        <source>Error retrieving update information.</source>
-        <translation>Errore nel recupero delle informazioni di aggiornamento.</translation>
-    </message>
-    <message>
-        <location filename="../common/desktop/update_dialog.cc" line="343"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>Installazione dell&apos;aggiornamento. Attendere.</translation>
+        <translation>Възникна грешка при инсталиране на актуализацията.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="261"/>
         <source>No updates available.</source>
-        <translation>Nessun aggiornamento disponibile.</translation>
+        <translation>Няма налични актуализации.</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="285"/>
+        <source>Unknown</source>
+        <translation>Неизвестно</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="286"/>
+        <source>Error retrieving update information.</source>
+        <translation>Грешка при получаване на информация за актуализацията.</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="308"/>
+        <source>An error occurred while downloading the update: %1</source>
+        <translation>Възникна грешка при изтегляне на актуализацията: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="333"/>
+        <source>The downloaded file is damaged.</source>
+        <translation>Изтегленият файл е повреден.</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="343"/>
+        <source>Installing the update. Please wait.</source>
+        <translation>Инсталиране на актуализацията. Моля, изчакайте.</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="368"/>
+        <source>Downloading the update</source>
+        <translation>Изтегляне на актуализацията</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="368"/>
+        <source>Checking for updates</source>
+        <translation>Проверка за актуализации</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="373"/>
+        <source>Cancel</source>
+        <translation>Отказ</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="373"/>
+        <source>Close</source>
+        <translation>Затваряне</translation>
     </message>
 </context>
 <context>
@@ -12966,42 +12966,42 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/update_server_dialog.ui" line="14"/>
         <source>Update Server</source>
-        <translation>Server di aggiornamento</translation>
+        <translation>Сървър за актуализации</translation>
     </message>
     <message>
         <location filename="../client/desktop/update_server_dialog.ui" line="25"/>
         <source>Update server:</source>
-        <translation>Server di aggiornamento:</translation>
+        <translation>Сървър за актуализации:</translation>
     </message>
     <message>
         <location filename="../client/desktop/update_server_dialog.ui" line="35"/>
         <source>Public key:</source>
-        <translation>Chiave pubblica:</translation>
+        <translation>Публичен ключ:</translation>
     </message>
     <message>
         <location filename="../client/desktop/update_server_dialog.ui" line="47"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
-        <translation>Se il server di aggiornamento non è specificato, viene utilizzato quello predefinito. Se la chiave pubblica non è specificata, viene utilizzata quella integrata.</translation>
+        <translation>Ако не е посочен сървър за актуализации, се използва сървърът по подразбиране. Ако не е посочен публичен ключ, се използва вграденият ключ.</translation>
     </message>
     <message>
         <location filename="../client/desktop/update_server_dialog.cc" line="82"/>
         <source>An invalid update server address was entered.</source>
-        <translation>È stato inserito un indirizzo del server di aggiornamento non valido.</translation>
+        <translation>Въведен е невалиден адрес на сървъра за актуализации.</translation>
     </message>
     <message>
         <location filename="../client/desktop/update_server_dialog.cc" line="90"/>
         <source>Enter the update server address.</source>
-        <translation>Inserisci l&apos;indirizzo del server di aggiornamento.</translation>
+        <translation>Въведете адреса на сървъра за актуализации.</translation>
     </message>
     <message>
         <location filename="../client/desktop/update_server_dialog.cc" line="99"/>
         <source>An invalid public key was entered.</source>
-        <translation>È stata inserita una chiave pubblica non valida.</translation>
+        <translation>Въведен е невалиден публичен ключ.</translation>
     </message>
     <message>
         <location filename="../client/desktop/update_server_dialog.cc" line="113"/>
         <source>Failed to save the update server.</source>
-        <translation>Impossibile salvare il server di aggiornamento.</translation>
+        <translation>Неуспешно запазване на сървъра за актуализации.</translation>
     </message>
 </context>
 <context>
@@ -13012,84 +13012,84 @@ Credenziali importate: %5</translation>
         <location filename="../common/android/update_widget.cc" line="275"/>
         <location filename="../common/android/update_widget.cc" line="285"/>
         <source>Update</source>
-        <translation>Aggiornamento</translation>
+        <translation>Актуализиране</translation>
     </message>
     <message>
         <location filename="../common/android/update_widget.cc" line="82"/>
         <source>Check again</source>
-        <translation>Controlla di nuovo</translation>
+        <translation>Повторна проверка</translation>
     </message>
     <message>
         <location filename="../common/android/update_widget.cc" line="85"/>
         <source>What&apos;s new</source>
-        <translation>Novità</translation>
+        <translation>Какво ново</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="160"/>
+        <source>Receiving information...</source>
+        <translation>Получаване на информация...</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="185"/>
+        <source>No updates available.</source>
+        <translation>Няма налични актуализации.</translation>
     </message>
     <message>
         <location filename="../common/android/update_widget.cc" line="203"/>
         <location filename="../common/android/update_widget.cc" line="352"/>
         <source>Installed version: %1</source>
-        <translation>Versione installata: %1</translation>
-    </message>
-    <message>
-        <location filename="../common/android/update_widget.cc" line="160"/>
-        <source>Receiving information...</source>
-        <translation>Ricezione delle informazioni...</translation>
-    </message>
-    <message>
-        <location filename="../common/android/update_widget.cc" line="185"/>
-        <source>No updates available.</source>
-        <translation>Nessun aggiornamento disponibile.</translation>
+        <translation>Инсталирана версия: %1</translation>
     </message>
     <message>
         <location filename="../common/android/update_widget.cc" line="204"/>
         <source>Error retrieving update information.</source>
-        <translation>Errore nel recupero delle informazioni di aggiornamento.</translation>
+        <translation>Грешка при получаване на информация за актуализацията.</translation>
     </message>
     <message>
         <location filename="../common/android/update_widget.cc" line="233"/>
         <source>An error occurred while downloading the update: %1</source>
-        <translation>Si è verificato un errore durante il download dell&apos;aggiornamento: %1</translation>
+        <translation>Възникна грешка при изтегляне на актуализацията: %1</translation>
     </message>
     <message>
         <location filename="../common/android/update_widget.cc" line="254"/>
         <source>The downloaded file is damaged.</source>
-        <translation>Il file scaricato è danneggiato.</translation>
+        <translation>Изтегленият файл е повреден.</translation>
     </message>
     <message>
         <location filename="../common/android/update_widget.cc" line="256"/>
         <location filename="../common/android/update_widget.cc" line="312"/>
         <source>An error occurred while installing the update.</source>
-        <translation>Si è verificato un errore durante l&apos;installazione dell&apos;aggiornamento.</translation>
+        <translation>Възникна грешка при инсталиране на актуализацията.</translation>
     </message>
     <message>
         <location filename="../common/android/update_widget.cc" line="267"/>
         <source>Install the update yourself: %1</source>
-        <translation>Installare l&apos;aggiornamento manualmente: %1</translation>
+        <translation>Инсталирайте актуализацията ръчно: %1</translation>
     </message>
     <message>
         <location filename="../common/android/update_widget.cc" line="276"/>
         <source>To install the update, allow this application to install unknown apps on the next screen.</source>
-        <translation>Per installare l&apos;aggiornamento, consenti a questa applicazione di installare app sconosciute nella schermata successiva.</translation>
+        <translation>За да инсталирате актуализацията, разрешете на това приложение да инсталира неизвестни приложения на следващия екран.</translation>
     </message>
     <message>
         <location filename="../common/android/update_widget.cc" line="277"/>
         <source>Allow</source>
-        <translation>Consenti</translation>
+        <translation>Разрешаване</translation>
     </message>
     <message>
         <location filename="../common/android/update_widget.cc" line="286"/>
         <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
-        <translation>Verrà scaricato un aggiornamento. Tutte le sessioni connesse verranno terminate e tutti i dati non salvati andranno persi.</translation>
+        <translation>Актуализацията ще бъде изтеглена. Всички свързани сесии ще бъдат прекратени и всички незапазени данни ще бъдат загубени.</translation>
     </message>
     <message>
         <location filename="../common/android/update_widget.cc" line="287"/>
         <source>Continue</source>
-        <translation>Continua</translation>
+        <translation>Продължаване</translation>
     </message>
     <message>
         <location filename="../common/android/update_widget.cc" line="326"/>
         <source>Downloading the update. Please wait.</source>
-        <translation>Scaricamento dell&apos;aggiornamento. Attendere.</translation>
+        <translation>Изтегляне на актуализацията. Моля, изчакайте.</translation>
     </message>
 </context>
 <context>
@@ -13097,112 +13097,157 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="14"/>
         <source>User Properties</source>
-        <translation>Proprietà Utente</translation>
+        <translation>Свойства на потребителя</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="24"/>
         <source>User Name:</source>
-        <translation>Nome Utente:</translation>
+        <translation>Потребителско име:</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="31"/>
         <source>Password:</source>
-        <translation></translation>
+        <translation>Парола:</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="38"/>
         <source>Password (repeat):</source>
-        <translation>Password (ripeti):</translation>
+        <translation>Парола (повторно):</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="62"/>
         <source>Disable User Account</source>
-        <translation>Disabilita Account Utente</translation>
+        <translation>Изключване на потребителския акаунт</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="69"/>
         <source>Allowed Session Types:</source>
-        <translation>Permetti Tipi Sessione:</translation>
+        <translation>Разрешени типове сесии:</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="86"/>
         <source>Check all</source>
-        <translation>Seleziona tutto</translation>
+        <translation>Отмятане на всички</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="112"/>
         <source>Uncheck all</source>
-        <translation>Deseleziona tutto</translation>
+        <translation>Премахване на отметките</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="182"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri _, -, ., @. Non può essere composto solo da cifre.</translation>
+        <translation>Потребителското име не може да бъде празно и може да съдържа само букви, цифри и знаците _, -, ., @. Не може да се състои само от цифри.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="200"/>
         <source>The username you entered already exists.</source>
-        <translation>Il nome utente inserito esiste già.</translation>
+        <translation>Въведеното потребителско име вече съществува.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="209"/>
         <source>The passwords you entered do not match.</source>
-        <translation>Le password inserite non corrispondono.</translation>
+        <translation>Въведените пароли не съвпадат.</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="220"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="222"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
-            <numerusform>La password non deve superare %n carattere.</numerusform>
-            <numerusform>La password non deve superare %n caratteri.</numerusform>
+            <numerusform>Паролата не може да бъде по-дълга от %n знак.</numerusform>
+            <numerusform>Паролата не може да бъде по-дълга от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="234"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation>La password inserita non soddisfa i requisiti di sicurezza!</translation>
+        <translation>Въведената парола не отговаря на изискванията за защита!</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="237"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата трябва да съдържа малки и главни букви, цифри и не трябва да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="241"/>
         <source>Do you want to enter a different password?</source>
-        <translation>Vuoi inserire una password diversa?</translation>
+        <translation>Искате ли да въведете друга парола?</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="244"/>
         <source>Warning</source>
-        <translation>Attenzione</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="262"/>
         <location filename="../host/ui/user_dialog.cc" line="292"/>
         <location filename="../host/ui/user_dialog.cc" line="302"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation>Errore interno sconosciuto durante la creazione o la modifica di un utente.</translation>
+        <translation>Неизвестна вътрешна грешка при създаване или промяна на потребител.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="340"/>
         <source>Double-click to change</source>
-        <translation>Doppio clic per modificare</translation>
+        <translation>Щракнете двукратно за промяна</translation>
     </message>
 </context>
 <context>
     <name>UserEditorWidget</name>
+    <message>
+        <location filename="../host/android/user_editor_widget.cc" line="114"/>
+        <source>User name</source>
+        <translation>Потребителско име</translation>
+    </message>
+    <message>
+        <location filename="../host/android/user_editor_widget.cc" line="115"/>
+        <source>Password</source>
+        <translation>Парола</translation>
+    </message>
+    <message>
+        <location filename="../host/android/user_editor_widget.cc" line="116"/>
+        <source>Password (repeat)</source>
+        <translation>Парола (повторно)</translation>
+    </message>
+    <message>
+        <location filename="../host/android/user_editor_widget.cc" line="117"/>
+        <source>Leave the password empty to keep the current one.</source>
+        <translation>Оставете паролата празна, за да запазите текущата.</translation>
+    </message>
+    <message>
+        <location filename="../host/android/user_editor_widget.cc" line="118"/>
+        <source>User enabled</source>
+        <translation>Потребителят е включен</translation>
+    </message>
+    <message>
+        <location filename="../host/android/user_editor_widget.cc" line="119"/>
+        <source>Allowed sessions</source>
+        <translation>Разрешени сесии</translation>
+    </message>
+    <message>
+        <location filename="../host/android/user_editor_widget.cc" line="120"/>
+        <source>Desktop</source>
+        <translation>Работен плот</translation>
+    </message>
+    <message>
+        <location filename="../host/android/user_editor_widget.cc" line="121"/>
+        <source>File Transfer</source>
+        <translation>Прехвърляне на файлове</translation>
+    </message>
+    <message>
+        <location filename="../host/android/user_editor_widget.cc" line="122"/>
+        <source>Delete user</source>
+        <translation>Изтриване на потребител</translation>
+    </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="169"/>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
@@ -13213,110 +13258,65 @@ Credenziali importate: %5</translation>
         <location filename="../host/android/user_editor_widget.cc" line="257"/>
         <location filename="../host/android/user_editor_widget.cc" line="280"/>
         <source>Error</source>
-        <translation>Errore</translation>
-    </message>
-    <message>
-        <location filename="../host/android/user_editor_widget.cc" line="182"/>
-        <source>The username you entered already exists.</source>
-        <translation>Il nome utente inserito esiste già.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/user_editor_widget.cc" line="202"/>
-        <source>The passwords you entered do not match.</source>
-        <translation>Le password inserite non corrispondono.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/user_editor_widget.cc" line="224"/>
-        <location filename="../host/android/user_editor_widget.cc" line="247"/>
-        <location filename="../host/android/user_editor_widget.cc" line="258"/>
-        <source>Unknown internal error when creating or modifying a user.</source>
-        <translation>Errore interno sconosciuto durante la creazione o la modifica di un utente.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/user_editor_widget.cc" line="114"/>
-        <source>User name</source>
-        <translation>Nome utente</translation>
-    </message>
-    <message>
-        <location filename="../host/android/user_editor_widget.cc" line="115"/>
-        <source>Password</source>
-        <translation>Password</translation>
-    </message>
-    <message>
-        <location filename="../host/android/user_editor_widget.cc" line="116"/>
-        <source>Password (repeat)</source>
-        <translation>Password (ripeti)</translation>
-    </message>
-    <message>
-        <location filename="../host/android/user_editor_widget.cc" line="117"/>
-        <source>Leave the password empty to keep the current one.</source>
-        <translation>Lascia la password vuota per mantenere quella attuale.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/user_editor_widget.cc" line="118"/>
-        <source>User enabled</source>
-        <translation>Utente abilitato</translation>
-    </message>
-    <message>
-        <location filename="../host/android/user_editor_widget.cc" line="119"/>
-        <source>Allowed sessions</source>
-        <translation>Sessioni consentite</translation>
-    </message>
-    <message>
-        <location filename="../host/android/user_editor_widget.cc" line="120"/>
-        <source>Desktop</source>
-        <translation>Desktop</translation>
-    </message>
-    <message>
-        <location filename="../host/android/user_editor_widget.cc" line="121"/>
-        <source>File Transfer</source>
-        <translation>Trasferimento File</translation>
-    </message>
-    <message>
-        <location filename="../host/android/user_editor_widget.cc" line="122"/>
-        <source>Delete user</source>
-        <translation>Elimina utente</translation>
+        <translation>Грешка</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="170"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
-        <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;. Non può essere composto solo da cifre.</translation>
+        <translation>Потребителското име не може да бъде празно и може да съдържа само букви, цифри и знаците &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;. Не може да се състои само от цифри.</translation>
+    </message>
+    <message>
+        <location filename="../host/android/user_editor_widget.cc" line="182"/>
+        <source>The username you entered already exists.</source>
+        <translation>Въведеното потребителско име вече съществува.</translation>
+    </message>
+    <message>
+        <location filename="../host/android/user_editor_widget.cc" line="202"/>
+        <source>The passwords you entered do not match.</source>
+        <translation>Въведените пароли не съвпадат.</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/android/user_editor_widget.cc" line="210"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password non deve essere più corta di %n caratteri.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знак.</numerusform>
+            <numerusform>Паролата не може да бъде по-кратка от %n знака.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../host/android/user_editor_widget.cc" line="212"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
-            <numerusform>La password non deve superare %n carattere.</numerusform>
-            <numerusform>La password non deve superare %n caratteri.</numerusform>
+            <numerusform>Паролата не може да бъде по-дълга от %n знак.</numerusform>
+            <numerusform>Паролата не може да бъде по-дълга от %n знака.</numerusform>
         </translation>
+    </message>
+    <message>
+        <location filename="../host/android/user_editor_widget.cc" line="224"/>
+        <location filename="../host/android/user_editor_widget.cc" line="247"/>
+        <location filename="../host/android/user_editor_widget.cc" line="258"/>
+        <source>Unknown internal error when creating or modifying a user.</source>
+        <translation>Неизвестна вътрешна грешка при създаване или промяна на потребител.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="272"/>
         <source>Delete User</source>
-        <translation>Elimina utente</translation>
+        <translation>Изтриване на потребител</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete the user &quot;%1&quot;?</source>
-        <translation>Eliminare l&apos;utente &quot;%1&quot;?</translation>
+        <translation>Да се изтрие ли потребителят &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete</source>
-        <translation>Elimina</translation>
+        <translation>Изтриване</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="280"/>
         <source>Failed to delete the user.</source>
-        <translation>Impossibile eliminare l&apos;utente.</translation>
+        <translation>Неуспешно изтриване на потребителя.</translation>
     </message>
 </context>
 <context>
@@ -13324,62 +13324,62 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="254"/>
         <source>&lt;no user&gt;</source>
-        <translation>&lt;nessun utente&gt;</translation>
+        <translation>&lt;няма&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="289"/>
         <source>Active</source>
-        <translation>Attivo</translation>
+        <translation>Активна</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="291"/>
         <source>Connected</source>
-        <translation>Connesso</translation>
+        <translation>Свързана</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="293"/>
         <source>Connect Query</source>
-        <translation>Stato Connessione</translation>
+        <translation>Свързване</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="295"/>
         <source>Shadow</source>
-        <translation>Mascherato</translation>
+        <translation>Наблюдение</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="297"/>
         <source>Disconnected</source>
-        <translation>Disconnesso</translation>
+        <translation>Прекъсната</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="299"/>
         <source>Idle</source>
-        <translation>Inattivo</translation>
+        <translation>Бездействие</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="301"/>
         <source>Listen</source>
-        <translation>In attesa</translation>
+        <translation>Слушане</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="303"/>
         <source>Reset</source>
-        <translation>Resettato</translation>
+        <translation>Нулиране</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="305"/>
         <source>Down</source>
-        <translation>Caduto</translation>
+        <translation>Неработеща</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="307"/>
         <source>Init</source>
-        <translation>Inizializzazione</translation>
+        <translation>Инициализиране</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="309"/>
         <source>Unknown</source>
-        <translation>Sconosciuto</translation>
+        <translation>Неизвестно</translation>
     </message>
 </context>
 <context>
@@ -13387,42 +13387,42 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="143"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="146"/>
         <source>Enabled</source>
-        <translation>Abilitato</translation>
+        <translation>Включено</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="149"/>
         <source>Session Types</source>
-        <translation>Tipi di sessione</translation>
+        <translation>Типове сесии</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>Yes</source>
-        <translation>Sì</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Не</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="211"/>
         <source>Administrator</source>
-        <translation>Amministratore</translation>
+        <translation>Администратор</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="213"/>
         <source>Manager</source>
-        <translation>Gestore</translation>
+        <translation>Мениджър</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="215"/>
         <source>Operator</source>
-        <translation>Operatore</translation>
+        <translation>Оператор</translation>
     </message>
 </context>
 <context>
@@ -13430,17 +13430,17 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../host/android/users_widget.cc" line="95"/>
         <source>No users</source>
-        <translation>Nessun utente</translation>
+        <translation>Няма потребители</translation>
     </message>
     <message>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Enabled</source>
-        <translation>Abilitato</translation>
+        <translation>Включено</translation>
     </message>
     <message>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Disabled</source>
-        <translation>Disabilitato</translation>
+        <translation>Изключено</translation>
     </message>
 </context>
 <context>
@@ -13448,17 +13448,17 @@ Credenziali importate: %5</translation>
     <message>
         <location filename="../client/workers/video_worker.cc" line="46"/>
         <source>Unable to create the directory for the recording.</source>
-        <translation>Impossibile creare la directory per la registrazione.</translation>
+        <translation>Неуспешно създаване на папката за записа.</translation>
     </message>
     <message>
         <location filename="../client/workers/video_worker.cc" line="48"/>
         <source>Unable to create the file for the recording.</source>
-        <translation>Impossibile creare il file per la registrazione.</translation>
+        <translation>Неуспешно създаване на файла за записа.</translation>
     </message>
     <message>
         <location filename="../client/workers/video_worker.cc" line="50"/>
         <source>An error occurred while writing the recording.</source>
-        <translation>Si è verificato un errore durante la scrittura della registrazione.</translation>
+        <translation>Възникна грешка по време на записа.</translation>
     </message>
 </context>
 </TS>
