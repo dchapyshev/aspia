@@ -463,6 +463,7 @@ void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
     public_key->setLabel(tr("Public key"));
     public_key->setMaxLength(kUpdatePublicKeyLength);
     public_key->setText(QString::fromLatin1(settings.updatePublicKey().toHex()));
+    public_key->setEnabled(!settings.updateServer().isEmpty());
     layout->addWidget(public_key);
 
     Label* hint = new Label(tr("If the update server is not specified, the default one is used. "
@@ -471,22 +472,34 @@ void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
     hint->setWordWrap(true);
     layout->addWidget(hint);
 
-    connect(server, &QLineEdit::editingFinished, this, [server]()
+    connect(server, &QLineEdit::textChanged, public_key, [server, public_key]()
+    {
+        public_key->setEnabled(!server->text().trimmed().isEmpty());
+    });
+
+    connect(server, &QLineEdit::editingFinished, this, [server, public_key]()
     {
         SystemSettings settings;
         const QString value = server->text().trimmed();
 
         QSignalBlocker blocker(server);
-        if (isValidUpdateServer(value) && (!value.isEmpty() || settings.updatePublicKey().isEmpty()))
-        {
-            settings.setUpdateServer(value);
-            settings.sync();
-            server->setText(value);
-        }
-        else
+        if (!isValidUpdateServer(value))
         {
             server->setText(settings.updateServer());
+            public_key->setEnabled(!settings.updateServer().isEmpty());
+            return;
         }
+
+        settings.setUpdateServer(value);
+        server->setText(value);
+
+        if (value.isEmpty())
+        {
+            settings.setUpdatePublicKey(QByteArray());
+            public_key->clear();
+        }
+
+        settings.sync();
     });
 
     connect(public_key, &QLineEdit::editingFinished, this, [public_key]()
@@ -495,8 +508,7 @@ void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
         const QByteArray value = public_key->text().trimmed().toLower().toLatin1();
 
         QSignalBlocker blocker(public_key);
-        if (value.isEmpty() ||
-            (isValidUpdatePublicKey(value) && !settings.updateServer().isEmpty()))
+        if (value.isEmpty() || isValidUpdatePublicKey(value))
         {
             settings.setUpdatePublicKey(QByteArray::fromHex(value));
             settings.sync();
