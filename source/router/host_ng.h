@@ -42,6 +42,7 @@ public:
     bool isRemoveCommandSent() const { return remove_command_sent_; }
     const QByteArray& keyHash() const { return key_hash_; }
     const QByteArray& hardwareId() const { return hw_id_; }
+    bool isPortable() const { return portable_; }
 
     void sendConnectionOffer(const proto::router::ConnectionOffer& offer);
     // Sends the "remove" host command and marks the connection so that on disconnect the
@@ -65,6 +66,7 @@ private:
     HostId host_id_ = kInvalidHostId;
     QByteArray key_hash_;
     QByteArray hw_id_;
+    bool portable_ = false;
     std::string telemetry_;
     TimePoint next_telemetry_time_ = TimePoint::min();
     int id_request_count_ = 0;

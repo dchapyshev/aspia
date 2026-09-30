@@ -269,12 +269,12 @@ protected:
     // Connects a peer that behaves like a brand new host: anonymous authentication, then a request
     // for a new id. The router answers with a temporary id and keeps the connection among the
     // temporary hosts until an administrator approves it.
-    [[nodiscard]] Peer* connectTempHost()
+    [[nodiscard]] Peer* connectTempHost(bool portable = false)
     {
         peers_.push_back(std::make_unique<Peer>());
         Peer* peer = peers_.back().get();
 
-        peer_worker_->invoke([this, peer]()
+        peer_worker_->invoke([this, peer, portable]()
         {
             ClientAuthenticator* authenticator = new ClientAuthenticator();
             authenticator->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
@@ -291,7 +291,8 @@ protected:
                 peer->disconnected = true;
             });
 
-            QObject::connect(peer->channel, &TcpChannel::sig_authenticated, peer->channel, [peer]()
+            QObject::connect(peer->channel, &TcpChannel::sig_authenticated, peer->channel,
+                             [peer, portable]()
             {
                 peer->channel->setPaused(false);
                 peer->authenticated = true;
@@ -300,6 +301,7 @@ protected:
                 proto::router::HostIdRequest* request = message.mutable_host_id_request();
                 request->set_type(proto::router::HostIdRequest::NEW_ID);
                 request->set_hw_id(kHardwareId);
+                request->set_portable(portable);
 
                 peer->channel->send(0, serialize(message));
             });
@@ -565,4 +567,24 @@ TEST_F(HostWorkerTest, PermanentHostIsNotApproved)
 
     HostWorkerTestPeer peer(host_worker_);
     EXPECT_EQ(peer.approveHost(host_id_), proto::router::kErrorInvalidEntryId);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A portable host forgets its key when it quits, so an approved record of it would never be used.
+// The list of temporary hosts tells the operator so, and the approval is refused.
+TEST_F(HostWorkerTest, PortableHostIsNotApproved)
+{
+    Peer* portable_host = connectTempHost(true);
+    ASSERT_TRUE(portable_host);
+    ASSERT_TRUE(connectTempHost());
+
+    const proto::router::TempHostList list = tempHostList(0, 2);
+    ASSERT_EQ(list.host_size(), 2);
+
+    for (const proto::router::TempHost& host : list.host())
+        EXPECT_EQ(host.portable(), host.temp_id() == portable_host->assigned_host_id.load());
+
+    HostWorkerTestPeer peer(host_worker_);
+    EXPECT_EQ(peer.approveHost(portable_host->assigned_host_id.load()),
+              proto::router::kErrorAccessDenied);
 }

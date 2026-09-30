@@ -24,7 +24,7 @@
 
 namespace {
 
-constexpr int kColumnCount = 5;
+constexpr int kColumnCount = 6;
 
 } // namespace
 
@@ -141,6 +141,9 @@ QVariant TempHostListModel::headerData(int section, Qt::Orientation orientation,
 
         case Column::ADDRESS:
             return tr("Address");
+
+        case Column::TYPE:
+            return tr("Type");
     }
 
     return QVariant();
@@ -205,6 +208,9 @@ QString TempHostListModel::textAt(const RouterTempHost& host, Column column) con
 
         case Column::ADDRESS:
             return host.address;
+
+        case Column::TYPE:
+            return host.portable ? tr("Portable") : tr("Installed");
     }
 
     return QString();

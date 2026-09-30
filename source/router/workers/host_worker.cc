@@ -451,6 +451,7 @@ proto::router::TempHostList HostWorker::doTempHostList(bool with_address, qint64
         temp_host->set_computer_name(host_ng->computerName());
         temp_host->set_version(host_ng->version().toString().toStdString());
         temp_host->set_os_name(host_ng->osName());
+        temp_host->set_portable(host_ng->isPortable());
 
         if (with_address)
             temp_host->set_address(host_ng->address());
@@ -555,6 +556,12 @@ std::string_view HostWorker::doApproveHost(HostId host_id)
     HostNG* host = dynamic_cast<HostNG*>(hostByHostId(host_id));
     if (!host)
         return proto::router::kErrorInvalidEntryId;
+
+    if (host->isPortable())
+    {
+        LOG(ERROR) << "Attempt to approve a portable host:" << host_id;
+        return proto::router::kErrorAccessDenied;
+    }
 
     Database& database = Database::instance();
     if (!database.isValid())

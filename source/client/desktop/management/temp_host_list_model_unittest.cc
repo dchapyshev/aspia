@@ -131,7 +131,7 @@ private:
 TEST_F(TempHostListModelTest, EmptyModelHasItsColumnsAndNoRows)
 {
     EXPECT_EQ(model()->rowCount(), 0);
-    EXPECT_EQ(model()->columnCount(), 5);
+    EXPECT_EQ(model()->columnCount(), 6);
     EXPECT_EQ(model()->hostAt(0), nullptr);
     EXPECT_EQ(model()->rowOf(HostId(1)), -1);
 }
@@ -140,8 +140,8 @@ TEST_F(TempHostListModelTest, EmptyModelHasItsColumnsAndNoRows)
 TEST_F(TempHostListModelTest, HeaderNamesTheColumnOfItsSection)
 {
     EXPECT_EQ(model()->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString(), QString("ID"));
-    EXPECT_EQ(model()->headerData(4, Qt::Horizontal, Qt::DisplayRole).toString(),
-              QString("Address"));
+    EXPECT_EQ(model()->headerData(4, Qt::Horizontal, Qt::DisplayRole).toString(), QString("Address"));
+    EXPECT_EQ(model()->headerData(5, Qt::Horizontal, Qt::DisplayRole).toString(), QString("Type"));
 
     // A vertical header is not ours to fill, and a section outside the table has no name.
     EXPECT_FALSE(model()->headerData(0, Qt::Vertical, Qt::DisplayRole).isValid());
@@ -160,6 +160,19 @@ TEST_F(TempHostListModelTest, RowShowsTheFieldsOfItsHost)
     EXPECT_EQ(textAt(model(), 0, Column::OS), QString("Windows 11"));
     EXPECT_EQ(textAt(model(), 0, Column::VERSION), QString("2.7.0"));
     EXPECT_EQ(textAt(model(), 0, Column::ADDRESS), QString("192.168.0.2"));
+    EXPECT_EQ(textAt(model(), 0, Column::TYPE), QString("Installed"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A portable host cannot be approved, and the list says why the approval is not offered for it.
+TEST_F(TempHostListModelTest, PortableHostIsShownAsPortable)
+{
+    RouterTempHost host = makeHost(HostId(900000001), "host1", "192.168.0.1");
+    host.portable = true;
+
+    model()->setHosts({ host });
+
+    EXPECT_EQ(textAt(model(), 0, Column::TYPE), QString("Portable"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -273,5 +286,5 @@ TEST_F(TempHostListModelTest, ClearDropsTheRows)
     model()->clear();
 
     EXPECT_EQ(model()->rowCount(), 0);
-    EXPECT_EQ(model()->columnCount(), 5);
+    EXPECT_EQ(model()->columnCount(), 6);
 }

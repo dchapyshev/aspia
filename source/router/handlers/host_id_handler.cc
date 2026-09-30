@@ -85,6 +85,7 @@ HostIdResult handleHostIdRequest(Database& database, const proto::router::HostId
         // before the approval, its key is not found and it simply asks for a new id again.
         result.action = Action::ISSUE_TEMP_ID;
         result.notify_flags = ClientWorker::NOTIFY_TEMP_HOSTS;
+        result.portable = request.portable();
         return result;
     }
 
@@ -105,8 +106,7 @@ HostIdResult handleHostIdRequest(Database& database, const proto::router::HostId
         return result;
     }
 
-    const QByteArray key_hash =
-        GenericHash::hash(GenericHash::Type::BLAKE2b512, request.key());
+    const QByteArray key_hash = GenericHash::hash(GenericHash::Type::BLAKE2b512, request.key());
 
     HostId host_id = kInvalidHostId;
     const std::string_view error_code = database.hostId(key_hash, &host_id);

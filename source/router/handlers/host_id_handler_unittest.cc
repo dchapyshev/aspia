@@ -93,7 +93,40 @@ TEST_F(HostIdHandlerTest, UnapprovedHostGetsATemporaryId)
     EXPECT_EQ(result.action, HostIdResult::Action::ISSUE_TEMP_ID);
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_TEMP_HOSTS));
     EXPECT_EQ(result.hardware_id, QByteArray("hwid-1"));
+    EXPECT_FALSE(result.portable);
     EXPECT_EQ(hostCount(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A portable host says what it is, and the caller keeps that to refuse its approval.
+TEST_F(HostIdHandlerTest, PortableHostIsReported)
+{
+    proto::router::HostIdRequest request = newIdRequest();
+    request.set_portable(true);
+
+    const HostIdResult result = handle(request);
+
+    EXPECT_EQ(result.action, HostIdResult::Action::ISSUE_TEMP_ID);
+    EXPECT_TRUE(result.portable);
+    EXPECT_EQ(hostCount(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The portable flag only makes sense when asking for a new id. A request for an existing id that
+// carries it anyway does not make an approved host look portable.
+TEST_F(HostIdHandlerTest, PortableFlagIsIgnoredForExistingId)
+{
+    const HostId host_id = approveHost("key-1");
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    proto::router::HostIdRequest request = existingIdRequest("key-1");
+    request.set_portable(true);
+
+    const HostIdResult result = handle(request);
+
+    EXPECT_EQ(result.action, HostIdResult::Action::SEND_RESPONSE);
+    EXPECT_EQ(result.host_id, host_id);
+    EXPECT_FALSE(result.portable);
 }
 
 //--------------------------------------------------------------------------------------------------

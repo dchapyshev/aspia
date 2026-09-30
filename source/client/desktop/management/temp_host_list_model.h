@@ -37,7 +37,8 @@ public:
         COMPUTER_NAME,
         OS,
         VERSION,
-        ADDRESS
+        ADDRESS,
+        TYPE
     };
 
     explicit TempHostListModel(QObject* parent = nullptr);

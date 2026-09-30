@@ -106,6 +106,7 @@ struct RouterTempHost
     QString version;
     QString os_name;
     QString address;
+    bool portable = false;
 };
 
 struct RouterTempHostList

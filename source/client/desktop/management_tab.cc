@@ -2014,7 +2014,12 @@ void ManagementTab::updateActionsState()
         if (session)
             session_type = session->config().sessionType();
 
-        ui->action_host_approve->setVisible(!router_temp_hosts_widget_->selectedHosts().isEmpty() &&
+        // A portable host lives only while it is connected and cannot be approved.
+        const QList<RouterTempHost> selected_hosts = router_temp_hosts_widget_->selectedHosts();
+        const bool has_portable_host = std::any_of(selected_hosts.cbegin(), selected_hosts.cend(),
+            [](const RouterTempHost& host) { return host.portable; });
+
+        ui->action_host_approve->setVisible(!selected_hosts.isEmpty() && !has_portable_host &&
                                             session_type == proto::router::SESSION_TYPE_ADMIN);
         ui->action_desktop_connect->setVisible(has_host);
         ui->action_file_transfer_connect->setVisible(has_host);

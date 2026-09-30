@@ -688,6 +688,7 @@ void RouterSession::listTempHosts(qint64 offset, qint64 count, RouterCallback<Ro
             dst.version       = QString::fromStdString(src.version());
             dst.os_name       = QString::fromStdString(src.os_name());
             dst.address       = QString::fromStdString(src.address());
+            dst.portable      = src.portable();
         }
 
         return temp_hosts;

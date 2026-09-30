@@ -178,6 +178,7 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
     }
 
     hw_id_ = result.hardware_id;
+    portable_ = result.portable;
 
     proto::router::RouterToHost message;
     proto::router::HostIdResponse* host_id_response = message.mutable_host_id_response();

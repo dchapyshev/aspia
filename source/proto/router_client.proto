@@ -184,6 +184,7 @@ message TempHost
     string version       = 3;
     string os_name       = 4;
     string address       = 5;
+    bool portable        = 6;
 }
 
 message TempHostListRequest

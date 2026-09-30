@@ -72,6 +72,9 @@ struct HostIdResult
     // The validated hardware id of the host; the caller keeps it for the approval command.
     QByteArray hardware_id;
 
+    // The host is a portable one: it keeps its temporary id and is never approved.
+    bool portable = false;
+
     // SEND_RESPONSE: the telemetry stored for the host, so that a report repeating it is not
     // written again.
     std::string telemetry;
