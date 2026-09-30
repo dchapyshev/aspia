@@ -59,7 +59,9 @@
 #if defined(Q_OS_WINDOWS)
 #include "base/process_util.h"
 #include "base/win/desktop.h"
+#include "host/win/portable_host.h"
 #include "host/win/portable_package.h"
+#include "host/win/portable_service.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
@@ -369,6 +371,11 @@ int runService(int& argc, char* argv[])
 
     HostUtils::printDebugInfo();
 
+#if defined(Q_OS_WINDOWS)
+    if (PortableHost::isActive())
+        return PortableService().exec(application);
+#endif // defined(Q_OS_WINDOWS)
+
     application.addWorker(std::make_unique<ServiceWorker>());
     application.addWorker(std::make_unique<SysInfoWorker>());
     application.addWorker(std::make_unique<TaskMgrWorker>());
@@ -510,8 +517,8 @@ int main(int argc, char* argv[])
     ScopedLogging scoped_logging(logging_settings);
 
 #if defined(Q_OS_WINDOWS)
-    if (PortablePackage::builtInSettings())
-        LOG(INFO) << "Built-in portable settings found";
+    if (PortablePackage::builtInSettings() && !PortableHost::isStartedByLauncher())
+        return PortableHost::runLauncher(argc, argv);
 #endif // defined(Q_OS_WINDOWS)
 
     for (int i = 1; i < argc; ++i)
