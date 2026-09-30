@@ -163,8 +163,8 @@ std::unique_ptr<UpdateChecker> checkerFor(const FileServer& server,
 {
     std::unique_ptr<UpdateChecker> checker = std::make_unique<UpdateChecker>(channel, "host");
 
-    checker->setServerForTesting(server.url());
-    checker->setPublicKeysForTesting({ Signature::publicKey(privateKey()) });
+    checker->setServer(server.url());
+    checker->setPublicKeys({ Signature::publicKey(privateKey()) });
     return checker;
 }
 

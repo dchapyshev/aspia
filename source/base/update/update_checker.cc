@@ -111,15 +111,20 @@ UpdateChecker::~UpdateChecker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpdateChecker::setServerForTesting(const QString& server)
+void UpdateChecker::setServer(const QString& server)
 {
-    server_ = server;
+    QString value = server.trimmed();
+    while (value.endsWith('/'))
+        value.chop(1);
+
+    server_ = value.isEmpty() ? QString(kUpdateServer) : value;
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpdateChecker::setPublicKeysForTesting(const QList<QByteArray>& public_keys)
+void UpdateChecker::setPublicKeys(const QList<QByteArray>& public_keys)
 {
-    public_keys_ = public_keys;
+    if (!public_keys.isEmpty())
+        public_keys_ = public_keys;
 }
 
 //--------------------------------------------------------------------------------------------------

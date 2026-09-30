@@ -35,12 +35,12 @@ public:
     UpdateChecker(const QString& channel, const QString& package, QObject* parent = nullptr);
     ~UpdateChecker();
 
-    // Replaces the address the files are read from, so that tests can serve their own.
-    void setServerForTesting(const QString& server);
+    // Replaces the address the files are read from. An empty one keeps the default server.
+    void setServer(const QString& server);
 
-    // Replaces the keys the files are checked against with |public_keys|, so that tests can sign
-    // with a key of their own.
-    void setPublicKeysForTesting(const QList<QByteArray>& public_keys);
+    // Replaces the keys the files are checked against. An empty list keeps the keys the application
+    // carries, and then another server can only serve what was signed for the default one.
+    void setPublicKeys(const QList<QByteArray>& public_keys);
 
 signals:
     void sig_checkFinished(const UpdateInfo& update_info);
