@@ -31,12 +31,6 @@
 #include "host/client.h"
 #include "host/host_constants.h"
 
-namespace {
-
-const char kExecutableName[] = "aspia_host.exe";
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 PortableUserSession::PortableUserSession(const QString& ipc_channel_id, QObject* parent)
     : QObject(parent),
@@ -191,9 +185,10 @@ void PortableUserSession::onIpcNewConnection()
         return;
     }
 
-    // Verify the connecting peer's executable is exactly the UI binary we shipped.
-    const QString expected_path = QFileInfo(
-        QCoreApplication::applicationDirPath() + '/' + kExecutableName).canonicalFilePath();
+    // Verify the connecting peer's executable is exactly our own binary: the GUI is launched from the
+    // same executable as this process in both the elevated (run-dir copy) and user modes.
+    const QString expected_path =
+        QFileInfo(QCoreApplication::applicationFilePath()).canonicalFilePath();
     const QString actual_path = QFileInfo(
         ProcessUtil::filePath(ipc_channel->processId())).canonicalFilePath();
     if (actual_path.isEmpty() || actual_path != expected_path)
