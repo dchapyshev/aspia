@@ -35,7 +35,6 @@ class TouchEvent;
 } // namespace proto::input
 
 class InputInjector;
-class DesktopIpcWorker;
 class ScreenWorker;
 
 // Injects the input received from clients into the user session. All input enters here (gating and
@@ -91,9 +90,6 @@ private:
     // Delegation target for platforms where the injector belongs to the capture path. Resolved
     // through WorkerManager when the worker starts.
     QPointer<ScreenWorker> screen_worker_;
-
-    // Source of the client input and gating commands. Resolved through WorkerManager on start.
-    QPointer<DesktopIpcWorker> ipc_worker_;
 
     bool is_paused_ = false;
     bool is_mouse_locked_ = false;

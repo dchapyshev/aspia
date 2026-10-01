@@ -23,7 +23,6 @@
 #include "base/logging.h"
 #include "base/threading/worker.h"
 #include "host/input_injector.h"
-#include "host/workers/desktop_ipc_worker.h"
 #include "host/workers/screen_worker.h"
 #include "proto/desktop_input.h"
 
@@ -219,32 +218,6 @@ void InputWorker::onPrepare()
     {
         LOG(ERROR) << "Screen worker not found";
     }
-
-    // Subscribe to the client input and gating commands forwarded by the IPC worker.
-    ipc_worker_ = findWorker<DesktopIpcWorker>();
-    if (ipc_worker_)
-    {
-        connect(ipc_worker_, &DesktopIpcWorker::sig_injectKeyEvent, this, &InputWorker::onInjectKeyEvent,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_injectTextEvent, this, &InputWorker::onInjectTextEvent,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_injectMouseEvent, this, &InputWorker::onInjectMouseEvent,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_injectTouchEvent, this, &InputWorker::onInjectTouchEvent,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_paused, this, &InputWorker::onSetPaused,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_mouseLocked, this, &InputWorker::onSetMouseLocked,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_keyboardLocked, this, &InputWorker::onSetKeyboardLocked,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_blockInput, this, &InputWorker::onSetBlockInput,
-                Qt::QueuedConnection);
-    }
-    else
-    {
-        LOG(ERROR) << "IPC worker not found";
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -262,12 +235,6 @@ void InputWorker::onStop()
     {
         screen_worker_->disconnect(this);
         screen_worker_ = nullptr;
-    }
-
-    if (ipc_worker_)
-    {
-        ipc_worker_->disconnect(this);
-        ipc_worker_ = nullptr;
     }
 
     input_injector_.reset();

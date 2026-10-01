@@ -20,7 +20,6 @@
 #define HOST_WORKERS_SCREEN_WORKER_H
 
 #include <QPoint>
-#include <QPointer>
 #include <QSize>
 
 #include <sys/types.h>
@@ -49,7 +48,6 @@ class CursorEncoder;
 class DesktopEnvironment;
 class DesktopResizer;
 class InputInjector;
-class DesktopIpcWorker;
 class PowerSaveBlocker;
 class QTimer;
 class ScaleReducer;
@@ -152,7 +150,6 @@ private:
     void createVideoEncoder();
     void updateInjectorScreenInfo(const Frame* frame);
 
-    QPointer<DesktopIpcWorker> ipc_worker_;
     ScopedQPointer<InputInjector> input_injector_;
     ScopedQPointer<ScreenCapturer> screen_capturer_;
 

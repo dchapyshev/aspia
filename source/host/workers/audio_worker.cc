@@ -22,7 +22,6 @@
 #include "base/codec/audio_encoder.h"
 #include "base/threading/worker.h"
 #include "host/audio_capturer.h"
-#include "host/workers/desktop_ipc_worker.h"
 
 //--------------------------------------------------------------------------------------------------
 // On macOS the Qt dispatcher backs the thread with a CFRunLoop (via
@@ -98,21 +97,6 @@ void AudioWorker::onRawAudioData(std::shared_ptr<proto::audio::Packet> packet)
 //--------------------------------------------------------------------------------------------------
 void AudioWorker::onPrepare()
 {
-    // All AudioWorker<->DesktopIpcWorker wiring lives here: the IPC worker toggles the pipeline through the
-    // merged configuration, and the encoded audio produced here is fanned out through it.
-    ipc_worker_ = findWorker<DesktopIpcWorker>();
-    if (ipc_worker_)
-    {
-        connect(ipc_worker_, &DesktopIpcWorker::sig_audioEnabled, this, &AudioWorker::onSetEnabled,
-                Qt::QueuedConnection);
-        connect(this, &AudioWorker::sig_audioData, ipc_worker_, &DesktopIpcWorker::onAudioData,
-                Qt::QueuedConnection);
-    }
-    else
-    {
-        LOG(ERROR) << "IPC worker not found";
-    }
-
     // Audio is latency-sensitive: a delayed packet is an audible glitch.
     QThread::currentThread()->setPriority(QThread::HighestPriority);
 }
@@ -127,12 +111,6 @@ void AudioWorker::onStart()
 void AudioWorker::onStop()
 {
     LOG(INFO) << "Audio worker stopped";
-
-    if (ipc_worker_)
-    {
-        ipc_worker_->disconnect(this);
-        ipc_worker_ = nullptr;
-    }
 
     capturer_.reset();
     encoder_.reset();

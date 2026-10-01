@@ -29,17 +29,15 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/service_controller.h"
-#include "base/ipc/ipc_server.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "base/threading/worker.h"
 #include "common/desktop/msg_box.h"
+#include "host/agent_main.h"
 #include "host/database.h"
-#include "host/file_agent.h"
 #include "host/host_constants.h"
 #include "host/host_utils.h"
 #include "host/service.h"
 #include "host/settings_util.h"
-#include "host/terminal_agent.h"
 #include "host/user_settings.h"
 #include "host/ui/application.h"
 #include "host/ui/check_password_dialog.h"
@@ -47,10 +45,6 @@
 #include "host/ui/host_window.h"
 #include "host/ui/security_log_dialog.h"
 #include "host/ui/system_info_window.h"
-#include "host/workers/audio_worker.h"
-#include "host/workers/desktop_ipc_worker.h"
-#include "host/workers/input_worker.h"
-#include "host/workers/screen_worker.h"
 #include "host/workers/service_worker.h"
 #include "host/workers/sys_info_worker.h"
 #include "host/workers/task_mgr_worker.h"
@@ -79,138 +73,9 @@
 #include "base/mac/login_utils.h"
 #include "base/process_util.h"
 #include "common/desktop/elevate_util.h"
-#include "host/screen_capturer_mac.h"
 #endif // defined(Q_OS_MACOS)
 
 namespace {
-
-#if defined(Q_OS_WINDOWS)
-//--------------------------------------------------------------------------------------------------
-// The desktop agent captures the screen and maps input coordinates, so it must be per-monitor DPI
-// aware to work in physical pixels on scaled displays; the other agents do not care either way. The
-// GUI gets this from Qt (QApplication), but a headless agent runs on QCoreApplication, which does not
-// set it - and the shared binary uses the GUI manifest, which deliberately leaves DPI awareness unset
-// so Qt can select Per-Monitor V2.
-//
-// The build targets Windows 7, so the newer entry points are not in the headers; resolve the best
-// available one at runtime: Per-Monitor-V2 (Win10 1703+), then Per-Monitor (Win8.1+), then system
-// aware (always present).
-void setDpiAwareness()
-{
-    if (HMODULE user32 = GetModuleHandleW(L"user32.dll"))
-    {
-        using SetProcessDpiAwarenessContextFn = BOOL(WINAPI*)(HANDLE);
-        auto set_context = reinterpret_cast<SetProcessDpiAwarenessContextFn>(
-            GetProcAddress(user32, "SetProcessDpiAwarenessContext"));
-
-        // DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 == (DPI_AWARENESS_CONTEXT)-4.
-        if (set_context && set_context(reinterpret_cast<HANDLE>(static_cast<INT_PTR>(-4))))
-            return;
-    }
-
-    if (HMODULE shcore = LoadLibraryW(L"shcore.dll"))
-    {
-        using SetProcessDpiAwarenessFn = HRESULT(WINAPI*)(int);
-        auto set_awareness = reinterpret_cast<SetProcessDpiAwarenessFn>(
-            GetProcAddress(shcore, "SetProcessDpiAwareness"));
-
-        // PROCESS_PER_MONITOR_DPI_AWARE == 2.
-        const bool ok = set_awareness && SUCCEEDED(set_awareness(2));
-        FreeLibrary(shcore);
-        if (ok)
-            return;
-    }
-
-    // Windows Vista+ fallback: system DPI aware.
-    SetProcessDPIAware();
-}
-#endif // defined(Q_OS_WINDOWS)
-
-//--------------------------------------------------------------------------------------------------
-// Runs the host as a headless agent; |agent_type| is the "--agent" value straight from the command
-// line ("desktop", "file" or "terminal"). The agent is the same aspia_host binary as the GUI, so it
-// presents the same code identity to the OS - on macOS that is what lets it inherit the app's privacy
-// (TCC) grants instead of being a separate app. Returns the process exit code.
-int runAgent(int& argc, char* argv[], const char* agent_type)
-{
-    const bool desktop = qstrcmp(agent_type, "desktop") == 0;
-    const bool file = qstrcmp(agent_type, "file") == 0;
-    const bool terminal = qstrcmp(agent_type, "terminal") == 0;
-
-    if (!desktop && !file && !terminal)
-    {
-        LOG(ERROR) << "Unknown --agent value:" << agent_type;
-        return 1;
-    }
-
-#if defined(Q_OS_WINDOWS)
-    setDpiAwareness();
-#endif // defined(Q_OS_WINDOWS)
-
-    // On macOS the desktop agent captures the screen on a Qt worker thread that needs a real CFRunLoop
-    // (the capture/display APIs deliver on the run loop). Make Qt back its stock QThread dispatchers
-    // with CoreFoundation so those threads get one; other platforms and agents simply ignore the
-    // variable.
-    qputenv("QT_EVENT_DISPATCHER_CORE_FOUNDATION", "1");
-
-    // The desktop agent is a coordinator: it does no I/O on the main thread (each worker runs its
-    // own), so the main thread keeps the default (Qt) event dispatcher. The file and terminal agents
-    // do their I/O on the main thread and need the asio dispatcher there.
-    if (!desktop)
-        CoreApplication::setEventDispatcher(new AsioEventDispatcher());
-
-    CoreApplication::setApplicationVersion(ASPIA_VERSION_STRING);
-    CoreApplication application(argc, argv);
-
-    if (desktop)
-    {
-#if defined(Q_OS_MACOS)
-        if (!ScreenCapturerMac::waitForDisplays())
-        {
-            LOG(ERROR) << "No online displays; exiting so launchd can restart the agent";
-            return 1;
-        }
-#endif // defined(Q_OS_MACOS)
-
-        HostUtils::printDebugInfo(
-            HostUtils::INCLUDE_VIDEO_ADAPTERS | HostUtils::INCLUDE_WINDOW_STATIONS);
-
-        application.addWorker(std::make_unique<DesktopIpcWorker>());
-        application.addWorker(std::make_unique<ScreenWorker>());
-        application.addWorker(std::make_unique<InputWorker>());
-        application.addWorker(std::make_unique<AudioWorker>());
-
-#if defined(Q_OS_MACOS)
-        // In the session of a logged-in user this agent is the instance of the application that
-        // LaunchServices finds, so it is the one that has to answer the click opening the window.
-        // At the login window there is nobody to click.
-        if (!LoginUtils::isActive())
-            return application.exec(CoreApplication::Loop::APPKIT);
-#endif // defined(Q_OS_MACOS)
-
-        return application.exec();
-    }
-
-    HostUtils::printDebugInfo();
-
-    QString channel_id = qEnvironmentVariable(IpcServer::kChannelIdEnvVar);
-    if (channel_id.isEmpty())
-    {
-        LOG(ERROR) << "Environment variable" << IpcServer::kChannelIdEnvVar << "is not set";
-        return 1;
-    }
-
-    if (file)
-    {
-        FileAgent agent;
-        agent.start(channel_id);
-        return application.exec();
-    }
-
-    TerminalAgent agent;
-    agent.start(channel_id);
-    return application.exec();
-}
 
 //--------------------------------------------------------------------------------------------------
 int startService(QTextStream& out)

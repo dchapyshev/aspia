@@ -34,7 +34,6 @@
 #include "host/input_injector.h"
 #include "host/scale_reducer.h"
 #include "host/system_settings.h"
-#include "host/workers/desktop_ipc_worker.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "host/screen_capturer_win.h"
@@ -476,42 +475,6 @@ void ScreenWorker::onBandwidthChanged(qint64 bandwidth)
 //--------------------------------------------------------------------------------------------------
 void ScreenWorker::onPrepare()
 {
-    ipc_worker_ = findWorker<DesktopIpcWorker>();
-    if (ipc_worker_)
-    {
-        connect(ipc_worker_, &DesktopIpcWorker::sig_selectScreen, this, &ScreenWorker::onSelectScreen,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_keyFrameRequested, this, &ScreenWorker::onKeyFrameRequested,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_preferredSizeChanged, this, &ScreenWorker::onSetPreferredSize,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_configure, this, &ScreenWorker::onConfigure,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_overflowStateChanged, this, &ScreenWorker::onOverflowStateChanged,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_bandwidthChanged, this, &ScreenWorker::onBandwidthChanged,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_stopCapture, this, &ScreenWorker::onStopCapture,
-                Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_paused, this, &ScreenWorker::onSetPaused,
-                Qt::QueuedConnection);
-
-        connect(this, &ScreenWorker::sig_videoData, ipc_worker_, &DesktopIpcWorker::onVideoData,
-                Qt::QueuedConnection);
-        connect(this, &ScreenWorker::sig_cursorShapeData, ipc_worker_, &DesktopIpcWorker::onCursorShapeData,
-                Qt::QueuedConnection);
-        connect(this, &ScreenWorker::sig_cursorPositionData, ipc_worker_, &DesktopIpcWorker::onCursorPositionData,
-                Qt::QueuedConnection);
-        connect(this, &ScreenWorker::sig_screenListData, ipc_worker_, &DesktopIpcWorker::onScreenListData,
-                Qt::QueuedConnection);
-        connect(this, &ScreenWorker::sig_screenTypeData, ipc_worker_, &DesktopIpcWorker::onScreenTypeData,
-                Qt::QueuedConnection);
-    }
-    else
-    {
-        LOG(ERROR) << "IPC worker not found";
-    }
-
     SystemSettings settings;
     preferred_capturer_ = static_cast<ScreenCapturer::Type>(settings.preferredVideoCapturer());
     h264_enabled_ = settings.isHardwareVideoEncodingEnabled() &&
@@ -546,12 +509,6 @@ void ScreenWorker::onStart()
 void ScreenWorker::onStop()
 {
     LOG(INFO) << "Screen worker stopped";
-
-    if (ipc_worker_)
-    {
-        ipc_worker_->disconnect(this);
-        ipc_worker_ = nullptr;
-    }
 
     // Everything created in onStart() lives in the worker thread and must be destroyed here.
     // Destroy the injector before the capturer: on Linux (Wayland) it references capturer-owned

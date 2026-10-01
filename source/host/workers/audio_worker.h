@@ -29,7 +29,6 @@
 
 class AudioCapturer;
 class AudioEncoder;
-class DesktopIpcWorker;
 
 class AudioWorker final : public Worker
 {
@@ -61,9 +60,6 @@ protected:
 
 private:
     void encodePacket(const proto::audio::Packet& packet);
-
-    // Source of the enable/disable command. Resolved through WorkerManager on start.
-    QPointer<DesktopIpcWorker> ipc_worker_;
 
     std::unique_ptr<AudioCapturer> capturer_;
     std::unique_ptr<AudioEncoder> encoder_;

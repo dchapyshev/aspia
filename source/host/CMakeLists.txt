@@ -150,6 +150,8 @@ list(APPEND SOURCE_HOST_CORE
     user_settings.h)
 
 list(APPEND SOURCE_HOST
+    agent_main.cc
+    agent_main.h
     main.cc)
 
 list(APPEND SOURCE_HOST_TESTS
