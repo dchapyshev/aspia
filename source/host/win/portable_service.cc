@@ -18,8 +18,29 @@
 
 #include "host/win/portable_service.h"
 
+#include <QCoreApplication>
+
 #include "base/logging.h"
+#include "base/net/firewall_manager.h"
 #include "host/win/portable_host.h"
+
+namespace {
+
+const char kFirewallRuleDescription[] = "Allow incoming connections for Aspia Quick Support";
+
+//--------------------------------------------------------------------------------------------------
+QString firewallTcpRuleName()
+{
+    return PortableHost::serviceName() + " (TCP)";
+}
+
+//--------------------------------------------------------------------------------------------------
+QString firewallUdpRuleName()
+{
+    return PortableHost::serviceName() + " (UDP)";
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 PortableService::PortableService(QObject* parent)
@@ -38,10 +59,33 @@ PortableService::~PortableService()
 void PortableService::onStart()
 {
     LOG(INFO) << "Portable service is started";
+
+    FirewallManager firewall(QCoreApplication::applicationFilePath());
+    if (!firewall.isValid())
+    {
+        LOG(ERROR) << "Invalid firewall manager";
+        return;
+    }
+
+    if (!firewall.addTcpRule(firewallTcpRuleName(), kFirewallRuleDescription))
+        LOG(ERROR) << "Unable to add firewall rule for TCP";
+
+    if (!firewall.addUdpRule(firewallUdpRuleName(), kFirewallRuleDescription))
+        LOG(ERROR) << "Unable to add firewall rule for UDP";
 }
 
 //--------------------------------------------------------------------------------------------------
 void PortableService::onStop()
 {
     LOG(INFO) << "Portable service is stopped";
+
+    FirewallManager firewall(QCoreApplication::applicationFilePath());
+    if (!firewall.isValid())
+    {
+        LOG(ERROR) << "Invalid firewall manager";
+        return;
+    }
+
+    firewall.deleteRuleByName(firewallTcpRuleName());
+    firewall.deleteRuleByName(firewallUdpRuleName());
 }

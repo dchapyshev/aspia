@@ -138,7 +138,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
             this, &ConfigDialog::onExport);
     connect(export_menu->addAction(tr("Installer")), &QAction::triggered,
             this, &ConfigDialog::onExportInstaller);
-    connect(export_menu->addAction(tr("Portable")), &QAction::triggered,
+    connect(export_menu->addAction(tr("Quick Support")), &QAction::triggered,
             this, &ConfigDialog::onExportPortable);
     ui->button_export->setMenu(export_menu);
 #else
@@ -634,7 +634,7 @@ void ConfigDialog::onExportPortable()
     LOG(INFO) << "[ACTION] Export portable";
 
     QString file_path = QFileDialog::getSaveFileName(
-        this, tr("Export Portable"), desktopPath("aspia-quick-support.exe"),
+        this, tr("Export Quick Support"), desktopPath("aspia-quick-support.exe"),
         tr("Executable files (*.exe)"));
     if (file_path.isEmpty())
     {

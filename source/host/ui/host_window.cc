@@ -176,6 +176,9 @@ HostWindow::HostWindow(QWidget* parent)
         ui->action_security_log->setVisible(false);
         ui->action_settings->setVisible(false);
         ui->action_show_hide->setVisible(false);
+
+        if (!ProcessUtil::isProcessElevated())
+            ui->action_about_system->setVisible(false);
     }
 #endif // defined(Q_OS_WINDOWS)
 

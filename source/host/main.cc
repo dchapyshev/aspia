@@ -377,6 +377,8 @@ int runService(int& argc, char* argv[])
     if (PortableHost::isActive())
     {
         application.addWorker(std::make_unique<PortableServiceWorker>());
+        application.addWorker(std::make_unique<TaskMgrWorker>());
+        application.addWorker(std::make_unique<ToolsWorker>());
         return PortableService().exec(application);
     }
 #endif // defined(Q_OS_WINDOWS)
