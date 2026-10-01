@@ -40,6 +40,8 @@ struct WorkerTestState
     std::atomic<bool> sibling_found{ false };
     std::atomic<void*> prepare_thread_id{ nullptr };
     std::atomic<bool> signal_received{ false };
+    std::atomic<bool> sibling_connected_at_stop{ false };
+    std::atomic<bool> self_connected_at_stop{ false };
 
     // Written in onStart(); reading from the test thread is ordered by the start() barrier.
     QString thread_name;
@@ -77,13 +79,7 @@ protected:
         state_->started = true;
     }
 
-    void onStop() final
-    {
-        state_->stop_thread_id = QThread::currentThreadId();
-        if (state_->on_stop)
-            state_->on_stop();
-        state_->stopped = true;
-    }
+    void onStop() final;
 
     void onTimer(TimePoint /* now */) final { ++state_->ticks; }
 
@@ -133,6 +129,23 @@ void TestWorkerA::onPrepare()
         connect(sibling, &TestWorkerB::sig_started, this,
                 [this]() { state_->signal_received = true; }, Qt::QueuedConnection);
     }
+
+    connect(this, &Worker::sig_tick, this, [](TimePoint /* now */) {});
+}
+
+//--------------------------------------------------------------------------------------------------
+void TestWorkerA::onStop()
+{
+    state_->stop_thread_id = QThread::currentThreadId();
+
+    // A disconnect succeeds only for a connection that still exists.
+    if (TestWorkerB* sibling = findWorker<TestWorkerB>())
+        state_->sibling_connected_at_stop = disconnect(sibling, &TestWorkerB::sig_started, this, nullptr);
+    state_->self_connected_at_stop = disconnect(this, &Worker::sig_tick, this, nullptr);
+
+    if (state_->on_stop)
+        state_->on_stop();
+    state_->stopped = true;
 }
 
 namespace {
@@ -351,6 +364,25 @@ TEST(WorkerTests, SignalFromOnStartReachesSubscriptionFromOnPrepare)
         std::this_thread::sleep_for(MilliSeconds(10));
 
     EXPECT_TRUE(state_a->signal_received);
+}
+
+// A worker that is being stopped no longer receives signals from its siblings, while its connections
+// to itself stay.
+TEST(WorkerTests, DestructorDisconnectsWorkersBeforeStopping)
+{
+    auto state_a = std::make_shared<WorkerTestState>();
+    auto state_b = std::make_shared<WorkerTestState>();
+
+    {
+        WorkerManager manager;
+        manager.add(std::make_unique<TestWorkerA>(state_a));
+        manager.add(std::make_unique<TestWorkerB>(state_b));
+        manager.start();
+    }
+
+    EXPECT_TRUE(state_a->stopped);
+    EXPECT_FALSE(state_a->sibling_connected_at_stop);
+    EXPECT_TRUE(state_a->self_connected_at_stop);
 }
 
 TEST(WorkerTests, DestructorWithoutStartDoesNotHang)

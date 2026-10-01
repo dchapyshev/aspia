@@ -141,6 +141,15 @@ WorkerManager::~WorkerManager()
         watchdog_timer_id_ = 0;
     }
 
+    for (const auto& sender : workers_)
+    {
+        for (const auto& receiver : workers_)
+        {
+            if (sender.first != receiver.first)
+                disconnect(sender.second.get(), nullptr, receiver.second.get(), nullptr);
+        }
+    }
+
     std::vector<Worker*> pending;
     pending.reserve(workers_.size());
 
