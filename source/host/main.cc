@@ -35,6 +35,7 @@
 #include "common/desktop/msg_box.h"
 #include "host/database.h"
 #include "host/file_agent.h"
+#include "host/host_constants.h"
 #include "host/host_utils.h"
 #include "host/service.h"
 #include "host/settings_util.h"
@@ -585,7 +586,14 @@ int main(int argc, char* argv[])
     ProcessUtil::restartAsRoot(argv);
 #endif // defined(Q_OS_MACOS)
 
-    Application application(argc, argv);
+    QString ui_channel_id = kHostUiChannelId;
+
+#if defined(Q_OS_WINDOWS)
+    if (PortableHost::isActive())
+        ui_channel_id = PortableHost::uiChannelId();
+#endif // defined(Q_OS_WINDOWS)
+
+    Application application(argc, argv, ui_channel_id);
     Application::setQuitOnLastWindowClosed(false);
 
 #if defined(Q_OS_LINUX)
