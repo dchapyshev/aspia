@@ -135,8 +135,9 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UserSession::UserSession(QObject* parent)
-    : QObject(parent)
+UserSession::UserSession(const QString& ipc_channel_id, QObject* parent)
+    : QObject(parent),
+      ipc_channel_id_(ipc_channel_id)
 {
     LOG(INFO) << "Ctor";
 
@@ -186,9 +187,9 @@ bool UserSession::start()
     ipc_server_ = new IpcServer(this);
     connect(ipc_server_, &IpcServer::sig_newConnection, this, &UserSession::onIpcNewConnection);
 
-    LOG(INFO) << "Start IPC server for UI (channel:" << kHostUiChannelId << ")";
+    LOG(INFO) << "Start IPC server for UI (channel:" << ipc_channel_id_ << ")";
 
-    if (!ipc_server_->start(kHostUiChannelId, IpcServer::AccessMode::INTERACTIVE_USER))
+    if (!ipc_server_->start(ipc_channel_id_, IpcServer::AccessMode::INTERACTIVE_USER))
     {
         LOG(ERROR) << "Failed to start IPC server for UI";
         return false;

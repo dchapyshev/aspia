@@ -357,3 +357,10 @@ QString PortableHost::desktopAgentChannelId()
 {
     return QString::fromLatin1(kDesktopAgentChannelId) + '-' + runId();
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString PortableHost::uiChannelId()
+{
+    return QString::fromLatin1(kHostUiChannelId) + '-' + runId();
+}

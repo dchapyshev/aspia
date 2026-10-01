@@ -135,7 +135,7 @@ void ServiceWorker::onPrepare()
     settings_watcher_->addPath(settings_file_path);
     settings_watcher_->addPath(Database::filePath());
 
-    user_session_ = new UserSession(this);
+    user_session_ = new UserSession(kHostUiChannelId, this);
     connect(user_session_, &UserSession::sig_attached, this, &ServiceWorker::onUserSessionAttached);
     connect(user_session_, &UserSession::sig_dettached, this, &ServiceWorker::onUserSessionDettached);
     connect(user_session_, &UserSession::sig_confirmationReply, this, &ServiceWorker::onConfirmationReply);

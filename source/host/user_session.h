@@ -27,6 +27,7 @@
 #include "base/session_id.h"
 #include "base/time_types.h"
 #include "base/peer/host_id.h"
+#include "host/host_constants.h"
 #include "proto/user.h"
 
 class IpcChannel;
@@ -39,7 +40,7 @@ class UserSession final : public QObject
     Q_OBJECT
 
 public:
-    explicit UserSession(QObject* parent = nullptr);
+    explicit UserSession(const QString& ipc_channel_id = kHostUiChannelId, QObject* parent = nullptr);
     ~UserSession() final;
 
     enum class State
@@ -101,6 +102,8 @@ private:
     void attach(const Location& location, AttachReason reason, SessionId session_id);
     void dettach(const Location& location);
     void sendMessage();
+
+    const QString ipc_channel_id_;
 
     IpcServer* ipc_server_ = nullptr;
     ScopedQPointer<IpcChannel> ipc_channel_;
