@@ -40,7 +40,7 @@
 #include "base/win/security_helpers.h"
 #include "host/host_constants.h"
 #include "host/win/portable_package.h"
-#include "host/workers/portable_service_worker.h"
+#include "host/workers/portable_user_worker.h"
 #include "version.h"
 
 namespace {
@@ -369,7 +369,7 @@ int launchUserMode(int& argc, char* argv[])
     CoreApplication::setApplicationVersion(ASPIA_VERSION_STRING);
 
     CoreApplication application(argc, argv);
-    application.addWorker(std::make_unique<PortableServiceWorker>());
+    application.addWorker(std::make_unique<PortableUserWorker>());
 
     // Start the GUI in this launcher's session.
     if (!ProcessUtil::createProcess(QDir::toNativeSeparators(BasePaths::currentApp()), QString()))
