@@ -46,8 +46,6 @@ class Pause;
 class PreferredSize;
 } // namespace proto::video
 
-class IpcChannel;
-
 class DesktopAgentClient final : public QObject
 {
     Q_OBJECT
@@ -75,9 +73,10 @@ public:
     void onAudioData(const QByteArray& buffer);
 
 public slots:
-    void start(const QString& ipc_channel_name);
+    void onMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
 
 signals:
+    void sig_sendMessage(quint32 channel_id, const QByteArray& buffer, bool reliable);
     void sig_injectKeyEvent(const proto::input::KeyEvent& event);
     void sig_injectTextEvent(const proto::input::TextEvent& event);
     void sig_injectMouseEvent(const proto::input::MouseEvent& event);
@@ -88,12 +87,6 @@ signals:
     void sig_bandwidthChanged();
     void sig_configured();
     void sig_finished();
-
-private slots:
-    void onIpcConnected();
-    void onIpcErrorOccurred();
-    void onIpcDisconnected();
-    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
 
 private:
     void readSessionMessage(quint8 channel_id, const QByteArray& buffer);
@@ -107,8 +100,6 @@ private:
     void readPowerControl(const proto::power::Control& control);
     void readOverflow(proto::desktop::Overflow::State state);
     void sendCapabilities();
-
-    IpcChannel* ipc_channel_ = nullptr;
 
     proto::desktop::Overflow::State overflow_state_ = proto::desktop::Overflow::STATE_NONE;
     std::optional<proto::control::Config> config_;

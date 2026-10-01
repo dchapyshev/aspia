@@ -23,7 +23,6 @@
 #include "base/numeric_utils.h"
 #include "base/power_controller.h"
 #include "base/serialization.h"
-#include "base/ipc/ipc_channel.h"
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_channel.h"
@@ -46,14 +45,9 @@ const int kMaxScreenSize = std::numeric_limits<qint16>::max();
 
 //--------------------------------------------------------------------------------------------------
 DesktopAgentClient::DesktopAgentClient(QObject* parent)
-    : QObject(parent),
-      ipc_channel_(new IpcChannel(this))
+    : QObject(parent)
 {
     CLOG(INFO) << "Ctor";
-    connect(ipc_channel_, &IpcChannel::sig_connected, this, &DesktopAgentClient::onIpcConnected);
-    connect(ipc_channel_, &IpcChannel::sig_disconnected, this, &DesktopAgentClient::onIpcDisconnected);
-    connect(ipc_channel_, &IpcChannel::sig_errorOccurred, this, &DesktopAgentClient::onIpcErrorOccurred);
-    connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &DesktopAgentClient::onIpcMessageReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -108,37 +102,7 @@ void DesktopAgentClient::onAudioData(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::start(const QString& ipc_channel_name)
-{
-    ipc_channel_->connectTo(ipc_channel_name);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onIpcConnected()
-{
-    CLOG(INFO) << "IPC channel is connected";
-    ipc_channel_->setPaused(false);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onIpcErrorOccurred()
-{
-    CLOG(ERROR) << "Unable to connect to IPC server";
-    ipc_channel_->disconnect();
-    emit sig_finished();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onIpcDisconnected()
-{
-    CLOG(INFO) << "IPC channel is disconnected";
-    ipc_channel_->disconnect();
-    emit sig_finished();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onIpcMessageReceived(
-    quint32 channel_id, const QByteArray& buffer, bool /* reliable */)
+void DesktopAgentClient::onMessageReceived(quint32 channel_id, const QByteArray& buffer, bool /* reliable */)
 {
     quint16 net_channel_id = lowWord(channel_id);
     quint16 ipc_channel_id = highWord(channel_id);
@@ -277,7 +241,7 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
 void DesktopAgentClient::sendSessionMessage(quint8 net_channel_id, const QByteArray& buffer, bool reliable)
 {
     quint32 channel_id = makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, net_channel_id);
-    ipc_channel_->send(channel_id, buffer, reliable);
+    emit sig_sendMessage(channel_id, buffer, reliable);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -376,8 +376,34 @@ void DesktopIpcWorker::startClient(const QString& ipc_channel_name)
     connect(client, &DesktopAgentClient::sig_configured, this, &DesktopIpcWorker::onClientConfigured);
     connect(client, &DesktopAgentClient::sig_finished, this, &DesktopIpcWorker::onClientFinished);
 
+    IpcChannel* ipc_channel = new IpcChannel(client);
+
+    connect(ipc_channel, &IpcChannel::sig_connected, client, [ipc_channel]()
+    {
+        LOG(INFO) << "Client IPC channel is connected";
+        ipc_channel->setPaused(false);
+    });
+    connect(ipc_channel, &IpcChannel::sig_errorOccurred, client, [client, ipc_channel]()
+    {
+        LOG(ERROR) << "Unable to connect to client IPC server";
+        ipc_channel->disconnect();
+        emit client->sig_finished();
+    });
+    connect(ipc_channel, &IpcChannel::sig_disconnected, client, [client, ipc_channel]()
+    {
+        LOG(INFO) << "Client IPC channel is disconnected";
+        ipc_channel->disconnect();
+        emit client->sig_finished();
+    });
+    connect(ipc_channel, &IpcChannel::sig_messageReceived, client, &DesktopAgentClient::onMessageReceived);
+    connect(client, &DesktopAgentClient::sig_sendMessage, ipc_channel,
+            [ipc_channel](quint32 channel_id, const QByteArray& buffer, bool reliable)
+    {
+        ipc_channel->send(channel_id, buffer, reliable);
+    });
+
     LOG(INFO) << "Starting client...";
-    client->start(ipc_channel_name);
+    ipc_channel->connectTo(ipc_channel_name);
 }
 
 //--------------------------------------------------------------------------------------------------
