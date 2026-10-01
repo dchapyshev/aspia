@@ -26,6 +26,7 @@
 #include <ShlObj.h>
 #include <TlHelp32.h>
 
+#include "base/core_application.h"
 #include "base/logging.h"
 #include "base/process_util.h"
 #include "base/service_controller.h"
@@ -33,11 +34,14 @@
 #include "base/time_types.h"
 #include "base/crypto/random.h"
 #include "base/files/base_paths.h"
+#include "base/threading/asio_event_dispatcher.h"
 #include "base/win/scoped_co_mem.h"
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
 #include "host/host_constants.h"
 #include "host/win/portable_package.h"
+#include "host/workers/portable_service_worker.h"
+#include "version.h"
 
 namespace {
 
@@ -348,6 +352,31 @@ int launch()
     return result ? 0 : 1;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Runs the portable host in user mode: the service worker lives in this (the launcher's) process,
+// without a Windows service, and the GUI is launched into the user's session. Used when the user
+// declined the elevation prompt.
+int launchUserMode(int& argc, char* argv[])
+{
+    CoreApplication::setEventDispatcher(new AsioEventDispatcher());
+    CoreApplication::setApplicationVersion(ASPIA_VERSION_STRING);
+
+    CoreApplication application(argc, argv);
+    application.addWorker(std::make_unique<PortableServiceWorker>());
+
+    // This process is already in the user's session, so the GUI is started here with a plain process
+    // creation. It retries the IPC connection, so the moment before the worker's IPC server is ready
+    // does not matter. When the user closes the GUI the worker stops and the event loop ends.
+    if (!ProcessUtil::createProcess(QDir::toNativeSeparators(BasePaths::currentApp()),
+            QString::fromLatin1(kGuiHiddenOption)))
+    {
+        LOG(ERROR) << "Unable to start the portable GUI";
+    }
+
+    LOG(INFO) << "Portable host is started in user mode";
+    return application.exec();
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -364,6 +393,15 @@ bool PortableHost::isStartedByLauncher()
 
 //--------------------------------------------------------------------------------------------------
 // static
+bool PortableHost::isLauncherInvocation(int argc, char* argv[])
+{
+    if (argc == 1)
+        return true;
+    return argc == 2 && qstrcmp(argv[1], kLaunchOption) == 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 int PortableHost::runLauncher(int argc, char* argv[])
 {
     const bool relaunched = argc == 2 && qstrcmp(argv[1], kLaunchOption) == 0;
@@ -376,24 +414,30 @@ int PortableHost::runLauncher(int argc, char* argv[])
     if (ProcessUtil::isProcessElevated())
         return launch();
 
-    // The temporary service needs administrator rights.
     if (relaunched)
     {
         LOG(ERROR) << "The launcher is not elevated";
         return 1;
     }
 
-    return ProcessUtil::createProcess(
-        QDir::toNativeSeparators(BasePaths::currentApp()),
-        QString::fromLatin1(kLaunchOption),
-        ProcessUtil::ExecuteMode::ELEVATE) ? 0 : 1;
+    // Ask for elevation (the temporary service needs administrator rights). If the user declines the
+    // UAC prompt, fall back to running without it, in user mode.
+    if (ProcessUtil::createProcess(QDir::toNativeSeparators(BasePaths::currentApp()),
+            QString::fromLatin1(kLaunchOption), ProcessUtil::ExecuteMode::ELEVATE))
+    {
+        return 0;
+    }
+
+    LOG(INFO) << "Elevation was declined; starting the portable host in user mode";
+    return launchUserMode(argc, argv);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 bool PortableHost::isActive()
 {
-    static const bool active = PortablePackage::builtInSettings().has_value() && isStartedByLauncher();
+    static const bool active = PortablePackage::builtInSettings().has_value() &&
+        (isStartedByLauncher() || !ProcessUtil::isProcessElevated());
     return active;
 }
 

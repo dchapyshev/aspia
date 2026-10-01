@@ -27,10 +27,16 @@ public:
     // Whether the executable of this process is the copy made by the launcher.
     static bool isStartedByLauncher();
 
-    // Runs the launcher (asks for administrator rights, starts the temporary service, cleans up).
+    // Whether this invocation is the launcher itself (bare, or the internal relaunch) rather than a
+    // child role (the --hidden GUI, the --agent process).
+    static bool isLauncherInvocation(int argc, char* argv[]);
+
+    // Runs the launcher: asks for administrator rights and starts the temporary service, or, if the
+    // elevation prompt is declined, runs the host in user mode in this process.
     static int runLauncher(int argc, char* argv[]);
 
-    // Whether this process is the copy the launcher runs as the portable service.
+    // Whether this process is part of a portable run (an elevated child from the launcher's copy, or
+    // any non-elevated portable process in user mode).
     static bool isActive();
 
     // Name of the temporary service of the portable host this process belongs to.

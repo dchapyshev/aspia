@@ -522,7 +522,7 @@ int main(int argc, char* argv[])
     ScopedLogging scoped_logging(logging_settings);
 
 #if defined(Q_OS_WINDOWS)
-    if (PortablePackage::builtInSettings() && !PortableHost::isStartedByLauncher())
+    if (PortablePackage::builtInSettings() && PortableHost::isLauncherInvocation(argc, argv))
         return PortableHost::runLauncher(argc, argv);
 #endif // defined(Q_OS_WINDOWS)
 
