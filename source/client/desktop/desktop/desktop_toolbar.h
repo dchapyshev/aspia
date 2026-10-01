@@ -64,6 +64,7 @@ public:
     void enableTaskManager(bool enable);
     void enableCtrlAltDelFeature(bool enable);
     void enableRebootInSafeMode(bool enable);
+    void enableWaitForHost(bool enable);
     void enablePasteAsKeystrokesFeature(bool enable);
 
     void setScreenList(const proto::screen::ScreenList& screen_list);
@@ -171,6 +172,7 @@ private:
     bool leaved_ = true;
     bool is_tabbed_ = false;
     bool wait_for_host_ = true;
+    bool wait_for_host_enabled_ = true;
 
     qint64 scale_ = -1;
 

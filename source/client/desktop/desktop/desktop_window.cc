@@ -426,6 +426,8 @@ void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& ca
             elevated = value;
     }
 
+    toolbar_->enableWaitForHost(!portable);
+
     if (portable)
     {
         toolbar_->enableTextChat(false);
@@ -433,7 +435,10 @@ void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& ca
         toolbar_->enableSystemInfo(false);
 
         if (!elevated)
+        {
             toolbar_->enableCtrlAltDelFeature(false);
+            toolbar_->enablePowerControl(false);
+        }
     }
 }
 

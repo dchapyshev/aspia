@@ -296,6 +296,13 @@ void DesktopToolBar::enableRebootInSafeMode(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopToolBar::enableWaitForHost(bool enable)
+{
+    LOG(INFO) << "enableWaitForHost:" << enable;
+    wait_for_host_enabled_ = enable;
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enablePasteAsKeystrokesFeature(bool enable)
 {
     LOG(INFO) << "enablePasteAsKeystrokesFeature:" << enable;
@@ -829,17 +836,24 @@ void DesktopToolBar::onPowerControl(QAction* action)
             MsgBox::Yes | MsgBox::No,
             this));
 
-        QCheckBox* wait_checkbox = new QCheckBox(message_box);
-        wait_checkbox->setText(tr("Wait for host"));
-        wait_checkbox->setChecked(wait_for_host_);
-        message_box->setCheckBox(wait_checkbox);
+        QCheckBox* wait_checkbox = nullptr;
+        if (wait_for_host_enabled_)
+        {
+            wait_checkbox = new QCheckBox(message_box);
+            wait_checkbox->setText(tr("Wait for host"));
+            wait_checkbox->setChecked(wait_for_host_);
+            message_box->setCheckBox(wait_checkbox);
+        }
 
         if (message_box->exec() == MsgBox::Yes)
         {
-            wait_for_host_ = wait_checkbox->isChecked();
+            if (wait_checkbox)
+                wait_for_host_ = wait_checkbox->isChecked();
 
-            LOG(INFO) << "[ACTION] Reboot accepted by user (wait=" << wait_for_host_ << ")";
-            emit sig_powerControl(proto::power::Control::ACTION_REBOOT, wait_for_host_);
+            const bool wait = wait_for_host_enabled_ && wait_for_host_;
+
+            LOG(INFO) << "[ACTION] Reboot accepted by user (wait=" << wait << ")";
+            emit sig_powerControl(proto::power::Control::ACTION_REBOOT, wait);
         }
         else
         {
@@ -855,17 +869,24 @@ void DesktopToolBar::onPowerControl(QAction* action)
             MsgBox::Yes | MsgBox::No,
             this));
 
-        QCheckBox* wait_checkbox = new QCheckBox(message_box);
-        wait_checkbox->setText(tr("Wait for host"));
-        wait_checkbox->setChecked(wait_for_host_);
-        message_box->setCheckBox(wait_checkbox);
+        QCheckBox* wait_checkbox = nullptr;
+        if (wait_for_host_enabled_)
+        {
+            wait_checkbox = new QCheckBox(message_box);
+            wait_checkbox->setText(tr("Wait for host"));
+            wait_checkbox->setChecked(wait_for_host_);
+            message_box->setCheckBox(wait_checkbox);
+        }
 
         if (message_box->exec() == MsgBox::Yes)
         {
-            wait_for_host_ = wait_checkbox->isChecked();
+            if (wait_checkbox)
+                wait_for_host_ = wait_checkbox->isChecked();
 
-            LOG(INFO) << "[ACTION] Reboot (safe mode) accepted by user (wait=" << wait_for_host_ << ")";
-            emit sig_powerControl(proto::power::Control::ACTION_REBOOT_SAFE_MODE, wait_for_host_);
+            const bool wait = wait_for_host_enabled_ && wait_for_host_;
+
+            LOG(INFO) << "[ACTION] Reboot (safe mode) accepted by user (wait=" << wait << ")";
+            emit sig_powerControl(proto::power::Control::ACTION_REBOOT_SAFE_MODE, wait);
         }
         else
         {
