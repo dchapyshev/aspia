@@ -19,6 +19,8 @@
 #ifndef HOST_WORKERS_PORTABLE_SERVICE_WORKER_H
 #define HOST_WORKERS_PORTABLE_SERVICE_WORKER_H
 
+#include <QList>
+
 #include "base/scoped_qpointer.h"
 #include "base/peer/host_id.h"
 #include "base/threading/worker.h"
@@ -27,10 +29,12 @@ namespace proto::user {
 class RouterState;
 } // namespace proto::user
 
+class Client;
 class DesktopManager;
 class PortableUserSession;
 class RouterManager;
 class SecureString;
+class TcpChannel;
 
 class PortableServiceWorker final : public Worker
 {
@@ -49,11 +53,19 @@ protected:
 private slots:
     void onRouterStateChanged(const proto::user::RouterState& state);
     void onCredentialsChanged(HostId host_id, const SecureString& one_time_password);
+    void onNewRelayConnection();
+    void onStopClient(quint32 client_id);
+    void onClientFinished();
+    void onDesktopManagerAttached();
 
 private:
+    void startClient(TcpChannel* tcp_channel, const QString& stun_host, quint16 stun_port);
+
     ScopedQPointer<RouterManager> router_manager_;
     ScopedQPointer<DesktopManager> desktop_manager_;
     ScopedQPointer<PortableUserSession> user_session_;
+
+    QList<Client*> clients_;
 
     Q_DISABLE_COPY_MOVE(PortableServiceWorker)
 };

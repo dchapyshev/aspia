@@ -119,30 +119,6 @@ void PortableUserSession::onUpdateCredentials(HostId host_id, const SecureString
 }
 
 //--------------------------------------------------------------------------------------------------
-void PortableUserSession::onClientConfirmation(const proto::user::ConfirmationRequest& request)
-{
-    if (request.session_type() == proto::peer::SESSION_TYPE_SYSTEM_INFO)
-    {
-        LOG(INFO) << "Accept: confirmation for system info session NOT required";
-        emit sig_confirmationReply(request.id(), true);
-        return;
-    }
-
-    // The portable host has no database policy for the no-GUI case. The GUI is the only place a
-    // request can be shown, so if it is not attached the request is rejected.
-    if (!ipc_channel_)
-    {
-        LOG(INFO) << "Reject: no portable GUI to ask";
-        emit sig_confirmationReply(request.id(), false);
-        return;
-    }
-
-    outgoing_message_.newMessage<proto::user::ServiceToUser>()
-        .mutable_confirmation_request()->CopyFrom(request);
-    sendMessage();
-}
-
-//--------------------------------------------------------------------------------------------------
 void PortableUserSession::onClientStarted()
 {
     Client* client = dynamic_cast<Client*>(sender());
@@ -156,10 +132,6 @@ void PortableUserSession::onClientStarted()
     switch (session_type)
     {
         case proto::peer::SESSION_TYPE_DESKTOP:
-            ++desktop_client_count_;
-            sendConnectEvent(client_id, session_type, computer_name, display_name);
-            break;
-
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             sendConnectEvent(client_id, session_type, computer_name, display_name);
             break;
@@ -179,10 +151,6 @@ void PortableUserSession::onClientFinished()
     switch (session_type)
     {
         case proto::peer::SESSION_TYPE_DESKTOP:
-            sendDisconnectEvent(client->clientId());
-            desktop_client_count_ = std::max(desktop_client_count_ - 1, 0);
-            break;
-
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             sendDisconnectEvent(client->clientId());
             break;
@@ -190,13 +158,6 @@ void PortableUserSession::onClientFinished()
         default:
             break;
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void PortableUserSession::onClientChat(quint32 /* client_id */, const proto::chat::Chat& chat)
-{
-    outgoing_message_.newMessage<proto::user::ServiceToUser>().mutable_chat()->CopyFrom(chat);
-    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -243,6 +204,7 @@ void PortableUserSession::onIpcNewConnection()
     }
 
     ipc_channel_ = ipc_channel.release();
+    session_id_ = ipc_channel_->sessionId();
 
     connect(ipc_channel_, &IpcChannel::sig_disconnected,
             this, &PortableUserSession::onIpcDisconnected);
@@ -251,7 +213,8 @@ void PortableUserSession::onIpcNewConnection()
 
     ipc_channel_->setPaused(false);
 
-    LOG(INFO) << "Portable GUI connected (IPC channel" << ipc_channel_->channelName() << ")";
+    LOG(INFO) << "Portable GUI connected (IPC channel" << ipc_channel_->channelName()
+              << "session:" << session_id_ << ")";
     emit sig_attached();
 }
 
@@ -260,6 +223,7 @@ void PortableUserSession::onIpcDisconnected()
 {
     LOG(INFO) << "Portable GUI disconnected";
     ipc_channel_.reset();
+    session_id_ = kInvalidSessionId;
     emit sig_guiTerminated();
 }
 
@@ -304,13 +268,6 @@ void PortableUserSession::onIpcMessageReceived(
     {
         quint32 sessions = message->one_time_sessions().sessions();
         emit sig_changeOneTimeSessions(sessions);
-    }
-    else if (message->has_confirmation_reply())
-    {
-        proto::user::ConfirmationReply confirmation = message->confirmation_reply();
-        LOG(INFO) << "Connect confirmation (request_id:" << confirmation.id() << "accept:"
-                  << confirmation.accept();
-        emit sig_confirmationReply(confirmation.id(), confirmation.accept());
     }
     else if (message->has_control())
     {
@@ -361,11 +318,6 @@ void PortableUserSession::onIpcMessageReceived(
         {
             LOG(ERROR) << "Unhandled command:" << command_name;
         }
-    }
-    else if (message->has_chat())
-    {
-        LOG(INFO) << "Text chat message";
-        emit sig_chatMessage(message->chat());
     }
     else
     {

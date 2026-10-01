@@ -23,6 +23,7 @@
 
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
+#include "base/session_id.h"
 #include "base/peer/host_id.h"
 #include "host/host_constants.h"
 #include "proto/user.h"
@@ -39,6 +40,8 @@ public:
     explicit PortableUserSession(const QString& ipc_channel_id = kHostUiChannelId, QObject* parent = nullptr);
     ~PortableUserSession() final;
 
+    SessionId sessionId() const { return session_id_; }
+
     void sendConnectEvent(quint32 client_id, proto::peer::SessionType session_type,
         const QString& computer_name, const QString& display_name);
     void sendDisconnectEvent(quint32 client_id);
@@ -47,10 +50,8 @@ public slots:
     bool start();
     void onRouterStateChanged(const proto::user::RouterState& state);
     void onUpdateCredentials(HostId host_id, const SecureString& password);
-    void onClientConfirmation(const proto::user::ConfirmationRequest& request);
     void onClientStarted();
     void onClientFinished();
-    void onClientChat(quint32 client_id, const proto::chat::Chat& chat);
     void onClientMessage(quint8 net_channel_id, const QByteArray& buffer);
 
 signals:
@@ -58,9 +59,7 @@ signals:
     void sig_guiTerminated();
     void sig_changeOneTimePassword();
     void sig_changeOneTimeSessions(quint32 sessions);
-    void sig_confirmationReply(quint32 request_id, bool accept);
     void sig_stopClient(quint32 client_id);
-    void sig_chatMessage(const proto::chat::Chat& chat);
     void sig_lockMouseChanged(bool enable);
     void sig_lockKeyboardChanged(bool enable);
     void sig_pauseChanged(bool enable);
@@ -79,7 +78,7 @@ private:
     IpcServer* ipc_server_ = nullptr;
     ScopedQPointer<IpcChannel> ipc_channel_;
 
-    int desktop_client_count_ = 0;
+    SessionId session_id_ = kInvalidSessionId;
 
     Parser<proto::user::UserToService> incoming_message_;
     Serializer<proto::user::ServiceToUser> outgoing_message_;
