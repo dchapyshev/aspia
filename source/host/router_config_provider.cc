@@ -187,13 +187,13 @@ bool PortableConfigProvider::oneTimePassword() const
 //--------------------------------------------------------------------------------------------------
 quint32 PortableConfigProvider::oneTimePasswordCharacters() const
 {
-    return PasswordGenerator::kDefaultCharacters;
+    return PasswordGenerator::DIGITS;
 }
 
 //--------------------------------------------------------------------------------------------------
 int PortableConfigProvider::oneTimePasswordLength() const
 {
-    return static_cast<int>(PasswordGenerator::kDefaultLength);
+    return 8;
 }
 
 //--------------------------------------------------------------------------------------------------
