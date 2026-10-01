@@ -605,15 +605,15 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& pos)
 {
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
 
     if (type == SidebarItem::LOCAL_GROUP)
     {
-        menu.addAction(ui->action_add_group);
-        menu.addAction(ui->action_edit_group);
-        menu.addAction(ui->action_delete_group);
-        menu.addSeparator();
-        menu.addAction(ui->action_add_host);
+        menu->addAction(ui->action_add_group);
+        menu->addAction(ui->action_edit_group);
+        menu->addAction(ui->action_delete_group);
+        menu->addSeparator();
+        menu->addAction(ui->action_add_host);
     }
     else if (type == SidebarItem::ROUTER_WORKSPACE)
     {
@@ -629,13 +629,13 @@ void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& p
 
         // Operators are read-only; only an administrator manages the workspaces themselves.
         if (session_type != proto::router::SESSION_TYPE_OPERATOR)
-            menu.addAction(ui->action_add_group);
+            menu->addAction(ui->action_add_group);
 
         if (session_type == proto::router::SESSION_TYPE_ADMIN)
         {
-            menu.addSeparator();
-            menu.addAction(ui->action_edit_workspace);
-            menu.addAction(ui->action_delete_workspace);
+            menu->addSeparator();
+            menu->addAction(ui->action_edit_workspace);
+            menu->addAction(ui->action_delete_workspace);
         }
     }
     else if (type == SidebarItem::ROUTER_GROUP)
@@ -653,9 +653,9 @@ void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& p
         // Clients are read-only and cannot manage host groups.
         if (session_type != proto::router::SESSION_TYPE_OPERATOR)
         {
-            menu.addAction(ui->action_add_group);
-            menu.addAction(ui->action_edit_group);
-            menu.addAction(ui->action_delete_group);
+            menu->addAction(ui->action_add_group);
+            menu->addAction(ui->action_edit_group);
+            menu->addAction(ui->action_delete_group);
         }
     }
     else if (type == SidebarItem::ROUTER)
@@ -664,36 +664,36 @@ void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& p
         if (!item || item->itemType() != SidebarItem::ROUTER)
             return;
 
-        menu.addAction(ui->action_edit_router);
-        menu.addAction(ui->action_delete_router);
-        menu.addAction(ui->action_clear_router_events);
+        menu->addAction(ui->action_edit_router);
+        menu->addAction(ui->action_delete_router);
+        menu->addAction(ui->action_clear_router_events);
 
         auto* router_item = static_cast<SidebarRouter*>(item);
         RouterSession* session = RouterController::session(router_item->routerId());
         if (session)
         {
-            menu.addSeparator();
+            menu->addSeparator();
             if (session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
-                menu.addAction(ui->action_add_workspace);
-            menu.addAction(ui->action_change_router_password);
+                menu->addAction(ui->action_add_workspace);
+            menu->addAction(ui->action_change_router_password);
         }
 
-        menu.exec(pos);
+        menu->exec(pos);
         return;
     }
     else if (type == SidebarItem::ROUTER_USERS)
     {
-        menu.addAction(ui->action_add_user);
+        menu->addAction(ui->action_add_user);
     }
     else
     {
         return;
     }
 
-    if (menu.isEmpty())
+    if (menu->isEmpty())
         return;
 
-    menu.exec(pos);
+    menu->exec(pos);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -868,13 +868,13 @@ void ManagementTab::onSearchConnect()
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
 {
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
 
     if (entry_id)
     {
         auto addProxy = [&menu](QAction* action)
         {
-            menu.addAction(action->icon(), action->text(), action, &QAction::triggered);
+            menu->addAction(action->icon(), action->text(), action, &QAction::triggered);
         };
 
         addProxy(ui->action_desktop_connect);
@@ -882,26 +882,26 @@ void ManagementTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
         addProxy(ui->action_file_transfer_connect);
         addProxy(ui->action_chat_connect);
         addProxy(ui->action_system_info_connect);
-        menu.addSeparator();
+        menu->addSeparator();
 
         LocalHostConfig host;
         Database::instance().findLocalHost(entry_id, &host);
         if (!host.guid().isEmpty())
         {
-            addCopyLinkMenu(menu, host);
-            menu.addSeparator();
+            addCopyLinkMenu(*menu, host);
+            menu->addSeparator();
         }
 
-        menu.addAction(ui->action_edit_host);
-        menu.addAction(ui->action_copy_host);
-        menu.addAction(ui->action_delete_host);
+        menu->addAction(ui->action_edit_host);
+        menu->addAction(ui->action_copy_host);
+        menu->addAction(ui->action_delete_host);
     }
     else
     {
-        menu.addAction(ui->action_add_host);
+        menu->addAction(ui->action_add_host);
     }
 
-    menu.exec(pos);
+    menu->exec(pos);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -911,11 +911,11 @@ void ManagementTab::onSearchContextMenu(const QPoint& pos)
     if (!row)
         return;
 
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
 
     auto addProxy = [&menu](QAction* action)
     {
-        menu.addAction(action->icon(), action->text(), action, &QAction::triggered);
+        menu->addAction(action->icon(), action->text(), action, &QAction::triggered);
     };
 
     addProxy(ui->action_desktop_connect);
@@ -926,8 +926,8 @@ void ManagementTab::onSearchContextMenu(const QPoint& pos)
 
     if (row->type == SearchResultModel::Type::ROUTER)
     {
-        menu.addSeparator();
-        addCopyLinkMenu(menu, row->host.routerId(), stringToHostId(row->host.address()));
+        menu->addSeparator();
+        addCopyLinkMenu(*menu, row->host.routerId(), stringToHostId(row->host.address()));
     }
     else
     {
@@ -935,26 +935,26 @@ void ManagementTab::onSearchContextMenu(const QPoint& pos)
         Database::instance().findLocalHost(row->host.id(), &host);
         if (!host.guid().isEmpty())
         {
-            menu.addSeparator();
-            addCopyLinkMenu(menu, host);
+            menu->addSeparator();
+            addCopyLinkMenu(*menu, host);
         }
     }
 
     // Router hosts have no address-book record to copy or delete.
     if (row->type == SearchResultModel::Type::LOCAL)
     {
-        menu.addSeparator();
-        menu.addAction(ui->action_edit_host);
-        menu.addAction(ui->action_copy_host);
-        menu.addAction(ui->action_delete_host);
+        menu->addSeparator();
+        menu->addAction(ui->action_edit_host);
+        menu->addAction(ui->action_copy_host);
+        menu->addAction(ui->action_delete_host);
     }
     else if (ui->action_edit_host->isVisible())
     {
-        menu.addSeparator();
-        menu.addAction(ui->action_edit_host);
+        menu->addSeparator();
+        menu->addAction(ui->action_edit_host);
     }
 
-    menu.exec(pos);
+    menu->exec(pos);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1123,17 +1123,17 @@ void ManagementTab::onRemoveHost()
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onUserContextMenu(const QPoint& pos)
 {
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
     if (router_users_widget_->hasSelectedUser())
     {
-        menu.addAction(ui->action_edit_user);
-        menu.addAction(ui->action_delete_user);
+        menu->addAction(ui->action_edit_user);
+        menu->addAction(ui->action_delete_user);
     }
     else
     {
-        menu.addAction(ui->action_add_user);
+        menu->addAction(ui->action_add_user);
     }
-    menu.exec(pos);
+    menu->exec(pos);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1144,37 +1144,37 @@ void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
 
     bool is_online = router_hosts_widget_->isSelectedHostOnline();
 
-    QMenu menu;
-    menu.addAction(ui->action_edit_host);
+    AutoQPointer<QMenu> menu(new QMenu(this));
+    menu->addAction(ui->action_edit_host);
 
     if (is_online)
     {
-        menu.addAction(ui->action_host_check_updates);
-        menu.addAction(ui->action_disconnect);
+        menu->addAction(ui->action_host_check_updates);
+        menu->addAction(ui->action_disconnect);
     }
 
-    menu.addAction(ui->action_host_telemetry);
-    menu.addAction(ui->action_host_remove);
+    menu->addAction(ui->action_host_telemetry);
+    menu->addAction(ui->action_host_remove);
 
     if (is_online)
     {
-        menu.addSeparator();
-        menu.addAction(ui->action_desktop_connect);
-        menu.addAction(ui->action_terminal_connect);
-        menu.addAction(ui->action_file_transfer_connect);
-        menu.addAction(ui->action_chat_connect);
-        menu.addAction(ui->action_system_info_connect);
+        menu->addSeparator();
+        menu->addAction(ui->action_desktop_connect);
+        menu->addAction(ui->action_terminal_connect);
+        menu->addAction(ui->action_file_transfer_connect);
+        menu->addAction(ui->action_chat_connect);
+        menu->addAction(ui->action_system_info_connect);
     }
-    menu.addSeparator();
+    menu->addSeparator();
 
-    addCopyLinkMenu(menu, router_hosts_widget_->routerId(), router_hosts_widget_->selectedHostId());
+    addCopyLinkMenu(*menu, router_hosts_widget_->routerId(), router_hosts_widget_->selectedHostId());
 
     const QIcon copy_icon(":/img/copy.svg");
-    QAction* copy_row = menu.addAction(copy_icon, tr("Copy Row"));
-    QAction* copy_col = menu.addAction(copy_icon, tr("Copy Value"));
+    QAction* copy_row = menu->addAction(copy_icon, tr("Copy Row"));
+    QAction* copy_col = menu->addAction(copy_icon, tr("Copy Value"));
 
     QPointer<ManagementTab> self(this);
-    QAction* action = menu.exec(pos);
+    QAction* action = menu->exec(pos);
     if (!action || !self)
         return;
 
@@ -1224,17 +1224,17 @@ void ManagementTab::onClientContextMenu(const QPoint& pos, int column)
     if (!router_clients_widget_->hasSelectedClient())
         return;
 
-    QMenu menu;
-    menu.addAction(ui->action_disconnect);
-    menu.addAction(ui->action_disconnect_all);
-    menu.addSeparator();
+    AutoQPointer<QMenu> menu(new QMenu(this));
+    menu->addAction(ui->action_disconnect);
+    menu->addAction(ui->action_disconnect_all);
+    menu->addSeparator();
 
     const QIcon copy_icon(":/img/copy.svg");
-    QAction* copy_row = menu.addAction(copy_icon, tr("Copy Row"));
-    QAction* copy_col = menu.addAction(copy_icon, tr("Copy Value"));
+    QAction* copy_row = menu->addAction(copy_icon, tr("Copy Row"));
+    QAction* copy_col = menu->addAction(copy_icon, tr("Copy Value"));
 
     QPointer<ManagementTab> self(this);
-    QAction* action = menu.exec(pos);
+    QAction* action = menu->exec(pos);
     if (!action || !self)
         return;
 
@@ -1250,17 +1250,17 @@ void ManagementTab::onRelayContextMenu(const QPoint& pos, int column)
     if (!router_relays_widget_->hasSelectedRelay())
         return;
 
-    QMenu menu;
-    menu.addAction(ui->action_disconnect);
-    menu.addAction(ui->action_disconnect_all);
-    menu.addSeparator();
+    AutoQPointer<QMenu> menu(new QMenu(this));
+    menu->addAction(ui->action_disconnect);
+    menu->addAction(ui->action_disconnect_all);
+    menu->addSeparator();
 
     const QIcon copy_icon(":/img/copy.svg");
-    QAction* copy_row = menu.addAction(copy_icon, tr("Copy Row"));
-    QAction* copy_col = menu.addAction(copy_icon, tr("Copy Value"));
+    QAction* copy_row = menu->addAction(copy_icon, tr("Copy Row"));
+    QAction* copy_col = menu->addAction(copy_icon, tr("Copy Value"));
 
     QPointer<ManagementTab> self(this);
-    QAction* action = menu.exec(pos);
+    QAction* action = menu->exec(pos);
     if (!action || !self)
         return;
 
@@ -1278,10 +1278,10 @@ void ManagementTab::onRouterGroupContextMenu(const QPoint& pos)
 
     // Proxy the global action via a fresh menu entry: the local copy is always visible (so the
     // item shows up here) while the original ui->action_*_connect can stay hidden globally.
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
     auto addProxy = [&menu](QAction* action)
     {
-        menu.addAction(action->icon(), action->text(), action, &QAction::triggered);
+        menu->addAction(action->icon(), action->text(), action, &QAction::triggered);
     };
 
     addProxy(ui->action_desktop_connect);
@@ -1289,13 +1289,13 @@ void ManagementTab::onRouterGroupContextMenu(const QPoint& pos)
     addProxy(ui->action_file_transfer_connect);
     addProxy(ui->action_chat_connect);
     addProxy(ui->action_system_info_connect);
-    menu.addSeparator();
+    menu->addSeparator();
     if (ui->action_edit_host->isVisible())
-        menu.addAction(ui->action_edit_host);
+        menu->addAction(ui->action_edit_host);
 
-    addCopyLinkMenu(menu, router_group_widget_->routerId(),
+    addCopyLinkMenu(*menu, router_group_widget_->routerId(),
                     router_group_widget_->selectedHost().host_id);
-    menu.exec(pos);
+    menu->exec(pos);
 }
 
 //--------------------------------------------------------------------------------------------------
