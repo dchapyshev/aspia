@@ -19,8 +19,10 @@
 #include "host/ui/config_dialog.h"
 
 #include <QCollator>
+#include <QDir>
 #include <QFileDialog>
 #include <QMenu>
+#include <QStandardPaths>
 #include <QTimer>
 #include <QTranslator>
 #include <QUrl>
@@ -61,6 +63,16 @@ namespace {
 
 const int kUpdatePublicKeyLength = 64;
 
+//--------------------------------------------------------------------------------------------------
+QString desktopPath(const QString& file_name)
+{
+    const QString desktop = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    if (desktop.isEmpty())
+        return file_name;
+    return QDir(desktop).filePath(file_name);
+}
+
+//--------------------------------------------------------------------------------------------------
 class UserTreeItem final : public QTreeWidgetItem
 {
 public:
@@ -561,8 +573,8 @@ void ConfigDialog::onExport()
 {
     LOG(INFO) << "[ACTION] Export settings";
 
-    QString file_path =
-        QFileDialog::getSaveFileName(this, tr("Export"), QString(), tr("JSON-files (*.json)"));
+    QString file_path = QFileDialog::getSaveFileName(
+        this, tr("Export"), desktopPath(QString()), tr("JSON-files (*.json)"));
     if (file_path.isEmpty())
     {
         LOG(INFO) << "No selected file path";
@@ -587,7 +599,7 @@ void ConfigDialog::onExportInstaller()
 
     const QString default_name = QString("aspia-host-%1-%2.msi").arg(ASPIA_VERSION_SHORT_STRING).arg(arch);
     QString file_path = QFileDialog::getSaveFileName(
-        this, tr("Export Installer"), default_name, tr("MSI-files (*.msi)"));
+        this, tr("Export Installer"), desktopPath(default_name), tr("MSI-files (*.msi)"));
     if (file_path.isEmpty())
     {
         LOG(INFO) << "No selected file path";
@@ -622,7 +634,8 @@ void ConfigDialog::onExportPortable()
     LOG(INFO) << "[ACTION] Export portable";
 
     QString file_path = QFileDialog::getSaveFileName(
-        this, tr("Export Portable"), "aspia-quick-support.exe", tr("Executable files (*.exe)"));
+        this, tr("Export Portable"), desktopPath("aspia-quick-support.exe"),
+        tr("Executable files (*.exe)"));
     if (file_path.isEmpty())
     {
         LOG(INFO) << "No selected file path";
