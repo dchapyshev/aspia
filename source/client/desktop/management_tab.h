@@ -76,6 +76,7 @@ private slots:
     void onConnectAction(QAction* action);
     void onLocalConnect(qint64 entry_id);
     void onRouterGroupConnect();
+    void onTempHostConnect();
     void onSearchConnect();
     void onLocalHostContextMenu(qint64 entry_id, const QPoint& pos);
     void onSearchContextMenu(const QPoint& pos);

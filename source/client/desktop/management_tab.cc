@@ -184,6 +184,8 @@ ManagementTab::ManagementTab(QWidget* parent)
             this, &ManagementTab::updateActionsState);
     connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_contextMenu,
             this, &ManagementTab::onTempHostContextMenu);
+    connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_activated,
+            this, &ManagementTab::onTempHostConnect);
 
     connect(router_users_widget_, &RouterUsersWidget::sig_currentChanged,
             this, &ManagementTab::updateActionsState);
@@ -822,6 +824,28 @@ void ManagementTab::onRouterGroupConnect()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ManagementTab::onTempHostConnect()
+{
+    const QList<RouterTempHost> hosts = router_temp_hosts_widget_->selectedHosts();
+    if (hosts.size() != 1)
+        return;
+
+    const proto::peer::SessionType session_type = defaultSessionType();
+
+    if (hosts.front().portable && session_type != proto::peer::SESSION_TYPE_DESKTOP &&
+        session_type != proto::peer::SESSION_TYPE_FILE_TRANSFER)
+    {
+        LOG(INFO) << "Session type" << session_type << "is not available for a portable host";
+        return;
+    }
+
+    HostConfig host = router_temp_hosts_widget_->selectedHostConfig();
+    if (!validateHostForConnect(host))
+        return;
+    emit sig_connectRequested(host, session_type);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ManagementTab::onSearchConnect()
 {
     const SearchResultModel::Row* row = search_widget_->currentRow();
@@ -1163,19 +1187,35 @@ void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onTempHostContextMenu(const QPoint& pos)
 {
-    if (router_temp_hosts_widget_->selectedHosts().isEmpty())
+    const QList<RouterTempHost> hosts = router_temp_hosts_widget_->selectedHosts();
+    if (hosts.isEmpty())
         return;
 
-    QMenu menu;
-    menu.addAction(ui->action_host_approve);
-    menu.addSeparator();
-    menu.addAction(ui->action_desktop_connect);
-    menu.addAction(ui->action_terminal_connect);
-    menu.addAction(ui->action_file_transfer_connect);
-    menu.addAction(ui->action_chat_connect);
-    menu.addAction(ui->action_system_info_connect);
+    AutoQPointer<QMenu> menu(new QMenu(this));
+    auto addProxy = [&menu](QAction* action)
+    {
+        menu->addAction(action->icon(), action->text(), action, &QAction::triggered);
+    };
 
-    menu.exec(pos);
+    menu->addAction(ui->action_host_approve);
+
+    if (hosts.size() == 1)
+    {
+        const bool is_portable = hosts.front().portable;
+
+        menu->addSeparator();
+        addProxy(ui->action_desktop_connect);
+        if (!is_portable)
+            addProxy(ui->action_terminal_connect);
+        addProxy(ui->action_file_transfer_connect);
+        if (!is_portable)
+        {
+            addProxy(ui->action_chat_connect);
+            addProxy(ui->action_system_info_connect);
+        }
+    }
+
+    menu->exec(pos);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2007,8 +2047,6 @@ void ManagementTab::updateActionsState()
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_TEMP_HOSTS)
     {
-        const bool has_host = router_temp_hosts_widget_->hasSelectedHost();
-
         proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
         RouterSession* session = RouterController::session(router_temp_hosts_widget_->routerId());
         if (session)
@@ -2021,11 +2059,6 @@ void ManagementTab::updateActionsState()
 
         ui->action_host_approve->setVisible(!selected_hosts.isEmpty() && !has_portable_host &&
                                             session_type == proto::router::SESSION_TYPE_ADMIN);
-        ui->action_desktop_connect->setVisible(has_host);
-        ui->action_file_transfer_connect->setVisible(has_host);
-        ui->action_chat_connect->setVisible(has_host && !has_portable_host);
-        ui->action_system_info_connect->setVisible(has_host && !has_portable_host);
-        ui->action_terminal_connect->setVisible(has_host && !has_portable_host);
     }
 
     // The address book is saved and restored as a whole, routers included, so its actions go with
@@ -2058,7 +2091,8 @@ void ManagementTab::updateActionsState()
         show_session_types = show_session_types ||
             sidebar_item->itemType() == SidebarItem::LOCAL_GROUP ||
             sidebar_item->itemType() == SidebarItem::ROUTER_GROUP ||
-            sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE;
+            sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE ||
+            sidebar_item->itemType() == SidebarItem::ROUTER_TEMP_HOSTS;
     }
 
     ui->action_desktop->setVisible(show_session_types);

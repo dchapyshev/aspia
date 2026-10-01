@@ -106,6 +106,8 @@ RouterTempHostsWidget::RouterTempHostsWidget(QWidget* parent)
     connect(tree_->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &RouterTempHostsWidget::sig_currentChanged);
 
+    connect(tree_, &QAbstractItemView::activated, this, &RouterTempHostsWidget::sig_activated);
+
     tree_->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(tree_, &QWidget::customContextMenuRequested,
             this, &RouterTempHostsWidget::onContextMenu);

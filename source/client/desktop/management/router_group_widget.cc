@@ -114,8 +114,7 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     connect(ui->tree_host->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &RouterGroupWidget::sig_currentChanged);
 
-    connect(ui->tree_host, &QAbstractItemView::activated,
-            this, [this](const QModelIndex&) { emit sig_activated(); });
+    connect(ui->tree_host, &QAbstractItemView::activated, this, &RouterGroupWidget::sig_activated);
 
     // The largest entry is the largest page the router serves (kMaxHostPageSize).
     ui->combo_hosts_page_size->addItem("25", QVariant::fromValue<qint64>(25));
