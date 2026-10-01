@@ -85,6 +85,21 @@ QString formatHostId(HostId host_id)
     return id;
 }
 
+//--------------------------------------------------------------------------------------------------
+QString formatPassword(const QString& password)
+{
+    for (const QChar& character : password)
+    {
+        if (!character.isDigit())
+            return password;
+    }
+
+    QString result = password;
+    for (int i = result.size() - 3; i > 0; i -= 3)
+        result.insert(i, ' ');
+    return result;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -553,7 +568,7 @@ void HostWindow::onCredentialsChanged(const proto::user::Credentials& credential
 
     ui->button_new_password->setEnabled(has_password);
     ui->edit_password->setText(has_password ?
-        QString::fromStdString(credentials.password()) : QString(kUnknownValue));
+        formatPassword(QString::fromStdString(credentials.password())) : QString(kUnknownValue));
 
     updateTrayIconTooltip();
 }

@@ -193,7 +193,7 @@ quint32 PortableConfigProvider::oneTimePasswordCharacters() const
 //--------------------------------------------------------------------------------------------------
 int PortableConfigProvider::oneTimePasswordLength() const
 {
-    return 8;
+    return 9;
 }
 
 //--------------------------------------------------------------------------------------------------
