@@ -24,6 +24,7 @@
 #include "host/desktop_manager.h"
 #include "host/router_config_provider.h"
 #include "host/router_manager.h"
+#include "host/user_session.h"
 #include "host/win/portable_host.h"
 #include "proto/user.h"
 
@@ -51,11 +52,25 @@ void PortableServiceWorker::onPrepare()
             this, &PortableServiceWorker::onCredentialsChanged);
 
     desktop_manager_ = new DesktopManager(PortableHost::desktopAgentChannelId(), this);
+
+    user_session_ = new UserSession(PortableHost::uiChannelId(), this);
+
+    connect(router_manager_, &RouterManager::sig_routerStateChanged,
+            user_session_, &UserSession::onRouterStateChanged);
+    connect(router_manager_, &RouterManager::sig_credentialsChanged,
+            user_session_, &UserSession::onUpdateCredentials);
+    connect(user_session_, &UserSession::sig_changeOneTimeSessions,
+            router_manager_, &RouterManager::onOneTimeSessionsChanged);
+    connect(user_session_, &UserSession::sig_changeOneTimePassword,
+            router_manager_, &RouterManager::onNewOneTimePassword);
+    connect(user_session_, &UserSession::sig_attached,
+            router_manager_, &RouterManager::onUserSessionAttached);
 }
 
 //--------------------------------------------------------------------------------------------------
 void PortableServiceWorker::onStart()
 {
+    user_session_->start();
     desktop_manager_->start();
     router_manager_->start();
 }
@@ -65,6 +80,7 @@ void PortableServiceWorker::onStop()
 {
     router_manager_.reset();
     desktop_manager_.reset();
+    user_session_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
