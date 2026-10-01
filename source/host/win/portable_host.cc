@@ -46,7 +46,6 @@
 namespace {
 
 const char kLaunchOption[] = "--portable";
-const char kGuiHiddenOption[] = "--hidden";
 const char kExecutableName[] = "aspia_host.exe";
 const char kBaseDirectoryName[] = "AspiaPortable";
 const char kDataDirectoryName[] = "data";
@@ -80,6 +79,18 @@ QString baseDirectory()
 QString runId()
 {
     return QDir(BasePaths::currentAppDir()).dirName();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool startedByOurProcess()
+{
+    const quint32 parent_pid = ProcessUtil::parentProcessId(ProcessUtil::currentProcessId());
+    if (parent_pid == 0)
+        return false;
+
+    const QString parent_path = ProcessUtil::filePath(parent_pid);
+    return QFileInfo(parent_path).fileName().compare(
+        QLatin1String(kExecutableName), Qt::CaseInsensitive) == 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -282,15 +293,9 @@ bool runHost(const QString& run_dir, const QString& run_id)
         return false;
     }
 
-    // Start the GUI in this launcher's session, the session of the user who started the portable host.
-    // The service never launches or relaunches the GUI; the GUI stays in this session and when the
-    // user closes it the service sees the IPC channel drop and stops. The GUI retries the IPC
-    // connection, so the brief moment before the service IPC server is ready does not matter.
-    if (!ProcessUtil::createProcess(
-            QDir::toNativeSeparators(file_path), QString::fromLatin1(kGuiHiddenOption)))
-    {
+    // Start the GUI in this launcher's session.
+    if (!ProcessUtil::createProcess(QDir::toNativeSeparators(file_path), QString()))
         LOG(ERROR) << "Unable to start the portable GUI";
-    }
 
     LOG(INFO) << "Portable host is started from:" << run_dir;
     WaitForSingleObject(process, INFINITE);
@@ -364,14 +369,9 @@ int launchUserMode(int& argc, char* argv[])
     CoreApplication application(argc, argv);
     application.addWorker(std::make_unique<PortableServiceWorker>());
 
-    // This process is already in the user's session, so the GUI is started here with a plain process
-    // creation. It retries the IPC connection, so the moment before the worker's IPC server is ready
-    // does not matter. When the user closes the GUI the worker stops and the event loop ends.
-    if (!ProcessUtil::createProcess(QDir::toNativeSeparators(BasePaths::currentApp()),
-            QString::fromLatin1(kGuiHiddenOption)))
-    {
+    // Start the GUI in this launcher's session.
+    if (!ProcessUtil::createProcess(QDir::toNativeSeparators(BasePaths::currentApp()), QString()))
         LOG(ERROR) << "Unable to start the portable GUI";
-    }
 
     LOG(INFO) << "Portable host is started in user mode";
     return application.exec();
@@ -395,9 +395,17 @@ bool PortableHost::isStartedByLauncher()
 // static
 bool PortableHost::isLauncherInvocation(int argc, char* argv[])
 {
-    if (argc == 1)
+    // The internal relaunch (asking for elevation) is always the launcher.
+    if (argc == 2 && qstrcmp(argv[1], kLaunchOption) == 0)
         return true;
-    return argc == 2 && qstrcmp(argv[1], kLaunchOption) == 0;
+
+    // A role invocation (the --agent process and the like) is never the launcher.
+    if (argc != 1)
+        return false;
+
+    // A bare invocation is the launcher when the user started it. When our own launcher started it
+    // (the parent is our binary), it is the host window to show, so it is not a launcher.
+    return !startedByOurProcess();
 }
 
 //--------------------------------------------------------------------------------------------------
