@@ -42,6 +42,7 @@
 namespace {
 
 const char kLaunchOption[] = "--portable";
+const char kGuiHiddenOption[] = "--hidden";
 const char kExecutableName[] = "aspia_host.exe";
 const char kBaseDirectoryName[] = "AspiaPortable";
 const char kDataDirectoryName[] = "data";
@@ -275,6 +276,16 @@ bool runHost(const QString& run_dir, const QString& run_id)
     {
         PLOG(ERROR) << "OpenProcess failed";
         return false;
+    }
+
+    // Start the GUI in this launcher's session, the session of the user who started the portable host.
+    // The service never launches or relaunches the GUI; the GUI stays in this session and when the
+    // user closes it the service sees the IPC channel drop and stops. The GUI retries the IPC
+    // connection, so the brief moment before the service IPC server is ready does not matter.
+    if (!ProcessUtil::createProcess(
+            QDir::toNativeSeparators(file_path), QString::fromLatin1(kGuiHiddenOption)))
+    {
+        LOG(ERROR) << "Unable to start the portable GUI";
     }
 
     LOG(INFO) << "Portable host is started from:" << run_dir;

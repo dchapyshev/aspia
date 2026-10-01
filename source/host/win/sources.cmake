@@ -47,6 +47,8 @@ collect_sources(SOURCE_HOST_WIN
     portable_package.h
     portable_service.cc
     portable_service.h
+    portable_user_session.cc
+    portable_user_session.h
     safe_mode_util.cc
     safe_mode_util.h
     screen_capture_utils.cc

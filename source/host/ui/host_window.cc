@@ -62,6 +62,10 @@
 #include "host/ui/permission_dialog.h"
 #endif // defined(Q_OS_MACOS)
 
+#if defined(Q_OS_WINDOWS)
+#include "host/win/portable_host.h"
+#endif // defined(Q_OS_WINDOWS)
+
 namespace {
 
 // How many one-second tray availability checks to make before creating the tray icon anyway (an
@@ -859,7 +863,12 @@ void HostWindow::onExit()
 
     LOG(INFO) << "[ACTION] Exit";
 
-    if (MsgBox::question(this,
+    bool portable = false;
+#if defined(Q_OS_WINDOWS)
+    portable = PortableHost::isActive();
+#endif // defined(Q_OS_WINDOWS)
+
+    if (portable || MsgBox::question(this,
             tr("If you exit from Aspia, it will not be possible to connect to this computer until "
                "you turn on the computer or Aspia again manually. Do you really want to exit the "
                "application?")) == MsgBox::Yes)

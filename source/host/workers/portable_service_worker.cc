@@ -18,13 +18,15 @@
 
 #include "host/workers/portable_service_worker.h"
 
+#include <QCoreApplication>
+
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "base/peer/host_id.h"
 #include "host/desktop_manager.h"
 #include "host/router_config_provider.h"
 #include "host/router_manager.h"
-#include "host/user_session.h"
+#include "host/win/portable_user_session.h"
 #include "host/win/portable_host.h"
 #include "proto/user.h"
 
@@ -53,18 +55,20 @@ void PortableServiceWorker::onPrepare()
 
     desktop_manager_ = new DesktopManager(PortableHost::desktopAgentChannelId(), this);
 
-    user_session_ = new UserSession(PortableHost::uiChannelId(), this);
+    user_session_ = new PortableUserSession(PortableHost::uiChannelId(), this);
 
     connect(router_manager_, &RouterManager::sig_routerStateChanged,
-            user_session_, &UserSession::onRouterStateChanged);
+            user_session_, &PortableUserSession::onRouterStateChanged);
     connect(router_manager_, &RouterManager::sig_credentialsChanged,
-            user_session_, &UserSession::onUpdateCredentials);
-    connect(user_session_, &UserSession::sig_changeOneTimeSessions,
+            user_session_, &PortableUserSession::onUpdateCredentials);
+    connect(user_session_, &PortableUserSession::sig_changeOneTimeSessions,
             router_manager_, &RouterManager::onOneTimeSessionsChanged);
-    connect(user_session_, &UserSession::sig_changeOneTimePassword,
+    connect(user_session_, &PortableUserSession::sig_changeOneTimePassword,
             router_manager_, &RouterManager::onNewOneTimePassword);
-    connect(user_session_, &UserSession::sig_attached,
+    connect(user_session_, &PortableUserSession::sig_attached,
             router_manager_, &RouterManager::onUserSessionAttached);
+    connect(user_session_, &PortableUserSession::sig_guiTerminated,
+            QCoreApplication::instance(), &QCoreApplication::quit, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
