@@ -24,6 +24,7 @@
 #include <QThread>
 #include <qt_windows.h>
 #include <ShlObj.h>
+#include <TlHelp32.h>
 
 #include "base/logging.h"
 #include "base/process_util.h"
@@ -108,6 +109,45 @@ void removeService(const QString& name)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Terminates the processes still running from |run_dir| so the directory can be removed. The GUI
+// outlives the service (like the installed host's) and a desktop agent may still be exiting.
+void terminateRunProcesses(const QString& run_dir)
+{
+    ScopedHandle snapshot(CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0));
+    if (!snapshot.isValid())
+    {
+        PLOG(ERROR) << "CreateToolhelp32Snapshot failed";
+        return;
+    }
+
+    PROCESSENTRY32W entry;
+    entry.dwSize = sizeof(entry);
+
+    if (!Process32FirstW(snapshot, &entry))
+        return;
+
+    const QString prefix = QDir::toNativeSeparators(run_dir) + '\\';
+
+    do
+    {
+        if (QString::fromWCharArray(entry.szExeFile).compare(
+                QLatin1String(kExecutableName), Qt::CaseInsensitive) != 0)
+        {
+            continue;
+        }
+
+        const QString path = QDir::toNativeSeparators(ProcessUtil::filePath(entry.th32ProcessID));
+        if (!path.startsWith(prefix, Qt::CaseInsensitive))
+            continue;
+
+        ScopedHandle process(OpenProcess(PROCESS_TERMINATE, FALSE, entry.th32ProcessID));
+        if (process.isValid() && TerminateProcess(process, 0))
+            LOG(INFO) << "Terminated process from the run directory:" << path;
+    }
+    while (Process32NextW(snapshot, &entry));
+}
+
+//--------------------------------------------------------------------------------------------------
 void removeDirectory(const QString& path)
 {
     for (int i = 0; i < kRemoveAttempts; ++i)
@@ -135,6 +175,7 @@ void removeStaleRuns(const QString& base_dir)
 
         LOG(INFO) << "Removing stale run:" << run_id;
         removeService(serviceName(run_id));
+        terminateRunProcesses(base_dir + '/' + run_id);
         removeDirectory(base_dir + '/' + run_id);
     }
 }
@@ -287,6 +328,7 @@ int launch()
     const bool result = runHost(run_dir, run_id);
 
     removeService(serviceName(run_id));
+    terminateRunProcesses(run_dir);
     removeDirectory(run_dir);
 
     // Removed only when there are no other runs.
