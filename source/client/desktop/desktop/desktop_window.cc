@@ -398,6 +398,9 @@ void DesktopWindow::restoreState(const QByteArray& state)
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& capabilities)
 {
+    bool portable = false;
+    bool elevated = false;
+
     for (int i = 0; i < capabilities.flag_size(); ++i)
     {
         const proto::control::Capabilities::Flag& flag = capabilities.flag(i);
@@ -417,6 +420,20 @@ void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& ca
             toolbar_->enableScreenSelect(value);
         else if (name == kFlagTaskManager)
             toolbar_->enableTaskManager(value);
+        else if (name == kFlagPortable)
+            portable = value;
+        else if (name == kFlagElevated)
+            elevated = value;
+    }
+
+    if (portable)
+    {
+        toolbar_->enableTextChat(false);
+        toolbar_->enableTerminal(false);
+        toolbar_->enableSystemInfo(false);
+
+        if (!elevated)
+            toolbar_->enableCtrlAltDelFeature(false);
     }
 }
 

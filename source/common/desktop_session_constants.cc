@@ -58,3 +58,5 @@ const char kFlagPowerControl[] = "power_control";
 const char kFlagSelectScreen[] = "select_screen";
 const char kFlagTaskManager[] = "task_manager";
 const char kFlagFileClipboard[] = "file_clipboard";
+const char kFlagPortable[] = "portable";
+const char kFlagElevated[] = "elevated";

@@ -57,5 +57,7 @@ extern const char kFlagPowerControl[];
 extern const char kFlagSelectScreen[];
 extern const char kFlagTaskManager[];
 extern const char kFlagFileClipboard[];
+extern const char kFlagPortable[];
+extern const char kFlagElevated[];
 
 #endif // COMMON_DESKTOP_SESSION_CONSTANTS_H

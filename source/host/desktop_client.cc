@@ -40,6 +40,7 @@
 #if defined(Q_OS_WINDOWS)
 #include "host/host_storage.h"
 #include "host/service.h"
+#include "host/win/portable_host.h"
 #include "host/win/safe_mode_util.h"
 #endif // defined(Q_OS_WINDOWS)
 
@@ -456,6 +457,9 @@ void DesktopClient::sendIpcServiceMessage(const QByteArray& buffer)
 void DesktopClient::sendSessionList()
 {
 #if defined(Q_OS_WINDOWS)
+    if (PortableHost::isActive())
+        return;
+
     proto::control::HostToClient message;
     proto::control::SessionList* session_list = message.mutable_session_list();
 

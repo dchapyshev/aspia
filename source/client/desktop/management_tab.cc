@@ -2023,9 +2023,9 @@ void ManagementTab::updateActionsState()
                                             session_type == proto::router::SESSION_TYPE_ADMIN);
         ui->action_desktop_connect->setVisible(has_host);
         ui->action_file_transfer_connect->setVisible(has_host);
-        ui->action_chat_connect->setVisible(has_host);
-        ui->action_system_info_connect->setVisible(has_host);
-        ui->action_terminal_connect->setVisible(has_host);
+        ui->action_chat_connect->setVisible(has_host && !has_portable_host);
+        ui->action_system_info_connect->setVisible(has_host && !has_portable_host);
+        ui->action_terminal_connect->setVisible(has_host && !has_portable_host);
     }
 
     // The address book is saved and restored as a whole, routers included, so its actions go with

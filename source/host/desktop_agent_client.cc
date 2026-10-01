@@ -20,8 +20,6 @@
 
 #include <QThread>
 
-#include <limits>
-
 #include "base/numeric_utils.h"
 #include "base/power_controller.h"
 #include "base/serialization.h"
@@ -33,6 +31,11 @@
 #include "proto/desktop_power.h"
 #include "proto/desktop_screen.h"
 #include "proto/desktop_video.h"
+
+#if defined(Q_OS_WINDOWS)
+#include "base/process_util.h"
+#include "host/win/portable_host.h"
+#endif // defined(Q_OS_WINDOWS)
 
 namespace {
 
@@ -420,6 +423,8 @@ void DesktopAgentClient::sendCapabilities()
     add_flag(kFlagBlockInput, true);
     add_flag(kFlagDesktopEffects, true);
     add_flag(kFlagFileClipboard, true);
+    add_flag(kFlagPortable, PortableHost::isActive());
+    add_flag(kFlagElevated, ProcessUtil::isProcessElevated());
 #elif defined(Q_OS_LINUX)
     add_flag(kFlagOSLinux, true);
 #elif defined(Q_OS_MACOS)
