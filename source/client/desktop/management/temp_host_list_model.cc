@@ -210,7 +210,7 @@ QString TempHostListModel::textAt(const RouterTempHost& host, Column column) con
             return host.address;
 
         case Column::TYPE:
-            return host.portable ? tr("Portable") : tr("Installed");
+            return host.portable ? tr("Quick Support") : tr("Installed");
     }
 
     return QString();

@@ -165,14 +165,14 @@ TEST_F(TempHostListModelTest, RowShowsTheFieldsOfItsHost)
 
 //--------------------------------------------------------------------------------------------------
 // A portable host cannot be approved, and the list says why the approval is not offered for it.
-TEST_F(TempHostListModelTest, PortableHostIsShownAsPortable)
+TEST_F(TempHostListModelTest, PortableHostIsShownAsQuickSupport)
 {
     RouterTempHost host = makeHost(HostId(900000001), "host1", "192.168.0.1");
     host.portable = true;
 
     model()->setHosts({ host });
 
-    EXPECT_EQ(textAt(model(), 0, Column::TYPE), QString("Portable"));
+    EXPECT_EQ(textAt(model(), 0, Column::TYPE), QString("Quick Support"));
 }
 
 //--------------------------------------------------------------------------------------------------
