@@ -88,9 +88,12 @@ bool startedByOurProcess()
     if (parent_pid == 0)
         return false;
 
-    const QString parent_path = ProcessUtil::filePath(parent_pid);
-    return QFileInfo(parent_path).fileName().compare(
-        QLatin1String(kExecutableName), Qt::CaseInsensitive) == 0;
+    const QString parent_path = QFileInfo(ProcessUtil::filePath(parent_pid)).canonicalFilePath();
+    if (parent_path.isEmpty())
+        return false;
+
+    return parent_path.compare(
+        QFileInfo(BasePaths::currentApp()).canonicalFilePath(), Qt::CaseInsensitive) == 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -358,9 +361,8 @@ int launch()
 }
 
 //--------------------------------------------------------------------------------------------------
-// Runs the portable host in user mode: the service worker lives in this (the launcher's) process,
-// without a Windows service, and the GUI is launched into the user's session. Used when the user
-// declined the elevation prompt.
+// Runs the portable host in user mode. The service worker lives in this process without a Windows
+// service, and the GUI runs in the user's session. Used when the user declined the elevation prompt.
 int launchUserMode(int& argc, char* argv[])
 {
     CoreApplication::setEventDispatcher(new AsioEventDispatcher());
@@ -403,9 +405,10 @@ bool PortableHost::isLauncherInvocation(int argc, char* argv[])
     if (argc != 1)
         return false;
 
-    // A bare invocation is the launcher when the user started it. When our own launcher started it
-    // (the parent is our binary), it is the host window to show, so it is not a launcher.
-    return !startedByOurProcess();
+    // A bare invocation is the launcher when the user started it, and the host window when our own
+    // launcher did. The launcher started it when it is the copy in the run directory (elevated) or
+    // when its parent is our own binary (user mode).
+    return !isStartedByLauncher() && !startedByOurProcess();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -159,6 +159,24 @@ HostWindow::HostWindow(QWidget* parent)
     ui->action_uninstall->setVisible(false);
 #endif // !defined(Q_OS_MACOS)
 
+#if defined(Q_OS_WINDOWS)
+    if (PortableHost::isActive())
+    {
+        ui->action_terminal->setChecked(false);
+        ui->action_system_info->setChecked(false);
+        ui->action_text_chat->setChecked(false);
+
+        ui->action_terminal->setVisible(false);
+        ui->action_system_info->setVisible(false);
+        ui->action_text_chat->setVisible(false);
+
+        ui->action_show_chat->setVisible(false);
+        ui->action_security_log->setVisible(false);
+        ui->action_settings->setVisible(false);
+        ui->action_show_hide->setVisible(false);
+    }
+#endif // defined(Q_OS_WINDOWS)
+
     createLanguageMenu(GuiApplication::instance()->locale());
     createThemeMenu(user_settings.theme());
 
@@ -305,6 +323,11 @@ void HostWindow::hideToTray()
 void HostWindow::closeEvent(QCloseEvent* event)
 {
     bool hide_to_tray = !should_be_quit_;
+
+#if defined(Q_OS_WINDOWS)
+    if (PortableHost::isActive())
+        hide_to_tray = false;
+#endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_MACOS)
     // Only the window's own close button (a spontaneous close) hides to the tray. A non-spontaneous
