@@ -248,21 +248,7 @@
           <item>
            <widget class="QPushButton" name="button_export">
             <property name="text">
-             <string>Export settings</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="button_export_installer">
-            <property name="text">
-             <string>Export installer</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="button_export_portable">
-            <property name="text">
-             <string>Export portable</string>
+             <string>Export</string>
             </property>
            </widget>
           </item>

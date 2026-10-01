@@ -43,6 +43,7 @@
 #include "host/ui/check_password_dialog.h"
 #include "host/ui/ui_config_dialog.h"
 #include "host/ui/user_dialog.h"
+#include "version.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "host/win/msi_package.h"
@@ -118,13 +119,18 @@ ConfigDialog::ConfigDialog(QWidget* parent)
             this, &ConfigDialog::onConfigChanged);
 
     connect(ui->button_import, &QPushButton::clicked, this, &ConfigDialog::onImport);
-    connect(ui->button_export, &QPushButton::clicked, this, &ConfigDialog::onExport);
+
 #if defined(Q_OS_WINDOWS)
-    connect(ui->button_export_installer, &QPushButton::clicked, this, &ConfigDialog::onExportInstaller);
-    connect(ui->button_export_portable, &QPushButton::clicked, this, &ConfigDialog::onExportPortable);
+    QMenu* export_menu = new QMenu(ui->button_export);
+    connect(export_menu->addAction(tr("Settings")), &QAction::triggered,
+            this, &ConfigDialog::onExport);
+    connect(export_menu->addAction(tr("Installer")), &QAction::triggered,
+            this, &ConfigDialog::onExportInstaller);
+    connect(export_menu->addAction(tr("Portable")), &QAction::triggered,
+            this, &ConfigDialog::onExportPortable);
+    ui->button_export->setMenu(export_menu);
 #else
-    ui->button_export_installer->hide();
-    ui->button_export_portable->hide();
+    connect(ui->button_export, &QPushButton::clicked, this, &ConfigDialog::onExport);
 #endif // defined(Q_OS_WINDOWS)
 
     ui->combobox_update_check_freq->addItem(tr("Once a day"), 1);
@@ -572,8 +578,16 @@ void ConfigDialog::onExportInstaller()
 #if defined(Q_OS_WINDOWS)
     LOG(INFO) << "[ACTION] Export installer";
 
-    QString file_path =
-        QFileDialog::getSaveFileName(this, tr("Export Installer"), QString(), tr("MSI-files (*.msi)"));
+    QString arch = "x86";
+#if defined(Q_PROCESSOR_ARM_64)
+    arch = "arm64";
+#elif defined(Q_PROCESSOR_X86_64)
+    arch = "x86_64";
+#endif
+
+    const QString default_name = QString("aspia-host-%1-%2.msi").arg(ASPIA_VERSION_SHORT_STRING).arg(arch);
+    QString file_path = QFileDialog::getSaveFileName(
+        this, tr("Export Installer"), default_name, tr("MSI-files (*.msi)"));
     if (file_path.isEmpty())
     {
         LOG(INFO) << "No selected file path";
@@ -608,7 +622,7 @@ void ConfigDialog::onExportPortable()
     LOG(INFO) << "[ACTION] Export portable";
 
     QString file_path = QFileDialog::getSaveFileName(
-        this, tr("Export Portable"), QString(), tr("Executable files (*.exe)"));
+        this, tr("Export Portable"), "aspia-quick-support.exe", tr("Executable files (*.exe)"));
     if (file_path.isEmpty())
     {
         LOG(INFO) << "No selected file path";

@@ -162,6 +162,8 @@ HostWindow::HostWindow(QWidget* parent)
 #if defined(Q_OS_WINDOWS)
     if (PortableHost::isActive())
     {
+        setWindowTitle(tr("Aspia Quick Support"));
+
         ui->action_terminal->setChecked(false);
         ui->action_system_info->setChecked(false);
         ui->action_text_chat->setChecked(false);
@@ -1103,53 +1105,59 @@ void HostWindow::updateTrayIconTooltip()
     if (!tray_icon_)
         return;
 
-    QString ipv4;
-    QString ipv6;
-
-    QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
-    for (int i = 0; i < interfaces.count(); ++i)
-    {
-        const QNetworkInterface& iface = interfaces[i];
-
-        QNetworkInterface::InterfaceFlags flags = iface.flags();
-        if (!(flags & QNetworkInterface::IsUp))
-             continue;
-
-        if (!(flags & QNetworkInterface::IsRunning))
-            continue;
-
-        QNetworkInterface::InterfaceType type = iface.type();
-        if (type != QNetworkInterface::Ethernet && type != QNetworkInterface::Wifi &&
-            type != QNetworkInterface::Ieee80211 && type != QNetworkInterface::Ieee80216 &&
-            type != QNetworkInterface::Ieee802154)
-        {
-            continue;
-        }
-
-        QList<QNetworkAddressEntry> addresses = iface.addressEntries();
-        for (int j = 0; j < addresses.count(); ++j)
-        {
-            const QNetworkAddressEntry& entry = addresses[j];
-            QHostAddress address = entry.ip();
-            if (address.isLoopback() || address.isLinkLocal())
-                continue;
-
-            if (address.protocol() == QAbstractSocket::IPv4Protocol)
-                ipv4 += address.toString() + '\n';
-            else if (address.protocol() == QAbstractSocket::IPv6Protocol && !entry.isTemporary())
-                ipv6 += address.toString() + '\n';
-        }
-    }
-
-    QString ip = ipv4 + ipv6;
-
-    if (!ip.isEmpty())
-        ip.prepend(tr("IP addresses:") + '\n');
+    bool portable = false;
+#if defined(Q_OS_WINDOWS)
+    portable = PortableHost::isActive();
+#endif // defined(Q_OS_WINDOWS)
 
     QString tooltip;
-    tooltip += tr("Aspia Host") + "\n\n";
-    tooltip += tr("ID: %1").arg(ui->edit_id->text()) + '\n';
-    tooltip += ip;
+    tooltip += (portable ? tr("Aspia Quick Support") : tr("Aspia Host")) + "\n\n";
+    tooltip += tr("ID: %1").arg(ui->edit_id->text());
+
+    if (!portable)
+    {
+        QString ipv4;
+        QString ipv6;
+
+        QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
+        for (int i = 0; i < interfaces.count(); ++i)
+        {
+            const QNetworkInterface& iface = interfaces[i];
+
+            QNetworkInterface::InterfaceFlags flags = iface.flags();
+            if (!(flags & QNetworkInterface::IsUp))
+                continue;
+
+            if (!(flags & QNetworkInterface::IsRunning))
+                continue;
+
+            QNetworkInterface::InterfaceType type = iface.type();
+            if (type != QNetworkInterface::Ethernet && type != QNetworkInterface::Wifi &&
+                type != QNetworkInterface::Ieee80211 && type != QNetworkInterface::Ieee80216 &&
+                type != QNetworkInterface::Ieee802154)
+            {
+                continue;
+            }
+
+            QList<QNetworkAddressEntry> addresses = iface.addressEntries();
+            for (int j = 0; j < addresses.count(); ++j)
+            {
+                const QNetworkAddressEntry& entry = addresses[j];
+                QHostAddress address = entry.ip();
+                if (address.isLoopback() || address.isLinkLocal())
+                    continue;
+
+                if (address.protocol() == QAbstractSocket::IPv4Protocol)
+                    ipv4 += address.toString() + '\n';
+                else if (address.protocol() == QAbstractSocket::IPv6Protocol && !entry.isTemporary())
+                    ipv6 += address.toString() + '\n';
+            }
+        }
+
+        QString ip = ipv4 + ipv6;
+        if (!ip.isEmpty())
+            tooltip += '\n' + tr("IP addresses:") + '\n' + ip;
+    }
 
     tray_icon_->setToolTip(tooltip);
 }
