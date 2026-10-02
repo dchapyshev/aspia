@@ -101,6 +101,11 @@ void PortableServiceWorker::onStart()
 //--------------------------------------------------------------------------------------------------
 void PortableServiceWorker::onStop()
 {
+    const QList<Client*> clients = clients_;
+    clients_.clear();
+    for (auto* client : clients)
+        delete client;
+
     router_manager_.reset();
     desktop_manager_.reset();
     user_session_.reset();
