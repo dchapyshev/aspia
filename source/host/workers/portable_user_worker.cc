@@ -29,6 +29,7 @@
 #include "host/router_config_provider.h"
 #include "host/router_manager.h"
 #include "host/win/portable_desktop_client.h"
+#include "host/win/portable_file_client.h"
 #include "host/win/portable_host.h"
 #include "host/win/portable_user_session.h"
 #include "proto/peer.h"
@@ -193,45 +194,63 @@ void PortableUserWorker::startClient(TcpChannel* tcp_channel, const QString& stu
     tcp_channel->setWriteBufferSize(kWriteBufferSize);
 
     const auto session_type = static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
-    if (session_type != proto::peer::SESSION_TYPE_DESKTOP)
+    Client* client_to_start = nullptr;
+
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP)
     {
-        LOG(INFO) << "Session type not served yet in user mode:" << session_type;
+        PortableDesktopClient* client = new PortableDesktopClient(tcp_channel, this);
+        client_to_start = client;
+
+        const quint32 client_id = client->clientId();
+
+        client->setFeature(Client::FEATURE_UDP, true);
+        client->setFeature(Client::FEATURE_BANDWIDTH, true);
+
+        connect(client, &Client::sig_finished, this, &PortableUserWorker::onClientFinished);
+
+        connect(client, &Client::sig_finished, this, [this, client_id]()
+        {
+            emit sig_desktopClientFinished(client_id);
+        });
+        connect(client, &Client::sig_channelChanged, this, &PortableUserWorker::sig_desktopClientChannelChanged);
+        connect(client, &PortableDesktopClient::sig_desktopMessage, this,
+                [this, client_id](quint32 channel_id, const QByteArray& buffer)
+        {
+            emit sig_desktopClientMessage(client_id, channel_id, buffer);
+        });
+
+        connect(client, &Client::sig_started, user_session_, &PortableUserSession::onClientStarted);
+        connect(client, &Client::sig_finished, user_session_, &PortableUserSession::onClientFinished);
+
+        connect(client, &PortableDesktopClient::sig_userMessage, user_session_, &PortableUserSession::onClientMessage);
+        connect(user_session_, &PortableUserSession::sig_userMessage, client, &PortableDesktopClient::onUserMessage);
+
+        // The client starts reading the network as it starts, and a message it already has is handled
+        // right away, so the desktop side must know about the client before that.
+        emit sig_desktopClientStarted(client_id);
+    }
+    else if (session_type == proto::peer::SESSION_TYPE_FILE_TRANSFER)
+    {
+        PortableFileClient* client = new PortableFileClient(tcp_channel, this);
+        client_to_start = client;
+
+        client->setFeature(Client::FEATURE_UDP, true);
+
+        connect(client, &Client::sig_finished, this, &PortableUserWorker::onClientFinished);
+        connect(client, &Client::sig_started, user_session_, &PortableUserSession::onClientStarted);
+        connect(client, &Client::sig_finished, user_session_, &PortableUserSession::onClientFinished);
+    }
+
+    if (!client_to_start)
+    {
+        LOG(INFO) << "Session type not served in user mode:" << session_type;
         tcp_channel->deleteLater();
         return;
     }
 
-    PortableDesktopClient* client = new PortableDesktopClient(tcp_channel, this);
-    const quint32 client_id = client->clientId();
+    LOG(INFO) << "Client connected (type:" << client_to_start->sessionType() << "computer:"
+              << client_to_start->computerName() << "address:" << client_to_start->address() << ")";
 
-    client->setFeature(Client::FEATURE_UDP, true);
-    client->setFeature(Client::FEATURE_BANDWIDTH, true);
-
-    connect(client, &Client::sig_finished, this, &PortableUserWorker::onClientFinished);
-
-    connect(client, &Client::sig_finished, this, [this, client_id]()
-    {
-        emit sig_desktopClientFinished(client_id);
-    });
-    connect(client, &Client::sig_channelChanged, this, &PortableUserWorker::sig_desktopClientChannelChanged);
-    connect(client, &PortableDesktopClient::sig_desktopMessage, this,
-            [this, client_id](quint32 channel_id, const QByteArray& buffer)
-    {
-        emit sig_desktopClientMessage(client_id, channel_id, buffer);
-    });
-
-    connect(client, &Client::sig_started, user_session_, &PortableUserSession::onClientStarted);
-    connect(client, &Client::sig_finished, user_session_, &PortableUserSession::onClientFinished);
-
-    connect(client, &PortableDesktopClient::sig_userMessage, user_session_, &PortableUserSession::onClientMessage);
-    connect(user_session_, &PortableUserSession::sig_userMessage, client, &PortableDesktopClient::onUserMessage);
-
-    LOG(INFO) << "Client connected (type:" << client->sessionType() << "computer:" << client->computerName()
-              << "address:" << client->address() << ")";
-
-    clients_.append(client);
-
-    // The client starts reading the network as it starts, and a message it already has is handled right
-    // away, so the desktop side must know about the client before that.
-    emit sig_desktopClientStarted(client_id);
-    client->start(stun_host, stun_port);
+    clients_.append(client_to_start);
+    client_to_start->start(stun_host, stun_port);
 }

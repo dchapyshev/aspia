@@ -43,6 +43,8 @@ collect_sources(SOURCE_HOST_WIN
     msi_package.h
     portable_desktop_client.cc
     portable_desktop_client.h
+    portable_file_client.cc
+    portable_file_client.h
     portable_host.cc
     portable_host.h
     portable_package.cc
