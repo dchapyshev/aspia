@@ -33,6 +33,7 @@
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
+#include "host/win/portable_host.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_MACOS)
@@ -108,6 +109,11 @@ int runDesktopAgent(CoreApplication& application)
     InputWorker* input_worker = CoreApplication::findWorker<InputWorker>();
     AudioWorker* audio_worker = CoreApplication::findWorker<AudioWorker>();
 
+    bool portable = false;
+#if defined(Q_OS_WINDOWS)
+    portable = PortableHost::isActive();
+#endif // defined(Q_OS_WINDOWS)
+
     QObject::connect(ipc_worker, &DesktopIpcWorker::sig_selectScreen, screen_worker, &ScreenWorker::onSelectScreen,
                      Qt::QueuedConnection);
     QObject::connect(ipc_worker, &DesktopIpcWorker::sig_keyFrameRequested,
@@ -150,8 +156,13 @@ int runDesktopAgent(CoreApplication& application)
                      Qt::QueuedConnection);
     QObject::connect(ipc_worker, &DesktopIpcWorker::sig_keyboardLocked,
                      input_worker, &InputWorker::onSetKeyboardLocked, Qt::QueuedConnection);
-    QObject::connect(ipc_worker, &DesktopIpcWorker::sig_blockInput, input_worker, &InputWorker::onSetBlockInput,
-                     Qt::QueuedConnection);
+
+    // The portable host must not block the input of the user.
+    if (!portable)
+    {
+        QObject::connect(ipc_worker, &DesktopIpcWorker::sig_blockInput, input_worker, &InputWorker::onSetBlockInput,
+                         Qt::QueuedConnection);
+    }
 
     QObject::connect(ipc_worker, &DesktopIpcWorker::sig_audioEnabled, audio_worker, &AudioWorker::onSetEnabled,
                      Qt::QueuedConnection);
