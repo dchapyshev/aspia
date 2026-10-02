@@ -39,9 +39,11 @@ const Seconds kAttachTimeout{ 30 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-PortableUserSession::PortableUserSession(const QString& ipc_channel_id, QObject* parent)
+PortableUserSession::PortableUserSession(
+    const QString& ipc_channel_id, SessionId gui_session_id, QObject* parent)
     : QObject(parent),
-      ipc_channel_id_(ipc_channel_id)
+      ipc_channel_id_(ipc_channel_id),
+      gui_session_id_(gui_session_id)
 {
     LOG(INFO) << "Ctor";
 }
@@ -213,6 +215,15 @@ void PortableUserSession::onIpcNewConnection()
     {
         LOG(ERROR) << "IPC client has unexpected executable (pid:" << ipc_channel->processId()
                    << "path:" << actual_path << "expected:" << expected_path << ")";
+        return;
+    }
+
+    // The channel is open to every authenticated user, so the same executable started by another user
+    // must not take over the host.
+    if (gui_session_id_ != kInvalidSessionId && ipc_channel->sessionId() != gui_session_id_)
+    {
+        LOG(ERROR) << "IPC client is in another session (pid:" << ipc_channel->processId()
+                   << "session:" << ipc_channel->sessionId() << "expected:" << gui_session_id_ << ")";
         return;
     }
 

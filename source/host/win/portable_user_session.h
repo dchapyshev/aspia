@@ -37,7 +37,8 @@ class PortableUserSession final : public QObject
     Q_OBJECT
 
 public:
-    explicit PortableUserSession(const QString& ipc_channel_id = kHostUiChannelId, QObject* parent = nullptr);
+    // |gui_session_id| is the session the GUI must run in, kInvalidSessionId accepts any session.
+    PortableUserSession(const QString& ipc_channel_id, SessionId gui_session_id, QObject* parent = nullptr);
     ~PortableUserSession() final;
 
     SessionId sessionId() const { return session_id_; }
@@ -74,6 +75,7 @@ private:
     void sendMessage();
 
     const QString ipc_channel_id_;
+    const SessionId gui_session_id_;
 
     IpcServer* ipc_server_ = nullptr;
     ScopedQPointer<IpcChannel> ipc_channel_;
