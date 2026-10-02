@@ -28,6 +28,7 @@
 #include "host/client.h"
 #include "host/router_config_provider.h"
 #include "host/router_manager.h"
+#include "host/win/portable_desktop_client.h"
 #include "host/win/portable_host.h"
 #include "host/win/portable_user_session.h"
 #include "proto/peer.h"
@@ -44,6 +45,21 @@ PortableUserWorker::PortableUserWorker()
 PortableUserWorker::~PortableUserWorker()
 {
     LOG(TRACE) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+void PortableUserWorker::onDesktopClientMessage(
+    quint32 client_id, quint32 channel_id, const QByteArray& buffer, bool reliable)
+{
+    for (auto* client : std::as_const(clients_))
+    {
+        if (client->clientId() == client_id)
+        {
+            if (PortableDesktopClient* desktop_client = dynamic_cast<PortableDesktopClient*>(client))
+                desktop_client->readDesktopMessage(channel_id, buffer, reliable);
+            return;
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,8 +166,7 @@ void PortableUserWorker::onClientFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PortableUserWorker::startClient(
-    TcpChannel* tcp_channel, const QString& /* stun_host */, quint16 /* stun_port */)
+void PortableUserWorker::startClient(TcpChannel* tcp_channel, const QString& stun_host, quint16 stun_port)
 {
     CHECK(tcp_channel);
     tcp_channel->setParent(this);
@@ -172,6 +187,45 @@ void PortableUserWorker::startClient(
     tcp_channel->setWriteBufferSize(kWriteBufferSize);
 
     const auto session_type = static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
-    LOG(INFO) << "Session type not served yet in user mode:" << session_type;
-    tcp_channel->deleteLater();
+    if (session_type != proto::peer::SESSION_TYPE_DESKTOP)
+    {
+        LOG(INFO) << "Session type not served yet in user mode:" << session_type;
+        tcp_channel->deleteLater();
+        return;
+    }
+
+    PortableDesktopClient* client = new PortableDesktopClient(tcp_channel, this);
+    const quint32 client_id = client->clientId();
+
+    client->setFeature(Client::FEATURE_UDP, true);
+    client->setFeature(Client::FEATURE_BANDWIDTH, true);
+
+    connect(client, &Client::sig_finished, this, &PortableUserWorker::onClientFinished);
+
+    connect(client, &Client::sig_finished, this, [this, client_id]()
+    {
+        emit sig_desktopClientFinished(client_id);
+    });
+    connect(client, &Client::sig_channelChanged, this, &PortableUserWorker::sig_desktopClientChannelChanged);
+    connect(client, &PortableDesktopClient::sig_desktopMessage, this,
+            [this, client_id](quint32 channel_id, const QByteArray& buffer)
+    {
+        emit sig_desktopClientMessage(client_id, channel_id, buffer);
+    });
+
+    connect(client, &Client::sig_started, user_session_, &PortableUserSession::onClientStarted);
+    connect(client, &Client::sig_finished, user_session_, &PortableUserSession::onClientFinished);
+
+    connect(client, &PortableDesktopClient::sig_userMessage, user_session_, &PortableUserSession::onClientMessage);
+    connect(user_session_, &PortableUserSession::sig_userMessage, client, &PortableDesktopClient::onUserMessage);
+
+    LOG(INFO) << "Client connected (type:" << client->sessionType() << "computer:" << client->computerName()
+              << "address:" << client->address() << ")";
+
+    clients_.append(client);
+
+    // The client starts reading the network as it starts, and a message it already has is handled right
+    // away, so the desktop side must know about the client before that.
+    emit sig_desktopClientStarted(client_id);
+    client->start(stun_host, stun_port);
 }

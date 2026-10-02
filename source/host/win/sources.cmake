@@ -41,6 +41,8 @@ collect_sources(SOURCE_HOST_WIN
     dxgi_texture_staging.h
     msi_package.cc
     msi_package.h
+    portable_desktop_client.cc
+    portable_desktop_client.h
     portable_host.cc
     portable_host.h
     portable_package.cc

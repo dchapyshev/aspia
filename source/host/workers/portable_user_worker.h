@@ -43,6 +43,15 @@ public:
     PortableUserWorker();
     ~PortableUserWorker() final;
 
+public slots:
+    void onDesktopClientMessage(quint32 client_id, quint32 channel_id, const QByteArray& buffer, bool reliable);
+
+signals:
+    void sig_desktopClientStarted(quint32 client_id);
+    void sig_desktopClientMessage(quint32 client_id, quint32 channel_id, const QByteArray& buffer);
+    void sig_desktopClientFinished(quint32 client_id);
+    void sig_desktopClientChannelChanged();
+
 protected:
     // Worker implementation.
     void onPrepare() final;

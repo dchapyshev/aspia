@@ -380,10 +380,22 @@ int launchUserMode(int& argc, char* argv[])
     application.addWorker(std::make_unique<InputWorker>());
     application.addWorker(std::make_unique<AudioWorker>());
 
+    PortableUserWorker* user_worker = CoreApplication::findWorker<PortableUserWorker>();
     PortableDesktopWorker* desktop_worker = CoreApplication::findWorker<PortableDesktopWorker>();
     ScreenWorker* screen_worker = CoreApplication::findWorker<ScreenWorker>();
     InputWorker* input_worker = CoreApplication::findWorker<InputWorker>();
     AudioWorker* audio_worker = CoreApplication::findWorker<AudioWorker>();
+
+    QObject::connect(user_worker, &PortableUserWorker::sig_desktopClientStarted,
+                     desktop_worker, &PortableDesktopWorker::onClientStarted, Qt::QueuedConnection);
+    QObject::connect(user_worker, &PortableUserWorker::sig_desktopClientMessage,
+                     desktop_worker, &PortableDesktopWorker::onClientMessage, Qt::QueuedConnection);
+    QObject::connect(user_worker, &PortableUserWorker::sig_desktopClientFinished,
+                     desktop_worker, &PortableDesktopWorker::onClientFinished, Qt::QueuedConnection);
+    QObject::connect(user_worker, &PortableUserWorker::sig_desktopClientChannelChanged,
+                     desktop_worker, &PortableDesktopWorker::onClientChannelChanged, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_clientMessage,
+                     user_worker, &PortableUserWorker::onDesktopClientMessage, Qt::QueuedConnection);
 
     QObject::connect(desktop_worker, &PortableDesktopWorker::sig_selectScreen,
                      screen_worker, &ScreenWorker::onSelectScreen, Qt::QueuedConnection);
