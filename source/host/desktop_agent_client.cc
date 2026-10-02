@@ -371,6 +371,14 @@ void DesktopAgentClient::sendCapabilities()
         flag->set_value(value);
     };
 
+    bool portable = false;
+    bool elevated = false;
+
+#if defined(Q_OS_WINDOWS)
+    portable = PortableHost::isActive();
+    elevated = ProcessUtil::isProcessElevated();
+#endif // defined(Q_OS_WINDOWS)
+
     // Capabilities implemented by the agent on every platform.
     add_flag(kFlagClipboard, true);
     add_flag(kFlagCursorPosition, true);
@@ -380,15 +388,15 @@ void DesktopAgentClient::sendCapabilities()
     add_flag(kFlagLockAtDisconnect, true);
     add_flag(kFlagPowerControl, true);
     add_flag(kFlagSelectScreen, true);
-    add_flag(kFlagTaskManager, true);
+    add_flag(kFlagTaskManager, !portable || elevated);
 
 #if defined(Q_OS_WINDOWS)
     add_flag(kFlagOSWindows, true);
     add_flag(kFlagBlockInput, true);
     add_flag(kFlagDesktopEffects, true);
     add_flag(kFlagFileClipboard, true);
-    add_flag(kFlagPortable, PortableHost::isActive());
-    add_flag(kFlagElevated, ProcessUtil::isProcessElevated());
+    add_flag(kFlagPortable, portable);
+    add_flag(kFlagElevated, elevated);
 #elif defined(Q_OS_LINUX)
     add_flag(kFlagOSLinux, true);
 #elif defined(Q_OS_MACOS)

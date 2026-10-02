@@ -37,6 +37,7 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "host/screen_capturer_win.h"
+#include "host/win/portable_host.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
@@ -587,7 +588,14 @@ void ScreenWorker::onCaptureScreen()
         LOG(INFO) << "Screen count changed from" << screen_count_ << "to" << count;
 
         screen_resizer_.reset();
-        screen_resizer_ = DesktopResizer::create();
+
+        bool resolution_change_allowed = true;
+#if defined(Q_OS_WINDOWS)
+        resolution_change_allowed = !PortableHost::isActive();
+#endif // defined(Q_OS_WINDOWS)
+
+        if (resolution_change_allowed)
+            screen_resizer_ = DesktopResizer::create();
 
         screen_count_ = count;
 
