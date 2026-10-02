@@ -105,7 +105,7 @@ bool PortableUserSession::start()
             return;
 
         LOG(ERROR) << "Portable GUI is not connected in time";
-        emit sig_guiTerminated();
+        terminate();
     });
 
     return true;
@@ -248,7 +248,7 @@ void PortableUserSession::onIpcDisconnected()
     LOG(INFO) << "Portable GUI disconnected";
     ipc_channel_.reset();
     session_id_ = kInvalidSessionId;
-    emit sig_guiTerminated();
+    terminate();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -347,6 +347,15 @@ void PortableUserSession::onIpcMessageReceived(
     {
         LOG(ERROR) << "Unhandled message from UI";
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void PortableUserSession::terminate()
+{
+    if (ipc_server_)
+        ipc_server_->stop();
+
+    emit sig_guiTerminated();
 }
 
 //--------------------------------------------------------------------------------------------------

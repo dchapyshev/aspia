@@ -501,6 +501,8 @@ int launchUserMode(int& argc, char* argv[])
     QObject::connect(audio_worker, &AudioWorker::sig_audioData,
                      desktop_worker, &PortableDesktopWorker::onAudioData, Qt::QueuedConnection);
 
+    QObject::connect(&application, &QCoreApplication::aboutToQuit, [&mutex]() { mutex.reset(); });
+
     // Start the GUI in this launcher's session.
     if (!ProcessUtil::createProcess(QDir::toNativeSeparators(BasePaths::currentApp()), QString()))
         LOG(ERROR) << "Unable to start the portable GUI";

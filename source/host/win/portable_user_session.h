@@ -72,6 +72,8 @@ private slots:
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
 
 private:
+    // Ends the session together with the GUI: the host terminates after it.
+    void terminate();
     void sendMessage();
 
     const QString ipc_channel_id_;
