@@ -169,6 +169,14 @@ public final class InputService extends AccessibilityService
         return sInstance != null;
     }
 
+    // The service itself while it is bound, null otherwise. Windows added through it may be accessibility
+    // overlays, which are shown above everything, including the screens of the system that hide the usual
+    // overlays of applications (the settings, for one).
+    public static Context overlayContext()
+    {
+        return sInstance;
+    }
+
     // True if the user has enabled this service in the accessibility settings. Unlike isRunning() this
     // reads the settings directly, so it is reliable at startup before the system has bound the service.
     public static boolean isEnabled(Context context)

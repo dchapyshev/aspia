@@ -18,10 +18,13 @@
 
 package org.aspia.host;
 
+import android.app.KeyguardManager;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -32,6 +35,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -69,9 +73,14 @@ public final class FloatingMenu
     // click listeners) runs on that same thread, because the windows are added from it via post(), so
     // their input and view callbacks are dispatched on its Looper. No cross-thread access, no locking.
     private static WindowManager sWindowManager = null;
+    private static int sWindowType = 0;
     private static View sButton = null;
     private static WindowManager.LayoutParams sButtonParams = null;
     private static View sMenu = null;
+
+    // Hides the button while the lock screen is up; registered while the button exists.
+    private static BroadcastReceiver sLockReceiver = null;
+    private static Context sLockReceiverContext = null;
 
     // Latest remote clipboard text, applied to the device the next time the menu syncs the clipboard.
     private static volatile String sPending = null;
@@ -160,7 +169,8 @@ public final class FloatingMenu
         }
     }
 
-    // Shows the floating button (no-op if already shown or the overlay permission is not granted).
+    // Shows the floating button (no-op if already shown, or if neither the accessibility service is bound
+    // nor the overlay permission is granted).
     public static void show(final Context context)
     {
         // Use the application context: the overlay is long-lived and its views, listeners and layout
@@ -169,17 +179,35 @@ public final class FloatingMenu
         post(() -> showImpl(app_context));
     }
 
-    private static void showImpl(Context context)
+    private static void showImpl(Context app_context)
     {
         if (sButton != null)
             return;
 
-        if (!Settings.canDrawOverlays(context))
+        // The settings of the system and some other screens hide the overlays of applications, so the
+        // remote side would lose the button there. An accessibility overlay is not hidden; it is added
+        // through the accessibility service, which the host requires anyway. Without the service the
+        // usual overlay is used.
+        Context overlay_context = InputService.overlayContext();
+        if (overlay_context != null)
         {
-            Log.w(TAG, "Overlay permission not granted; floating menu unavailable");
-            return;
+            sWindowType = WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY;
+        }
+        else
+        {
+            if (!Settings.canDrawOverlays(app_context))
+            {
+                Log.w(TAG, "Overlay permission not granted; floating menu unavailable");
+                return;
+            }
+
+            overlay_context = app_context;
+            sWindowType = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                    : WindowManager.LayoutParams.TYPE_PHONE;
         }
 
+        final Context context = overlay_context;
         final float density = context.getResources().getDisplayMetrics().density;
         final int size = Math.round(52 * density);
 
@@ -268,12 +296,8 @@ public final class FloatingMenu
             }
         });
 
-        final int type = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                : WindowManager.LayoutParams.TYPE_PHONE;
-
         sButtonParams = new WindowManager.LayoutParams(
-                size, size, type,
+                size, size, sWindowType,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
         sButtonParams.gravity = Gravity.TOP | Gravity.START;
@@ -293,7 +317,76 @@ public final class FloatingMenu
         {
             Log.e(TAG, "Unable to add floating button", t);
             sButton = null;
+            return;
         }
+
+        startLockMonitor(app_context);
+    }
+
+    // An accessibility overlay is shown above the lock screen too, where the button has no business. It
+    // is hidden while the screen is off or locked and shown again once the user unlocks the device. The
+    // broadcasts are delivered on this overlay thread, like the rest of the work with the windows.
+    private static void startLockMonitor(Context context)
+    {
+        sLockReceiver = new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                updateLockVisibility(context, Intent.ACTION_SCREEN_OFF.equals(intent.getAction()));
+            }
+        };
+        sLockReceiverContext = context;
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_USER_PRESENT);
+
+        // All the actions are protected system broadcasts, so no exported flag is required; it is
+        // passed on API 33+ anyway to satisfy the stricter registration checks.
+        Handler handler = new Handler(Looper.myLooper());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            context.registerReceiver(sLockReceiver, filter, null, handler, Context.RECEIVER_NOT_EXPORTED);
+        else
+            context.registerReceiver(sLockReceiver, filter, null, handler);
+
+        // The broadcasts only report transitions; the device may be locked already.
+        updateLockVisibility(context, false);
+    }
+
+    private static void stopLockMonitor()
+    {
+        if (sLockReceiver == null)
+            return;
+
+        try
+        {
+            sLockReceiverContext.unregisterReceiver(sLockReceiver);
+        }
+        catch (Throwable t)
+        {
+            Log.e(TAG, "Unable to unregister the lock receiver", t);
+        }
+
+        sLockReceiver = null;
+        sLockReceiverContext = null;
+    }
+
+    // The lock screen may come up a while after the screen goes off, so the button is hidden with the
+    // screen already.
+    private static void updateLockVisibility(Context context, boolean screen_off)
+    {
+        if (sButton == null)
+            return;
+
+        KeyguardManager keyguard = context.getSystemService(KeyguardManager.class);
+        boolean locked = screen_off || (keyguard != null && keyguard.isKeyguardLocked());
+
+        if (locked)
+            closeMenu();
+
+        sButton.setVisibility(locked ? View.GONE : View.VISIBLE);
     }
 
     public static void hide()
@@ -303,6 +396,7 @@ public final class FloatingMenu
 
     private static void hideImpl()
     {
+        stopLockMonitor();
         closeMenu();
 
         if (sWindowManager != null && sButton != null)
@@ -369,16 +463,12 @@ public final class FloatingMenu
             return false;
         });
 
-        final int type = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                : WindowManager.LayoutParams.TYPE_PHONE;
-
         // Focusable (no FLAG_NOT_FOCUSABLE) so the clipboard is accessible while the menu is open.
         // FLAG_WATCH_OUTSIDE_TOUCH needs FLAG_NOT_TOUCH_MODAL to deliver ACTION_OUTSIDE, used to close it.
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                type,
+                sWindowType,
                 WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
                         | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
