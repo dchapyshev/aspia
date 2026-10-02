@@ -53,7 +53,7 @@ QString Worker::name() const
 //--------------------------------------------------------------------------------------------------
 void Worker::post(std::function<void()> work)
 {
-    QMetaObject::invokeMethod(this, std::move(work), Qt::QueuedConnection);
+    postFunctor(std::move(work));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -116,6 +116,12 @@ void Worker::onThreadFinished()
     }
 
     onStop();
+
+    // Right after this the thread deletes its event dispatcher.
+    {
+        std::scoped_lock lock(post_lock_);
+        thread_finished_ = true;
+    }
 
     current_worker_ = nullptr;
 }

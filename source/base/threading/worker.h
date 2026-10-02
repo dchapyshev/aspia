@@ -26,6 +26,7 @@
 #include <barrier>
 #include <functional>
 #include <memory>
+#include <mutex>
 #include <optional>
 #include <thread>
 #include <unordered_map>
@@ -54,7 +55,8 @@ public:
     // Human-readable worker name (the class name); used for the thread name and diagnostics.
     QString name() const;
 
-    // Executes |work| asynchronously in the worker thread. May be called from any thread.
+    // Executes |work| asynchronously in the worker thread. May be called from any thread. The work
+    // posted after the worker thread has finished is dropped.
     void post(std::function<void()> work);
 
     // Request-response: executes |request| in the worker thread and delivers its return value to
@@ -72,13 +74,11 @@ public:
         QPointer<QObject> ctx(context);
         post([caller, ctx, request = std::move(request), reply = std::move(reply)]() mutable
         {
-            QMetaObject::invokeMethod(caller,
-                [ctx, reply = std::move(reply), result = request()]() mutable
+            caller->postFunctor([ctx, reply = std::move(reply), result = request()]() mutable
             {
                 if (ctx)
                     reply(std::move(result));
-            },
-            Qt::QueuedConnection);
+            });
         });
     }
 
@@ -123,6 +123,19 @@ private slots:
     void onThreadFinished();
 
 private:
+    // Queues |functor| to the worker thread unless the thread has finished. Qt reads the event
+    // dispatcher of the receiver's thread after queuing an event, while the finishing thread deletes
+    // it, so no post may be in progress then.
+    template <typename Functor>
+    void postFunctor(Functor&& functor)
+    {
+        std::scoped_lock lock(post_lock_);
+        if (thread_finished_)
+            return;
+
+        QMetaObject::invokeMethod(this, std::forward<Functor>(functor), Qt::QueuedConnection);
+    }
+
     WorkerManager* manager_ = nullptr;
     Thread thread_;
 
@@ -132,6 +145,9 @@ private:
     std::atomic<bool> pong_pending_{ false };
     TimePoint ping_time_;
     bool stall_reported_ = false;
+
+    std::mutex post_lock_;
+    bool thread_finished_ = false;
 
     static thread_local Worker* current_worker_;
 

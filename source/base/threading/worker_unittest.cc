@@ -152,6 +152,22 @@ namespace {
 
 const MilliSeconds kWaitTimeout{ 5000 };
 
+//--------------------------------------------------------------------------------------------------
+bool waitFor(const std::function<bool()>& condition)
+{
+    const TimePoint deadline = Clock::now() + kWaitTimeout;
+
+    while (!condition())
+    {
+        if (Clock::now() >= deadline)
+            return false;
+
+        std::this_thread::sleep_for(MilliSeconds(10));
+    }
+
+    return true;
+}
+
 } // namespace
 
 TEST(WorkerTests, StartRunsEveryOnStartBeforeReturn)
@@ -383,6 +399,95 @@ TEST(WorkerTests, DestructorDisconnectsWorkersBeforeStopping)
     EXPECT_TRUE(state_a->stopped);
     EXPECT_FALSE(state_a->sibling_connected_at_stop);
     EXPECT_TRUE(state_a->self_connected_at_stop);
+}
+
+// The work posted to a worker whose thread has finished is dropped at once: the finishing thread
+// deletes its event dispatcher, so nothing may be queued to it any more.
+TEST(WorkerTests, PostAfterThreadFinishedIsDropped)
+{
+    auto state_a = std::make_shared<WorkerTestState>();
+    auto state_b = std::make_shared<WorkerTestState>();
+
+    std::atomic<bool> target_finished{ false };
+    std::atomic<bool> work_released{ false };
+    std::atomic<bool> work_executed{ false };
+
+    {
+        WorkerManager manager;
+        manager.add(std::make_unique<TestWorkerA>(state_a));
+        const qint64 target_id = manager.add(std::make_unique<TestWorkerA>(state_b));
+
+        TestWorkerA* target = manager.find<TestWorkerA>(target_id);
+        ASSERT_TRUE(target);
+
+        // Both workers stop together; this one posts once the thread of the other has finished.
+        state_a->on_stop = [&, target]()
+        {
+            target_finished = waitFor([target]() { return target->thread()->isFinished(); });
+
+            auto marker = std::make_shared<int>(0);
+            std::weak_ptr<int> weak_marker = marker;
+
+            target->post([marker = std::move(marker), &work_executed]() { work_executed = true; });
+            work_released = weak_marker.expired();
+        };
+
+        manager.start();
+    }
+
+    EXPECT_TRUE(target_finished);
+    EXPECT_TRUE(work_released);
+    EXPECT_FALSE(work_executed);
+}
+
+// The reply to a request is dropped at once as well when the thread of the caller has finished
+// before the request is done.
+TEST(WorkerTests, RequestReplyToFinishedCallerIsDropped)
+{
+    auto state_a = std::make_shared<WorkerTestState>();
+    auto state_b = std::make_shared<WorkerTestState>();
+
+    std::atomic<bool> caller_finished{ false };
+    std::atomic<bool> reply_released{ false };
+    std::atomic<bool> reply_executed{ false };
+
+    // Written in the caller's onStart(), read in the target's onStop(); ordered by the start() barrier.
+    std::weak_ptr<int> weak_marker;
+
+    {
+        WorkerManager manager;
+        const qint64 caller_id = manager.add(std::make_unique<TestWorkerA>(state_a));
+        const qint64 target_id = manager.add(std::make_unique<TestWorkerA>(state_b));
+
+        TestWorkerA* caller = manager.find<TestWorkerA>(caller_id);
+        TestWorkerA* target = manager.find<TestWorkerA>(target_id);
+        ASSERT_TRUE(caller);
+        ASSERT_TRUE(target);
+
+        // The request is done only after the caller has stopped and its thread has finished.
+        state_a->on_start = [&, caller, target]()
+        {
+            auto marker = std::make_shared<int>(0);
+            weak_marker = marker;
+
+            target->request(caller,
+                [&, caller]() -> int
+                {
+                    caller_finished = waitFor([caller]() { return caller->thread()->isFinished(); });
+                    return 0;
+                },
+                [marker, &reply_executed](int /* value */) { reply_executed = true; });
+        };
+
+        // The caller is not destroyed yet, so a reply still queued to it would keep the marker.
+        state_b->on_stop = [&]() { reply_released = weak_marker.expired(); };
+
+        manager.start();
+    }
+
+    EXPECT_TRUE(caller_finished);
+    EXPECT_TRUE(reply_released);
+    EXPECT_FALSE(reply_executed);
 }
 
 TEST(WorkerTests, DestructorWithoutStartDoesNotHang)
