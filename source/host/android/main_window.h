@@ -29,6 +29,7 @@ class AppBar;
 class BottomNavigationBar;
 class ConnectionWidget;
 class PermissionsWidget;
+class QDialog;
 class QScrollArea;
 class QStackedWidget;
 
@@ -49,6 +50,9 @@ signals:
 protected:
     // QWidget implementation.
     void resizeEvent(QResizeEvent* event) final;
+
+    // QObject implementation.
+    bool eventFilter(QObject* watched, QEvent* event) final;
 
 private slots:
     void onSectionChanged(int index);
@@ -71,6 +75,7 @@ private:
     void scrollFocusIntoView();
     // Shows the permissions screen in place of the app while a permission is missing.
     void updatePermissions();
+    QDialog* visibleDialog() const;
     QScrollArea* focusedScrollArea() const;
     QString sectionTitle(int index) const;
 
@@ -91,6 +96,10 @@ private:
 
     // The server starts without the permissions and learns when they are granted.
     bool permissions_granted_ = false;
+
+    // The last press of the system Back that came to this window, see eventFilter().
+    enum class BackPress { NONE, TAKEN, PASSED };
+    BackPress back_press_ = BackPress::NONE;
 
     Q_DISABLE_COPY_MOVE(AndroidMainWindow)
 };

@@ -294,8 +294,9 @@ void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
     layout->addWidget(background);
 
     Label* background_hint = new Label(
-        tr("The host stays connected to the router while the application is not on the screen, so it "
-           "can be reached at any time."), Label::Role::CAPTION);
+        tr("The host accepts connections in the local network and stays connected to the router while "
+           "the application is not on the screen, so it can be reached at any time."),
+        Label::Role::CAPTION);
     background_hint->setWordWrap(true);
     layout->addWidget(background_hint);
 

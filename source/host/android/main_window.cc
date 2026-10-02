@@ -20,19 +20,25 @@
 
 #include <QApplication>
 #include <QCoreApplication>
+#include <QDialog>
 #include <QEvent>
 #include <QInputMethod>
+#include <QJniObject>
+#include <QKeyEvent>
 #include <QResizeEvent>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QStackedWidget>
+#include <QVariant>
 #include <QVBoxLayout>
+#include <QWindow>
 
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
 #include "host/database.h"
+#include "host/system_settings.h"
 #include "host/android/connection_widget.h"
 #include "host/android/password_dialog.h"
 #include "host/android/permissions_widget.h"
@@ -137,6 +143,9 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     }, Qt::QueuedConnection);
 
     updatePermissions();
+
+    // The system Back is taken before it reaches the focused widget, see eventFilter().
+    qApp->installEventFilter(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -159,6 +168,73 @@ void AndroidMainWindow::resizeEvent(QResizeEvent* event)
     // A key press on the on-screen keyboard can restore the full window height with the keyboard still
     // up, which arrives as a resize rather than a keyboard rectangle change; recompute the inset here.
     onUpdateKeyboardInset();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AndroidMainWindow::eventFilter(QObject* watched, QEvent* event)
+{
+    // Only the system Back that comes to this window; a popup handles it in its own window. It is taken
+    // here, before the focused widget: a line edit shows the on-screen keyboard on the release of any
+    // key.
+    if (watched != windowHandle() ||
+        (event->type() != QEvent::KeyPress && event->type() != QEvent::KeyRelease) ||
+        static_cast<QKeyEvent*>(event)->key() != Qt::Key_Back)
+    {
+        return QWidget::eventFilter(watched, event);
+    }
+
+    if (event->type() == QEvent::KeyPress)
+    {
+        // The system Back nobody handles closes the window on the release, and with it the application
+        // and the host. Taking the press keeps Qt from doing that.
+        if (!visibleDialog() && !app_bar_->isBackVisible() &&
+            !SystemSettings().isBackgroundModeEnabled())
+        {
+            back_press_ = BackPress::PASSED;
+            return QWidget::eventFilter(watched, event);
+        }
+
+        back_press_ = BackPress::TAKEN;
+        return true;
+    }
+
+    const BackPress back_press = back_press_;
+    back_press_ = BackPress::NONE;
+
+    // While the on-screen keyboard is up, the press goes to the keyboard, which hides itself, and only
+    // the release may come here. It is dropped, otherwise the line edit shows the keyboard again.
+    if (back_press == BackPress::NONE)
+        return true;
+
+    if (back_press == BackPress::PASSED)
+        return QWidget::eventFilter(watched, event);
+
+    // The action follows on the release, so the whole press is over before the app may leave the
+    // screen: a release that comes to another app leaves Android waiting for it. A dialog is closed as
+    // with its cancel button.
+    if (QDialog* dialog = visibleDialog())
+    {
+        dialog->reject();
+        return true;
+    }
+
+    // A page opened inside a section returns the same way as with the back button of the app bar.
+    if (app_bar_->isBackVisible())
+    {
+        onBackClicked();
+        return true;
+    }
+
+    // In the background mode the host has to stay reachable, so the app goes to the background
+    // instead, as with Home.
+    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
+    {
+        QJniObject context = QNativeInterface::QAndroidApplication::context();
+        if (context.isValid())
+            context.callMethod<jboolean>("moveTaskToBack", "(Z)Z", jboolean(true));
+        return QVariant();
+    });
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -357,6 +433,21 @@ void AndroidMainWindow::updatePermissions()
         navigation_->show();
         onSectionChanged(navigation_->currentIndex());
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+QDialog* AndroidMainWindow::visibleDialog() const
+{
+    // The dialogs are shown inside this window over its content; one opened from another is created
+    // later and is on top.
+    const QList<QDialog*> dialogs = findChildren<QDialog*>();
+    for (auto it = dialogs.crbegin(); it != dialogs.crend(); ++it)
+    {
+        if ((*it)->isVisible())
+            return *it;
+    }
+
+    return nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------

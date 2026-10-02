@@ -95,7 +95,7 @@ private slots:
     void onClientFinished();
     void onRouterStateChanged(const proto::user::RouterState& state);
     void onCredentialsChanged(HostId host_id, const SecureString& password);
-    void onApplicationStateChanged(Qt::ApplicationState state);
+    void onApplicationStateChanged();
     void onScreenInteractiveChanged(bool interactive);
     void onShareCancelled();
 
@@ -103,6 +103,7 @@ private:
     void connectToRouter();
     void disconnectFromRouter();
     void updateRouterConnection();
+    void updateBackgroundModeService();
     void stopWaitingAfterShare();
     void startClient(TcpChannel* tcp_channel, const QString& stun_host = QString(),
                      quint16 stun_port = 0);

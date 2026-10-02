@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"  />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION"  />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"  />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"  />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"  />
     <uses-permission android:name="android.permission.OPEN_ACCESSIBILITY_DETAILS_SETTINGS"  />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"  />
@@ -64,6 +65,15 @@
             android:name="org.aspia.host.ConnectionWaitService"
             android:foregroundServiceType="dataSync"
             android:exported="false" />
+
+        <service
+            android:name="org.aspia.host.BackgroundModeService"
+            android:foregroundServiceType="specialUse"
+            android:exported="false">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Remote access host that accepts incoming connections at any time while the user keeps the background mode turned on" />
+        </service>
 
         <service
             android:name="org.aspia.host.InputService"

@@ -33,6 +33,7 @@
 #include "common/android/scroll_area.h"
 #include "common/android/switch.h"
 #include "common/desktop/session_type.h"
+#include "host/system_settings.h"
 #include "host/user_settings.h"
 #include "proto/peer.h"
 
@@ -366,9 +367,12 @@ bool ConnectionWidget::eventFilter(QObject* watched, QEvent* event)
 void ConnectionWidget::onShare()
 {
     // The app that gets the ID and the password stays on the screen, and the other side may connect
-    // before the user comes back.
-    startConnectionWait(tr("Waiting for a connection"), tr("Stop"));
-    emit sig_shareStarted();
+    // before the user comes back. In the background mode the host is online all the time anyway.
+    if (!SystemSettings().isBackgroundModeEnabled())
+    {
+        startConnectionWait(tr("Waiting for a connection"), tr("Stop"));
+        emit sig_shareStarted();
+    }
 
     shareText(tr("Aspia ID: %1\nPassword: %2").arg(host_id_, password_));
 }
