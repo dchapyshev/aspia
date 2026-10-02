@@ -709,6 +709,31 @@ TEST_F(RouterManagerTest, PortableHostMarksTheRequestPortable)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A portable host sends no telemetry, even on request, and leaves the storage of the installed host
+// as it is.
+TEST_F(RouterManagerTest, PortableHostSendsNoTelemetryAndKeepsNoStorage)
+{
+    startManager(false, /* portable */ true);
+
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+    sendIdResponse(proto::router::kErrorOk, kHostId, std::string_view());
+    ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kHostId; }));
+
+    sendCommand(proto::router::kCommandHostTelemetry);
+
+    // The host answers the next message with a new ID request. The connection keeps the order, so a
+    // report sent for the command would have come before it.
+    sendIdResponse(proto::router::kErrorNotFound, kInvalidHostId, std::string_view());
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 2; }));
+
+    EXPECT_EQ(telemetry_received_.load(), 0);
+
+    HostStorage storage;
+    EXPECT_EQ(storage.lastHostId(), kInvalidHostId);
+    EXPECT_EQ(storage.routerConnectCount(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST_F(RouterManagerTest, UnknownKeyIsResetAndANewIdIsRequested)
 {
     host_worker_->invoke([this]()

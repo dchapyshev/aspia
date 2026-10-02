@@ -955,6 +955,12 @@ void HostWindow::onExit()
 void HostWindow::onSettingsChanged()
 {
     LOG(INFO) << "Settings changed";
+
+#if defined(Q_OS_WINDOWS)
+    if (PortableHost::isActive())
+        return;
+#endif // defined(Q_OS_WINDOWS)
+
     SystemSettings settings;
     ui->action_exit->setEnabled(!settings.isApplicationShutdownDisabled());
 }
@@ -1201,6 +1207,11 @@ QString HostWindow::lastKnownHostId() const
 {
     if (connected_to_service_ && last_state_ == proto::user::RouterState::DISABLED)
         return kUnknownValue;
+
+#if defined(Q_OS_WINDOWS)
+    if (PortableHost::isActive())
+        return kUnknownValue;
+#endif // defined(Q_OS_WINDOWS)
 
     const HostId host_id = HostStorage().lastHostId();
     if (host_id == kInvalidHostId || isTempHostId(host_id))

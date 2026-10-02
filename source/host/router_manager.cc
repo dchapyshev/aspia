@@ -173,8 +173,11 @@ void RouterManager::onTcpReady()
     LOG(INFO) << "Connection to the router is established";
     routerStateChanged(proto::user::RouterState::CONNECTED);
 
-    HostStorage().registerRouterConnect();
-    onTelemetryChanged();
+    if (!config_->isPortable())
+    {
+        HostStorage().registerRouterConnect();
+        onTelemetryChanged();
+    }
 
     // Now the session will receive incoming messages.
     reconnect_time_ = TimePoint::max();
@@ -258,9 +261,12 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
 
         LOG(INFO) << "Host ID received:" << host_id_;
 
-        HostStorage host_storage;
-        if (host_storage.lastHostId() != host_id_)
-            host_storage.setLastHostId(host_id_);
+        if (!config_->isPortable())
+        {
+            HostStorage host_storage;
+            if (host_storage.lastHostId() != host_id_)
+                host_storage.setLastHostId(host_id_);
+        }
 
         // The one-time user name is derived from the host ID ("#<id>"), so the user can only be
         // registered now that the ID is known; before this point (first connect or reconnect after
@@ -465,7 +471,7 @@ void RouterManager::hostIdRequest()
 //--------------------------------------------------------------------------------------------------
 void RouterManager::sendTelemetry()
 {
-    if (!tcp_channel_ || !tcp_channel_->isAuthenticated() || host_id_ == kInvalidHostId)
+    if (config_->isPortable() || !tcp_channel_ || !tcp_channel_->isAuthenticated() || host_id_ == kInvalidHostId)
         return;
 
     HostStorage storage;
@@ -564,18 +570,21 @@ void RouterManager::readConnectionOffer(const proto::router::ConnectionOffer& of
     ScopedQPointer<ServerAuthenticator> authenticator(new ServerAuthenticator());
     authenticator->setUserList(user_list_);
 
-    connect(authenticator.get(), &Authenticator::sig_finished,
-            this, [this](Authenticator::ErrorCode error_code)
+    if (!config_->isPortable())
     {
-        if (error_code == Authenticator::ErrorCode::SUCCESS)
-            HostStorage().registerSuccessfulLogin();
-        else if (error_code == Authenticator::ErrorCode::ACCESS_DENIED)
-            HostStorage().registerFailedLogin();
-        else
-            return;
+        connect(authenticator.get(), &Authenticator::sig_finished,
+                this, [this](Authenticator::ErrorCode error_code)
+        {
+            if (error_code == Authenticator::ErrorCode::SUCCESS)
+                HostStorage().registerSuccessfulLogin();
+            else if (error_code == Authenticator::ErrorCode::ACCESS_DENIED)
+                HostStorage().registerFailedLogin();
+            else
+                return;
 
-        onTelemetryChanged();
-    });
+            onTelemetryChanged();
+        });
+    }
 
     peer_manager_->addConnectionOffer(offer, authenticator.release());
 }
