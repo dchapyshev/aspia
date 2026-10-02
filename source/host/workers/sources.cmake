@@ -45,6 +45,8 @@ if (WIN32)
     collect_sources(SOURCE_HOST_WORKERS
         portable_desktop_worker.cc
         portable_desktop_worker.h
+        portable_file_worker.cc
+        portable_file_worker.h
         portable_service_worker.cc
         portable_service_worker.h
         portable_user_worker.cc

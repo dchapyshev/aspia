@@ -19,12 +19,12 @@
 #ifndef HOST_WIN_PORTABLE_FILE_CLIENT_H
 #define HOST_WIN_PORTABLE_FILE_CLIENT_H
 
-#include "base/power_save_blocker.h"
-#include "base/serialization.h"
-#include "host/client.h"
-#include "proto/file_transfer.h"
+#include <QPointer>
 
-class FileRequestHandler;
+#include "base/power_save_blocker.h"
+#include "host/client.h"
+
+class PortableFileWorker;
 
 // File transfer client of the portable host running with the rights of the user.
 class PortableFileClient final : public Client
@@ -41,11 +41,9 @@ protected:
     void onMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
-    FileRequestHandler* handler_ = nullptr;
+    QPointer<PortableFileWorker> file_worker_;
     PowerSaveBlocker power_save_blocker_;
-
-    Parser<proto::file_transfer::Request> request_;
-    Serializer<proto::file_transfer::Reply> reply_;
+    bool is_session_locked_ = false;
 
     Q_DISABLE_COPY_MOVE(PortableFileClient)
 };

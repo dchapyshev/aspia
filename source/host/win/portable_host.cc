@@ -46,6 +46,7 @@
 #include "host/workers/audio_worker.h"
 #include "host/workers/input_worker.h"
 #include "host/workers/portable_desktop_worker.h"
+#include "host/workers/portable_file_worker.h"
 #include "host/workers/portable_user_worker.h"
 #include "host/workers/screen_worker.h"
 #include "version.h"
@@ -404,6 +405,7 @@ int launchUserMode(int& argc, char* argv[])
     CoreApplication application(argc, argv);
     application.addWorker(std::make_unique<PortableUserWorker>());
     application.addWorker(std::make_unique<PortableDesktopWorker>());
+    application.addWorker(std::make_unique<PortableFileWorker>());
     application.addWorker(std::make_unique<ScreenWorker>());
     application.addWorker(std::make_unique<InputWorker>());
     application.addWorker(std::make_unique<AudioWorker>());
