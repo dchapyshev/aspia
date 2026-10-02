@@ -415,9 +415,9 @@ Eklenen yönlendiriciler: %4</translation>
         <location filename="../client/android/main_window.cc" line="173"/>
         <location filename="../client/android/main_window.cc" line="282"/>
         <location filename="../client/android/main_window.cc" line="342"/>
-        <location filename="../host/android/main_window.cc" line="82"/>
-        <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="388"/>
+        <location filename="../host/android/main_window.cc" line="88"/>
+        <location filename="../host/android/main_window.cc" line="104"/>
+        <location filename="../host/android/main_window.cc" line="479"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
@@ -487,14 +487,14 @@ Eklenen yönlendiriciler: %4</translation>
         <location filename="../client/android/main_window.cc" line="961"/>
         <location filename="../client/android/main_window.cc" line="970"/>
         <location filename="../client/android/main_window.cc" line="1011"/>
-        <location filename="../host/android/main_window.cc" line="81"/>
-        <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="386"/>
+        <location filename="../host/android/main_window.cc" line="87"/>
+        <location filename="../host/android/main_window.cc" line="103"/>
+        <location filename="../host/android/main_window.cc" line="477"/>
         <source>Connection</source>
         <translation>Bağlantı</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="352"/>
+        <location filename="../host/android/main_window.cc" line="428"/>
         <source>Permissions</source>
         <translation>İzinler</translation>
     </message>
@@ -1182,6 +1182,7 @@ Eklenen yönlendiriciler: %4</translation>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
         <location filename="../host/ui/config_dialog.ui" line="225"/>
+        <location filename="../host/ui/config_dialog.cc" line="137"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
@@ -1226,28 +1227,23 @@ Eklenen yönlendiriciler: %4</translation>
         <translation>Güncelleme sunucusu belirtilmezse varsayılan sunucu kullanılır. Ortak anahtar belirtilmezse yerleşik anahtar kullanılır.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="258"/>
-        <source>Export installer</source>
-        <translation>Yükleyiciyi dışa aktar</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="535"/>
-        <location filename="../host/ui/config_dialog.ui" line="646"/>
+        <location filename="../host/ui/config_dialog.ui" line="528"/>
+        <location filename="../host/ui/config_dialog.ui" line="639"/>
         <source>Users</source>
         <translation>Kullanıcılar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="549"/>
+        <location filename="../host/ui/config_dialog.ui" line="542"/>
         <source>Add new user</source>
         <translation>Yeni kullanıcı ekle</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="575"/>
+        <location filename="../host/ui/config_dialog.ui" line="568"/>
         <source>Edit user</source>
         <translation>Kullanıcıyı düzenle</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="601"/>
+        <location filename="../host/ui/config_dialog.ui" line="594"/>
         <source>Delete user</source>
         <translation>Kullanıcıyı sil</translation>
     </message>
@@ -1257,102 +1253,102 @@ Eklenen yönlendiriciler: %4</translation>
         <translation>Güncellemeleri denetle</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="669"/>
+        <location filename="../host/ui/config_dialog.ui" line="662"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="678"/>
+        <location filename="../host/ui/config_dialog.ui" line="671"/>
         <source>Modify</source>
         <translation>Değiştir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="687"/>
+        <location filename="../host/ui/config_dialog.ui" line="680"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="467"/>
+        <location filename="../host/ui/config_dialog.ui" line="460"/>
         <source>Router</source>
         <translation>Yönlendirici</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="473"/>
+        <location filename="../host/ui/config_dialog.ui" line="466"/>
         <source>Enable the use of a router</source>
         <translation>Yönlendirici kullanımını etkinleştir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="485"/>
+        <location filename="../host/ui/config_dialog.ui" line="478"/>
         <source>Address:</source>
         <translation>Adres:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="504"/>
+        <location filename="../host/ui/config_dialog.ui" line="497"/>
         <source>Public Key:</source>
         <translation>Ortak Anahtar:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="307"/>
+        <location filename="../host/ui/config_dialog.ui" line="300"/>
         <source>Change password</source>
         <translation>Parolayı değiştir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="282"/>
+        <location filename="../host/ui/config_dialog.ui" line="275"/>
         <source>Security</source>
         <translation>Güvenlik</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="288"/>
+        <location filename="../host/ui/config_dialog.ui" line="281"/>
         <source>Password Protection of Settings</source>
         <translation>Ayarların Parola Koruması</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="324"/>
+        <location filename="../host/ui/config_dialog.ui" line="317"/>
         <source>One-time Password</source>
         <translation>Tek Kullanımlık Parola</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="330"/>
+        <location filename="../host/ui/config_dialog.ui" line="323"/>
         <source>Enable one-time password</source>
         <translation>Tek kullanımlık parolayı etkinleştir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="367"/>
+        <location filename="../host/ui/config_dialog.ui" line="360"/>
         <source>Characters count:</source>
         <translation>Karakter sayısı:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="353"/>
+        <location filename="../host/ui/config_dialog.ui" line="346"/>
         <source>Characters:</source>
         <translation>Karakterler:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="389"/>
+        <location filename="../host/ui/config_dialog.ui" line="382"/>
         <source>Connection Confirmation</source>
         <translation>Bağlantı Onayı</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="395"/>
+        <location filename="../host/ui/config_dialog.ui" line="388"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>Bilgisayara bağlanıldığında onay iste</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="404"/>
+        <location filename="../host/ui/config_dialog.ui" line="397"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>Bağlantının otomatik onaylanma süresi:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="339"/>
+        <location filename="../host/ui/config_dialog.ui" line="332"/>
         <source>Change password:</source>
         <translation>Parolayı yenileme sıklığı:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="418"/>
+        <location filename="../host/ui/config_dialog.ui" line="411"/>
         <source>If there is no active user:</source>
         <translation>Etkin kullanıcı yoksa:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="518"/>
+        <location filename="../host/ui/config_dialog.ui" line="511"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Doğrudan bağlantı olmadığında (NAT arkasında) bir bilgisayara bağlanmak için yönlendirici gereklidir. Aspia genel bir yönlendirici sağlamaz, ancak kendi yönlendiricinizi kurabilirsiniz. Yönlendiriciyi &lt;a href=&quot;https://aspia.org&quot;&gt;resmi web sitesinden&lt;/a&gt; indirebilirsiniz.</translation>
     </message>
@@ -1367,24 +1363,14 @@ Eklenen yönlendiriciler: %4</translation>
         <translation>Gelen bağlantı noktası:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="443"/>
+        <location filename="../host/ui/config_dialog.ui" line="436"/>
         <source>Disable Aspia shutdown</source>
         <translation>Aspia&apos;nın kapatılmasını devre dışı bırak</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="437"/>
+        <location filename="../host/ui/config_dialog.ui" line="430"/>
         <source>Other</source>
         <translation>Diğer</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="244"/>
-        <source>Import settings</source>
-        <translation>Ayarları içe aktar</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="251"/>
-        <source>Export settings</source>
-        <translation>Ayarları dışa aktar</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="103"/>
@@ -1397,219 +1383,256 @@ Eklenen yönlendiriciler: %4</translation>
         <translation>Güncellemeleri denetleme sıklığı:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="127"/>
+        <location filename="../host/ui/config_dialog.cc" line="139"/>
+        <source>Installer</source>
+        <translation>Yükleyici</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="141"/>
+        <source>Quick Support</source>
+        <translation>Quick Support</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="148"/>
         <source>Once a day</source>
         <translation>Günde bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="128"/>
+        <location filename="../host/ui/config_dialog.cc" line="149"/>
         <source>Once a week</source>
         <translation>Haftada bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="129"/>
+        <location filename="../host/ui/config_dialog.cc" line="150"/>
         <source>Once a month</source>
         <translation>Ayda bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="131"/>
+        <location filename="../host/ui/config_dialog.cc" line="152"/>
         <source>Stable</source>
         <translation>Kararlı</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="132"/>
+        <location filename="../host/ui/config_dialog.cc" line="153"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="133"/>
+        <location filename="../host/ui/config_dialog.cc" line="154"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="168"/>
+        <location filename="../host/ui/config_dialog.cc" line="189"/>
         <source>Default</source>
         <translation>Varsayılan</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="215"/>
+        <location filename="../host/ui/config_dialog.cc" line="236"/>
         <source>On reboot</source>
         <translation>Yeniden başlatıldığında</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="216"/>
+        <location filename="../host/ui/config_dialog.cc" line="237"/>
         <source>Every 5 minutes</source>
         <translation>5 dakikada bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="217"/>
+        <location filename="../host/ui/config_dialog.cc" line="238"/>
         <source>Every 30 minutes</source>
         <translation>30 dakikada bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="218"/>
+        <location filename="../host/ui/config_dialog.cc" line="239"/>
         <source>Every 1 hour</source>
         <translation>Saatte bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="219"/>
+        <location filename="../host/ui/config_dialog.cc" line="240"/>
         <source>Every 6 hours</source>
         <translation>6 saatte bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="220"/>
+        <location filename="../host/ui/config_dialog.cc" line="241"/>
         <source>Every 12 hours</source>
         <translation>12 saatte bir</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="228"/>
+        <location filename="../host/ui/config_dialog.cc" line="249"/>
         <source>Letters and digits</source>
         <translation>Harfler ve rakamlar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="231"/>
+        <location filename="../host/ui/config_dialog.cc" line="252"/>
         <source>Letters</source>
         <translation>Harfler</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="233"/>
+        <location filename="../host/ui/config_dialog.cc" line="254"/>
         <source>Digits</source>
         <translation>Rakamlar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="250"/>
+        <location filename="../host/ui/config_dialog.cc" line="271"/>
         <source>Never</source>
         <translation>Hiçbir zaman</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="251"/>
+        <location filename="../host/ui/config_dialog.cc" line="272"/>
         <source>15 seconds</source>
         <translation>15 saniye</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="252"/>
+        <location filename="../host/ui/config_dialog.cc" line="273"/>
         <source>30 seconds</source>
         <translation>30 saniye</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="253"/>
+        <location filename="../host/ui/config_dialog.cc" line="274"/>
         <source>45 seconds</source>
         <translation>45 saniye</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="254"/>
+        <location filename="../host/ui/config_dialog.cc" line="275"/>
         <source>60 seconds</source>
         <translation>60 saniye</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="262"/>
+        <location filename="../host/ui/config_dialog.cc" line="283"/>
         <source>Accept connection</source>
         <translation>Bağlantıyı kabul et</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="263"/>
+        <location filename="../host/ui/config_dialog.cc" line="284"/>
         <source>Reject connection</source>
         <translation>Bağlantıyı reddet</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="463"/>
+        <location filename="../host/ui/config_dialog.cc" line="484"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; kullanıcısını silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="491"/>
-        <location filename="../host/ui/config_dialog.cc" line="525"/>
+        <location filename="../host/ui/config_dialog.cc" line="512"/>
+        <location filename="../host/ui/config_dialog.cc" line="546"/>
         <source>An error occurred while processing the password.</source>
         <translation>Parola işlenirken bir hata oluştu.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="508"/>
+        <location filename="../host/ui/config_dialog.cc" line="529"/>
         <source>Settings storage is unavailable.</source>
         <translation>Ayar depolama alanı kullanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="539"/>
+        <location filename="../host/ui/config_dialog.ui" line="244"/>
+        <location filename="../host/ui/config_dialog.cc" line="560"/>
         <source>Import</source>
         <translation>İçe Aktar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="539"/>
-        <location filename="../host/ui/config_dialog.cc" line="556"/>
+        <location filename="../host/ui/config_dialog.cc" line="560"/>
+        <location filename="../host/ui/config_dialog.cc" line="577"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON dosyaları (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="556"/>
+        <location filename="../host/ui/config_dialog.ui" line="251"/>
+        <location filename="../host/ui/config_dialog.cc" line="577"/>
         <source>Export</source>
         <translation>Dışa Aktar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="573"/>
+        <location filename="../host/ui/config_dialog.cc" line="602"/>
         <source>Export Installer</source>
         <translation>Yükleyiciyi Dışa Aktar</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="573"/>
+        <location filename="../host/ui/config_dialog.cc" line="602"/>
         <source>MSI-files (*.msi)</source>
         <translation>MSI dosyaları (*.msi)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="583"/>
+        <location filename="../host/ui/config_dialog.cc" line="612"/>
         <source>The installer was successfully exported.</source>
         <translation>Yükleyici başarıyla dışa aktarıldı.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="587"/>
+        <location filename="../host/ui/config_dialog.cc" line="616"/>
         <source>The installed host package was not found.</source>
         <translation>Yüklü ana bilgisayar paketi bulunamadı.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="591"/>
+        <location filename="../host/ui/config_dialog.cc" line="620"/>
         <source>The installed version of the host does not support exporting the installer.</source>
         <translation>Ana bilgisayarın yüklü sürümü yükleyicinin dışa aktarılmasını desteklemiyor.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="595"/>
+        <location filename="../host/ui/config_dialog.cc" line="624"/>
         <source>Unable to export the installer.</source>
         <translation>Yükleyici dışa aktarılamıyor.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="616"/>
+        <location filename="../host/ui/config_dialog.cc" line="637"/>
+        <source>Export Quick Support</source>
+        <translation>Quick Support&apos;u Dışa Aktar</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="638"/>
+        <source>Executable files (*.exe)</source>
+        <translation>Yürütülebilir dosyalar (*.exe)</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="648"/>
+        <source>The portable version was successfully exported.</source>
+        <translation>Taşınabilir sürüm başarıyla dışa aktarıldı.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="652"/>
+        <source>The portable version works only through a router. Set up the connection to the router and save the settings.</source>
+        <translation>Taşınabilir sürüm yalnızca yönlendirici üzerinden çalışır. Yönlendirici bağlantısını yapılandırın ve ayarları kaydedin.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="656"/>
+        <source>Unable to export the portable version.</source>
+        <translation>Taşınabilir sürüm dışa aktarılamıyor.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="677"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Yapılandırma yazılamıyor. Yazma için yeterli haklara sahip olduğunuzdan emin olun.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="632"/>
+        <location filename="../host/ui/config_dialog.cc" line="693"/>
         <source>An invalid update server address was entered.</source>
         <translation>Geçersiz bir güncelleme sunucusu adresi girildi.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="640"/>
+        <location filename="../host/ui/config_dialog.cc" line="701"/>
         <source>Enter the update server address.</source>
         <translation>Güncelleme sunucusu adresini girin.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="650"/>
+        <location filename="../host/ui/config_dialog.cc" line="711"/>
         <source>An invalid public key was entered.</source>
         <translation>Geçersiz bir ortak anahtar girildi.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="662"/>
+        <location filename="../host/ui/config_dialog.cc" line="723"/>
         <source>Incorrect router address entered.</source>
         <translation>Hatalı yönlendirici adresi girildi.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="672"/>
+        <location filename="../host/ui/config_dialog.cc" line="733"/>
         <source>Incorrect router public key entered.</source>
         <translation>Hatalı yönlendirici ortak anahtarı girildi.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="835"/>
+        <location filename="../host/ui/config_dialog.cc" line="896"/>
         <source>Install</source>
         <translation>Yükle</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="840"/>
+        <location filename="../host/ui/config_dialog.cc" line="901"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
@@ -1649,74 +1672,74 @@ Eklenen yönlendiriciler: %4</translation>
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="244"/>
+        <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>Your ID</source>
         <translation>ID&apos;niz</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="245"/>
+        <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>One-time password</source>
         <translation>Tek kullanımlık parola</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="246"/>
+        <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Access</source>
         <translation>Erişim</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="247"/>
+        <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>Desktop</source>
         <translation>Masaüstü</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="248"/>
+        <location filename="../host/android/connection_widget.cc" line="249"/>
         <source>File Transfer</source>
         <translation>Dosya Aktarımı</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="370"/>
+        <location filename="../host/android/connection_widget.cc" line="373"/>
         <source>Waiting for a connection</source>
         <translation>Bağlantı bekleniyor</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="370"/>
+        <location filename="../host/android/connection_widget.cc" line="373"/>
         <source>Stop</source>
         <translation>Durdur</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="373"/>
+        <location filename="../host/android/connection_widget.cc" line="377"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>Aspia ID: %1
 Parola: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="416"/>
+        <location filename="../host/android/connection_widget.cc" line="420"/>
         <source>Router is disabled</source>
         <translation>Yönlendirici devre dışı</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="419"/>
+        <location filename="../host/android/connection_widget.cc" line="423"/>
         <source>Connecting to router...</source>
         <translation>Yönlendiriciye bağlanılıyor...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="420"/>
+        <location filename="../host/android/connection_widget.cc" line="424"/>
         <source>Connecting to router %1...</source>
         <translation>%1 yönlendiricisine bağlanılıyor...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="423"/>
+        <location filename="../host/android/connection_widget.cc" line="427"/>
         <source>Connected to router</source>
         <translation>Yönlendiriciye bağlanıldı</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="424"/>
+        <location filename="../host/android/connection_widget.cc" line="428"/>
         <source>Connected to router %1</source>
         <translation>%1 yönlendiricisine bağlanıldı</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="427"/>
+        <location filename="../host/android/connection_widget.cc" line="431"/>
         <source>Failed to connect to router</source>
         <translation>Yönlendiriciye bağlanılamadı</translation>
     </message>
@@ -2463,7 +2486,7 @@ Değiştirilen kimlik bilgileri: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="983"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1004"/>
         <source>Scale</source>
         <translation>Ölçek</translation>
     </message>
@@ -2553,7 +2576,7 @@ Değiştirilen kimlik bilgileri: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="585"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="592"/>
         <source>Start recording</source>
         <translation>Kaydı başlat</translation>
     </message>
@@ -2575,69 +2598,69 @@ Değiştirilen kimlik bilgileri: %2</translation>
         <translation>Oturum Değiştir</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="372"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="379"/>
         <source>Resolution selection</source>
         <translation>Çözünürlük seçimi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1158"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1179"/>
         <source>Session %1</source>
         <translation>Oturum %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1158"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1179"/>
         <source>Session %1 (%2)</source>
         <translation>Oturum %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="580"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="587"/>
         <source>Stop recording</source>
         <translation>Kaydı durdur</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="485"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="492"/>
         <source>Scripts</source>
         <translation>Betikler</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="548"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Uzak bilgisayarda &quot;%1&quot; betiğini çalıştırmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="812"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="819"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Uzak bilgisayarı kapatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="827"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="853"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="867"/>
         <source>Confirmation</source>
         <translation>Onay</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="835"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Uzak bilgisayarı yeniden başlatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="833"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="859"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="876"/>
         <source>Wait for host</source>
         <translation>Ana bilgisayarı bekle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="854"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="868"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Uzak bilgisayarı Güvenli Modda yeniden başlatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="879"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="900"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Uzak bilgisayardaki kullanıcı oturumunu sonlandırmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="894"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="915"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Uzak bilgisayardaki kullanıcı oturumunu kilitlemek istediğinizden emin misiniz?</translation>
     </message>
@@ -2678,32 +2701,32 @@ Değiştirilen kimlik bilgileri: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="976"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="999"/>
         <source>Save File</source>
         <translation>Dosyayı Kaydet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="977"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1000"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG Görüntüsü (*.png);;BMP Görüntüsü (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1008"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1031"/>
         <source>Could not save image</source>
         <translation>Görüntü kaydedilemedi</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="513"/>
+        <location filename="../client/android/desktop_window.cc" line="514"/>
         <source>Connecting...</source>
         <translation>Bağlanılıyor...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="537"/>
+        <location filename="../client/android/desktop_window.cc" line="538"/>
         <source>The specified router is unavailable.</source>
         <translation>Belirtilen yönlendirici kullanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="564"/>
+        <location filename="../client/android/desktop_window.cc" line="565"/>
         <source>Requesting connection to the host...</source>
         <translation>Ana bilgisayara bağlantı isteniyor...</translation>
     </message>
@@ -2718,37 +2741,37 @@ Değiştirilen kimlik bilgileri: %2</translation>
         <translation>Oturum %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="536"/>
+        <location filename="../client/android/desktop_window.cc" line="537"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Yönlendiricinin verileri hasarlı. Yönlendiriciyi düzenleyin ve verileri yeniden girin.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="543"/>
+        <location filename="../client/android/desktop_window.cc" line="544"/>
         <source>Connecting to router...</source>
         <translation>Yönlendiriciye bağlanılıyor...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="771"/>
+        <location filename="../client/android/desktop_window.cc" line="775"/>
         <source>Connecting to host %1...</source>
         <translation>%1 ana bilgisayarına bağlanılıyor...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="777"/>
+        <location filename="../client/android/desktop_window.cc" line="781"/>
         <source>Connection established.</source>
         <translation>Bağlantı kuruldu.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="790"/>
+        <location filename="../client/android/desktop_window.cc" line="794"/>
         <source>The connection to the host has been lost.</source>
         <translation>Ana bilgisayarla bağlantı kesildi.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="803"/>
+        <location filename="../client/android/desktop_window.cc" line="807"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Ana bilgisayar sürümü istemciden daha yeni. Lütfen uygulamayı güncelleyin.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="807"/>
+        <location filename="../client/android/desktop_window.cc" line="811"/>
         <source>Legacy hosts are not supported.</source>
         <translation>Eski sürüm ana bilgisayarlar desteklenmiyor.</translation>
     </message>
@@ -2768,83 +2791,83 @@ Değiştirilen kimlik bilgileri: %2</translation>
         <translation>Klavye</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="378"/>
+        <location filename="../client/android/desktop_window.cc" line="379"/>
         <source>Ctrl+Alt+Del</source>
         <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="385"/>
+        <location filename="../client/android/desktop_window.cc" line="386"/>
         <source>Users</source>
         <translation>Kullanıcılar</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="390"/>
+        <location filename="../client/android/desktop_window.cc" line="391"/>
         <source>Disconnect</source>
         <translation>Bağlantıyı Kes</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="661"/>
-        <location filename="../client/android/desktop_window.cc" line="715"/>
+        <location filename="../client/android/desktop_window.cc" line="662"/>
+        <location filename="../client/android/desktop_window.cc" line="719"/>
         <source>Back</source>
         <translation>Geri</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="662"/>
+        <location filename="../client/android/desktop_window.cc" line="663"/>
         <source>Shutdown</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="664"/>
         <source>Reboot</source>
         <translation>Yeniden Başlat</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="665"/>
+        <location filename="../client/android/desktop_window.cc" line="669"/>
         <source>Safe Mode</source>
         <translation>Güvenli Mod</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="666"/>
+        <location filename="../client/android/desktop_window.cc" line="670"/>
         <source>Logoff</source>
         <translation>Oturumu Kapat</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="667"/>
+        <location filename="../client/android/desktop_window.cc" line="671"/>
         <source>Lock</source>
         <translation>Kilitle</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="683"/>
+        <location filename="../client/android/desktop_window.cc" line="687"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Uzak bilgisayarı kapatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="687"/>
+        <location filename="../client/android/desktop_window.cc" line="691"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Uzak bilgisayarı yeniden başlatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="691"/>
+        <location filename="../client/android/desktop_window.cc" line="695"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Uzak bilgisayarı Güvenli Modda yeniden başlatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="695"/>
+        <location filename="../client/android/desktop_window.cc" line="699"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Uzak bilgisayardaki kullanıcı oturumunu sonlandırmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="699"/>
+        <location filename="../client/android/desktop_window.cc" line="703"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Uzak bilgisayardaki kullanıcı oturumunu kilitlemek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="754"/>
+        <location filename="../client/android/desktop_window.cc" line="758"/>
         <source>Confirmation</source>
         <translation>Onay</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="754"/>
+        <location filename="../client/android/desktop_window.cc" line="758"/>
         <source>Yes</source>
         <translation>Evet</translation>
     </message>
@@ -3721,8 +3744,8 @@ Değiştirilen kimlik bilgileri: %2</translation>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="649"/>
-        <location filename="../host/main.cc" line="684"/>
+        <location filename="../host/main.cc" line="541"/>
+        <location filename="../host/main.cc" line="576"/>
         <source>Settings storage is unavailable.</source>
         <translation>Ayar depolama alanı kullanılamıyor.</translation>
     </message>
@@ -3803,32 +3826,32 @@ Değiştirilen kimlik bilgileri: %2</translation>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="586"/>
+        <location filename="../host/main.cc" line="478"/>
         <source>Launch the application hidden.</source>
         <translation>Uygulamayı gizli başlatır.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="588"/>
+        <location filename="../host/main.cc" line="480"/>
         <source>Export parameters to file.</source>
         <translation>Parametreleri dosyaya dışa aktarır.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="590"/>
+        <location filename="../host/main.cc" line="482"/>
         <source>Import parameters from file.</source>
         <translation>Parametreleri dosyadan içe aktarır.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="592"/>
+        <location filename="../host/main.cc" line="484"/>
         <source>Do not display any messages during import and export.</source>
         <translation>İçe ve dışa aktarma sırasında hiçbir mesaj göstermez.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="594"/>
+        <location filename="../host/main.cc" line="486"/>
         <source>Calling the settings dialog.</source>
         <translation>Ayarlar iletişim kutusunu açar.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="596"/>
+        <location filename="../host/main.cc" line="488"/>
         <source>Calling the security log dialog.</source>
         <translation>Güvenlik günlüğü iletişim kutusunu açar.</translation>
     </message>
@@ -3865,9 +3888,9 @@ Değiştirilen kimlik bilgileri: %2</translation>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="575"/>
-        <location filename="../host/ui/host_window.cc" line="818"/>
-        <location filename="../host/ui/host_window.cc" line="1118"/>
+        <location filename="../host/ui/host_window.cc" line="638"/>
+        <location filename="../host/ui/host_window.cc" line="881"/>
+        <location filename="../host/ui/host_window.cc" line="1154"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
@@ -3883,7 +3906,7 @@ Değiştirilen kimlik bilgileri: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
-        <location filename="../host/ui/host_window.cc" line="1032"/>
+        <location filename="../host/ui/host_window.cc" line="1106"/>
         <source>Router is disabled</source>
         <translation>Yönlendirici devre dışı</translation>
     </message>
@@ -3954,7 +3977,7 @@ Değiştirilen kimlik bilgileri: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="335"/>
-        <location filename="../host/ui/host_window.cc" line="779"/>
+        <location filename="../host/ui/host_window.cc" line="842"/>
         <source>Hide</source>
         <translation>Gizle</translation>
     </message>
@@ -3994,68 +4017,74 @@ Değiştirilen kimlik bilgileri: %2</translation>
         <translation>Sohbeti göster</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="296"/>
-        <location filename="../host/ui/host_window.cc" line="774"/>
+        <location filename="../host/ui/host_window.cc" line="180"/>
+        <location filename="../host/ui/host_window.cc" line="1154"/>
+        <source>Aspia Quick Support</source>
+        <translation>Aspia Quick Support</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_window.cc" line="339"/>
+        <location filename="../host/ui/host_window.cc" line="837"/>
         <source>Show</source>
         <translation>Göster</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="570"/>
+        <location filename="../host/ui/host_window.cc" line="633"/>
         <source>Screen recording has started.</source>
         <translation>Ekran kaydı başladı.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="572"/>
+        <location filename="../host/ui/host_window.cc" line="635"/>
         <source>Screen recording stopped.</source>
         <translation>Ekran kaydı durduruldu.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="763"/>
+        <location filename="../host/ui/host_window.cc" line="826"/>
         <source>Settings storage is unavailable.</source>
         <translation>Ayar depolama alanı kullanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="829"/>
+        <location filename="../host/ui/host_window.cc" line="892"/>
         <source>Aspia Host will be removed from this computer. The settings of the host will be kept. Do you really want to uninstall the application?</source>
         <translation>Aspia Host bu bilgisayardan kaldırılacak. Ana bilgisayarın ayarları korunacak. Uygulamayı kaldırmak istediğinizden gerçekten emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="841"/>
+        <location filename="../host/ui/host_window.cc" line="904"/>
         <source>Unable to uninstall the application.</source>
         <translation>Uygulama kaldırılamıyor.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="863"/>
+        <location filename="../host/ui/host_window.cc" line="931"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Aspia&apos;dan çıkarsanız, bilgisayarı veya Aspia&apos;yı yeniden elle açana kadar bu bilgisayara bağlanmak mümkün olmayacak. Uygulamadan çıkmak istediğinizden gerçekten emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1024"/>
+        <location filename="../host/ui/host_window.cc" line="1098"/>
         <source>Not connected to service</source>
         <translation>Hizmete bağlı değil</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1037"/>
+        <location filename="../host/ui/host_window.cc" line="1111"/>
         <source>Connecting to router...</source>
         <translation>Yönlendiriciye bağlanılıyor...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1042"/>
+        <location filename="../host/ui/host_window.cc" line="1116"/>
         <source>Connected to router</source>
         <translation>Yönlendiriciye bağlanıldı</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1047"/>
+        <location filename="../host/ui/host_window.cc" line="1121"/>
         <source>Connection error</source>
         <translation>Bağlantı hatası</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1115"/>
+        <location filename="../host/ui/host_window.cc" line="1199"/>
         <source>IP addresses:</source>
         <translation>IP adresleri:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1119"/>
+        <location filename="../host/ui/host_window.cc" line="1155"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
@@ -5117,156 +5146,156 @@ Credentials imported: %5</source>
         <translation>Durumu Otomatik Yenile</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1035"/>
+        <location filename="../client/desktop/management_tab.cc" line="1059"/>
         <source>(copy)</source>
         <translation>(kopya)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1003"/>
-        <location filename="../client/desktop/management_tab.cc" line="1077"/>
-        <location filename="../client/desktop/management_tab.cc" line="2174"/>
+        <location filename="../client/desktop/management_tab.cc" line="1027"/>
+        <location filename="../client/desktop/management_tab.cc" line="1101"/>
+        <location filename="../client/desktop/management_tab.cc" line="2213"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Yerel veritabanından ana bilgisayar bilgileri alınamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1040"/>
+        <location filename="../client/desktop/management_tab.cc" line="1064"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Ana bilgisayar yerel veritabanına eklenemedi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1081"/>
+        <location filename="../client/desktop/management_tab.cc" line="1105"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; ana bilgisayarını silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1091"/>
+        <location filename="../client/desktop/management_tab.cc" line="1115"/>
         <source>Unable to remove host</source>
         <translation>Ana bilgisayar kaldırılamıyor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1149"/>
-        <location filename="../client/desktop/management_tab.cc" line="1193"/>
-        <location filename="../client/desktop/management_tab.cc" line="1219"/>
+        <location filename="../client/desktop/management_tab.cc" line="1173"/>
+        <location filename="../client/desktop/management_tab.cc" line="1233"/>
+        <location filename="../client/desktop/management_tab.cc" line="1259"/>
         <source>Copy Row</source>
         <translation>Satırı Kopyala</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1150"/>
-        <location filename="../client/desktop/management_tab.cc" line="1194"/>
-        <location filename="../client/desktop/management_tab.cc" line="1220"/>
+        <location filename="../client/desktop/management_tab.cc" line="1174"/>
+        <location filename="../client/desktop/management_tab.cc" line="1234"/>
+        <location filename="../client/desktop/management_tab.cc" line="1260"/>
         <source>Copy Value</source>
         <translation>Değeri Kopyala</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1321"/>
+        <location filename="../client/desktop/management_tab.cc" line="1361"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; çalışma alanını silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1341"/>
+        <location filename="../client/desktop/management_tab.cc" line="1381"/>
         <source>Failed to delete the workspace.</source>
         <translation>Çalışma alanı silinemedi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1443"/>
+        <location filename="../client/desktop/management_tab.cc" line="1483"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>&quot;%1&quot; grubunu silmek istediğinizden emin misiniz? Bu gruba veya alt gruplarına atanmış ana bilgisayarlar çalışma alanı köküne taşınacak.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1461"/>
+        <location filename="../client/desktop/management_tab.cc" line="1501"/>
         <source>Failed to delete the group.</source>
         <translation>Grup silinemedi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1500"/>
+        <location filename="../client/desktop/management_tab.cc" line="1540"/>
         <source>Import Old Address Book</source>
         <translation>Eski Adres Defterini İçe Aktar</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1501"/>
+        <location filename="../client/desktop/management_tab.cc" line="1541"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>Adres Defteri (*.aab);;Tüm dosyalar (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1524"/>
-        <location filename="../client/desktop/management_tab.cc" line="1581"/>
+        <location filename="../client/desktop/management_tab.cc" line="1564"/>
+        <location filename="../client/desktop/management_tab.cc" line="1621"/>
         <source>The database is not available.</source>
         <translation>Veritabanı kullanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1530"/>
+        <location filename="../client/desktop/management_tab.cc" line="1570"/>
         <source>Create Backup</source>
         <translation>Yedek Oluştur</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1547"/>
+        <location filename="../client/desktop/management_tab.cc" line="1587"/>
         <source>There is nothing to save.</source>
         <translation>Kaydedilecek bir şey yok.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2169"/>
+        <location filename="../client/desktop/management_tab.cc" line="2208"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Ana bilgisayarın verileri hasarlı. Ana bilgisayarı düzenleyin ve verileri yeniden girin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2190"/>
+        <location filename="../client/desktop/management_tab.cc" line="2229"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Yönlendiricinin verileri hasarlı. Yönlendiriciyi düzenleyin ve verileri yeniden girin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1559"/>
+        <location filename="../client/desktop/management_tab.cc" line="1599"/>
         <source>Failed to create the backup.</source>
         <translation>Yedek oluşturulamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1587"/>
-        <location filename="../client/desktop/management_tab.cc" line="1613"/>
+        <location filename="../client/desktop/management_tab.cc" line="1627"/>
+        <location filename="../client/desktop/management_tab.cc" line="1653"/>
         <source>Restore from Backup</source>
         <translation>Yedekten Geri Yükle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1596"/>
+        <location filename="../client/desktop/management_tab.cc" line="1636"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Şu anda kayıtlı olan her şey silinecek ve yedekteki verilerle değiştirilecek. Devam edilsin mi?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1615"/>
+        <location filename="../client/desktop/management_tab.cc" line="1655"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Yedek başka bir kurulumda oluşturulmuş. Orada kullanılan ana parolayı girin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1640"/>
+        <location filename="../client/desktop/management_tab.cc" line="1680"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Yedek veri içermiyor, bu nedenle hiçbir şey değiştirilmedi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1648"/>
+        <location filename="../client/desktop/management_tab.cc" line="1688"/>
         <source>The file is not a valid backup.</source>
         <translation>Dosya geçerli bir yedek değil.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1652"/>
+        <location filename="../client/desktop/management_tab.cc" line="1692"/>
         <source>Failed to restore from the backup.</source>
         <translation>Yedekten geri yüklenemedi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1531"/>
-        <location filename="../client/desktop/management_tab.cc" line="1588"/>
+        <location filename="../client/desktop/management_tab.cc" line="1571"/>
+        <location filename="../client/desktop/management_tab.cc" line="1628"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia Yedeği (*.aspia-backup);;Tüm dosyalar (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1551"/>
+        <location filename="../client/desktop/management_tab.cc" line="1591"/>
         <source>Unable to write the file.</source>
         <translation>Dosya yazılamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1644"/>
+        <location filename="../client/desktop/management_tab.cc" line="1684"/>
         <source>Unable to read the file.</source>
         <translation>Dosya okunamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1564"/>
+        <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5281,22 +5310,22 @@ Dışa aktarılan kayıtlı parolalar: %4
 Dışa aktarılan kimlik bilgileri: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1555"/>
+        <location filename="../client/desktop/management_tab.cc" line="1595"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Veritabanındaki bazı kayıtlar hasarlı. Bunları düzeltin veya silin, ardından yeniden deneyin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1632"/>
+        <location filename="../client/desktop/management_tab.cc" line="1672"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Dosyanın şifresi belirtilen parolayla çözülemiyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1636"/>
+        <location filename="../client/desktop/management_tab.cc" line="1676"/>
         <source>Unsupported file format version.</source>
         <translation>Desteklenmeyen dosya biçimi sürümü.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1657"/>
+        <location filename="../client/desktop/management_tab.cc" line="1697"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5311,29 +5340,29 @@ Credentials imported: %5</source>
 İçe aktarılan kimlik bilgileri: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2097"/>
-        <location filename="../client/desktop/management_tab.cc" line="2128"/>
+        <location filename="../client/desktop/management_tab.cc" line="2136"/>
+        <location filename="../client/desktop/management_tab.cc" line="2167"/>
         <source>Copy Link</source>
         <translation>Linki Kopyala</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2116"/>
-        <location filename="../client/desktop/management_tab.cc" line="2150"/>
+        <location filename="../client/desktop/management_tab.cc" line="2155"/>
+        <location filename="../client/desktop/management_tab.cc" line="2189"/>
         <source>Unable to create a link for this host.</source>
         <translation>Bu ana bilgisayar için link oluşturulamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2191"/>
+        <location filename="../client/desktop/management_tab.cc" line="2230"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Bu ana bilgisayarla ilişkili yönlendirici silinmiş. Başka bir yönlendirici seçmek veya doğrudan bağlantıya geçmek için ana bilgisayarı düzenleyin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2198"/>
+        <location filename="../client/desktop/management_tab.cc" line="2237"/>
         <source>The host has an invalid host ID.</source>
         <translation>Ana bilgisayarın ID&apos;si geçersiz.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2207"/>
+        <location filename="../client/desktop/management_tab.cc" line="2246"/>
         <source>The host has an incorrect address.</source>
         <translation>Ana bilgisayarın adresi hatalı.</translation>
     </message>
@@ -6012,34 +6041,34 @@ Credentials imported: %5</source>
 <context>
     <name>RemoteWidget</name>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="693"/>
+        <location filename="../client/android/remote_widget.cc" line="695"/>
         <source>Unapproved Hosts</source>
         <translation>Onaylanmamış Ana Bilgisayarlar</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="829"/>
-        <location filename="../client/android/remote_widget.cc" line="850"/>
+        <location filename="../client/android/remote_widget.cc" line="831"/>
+        <location filename="../client/android/remote_widget.cc" line="852"/>
         <source>Show more</source>
         <translation>Daha fazla göster</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="829"/>
-        <location filename="../client/android/remote_widget.cc" line="850"/>
+        <location filename="../client/android/remote_widget.cc" line="831"/>
+        <location filename="../client/android/remote_widget.cc" line="852"/>
         <source>%1 of %2</source>
         <translation>%1 / %2</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="913"/>
+        <location filename="../client/android/remote_widget.cc" line="916"/>
         <source>Desktop</source>
         <translation>Masaüstü</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="915"/>
+        <location filename="../client/android/remote_widget.cc" line="918"/>
         <source>File Transfer</source>
         <translation>Dosya Aktarımı</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="917"/>
+        <location filename="../client/android/remote_widget.cc" line="920"/>
         <source>Chat</source>
         <translation>Sohbet</translation>
     </message>
@@ -6484,7 +6513,7 @@ Credentials imported: %5</source>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="454"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="453"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n ana bilgisayar</numerusform>
@@ -6880,24 +6909,24 @@ Credentials imported: %5</source>
         <translation>Sayfa başına öğe:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="211"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="213"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
         <translation>Onaylanan bir ana bilgisayar, yönlendiriciye kalıcı erişime sahip olur. &quot;%1&quot; ana bilgisayarını onaylamak istediğinizden emin misiniz?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="218"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="220"/>
         <source>Approving hosts will give them permanent access to the router. Are you sure you want to approve %n hosts?</source>
         <translation>
             <numerusform>Onaylanan ana bilgisayarlar, yönlendiriciye kalıcı erişime sahip olur. %n ana bilgisayarı onaylamak istediğinizden emin misiniz?</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="258"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="260"/>
         <source>Failed to approve the host.</source>
         <translation>Ana bilgisayar onaylanamadı.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="260"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="262"/>
         <source>Failed to approve %n of the selected hosts.</source>
         <translation>
             <numerusform>Seçilen ana bilgisayarlardan %n tanesi onaylanamadı.</numerusform>
@@ -7423,6 +7452,14 @@ Credentials imported: %5</source>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
         <source>Monitor %1</source>
         <translation>Monitör %1</translation>
+    </message>
+</context>
+<context>
+    <name>ServerWorker</name>
+    <message>
+        <location filename="../host/android/server_worker.cc" line="564"/>
+        <source>Waiting for connections</source>
+        <translation>Bağlantılar bekleniyor</translation>
     </message>
 </context>
 <context>
@@ -8139,7 +8176,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="418"/>
-        <location filename="../host/android/settings_widget.cc" line="438"/>
+        <location filename="../host/android/settings_widget.cc" line="439"/>
         <source>Updates</source>
         <translation>Güncellemeler</translation>
     </message>
@@ -8150,49 +8187,49 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="429"/>
-        <location filename="../host/android/settings_widget.cc" line="441"/>
+        <location filename="../host/android/settings_widget.cc" line="442"/>
         <source>Update channel</source>
         <translation>Güncelleme kanalı</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="430"/>
-        <location filename="../host/android/settings_widget.cc" line="442"/>
+        <location filename="../host/android/settings_widget.cc" line="443"/>
         <source>Stable</source>
         <translation>Kararlı</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="431"/>
-        <location filename="../host/android/settings_widget.cc" line="443"/>
+        <location filename="../host/android/settings_widget.cc" line="444"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="432"/>
-        <location filename="../host/android/settings_widget.cc" line="444"/>
+        <location filename="../host/android/settings_widget.cc" line="445"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="443"/>
-        <location filename="../host/android/settings_widget.cc" line="458"/>
+        <location filename="../host/android/settings_widget.cc" line="459"/>
         <source>Update server</source>
         <translation>Güncelleme sunucusu</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="448"/>
-        <location filename="../host/android/settings_widget.cc" line="463"/>
+        <location filename="../host/android/settings_widget.cc" line="464"/>
         <source>Public key</source>
         <translation>Ortak anahtar</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="454"/>
-        <location filename="../host/android/settings_widget.cc" line="469"/>
+        <location filename="../host/android/settings_widget.cc" line="470"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>Güncelleme sunucusu belirtilmezse varsayılan sunucu kullanılır. Ortak anahtar belirtilmezse yerleşik anahtar kullanılır.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="508"/>
-        <location filename="../host/android/settings_widget.cc" line="523"/>
+        <location filename="../host/android/settings_widget.cc" line="524"/>
         <source>Check for updates</source>
         <translation>Güncellemeleri denetle</translation>
     </message>
@@ -8228,83 +8265,83 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="297"/>
-        <source>The host stays connected to the router while the application is not on the screen, so it can be reached at any time.</source>
-        <translation>Uygulama ekranda değilken ana bilgisayar yönlendiriciye bağlı kalır, böylece ona her zaman bağlanılabilir.</translation>
+        <source>The host accepts connections in the local network and stays connected to the router while the application is not on the screen, so it can be reached at any time.</source>
+        <translation>Ana bilgisayar yerel ağdaki bağlantıları kabul eder ve uygulama ekranda değilken yönlendiriciye bağlı kalır, böylece ona her zaman bağlanılabilir.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="302"/>
+        <location filename="../host/android/settings_widget.cc" line="303"/>
         <source>Confirm screen capture automatically</source>
         <translation>Ekran yakalamayı otomatik olarak onayla</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="313"/>
+        <location filename="../host/android/settings_widget.cc" line="314"/>
         <source>The screen capture request is confirmed automatically. The system window briefly appears on the screen.</source>
         <translation>Ekran yakalama isteği otomatik olarak onaylanır. Sistem penceresi ekranda kısa bir süre görünür.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="318"/>
+        <location filename="../host/android/settings_widget.cc" line="319"/>
         <source>Manage users</source>
         <translation>Kullanıcıları yönet</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="326"/>
+        <location filename="../host/android/settings_widget.cc" line="327"/>
         <source>Change password</source>
         <translation>Parolayı değiştir</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="330"/>
+        <location filename="../host/android/settings_widget.cc" line="331"/>
         <source>Disable password protection</source>
         <translation>Parola korumasını devre dışı bırak</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="339"/>
+        <location filename="../host/android/settings_widget.cc" line="340"/>
         <source>Enable password protection</source>
         <translation>Parola korumasını etkinleştir</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="354"/>
+        <location filename="../host/android/settings_widget.cc" line="355"/>
         <source>Router</source>
         <translation>Yönlendirici</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="359"/>
+        <location filename="../host/android/settings_widget.cc" line="360"/>
         <source>Enable the use of a router</source>
         <translation>Yönlendirici kullanımını etkinleştir</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="364"/>
+        <location filename="../host/android/settings_widget.cc" line="365"/>
         <source>Address</source>
         <translation>Adres</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="370"/>
+        <location filename="../host/android/settings_widget.cc" line="371"/>
         <source>Public Key</source>
         <translation>Ortak Anahtar</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="375"/>
+        <location filename="../host/android/settings_widget.cc" line="376"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Doğrudan bağlantı olmadığında (NAT arkasında) bir bilgisayara bağlanmak için yönlendirici gereklidir. Aspia genel bir yönlendirici sağlamaz, ancak kendi yönlendiricinizi kurabilirsiniz. Yönlendiriciyi &lt;a href=&quot;https://aspia.org&quot;&gt;resmi web sitesinden&lt;/a&gt; indirebilirsiniz.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="537"/>
-        <location filename="../host/android/settings_widget.cc" line="558"/>
+        <location filename="../host/android/settings_widget.cc" line="538"/>
+        <location filename="../host/android/settings_widget.cc" line="559"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="537"/>
-        <location filename="../host/android/settings_widget.cc" line="558"/>
+        <location filename="../host/android/settings_widget.cc" line="538"/>
+        <location filename="../host/android/settings_widget.cc" line="559"/>
         <source>An error occurred while processing the password.</source>
         <translation>Parola işlenirken bir hata oluştu.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="580"/>
+        <location filename="../host/android/settings_widget.cc" line="581"/>
         <source>Import</source>
         <translation>İçe Aktar</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="580"/>
+        <location filename="../host/android/settings_widget.cc" line="581"/>
         <source>JSON files (*.json)</source>
         <translation>JSON dosyaları (*.json)</translation>
     </message>
@@ -12692,6 +12729,21 @@ Credentials imported: %5</source>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
         <source>Address</source>
         <translation>Adres</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="146"/>
+        <source>Type</source>
+        <translation>Tür</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="213"/>
+        <source>Quick Support</source>
+        <translation>Quick Support</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="213"/>
+        <source>Installed</source>
+        <translation>Yüklü</translation>
     </message>
 </context>
 <context>
