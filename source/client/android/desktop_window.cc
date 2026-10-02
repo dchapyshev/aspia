@@ -372,7 +372,8 @@ void DesktopWindow::onShowActions()
         keyboard_index = next_index++;
         action_sheet_->addItem(tr("Keyboard"), ":/img/material/keyboard.svg");
 
-        if (host_is_windows_)
+        // The portable host with the rights of the user cannot send Ctrl+Alt+Del.
+        if (host_is_windows_ && (!host_is_portable_ || host_is_elevated_))
         {
             ctrl_alt_del_index = next_index++;
             action_sheet_->addItem(tr("Ctrl+Alt+Del"), ":/img/material/lock.svg");
@@ -853,9 +854,11 @@ void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& ca
         if (name == kFlagOSWindows)
             host_is_windows_ = true;
         else if (name == kFlagPowerControl)
-            power_control_available_ = true;
+            power_control_available_ = capabilities.flag(i).value();
         else if (name == kFlagPortable)
             host_is_portable_ = capabilities.flag(i).value();
+        else if (name == kFlagElevated)
+            host_is_elevated_ = capabilities.flag(i).value();
     }
 }
 
