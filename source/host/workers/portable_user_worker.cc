@@ -90,6 +90,12 @@ void PortableUserWorker::onPrepare()
             QCoreApplication::instance(), &QCoreApplication::quit, Qt::QueuedConnection);
     connect(user_session_, &PortableUserSession::sig_stopClient,
             this, &PortableUserWorker::onStopClient);
+    connect(user_session_, &PortableUserSession::sig_pauseChanged,
+            this, &PortableUserWorker::sig_pauseChanged);
+    connect(user_session_, &PortableUserSession::sig_lockMouseChanged,
+            this, &PortableUserWorker::sig_lockMouseChanged);
+    connect(user_session_, &PortableUserSession::sig_lockKeyboardChanged,
+            this, &PortableUserWorker::sig_lockKeyboardChanged);
 }
 
 //--------------------------------------------------------------------------------------------------

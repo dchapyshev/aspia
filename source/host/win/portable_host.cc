@@ -396,6 +396,12 @@ int launchUserMode(int& argc, char* argv[])
                      desktop_worker, &PortableDesktopWorker::onClientChannelChanged, Qt::QueuedConnection);
     QObject::connect(desktop_worker, &PortableDesktopWorker::sig_clientMessage,
                      user_worker, &PortableUserWorker::onDesktopClientMessage, Qt::QueuedConnection);
+    QObject::connect(user_worker, &PortableUserWorker::sig_pauseChanged,
+                     desktop_worker, &PortableDesktopWorker::onUserPause, Qt::QueuedConnection);
+    QObject::connect(user_worker, &PortableUserWorker::sig_lockMouseChanged,
+                     desktop_worker, &PortableDesktopWorker::onUserLockMouse, Qt::QueuedConnection);
+    QObject::connect(user_worker, &PortableUserWorker::sig_lockKeyboardChanged,
+                     desktop_worker, &PortableDesktopWorker::onUserLockKeyboard, Qt::QueuedConnection);
 
     QObject::connect(desktop_worker, &PortableDesktopWorker::sig_selectScreen,
                      screen_worker, &ScreenWorker::onSelectScreen, Qt::QueuedConnection);

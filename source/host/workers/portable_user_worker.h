@@ -52,6 +52,10 @@ signals:
     void sig_desktopClientFinished(quint32 client_id);
     void sig_desktopClientChannelChanged();
 
+    void sig_pauseChanged(bool enable);
+    void sig_lockMouseChanged(bool enable);
+    void sig_lockKeyboardChanged(bool enable);
+
 protected:
     // Worker implementation.
     void onPrepare() final;
