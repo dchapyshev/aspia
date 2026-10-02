@@ -20,6 +20,7 @@
 
 #include <QCoreApplication>
 #include <QFileInfo>
+#include <QTimer>
 
 #include "base/logging.h"
 #include "base/numeric_utils.h"
@@ -30,6 +31,12 @@
 #include "base/ipc/ipc_server.h"
 #include "host/client.h"
 #include "host/host_constants.h"
+
+namespace {
+
+const Seconds kAttachTimeout{ 30 };
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 PortableUserSession::PortableUserSession(const QString& ipc_channel_id, QObject* parent)
@@ -76,8 +83,7 @@ bool PortableUserSession::start()
     }
 
     ipc_server_ = new IpcServer(this);
-    connect(ipc_server_, &IpcServer::sig_newConnection,
-            this, &PortableUserSession::onIpcNewConnection);
+    connect(ipc_server_, &IpcServer::sig_newConnection, this, &PortableUserSession::onIpcNewConnection);
 
     LOG(INFO) << "Start IPC server for portable GUI (channel:" << ipc_channel_id_ << ")";
 
@@ -88,6 +94,18 @@ bool PortableUserSession::start()
     }
 
     LOG(INFO) << "IPC server for portable GUI is started";
+
+    // The portable host lives only together with its GUI, so a GUI that never connects (it failed to
+    // start or crashed) must not leave the host running in the background.
+    QTimer::singleShot(kAttachTimeout, this, [this]()
+    {
+        if (ipc_channel_)
+            return;
+
+        LOG(ERROR) << "Portable GUI is not connected in time";
+        emit sig_guiTerminated();
+    });
+
     return true;
 }
 

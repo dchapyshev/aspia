@@ -30,8 +30,10 @@
 #include "base/logging.h"
 #include "base/process_util.h"
 #include "base/service_controller.h"
+#include "base/session_id.h"
 #include "base/system_error.h"
 #include "base/time_types.h"
+#include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
 #include "base/files/base_paths.h"
 #include "base/threading/asio_event_dispatcher.h"
@@ -83,7 +85,16 @@ QString baseDirectory()
 //--------------------------------------------------------------------------------------------------
 QString runId()
 {
-    return QDir(BasePaths::currentAppDir()).dirName();
+    // The copy made by the launcher lives in the directory named by the random ID of its run.
+    if (PortableHost::isStartedByLauncher())
+        return QDir(BasePaths::currentAppDir()).dirName();
+
+    // In user mode the host runs from the executable the user started, one instance per executable
+    // and session.
+    const QByteArray path = QFileInfo(BasePaths::currentApp()).canonicalFilePath().toLower().toUtf8();
+    const QByteArray hash = GenericHash::hash(GenericHash::BLAKE2s256, path).toHex().left(16);
+
+    return QString::fromLatin1(hash) + '-' + QString::number(currentProcessSessionId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -370,6 +381,23 @@ int launch()
 // service, and the GUI runs in the user's session. Used when the user declined the elevation prompt.
 int launchUserMode(int& argc, char* argv[])
 {
+    ScopedHandle mutex(CreateMutexW(nullptr, FALSE, qUtf16Printable(mutexName(runId()))));
+    if (!mutex.isValid())
+    {
+        PLOG(ERROR) << "CreateMutexW failed";
+        return 1;
+    }
+
+    if (GetLastError() == ERROR_ALREADY_EXISTS)
+    {
+        LOG(INFO) << "Portable host is already running in user mode";
+
+        // The new GUI finds the running one and brings up its window.
+        if (!ProcessUtil::createProcess(QDir::toNativeSeparators(BasePaths::currentApp()), QString()))
+            LOG(ERROR) << "Unable to start the portable GUI";
+        return 0;
+    }
+
     CoreApplication::setEventDispatcher(new AsioEventDispatcher());
     CoreApplication::setApplicationVersion(ASPIA_VERSION_STRING);
 
