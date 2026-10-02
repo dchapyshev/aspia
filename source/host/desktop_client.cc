@@ -544,6 +544,12 @@ void DesktopClient::readPowerControl(const proto::power::Control& control)
         case proto::power::Control::ACTION_REBOOT_SAFE_MODE:
         {
 #if defined(Q_OS_WINDOWS)
+            if (PortableHost::isActive())
+            {
+                CLOG(ERROR) << "Safe mode is not available for the portable host";
+                return;
+            }
+
             if (!SafeModeUtil::setSafeModeService(Service::kName, true))
             {
                 CLOG(ERROR) << "Failed to add service to start in safe mode";

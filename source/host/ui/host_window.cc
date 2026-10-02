@@ -178,6 +178,7 @@ HostWindow::HostWindow(QWidget* parent)
     if (PortableHost::isActive())
     {
         setWindowTitle(tr("Aspia Quick Support"));
+        setWindowFlag(Qt::WindowStaysOnTopHint);
 
         ui->action_terminal->setChecked(false);
         ui->action_system_info->setChecked(false);
@@ -513,6 +514,21 @@ void HostWindow::onClientListChanged(const UserIpcWorker::ClientList& clients)
     }
 
     notifier_->onClientListChanged(clients);
+
+    bool portable = false;
+#if defined(Q_OS_WINDOWS)
+    portable = PortableHost::isActive();
+#endif // defined(Q_OS_WINDOWS)
+
+    if (portable && clients.size() > client_count_)
+    {
+        setWindowState(windowState() & ~Qt::WindowMinimized);
+        show();
+        raise();
+        activateWindow();
+    }
+
+    client_count_ = clients.size();
 
     bool has_desktop = false;
     for (const auto& client : std::as_const(clients))

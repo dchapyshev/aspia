@@ -433,6 +433,7 @@ void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& ca
         toolbar_->enableTextChat(false);
         toolbar_->enableTerminal(false);
         toolbar_->enableSystemInfo(false);
+        toolbar_->enableRebootInSafeMode(false);
 
         if (!elevated)
         {

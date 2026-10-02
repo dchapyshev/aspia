@@ -173,6 +173,7 @@ private:
     // is auto-reconnected when the app returns to the foreground.
     bool was_connected_ = false;
     bool host_is_windows_ = false;
+    bool host_is_portable_ = false;
     bool power_control_available_ = false;
 
     Q_DISABLE_COPY_MOVE(DesktopWindow)

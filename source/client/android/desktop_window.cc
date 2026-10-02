@@ -661,16 +661,19 @@ void DesktopWindow::showPowerActions()
     sheet->addItem(tr("Back"), ":/img/material/arrow_back.svg");
     sheet->addItem(tr("Shutdown"), ":/img/material/power.svg");
     sheet->addItem(tr("Reboot"), ":/img/material/restart.svg");
-    if (host_is_windows_) // Safe mode is a Windows-only feature.
+
+    // Safe mode is a Windows-only feature, and the portable host does not run in it.
+    const bool safe_mode = host_is_windows_ && !host_is_portable_;
+    if (safe_mode)
         sheet->addItem(tr("Safe Mode"), ":/img/material/restart.svg");
     sheet->addItem(tr("Logoff"), ":/img/material/logout.svg");
     sheet->addItem(tr("Lock"), ":/img/material/lock.svg");
 
-    connect(sheet, &BottomSheet::sig_triggered, this, [this](int index)
+    connect(sheet, &BottomSheet::sig_triggered, this, [this, safe_mode](int index)
     {
-        // When the host is not Windows the "Safe Mode" item is absent, so the items after it shift
-        // up by one; realign them with the indices below.
-        if (!host_is_windows_ && index >= 3)
+        // Without the "Safe Mode" item the items after it shift up by one; realign them with the
+        // indices below.
+        if (!safe_mode && index >= 3)
             ++index;
 
         switch (index)
@@ -851,6 +854,8 @@ void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& ca
             host_is_windows_ = true;
         else if (name == kFlagPowerControl)
             power_control_available_ = true;
+        else if (name == kFlagPortable)
+            host_is_portable_ = capabilities.flag(i).value();
     }
 }
 

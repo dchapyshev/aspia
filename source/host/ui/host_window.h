@@ -111,6 +111,7 @@ private:
 
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
+    qsizetype client_count_ = 0;
     ScopedQPointer<ChatWidget> chat_widget_;
 
 #if defined(Q_OS_MACOS)
