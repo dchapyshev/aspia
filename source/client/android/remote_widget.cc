@@ -203,7 +203,7 @@ RemoteWidget::RemoteWidget(QWidget* parent)
 
         HostConfig config;
         if (hostConfigForItem(item, &config))
-            showSessionMenu(config);
+            showSessionMenu(config, /* portable */ false);
     });
 
     // A tap on a temporary host opens the same session-type chooser.
@@ -216,8 +216,9 @@ RemoteWidget::RemoteWidget(QWidget* parent)
         }
 
         HostConfig config;
-        if (tempHostConfigForItem(item, &config))
-            showSessionMenu(config);
+        bool portable = false;
+        if (tempHostConfigForItem(item, &config, &portable))
+            showSessionMenu(config, portable);
     });
 
     connect(tree_host_, &TreeWidget::sig_itemLongPressed, this, &RemoteWidget::onHostLongPressed);
@@ -253,7 +254,8 @@ RemoteWidget::RemoteWidget(QWidget* parent)
         const QString name = match.host.display_name.isEmpty() ? match.host.computer_name
                                                                : match.host.display_name;
 
-        showSessionMenu(HostConfig::forRouterHost(match.router_id, match.host.host_id, name));
+        showSessionMenu(HostConfig::forRouterHost(match.router_id, match.host.host_id, name),
+                        /* portable */ false);
     });
 
     RouterController& controller = RouterController::instance();
@@ -881,7 +883,7 @@ bool RemoteWidget::hostConfigForItem(QTreeWidgetItem* item, HostConfig* config) 
 }
 
 //--------------------------------------------------------------------------------------------------
-bool RemoteWidget::tempHostConfigForItem(QTreeWidgetItem* item, HostConfig* config) const
+bool RemoteWidget::tempHostConfigForItem(QTreeWidgetItem* item, HostConfig* config, bool* portable) const
 {
     if (!item || !item->data(0, kHostIdRole).isValid())
         return false;
@@ -894,6 +896,7 @@ bool RemoteWidget::tempHostConfigForItem(QTreeWidgetItem* item, HostConfig* conf
             continue;
 
         *config = HostConfig::forRouterHost(host_router_id_, host.temp_id, host.computer_name);
+        *portable = host.portable;
         return true;
     }
 
@@ -901,7 +904,7 @@ bool RemoteWidget::tempHostConfigForItem(QTreeWidgetItem* item, HostConfig* conf
 }
 
 //--------------------------------------------------------------------------------------------------
-void RemoteWidget::showSessionMenu(const HostConfig& host)
+void RemoteWidget::showSessionMenu(const HostConfig& host, bool portable)
 {
     static const struct
     {
@@ -919,12 +922,26 @@ void RemoteWidget::showSessionMenu(const HostConfig& host)
     };
 
     BottomSheet* sheet = new BottomSheet(this);
-    for (const auto& session : kSessions)
-        sheet->addItem(tr(session.name), session.icon, false, false);
 
-    connect(sheet, &BottomSheet::sig_triggered, this, [this, host](int index)
+    // The session types of the sheet rows.
+    QList<proto::peer::SessionType> types;
+
+    for (const auto& session : kSessions)
     {
-        emit sig_connectHost(host, kSessions[index].type);
+        if (portable && session.type != proto::peer::SESSION_TYPE_DESKTOP &&
+            session.type != proto::peer::SESSION_TYPE_FILE_TRANSFER)
+        {
+            continue;
+        }
+
+        types.append(session.type);
+        sheet->addItem(tr(session.name), session.icon, false, false);
+    }
+
+    connect(sheet, &BottomSheet::sig_triggered, this, [this, host, types](int index)
+    {
+        if (index >= 0 && index < types.size())
+            emit sig_connectHost(host, types[index]);
     });
 
     sheet->showSheet();

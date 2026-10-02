@@ -90,12 +90,13 @@ private:
     // host is no longer present.
     bool hostConfigForItem(QTreeWidgetItem* item, HostConfig* config) const;
 
-    // Builds the connection config for a temporary host row. Returns false if the host is no longer
-    // present.
-    bool tempHostConfigForItem(QTreeWidgetItem* item, HostConfig* config) const;
+    // Builds the connection config for a temporary host row and tells whether the host is portable.
+    // Returns false if the host is no longer present.
+    bool tempHostConfigForItem(QTreeWidgetItem* item, HostConfig* config, bool* portable) const;
 
-    // Opens the session-type bottom sheet (Desktop / File Transfer) for the given router host.
-    void showSessionMenu(const HostConfig& host);
+    // Opens the session-type bottom sheet for the given router host. A portable host serves desktop
+    // and file transfer sessions only.
+    void showSessionMenu(const HostConfig& host, bool portable);
 
     QTreeWidgetItem* routerItem(qint64 router_id) const;
     QTreeWidgetItem* workspaceItem(qint64 router_id, qint64 workspace_id) const;
