@@ -36,8 +36,10 @@
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
 #include "base/files/base_paths.h"
+#include "base/net/firewall_manager.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "base/win/scoped_co_mem.h"
+#include "base/win/scoped_com_initializer.h"
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
 #include "host/host_constants.h"
@@ -184,6 +186,19 @@ void terminateRunProcesses(const QString& run_dir)
 }
 
 //--------------------------------------------------------------------------------------------------
+void removeFirewallRules(const QString& run_dir)
+{
+    FirewallManager firewall(run_dir + '/' + kExecutableName);
+    if (!firewall.isValid())
+    {
+        LOG(ERROR) << "Invalid firewall manager";
+        return;
+    }
+
+    firewall.deleteAllRules();
+}
+
+//--------------------------------------------------------------------------------------------------
 void removeDirectory(const QString& path)
 {
     for (int i = 0; i < kRemoveAttempts; ++i)
@@ -211,6 +226,7 @@ void removeStaleRuns(const QString& base_dir)
 
         LOG(INFO) << "Removing stale run:" << run_id;
         removeService(serviceName(run_id));
+        removeFirewallRules(base_dir + '/' + run_id);
         terminateRunProcesses(base_dir + '/' + run_id);
         removeDirectory(base_dir + '/' + run_id);
     }
@@ -353,6 +369,9 @@ bool reserveRun(const QString& base_dir, QString* run_id_out, QString* run_dir_o
 //--------------------------------------------------------------------------------------------------
 int launch()
 {
+    // The firewall rules are removed through COM.
+    ScopedCOMInitializer com_initializer;
+
     const QString base_dir = baseDirectory();
     if (base_dir.isEmpty())
         return 1;
@@ -368,6 +387,7 @@ int launch()
     const bool result = runHost(run_dir, run_id);
 
     removeService(serviceName(run_id));
+    removeFirewallRules(run_dir);
     terminateRunProcesses(run_dir);
     removeDirectory(run_dir);
 
