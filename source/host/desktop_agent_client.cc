@@ -385,14 +385,14 @@ void DesktopAgentClient::sendCapabilities()
     add_flag(kFlagCursorShape, true);
     add_flag(kFlagPasteAsKeystrokes, true);
     add_flag(kFlagDesktopWallpaper, true);
-    add_flag(kFlagLockAtDisconnect, true);
-    add_flag(kFlagPowerControl, true);
+    add_flag(kFlagLockAtDisconnect, !portable || elevated);
+    add_flag(kFlagPowerControl, !portable || elevated);
     add_flag(kFlagSelectScreen, true);
     add_flag(kFlagTaskManager, !portable || elevated);
 
 #if defined(Q_OS_WINDOWS)
     add_flag(kFlagOSWindows, true);
-    add_flag(kFlagBlockInput, true);
+    add_flag(kFlagBlockInput, !portable);
     add_flag(kFlagDesktopEffects, true);
     add_flag(kFlagFileClipboard, true);
     add_flag(kFlagPortable, portable);
