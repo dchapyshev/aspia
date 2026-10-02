@@ -32,7 +32,6 @@
 #include "host/workers/screen_worker.h"
 
 #if defined(Q_OS_WINDOWS)
-#include <qt_windows.h>
 #include "host/win/portable_host.h"
 #endif // defined(Q_OS_WINDOWS)
 
@@ -42,48 +41,6 @@
 #endif // defined(Q_OS_MACOS)
 
 namespace {
-
-#if defined(Q_OS_WINDOWS)
-//--------------------------------------------------------------------------------------------------
-// The desktop agent captures the screen and maps input coordinates, so it must be per-monitor DPI
-// aware to work in physical pixels on scaled displays; the other agents do not care either way. The
-// GUI gets this from Qt (QApplication), but a headless agent runs on QCoreApplication, which does not
-// set it - and the shared binary uses the GUI manifest, which deliberately leaves DPI awareness unset
-// so Qt can select Per-Monitor V2.
-//
-// The build targets Windows 7, so the newer entry points are not in the headers; resolve the best
-// available one at runtime: Per-Monitor-V2 (Win10 1703+), then Per-Monitor (Win8.1+), then system
-// aware (always present).
-void setDpiAwareness()
-{
-    if (HMODULE user32 = GetModuleHandleW(L"user32.dll"))
-    {
-        using SetProcessDpiAwarenessContextFn = BOOL(WINAPI*)(HANDLE);
-        auto set_context = reinterpret_cast<SetProcessDpiAwarenessContextFn>(
-            GetProcAddress(user32, "SetProcessDpiAwarenessContext"));
-
-        // DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 == (DPI_AWARENESS_CONTEXT)-4.
-        if (set_context && set_context(reinterpret_cast<HANDLE>(static_cast<INT_PTR>(-4))))
-            return;
-    }
-
-    if (HMODULE shcore = LoadLibraryW(L"shcore.dll"))
-    {
-        using SetProcessDpiAwarenessFn = HRESULT(WINAPI*)(int);
-        auto set_awareness = reinterpret_cast<SetProcessDpiAwarenessFn>(
-            GetProcAddress(shcore, "SetProcessDpiAwareness"));
-
-        // PROCESS_PER_MONITOR_DPI_AWARE == 2.
-        const bool ok = set_awareness && SUCCEEDED(set_awareness(2));
-        FreeLibrary(shcore);
-        if (ok)
-            return;
-    }
-
-    // Windows Vista+ fallback: system DPI aware.
-    SetProcessDPIAware();
-}
-#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 int runDesktopAgent(CoreApplication& application)
@@ -196,7 +153,7 @@ int runAgent(int& argc, char* argv[], const char* agent_type)
     }
 
 #if defined(Q_OS_WINDOWS)
-    setDpiAwareness();
+    HostUtils::setDpiAwareness();
 #endif // defined(Q_OS_WINDOWS)
 
     // On macOS the desktop agent captures the screen on a Qt worker thread that needs a real CFRunLoop

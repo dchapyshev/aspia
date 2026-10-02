@@ -39,8 +39,13 @@
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
 #include "host/host_constants.h"
+#include "host/host_utils.h"
 #include "host/win/portable_package.h"
+#include "host/workers/audio_worker.h"
+#include "host/workers/input_worker.h"
+#include "host/workers/portable_desktop_worker.h"
 #include "host/workers/portable_user_worker.h"
+#include "host/workers/screen_worker.h"
 #include "version.h"
 
 namespace {
@@ -370,6 +375,63 @@ int launchUserMode(int& argc, char* argv[])
 
     CoreApplication application(argc, argv);
     application.addWorker(std::make_unique<PortableUserWorker>());
+    application.addWorker(std::make_unique<PortableDesktopWorker>());
+    application.addWorker(std::make_unique<ScreenWorker>());
+    application.addWorker(std::make_unique<InputWorker>());
+    application.addWorker(std::make_unique<AudioWorker>());
+
+    PortableDesktopWorker* desktop_worker = CoreApplication::findWorker<PortableDesktopWorker>();
+    ScreenWorker* screen_worker = CoreApplication::findWorker<ScreenWorker>();
+    InputWorker* input_worker = CoreApplication::findWorker<InputWorker>();
+    AudioWorker* audio_worker = CoreApplication::findWorker<AudioWorker>();
+
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_selectScreen,
+                     screen_worker, &ScreenWorker::onSelectScreen, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_keyFrameRequested,
+                     screen_worker, &ScreenWorker::onKeyFrameRequested, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_preferredSizeChanged,
+                     screen_worker, &ScreenWorker::onSetPreferredSize, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_configure,
+                     screen_worker, &ScreenWorker::onConfigure, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_overflowStateChanged,
+                     screen_worker, &ScreenWorker::onOverflowStateChanged, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_bandwidthChanged,
+                     screen_worker, &ScreenWorker::onBandwidthChanged, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_stopCapture,
+                     screen_worker, &ScreenWorker::onStopCapture, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_paused,
+                     screen_worker, &ScreenWorker::onSetPaused, Qt::QueuedConnection);
+
+    QObject::connect(screen_worker, &ScreenWorker::sig_videoData,
+                     desktop_worker, &PortableDesktopWorker::onVideoData, Qt::QueuedConnection);
+    QObject::connect(screen_worker, &ScreenWorker::sig_cursorShapeData,
+                     desktop_worker, &PortableDesktopWorker::onCursorShapeData, Qt::QueuedConnection);
+    QObject::connect(screen_worker, &ScreenWorker::sig_cursorPositionData,
+                     desktop_worker, &PortableDesktopWorker::onCursorPositionData, Qt::QueuedConnection);
+    QObject::connect(screen_worker, &ScreenWorker::sig_screenListData,
+                     desktop_worker, &PortableDesktopWorker::onScreenListData, Qt::QueuedConnection);
+    QObject::connect(screen_worker, &ScreenWorker::sig_screenTypeData,
+                     desktop_worker, &PortableDesktopWorker::onScreenTypeData, Qt::QueuedConnection);
+
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_injectKeyEvent,
+                     input_worker, &InputWorker::onInjectKeyEvent, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_injectTextEvent,
+                     input_worker, &InputWorker::onInjectTextEvent, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_injectMouseEvent,
+                     input_worker, &InputWorker::onInjectMouseEvent, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_injectTouchEvent,
+                     input_worker, &InputWorker::onInjectTouchEvent, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_paused,
+                     input_worker, &InputWorker::onSetPaused, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_mouseLocked,
+                     input_worker, &InputWorker::onSetMouseLocked, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_keyboardLocked,
+                     input_worker, &InputWorker::onSetKeyboardLocked, Qt::QueuedConnection);
+
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_audioEnabled,
+                     audio_worker, &AudioWorker::onSetEnabled, Qt::QueuedConnection);
+    QObject::connect(audio_worker, &AudioWorker::sig_audioData,
+                     desktop_worker, &PortableDesktopWorker::onAudioData, Qt::QueuedConnection);
 
     // Start the GUI in this launcher's session.
     if (!ProcessUtil::createProcess(QDir::toNativeSeparators(BasePaths::currentApp()), QString()))
@@ -415,6 +477,10 @@ bool PortableHost::isLauncherInvocation(int argc, char* argv[])
 // static
 int PortableHost::runLauncher(int argc, char* argv[])
 {
+    // The user mode host runs in this process and captures the screen, so DPI awareness is set here,
+    // before anything (the elevation request included) could create a window.
+    HostUtils::setDpiAwareness();
+
     const bool relaunched = argc == 2 && qstrcmp(argv[1], kLaunchOption) == 0;
     if (argc > 1 && !relaunched)
     {

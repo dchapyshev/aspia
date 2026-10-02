@@ -38,6 +38,10 @@ public:
     static void printDebugInfo(quint32 features = INCLUDE_DEFAULT);
     static void uninstallApplication();
 
+    // Makes the process per-monitor DPI aware, so that screen capture and input work in physical pixels
+    // on scaled displays. Must be called before the process creates any window.
+    static void setDpiAwareness();
+
 private:
     Q_DISABLE_COPY_MOVE(HostUtils)
 };
