@@ -234,7 +234,6 @@ void PortableServiceWorker::startClient(
         connect(client, &Client::sig_started, desktop_manager_, &DesktopManager::onClientStarted);
         connect(client, &Client::sig_finished, desktop_manager_, &DesktopManager::onClientFinished);
         connect(client, &Client::sig_channelChanged, desktop_manager_, &DesktopManager::onClientChannelChanged);
-        connect(client, &DesktopClient::sig_switchSession, desktop_manager_, &DesktopManager::onClientSwitchSession);
 
         connect(client, &Client::sig_started, user_session_, &PortableUserSession::onClientStarted);
         connect(client, &Client::sig_finished, user_session_, &PortableUserSession::onClientFinished);
