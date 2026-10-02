@@ -22,6 +22,10 @@
 
 #include "proto/peer.h"
 
+#if defined(Q_OS_WINDOWS)
+#include "host/win/portable_host.h"
+#endif // defined(Q_OS_WINDOWS)
+
 namespace {
 
 const QString kLocaleParam = "Locale";
@@ -36,7 +40,9 @@ const QString kSystemInfoWindowStateParam = "SystemInfoWindowState";
 UserSettings::UserSettings()
     : settings_(QSettings::IniFormat, QSettings::UserScope, "aspia", "host")
 {
-    // Nothing
+#if defined(Q_OS_WINDOWS)
+    portable_ = PortableHost::isActive();
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -57,65 +63,84 @@ bool UserSettings::isWritable() const
 //--------------------------------------------------------------------------------------------------
 void UserSettings::sync()
 {
-    settings_.sync();
+    if (!portable_)
+        settings_.sync();
 }
 
 //--------------------------------------------------------------------------------------------------
 QString UserSettings::locale() const
 {
-    return settings_.value(kLocaleParam, QLocale::system().bcp47Name()).toString();
+    return value(kLocaleParam, QLocale::system().bcp47Name()).toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSettings::setLocale(const QString& locale)
 {
-    settings_.setValue(kLocaleParam, locale);
+    setValue(kLocaleParam, locale);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString UserSettings::theme() const
 {
-    return settings_.value(kThemeParam, "auto").toString();
+    return value(kThemeParam, "auto").toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSettings::setTheme(const QString& theme)
 {
-    settings_.setValue(kThemeParam, theme);
+    setValue(kThemeParam, theme);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint32 UserSettings::oneTimeSessions() const
 {
-    return settings_.value(kOneTimeSessionsParam, proto::peer::SESSION_TYPE_ALL).toUInt();
+    return value(kOneTimeSessionsParam, proto::peer::SESSION_TYPE_ALL).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSettings::setOneTimeSessions(quint32 sessions)
 {
-    settings_.setValue(kOneTimeSessionsParam, sessions);
+    setValue(kOneTimeSessionsParam, sessions);
 }
 
 //--------------------------------------------------------------------------------------------------
 QByteArray UserSettings::securityLogDialogState() const
 {
-    return settings_.value(kSecurityLogDialogStateParam).toByteArray();
+    return value(kSecurityLogDialogStateParam).toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSettings::setSecurityLogDialogState(const QByteArray& state)
 {
-    settings_.setValue(kSecurityLogDialogStateParam, state);
+    setValue(kSecurityLogDialogStateParam, state);
 }
 
 //--------------------------------------------------------------------------------------------------
 QByteArray UserSettings::systemInfoWindowState() const
 {
-    return settings_.value(kSystemInfoWindowStateParam).toByteArray();
+    return value(kSystemInfoWindowStateParam).toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSettings::setSystemInfoWindowState(const QByteArray& state)
 {
-    settings_.setValue(kSystemInfoWindowStateParam, state);
+    setValue(kSystemInfoWindowStateParam, state);
+}
+
+//--------------------------------------------------------------------------------------------------
+QVariant UserSettings::value(const QString& key, const QVariant& default_value) const
+{
+    if (portable_)
+        return default_value;
+
+    return settings_.value(key, default_value);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setValue(const QString& key, const QVariant& value)
+{
+    if (portable_)
+        return;
+
+    settings_.setValue(key, value);
 }

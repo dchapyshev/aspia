@@ -50,7 +50,11 @@ public:
     void setSystemInfoWindowState(const QByteArray& state);
 
 private:
+    QVariant value(const QString& key, const QVariant& default_value = QVariant()) const;
+    void setValue(const QString& key, const QVariant& value);
+
     QSettings settings_;
+    bool portable_ = false;
 
     Q_DISABLE_COPY_MOVE(UserSettings)
 };
