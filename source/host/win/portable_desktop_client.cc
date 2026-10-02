@@ -96,6 +96,11 @@ void PortableDesktopClient::onMessage(quint8 net_channel_id, const QByteArray& b
         {
             readFeedback(message.feedback());
         }
+        else if (message.has_sessions_request())
+        {
+            // The client asks for the list of sessions with every configuration. There is no list in
+            // user mode, and the client hides the session switching without it.
+        }
         else
         {
             CLOG(WARNING) << "Control message is not served in user mode";
