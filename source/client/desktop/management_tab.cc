@@ -836,6 +836,8 @@ void ManagementTab::onTempHostConnect()
         session_type != proto::peer::SESSION_TYPE_FILE_TRANSFER)
     {
         LOG(INFO) << "Session type" << session_type << "is not available for a portable host";
+        MsgBox::warning(this, tr("The \"%1\" session type is not available for Quick Support.")
+            .arg(sessionName(session_type)));
         return;
     }
 
