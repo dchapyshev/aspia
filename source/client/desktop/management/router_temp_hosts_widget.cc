@@ -22,10 +22,12 @@
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
+#include <QMenu>
 #include <QSignalBlocker>
 #include <QTreeView>
 #include <QVBoxLayout>
 
+#include "base/auto_qpointer.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/shared_pointer.h"
@@ -112,6 +114,10 @@ RouterTempHostsWidget::RouterTempHostsWidget(QWidget* parent)
     connect(tree_, &QWidget::customContextMenuRequested,
             this, &RouterTempHostsWidget::onContextMenu);
 
+    tree_->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(tree_->header(), &QHeaderView::customContextMenuRequested,
+            this, &RouterTempHostsWidget::onHeaderContextMenu);
+
     // The working sessions come and go with their connections, so the subscriptions live on the
     // controller and follow whatever record is displayed.
     RouterController& controller = RouterController::instance();
@@ -139,9 +145,6 @@ void RouterTempHostsWidget::showRouter(qint64 router_id)
 {
     router_id_ = router_id;
     page_.clear();
-
-    // The peer address is only delivered to admin sessions, so hide the column for the rest.
-    tree_->setColumnHidden(static_cast<int>(TempHostListModel::Column::ADDRESS), !isAdmin());
 
     model_->clear();
     fetchTempHosts();
@@ -324,6 +327,27 @@ void RouterTempHostsWidget::onContextMenu(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterTempHostsWidget::onHeaderContextMenu(const QPoint& pos)
+{
+    QPointer<QHeaderView> header = tree_->header();
+    AutoQPointer<QMenu> menu(new QMenu(this));
+
+    for (int i = 1; i < header->count(); ++i)
+    {
+        ColumnAction* action = new ColumnAction(
+            model_->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), i, menu);
+        action->setChecked(!header->isSectionHidden(i));
+        menu->addAction(action);
+    }
+
+    ColumnAction* action = dynamic_cast<ColumnAction*>(menu->exec(header->viewport()->mapToGlobal(pos)));
+    if (!action || !header)
+        return;
+
+    header->setSectionHidden(action->columnIndex(), !action->isChecked());
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterTempHostsWidget::onPageSizeChanged(int /* index */)
 {
     page_.setPageSize(combo_page_size_->currentData().toLongLong());
@@ -389,11 +413,4 @@ void RouterTempHostsWidget::updatePagination()
     combo_page_->setEnabled(total_pages > 1);
     button_prev_->setEnabled(page_.currentPage() > 0);
     button_next_->setEnabled(page_.currentPage() < total_pages - 1);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool RouterTempHostsWidget::isAdmin() const
-{
-    RouterSession* session = RouterController::session(router_id_);
-    return session && session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
 }

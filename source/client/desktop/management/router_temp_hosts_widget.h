@@ -60,6 +60,7 @@ signals:
 private slots:
     void onTempHostListReceived(const RouterTempHostList& list);
     void onContextMenu(const QPoint& pos);
+    void onHeaderContextMenu(const QPoint& pos);
     void onPageSizeChanged(int index);
     void onPageChanged(int index);
     void onPrevClicked();
@@ -68,7 +69,6 @@ private slots:
 private:
     void fetchTempHosts();
     void updatePagination();
-    bool isAdmin() const;
 
     QTreeView* tree_ = nullptr;
     TempHostListModel* model_ = nullptr;
