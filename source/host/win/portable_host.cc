@@ -131,7 +131,7 @@ QString serviceDisplayName(const QString& run_id)
 //--------------------------------------------------------------------------------------------------
 QString mutexName(const QString& run_id)
 {
-    return "Global\\aspia-host-portable-" + run_id;
+    return "Global\\aspia-qs-" + run_id;
 }
 
 //--------------------------------------------------------------------------------------------------
