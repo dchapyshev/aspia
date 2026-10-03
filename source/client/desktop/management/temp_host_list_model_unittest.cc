@@ -131,7 +131,7 @@ private:
 TEST_F(TempHostListModelTest, EmptyModelHasItsColumnsAndNoRows)
 {
     EXPECT_EQ(model()->rowCount(), 0);
-    EXPECT_EQ(model()->columnCount(), 6);
+    EXPECT_EQ(model()->columnCount(), 7);
     EXPECT_EQ(model()->hostAt(0), nullptr);
     EXPECT_EQ(model()->rowOf(HostId(1)), -1);
 }
@@ -141,7 +141,8 @@ TEST_F(TempHostListModelTest, HeaderNamesTheColumnOfItsSection)
 {
     EXPECT_EQ(model()->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString(), QString("ID"));
     EXPECT_EQ(model()->headerData(4, Qt::Horizontal, Qt::DisplayRole).toString(), QString("Address"));
-    EXPECT_EQ(model()->headerData(5, Qt::Horizontal, Qt::DisplayRole).toString(), QString("Type"));
+    EXPECT_EQ(model()->headerData(5, Qt::Horizontal, Qt::DisplayRole).toString(), QString("Connect Time"));
+    EXPECT_EQ(model()->headerData(6, Qt::Horizontal, Qt::DisplayRole).toString(), QString("Type"));
 
     // A vertical header is not ours to fill, and a section outside the table has no name.
     EXPECT_FALSE(model()->headerData(0, Qt::Vertical, Qt::DisplayRole).isValid());
@@ -160,6 +161,7 @@ TEST_F(TempHostListModelTest, RowShowsTheFieldsOfItsHost)
     EXPECT_EQ(textAt(model(), 0, Column::OS), QString("Windows 11"));
     EXPECT_EQ(textAt(model(), 0, Column::VERSION), QString("2.7.0"));
     EXPECT_EQ(textAt(model(), 0, Column::ADDRESS), QString("192.168.0.2"));
+    EXPECT_EQ(textAt(model(), 0, Column::CONNECT_TIME), QString());
     EXPECT_EQ(textAt(model(), 0, Column::TYPE), QString("Installed"));
 }
 
@@ -232,6 +234,22 @@ TEST_F(TempHostListModelTest, AddressIsSortedTheWayItIsRead)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The connect time is compared as the moment it is, not as the text it is drawn as.
+TEST_F(TempHostListModelTest, ConnectTimeIsSortedAsAMoment)
+{
+    QList<RouterTempHost> list = hosts();
+    list[0].connect_time = 1700000300;
+    list[1].connect_time = 1700000100;
+    list[2].connect_time = 1700000200;
+    model()->setHosts(list);
+
+    model()->sort(static_cast<int>(Column::CONNECT_TIME), Qt::AscendingOrder);
+
+    EXPECT_EQ(rowIds(model()),
+              QList<HostId>({ HostId(900000010), HostId(900000001), HostId(900000002) }));
+}
+
+//--------------------------------------------------------------------------------------------------
 // The list is refetched on every change, and it arrives sorted the way the user asked for without
 // another click on the header.
 TEST_F(TempHostListModelTest, NewListKeepsTheSortTheUserPicked)
@@ -286,5 +304,5 @@ TEST_F(TempHostListModelTest, ClearDropsTheRows)
     model()->clear();
 
     EXPECT_EQ(model()->rowCount(), 0);
-    EXPECT_EQ(model()->columnCount(), 6);
+    EXPECT_EQ(model()->columnCount(), 7);
 }

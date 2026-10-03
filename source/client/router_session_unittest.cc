@@ -421,6 +421,7 @@ TEST_F(RouterSessionTest, TempHostListIsParsed)
     proto::router::TempHost* host = list->add_host();
     host->set_temp_id(42);
     host->set_computer_name("new-host");
+    host->set_connect_time(1700000000);
     deliver(reply);
 
     EXPECT_EQ(delivered.error_code, QString::fromStdString(proto::router::kErrorOk));
@@ -428,6 +429,7 @@ TEST_F(RouterSessionTest, TempHostListIsParsed)
     ASSERT_EQ(delivered.hosts.size(), 1);
     EXPECT_EQ(delivered.hosts.at(0).temp_id, HostId(42));
     EXPECT_EQ(delivered.hosts.at(0).computer_name, "new-host");
+    EXPECT_EQ(delivered.hosts.at(0).connect_time, 1700000000);
 }
 
 //--------------------------------------------------------------------------------------------------

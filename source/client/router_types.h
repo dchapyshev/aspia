@@ -107,6 +107,7 @@ struct RouterTempHost
     QString os_name;
     QString address;
     bool portable = false;
+    qint64 connect_time = 0;
 };
 
 struct RouterTempHostList

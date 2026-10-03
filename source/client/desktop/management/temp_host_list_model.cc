@@ -18,13 +18,15 @@
 
 #include "client/desktop/management/temp_host_list_model.h"
 
+#include <QDateTime>
 #include <QIcon>
+#include <QLocale>
 
 #include <algorithm>
 
 namespace {
 
-constexpr int kColumnCount = 6;
+constexpr int kColumnCount = 7;
 
 } // namespace
 
@@ -142,6 +144,9 @@ QVariant TempHostListModel::headerData(int section, Qt::Orientation orientation,
         case Column::ADDRESS:
             return tr("Address");
 
+        case Column::CONNECT_TIME:
+            return tr("Connect Time");
+
         case Column::TYPE:
             return tr("Type");
     }
@@ -209,6 +214,13 @@ QString TempHostListModel::textAt(const RouterTempHost& host, Column column) con
         case Column::ADDRESS:
             return host.address;
 
+        case Column::CONNECT_TIME:
+            if (host.connect_time == 0)
+                return QString();
+
+            return QLocale::system().toString(
+                QDateTime::fromSecsSinceEpoch(host.connect_time), QLocale::ShortFormat);
+
         case Column::TYPE:
             return host.portable ? tr("Quick Support") : tr("Installed");
     }
@@ -230,6 +242,9 @@ void TempHostListModel::applySort()
     {
         if (column == Column::ID)
             return first.temp_id < second.temp_id;
+
+        if (column == Column::CONNECT_TIME)
+            return first.connect_time < second.connect_time;
 
         if (column == Column::COMPUTER_NAME || column == Column::ADDRESS)
             return collator_.compare(textAt(first, column), textAt(second, column)) < 0;

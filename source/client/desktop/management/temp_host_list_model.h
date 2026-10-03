@@ -38,6 +38,7 @@ public:
         OS,
         VERSION,
         ADDRESS,
+        CONNECT_TIME,
         TYPE
     };
 

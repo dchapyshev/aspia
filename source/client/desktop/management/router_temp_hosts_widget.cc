@@ -61,6 +61,7 @@ RouterTempHostsWidget::RouterTempHostsWidget(QWidget* parent)
 
     tree_->header()->resizeSection(static_cast<int>(TempHostListModel::Column::COMPUTER_NAME), 130);
     tree_->header()->resizeSection(static_cast<int>(TempHostListModel::Column::OS), 140);
+    tree_->header()->resizeSection(static_cast<int>(TempHostListModel::Column::CONNECT_TIME), 130);
 
     button_prev_ = new IconTextButton(this);
     button_prev_->setText(tr("Previous"));

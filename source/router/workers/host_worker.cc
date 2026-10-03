@@ -439,6 +439,9 @@ proto::router::TempHostList HostWorker::doTempHostList(bool with_address, qint64
     temp_host_list.set_error_code(proto::router::kErrorOk);
     temp_host_list.set_total_count(static_cast<qint64>(temp_hosts.size()));
 
+    const qint64 wall_now = secondsSinceEpoch();
+    const TimePoint monotonic_now = Clock::now();
+
     const size_t begin = std::min(static_cast<size_t>(offset), temp_hosts.size());
     const size_t end = std::min(begin + static_cast<size_t>(count), temp_hosts.size());
 
@@ -452,6 +455,8 @@ proto::router::TempHostList HostWorker::doTempHostList(bool with_address, qint64
         temp_host->set_version(host_ng->version().toString().toStdString());
         temp_host->set_os_name(host_ng->osName());
         temp_host->set_portable(host_ng->isPortable());
+        temp_host->set_connect_time(
+            wall_now - DurationCast<Seconds>(monotonic_now - host_ng->startTime()).count());
 
         if (with_address)
             temp_host->set_address(host_ng->address());

@@ -540,6 +540,23 @@ TEST_F(HostWorkerTest, TempHostListIsPagedInAStableOrder)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A temporary host is listed with the wall-clock moment it connected. The router counts its
+// connections on a monotonic clock, so the moment is derived and may come out a second early.
+TEST_F(HostWorkerTest, TempHostIsListedWithItsConnectTime)
+{
+    const qint64 before = secondsSinceEpoch();
+    ASSERT_TRUE(connectTempHost());
+
+    const proto::router::TempHostList list = tempHostList(0, 1);
+    const qint64 after = secondsSinceEpoch();
+
+    ASSERT_EQ(list.error_code(), proto::router::kErrorOk);
+    ASSERT_EQ(list.host_size(), 1);
+    EXPECT_GE(list.host(0).connect_time(), before - 1);
+    EXPECT_LE(list.host(0).connect_time(), after);
+}
+
+//--------------------------------------------------------------------------------------------------
 // A request that names no page has a count of zero and is refused, as is one that asks for more
 // than the cap. Whatever comes out of the list goes into a single reply, so its size must never
 // follow the number of connected hosts.
