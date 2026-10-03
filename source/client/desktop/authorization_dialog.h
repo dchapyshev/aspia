@@ -41,6 +41,7 @@ public:
     ~AuthorizationDialog() final;
 
     void setOneTimePasswordEnabled(bool enable);
+    void setOneTimePasswordOnly(bool only);
 
     void setSavedCredentials(const QList<CredentialConfig>& credentials);
     qint64 credentialId() const;
@@ -77,6 +78,7 @@ private:
     std::unique_ptr<Ui::AuthorizationDialog> ui;
     QList<CredentialConfig> credentials_;
     bool one_time_password_enabled_ = false;
+    bool one_time_password_only_ = false;
     bool one_time_password_choice_ = false;
     bool save_credentials_visible_ = false;
     Q_DISABLE_COPY_MOVE(AuthorizationDialog)

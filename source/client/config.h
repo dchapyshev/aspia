@@ -323,6 +323,9 @@ public:
     const SecureString& password() const { return password_; }
     void setPassword(const SecureString& value) { password_ = value; }
 
+    bool isPortable() const { return portable_; }
+    void setPortable(bool portable) { portable_ = portable; }
+
 private:
     qint64 entry_id_ = 0;
     qint64 router_id_ = 0;
@@ -330,6 +333,7 @@ private:
     QString name_;
     QString username_;
     SecureString password_;
+    bool portable_ = false;
 };
 
 proto::control::Config defaultDesktopConfig();

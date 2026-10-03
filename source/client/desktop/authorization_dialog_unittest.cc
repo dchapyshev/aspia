@@ -388,3 +388,32 @@ TEST_F(AuthorizationDialogTest, OneTimePasswordLeavesTheRecordUnchosen)
     EXPECT_TRUE(dialog.userName().isEmpty());
     EXPECT_EQ(dialog.credentialId(), 0);
 }
+
+//--------------------------------------------------------------------------------------------------
+// A Quick Support host answers only to its one-time password, so the dialog opens on it and the
+// other ways in cannot be picked. The choice is forced and not the answer of the user, so what the
+// dialog remembers stays as it was.
+TEST_F(AuthorizationDialogTest, OneTimePasswordOnlyLocksTheOtherModes)
+{
+    rememberOneTimePassword(false);
+
+    {
+        AuthorizationDialog dialog;
+        dialog.setOneTimePasswordEnabled(true);
+        dialog.setOneTimePasswordOnly(true);
+        dialog.setSavedCredentials({ credential(1, "office", "admin", "secret") });
+        dialog.show();
+
+        QRadioButton* one_time = oneTimePasswordButton(dialog);
+        QRadioButton* saved = savedCredentialsButton(dialog);
+        QRadioButton* user_password = dialog.findChild<QRadioButton*>("radio_user_password");
+        ASSERT_TRUE(one_time && saved && user_password);
+
+        EXPECT_TRUE(one_time->isChecked());
+        EXPECT_FALSE(user_password->isEnabled());
+        EXPECT_FALSE(saved->isEnabled());
+        EXPECT_TRUE(dialog.userName().isEmpty());
+    }
+
+    EXPECT_FALSE(Settings().isOneTimePasswordChecked());
+}

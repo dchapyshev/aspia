@@ -79,6 +79,13 @@ void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
+void AuthorizationDialog::setOneTimePasswordOnly(bool only)
+{
+    one_time_password_only_ = only;
+    updateModes();
+}
+
+//--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::setSavedCredentials(const QList<CredentialConfig>& credentials)
 {
     credentials_.clear();
@@ -256,7 +263,7 @@ bool AuthorizationDialog::usesOneTimePassword() const
 //--------------------------------------------------------------------------------------------------
 bool AuthorizationDialog::isOneTimePasswordOffered() const
 {
-    return one_time_password_enabled_;
+    return one_time_password_enabled_ || one_time_password_only_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -299,7 +306,13 @@ void AuthorizationDialog::updateModes()
     const bool one_time_offered = isOneTimePasswordOffered();
     const bool saved_credentials_offered = hasSavedCredentials();
 
-    if ((!one_time_offered && ui->radio_one_time_password->isChecked()) ||
+    if (one_time_password_only_ && !ui->radio_one_time_password->isChecked())
+    {
+        const QSignalBlocker user_password_blocker(ui->radio_user_password);
+        const QSignalBlocker saved_credentials_blocker(ui->radio_saved_credentials);
+        ui->radio_one_time_password->setChecked(true);
+    }
+    else if ((!one_time_offered && ui->radio_one_time_password->isChecked()) ||
         (!saved_credentials_offered && ui->radio_saved_credentials->isChecked()))
     {
         const QSignalBlocker one_time_password_blocker(ui->radio_one_time_password);
@@ -312,6 +325,9 @@ void AuthorizationDialog::updateModes()
     ui->radio_user_password->setVisible(has_choice);
     ui->radio_one_time_password->setVisible(one_time_offered);
     ui->radio_saved_credentials->setVisible(saved_credentials_offered);
+
+    ui->radio_user_password->setEnabled(!one_time_password_only_);
+    ui->radio_saved_credentials->setEnabled(!one_time_password_only_);
 
     ui->label_one_time_password->setVisible(one_time_offered);
     ui->edit_one_time_password->setVisible(one_time_offered);

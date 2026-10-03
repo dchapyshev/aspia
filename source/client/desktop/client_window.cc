@@ -120,6 +120,7 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
         AutoQPointer<AuthorizationDialog> auth_dialog(new AuthorizationDialog(this));
 
         auth_dialog->setOneTimePasswordEnabled(host.routerId() > 0);
+        auth_dialog->setOneTimePasswordOnly(host.isPortable());
         auth_dialog->setSaveCredentialsVisible(can_save_credentials);
         auth_dialog->setUserName(host.username());
         auth_dialog->setPassword(host.password());

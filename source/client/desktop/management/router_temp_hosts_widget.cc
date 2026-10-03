@@ -179,7 +179,9 @@ HostConfig RouterTempHostsWidget::selectedHostConfig() const
     if (hosts.size() != 1 || hosts.front().temp_id == kInvalidHostId)
         return HostConfig();
 
-    return HostConfig::forRouterHost(router_id_, hosts.front().temp_id, hosts.front().computer_name);
+    HostConfig config = HostConfig::forRouterHost(router_id_, hosts.front().temp_id, hosts.front().computer_name);
+    config.setPortable(hosts.front().portable);
+    return config;
 }
 
 //--------------------------------------------------------------------------------------------------
