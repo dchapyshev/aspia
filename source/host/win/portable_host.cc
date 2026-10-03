@@ -58,10 +58,10 @@ namespace {
 const char kLaunchOption[] = "--portable";
 const char kSessionOption[] = "--session";
 const char kExecutableName[] = "aspia_host.exe";
-const char kBaseDirectoryName[] = "AspiaPortable";
+const char kBaseDirectoryName[] = "AspiaQS";
 const char kDataDirectoryName[] = "data";
-const char kServiceNamePrefix[] = "aspia-host-portable-";
-const wchar_t kServiceDisplayName[] = L"Aspia Host Portable";
+const char kServiceNamePrefix[] = "aspia-qs-";
+const char kServiceDisplayName[] = "Aspia QS";
 
 // Only SYSTEM and Administrators have access to the settings of the portable host.
 const char kDataDirectorySddl[] = "D:P(A;OICI;FA;;;SY)(A;OICI;FA;;;BA)";
@@ -120,6 +120,12 @@ bool startedByOurProcess()
 QString serviceName(const QString& run_id)
 {
     return kServiceNamePrefix + run_id;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString serviceDisplayName(const QString& run_id)
+{
+    return QString::fromLatin1(kServiceDisplayName) + " (" + run_id + ')';
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -284,9 +290,9 @@ bool runHost(const QString& run_dir, const QString& run_id)
         kSessionOption + ' ' + QString::number(currentProcessSessionId());
 
     ScopedScHandle service(CreateServiceW(manager, qUtf16Printable(serviceName(run_id)),
-        kServiceDisplayName, SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS, SERVICE_DEMAND_START,
-        SERVICE_ERROR_IGNORE, qUtf16Printable(command_line), nullptr, nullptr, nullptr, nullptr,
-        nullptr));
+        qUtf16Printable(serviceDisplayName(run_id)), SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS,
+        SERVICE_DEMAND_START, SERVICE_ERROR_IGNORE, qUtf16Printable(command_line), nullptr, nullptr,
+        nullptr, nullptr, nullptr));
     if (!service.isValid())
     {
         PLOG(ERROR) << "CreateServiceW failed";
