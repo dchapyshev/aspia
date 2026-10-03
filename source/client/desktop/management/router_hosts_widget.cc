@@ -92,8 +92,7 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
 
     connect(ui->tree_hosts->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &RouterHostsWidget::sig_currentChanged);
-    connect(ui->tree_hosts, &QAbstractItemView::activated,
-            this, [this](const QModelIndex&) { onModifyHost(); });
+    connect(ui->tree_hosts, &QAbstractItemView::activated, this, &RouterHostsWidget::sig_activated);
 
     ui->tree_hosts->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_hosts, &QWidget::customContextMenuRequested,

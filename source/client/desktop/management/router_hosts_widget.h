@@ -82,6 +82,7 @@ public slots:
 signals:
     void sig_currentChanged();
     void sig_contextMenu(const QPoint& global_pos, int column);
+    void sig_activated();
 
 protected:
     // QObject implementation.

@@ -179,6 +179,8 @@ ManagementTab::ManagementTab(QWidget* parent)
             this, &ManagementTab::updateActionsState);
     connect(router_hosts_widget_, &RouterHostsWidget::sig_contextMenu,
             this, &ManagementTab::onHostContextMenu);
+    connect(router_hosts_widget_, &RouterHostsWidget::sig_activated,
+            this, &ManagementTab::onRouterHostConnect);
 
     connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_currentChanged,
             this, &ManagementTab::updateActionsState);
@@ -824,6 +826,17 @@ void ManagementTab::onRouterGroupConnect()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ManagementTab::onRouterHostConnect()
+{
+    if (!router_hosts_widget_->hasSelectedHost())
+        return;
+    HostConfig host = router_hosts_widget_->selectedHostConfig();
+    if (!validateHostForConnect(host))
+        return;
+    emit sig_connectRequested(host, defaultSessionType());
+}
+
+//--------------------------------------------------------------------------------------------------
 void ManagementTab::onTempHostConnect()
 {
     const QList<RouterTempHost> hosts = router_temp_hosts_widget_->selectedHosts();
@@ -1147,6 +1160,11 @@ void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
     bool is_online = router_hosts_widget_->isSelectedHostOnline();
 
     AutoQPointer<QMenu> menu(new QMenu(this));
+    auto addProxy = [&menu](QAction* action)
+    {
+        menu->addAction(action->icon(), action->text(), action, &QAction::triggered);
+    };
+
     menu->addAction(ui->action_edit_host);
 
     if (is_online)
@@ -1161,11 +1179,11 @@ void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
     if (is_online)
     {
         menu->addSeparator();
-        menu->addAction(ui->action_desktop_connect);
-        menu->addAction(ui->action_terminal_connect);
-        menu->addAction(ui->action_file_transfer_connect);
-        menu->addAction(ui->action_chat_connect);
-        menu->addAction(ui->action_system_info_connect);
+        addProxy(ui->action_desktop_connect);
+        addProxy(ui->action_terminal_connect);
+        addProxy(ui->action_file_transfer_connect);
+        addProxy(ui->action_chat_connect);
+        addProxy(ui->action_system_info_connect);
     }
     menu->addSeparator();
 
@@ -2041,11 +2059,6 @@ void ManagementTab::updateActionsState()
 
         ui->action_host_check_updates->setVisible(can_connect);
         ui->action_host_telemetry->setVisible(has_host);
-        ui->action_desktop_connect->setVisible(can_connect);
-        ui->action_file_transfer_connect->setVisible(can_connect);
-        ui->action_chat_connect->setVisible(can_connect);
-        ui->action_system_info_connect->setVisible(can_connect);
-        ui->action_terminal_connect->setVisible(can_connect);
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_TEMP_HOSTS)
     {
@@ -2094,6 +2107,7 @@ void ManagementTab::updateActionsState()
             sidebar_item->itemType() == SidebarItem::LOCAL_GROUP ||
             sidebar_item->itemType() == SidebarItem::ROUTER_GROUP ||
             sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE ||
+            sidebar_item->itemType() == SidebarItem::ROUTER_HOSTS ||
             sidebar_item->itemType() == SidebarItem::ROUTER_TEMP_HOSTS;
     }
 
