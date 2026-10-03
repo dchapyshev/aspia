@@ -76,7 +76,7 @@ void PortableUserWorker::onPrepare()
             this, &PortableUserWorker::onNewRelayConnection);
 
     // The host and its GUI run in the session of the user who started the portable host.
-    user_session_ = new PortableUserSession(PortableHost::uiChannelId(), currentProcessSessionId(), this);
+    user_session_ = new PortableUserSession(PortableHost::uiIpcChannelId(), currentProcessSessionId(), this);
 
     connect(router_manager_, &RouterManager::sig_routerStateChanged,
             user_session_, &PortableUserSession::onRouterStateChanged);

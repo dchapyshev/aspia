@@ -56,6 +56,7 @@
 namespace {
 
 const char kLaunchOption[] = "--portable";
+const char kSessionOption[] = "--session";
 const char kExecutableName[] = "aspia_host.exe";
 const char kBaseDirectoryName[] = "AspiaPortable";
 const char kDataDirectoryName[] = "data";
@@ -279,7 +280,8 @@ bool runHost(const QString& run_dir, const QString& run_id)
         return false;
     }
 
-    const QString command_line = '"' + QDir::toNativeSeparators(file_path) + "\" --service";
+    const QString command_line = '"' + QDir::toNativeSeparators(file_path) + "\" --service " +
+        kSessionOption + ' ' + QString::number(currentProcessSessionId());
 
     ScopedScHandle service(CreateServiceW(manager, qUtf16Printable(serviceName(run_id)),
         kServiceDisplayName, SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS, SERVICE_DEMAND_START,
@@ -590,6 +592,20 @@ bool PortableHost::isActive()
 
 //--------------------------------------------------------------------------------------------------
 // static
+SessionId PortableHost::launcherSessionId()
+{
+    const QStringList arguments = QCoreApplication::arguments();
+    const qsizetype index = arguments.indexOf(QLatin1String(kSessionOption));
+    if (index == -1 || index + 1 >= arguments.size())
+        return kInvalidSessionId;
+
+    bool ok = false;
+    const SessionId session_id = arguments.at(index + 1).toULong(&ok);
+    return ok ? session_id : kInvalidSessionId;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 QString PortableHost::serviceName()
 {
     return ::serviceName(runId());
@@ -597,14 +613,14 @@ QString PortableHost::serviceName()
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString PortableHost::desktopAgentChannelId()
+QString PortableHost::desktopAgentIpcChannelId()
 {
     return QString::fromLatin1(kDesktopAgentChannelId) + '-' + runId();
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString PortableHost::uiChannelId()
+QString PortableHost::uiIpcChannelId()
 {
     return QString::fromLatin1(kHostUiChannelId) + '-' + runId();
 }

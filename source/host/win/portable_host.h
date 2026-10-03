@@ -21,6 +21,8 @@
 
 #include <QString>
 
+#include "base/session_id.h"
+
 class PortableHost
 {
 public:
@@ -39,14 +41,17 @@ public:
     // any non-elevated portable process in user mode).
     static bool isActive();
 
+    // Session of the launcher that started the temporary service of this process.
+    static SessionId launcherSessionId();
+
     // Name of the temporary service of the portable host this process belongs to.
     static QString serviceName();
 
     // IPC channel of this run's desktop agent (unique, for coexistence with the installed host).
-    static QString desktopAgentChannelId();
+    static QString desktopAgentIpcChannelId();
 
     // IPC channel of this run's UI (unique, for coexistence with the installed host).
-    static QString uiChannelId();
+    static QString uiIpcChannelId();
 
 private:
     Q_DISABLE_COPY_MOVE(PortableHost)

@@ -457,7 +457,7 @@ int main(int argc, char* argv[])
 
 #if defined(Q_OS_WINDOWS)
     if (PortableHost::isActive())
-        ui_channel_id = PortableHost::uiChannelId();
+        ui_channel_id = PortableHost::uiIpcChannelId();
 #endif // defined(Q_OS_WINDOWS)
 
     Application application(argc, argv, ui_channel_id);

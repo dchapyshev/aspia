@@ -58,10 +58,9 @@ void PortableServiceWorker::onPrepare()
     connect(router_manager_, &RouterManager::sig_credentialsChanged,
             this, &PortableServiceWorker::onCredentialsChanged);
 
-    desktop_manager_ = new DesktopManager(PortableHost::desktopAgentChannelId(), this);
-
-    // The service does not know the session of the launcher that starts the GUI.
-    user_session_ = new PortableUserSession(PortableHost::uiChannelId(), kInvalidSessionId, this);
+    desktop_manager_ = new DesktopManager(PortableHost::desktopAgentIpcChannelId(), this);
+    user_session_ = new PortableUserSession(
+        PortableHost::uiIpcChannelId(), PortableHost::launcherSessionId(), this);
 
     connect(router_manager_, &RouterManager::sig_routerStateChanged,
             user_session_, &PortableUserSession::onRouterStateChanged);

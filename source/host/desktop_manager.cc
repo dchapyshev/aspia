@@ -37,6 +37,7 @@
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
+#include "host/win/portable_host.h"
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
 
@@ -307,8 +308,15 @@ void DesktopManager::start()
         return;
     }
 
+    SessionId session_id = activeTargetSessionId();
+
+#if defined(Q_OS_WINDOWS)
+    if (PortableHost::isActive())
+        session_id = PortableHost::launcherSessionId();
+#endif // defined(Q_OS_WINDOWS)
+
     // Keep an agent running for the active session at all times, regardless of connected clients.
-    attach(FROM_HERE, activeTargetSessionId());
+    attach(FROM_HERE, session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
