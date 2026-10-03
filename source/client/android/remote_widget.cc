@@ -841,7 +841,7 @@ void RemoteWidget::rebuildTempHostRows()
     {
         QTreeWidgetItem* item = new QTreeWidgetItem(
             tree_temp_host_, { host.computer_name, QString("ID %1").arg(host.temp_id) });
-        item->setIcon(0, GuiApplication::svgIcon(":/img/computer.svg"));
+        item->setIcon(0, GuiApplication::svgIcon(host.portable ? ":/img/computer-qs.svg" : ":/img/computer.svg"));
         item->setData(0, kHostIdRole, QVariant::fromValue(host.temp_id));
     }
 

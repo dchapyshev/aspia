@@ -112,7 +112,7 @@ QVariant TempHostListModel::data(const QModelIndex& index, int role) const
         if (column != Column::ID)
             return QVariant();
 
-        return QIcon(":/img/computer.svg");
+        return QIcon(host->portable ? ":/img/computer-qs.svg" : ":/img/computer.svg");
     }
 
     if (role != Qt::DisplayRole)
