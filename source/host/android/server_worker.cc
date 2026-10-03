@@ -27,10 +27,8 @@
 #include <ctime>
 #include <optional>
 
-#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
-#include "base/net/address.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/host_id.h"
@@ -332,17 +330,7 @@ void ServerWorker::onClientFinished()
 //--------------------------------------------------------------------------------------------------
 void ServerWorker::onRouterStateChanged(const proto::user::RouterState& state)
 {
-    QString router;
-
-    if (state.state() != proto::user::RouterState::DISABLED)
-    {
-        Address address(kDefaultRouterHostTcpPort);
-        address.setHost(QString::fromStdString(state.host_name()));
-        address.setPort(static_cast<quint16>(state.host_port()));
-        router = address.toString();
-    }
-
-    emit sig_routerStateChanged(static_cast<int>(state.state()), router);
+    emit sig_routerStateChanged(static_cast<int>(state.state()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -502,7 +490,7 @@ void ServerWorker::disconnectFromRouter()
 
     // Reflect the offline state on the connection screen: the assigned ID and one-time password are no
     // longer valid, and a fresh password is issued on the next connect.
-    emit sig_routerStateChanged(static_cast<int>(proto::user::RouterState::DISABLED), QString());
+    emit sig_routerStateChanged(static_cast<int>(proto::user::RouterState::DISABLED));
     emit sig_credentialsChanged(QString(), QString());
 
     LOG(INFO) << "Router connection closed";

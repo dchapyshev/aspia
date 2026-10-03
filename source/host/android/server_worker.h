@@ -78,7 +78,7 @@ public slots:
 
 signals:
     void sig_credentialsChanged(const QString& host_id, const QString& password);
-    void sig_routerStateChanged(int state, const QString& router);
+    void sig_routerStateChanged(int state);
     void sig_connectedClientsChanged(const QList<ClientInfo>& clients);
 
 protected:

@@ -349,7 +349,7 @@ void AndroidMainWindow::onCredentialsChanged(const QString& host_id, const QStri
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::onRouterStateChanged(int state, const QString& router)
+void AndroidMainWindow::onRouterStateChanged(int state)
 {
     ConnectionWidget::RouterState mapped = ConnectionWidget::RouterState::DISABLED;
 
@@ -372,7 +372,7 @@ void AndroidMainWindow::onRouterStateChanged(int state, const QString& router)
             break;
     }
 
-    connection_->setRouterState(mapped, router);
+    connection_->setRouterState(mapped);
 }
 
 //--------------------------------------------------------------------------------------------------

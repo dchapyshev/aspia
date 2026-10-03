@@ -68,7 +68,7 @@ private slots:
 
     // Forwarded from the host server (queued from the I/O thread) to the connection screen.
     void onCredentialsChanged(const QString& host_id, const QString& password);
-    void onRouterStateChanged(int state, const QString& router);
+    void onRouterStateChanged(int state);
     void onConnectedClientsChanged(const QList<ServerWorker::ClientInfo>& clients);
 
 private:

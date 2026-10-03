@@ -268,10 +268,9 @@ void ConnectionWidget::setPassword(const QString& password)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ConnectionWidget::setRouterState(RouterState state, const QString& router)
+void ConnectionWidget::setRouterState(RouterState state)
 {
     router_state_ = state;
-    router_ = router;
     updateRouterRow();
 }
 
@@ -420,12 +419,10 @@ QString ConnectionWidget::routerStatusText() const
             return tr("Router is disabled");
 
         case RouterState::CONNECTING:
-            return router_.isEmpty() ? tr("Connecting to router...")
-                                     : tr("Connecting to router %1...").arg(router_);
+            return tr("Connecting to router...");
 
         case RouterState::CONNECTED:
-            return router_.isEmpty() ? tr("Connected to router")
-                                     : tr("Connected to router %1").arg(router_);
+            return tr("Connected to router");
 
         case RouterState::FAILED:
             return tr("Failed to connect to router");

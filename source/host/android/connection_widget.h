@@ -53,7 +53,7 @@ public:
 
     void setHostId(const QString& host_id);
     void setPassword(const QString& password);
-    void setRouterState(RouterState state, const QString& router = QString());
+    void setRouterState(RouterState state);
     void setConnectedClients(const QList<ServerWorker::ClientInfo>& clients);
 
     // The app bar action for this section (shares the host ID and one-time password).
@@ -98,7 +98,6 @@ private:
     QString host_id_ = QChar(0x2014);
     QString password_ = QChar(0x2014);
     RouterState router_state_ = RouterState::DISABLED;
-    QString router_;
 
     Q_DISABLE_COPY_MOVE(ConnectionWidget)
 };
