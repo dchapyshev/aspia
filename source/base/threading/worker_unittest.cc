@@ -447,6 +447,7 @@ TEST(WorkerTests, RequestReplyToFinishedCallerIsDropped)
     auto state_a = std::make_shared<WorkerTestState>();
     auto state_b = std::make_shared<WorkerTestState>();
 
+    std::atomic<bool> request_started{ false };
     std::atomic<bool> caller_finished{ false };
     std::atomic<bool> reply_released{ false };
     std::atomic<bool> reply_executed{ false };
@@ -473,6 +474,7 @@ TEST(WorkerTests, RequestReplyToFinishedCallerIsDropped)
             target->request(caller,
                 [&, caller]() -> int
                 {
+                    request_started = true;
                     caller_finished = waitFor([caller]() { return caller->thread()->isFinished(); });
                     return 0;
                 },
@@ -483,6 +485,9 @@ TEST(WorkerTests, RequestReplyToFinishedCallerIsDropped)
         state_b->on_stop = [&]() { reply_released = weak_marker.expired(); };
 
         manager.start();
+
+        // A stop that comes before the target runs the request drops the request unexecuted.
+        ASSERT_TRUE(waitFor([&]() { return request_started.load(); }));
     }
 
     EXPECT_TRUE(caller_finished);
