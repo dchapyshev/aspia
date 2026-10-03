@@ -634,8 +634,16 @@ void HostWindow::onRecordingStateChanged(bool started)
     else
         message = tr("Screen recording stopped.");
 
+    bool portable = false;
+#if defined(Q_OS_WINDOWS)
+    portable = PortableHost::isActive();
+#endif // defined(Q_OS_WINDOWS)
+
     if (tray_icon_)
-        tray_icon_->showMessage(tr("Aspia Host"), message, QIcon(":/img/aspia.ico"), 1200);
+    {
+        tray_icon_->showMessage(portable ? tr("Aspia Quick Support") : tr("Aspia Host"), message,
+                                QIcon(portable ? ":/img/aspia-qs.ico" : ":/img/aspia.ico"), 1200);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1058,8 +1066,13 @@ void HostWindow::createThemeMenu(const QString& current_theme)
 //--------------------------------------------------------------------------------------------------
 void HostWindow::createTrayIcon()
 {
+    bool portable = false;
+#if defined(Q_OS_WINDOWS)
+    portable = PortableHost::isActive();
+#endif // defined(Q_OS_WINDOWS)
+
     tray_icon_.reset(new QSystemTrayIcon(this));
-    tray_icon_->setIcon(QIcon(":/img/aspia.ico"));
+    tray_icon_->setIcon(QIcon(portable ? ":/img/aspia-qs.ico" : ":/img/aspia.ico"));
 
 #if !defined(Q_OS_MACOS)
     tray_icon_->setContextMenu(&tray_menu_);

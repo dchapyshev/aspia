@@ -31,6 +31,7 @@
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
+#include "host/win/portable_host.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace {
@@ -87,8 +88,15 @@ Application::Application(int& argc, char* argv[], const QString& ipc_channel_id)
     setOrganizationName("Aspia");
     setApplicationName("Host");
     setApplicationVersion(ASPIA_VERSION_STRING);
+
 #if !defined(Q_OS_MACOS)
-    setWindowIcon(QIcon(":/img/aspia.ico"));
+
+    bool portable = false;
+#if defined(Q_OS_WINDOWS)
+    portable = PortableHost::isActive();
+#endif // defined(Q_OS_WINDOWS)
+    setWindowIcon(QIcon(portable ? ":/img/aspia-qs.ico" : ":/img/aspia.ico"));
+
 #endif // !defined(Q_OS_MACOS)
 
     QAbstractEventDispatcher::instance()->installNativeEventFilter(EventFilter::instance());
