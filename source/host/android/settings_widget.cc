@@ -311,8 +311,8 @@ void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
     layout->addWidget(auto_confirm);
 
     Label* auto_confirm_hint = new Label(
-        tr("The screen capture request is confirmed automatically. The system window briefly appears "
-           "on the screen."), Label::Role::CAPTION);
+        tr("The screen capture request is confirmed automatically. It may not work on some devices."),
+        Label::Role::CAPTION);
     auto_confirm_hint->setWordWrap(true);
     layout->addWidget(auto_confirm_hint);
 
