@@ -27,10 +27,10 @@
 #include <QLocale>
 #include <QMenu>
 #include <QMouseEvent>
-#include <QPointer>
 #include <QStatusBar>
 #include <QUuid>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "client/database.h"
 #include "client/desktop/management/drag_and_drop.h"
@@ -365,17 +365,17 @@ bool LocalGroupWidget::eventFilter(QObject* watched, QEvent* event)
 void LocalGroupWidget::onHeaderContextMenu(const QPoint &pos)
 {
     QPointer<QHeaderView> header = ui->tree_host->header();
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
 
     for (int i = 1; i < header->count(); ++i)
     {
         ColumnAction* action = new ColumnAction(
-            model_->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), i, &menu);
+            model_->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), i, menu);
         action->setChecked(!header->isSectionHidden(i));
-        menu.addAction(action);
+        menu->addAction(action);
     }
 
-    ColumnAction* action = dynamic_cast<ColumnAction*>(menu.exec(header->viewport()->mapToGlobal(pos)));
+    ColumnAction* action = dynamic_cast<ColumnAction*>(menu->exec(header->viewport()->mapToGlobal(pos)));
     if (!action || !header)
         return;
 

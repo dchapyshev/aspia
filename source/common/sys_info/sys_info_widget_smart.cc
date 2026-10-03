@@ -22,6 +22,7 @@
 
 #include <algorithm>
 
+#include "base/auto_qpointer.h"
 #include "base/drive_smart.h"
 #include "base/time_types.h"
 #include "common/system_info_constants.h"
@@ -355,17 +356,17 @@ void SysInfoWidgetSmart::showContextMenu(QTreeWidget* tree, const QPoint& point)
     tree->setCurrentItem(current_item);
     context_tree_ = tree;
 
-    QMenu menu;
-    menu.addAction(ui->action_copy_row);
+    AutoQPointer<QMenu> menu(new QMenu(this));
+    menu->addAction(ui->action_copy_row);
 
     // The list of the drives is a single column: there is no name to tell from a value there.
     if (tree->columnCount() > 1)
     {
-        menu.addAction(ui->action_copy_name);
-        menu.addAction(ui->action_copy_value);
+        menu->addAction(ui->action_copy_name);
+        menu->addAction(ui->action_copy_value);
     }
 
-    menu.exec(tree->viewport()->mapToGlobal(point));
+    menu->exec(tree->viewport()->mapToGlobal(point));
 }
 
 //--------------------------------------------------------------------------------------------------

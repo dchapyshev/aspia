@@ -416,20 +416,20 @@ void ConfigDialog::onConnConfirmStateChanged(int state)
 //--------------------------------------------------------------------------------------------------
 void ConfigDialog::onUserContextMenu(const QPoint& point)
 {
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
 
     QTreeWidgetItem* current_item = ui->tree_users->itemAt(point);
     if (current_item)
     {
         ui->tree_users->setCurrentItem(current_item);
 
-        menu.addAction(ui->action_modify);
-        menu.addAction(ui->action_delete);
-        menu.addSeparator();
+        menu->addAction(ui->action_modify);
+        menu->addAction(ui->action_delete);
+        menu->addSeparator();
     }
 
-    menu.addAction(ui->action_add);
-    menu.exec(ui->tree_users->viewport()->mapToGlobal(point));
+    menu->addAction(ui->action_add);
+    menu->exec(ui->tree_users->viewport()->mapToGlobal(point));
 }
 
 //--------------------------------------------------------------------------------------------------

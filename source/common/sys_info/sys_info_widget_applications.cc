@@ -20,6 +20,7 @@
 
 #include <QMenu>
 
+#include "base/auto_qpointer.h"
 #include "common/system_info_constants.h"
 #include "common/sys_info/ui_sys_info_widget_applications.h"
 #include "proto/system_info.h"
@@ -130,11 +131,11 @@ void SysInfoWidgetApplications::onContextMenu(const QPoint& point)
 
     ui->tree->setCurrentItem(current_item);
 
-    QMenu menu;
-    menu.addAction(ui->action_copy_row);
-    menu.addAction(ui->action_copy_value);
-    menu.addSeparator();
-    menu.addAction(ui->action_search_in_google);
+    AutoQPointer<QMenu> menu(new QMenu(this));
+    menu->addAction(ui->action_copy_row);
+    menu->addAction(ui->action_copy_value);
+    menu->addSeparator();
+    menu->addAction(ui->action_search_in_google);
 
-    menu.exec(ui->tree->viewport()->mapToGlobal(point));
+    menu->exec(ui->tree->viewport()->mapToGlobal(point));
 }

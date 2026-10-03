@@ -205,20 +205,20 @@ void CredentialsTab::onContextMenu(const QPoint& pos)
 {
     const QModelIndex index = ui->tree_credentials->indexAt(pos);
 
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
 
     if (index.isValid())
     {
         ui->tree_credentials->setCurrentIndex(index);
-        menu.addAction(ui->action_edit);
-        menu.addAction(ui->action_delete);
+        menu->addAction(ui->action_edit);
+        menu->addAction(ui->action_delete);
     }
     else
     {
-        menu.addAction(ui->action_add);
+        menu->addAction(ui->action_add);
     }
 
-    menu.exec(ui->tree_credentials->viewport()->mapToGlobal(pos));
+    menu->exec(ui->tree_credentials->viewport()->mapToGlobal(pos));
 }
 
 //--------------------------------------------------------------------------------------------------

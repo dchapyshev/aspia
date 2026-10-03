@@ -31,11 +31,11 @@
 #include <QJsonObject>
 #include <QLabel>
 #include <QMenu>
-#include <QPointer>
 #include <QSaveFile>
 #include <QSplitter>
 #include <QStatusBar>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "client/router_controller.h"
 #include "client/desktop/file_dialog.h"
@@ -446,14 +446,14 @@ void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
     const QString value_text = peer_model_->index(index.row(), index.column()).data().toString();
     const QPoint global_pos = ui->tree_peers->viewport()->mapToGlobal(pos);
 
-    QMenu menu;
-    QAction* disconnect_action = menu.addAction(tr("Disconnect"));
-    menu.addSeparator();
-    QAction* copy_row_action = menu.addAction(tr("Copy Row"));
-    QAction* copy_value_action = menu.addAction(tr("Copy Value"));
+    AutoQPointer<QMenu> menu(new QMenu(this));
+    QAction* disconnect_action = menu->addAction(tr("Disconnect"));
+    menu->addSeparator();
+    QAction* copy_row_action = menu->addAction(tr("Copy Row"));
+    QAction* copy_value_action = menu->addAction(tr("Copy Value"));
 
     QPointer<RouterRelaysWidget> self(this);
-    QAction* selected = menu.exec(global_pos);
+    QAction* selected = menu->exec(global_pos);
     if (!selected || !self)
         return;
 
@@ -495,17 +495,17 @@ void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
 void RouterRelaysWidget::onHeaderContextMenu(const QPoint& pos)
 {
     QPointer<QHeaderView> header = ui->tree_relays->header();
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
 
     for (int i = 1; i < header->count(); ++i)
     {
         ColumnAction* action = new ColumnAction(
-            relay_model_->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), i, &menu);
+            relay_model_->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), i, menu);
         action->setChecked(!header->isSectionHidden(i));
-        menu.addAction(action);
+        menu->addAction(action);
     }
 
-    ColumnAction* action = dynamic_cast<ColumnAction*>(menu.exec(header->viewport()->mapToGlobal(pos)));
+    ColumnAction* action = dynamic_cast<ColumnAction*>(menu->exec(header->viewport()->mapToGlobal(pos)));
     if (!action || !header)
         return;
 

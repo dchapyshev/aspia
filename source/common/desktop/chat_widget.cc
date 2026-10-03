@@ -36,6 +36,7 @@
 #include <QTextStream>
 #include <QTimer>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "base/time_types.h"
 #include "base/files/base_paths.h"
@@ -160,17 +161,17 @@ ChatWidget::ChatWidget(QWidget* parent)
     {
         LOG(INFO) << "[ACTION] Show tool menu";
 
-        QMenu menu;
-        menu.addAction(action_save_chat_);
-        menu.addAction(action_clear_chat_);
+        AutoQPointer<QMenu> menu(new QMenu(this));
+        menu->addAction(action_save_chat_);
+        menu->addAction(action_clear_chat_);
 
-        menu.show();
+        menu->show();
 
         QPoint pos = ui->button_tools->mapToGlobal(ui->button_tools->rect().topRight());
-        pos.setX(pos.x() - menu.rect().width());
-        pos.setY(pos.y() - menu.rect().height());
+        pos.setX(pos.x() - menu->rect().width());
+        pos.setY(pos.y() - menu->rect().height());
 
-        menu.exec(pos);
+        menu->exec(pos);
     });
 
     ui->edit_message->setFocus();

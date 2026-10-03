@@ -20,6 +20,7 @@
 
 #include <QMenu>
 
+#include "base/auto_qpointer.h"
 #include "common/system_info_constants.h"
 #include "common/desktop/formatter.h"
 #include "common/sys_info/sys_info_report.h"
@@ -812,12 +813,12 @@ void SysInfoWidgetDmi::showContextMenu(QTreeWidget* tree, const QPoint& point)
     tree->setCurrentItem(current_item);
     context_tree_ = tree;
 
-    QMenu menu;
-    menu.addAction(ui->action_copy_row);
-    menu.addAction(ui->action_copy_name);
-    menu.addAction(ui->action_copy_value);
+    AutoQPointer<QMenu> menu(new QMenu(this));
+    menu->addAction(ui->action_copy_row);
+    menu->addAction(ui->action_copy_name);
+    menu->addAction(ui->action_copy_value);
 
-    menu.exec(tree->viewport()->mapToGlobal(point));
+    menu->exec(tree->viewport()->mapToGlobal(point));
 }
 
 //--------------------------------------------------------------------------------------------------

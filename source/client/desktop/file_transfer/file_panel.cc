@@ -23,8 +23,8 @@
 #include <QLineEdit>
 #include <QKeyEvent>
 #include <QMenu>
-#include <QPointer>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "client/file_error_code.h"
 #include "client/desktop/file_transfer/address_bar_model.h"
@@ -335,7 +335,7 @@ void FilePanel::onListContextMenu(const QPoint& point)
     if (!ui->address_bar->hasCurrentPath())
         return;
 
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
 
     std::unique_ptr<QAction> copy_action;
     std::unique_ptr<QAction> delete_action;
@@ -347,18 +347,18 @@ void FilePanel::onListContextMenu(const QPoint& point)
 
         copy_action->setEnabled(transfer_allowed_ && transfer_enabled_);
 
-        menu.addAction(copy_action.get());
-        menu.addAction(delete_action.get());
-        menu.addSeparator();
+        menu->addAction(copy_action.get());
+        menu->addAction(delete_action.get());
+        menu->addSeparator();
     }
 
     std::unique_ptr<QAction> add_folder_action(new QAction(
         QIcon(":/img/add-folder.svg"), tr("&Create Folder")));
 
-    menu.addAction(add_folder_action.get());
+    menu->addAction(add_folder_action.get());
 
     QPointer<FilePanel> self(this);
-    QAction* selected_action = menu.exec(ui->list->viewport()->mapToGlobal(point));
+    QAction* selected_action = menu->exec(ui->list->viewport()->mapToGlobal(point));
     if (!selected_action || !self)
         return;
 

@@ -22,9 +22,9 @@
 #include <QActionGroup>
 #include <QLabel>
 #include <QMenu>
-#include <QPointer>
 #include <QTimer>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "client/desktop/desktop/task_manager_settings.h"
@@ -521,17 +521,17 @@ void TaskManagerWindow::closeEvent(QCloseEvent* event)
 void TaskManagerWindow::onProcessHeaderContextMenu(const QPoint& pos)
 {
     QPointer<QHeaderView> header = ui->tree_processes->header();
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(ui->tree_processes->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(ui->tree_processes->headerItem()->text(i), i, menu);
         action->setChecked(!header->isSectionHidden(i));
-        menu.addAction(action);
+        menu->addAction(action);
     }
 
     ColumnAction* action = dynamic_cast<ColumnAction*>(
-        menu.exec(header->viewport()->mapToGlobal(pos)));
+        menu->exec(header->viewport()->mapToGlobal(pos)));
     if (!action || !header)
         return;
 
@@ -542,17 +542,17 @@ void TaskManagerWindow::onProcessHeaderContextMenu(const QPoint& pos)
 void TaskManagerWindow::onServiceHeaderContextMenu(const QPoint& pos)
 {
     QPointer<QHeaderView> header = ui->tree_services->header();
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(ui->tree_services->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(ui->tree_services->headerItem()->text(i), i, menu);
         action->setChecked(!header->isSectionHidden(i));
-        menu.addAction(action);
+        menu->addAction(action);
     }
 
     ColumnAction* action = dynamic_cast<ColumnAction*>(
-        menu.exec(header->viewport()->mapToGlobal(pos)));
+        menu->exec(header->viewport()->mapToGlobal(pos)));
     if (!action || !header)
         return;
 
@@ -563,17 +563,17 @@ void TaskManagerWindow::onServiceHeaderContextMenu(const QPoint& pos)
 void TaskManagerWindow::onUserHeaderContextMenu(const QPoint& pos)
 {
     QPointer<QHeaderView> header = ui->tree_users->header();
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(ui->tree_users->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(ui->tree_users->headerItem()->text(i), i, menu);
         action->setChecked(!header->isSectionHidden(i));
-        menu.addAction(action);
+        menu->addAction(action);
     }
 
     ColumnAction* action = dynamic_cast<ColumnAction*>(
-        menu.exec(header->viewport()->mapToGlobal(pos)));
+        menu->exec(header->viewport()->mapToGlobal(pos)));
     if (!action || !header)
         return;
 
@@ -587,11 +587,11 @@ void TaskManagerWindow::onProcessContextMenu(const QPoint& pos)
     if (current_item)
         ui->tree_processes->setCurrentItem(current_item);
 
-    QMenu menu;
-    menu.addAction(ui->action_end_task);
-    menu.addSeparator();
-    addUpdateItems(&menu);
-    menu.exec(ui->tree_processes->viewport()->mapToGlobal(pos));
+    AutoQPointer<QMenu> menu(new QMenu(this));
+    menu->addAction(ui->action_end_task);
+    menu->addSeparator();
+    addUpdateItems(menu);
+    menu->exec(ui->tree_processes->viewport()->mapToGlobal(pos));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -601,7 +601,7 @@ void TaskManagerWindow::onServiceContextMenu(const QPoint& pos)
     if (current_item)
         ui->tree_services->setCurrentItem(current_item);
 
-    QMenu menu;
+    AutoQPointer<QMenu> menu(new QMenu(this));
 
     bool enable_start = false;
     bool enable_stop = false;
@@ -619,11 +619,11 @@ void TaskManagerWindow::onServiceContextMenu(const QPoint& pos)
     ui->action_start_service->setEnabled(enable_start);
     ui->action_stop_service->setEnabled(enable_stop);
 
-    menu.addAction(ui->action_start_service);
-    menu.addAction(ui->action_stop_service);
-    menu.addSeparator();
-    addUpdateItems(&menu);
-    menu.exec(ui->tree_services->viewport()->mapToGlobal(pos));
+    menu->addAction(ui->action_start_service);
+    menu->addAction(ui->action_stop_service);
+    menu->addSeparator();
+    addUpdateItems(menu);
+    menu->exec(ui->tree_services->viewport()->mapToGlobal(pos));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -633,12 +633,12 @@ void TaskManagerWindow::onUserContextMenu(const QPoint& pos)
     if (current_item)
         ui->tree_users->setCurrentItem(current_item);
 
-    QMenu menu;
-    menu.addAction(ui->action_disconnect_user);
-    menu.addAction(ui->action_logoff_user);
-    menu.addSeparator();
-    addUpdateItems(&menu);
-    menu.exec(ui->tree_users->viewport()->mapToGlobal(pos));
+    AutoQPointer<QMenu> menu(new QMenu(this));
+    menu->addAction(ui->action_disconnect_user);
+    menu->addAction(ui->action_logoff_user);
+    menu->addSeparator();
+    addUpdateItems(menu);
+    menu->exec(ui->tree_users->viewport()->mapToGlobal(pos));
 }
 
 //--------------------------------------------------------------------------------------------------
