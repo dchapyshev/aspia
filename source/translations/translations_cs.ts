@@ -556,13 +556,13 @@ Přidané routery: %4</translation>
         <translation>Uložit údaje pro přihlášení</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="209"/>
-        <location filename="../client/desktop/authorization_dialog.cc" line="225"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="216"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="232"/>
         <source>Password cannot be empty.</source>
         <translation>Heslo nemůže být prázdné.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="218"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="225"/>
         <source>User name cannot be empty.</source>
         <translation>Uživatelské jméno nemůže být prázdné.</translation>
     </message>
@@ -723,54 +723,54 @@ Přidané routery: %4</translation>
         <translation>···</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="134"/>
-        <location filename="../common/desktop/chat_widget.cc" line="309"/>
+        <location filename="../common/desktop/chat_widget.cc" line="135"/>
+        <location filename="../common/desktop/chat_widget.cc" line="310"/>
         <source>Save chat...</source>
         <translation>Uložit chat...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="135"/>
-        <location filename="../common/desktop/chat_widget.cc" line="310"/>
+        <location filename="../common/desktop/chat_widget.cc" line="136"/>
+        <location filename="../common/desktop/chat_widget.cc" line="311"/>
         <source>Clear chat</source>
         <translation>Vymazat chat</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="206"/>
+        <location filename="../common/desktop/chat_widget.cc" line="207"/>
         <source>%1 is typing...</source>
         <translation>%1 píše...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="209"/>
+        <location filename="../common/desktop/chat_widget.cc" line="210"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation>Uživatel %1 se připojil k chatu (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="212"/>
+        <location filename="../common/desktop/chat_widget.cc" line="213"/>
         <source>User %1 has left the chat (%2)</source>
         <translation>Uživatel %1 opustil chat (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="215"/>
+        <location filename="../common/desktop/chat_widget.cc" line="216"/>
         <source>User %1 is logged in (%2)</source>
         <translation>Uživatel %1 je přihlášen (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="218"/>
+        <location filename="../common/desktop/chat_widget.cc" line="219"/>
         <source>User %1 is not logged in (%2)</source>
         <translation>Uživatel %1 není přihlášen (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="221"/>
+        <location filename="../common/desktop/chat_widget.cc" line="222"/>
         <source>There are no connected users (%1)</source>
         <translation>Nejsou připojeni žádní uživatelé (%1)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="431"/>
+        <location filename="../common/desktop/chat_widget.cc" line="432"/>
         <source>Unable to write file.</source>
         <translation>Nelze zapsat soubor.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/desktop/chat_widget.cc" line="447"/>
+        <location filename="../common/desktop/chat_widget.cc" line="448"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation>
             <numerusform>Zpráva je příliš dlouhá. Maximální délka zprávy je %n znak.</numerusform>
@@ -779,17 +779,17 @@ Přidané routery: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="370"/>
+        <location filename="../common/desktop/chat_widget.cc" line="371"/>
         <source>Save File</source>
         <translation>Uložit soubor</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="370"/>
+        <location filename="../common/desktop/chat_widget.cc" line="371"/>
         <source>TXT files (*.txt)</source>
         <translation>Soubory TXT (*.txt)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="383"/>
+        <location filename="../common/desktop/chat_widget.cc" line="384"/>
         <source>Could not open file for writing.</source>
         <translation>Nelze otevřít soubor pro zápis.</translation>
     </message>
@@ -1118,37 +1118,37 @@ Přidané routery: %4</translation>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="269"/>
+        <location filename="../client/desktop/client_window.cc" line="270"/>
         <source>Session started.</source>
         <translation>Relace zahájena.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="516"/>
+        <location filename="../client/desktop/client_window.cc" line="517"/>
         <source>The specified router is unavailable.</source>
         <translation>Zadaný router není dostupný.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="518"/>
+        <location filename="../client/desktop/client_window.cc" line="519"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Data routeru jsou poškozena. Upravte router a zadejte je znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="520"/>
+        <location filename="../client/desktop/client_window.cc" line="521"/>
         <source>The specified router is offline.</source>
         <translation>Zadaný router je offline.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="281"/>
+        <location filename="../client/desktop/client_window.cc" line="282"/>
         <source>Connecting to host %1...</source>
         <translation>Připojování k hostiteli %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="285"/>
+        <location filename="../client/desktop/client_window.cc" line="286"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Připojování k hostiteli %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="315"/>
+        <location filename="../client/desktop/client_window.cc" line="316"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Hostitel zatím není dostupný. Čekání na opětovné připojení...</translation>
     </message>
@@ -1158,27 +1158,27 @@ Přidané routery: %4</translation>
         <translation>Vypršel časový limit čekání na opětovné připojení k hostiteli.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="335"/>
+        <location filename="../client/desktop/client_window.cc" line="336"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Verze hostitele je novější než verze klienta (%1 &gt; %2). Aktualizujte prosím aplikaci.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="341"/>
+        <location filename="../client/desktop/client_window.cc" line="342"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Probíhá pokus o připojení v režimu kompatibility...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="527"/>
+        <location filename="../client/desktop/client_window.cc" line="528"/>
         <source>Requesting connection to the host...</source>
         <translation>Žádost o připojení k hostiteli...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="535"/>
+        <location filename="../client/desktop/client_window.cc" line="536"/>
         <source>Connection offer received.</source>
         <translation>Přijata nabídka připojení.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="552"/>
+        <location filename="../client/desktop/client_window.cc" line="553"/>
         <source>Error requesting connection via router.</source>
         <translation>Chyba při žádosti o připojení přes router.</translation>
     </message>
@@ -1544,13 +1544,10 @@ Přidané routery: %4</translation>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="251"/>
         <location filename="../host/ui/config_dialog.cc" line="577"/>
+        <location filename="../host/ui/config_dialog.cc" line="602"/>
+        <location filename="../host/ui/config_dialog.cc" line="637"/>
         <source>Export</source>
         <translation>Exportovat</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.cc" line="602"/>
-        <source>Export Installer</source>
-        <translation>Exportovat instalátor</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="602"/>
@@ -1579,66 +1576,61 @@ Přidané routery: %4</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="637"/>
-        <source>Export Quick Support</source>
-        <translation>Exportovat Quick Support</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.cc" line="638"/>
         <source>Executable files (*.exe)</source>
         <translation>Spustitelné soubory (*.exe)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="648"/>
+        <location filename="../host/ui/config_dialog.cc" line="647"/>
         <source>The portable version was successfully exported.</source>
         <translation>Přenosná verze byla úspěšně exportována.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="652"/>
+        <location filename="../host/ui/config_dialog.cc" line="651"/>
         <source>The portable version works only through a router. Set up the connection to the router and save the settings.</source>
         <translation>Přenosná verze funguje pouze přes router. Nastavte připojení k routeru a uložte nastavení.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="656"/>
+        <location filename="../host/ui/config_dialog.cc" line="655"/>
         <source>Unable to export the portable version.</source>
         <translation>Nelze exportovat přenosnou verzi.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="677"/>
+        <location filename="../host/ui/config_dialog.cc" line="676"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Konfiguraci nelze zapsat. Ujistěte se, že máte dostatečná práva k zápisu.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="693"/>
+        <location filename="../host/ui/config_dialog.cc" line="692"/>
         <source>An invalid update server address was entered.</source>
         <translation>Byla zadána neplatná adresa serveru aktualizací.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="701"/>
+        <location filename="../host/ui/config_dialog.cc" line="700"/>
         <source>Enter the update server address.</source>
         <translation>Zadejte adresu serveru aktualizací.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="711"/>
+        <location filename="../host/ui/config_dialog.cc" line="710"/>
         <source>An invalid public key was entered.</source>
         <translation>Byl zadán neplatný veřejný klíč.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="723"/>
+        <location filename="../host/ui/config_dialog.cc" line="722"/>
         <source>Incorrect router address entered.</source>
         <translation>Byla zadána nesprávná adresa routeru.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="733"/>
+        <location filename="../host/ui/config_dialog.cc" line="732"/>
         <source>Incorrect router public key entered.</source>
         <translation>Byl zadán nesprávný veřejný klíč routeru.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="896"/>
+        <location filename="../host/ui/config_dialog.cc" line="895"/>
         <source>Install</source>
         <translation>Nainstalovat</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="901"/>
+        <location filename="../host/ui/config_dialog.cc" line="900"/>
         <source>Remove</source>
         <translation>Odebrat</translation>
     </message>
@@ -1707,49 +1699,39 @@ Přidané routery: %4</translation>
         <translation>Přenos souborů</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="373"/>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Waiting for a connection</source>
         <translation>Čekání na připojení</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="373"/>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Stop</source>
         <translation>Zastavit</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="377"/>
+        <location filename="../host/android/connection_widget.cc" line="376"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>ID Aspia: %1
 Heslo: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="420"/>
+        <location filename="../host/android/connection_widget.cc" line="419"/>
         <source>Router is disabled</source>
         <translation>Router je zakázán</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="423"/>
+        <location filename="../host/android/connection_widget.cc" line="422"/>
         <source>Connecting to router...</source>
         <translation>Připojování k routeru...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="424"/>
-        <source>Connecting to router %1...</source>
-        <translation>Připojování k routeru %1...</translation>
-    </message>
-    <message>
-        <location filename="../host/android/connection_widget.cc" line="427"/>
+        <location filename="../host/android/connection_widget.cc" line="425"/>
         <source>Connected to router</source>
         <translation>Připojeno k routeru</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="428"/>
-        <source>Connected to router %1</source>
-        <translation>Připojeno k routeru %1</translation>
-    </message>
-    <message>
-        <location filename="../host/android/connection_widget.cc" line="431"/>
         <source>Failed to connect to router</source>
         <translation>Nepodařilo se připojit k routeru</translation>
     </message>
@@ -3918,9 +3900,9 @@ Nahrazené přihlašovací údaje: %2</translation>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="638"/>
-        <location filename="../host/ui/host_window.cc" line="881"/>
-        <location filename="../host/ui/host_window.cc" line="1154"/>
+        <location filename="../host/ui/host_window.cc" line="644"/>
+        <location filename="../host/ui/host_window.cc" line="889"/>
+        <location filename="../host/ui/host_window.cc" line="1167"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
@@ -3936,7 +3918,7 @@ Nahrazené přihlašovací údaje: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
-        <location filename="../host/ui/host_window.cc" line="1106"/>
+        <location filename="../host/ui/host_window.cc" line="1119"/>
         <source>Router is disabled</source>
         <translation>Router je zakázán</translation>
     </message>
@@ -4007,7 +3989,7 @@ Nahrazené přihlašovací údaje: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="335"/>
-        <location filename="../host/ui/host_window.cc" line="842"/>
+        <location filename="../host/ui/host_window.cc" line="850"/>
         <source>Hide</source>
         <translation>Skrýt</translation>
     </message>
@@ -4048,13 +4030,14 @@ Nahrazené přihlašovací údaje: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="180"/>
-        <location filename="../host/ui/host_window.cc" line="1154"/>
+        <location filename="../host/ui/host_window.cc" line="644"/>
+        <location filename="../host/ui/host_window.cc" line="1167"/>
         <source>Aspia Quick Support</source>
         <translation>Aspia Quick Support</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="339"/>
-        <location filename="../host/ui/host_window.cc" line="837"/>
+        <location filename="../host/ui/host_window.cc" line="845"/>
         <source>Show</source>
         <translation>Zobrazit</translation>
     </message>
@@ -4069,52 +4052,52 @@ Nahrazené přihlašovací údaje: %2</translation>
         <translation>Nahrávání obrazovky bylo zastaveno.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="826"/>
+        <location filename="../host/ui/host_window.cc" line="834"/>
         <source>Settings storage is unavailable.</source>
         <translation>Úložiště nastavení není k dispozici.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="892"/>
+        <location filename="../host/ui/host_window.cc" line="900"/>
         <source>Aspia Host will be removed from this computer. The settings of the host will be kept. Do you really want to uninstall the application?</source>
         <translation>Aspia Host bude z tohoto počítače odstraněn. Nastavení hostitele zůstane zachováno. Opravdu chcete aplikaci odinstalovat?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="904"/>
+        <location filename="../host/ui/host_window.cc" line="912"/>
         <source>Unable to uninstall the application.</source>
         <translation>Nelze odinstalovat aplikaci.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="931"/>
+        <location filename="../host/ui/host_window.cc" line="939"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Pokud ukončíte Aspia, nebude možné se k tomuto počítači připojit, dokud počítač nebo Aspia znovu ručně nezapnete. Opravdu chcete aplikaci ukončit?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1098"/>
+        <location filename="../host/ui/host_window.cc" line="1111"/>
         <source>Not connected to service</source>
         <translation>Nepřipojeno ke službě</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1111"/>
+        <location filename="../host/ui/host_window.cc" line="1124"/>
         <source>Connecting to router...</source>
         <translation>Připojování k routeru...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1116"/>
+        <location filename="../host/ui/host_window.cc" line="1129"/>
         <source>Connected to router</source>
         <translation>Připojeno k routeru</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1121"/>
+        <location filename="../host/ui/host_window.cc" line="1134"/>
         <source>Connection error</source>
         <translation>Chyba připojení</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1199"/>
+        <location filename="../host/ui/host_window.cc" line="1212"/>
         <source>IP addresses:</source>
         <translation>IP adresy:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1155"/>
+        <location filename="../host/ui/host_window.cc" line="1168"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
@@ -5196,156 +5179,161 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Automaticky obnovovat stav</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1059"/>
+        <location filename="../client/desktop/management_tab.cc" line="1074"/>
         <source>(copy)</source>
         <translation>(kopie)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1027"/>
-        <location filename="../client/desktop/management_tab.cc" line="1101"/>
-        <location filename="../client/desktop/management_tab.cc" line="2213"/>
+        <location filename="../client/desktop/management_tab.cc" line="1042"/>
+        <location filename="../client/desktop/management_tab.cc" line="1116"/>
+        <location filename="../client/desktop/management_tab.cc" line="2229"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Nepodařilo se načíst informace o hostiteli z místní databáze.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1064"/>
+        <location filename="../client/desktop/management_tab.cc" line="852"/>
+        <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
+        <translation>Typ relace &quot;%1&quot; není pro Quick Support k dispozici.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1079"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Nepodařilo se přidat hostitele do místní databáze.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1105"/>
+        <location filename="../client/desktop/management_tab.cc" line="1120"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit hostitele &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1115"/>
+        <location filename="../client/desktop/management_tab.cc" line="1130"/>
         <source>Unable to remove host</source>
         <translation>Nelze odebrat hostitele</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1173"/>
-        <location filename="../client/desktop/management_tab.cc" line="1233"/>
-        <location filename="../client/desktop/management_tab.cc" line="1259"/>
+        <location filename="../client/desktop/management_tab.cc" line="1193"/>
+        <location filename="../client/desktop/management_tab.cc" line="1253"/>
+        <location filename="../client/desktop/management_tab.cc" line="1279"/>
         <source>Copy Row</source>
         <translation>Kopírovat řádek</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1174"/>
-        <location filename="../client/desktop/management_tab.cc" line="1234"/>
-        <location filename="../client/desktop/management_tab.cc" line="1260"/>
+        <location filename="../client/desktop/management_tab.cc" line="1194"/>
+        <location filename="../client/desktop/management_tab.cc" line="1254"/>
+        <location filename="../client/desktop/management_tab.cc" line="1280"/>
         <source>Copy Value</source>
         <translation>Kopírovat hodnotu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1361"/>
+        <location filename="../client/desktop/management_tab.cc" line="1381"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit pracovní prostor &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1381"/>
+        <location filename="../client/desktop/management_tab.cc" line="1401"/>
         <source>Failed to delete the workspace.</source>
         <translation>Nepodařilo se odstranit pracovní prostor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1483"/>
+        <location filename="../client/desktop/management_tab.cc" line="1503"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Opravdu chcete odstranit skupinu &quot;%1&quot;? Hostitelé přiřazení k této skupině nebo jejím podskupinám budou přesunuti do kořene pracovního prostoru.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1501"/>
+        <location filename="../client/desktop/management_tab.cc" line="1521"/>
         <source>Failed to delete the group.</source>
         <translation>Nepodařilo se odstranit skupinu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1540"/>
+        <location filename="../client/desktop/management_tab.cc" line="1560"/>
         <source>Import Old Address Book</source>
         <translation>Importovat starý adresář</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1541"/>
+        <location filename="../client/desktop/management_tab.cc" line="1561"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>Adresář (*.aab);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1564"/>
-        <location filename="../client/desktop/management_tab.cc" line="1621"/>
+        <location filename="../client/desktop/management_tab.cc" line="1584"/>
+        <location filename="../client/desktop/management_tab.cc" line="1641"/>
         <source>The database is not available.</source>
         <translation>Databáze není k dispozici.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1570"/>
+        <location filename="../client/desktop/management_tab.cc" line="1590"/>
         <source>Create Backup</source>
         <translation>Vytvořit zálohu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1587"/>
+        <location filename="../client/desktop/management_tab.cc" line="1607"/>
         <source>There is nothing to save.</source>
         <translation>Není co uložit.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2208"/>
+        <location filename="../client/desktop/management_tab.cc" line="2224"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Data hostitele jsou poškozena. Upravte hostitele a zadejte je znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2229"/>
+        <location filename="../client/desktop/management_tab.cc" line="2245"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Data routeru jsou poškozena. Upravte router a zadejte je znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1599"/>
+        <location filename="../client/desktop/management_tab.cc" line="1619"/>
         <source>Failed to create the backup.</source>
         <translation>Nepodařilo se vytvořit zálohu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1627"/>
-        <location filename="../client/desktop/management_tab.cc" line="1653"/>
+        <location filename="../client/desktop/management_tab.cc" line="1647"/>
+        <location filename="../client/desktop/management_tab.cc" line="1673"/>
         <source>Restore from Backup</source>
         <translation>Obnovit ze zálohy</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1636"/>
+        <location filename="../client/desktop/management_tab.cc" line="1656"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Vše, co je nyní uloženo, bude odstraněno a nahrazeno obsahem zálohy. Pokračovat?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1655"/>
+        <location filename="../client/desktop/management_tab.cc" line="1675"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Záloha byla vytvořena v jiné instalaci. Zadejte hlavní heslo dané instalace.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1680"/>
+        <location filename="../client/desktop/management_tab.cc" line="1700"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Záloha neobsahuje žádná data, takže nebylo nic změněno.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1688"/>
+        <location filename="../client/desktop/management_tab.cc" line="1708"/>
         <source>The file is not a valid backup.</source>
         <translation>Soubor není platná záloha.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1692"/>
+        <location filename="../client/desktop/management_tab.cc" line="1712"/>
         <source>Failed to restore from the backup.</source>
         <translation>Nepodařilo se obnovit ze zálohy.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1571"/>
-        <location filename="../client/desktop/management_tab.cc" line="1628"/>
+        <location filename="../client/desktop/management_tab.cc" line="1591"/>
+        <location filename="../client/desktop/management_tab.cc" line="1648"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Záloha Aspia (*.aspia-backup);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1591"/>
+        <location filename="../client/desktop/management_tab.cc" line="1611"/>
         <source>Unable to write the file.</source>
         <translation>Nelze zapsat soubor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1684"/>
+        <location filename="../client/desktop/management_tab.cc" line="1704"/>
         <source>Unable to read the file.</source>
         <translation>Nelze číst soubor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1604"/>
+        <location filename="../client/desktop/management_tab.cc" line="1624"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5360,22 +5348,22 @@ Exportovaná uložená hesla: %4
 Exportované přihlašovací údaje: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1595"/>
+        <location filename="../client/desktop/management_tab.cc" line="1615"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Některé záznamy databáze jsou poškozeny. Opravte je nebo odstraňte a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1672"/>
+        <location filename="../client/desktop/management_tab.cc" line="1692"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Soubor nelze zadaným heslem dešifrovat.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1676"/>
+        <location filename="../client/desktop/management_tab.cc" line="1696"/>
         <source>Unsupported file format version.</source>
         <translation>Nepodporovaná verze formátu souboru.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1697"/>
+        <location filename="../client/desktop/management_tab.cc" line="1717"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5390,29 +5378,29 @@ Importovaná uložená hesla: %4
 Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2136"/>
-        <location filename="../client/desktop/management_tab.cc" line="2167"/>
+        <location filename="../client/desktop/management_tab.cc" line="2152"/>
+        <location filename="../client/desktop/management_tab.cc" line="2183"/>
         <source>Copy Link</source>
         <translation>Kopírovat odkaz</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2155"/>
-        <location filename="../client/desktop/management_tab.cc" line="2189"/>
+        <location filename="../client/desktop/management_tab.cc" line="2171"/>
+        <location filename="../client/desktop/management_tab.cc" line="2205"/>
         <source>Unable to create a link for this host.</source>
         <translation>Nelze vytvořit odkaz pro tohoto hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2230"/>
+        <location filename="../client/desktop/management_tab.cc" line="2246"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Router přidružený k tomuto hostiteli byl odstraněn. Upravte hostitele a vyberte jiný router, nebo přepněte na přímé připojení.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2237"/>
+        <location filename="../client/desktop/management_tab.cc" line="2253"/>
         <source>The host has an invalid host ID.</source>
         <translation>Hostitel má neplatné ID hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2246"/>
+        <location filename="../client/desktop/management_tab.cc" line="2262"/>
         <source>The host has an incorrect address.</source>
         <translation>Hostitel má nesprávnou adresu.</translation>
     </message>
@@ -6571,7 +6559,7 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="453"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="452"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n hostitel</numerusform>
@@ -6784,22 +6772,22 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Položek na stránku:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="366"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="364"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Opravdu chcete odpojit hostitele &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="391"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="389"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Opravdu chcete odpojit všechny hostitele?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="419"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="417"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Odstranění hostitele povede k odstranění celé jeho konfigurace pro připojení k routeru a aplikace bude na hostiteli odinstalována. Tato operace je nevratná. Opravdu to chcete provést?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="718"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="716"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n hostitel</numerusform>
@@ -6808,22 +6796,22 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="774"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="772"/>
         <source>Save File</source>
         <translation>Uložit soubor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="774"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="772"/>
         <source>JSON files (*.json)</source>
         <translation>Soubory JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="785"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="783"/>
         <source>Could not open file for writing.</source>
         <translation>Nelze otevřít soubor pro zápis.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="832"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="830"/>
         <source>Unable to write file.</source>
         <translation>Nelze zapsat soubor.</translation>
     </message>
@@ -6950,37 +6938,37 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="64"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="67"/>
         <source>Previous</source>
         <translation>Předchozí</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="68"/>
         <source>Previous page</source>
         <translation>Předchozí stránka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="69"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="72"/>
         <source>Next</source>
         <translation>Další</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="70"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="73"/>
         <source>Next page</source>
         <translation>Další stránka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="90"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="93"/>
         <source>Items per page:</source>
         <translation>Položek na stránku:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="213"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="219"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
         <translation>Schválení hostitele mu udělí trvalý přístup k routeru. Opravdu chcete schválit hostitele &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="220"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="226"/>
         <source>Approving hosts will give them permanent access to the router. Are you sure you want to approve %n hosts?</source>
         <translation>
             <numerusform>Schválení hostitele mu udělí trvalý přístup k routeru. Opravdu chcete schválit %n hostitele?</numerusform>
@@ -6989,12 +6977,12 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="260"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="266"/>
         <source>Failed to approve the host.</source>
         <translation>Nepodařilo se schválit hostitele.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="262"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="268"/>
         <source>Failed to approve %n of the selected hosts.</source>
         <translation>
             <numerusform>Nepodařilo se schválit %n z vybraných hostitelů.</numerusform>
@@ -7206,22 +7194,22 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>RouterUsersWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="230"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="229"/>
         <source>You cannot delete a built-in user.</source>
         <translation>Vestavěného uživatele nelze odstranit.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="235"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="234"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit uživatele &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="293"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="292"/>
         <source>Failed to get list of users.</source>
         <translation>Nepodařilo se získat seznam uživatelů.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="436"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="435"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n uživatel</numerusform>
@@ -7537,7 +7525,7 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>ServerWorker</name>
     <message>
-        <location filename="../host/android/server_worker.cc" line="564"/>
+        <location filename="../host/android/server_worker.cc" line="552"/>
         <source>Waiting for connections</source>
         <translation>Čekání na příchozí připojení</translation>
     </message>
@@ -8359,8 +8347,8 @@ Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="314"/>
-        <source>The screen capture request is confirmed automatically. The system window briefly appears on the screen.</source>
-        <translation>Žádost o zachytávání obrazovky se potvrdí automaticky. Systémové okno se na okamžik zobrazí na obrazovce.</translation>
+        <source>The screen capture request is confirmed automatically. It may not work on some devices.</source>
+        <translation>Žádost o zachytávání obrazovky se potvrdí automaticky. Na některých zařízeních to nemusí fungovat.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="319"/>
@@ -9637,133 +9625,133 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetCpu</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="162"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="163"/>
         <source>Processor Properties</source>
         <translation>Vlastnosti procesoru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="166"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="167"/>
         <source>Caches</source>
         <translation>Mezipaměti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="170"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="171"/>
         <source>Instruction Set</source>
         <translation>Instrukční sada</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="171"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="172"/>
         <source>Security Features</source>
         <translation>Funkce zabezpečení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="172"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="173"/>
         <source>Power Management Features</source>
         <translation>Funkce řízení spotřeby</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="173"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="174"/>
         <source>Virtualization Features</source>
         <translation>Funkce virtualizace</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="174"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="175"/>
         <source>Other Features</source>
         <translation>Další funkce</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="245"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="246"/>
         <source>Packages</source>
         <translation>Fyzické procesory</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="248"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="249"/>
         <source>Physical Cores</source>
         <translation>Fyzická jádra</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="251"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="252"/>
         <source>Logical Cores</source>
         <translation>Logická jádra</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="256"/>
         <source>Temperature</source>
         <translation>Teplota</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="256"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="257"/>
         <source>%1 C</source>
         <translation>%1 C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="278"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="279"/>
         <source>L%1 Data Cache</source>
         <translation>Datová mezipaměť L%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="283"/>
         <source>L%1 Instruction Cache</source>
         <translation>Instrukční mezipaměť L%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="287"/>
         <source>L%1 Cache</source>
         <translation>Mezipaměť L%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="294"/>
         <source>Size</source>
         <translation>Velikost</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="299"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="298"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="300"/>
         <source>Associativity</source>
         <translation>Asociativita</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="298"/>
         <source>Fully associative</source>
         <translation>Plně asociativní</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="299"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="300"/>
         <source>%1-way</source>
         <translation>%1cestná</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="302"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
         <source>Line Size</source>
         <translation>Velikost řádku</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="302"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
         <source>%1 bytes</source>
         <translation>%1 bajtů</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="305"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
         <source>Sets</source>
         <translation>Sady</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="308"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="309"/>
         <source>Shared By</source>
         <translation>Sdíleno mezi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="308"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="309"/>
         <source>%1 threads</source>
         <translation>%1 vláken</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="332"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="333"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="332"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="333"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
@@ -9771,1138 +9759,1138 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetDmi</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="218"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="831"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="219"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="832"/>
         <source>BIOS</source>
         <translation>BIOS</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="225"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="226"/>
         <source>Motherboard</source>
         <translation>Základní deska</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="232"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="233"/>
         <source>Chassis</source>
         <translation>Šasi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="239"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="240"/>
         <source>Processors</source>
         <translation>Procesory</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="246"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="247"/>
         <source>Caches</source>
         <translation>Mezipaměti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="254"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="255"/>
         <source>Port Connectors</source>
         <translation>Konektory portů</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="263"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="264"/>
         <source>System Slots</source>
         <translation>Systémové sloty</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="271"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="272"/>
         <source>On-board Devices</source>
         <translation>Integrovaná zařízení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="630"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="277"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="277"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="631"/>
         <source>OEM Strings</source>
         <translation>Řetězce OEM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="635"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="282"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="282"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="636"/>
         <source>Configuration Options</source>
         <translation>Možnosti konfigurace</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="289"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="290"/>
         <source>Memory Arrays</source>
         <translation>Paměťová pole</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="298"/>
         <source>Memory Devices</source>
         <translation>Paměťová zařízení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="306"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="307"/>
         <source>Memory Errors</source>
         <translation>Chyby paměti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="315"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="316"/>
         <source>Memory Array Addresses</source>
         <translation>Adresy paměťových polí</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="325"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="326"/>
         <source>Memory Device Addresses</source>
         <translation>Adresy paměťových zařízení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="333"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="334"/>
         <source>Voltage Probes</source>
         <translation>Napěťové sondy</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="341"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="342"/>
         <source>Cooling Devices</source>
         <translation>Chladicí zařízení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="351"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="352"/>
         <source>Temperature Probes</source>
         <translation>Teplotní sondy</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="360"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="361"/>
         <source>Current Probes</source>
         <translation>Proudové sondy</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="729"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="364"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="364"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="730"/>
         <source>System Boot</source>
         <translation>Spuštění systému</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="371"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="372"/>
         <source>Additional Information</source>
         <translation>Další informace</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="380"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="381"/>
         <source>TPM Device</source>
         <translation>Zařízení TPM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="389"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="390"/>
         <source>Processor Additional Information</source>
         <translation>Další informace o procesoru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="398"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="399"/>
         <source>Firmware Inventory</source>
         <translation>Inventář firmwaru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="404"/>
         <source>Misc</source>
         <translation>Různé</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="746"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="404"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="747"/>
         <source>DMI Properties</source>
         <translation>Vlastnosti DMI</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="841"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="842"/>
         <source>Vendor</source>
         <translation>Dodavatel</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="844"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="905"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="962"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1028"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1903"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="845"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="906"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="963"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1029"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1904"/>
         <source>Version</source>
         <translation>Verze</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="847"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1915"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="848"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1916"/>
         <source>Release Date</source>
         <translation>Datum vydání</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="851"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="852"/>
         <source>Address</source>
         <translation>Adresa</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="856"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="857"/>
         <source>ROM Size</source>
         <translation>Velikost ROM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="859"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="860"/>
         <source>Revision</source>
         <translation>Revize</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="863"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="864"/>
         <source>Firmware Revision</source>
         <translation>Revize firmwaru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="873"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1275"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1874"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="874"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1276"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1875"/>
         <source>Characteristics</source>
         <translation>Charakteristiky</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="889"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="890"/>
         <source>Board %1</source>
         <translation>Deska %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="899"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="954"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1025"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1552"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1900"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="900"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="955"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1026"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1553"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1901"/>
         <source>Manufacturer</source>
         <translation>Výrobce</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="902"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="903"/>
         <source>Product</source>
         <translation>Produkt</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="908"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="965"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1085"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1603"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="909"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="966"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1086"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1604"/>
         <source>Serial Number</source>
         <translation>Sériové číslo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="911"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="968"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1088"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1606"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="912"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="969"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1089"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1607"/>
         <source>Asset Tag</source>
         <translation>Inventární číslo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="914"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="915"/>
         <source>Location in Chassis</source>
         <translation>Umístění v šasi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="917"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="957"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1034"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1130"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1249"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1304"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1450"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1558"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1650"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="918"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="958"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1035"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1131"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1250"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1305"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1451"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1559"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1651"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <source>Hosting Board</source>
         <translation>Hostitelská deska</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1103"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1873"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1020"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1103"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1547"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1873"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
         <source>Requires Daughter Board</source>
         <translation>Vyžaduje dceřinou desku</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <source>Removable</source>
         <translation>Odnímatelné</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
         <source>Replaceable</source>
         <translation>Vyměnitelné</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
         <source>Hot Swappable</source>
         <translation>Vyměnitelné za provozu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="928"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="929"/>
         <source>Features</source>
         <translation>Funkce</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="944"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="945"/>
         <source>Chassis %1</source>
         <translation>Šasi %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
         <source>Lock Present</source>
         <translation>Zámek přítomen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="971"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="972"/>
         <source>SKU Number</source>
         <translation>Číslo SKU</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="974"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="975"/>
         <source>Boot-up State</source>
         <translation>Stav při spuštění</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="978"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="979"/>
         <source>Power Supply State</source>
         <translation>Stav napájecího zdroje</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="983"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="984"/>
         <source>Thermal State</source>
         <translation>Tepelný stav</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="986"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="987"/>
         <source>Security Status</source>
         <translation>Stav zabezpečení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="990"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
         <source>Height</source>
         <translation>Výška</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="990"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
         <source>%1 U</source>
         <translation>%1 U</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="993"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="994"/>
         <source>Power Cords</source>
         <translation>Napájecí kabely</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1009"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1010"/>
         <source>Processor %1</source>
         <translation>Procesor %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1020"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1547"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
         <source>Installed</source>
         <translation>Nainstalováno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1031"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1032"/>
         <source>Family</source>
         <translation>Rodina</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1037"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1401"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1453"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1038"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1402"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1454"/>
         <source>Status</source>
         <translation>Stav</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1041"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1125"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1042"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1126"/>
         <source>Socket Designation</source>
         <translation>Označení patice</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1046"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1047"/>
         <source>Socket</source>
         <translation>Patice</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1049"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1050"/>
         <source>Socket Type</source>
         <translation>Typ patice</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1052"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1263"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1918"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1053"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1264"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1919"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1055"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
         <source>Voltage</source>
         <translation>Napětí</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1055"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1059"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
         <source>External Clock</source>
         <translation>Externí takt</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1059"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1064"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1068"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1064"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
         <source>Max Speed</source>
         <translation>Maximální frekvence</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1068"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
         <source>Current Speed</source>
         <translation>Aktuální frekvence</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1073"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1074"/>
         <source>Core Count</source>
         <translation>Počet jader</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1076"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1077"/>
         <source>Cores Enabled</source>
         <translation>Povolená jádra</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1079"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1080"/>
         <source>Thread Count</source>
         <translation>Počet vláken</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1082"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1083"/>
         <source>Threads Enabled</source>
         <translation>Povolená vlákna</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1091"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1600"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1092"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1601"/>
         <source>Part Number</source>
         <translation>Číslo dílu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <source>64-bit Capable</source>
         <translation>Podpora 64 bitů</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
         <source>Multi-Core</source>
         <translation>Vícejádrový</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
         <source>Hardware Thread</source>
         <translation>Hardwarové vlákno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1097"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
         <source>Execute Protection</source>
         <translation>Ochrana proti spuštění</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
         <source>Enhanced Virtualization</source>
         <translation>Rozšířená virtualizace</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
         <source>Power/Performance Control</source>
         <translation>Řízení napájení/výkonu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1115"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1116"/>
         <source>L%1 Cache</source>
         <translation>Mezipaměť L%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1127"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1128"/>
         <source>Level</source>
         <translation>Úroveň</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1133"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1134"/>
         <source>Installed Size</source>
         <translation>Nainstalovaná velikost</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1136"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1137"/>
         <source>Maximum Size</source>
         <translation>Maximální velikost</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1139"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1398"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1496"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1539"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1140"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1399"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1497"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1540"/>
         <source>Location</source>
         <translation>Umístění</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1142"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1143"/>
         <source>Operational Mode</source>
         <translation>Provozní režim</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1145"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1146"/>
         <source>SRAM Type</source>
         <translation>Typ SRAM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1149"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1150"/>
         <source>Supported SRAM Types</source>
         <translation>Podporované typy SRAM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1155"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1156"/>
         <source>Error Correction Type</source>
         <translation>Typ korekce chyb</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1160"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1161"/>
         <source>Associativity</source>
         <translation>Asociativita</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1164"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1570"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
         <source>Speed</source>
         <translation>Rychlost</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1164"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
         <source>%1 ns</source>
         <translation>%1 ns</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
         <source>Enabled</source>
         <translation>Povoleno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
         <source>Socketed</source>
         <translation>V patici</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1186"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1187"/>
         <source>Port %1</source>
         <translation>Port %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1196"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1197"/>
         <source>Port Type</source>
         <translation>Typ portu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1200"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1201"/>
         <source>Internal Designator</source>
         <translation>Interní označení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1206"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1207"/>
         <source>Internal Connector Type</source>
         <translation>Typ interního konektoru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1212"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1213"/>
         <source>External Designator</source>
         <translation>Externí označení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1218"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1219"/>
         <source>External Connector Type</source>
         <translation>Typ externího konektoru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1236"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1237"/>
         <source>Slot %1</source>
         <translation>Slot %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1246"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1247"/>
         <source>Designation</source>
         <translation>Označení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1252"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1253"/>
         <source>Data Bus Width</source>
         <translation>Šířka datové sběrnice</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1255"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1256"/>
         <source>Current Usage</source>
         <translation>Aktuální využití</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1258"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1259"/>
         <source>Length</source>
         <translation>Délka</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1261"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1311"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1262"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1312"/>
         <source>Bus Address</source>
         <translation>Adresa sběrnice</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <source>5 V Provided</source>
         <translation>Poskytováno 5 V</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <source>3.3 V Provided</source>
         <translation>Poskytováno 3,3 V</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <source>Shared</source>
         <translation>Sdíleno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <source>PME Signal</source>
         <translation>Signál PME</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <source>Hot Plug</source>
         <translation>Připojení za provozu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
         <source>SMBus Signal</source>
         <translation>Signál SMBus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
         <source>Bifurcation</source>
         <translation>Bifurkace</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1291"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1437"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1529"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1844"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1292"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1438"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1530"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1845"/>
         <source>Device %1</source>
         <translation>Zařízení %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1301"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1395"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1447"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1854"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1302"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1396"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1448"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1855"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1308"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1309"/>
         <source>Type Instance</source>
         <translation>Instance typu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1325"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1326"/>
         <source>String %1</source>
         <translation>Řetězec %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1339"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1340"/>
         <source>Option %1</source>
         <translation>Možnost %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1357"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1358"/>
         <source>Probe %1</source>
         <translation>Sonda %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1368"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1369"/>
         <source>mV</source>
         <translation>mV</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1370"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1371"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1372"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1373"/>
         <source>mA</source>
         <translation>mA</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1404"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1405"/>
         <source>Nominal Value</source>
         <translation>Nominální hodnota</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1407"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1408"/>
         <source>Maximum Value</source>
         <translation>Maximální hodnota</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1410"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1411"/>
         <source>Minimum Value</source>
         <translation>Minimální hodnota</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1413"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1414"/>
         <source>Tolerance</source>
         <translation>Tolerance</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1416"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1678"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1417"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
         <source>Resolution</source>
         <translation>Rozlišení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1420"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1421"/>
         <source>Accuracy</source>
         <translation>Přesnost</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1457"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1458"/>
         <source>Cooling Unit Group</source>
         <translation>Skupina chladicí jednotky</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1460"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
         <source>Nominal Speed</source>
         <translation>Nominální otáčky</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1460"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
         <source>%1 rpm</source>
         <translation>%1 ot./min</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1470"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1471"/>
         <source>Boot Status</source>
         <translation>Stav spouštění</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1486"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1487"/>
         <source>Array %1</source>
         <translation>Pole %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1499"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1500"/>
         <source>Use</source>
         <translation>Použití</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1503"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1504"/>
         <source>Error Correction</source>
         <translation>Korekce chyb</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1509"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1510"/>
         <source>Maximum Capacity</source>
         <translation>Maximální kapacita</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1513"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1514"/>
         <source>Number of Devices</source>
         <translation>Počet zařízení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1542"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1543"/>
         <source>Bank</source>
         <translation>Banka</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1555"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1710"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1749"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1556"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1711"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1750"/>
         <source>Size</source>
         <translation>Velikost</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1561"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1562"/>
         <source>Type Detail</source>
         <translation>Detail typu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1564"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1565"/>
         <source>Form Factor</source>
         <translation>Provedení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1567"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1568"/>
         <source>Technology</source>
         <translation>Technologie</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1570"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1576"/>
         <source>%1 MT/s</source>
         <translation>%1 MT/s</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1574"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
         <source>Configured Speed</source>
         <translation>Nakonfigurovaná rychlost</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1579"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
         <source>Total Width</source>
         <translation>Celková šířka</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1579"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1582"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
         <source>%1 bit</source>
         <translation>%1 bit</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1582"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
         <source>Data Width</source>
         <translation>Šířka dat</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1585"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1586"/>
         <source>Rank</source>
         <translation>Rank</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1588"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
         <source>Minimum Voltage</source>
         <translation>Minimální napětí</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1588"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1591"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1597"/>
         <source>%1 mV</source>
         <translation>%1 mV</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1591"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
         <source>Maximum Voltage</source>
         <translation>Maximální napětí</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1595"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
         <source>Configured Voltage</source>
         <translation>Nakonfigurované napětí</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1610"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1863"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1611"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1864"/>
         <source>Firmware Version</source>
         <translation>Verze firmwaru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1616"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1617"/>
         <source>Non-volatile Size</source>
         <translation>Velikost energeticky nezávislé paměti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1622"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1623"/>
         <source>Volatile Size</source>
         <translation>Velikost energeticky závislé paměti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1627"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1628"/>
         <source>Cache Size</source>
         <translation>Velikost mezipaměti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1630"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1631"/>
         <source>Logical Size</source>
         <translation>Logická velikost</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1640"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1641"/>
         <source>Record %1</source>
         <translation>Záznam %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1653"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1654"/>
         <source>Granularity</source>
         <translation>Granularita</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1656"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1657"/>
         <source>Operation</source>
         <translation>Operace</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1661"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1662"/>
         <source>Vendor Syndrome</source>
         <translation>Syndrom dodavatele</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1667"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1668"/>
         <source>Memory Array Address</source>
         <translation>Adresa paměťového pole</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1673"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1674"/>
         <source>Device Address</source>
         <translation>Adresa zařízení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1678"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1959"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
         <source>%1 bytes</source>
         <translation>%1 bajtů</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1691"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1729"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1692"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1730"/>
         <source>Range %1</source>
         <translation>Rozsah %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1701"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1702"/>
         <source>Array</source>
         <translation>Pole</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1706"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1745"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1707"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1746"/>
         <source>Starting Address</source>
         <translation>Počáteční adresa</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1708"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1747"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1709"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1748"/>
         <source>Ending Address</source>
         <translation>Koncová adresa</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1715"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1716"/>
         <source>Partition Width</source>
         <translation>Šířka oddílu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1740"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1741"/>
         <source>Device</source>
         <translation>Zařízení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1753"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1754"/>
         <source>Partition Row Position</source>
         <translation>Pozice řádku oddílu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1757"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1758"/>
         <source>Interleave Position</source>
         <translation>Pozice prokládání</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1763"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1764"/>
         <source>Interleaved Data Depth</source>
         <translation>Hloubka prokládaných dat</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1778"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1813"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1779"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1814"/>
         <source>Entry %1</source>
         <translation>Položka %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1788"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1789"/>
         <source>String</source>
         <translation>Řetězec</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1791"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1792"/>
         <source>Value</source>
         <translation>Hodnota</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1794"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1795"/>
         <source>Referenced Handle</source>
         <translation>Odkazovaný popisovač</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1796"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1797"/>
         <source>Referenced Offset</source>
         <translation>Odkazovaný offset</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1825"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1826"/>
         <source>Processor</source>
         <translation>Procesor</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1828"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1829"/>
         <source>Architecture</source>
         <translation>Architektura</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1857"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1858"/>
         <source>Vendor ID</source>
         <translation>ID dodavatele</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1860"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1861"/>
         <source>Specification Version</source>
         <translation>Verze specifikace</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1867"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
         <source>Configurable by Firmware</source>
         <translation>Konfigurovatelné firmwarem</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
         <source>Configurable by Software</source>
         <translation>Konfigurovatelné softwarem</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
         <source>Configurable by OEM</source>
         <translation>Konfigurovatelné výrobcem (OEM)</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1887"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1888"/>
         <source>Firmware %1</source>
         <translation>Firmware %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1897"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1898"/>
         <source>Name</source>
         <translation>Název</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1906"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1907"/>
         <source>Version Format</source>
         <translation>Formát verze</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1910"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1911"/>
         <source>Lowest Supported Version</source>
         <translation>Nejnižší podporovaná verze</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1921"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1922"/>
         <source>ID Format</source>
         <translation>Formát ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1924"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1925"/>
         <source>State</source>
         <translation>Stav</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1927"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1928"/>
         <source>Image Size</source>
         <translation>Velikost bitové kopie</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <source>Updatable</source>
         <translation>Aktualizovatelné</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Write-protected</source>
         <translation>Chráněno proti zápisu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1936"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1937"/>
         <source>Component %1</source>
         <translation>Komponenta %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1941"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1942"/>
         <source>Associated Components</source>
         <translation>Přidružené komponenty</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1953"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1954"/>
         <source>SMBIOS Version</source>
         <translation>Verze SMBIOS</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1956"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1957"/>
         <source>Structures</source>
         <translation>Struktury</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1959"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
         <source>Structures Size</source>
         <translation>Velikost struktur</translation>
     </message>
@@ -10910,68 +10898,68 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetDrivers</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="132"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="133"/>
         <source>Continue Pending</source>
         <translation>Čeká na pokračování</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="134"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="135"/>
         <source>Pause Pending</source>
         <translation>Čeká na pozastavení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="136"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="137"/>
         <source>Paused</source>
         <translation>Pozastaveno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="139"/>
         <source>Running</source>
         <translation>Spuštěno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="140"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="141"/>
         <source>Start Pending</source>
         <translation>Čeká na spuštění</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="142"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="143"/>
         <source>Stop Pending</source>
         <translation>Čeká na zastavení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="145"/>
         <source>Stopped</source>
         <translation>Zastaveno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="146"/>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="147"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="169"/>
         <source>Unknown</source>
         <translation>Neznámý</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="158"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="159"/>
         <source>Auto Start</source>
         <translation>Automaticky</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="160"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="161"/>
         <source>Demand Start</source>
         <translation>Na vyžádání</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="162"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="163"/>
         <source>Disabled</source>
         <translation>Zakázáno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="164"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="165"/>
         <source>Boot Start</source>
         <translation>Boot</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="166"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="167"/>
         <source>System Start</source>
         <translation>Systém</translation>
     </message>
@@ -10979,77 +10967,77 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetDrives</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="159"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="160"/>
         <source>Path</source>
         <translation>Cesta</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="162"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="163"/>
         <source>Model</source>
         <translation>Model</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="165"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="166"/>
         <source>Serial Number</source>
         <translation>Sériové číslo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="169"/>
         <source>Firmware Revision</source>
         <translation>Revize firmwaru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="172"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="173"/>
         <source>Bus Type</source>
         <translation>Typ sběrnice</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="175"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="176"/>
         <source>Size</source>
         <translation>Velikost</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="180"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="181"/>
         <source>Media Type</source>
         <translation>Typ média</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="183"/>
         <source>Solid State</source>
         <translation>SSD</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="183"/>
         <source>Rotating</source>
         <translation>Rotační</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="187"/>
         <source>Rotation Rate</source>
         <translation>Rychlost otáčení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="187"/>
         <source>%1 RPM</source>
         <translation>%1 ot./min</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="190"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="191"/>
         <source>Cache Size</source>
         <translation>Velikost mezipaměti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="195"/>
         <source>Removable</source>
         <translation>Vyměnitelný</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="195"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="195"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
@@ -11057,47 +11045,47 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetEventLogs</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="68"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="69"/>
         <source>Application</source>
         <translation>Aplikace</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="70"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="71"/>
         <source>Security</source>
         <translation>Zabezpečení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="72"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="73"/>
         <source>System</source>
         <translation>Systém</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="308"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="309"/>
         <source>Information</source>
         <translation>Informace</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="310"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="311"/>
         <source>Warning</source>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="312"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="313"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="314"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="315"/>
         <source>Audit Success</source>
         <translation>Úspěšný audit</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="316"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="317"/>
         <source>Audit Failure</source>
         <translation>Neúspěšný audit</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="318"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="319"/>
         <source>Unknown</source>
         <translation>Neznámý</translation>
     </message>
@@ -11105,37 +11093,37 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetLicenses</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="139"/>
         <source>License Type</source>
         <translation>Typ licence</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="141"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="142"/>
         <source>License Version</source>
         <translation>Verze licence</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="145"/>
         <source>Organization</source>
         <translation>Organizace</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="147"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="148"/>
         <source>Owner</source>
         <translation>Vlastník</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="150"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="151"/>
         <source>Product ID</source>
         <translation>ID produktu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="153"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="154"/>
         <source>Product Key</source>
         <translation>Kód Product Key</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="157"/>
         <source>Unknown Field</source>
         <translation>Neznámé pole</translation>
     </message>
@@ -11143,56 +11131,56 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetLocalUsers</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="147"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="148"/>
         <source>Full Name</source>
         <translation>Celé jméno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="150"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="151"/>
         <source>Home Directory</source>
         <translation>Domovská složka</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <source>Disabled</source>
         <translation>Zakázáno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="155"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="155"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Password Expired</source>
         <translation>Platnost hesla vypršela</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="155"/>
         <source>Don&apos;t Expire Password</source>
         <translation>Heslo nikdy nevyprší</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="158"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="159"/>
         <source>Never</source>
         <translation>Nikdy</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="162"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="163"/>
         <source>Last Logon</source>
         <translation>Poslední přihlášení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="174"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="175"/>
         <source>Groups</source>
         <translation>Skupiny</translation>
     </message>
@@ -11200,153 +11188,153 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetMonitors</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="155"/>
         <source>Monitor Name</source>
         <translation>Název monitoru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="157"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="158"/>
         <source>Manufacturer Name</source>
         <translation>Název výrobce</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="160"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="161"/>
         <source>Monitor ID</source>
         <translation>ID monitoru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="163"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="164"/>
         <source>Serial Number</source>
         <translation>Sériové číslo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="167"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="168"/>
         <source>EDID Version</source>
         <translation>Verze EDID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="173"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="174"/>
         <source>Date Of Manufacture</source>
         <translation>Datum výroby</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="174"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="175"/>
         <source>Week %1 / %2</source>
         <translation>Týden %1 / %2</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="179"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="180"/>
         <source>Gamma</source>
         <translation>Gama</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="183"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>Image Size</source>
         <translation>Velikost obrazu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="184"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="185"/>
         <source>%1x%2 cm</source>
         <translation>%1x%2 cm</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="193"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="194"/>
         <source>Diagonal Size</source>
         <translation>Úhlopříčka</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="198"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="199"/>
         <source>Resolution</source>
         <translation>Rozlišení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="205"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="206"/>
         <source>Horizontal Frequency</source>
         <translation>Horizontální frekvence</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="206"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="207"/>
         <source>%1 - %2 kHz</source>
         <translation>%1 - %2 kHz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="212"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="213"/>
         <source>Vertical Frequency</source>
         <translation>Vertikální frekvence</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="213"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="214"/>
         <source>%1 - %2 Hz</source>
         <translation>%1 - %2 Hz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="219"/>
         <source>Pixel Clock</source>
         <translation>Pixelový takt</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="219"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="222"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="222"/>
         <source>Maximum Pixel Clock</source>
         <translation>Maximální pixelový takt</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="223"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="224"/>
         <source>Input Signal Type</source>
         <translation>Typ vstupního signálu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="227"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="228"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="229"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="232"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="227"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="228"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="229"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="232"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="234"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="235"/>
         <source>Supported Features</source>
         <translation>Podporované funkce</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="243"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="244"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="247"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="248"/>
         <source>Supported Video Modes</source>
         <translation>Podporované režimy videa</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="294"/>
         <source>Digital</source>
         <translation>Digitální</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="295"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="296"/>
         <source>Analog</source>
         <translation>Analogový</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="298"/>
         <source>Unknown</source>
         <translation>Neznámý</translation>
     </message>
@@ -11354,67 +11342,67 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetNetAdapters</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="140"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="141"/>
         <source>Adapter Name</source>
         <translation>Název adaptéru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="143"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="144"/>
         <source>Interface Type</source>
         <translation>Typ rozhraní</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="147"/>
         <source>Connection Speed</source>
         <translation>Rychlost připojení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
         <source>MAC Address</source>
         <translation>MAC adresa</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="152"/>
         <source>DHCP Enabled</source>
         <translation>DHCP povoleno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="152"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="152"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="157"/>
         <source>DHCP Server #%1</source>
         <translation>Server DHCP č. %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="157"/>
         <source>DHCP Server</source>
         <translation>Server DHCP</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="169"/>
         <source>Address #%1</source>
         <translation>Adresa č. %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="169"/>
         <source>Address</source>
         <translation>Adresa</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="177"/>
         <source>Gateway #%1</source>
         <translation>Brána č. %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="177"/>
         <source>Gateway</source>
         <translation>Brána</translation>
     </message>
@@ -11422,32 +11410,32 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetNetShares</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="133"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="134"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="136"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="137"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="139"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="140"/>
         <source>Local Path</source>
         <translation>Místní cesta</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="141"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="142"/>
         <source>Current Uses</source>
         <translation>Aktuální počet použití</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="145"/>
         <source>Not limited</source>
         <translation>Bez omezení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="145"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="146"/>
         <source>Maximum Uses</source>
         <translation>Maximální počet použití</translation>
     </message>
@@ -11455,170 +11443,170 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetPowerOptions</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="157"/>
         <source>Power Source</source>
         <translation>Zdroj napájení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="158"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="159"/>
         <source>Battery Status</source>
         <translation>Stav baterie</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="164"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="165"/>
         <source>Battery Life Percent</source>
         <translation>Procento nabití baterie</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="170"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="171"/>
         <source>Full Battery Life Time</source>
         <translation>Celková doba provozu na baterii</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="177"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="178"/>
         <source>Remaining Battery Life Time</source>
         <translation>Zbývající doba provozu na baterii</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="193"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="194"/>
         <source>Device Name</source>
         <translation>Název zařízení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="196"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="197"/>
         <source>Manufacturer</source>
         <translation>Výrobce</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="199"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="200"/>
         <source>Manufacture Date</source>
         <translation>Datum výroby</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="202"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="203"/>
         <source>Unique Id</source>
         <translation>Jedinečné ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="205"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="206"/>
         <source>Serial Number</source>
         <translation>Sériové číslo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="208"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="209"/>
         <source>Temperature</source>
         <translation>Teplota</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="212"/>
         <source>Design Capacity</source>
         <translation>Návrhová kapacita</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="212"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="218"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="224"/>
         <source>%1 mWh</source>
         <translation>%1 mWh</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="214"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="215"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="218"/>
         <source>Full Charged Capacity</source>
         <translation>Kapacita při plném nabití</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="220"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="221"/>
         <source>Depreciation</source>
         <translation>Opotřebení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="224"/>
         <source>Current Capacity</source>
         <translation>Aktuální kapacita</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="227"/>
         <source>Voltage</source>
         <translation>Napětí</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="227"/>
         <source>%1 mV</source>
         <translation>%1 mV</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="315"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="233"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="316"/>
         <source>Charging</source>
         <translation>Nabíjí se</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="233"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="236"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="239"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="242"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="313"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="236"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="314"/>
         <source>Critical</source>
         <translation>Kritická</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="239"/>
         <source>Discharging</source>
         <translation>Vybíjí se</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="242"/>
         <source>Power OnLine</source>
         <translation>Napájení připojeno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="245"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="246"/>
         <source>State</source>
         <translation>Stav</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="250"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="251"/>
         <source>Battery #%1</source>
         <translation>Baterie č. %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="291"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="292"/>
         <source>DC Battery</source>
         <translation>Napájení z baterie</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="294"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="295"/>
         <source>AC Line</source>
         <translation>Napájení ze sítě</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="297"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="319"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="298"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="320"/>
         <source>Unknown</source>
         <translation>Neznámý</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="309"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="310"/>
         <source>High</source>
         <translation>Vysoká</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="311"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="312"/>
         <source>Low</source>
         <translation>Nízká</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="317"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="318"/>
         <source>No Battery</source>
         <translation>Bez baterie</translation>
     </message>
@@ -11626,44 +11614,44 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetPrinters</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="139"/>
         <source>Default</source>
         <translation>Výchozí</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="139"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="147"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="139"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="147"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="141"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="142"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="145"/>
         <source>Driver</source>
         <translation>Ovladač</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="147"/>
         <source>Shared</source>
         <translation>Sdíleno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="149"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="150"/>
         <source>Share Name</source>
         <translation>Název sdílení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="151"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="152"/>
         <source>Jobs Count</source>
         <translation>Počet úloh</translation>
     </message>
@@ -11671,12 +11659,12 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetProcesses</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_processes.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.cc" line="145"/>
         <source>System Idle Process</source>
         <translation>Proces nečinnosti systému</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_processes.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.cc" line="147"/>
         <source>Unknown Process</source>
         <translation>Neznámý proces</translation>
     </message>
@@ -11684,68 +11672,68 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetServices</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="139"/>
         <source>Continue Pending</source>
         <translation>Čeká na pokračování</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="140"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="141"/>
         <source>Pause Pending</source>
         <translation>Čeká na pozastavení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="142"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="143"/>
         <source>Paused</source>
         <translation>Pozastaveno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="145"/>
         <source>Running</source>
         <translation>Spuštěno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="147"/>
         <source>Start Pending</source>
         <translation>Čeká na spuštění</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="148"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="149"/>
         <source>Stop Pending</source>
         <translation>Čeká na zastavení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="150"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="151"/>
         <source>Stopped</source>
         <translation>Zastaveno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="152"/>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="174"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="153"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="175"/>
         <source>Unknown</source>
         <translation>Neznámý</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="164"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="165"/>
         <source>Auto Start</source>
         <translation>Automaticky</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="166"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="167"/>
         <source>Demand Start</source>
         <translation>Na vyžádání</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="169"/>
         <source>Disabled</source>
         <translation>Zakázáno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="170"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="171"/>
         <source>Boot Start</source>
         <translation>Boot</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="172"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="173"/>
         <source>System Start</source>
         <translation>Systém</translation>
     </message>
@@ -11753,214 +11741,214 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetSmart</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
         <source>Attribute</source>
         <translation>Atribut</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="393"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="395"/>
         <source>Value</source>
         <translation>Hodnota</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
         <source>Worst</source>
         <translation>Nejhorší</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
         <source>Threshold</source>
         <translation>Práh</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="393"/>
         <source>Raw</source>
         <translation>Raw</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="389"/>
         <source>Status</source>
         <translation>Stav</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="393"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="395"/>
         <source>Parameter</source>
         <translation>Parametr</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="409"/>
         <source>Health Data</source>
         <translation>Údaje o stavu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="409"/>
         <source>Not available</source>
         <translation>Není k dispozici</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="425"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="426"/>
         <source>OK. Always passed</source>
         <translation>OK. Vždy splněno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="427"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="428"/>
         <source>OK. Value is normal</source>
         <translation>OK. Hodnota je normální</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="429"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="430"/>
         <source>Warning. Value is pre-failure</source>
         <translation>Varování. Hodnota předchází selhání</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="431"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="432"/>
         <source>Warning. Value is not normal</source>
         <translation>Varování. Hodnota není normální</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="438"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="439"/>
         <source>Unknown Attribute</source>
         <translation>Neznámý atribut</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="461"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="462"/>
         <source>Spare capacity is below the threshold</source>
         <translation>Rezervní kapacita je pod prahovou hodnotou</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="463"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="464"/>
         <source>Temperature is outside of the operating range</source>
         <translation>Teplota je mimo provozní rozsah</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="465"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="466"/>
         <source>Reliability is degraded</source>
         <translation>Spolehlivost je snížena</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="467"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="468"/>
         <source>Media is in read-only mode</source>
         <translation>Médium je v režimu pouze pro čtení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="469"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="470"/>
         <source>Volatile memory backup device failed</source>
         <translation>Zálohovací zařízení energeticky závislé paměti selhalo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="471"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="472"/>
         <source>Persistent memory region is unreliable</source>
         <translation>Oblast perzistentní paměti je nespolehlivá</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="475"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="476"/>
         <source>Critical Warning</source>
         <translation>Kritické varování</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="476"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="477"/>
         <source>None</source>
         <translation>Žádné</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="481"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="482"/>
         <source>Temperature</source>
         <translation>Teplota</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="482"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="498"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="483"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="499"/>
         <source>%1 C</source>
         <translation>%1 C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="497"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="498"/>
         <source>Temperature Sensor %1</source>
         <translation>Teplotní senzor %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="503"/>
         <source>Available Spare</source>
         <translation>Dostupná rezerva</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="505"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="503"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="506"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="508"/>
         <source>%1%</source>
         <translation>%1 %</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="504"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="505"/>
         <source>Available Spare Threshold</source>
         <translation>Práh dostupné rezervy</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="508"/>
         <source>Percentage Used</source>
         <translation>Procento opotřebení</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="510"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="511"/>
         <source>Data Read</source>
         <translation>Přečtená data</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="513"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="514"/>
         <source>Data Written</source>
         <translation>Zapsaná data</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="517"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="518"/>
         <source>Host Read Commands</source>
         <translation>Příkazy čtení hostitele</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="519"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="520"/>
         <source>Host Write Commands</source>
         <translation>Příkazy zápisu hostitele</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="521"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="522"/>
         <source>Controller Busy Time</source>
         <translation>Doba vytížení řadiče</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="524"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="525"/>
         <source>Power Cycles</source>
         <translation>Počet zapnutí</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="526"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="527"/>
         <source>Power-On Time</source>
         <translation>Doba zapnutí</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="529"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="530"/>
         <source>Unsafe Shutdowns</source>
         <translation>Nebezpečná vypnutí</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="531"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="532"/>
         <source>Media Errors</source>
         <translation>Chyby média</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="533"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="534"/>
         <source>Error Log Entries</source>
         <translation>Záznamy v protokolu chyb</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="536"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="537"/>
         <source>Warning Temperature Time</source>
         <translation>Doba varovné teploty</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="539"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="540"/>
         <source>Critical Temperature Time</source>
         <translation>Doba kritické teploty</translation>
     </message>
@@ -11968,169 +11956,169 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetSummary</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="200"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="241"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="201"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="242"/>
         <source>Name</source>
         <translation>Název</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="203"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="204"/>
         <source>Domain</source>
         <translation>Doména</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="206"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="207"/>
         <source>Workgroup</source>
         <translation>Pracovní skupina</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="209"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="210"/>
         <source>Uptime</source>
         <translation>Doba provozu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="212"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="213"/>
         <source>Computer</source>
         <translation>Počítač</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="219"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="220"/>
         <source>Host Version</source>
         <translation>Verze hostitele</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="222"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="223"/>
         <source>Client Version</source>
         <translation>Verze klienta</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="227"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="228"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="230"/>
         <source>Router Version</source>
         <translation>Verze routeru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="232"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="233"/>
         <source>Aspia Information</source>
         <translation>Informace o Aspia</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="244"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="316"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="245"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="317"/>
         <source>Version</source>
         <translation>Verze</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="247"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="248"/>
         <source>Architecture</source>
         <translation>Architektura</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="250"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="251"/>
         <source>License Key</source>
         <translation>Licenční klíč</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="253"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="254"/>
         <source>Install Date</source>
         <translation>Datum instalace</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="258"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="259"/>
         <source>Operating System</source>
         <translation>Operační systém</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="268"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="340"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="269"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="341"/>
         <source>Manufacturer</source>
         <translation>Výrobce</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="271"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="286"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="287"/>
         <source>Model</source>
         <translation>Model</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="276"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="277"/>
         <source>Motherboard</source>
         <translation>Základní deska</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="289"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="313"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="290"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="314"/>
         <source>Vendor</source>
         <translation>Dodavatel</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="292"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="293"/>
         <source>Packages</source>
         <translation>Fyzické procesory</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="295"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="296"/>
         <source>Cores</source>
         <translation>Jádra</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="298"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="299"/>
         <source>Threads</source>
         <translation>Vlákna</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="303"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="304"/>
         <source>Processor</source>
         <translation>Procesor</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="319"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="320"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="343"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="344"/>
         <source>Size</source>
         <translation>Velikost</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
         <source>Speed</source>
         <translation>Rychlost</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="346"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="347"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
         <source>Installed</source>
         <translation>Nainstalováno</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="230"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
         <source>%1 MT/s</source>
         <translation>%1 MT/s</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="363"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="364"/>
         <source>Memory</source>
         <translation>Paměť</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="392"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="393"/>
         <source>%1 (%2 free)</source>
         <translation>%1 (%2 volné)</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="402"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="403"/>
         <source>Logical Drives</source>
         <translation>Logické disky</translation>
     </message>
@@ -12138,133 +12126,133 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SysInfoWidgetVideoAdapters</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="84"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="85"/>
         <source>%1 C</source>
         <translation>%1 C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="150"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="151"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="153"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="154"/>
         <source>Adapter String</source>
         <translation>Řetězec adaptéru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="157"/>
         <source>BIOS String</source>
         <translation>Řetězec BIOS</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="159"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="160"/>
         <source>Chip Type</source>
         <translation>Typ čipu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="162"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="163"/>
         <source>DAC Type</source>
         <translation>Typ DAC</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="168"/>
         <source>Location</source>
         <translation>Umístění</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="168"/>
         <source>Bus %1, device %2, function %3</source>
         <translation>Sběrnice %1, zařízení %2, funkce %3</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="175"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="176"/>
         <source>Memory Size</source>
         <translation>Velikost paměti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="181"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="182"/>
         <source>Memory Used</source>
         <translation>Využitá paměť</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="187"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="188"/>
         <source>Shared Memory Size</source>
         <translation>Velikost sdílené paměti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="193"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="194"/>
         <source>Shared Memory Used</source>
         <translation>Využitá sdílená paměť</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="199"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="200"/>
         <source>Memory Frequency</source>
         <translation>Frekvence paměti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="200"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="201"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="215"/>
         <source>Driver Model</source>
         <translation>Model ovladače</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="215"/>
         <source>WDDM %1.%2</source>
         <translation>WDDM %1.%2</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="221"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="222"/>
         <source>Temperature</source>
         <translation>Teplota</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="227"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="228"/>
         <source>Maximum Temperature</source>
         <translation>Maximální teplota</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="233"/>
         <source>Fan Speed</source>
         <translation>Otáčky ventilátoru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="233"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="237"/>
         <source>%1 RPM</source>
         <translation>%1 ot./min</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="237"/>
         <source>Maximum Fan Speed</source>
         <translation>Maximální otáčky ventilátoru</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="242"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="243"/>
         <source>Power Usage</source>
         <translation>Spotřeba energie</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="243"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="244"/>
         <source>%1%</source>
         <translation>%1 %</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="204"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="205"/>
         <source>Driver Date</source>
         <translation>Datum ovladače</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="207"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="208"/>
         <source>Driver Version</source>
         <translation>Verze ovladače</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="210"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="211"/>
         <source>Driver Provider</source>
         <translation>Poskytovatel ovladače</translation>
     </message>
@@ -12802,42 +12790,47 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>TempHostListModel</name>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="131"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="133"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="134"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="136"/>
         <source>Computer Name</source>
         <translation>Název počítače</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="137"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="139"/>
         <source>Operating System</source>
         <translation>Operační systém</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="140"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="142"/>
         <source>Version</source>
         <translation>Verze</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="145"/>
         <source>Address</source>
         <translation>Adresa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="146"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="148"/>
+        <source>Connect Time</source>
+        <translation>Čas připojení</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="151"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="213"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="225"/>
         <source>Quick Support</source>
         <translation>Quick Support</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="213"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="225"/>
         <source>Installed</source>
         <translation>Nainstalovaný</translation>
     </message>

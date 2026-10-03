@@ -556,13 +556,13 @@ Lisättyjä reitittimiä: %4</translation>
         <translation>Tallenna sisäänkirjautumistiedot</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="209"/>
-        <location filename="../client/desktop/authorization_dialog.cc" line="225"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="216"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="232"/>
         <source>Password cannot be empty.</source>
         <translation>Salasana ei voi olla tyhjä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="218"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="225"/>
         <source>User name cannot be empty.</source>
         <translation>Käyttäjänimi ei voi olla tyhjä.</translation>
     </message>
@@ -723,54 +723,54 @@ Lisättyjä reitittimiä: %4</translation>
         <translation>···</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="134"/>
-        <location filename="../common/desktop/chat_widget.cc" line="309"/>
+        <location filename="../common/desktop/chat_widget.cc" line="135"/>
+        <location filename="../common/desktop/chat_widget.cc" line="310"/>
         <source>Save chat...</source>
         <translation>Tallenna keskustelu...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="135"/>
-        <location filename="../common/desktop/chat_widget.cc" line="310"/>
+        <location filename="../common/desktop/chat_widget.cc" line="136"/>
+        <location filename="../common/desktop/chat_widget.cc" line="311"/>
         <source>Clear chat</source>
         <translation>Tyhjennä keskustelu</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="206"/>
+        <location filename="../common/desktop/chat_widget.cc" line="207"/>
         <source>%1 is typing...</source>
         <translation>%1 kirjoittaa...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="209"/>
+        <location filename="../common/desktop/chat_widget.cc" line="210"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation>Käyttäjä %1 liittyi keskusteluun (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="212"/>
+        <location filename="../common/desktop/chat_widget.cc" line="213"/>
         <source>User %1 has left the chat (%2)</source>
         <translation>Käyttäjä %1 poistui keskustelusta (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="215"/>
+        <location filename="../common/desktop/chat_widget.cc" line="216"/>
         <source>User %1 is logged in (%2)</source>
         <translation>Käyttäjä %1 on kirjautunut sisään (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="218"/>
+        <location filename="../common/desktop/chat_widget.cc" line="219"/>
         <source>User %1 is not logged in (%2)</source>
         <translation>Käyttäjä %1 ei ole kirjautunut sisään (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="221"/>
+        <location filename="../common/desktop/chat_widget.cc" line="222"/>
         <source>There are no connected users (%1)</source>
         <translation>Ei yhdistettyjä käyttäjiä (%1)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="431"/>
+        <location filename="../common/desktop/chat_widget.cc" line="432"/>
         <source>Unable to write file.</source>
         <translation>Tiedostoa ei voi kirjoittaa.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/desktop/chat_widget.cc" line="447"/>
+        <location filename="../common/desktop/chat_widget.cc" line="448"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation>
             <numerusform>Viesti on liian pitkä. Viestin enimmäispituus on %n merkki.</numerusform>
@@ -778,17 +778,17 @@ Lisättyjä reitittimiä: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="370"/>
+        <location filename="../common/desktop/chat_widget.cc" line="371"/>
         <source>Save File</source>
         <translation>Tallenna tiedosto</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="370"/>
+        <location filename="../common/desktop/chat_widget.cc" line="371"/>
         <source>TXT files (*.txt)</source>
         <translation>TXT-tiedostot (*.txt)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="383"/>
+        <location filename="../common/desktop/chat_widget.cc" line="384"/>
         <source>Could not open file for writing.</source>
         <translation>Tiedostoa ei voitu avata kirjoittamista varten.</translation>
     </message>
@@ -1115,37 +1115,37 @@ Lisättyjä reitittimiä: %4</translation>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="269"/>
+        <location filename="../client/desktop/client_window.cc" line="270"/>
         <source>Session started.</source>
         <translation>Istunto aloitettu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="516"/>
+        <location filename="../client/desktop/client_window.cc" line="517"/>
         <source>The specified router is unavailable.</source>
         <translation>Määritetty reititin ei ole käytettävissä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="518"/>
+        <location filename="../client/desktop/client_window.cc" line="519"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Reitittimen tiedot ovat vioittuneet. Muokkaa reititintä ja syötä ne uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="520"/>
+        <location filename="../client/desktop/client_window.cc" line="521"/>
         <source>The specified router is offline.</source>
         <translation>Määritetty reititin on offline-tilassa.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="281"/>
+        <location filename="../client/desktop/client_window.cc" line="282"/>
         <source>Connecting to host %1...</source>
         <translation>Yhdistetään isäntään %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="285"/>
+        <location filename="../client/desktop/client_window.cc" line="286"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Yhdistetään isäntään %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="315"/>
+        <location filename="../client/desktop/client_window.cc" line="316"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Isäntä ei ole vielä käytettävissä. Odotetaan yhteyden palautumista...</translation>
     </message>
@@ -1155,27 +1155,27 @@ Lisättyjä reitittimiä: %4</translation>
         <translation>Aikakatkaisu odotettaessa yhteyden palautumista isäntään.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="335"/>
+        <location filename="../client/desktop/client_window.cc" line="336"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Isännän versio on uudempi kuin asiakkaan versio (%1 &gt; %2). Päivitä sovellus.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="341"/>
+        <location filename="../client/desktop/client_window.cc" line="342"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Yritetään yhdistää yhteensopivuustilassa...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="527"/>
+        <location filename="../client/desktop/client_window.cc" line="528"/>
         <source>Requesting connection to the host...</source>
         <translation>Pyydetään yhteyttä isäntään...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="535"/>
+        <location filename="../client/desktop/client_window.cc" line="536"/>
         <source>Connection offer received.</source>
         <translation>Yhteystarjous vastaanotettu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="552"/>
+        <location filename="../client/desktop/client_window.cc" line="553"/>
         <source>Error requesting connection via router.</source>
         <translation>Virhe pyydettäessä yhteyttä reitittimen kautta.</translation>
     </message>
@@ -1541,13 +1541,10 @@ Lisättyjä reitittimiä: %4</translation>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="251"/>
         <location filename="../host/ui/config_dialog.cc" line="577"/>
+        <location filename="../host/ui/config_dialog.cc" line="602"/>
+        <location filename="../host/ui/config_dialog.cc" line="637"/>
         <source>Export</source>
         <translation>Vie</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.cc" line="602"/>
-        <source>Export Installer</source>
-        <translation>Vie asennusohjelma</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="602"/>
@@ -1576,66 +1573,61 @@ Lisättyjä reitittimiä: %4</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="637"/>
-        <source>Export Quick Support</source>
-        <translation>Vie Quick Support</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.cc" line="638"/>
         <source>Executable files (*.exe)</source>
         <translation>Suoritettavat tiedostot (*.exe)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="648"/>
+        <location filename="../host/ui/config_dialog.cc" line="647"/>
         <source>The portable version was successfully exported.</source>
         <translation>Kannettavan version vienti onnistui.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="652"/>
+        <location filename="../host/ui/config_dialog.cc" line="651"/>
         <source>The portable version works only through a router. Set up the connection to the router and save the settings.</source>
         <translation>Kannettava versio toimii vain reitittimen kautta. Määritä yhteys reitittimeen ja tallenna asetukset.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="656"/>
+        <location filename="../host/ui/config_dialog.cc" line="655"/>
         <source>Unable to export the portable version.</source>
         <translation>Kannettavaa versiota ei voi viedä.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="677"/>
+        <location filename="../host/ui/config_dialog.cc" line="676"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Määrityksiä ei voitu kirjoittaa. Varmista, että sinulla on riittävät kirjoitusoikeudet.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="693"/>
+        <location filename="../host/ui/config_dialog.cc" line="692"/>
         <source>An invalid update server address was entered.</source>
         <translation>Syötetty päivityspalvelimen osoite on virheellinen.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="701"/>
+        <location filename="../host/ui/config_dialog.cc" line="700"/>
         <source>Enter the update server address.</source>
         <translation>Syötä päivityspalvelimen osoite.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="711"/>
+        <location filename="../host/ui/config_dialog.cc" line="710"/>
         <source>An invalid public key was entered.</source>
         <translation>Syötetty julkinen avain on virheellinen.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="723"/>
+        <location filename="../host/ui/config_dialog.cc" line="722"/>
         <source>Incorrect router address entered.</source>
         <translation>Syötetty reitittimen osoite on virheellinen.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="733"/>
+        <location filename="../host/ui/config_dialog.cc" line="732"/>
         <source>Incorrect router public key entered.</source>
         <translation>Syötetty reitittimen julkinen avain on virheellinen.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="896"/>
+        <location filename="../host/ui/config_dialog.cc" line="895"/>
         <source>Install</source>
         <translation>Asenna</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="901"/>
+        <location filename="../host/ui/config_dialog.cc" line="900"/>
         <source>Remove</source>
         <translation>Poista</translation>
     </message>
@@ -1702,49 +1694,39 @@ Lisättyjä reitittimiä: %4</translation>
         <translation>Tiedostonsiirto</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="373"/>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Waiting for a connection</source>
         <translation>Odotetaan yhteyttä</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="373"/>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Stop</source>
         <translation>Pysäytä</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="377"/>
+        <location filename="../host/android/connection_widget.cc" line="376"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>Aspia-ID: %1
 Salasana: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="420"/>
+        <location filename="../host/android/connection_widget.cc" line="419"/>
         <source>Router is disabled</source>
         <translation>Reititin on poissa käytöstä</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="423"/>
+        <location filename="../host/android/connection_widget.cc" line="422"/>
         <source>Connecting to router...</source>
         <translation>Yhdistetään reitittimeen...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="424"/>
-        <source>Connecting to router %1...</source>
-        <translation>Yhdistetään reitittimeen %1...</translation>
-    </message>
-    <message>
-        <location filename="../host/android/connection_widget.cc" line="427"/>
+        <location filename="../host/android/connection_widget.cc" line="425"/>
         <source>Connected to router</source>
         <translation>Yhdistetty reitittimeen</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="428"/>
-        <source>Connected to router %1</source>
-        <translation>Yhdistetty reitittimeen %1</translation>
-    </message>
-    <message>
-        <location filename="../host/android/connection_widget.cc" line="431"/>
         <source>Failed to connect to router</source>
         <translation>Yhteys reitittimeen epäonnistui</translation>
     </message>
@@ -3903,9 +3885,9 @@ Korvattuja kirjautumistietoja: %2</translation>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="638"/>
-        <location filename="../host/ui/host_window.cc" line="881"/>
-        <location filename="../host/ui/host_window.cc" line="1154"/>
+        <location filename="../host/ui/host_window.cc" line="644"/>
+        <location filename="../host/ui/host_window.cc" line="889"/>
+        <location filename="../host/ui/host_window.cc" line="1167"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
@@ -3921,7 +3903,7 @@ Korvattuja kirjautumistietoja: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
-        <location filename="../host/ui/host_window.cc" line="1106"/>
+        <location filename="../host/ui/host_window.cc" line="1119"/>
         <source>Router is disabled</source>
         <translation>Reititin on poissa käytöstä</translation>
     </message>
@@ -3992,7 +3974,7 @@ Korvattuja kirjautumistietoja: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="335"/>
-        <location filename="../host/ui/host_window.cc" line="842"/>
+        <location filename="../host/ui/host_window.cc" line="850"/>
         <source>Hide</source>
         <translation>Piilota</translation>
     </message>
@@ -4033,13 +4015,14 @@ Korvattuja kirjautumistietoja: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="180"/>
-        <location filename="../host/ui/host_window.cc" line="1154"/>
+        <location filename="../host/ui/host_window.cc" line="644"/>
+        <location filename="../host/ui/host_window.cc" line="1167"/>
         <source>Aspia Quick Support</source>
         <translation>Aspia Quick Support</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="339"/>
-        <location filename="../host/ui/host_window.cc" line="837"/>
+        <location filename="../host/ui/host_window.cc" line="845"/>
         <source>Show</source>
         <translation>Näytä</translation>
     </message>
@@ -4054,52 +4037,52 @@ Korvattuja kirjautumistietoja: %2</translation>
         <translation>Näytön tallennus pysäytetty.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="826"/>
+        <location filename="../host/ui/host_window.cc" line="834"/>
         <source>Settings storage is unavailable.</source>
         <translation>Asetusten tallennustila ei ole käytettävissä.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="892"/>
+        <location filename="../host/ui/host_window.cc" line="900"/>
         <source>Aspia Host will be removed from this computer. The settings of the host will be kept. Do you really want to uninstall the application?</source>
         <translation>Aspia Host poistetaan tästä tietokoneesta. Isännän asetukset säilytetään. Haluatko varmasti poistaa sovelluksen asennuksen?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="904"/>
+        <location filename="../host/ui/host_window.cc" line="912"/>
         <source>Unable to uninstall the application.</source>
         <translation>Sovelluksen asennusta ei voi poistaa.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="931"/>
+        <location filename="../host/ui/host_window.cc" line="939"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Jos lopetat Aspian, tähän tietokoneeseen ei voi muodostaa yhteyttä ennen kuin käynnistät tietokoneen tai Aspian uudelleen manuaalisesti. Haluatko varmasti lopettaa sovelluksen?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1098"/>
+        <location filename="../host/ui/host_window.cc" line="1111"/>
         <source>Not connected to service</source>
         <translation>Ei yhteyttä palveluun</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1111"/>
+        <location filename="../host/ui/host_window.cc" line="1124"/>
         <source>Connecting to router...</source>
         <translation>Yhdistetään reitittimeen...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1116"/>
+        <location filename="../host/ui/host_window.cc" line="1129"/>
         <source>Connected to router</source>
         <translation>Yhdistetty reitittimeen</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1121"/>
+        <location filename="../host/ui/host_window.cc" line="1134"/>
         <source>Connection error</source>
         <translation>Yhteysvirhe</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1199"/>
+        <location filename="../host/ui/host_window.cc" line="1212"/>
         <source>IP addresses:</source>
         <translation>IP-osoitteet:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1155"/>
+        <location filename="../host/ui/host_window.cc" line="1168"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
@@ -5171,156 +5154,161 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Päivitä tila automaattisesti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1059"/>
+        <location filename="../client/desktop/management_tab.cc" line="1074"/>
         <source>(copy)</source>
         <translation>(kopio)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1027"/>
-        <location filename="../client/desktop/management_tab.cc" line="1101"/>
-        <location filename="../client/desktop/management_tab.cc" line="2213"/>
+        <location filename="../client/desktop/management_tab.cc" line="1042"/>
+        <location filename="../client/desktop/management_tab.cc" line="1116"/>
+        <location filename="../client/desktop/management_tab.cc" line="2229"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Isännän tietojen noutaminen paikallisesta tietokannasta epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1064"/>
+        <location filename="../client/desktop/management_tab.cc" line="852"/>
+        <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
+        <translation>Istuntotyyppi &quot;%1&quot; ei ole käytettävissä Quick Supportissa.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1079"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Isännän lisääminen paikalliseen tietokantaan epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1105"/>
+        <location filename="../client/desktop/management_tab.cc" line="1120"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Haluatko varmasti poistaa isännän &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1115"/>
+        <location filename="../client/desktop/management_tab.cc" line="1130"/>
         <source>Unable to remove host</source>
         <translation>Isäntää ei voi poistaa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1173"/>
-        <location filename="../client/desktop/management_tab.cc" line="1233"/>
-        <location filename="../client/desktop/management_tab.cc" line="1259"/>
+        <location filename="../client/desktop/management_tab.cc" line="1193"/>
+        <location filename="../client/desktop/management_tab.cc" line="1253"/>
+        <location filename="../client/desktop/management_tab.cc" line="1279"/>
         <source>Copy Row</source>
         <translation>Kopioi rivi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1174"/>
-        <location filename="../client/desktop/management_tab.cc" line="1234"/>
-        <location filename="../client/desktop/management_tab.cc" line="1260"/>
+        <location filename="../client/desktop/management_tab.cc" line="1194"/>
+        <location filename="../client/desktop/management_tab.cc" line="1254"/>
+        <location filename="../client/desktop/management_tab.cc" line="1280"/>
         <source>Copy Value</source>
         <translation>Kopioi arvo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1361"/>
+        <location filename="../client/desktop/management_tab.cc" line="1381"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Haluatko varmasti poistaa työtilan &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1381"/>
+        <location filename="../client/desktop/management_tab.cc" line="1401"/>
         <source>Failed to delete the workspace.</source>
         <translation>Työtilan poistaminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1483"/>
+        <location filename="../client/desktop/management_tab.cc" line="1503"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Haluatko varmasti poistaa ryhmän &quot;%1&quot;? Tähän ryhmään tai sen aliryhmiin kuuluvat isännät siirretään työtilan juureen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1501"/>
+        <location filename="../client/desktop/management_tab.cc" line="1521"/>
         <source>Failed to delete the group.</source>
         <translation>Ryhmän poistaminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1540"/>
+        <location filename="../client/desktop/management_tab.cc" line="1560"/>
         <source>Import Old Address Book</source>
         <translation>Tuo vanha osoitekirja</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1541"/>
+        <location filename="../client/desktop/management_tab.cc" line="1561"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>Osoitekirja (*.aab);;Kaikki tiedostot (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1564"/>
-        <location filename="../client/desktop/management_tab.cc" line="1621"/>
+        <location filename="../client/desktop/management_tab.cc" line="1584"/>
+        <location filename="../client/desktop/management_tab.cc" line="1641"/>
         <source>The database is not available.</source>
         <translation>Tietokanta ei ole käytettävissä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1570"/>
+        <location filename="../client/desktop/management_tab.cc" line="1590"/>
         <source>Create Backup</source>
         <translation>Luo varmuuskopio</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1587"/>
+        <location filename="../client/desktop/management_tab.cc" line="1607"/>
         <source>There is nothing to save.</source>
         <translation>Tallennettavaa ei ole.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2208"/>
+        <location filename="../client/desktop/management_tab.cc" line="2224"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Isännän tiedot ovat vioittuneet. Muokkaa isäntää ja syötä ne uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2229"/>
+        <location filename="../client/desktop/management_tab.cc" line="2245"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Reitittimen tiedot ovat vioittuneet. Muokkaa reititintä ja syötä ne uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1599"/>
+        <location filename="../client/desktop/management_tab.cc" line="1619"/>
         <source>Failed to create the backup.</source>
         <translation>Varmuuskopion luominen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1627"/>
-        <location filename="../client/desktop/management_tab.cc" line="1653"/>
+        <location filename="../client/desktop/management_tab.cc" line="1647"/>
+        <location filename="../client/desktop/management_tab.cc" line="1673"/>
         <source>Restore from Backup</source>
         <translation>Palauta varmuuskopiosta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1636"/>
+        <location filename="../client/desktop/management_tab.cc" line="1656"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Kaikki nykyinen sisältö poistetaan ja korvataan varmuuskopion sisällöllä. Jatketaanko?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1655"/>
+        <location filename="../client/desktop/management_tab.cc" line="1675"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Varmuuskopio on tehty toisessa asennuksessa. Syötä siinä käytetty pääsalasana.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1680"/>
+        <location filename="../client/desktop/management_tab.cc" line="1700"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Varmuuskopio ei sisällä tietoja, joten mitään ei muutettu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1688"/>
+        <location filename="../client/desktop/management_tab.cc" line="1708"/>
         <source>The file is not a valid backup.</source>
         <translation>Tiedosto ei ole kelvollinen varmuuskopio.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1692"/>
+        <location filename="../client/desktop/management_tab.cc" line="1712"/>
         <source>Failed to restore from the backup.</source>
         <translation>Palauttaminen varmuuskopiosta epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1571"/>
-        <location filename="../client/desktop/management_tab.cc" line="1628"/>
+        <location filename="../client/desktop/management_tab.cc" line="1591"/>
+        <location filename="../client/desktop/management_tab.cc" line="1648"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia-varmuuskopio (*.aspia-backup);;Kaikki tiedostot (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1591"/>
+        <location filename="../client/desktop/management_tab.cc" line="1611"/>
         <source>Unable to write the file.</source>
         <translation>Tiedostoa ei voi kirjoittaa.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1684"/>
+        <location filename="../client/desktop/management_tab.cc" line="1704"/>
         <source>Unable to read the file.</source>
         <translation>Tiedostoa ei voi lukea.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1604"/>
+        <location filename="../client/desktop/management_tab.cc" line="1624"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5335,22 +5323,22 @@ Vietyjä tallennettuja salasanoja: %4
 Vietyjä kirjautumistietoja: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1595"/>
+        <location filename="../client/desktop/management_tab.cc" line="1615"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Jotkin tietokannan tietueet ovat vioittuneet. Korjaa tai poista ne ja yritä uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1672"/>
+        <location filename="../client/desktop/management_tab.cc" line="1692"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Tiedoston salausta ei voi purkaa annetulla salasanalla.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1676"/>
+        <location filename="../client/desktop/management_tab.cc" line="1696"/>
         <source>Unsupported file format version.</source>
         <translation>Tiedostomuodon versiota ei tueta.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1697"/>
+        <location filename="../client/desktop/management_tab.cc" line="1717"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5365,29 +5353,29 @@ Tuotuja tallennettuja salasanoja: %4
 Tuotuja kirjautumistietoja: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2136"/>
-        <location filename="../client/desktop/management_tab.cc" line="2167"/>
+        <location filename="../client/desktop/management_tab.cc" line="2152"/>
+        <location filename="../client/desktop/management_tab.cc" line="2183"/>
         <source>Copy Link</source>
         <translation>Kopioi linkki</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2155"/>
-        <location filename="../client/desktop/management_tab.cc" line="2189"/>
+        <location filename="../client/desktop/management_tab.cc" line="2171"/>
+        <location filename="../client/desktop/management_tab.cc" line="2205"/>
         <source>Unable to create a link for this host.</source>
         <translation>Tälle isännälle ei voi luoda linkkiä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2230"/>
+        <location filename="../client/desktop/management_tab.cc" line="2246"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Tähän isäntään liitetty reititin on poistettu. Muokkaa isäntää valitaksesi toisen reitittimen tai siirry suoraan yhteyteen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2237"/>
+        <location filename="../client/desktop/management_tab.cc" line="2253"/>
         <source>The host has an invalid host ID.</source>
         <translation>Isännän ID on virheellinen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2246"/>
+        <location filename="../client/desktop/management_tab.cc" line="2262"/>
         <source>The host has an incorrect address.</source>
         <translation>Isännän osoite on virheellinen.</translation>
     </message>
@@ -6542,7 +6530,7 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="453"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="452"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n isäntä</numerusform>
@@ -6754,22 +6742,22 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Kohteita sivulla:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="366"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="364"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Haluatko varmasti katkaista isännän &quot;%1&quot; yhteyden?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="391"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="389"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Haluatko varmasti katkaista kaikkien isäntien yhteyden?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="419"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="417"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Isännän poistaminen poistaa kaikki sen reititinyhteyden määritykset, ja sovellus poistetaan isännältä. Toimintoa ei voi perua. Haluatko varmasti tehdä tämän?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="718"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="716"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n isäntä</numerusform>
@@ -6777,22 +6765,22 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="774"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="772"/>
         <source>Save File</source>
         <translation>Tallenna tiedosto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="774"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="772"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-tiedostot (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="785"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="783"/>
         <source>Could not open file for writing.</source>
         <translation>Tiedostoa ei voitu avata kirjoittamista varten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="832"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="830"/>
         <source>Unable to write file.</source>
         <translation>Tiedostoa ei voi kirjoittaa.</translation>
     </message>
@@ -6917,37 +6905,37 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="64"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="67"/>
         <source>Previous</source>
         <translation>Edellinen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="68"/>
         <source>Previous page</source>
         <translation>Edellinen sivu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="69"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="72"/>
         <source>Next</source>
         <translation>Seuraava</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="70"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="73"/>
         <source>Next page</source>
         <translation>Seuraava sivu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="90"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="93"/>
         <source>Items per page:</source>
         <translation>Kohteita sivulla:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="213"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="219"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
         <translation>Isännän hyväksyminen antaa sille pysyvän käyttöoikeuden reitittimeen. Haluatko varmasti hyväksyä isännän &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="220"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="226"/>
         <source>Approving hosts will give them permanent access to the router. Are you sure you want to approve %n hosts?</source>
         <translation>
             <numerusform>Isäntien hyväksyminen antaa niille pysyvän käyttöoikeuden reitittimeen. Haluatko varmasti hyväksyä %n isännän?</numerusform>
@@ -6955,12 +6943,12 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="260"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="266"/>
         <source>Failed to approve the host.</source>
         <translation>Isännän hyväksyminen epäonnistui.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="262"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="268"/>
         <source>Failed to approve %n of the selected hosts.</source>
         <translation>
             <numerusform>%n valitun isännän hyväksyminen epäonnistui.</numerusform>
@@ -7168,22 +7156,22 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>RouterUsersWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="230"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="229"/>
         <source>You cannot delete a built-in user.</source>
         <translation>Sisäänrakennettua käyttäjää ei voi poistaa.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="235"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="234"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Haluatko varmasti poistaa käyttäjän &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="293"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="292"/>
         <source>Failed to get list of users.</source>
         <translation>Käyttäjäluettelon noutaminen epäonnistui.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="436"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="435"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n käyttäjä</numerusform>
@@ -7497,7 +7485,7 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>ServerWorker</name>
     <message>
-        <location filename="../host/android/server_worker.cc" line="564"/>
+        <location filename="../host/android/server_worker.cc" line="552"/>
         <source>Waiting for connections</source>
         <translation>Odotetaan yhteyksiä</translation>
     </message>
@@ -8317,8 +8305,8 @@ Tuotuja kirjautumistietoja: %5</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="314"/>
-        <source>The screen capture request is confirmed automatically. The system window briefly appears on the screen.</source>
-        <translation>Näytön kaappauspyyntö vahvistetaan automaattisesti. Järjestelmän ikkuna näkyy hetken näytöllä.</translation>
+        <source>The screen capture request is confirmed automatically. It may not work on some devices.</source>
+        <translation>Näytön kaappauspyyntö vahvistetaan automaattisesti. Se ei välttämättä toimi joillakin laitteilla.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="319"/>
@@ -9590,133 +9578,133 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetCpu</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="162"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="163"/>
         <source>Processor Properties</source>
         <translation>Suorittimen ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="166"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="167"/>
         <source>Caches</source>
         <translation>Välimuistit</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="170"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="171"/>
         <source>Instruction Set</source>
         <translation>Käskykanta</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="171"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="172"/>
         <source>Security Features</source>
         <translation>Suojausominaisuudet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="172"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="173"/>
         <source>Power Management Features</source>
         <translation>Virranhallintaominaisuudet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="173"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="174"/>
         <source>Virtualization Features</source>
         <translation>Virtualisointiominaisuudet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="174"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="175"/>
         <source>Other Features</source>
         <translation>Muut ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="245"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="246"/>
         <source>Packages</source>
         <translation>Paketit</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="248"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="249"/>
         <source>Physical Cores</source>
         <translation>Fyysiset ytimet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="251"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="252"/>
         <source>Logical Cores</source>
         <translation>Loogiset ytimet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="256"/>
         <source>Temperature</source>
         <translation>Lämpötila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="256"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="257"/>
         <source>%1 C</source>
         <translation>%1 C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="278"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="279"/>
         <source>L%1 Data Cache</source>
         <translation>L%1-datavälimuisti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="283"/>
         <source>L%1 Instruction Cache</source>
         <translation>L%1-käskyvälimuisti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="287"/>
         <source>L%1 Cache</source>
         <translation>L%1-välimuisti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="294"/>
         <source>Size</source>
         <translation>Koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="299"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="298"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="300"/>
         <source>Associativity</source>
         <translation>Assosiatiivisuus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="298"/>
         <source>Fully associative</source>
         <translation>Täysin assosiatiivinen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="299"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="300"/>
         <source>%1-way</source>
         <translation>%1-suuntainen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="302"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
         <source>Line Size</source>
         <translation>Rivin koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="302"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
         <source>%1 bytes</source>
         <translation>%1 tavua</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="305"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
         <source>Sets</source>
         <translation>Joukot</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="308"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="309"/>
         <source>Shared By</source>
         <translation>Jakavat säikeet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="308"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="309"/>
         <source>%1 threads</source>
         <translation>%1 säiettä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="332"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="333"/>
         <source>Yes</source>
         <translation>Kyllä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="332"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="333"/>
         <source>No</source>
         <translation>Ei</translation>
     </message>
@@ -9724,1138 +9712,1138 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetDmi</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="218"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="831"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="219"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="832"/>
         <source>BIOS</source>
         <translation>BIOS</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="225"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="226"/>
         <source>Motherboard</source>
         <translation>Emolevy</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="232"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="233"/>
         <source>Chassis</source>
         <translation>Kotelo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="239"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="240"/>
         <source>Processors</source>
         <translation>Suorittimet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="246"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="247"/>
         <source>Caches</source>
         <translation>Välimuistit</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="254"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="255"/>
         <source>Port Connectors</source>
         <translation>Porttiliittimet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="263"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="264"/>
         <source>System Slots</source>
         <translation>Korttipaikat</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="271"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="272"/>
         <source>On-board Devices</source>
         <translation>Emolevyn laitteet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="630"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="277"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="277"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="631"/>
         <source>OEM Strings</source>
         <translation>OEM-merkkijonot</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="635"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="282"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="282"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="636"/>
         <source>Configuration Options</source>
         <translation>Määritysasetukset</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="289"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="290"/>
         <source>Memory Arrays</source>
         <translation>Muistiryhmät</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="298"/>
         <source>Memory Devices</source>
         <translation>Muistilaitteet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="306"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="307"/>
         <source>Memory Errors</source>
         <translation>Muistivirheet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="315"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="316"/>
         <source>Memory Array Addresses</source>
         <translation>Muistiryhmien osoitteet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="325"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="326"/>
         <source>Memory Device Addresses</source>
         <translation>Muistilaitteiden osoitteet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="333"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="334"/>
         <source>Voltage Probes</source>
         <translation>Jänniteanturit</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="341"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="342"/>
         <source>Cooling Devices</source>
         <translation>Jäähdytyslaitteet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="351"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="352"/>
         <source>Temperature Probes</source>
         <translation>Lämpötila-anturit</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="360"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="361"/>
         <source>Current Probes</source>
         <translation>Virta-anturit</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="729"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="364"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="364"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="730"/>
         <source>System Boot</source>
         <translation>Järjestelmän käynnistys</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="371"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="372"/>
         <source>Additional Information</source>
         <translation>Lisätiedot</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="380"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="381"/>
         <source>TPM Device</source>
         <translation>TPM-laite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="389"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="390"/>
         <source>Processor Additional Information</source>
         <translation>Suorittimen lisätiedot</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="398"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="399"/>
         <source>Firmware Inventory</source>
         <translation>Laiteohjelmistoluettelo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="404"/>
         <source>Misc</source>
         <translation>Muut</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="746"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="404"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="747"/>
         <source>DMI Properties</source>
         <translation>DMI-ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="841"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="842"/>
         <source>Vendor</source>
         <translation>Toimittaja</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="844"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="905"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="962"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1028"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1903"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="845"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="906"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="963"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1029"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1904"/>
         <source>Version</source>
         <translation>Versio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="847"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1915"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="848"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1916"/>
         <source>Release Date</source>
         <translation>Julkaisupäivä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="851"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="852"/>
         <source>Address</source>
         <translation>Osoite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="856"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="857"/>
         <source>ROM Size</source>
         <translation>ROM-muistin koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="859"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="860"/>
         <source>Revision</source>
         <translation>Revisio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="863"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="864"/>
         <source>Firmware Revision</source>
         <translation>Laiteohjelmiston revisio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="873"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1275"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1874"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="874"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1276"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1875"/>
         <source>Characteristics</source>
         <translation>Ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="889"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="890"/>
         <source>Board %1</source>
         <translation>Emolevy %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="899"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="954"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1025"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1552"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1900"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="900"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="955"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1026"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1553"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1901"/>
         <source>Manufacturer</source>
         <translation>Valmistaja</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="902"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="903"/>
         <source>Product</source>
         <translation>Tuote</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="908"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="965"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1085"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1603"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="909"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="966"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1086"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1604"/>
         <source>Serial Number</source>
         <translation>Sarjanumero</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="911"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="968"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1088"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1606"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="912"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="969"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1089"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1607"/>
         <source>Asset Tag</source>
         <translation>Omaisuustunnus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="914"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="915"/>
         <source>Location in Chassis</source>
         <translation>Sijainti kotelossa</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="917"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="957"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1034"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1130"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1249"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1304"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1450"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1558"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1650"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="918"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="958"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1035"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1131"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1250"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1305"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1451"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1559"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1651"/>
         <source>Type</source>
         <translation>Tyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <source>Hosting Board</source>
         <translation>Isäntälevy</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1103"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1873"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Yes</source>
         <translation>Kyllä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="921"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1020"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1103"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1547"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1873"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>No</source>
         <translation>Ei</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
         <source>Requires Daughter Board</source>
         <translation>Vaatii lisäkortin</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <source>Removable</source>
         <translation>Irrotettava</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
         <source>Replaceable</source>
         <translation>Vaihdettavissa</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
         <source>Hot Swappable</source>
         <translation>Vaihdettavissa käytön aikana</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="928"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="929"/>
         <source>Features</source>
         <translation>Ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="944"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="945"/>
         <source>Chassis %1</source>
         <translation>Kotelo %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="959"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
         <source>Lock Present</source>
         <translation>Lukko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="971"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="972"/>
         <source>SKU Number</source>
         <translation>SKU-numero</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="974"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="975"/>
         <source>Boot-up State</source>
         <translation>Käynnistystila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="978"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="979"/>
         <source>Power Supply State</source>
         <translation>Virtalähteen tila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="983"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="984"/>
         <source>Thermal State</source>
         <translation>Lämpötilan tila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="986"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="987"/>
         <source>Security Status</source>
         <translation>Suojauksen tila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="990"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
         <source>Height</source>
         <translation>Korkeus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="990"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
         <source>%1 U</source>
         <translation>%1 U</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="993"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="994"/>
         <source>Power Cords</source>
         <translation>Virtajohdot</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1009"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1010"/>
         <source>Processor %1</source>
         <translation>Suoritin %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1020"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1547"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
         <source>Installed</source>
         <translation>Asennettu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1031"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1032"/>
         <source>Family</source>
         <translation>Tuoteperhe</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1037"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1401"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1453"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1038"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1402"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1454"/>
         <source>Status</source>
         <translation>Tila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1041"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1125"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1042"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1126"/>
         <source>Socket Designation</source>
         <translation>Kannan nimike</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1046"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1047"/>
         <source>Socket</source>
         <translation>Kanta</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1049"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1050"/>
         <source>Socket Type</source>
         <translation>Kannan tyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1052"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1263"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1918"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1053"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1264"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1919"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1055"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
         <source>Voltage</source>
         <translation>Jännite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1055"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1059"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
         <source>External Clock</source>
         <translation>Ulkoinen kello</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1059"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1064"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1068"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1064"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
         <source>Max Speed</source>
         <translation>Enimmäiskellotaajuus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1068"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
         <source>Current Speed</source>
         <translation>Nykyinen kellotaajuus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1073"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1074"/>
         <source>Core Count</source>
         <translation>Ydinten määrä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1076"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1077"/>
         <source>Cores Enabled</source>
         <translation>Käytössä olevat ytimet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1079"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1080"/>
         <source>Thread Count</source>
         <translation>Säikeiden määrä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1082"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1083"/>
         <source>Threads Enabled</source>
         <translation>Käytössä olevat säikeet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1091"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1600"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1092"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1601"/>
         <source>Part Number</source>
         <translation>Osanumero</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1093"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <source>64-bit Capable</source>
         <translation>Tukee 64-bittisyyttä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
         <source>Multi-Core</source>
         <translation>Moniydin</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
         <source>Hardware Thread</source>
         <translation>Laitteistosäie</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1097"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
         <source>Execute Protection</source>
         <translation>Suorituksen esto</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
         <source>Enhanced Virtualization</source>
         <translation>Laajennettu virtualisointi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
         <source>Power/Performance Control</source>
         <translation>Virran ja suorituskyvyn hallinta</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1115"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1116"/>
         <source>L%1 Cache</source>
         <translation>L%1-välimuisti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1127"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1128"/>
         <source>Level</source>
         <translation>Taso</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1133"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1134"/>
         <source>Installed Size</source>
         <translation>Asennettu koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1136"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1137"/>
         <source>Maximum Size</source>
         <translation>Enimmäiskoko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1139"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1398"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1496"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1539"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1140"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1399"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1497"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1540"/>
         <source>Location</source>
         <translation>Sijainti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1142"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1143"/>
         <source>Operational Mode</source>
         <translation>Toimintatila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1145"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1146"/>
         <source>SRAM Type</source>
         <translation>SRAM-tyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1149"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1150"/>
         <source>Supported SRAM Types</source>
         <translation>Tuetut SRAM-tyypit</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1155"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1156"/>
         <source>Error Correction Type</source>
         <translation>Virheenkorjauksen tyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1160"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1161"/>
         <source>Associativity</source>
         <translation>Assosiatiivisuus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1164"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1570"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
         <source>Speed</source>
         <translation>Nopeus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1164"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
         <source>%1 ns</source>
         <translation>%1 ns</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1166"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1313"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
         <source>Enabled</source>
         <translation>Käytössä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
         <source>Socketed</source>
         <translation>Kannassa</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1186"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1187"/>
         <source>Port %1</source>
         <translation>Portti %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1196"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1197"/>
         <source>Port Type</source>
         <translation>Portin tyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1200"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1201"/>
         <source>Internal Designator</source>
         <translation>Sisäinen nimike</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1206"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1207"/>
         <source>Internal Connector Type</source>
         <translation>Sisäisen liittimen tyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1212"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1213"/>
         <source>External Designator</source>
         <translation>Ulkoinen nimike</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1218"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1219"/>
         <source>External Connector Type</source>
         <translation>Ulkoisen liittimen tyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1236"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1237"/>
         <source>Slot %1</source>
         <translation>Korttipaikka %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1246"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1247"/>
         <source>Designation</source>
         <translation>Nimike</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1252"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1253"/>
         <source>Data Bus Width</source>
         <translation>Dataväylän leveys</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1255"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1256"/>
         <source>Current Usage</source>
         <translation>Nykyinen käyttö</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1258"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1259"/>
         <source>Length</source>
         <translation>Pituus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1261"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1311"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1262"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1312"/>
         <source>Bus Address</source>
         <translation>Väyläosoite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1267"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <source>5 V Provided</source>
         <translation>5 V:n syöttö</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <source>3.3 V Provided</source>
         <translation>3,3 V:n syöttö</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <source>Shared</source>
         <translation>Jaettu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <source>PME Signal</source>
         <translation>PME-signaali</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <source>Hot Plug</source>
         <translation>Hot plug</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
         <source>SMBus Signal</source>
         <translation>SMBus-signaali</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
         <source>Bifurcation</source>
         <translation>Haaroitus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1291"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1437"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1529"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1844"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1292"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1438"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1530"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1845"/>
         <source>Device %1</source>
         <translation>Laite %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1301"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1395"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1447"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1854"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1302"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1396"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1448"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1855"/>
         <source>Description</source>
         <translation>Kuvaus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1308"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1309"/>
         <source>Type Instance</source>
         <translation>Tyypin esiintymä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1325"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1326"/>
         <source>String %1</source>
         <translation>Merkkijono %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1339"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1340"/>
         <source>Option %1</source>
         <translation>Asetus %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1357"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1358"/>
         <source>Probe %1</source>
         <translation>Anturi %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1368"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1369"/>
         <source>mV</source>
         <translation>mV</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1370"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1371"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1372"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1373"/>
         <source>mA</source>
         <translation>mA</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1404"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1405"/>
         <source>Nominal Value</source>
         <translation>Nimellisarvo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1407"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1408"/>
         <source>Maximum Value</source>
         <translation>Enimmäisarvo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1410"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1411"/>
         <source>Minimum Value</source>
         <translation>Vähimmäisarvo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1413"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1414"/>
         <source>Tolerance</source>
         <translation>Toleranssi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1416"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1678"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1417"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
         <source>Resolution</source>
         <translation>Tarkkuus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1420"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1421"/>
         <source>Accuracy</source>
         <translation>Tarkkuus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1457"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1458"/>
         <source>Cooling Unit Group</source>
         <translation>Jäähdytysyksikköryhmä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1460"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
         <source>Nominal Speed</source>
         <translation>Nimellisnopeus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1460"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
         <source>%1 rpm</source>
         <translation>%1 rpm</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1470"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1471"/>
         <source>Boot Status</source>
         <translation>Käynnistyksen tila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1486"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1487"/>
         <source>Array %1</source>
         <translation>Muistiryhmä %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1499"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1500"/>
         <source>Use</source>
         <translation>Käyttötarkoitus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1503"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1504"/>
         <source>Error Correction</source>
         <translation>Virheenkorjaus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1509"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1510"/>
         <source>Maximum Capacity</source>
         <translation>Enimmäiskapasiteetti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1513"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1514"/>
         <source>Number of Devices</source>
         <translation>Laitteiden määrä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1542"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1543"/>
         <source>Bank</source>
         <translation>Muistipankki</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1555"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1710"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1749"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1556"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1711"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1750"/>
         <source>Size</source>
         <translation>Koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1561"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1562"/>
         <source>Type Detail</source>
         <translation>Tyypin tiedot</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1564"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1565"/>
         <source>Form Factor</source>
         <translation>Muototekijä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1567"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1568"/>
         <source>Technology</source>
         <translation>Tekniikka</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1570"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1576"/>
         <source>%1 MT/s</source>
         <translation>%1 MT/s</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1574"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
         <source>Configured Speed</source>
         <translation>Määritetty nopeus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1579"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
         <source>Total Width</source>
         <translation>Kokonaisleveys</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1579"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1582"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
         <source>%1 bit</source>
         <translation>%1 bittiä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1582"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
         <source>Data Width</source>
         <translation>Datan leveys</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1585"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1586"/>
         <source>Rank</source>
         <translation>Rank</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1588"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
         <source>Minimum Voltage</source>
         <translation>Vähimmäisjännite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1588"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1591"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1597"/>
         <source>%1 mV</source>
         <translation>%1 mV</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1591"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
         <source>Maximum Voltage</source>
         <translation>Enimmäisjännite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1595"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
         <source>Configured Voltage</source>
         <translation>Määritetty jännite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1610"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1863"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1611"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1864"/>
         <source>Firmware Version</source>
         <translation>Laiteohjelmistoversio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1616"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1617"/>
         <source>Non-volatile Size</source>
         <translation>Haihtumattoman muistin koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1622"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1623"/>
         <source>Volatile Size</source>
         <translation>Haihtuvan muistin koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1627"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1628"/>
         <source>Cache Size</source>
         <translation>Välimuistin koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1630"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1631"/>
         <source>Logical Size</source>
         <translation>Looginen koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1640"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1641"/>
         <source>Record %1</source>
         <translation>Tietue %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1653"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1654"/>
         <source>Granularity</source>
         <translation>Rakeisuus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1656"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1657"/>
         <source>Operation</source>
         <translation>Toiminto</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1661"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1662"/>
         <source>Vendor Syndrome</source>
         <translation>Toimittajan syndrooma</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1667"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1668"/>
         <source>Memory Array Address</source>
         <translation>Muistiryhmän osoite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1673"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1674"/>
         <source>Device Address</source>
         <translation>Laitteen osoite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1678"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1959"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
         <source>%1 bytes</source>
         <translation>%1 tavua</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1691"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1729"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1692"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1730"/>
         <source>Range %1</source>
         <translation>Alue %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1701"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1702"/>
         <source>Array</source>
         <translation>Muistiryhmä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1706"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1745"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1707"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1746"/>
         <source>Starting Address</source>
         <translation>Alkuosoite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1708"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1747"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1709"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1748"/>
         <source>Ending Address</source>
         <translation>Loppuosoite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1715"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1716"/>
         <source>Partition Width</source>
         <translation>Osion leveys</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1740"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1741"/>
         <source>Device</source>
         <translation>Laite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1753"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1754"/>
         <source>Partition Row Position</source>
         <translation>Osiorivin sijainti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1757"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1758"/>
         <source>Interleave Position</source>
         <translation>Lomituksen sijainti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1763"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1764"/>
         <source>Interleaved Data Depth</source>
         <translation>Lomitetun datan syvyys</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1778"/>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1813"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1779"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1814"/>
         <source>Entry %1</source>
         <translation>Merkintä %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1788"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1789"/>
         <source>String</source>
         <translation>Merkkijono</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1791"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1792"/>
         <source>Value</source>
         <translation>Arvo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1794"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1795"/>
         <source>Referenced Handle</source>
         <translation>Viitattu kahva</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1796"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1797"/>
         <source>Referenced Offset</source>
         <translation>Viitattu siirtymä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1825"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1826"/>
         <source>Processor</source>
         <translation>Suoritin</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1828"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1829"/>
         <source>Architecture</source>
         <translation>Arkkitehtuuri</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1857"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1858"/>
         <source>Vendor ID</source>
         <translation>Toimittaja-ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1860"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1861"/>
         <source>Specification Version</source>
         <translation>Määrityksen versio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1867"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
         <source>Configurable by Firmware</source>
         <translation>Laiteohjelmiston määritettävissä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
         <source>Configurable by Software</source>
         <translation>Ohjelmiston määritettävissä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
         <source>Configurable by OEM</source>
         <translation>OEM:n määritettävissä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1887"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1888"/>
         <source>Firmware %1</source>
         <translation>Laiteohjelmisto %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1897"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1898"/>
         <source>Name</source>
         <translation>Nimi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1906"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1907"/>
         <source>Version Format</source>
         <translation>Version muoto</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1910"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1911"/>
         <source>Lowest Supported Version</source>
         <translation>Vanhin tuettu versio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1921"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1922"/>
         <source>ID Format</source>
         <translation>ID-muoto</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1924"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1925"/>
         <source>State</source>
         <translation>Tila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1927"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1928"/>
         <source>Image Size</source>
         <translation>Näköistiedoston koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1929"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <source>Updatable</source>
         <translation>Päivitettävissä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Write-protected</source>
         <translation>Kirjoitussuojattu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1936"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1937"/>
         <source>Component %1</source>
         <translation>Komponentti %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1941"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1942"/>
         <source>Associated Components</source>
         <translation>Liittyvät komponentit</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1953"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1954"/>
         <source>SMBIOS Version</source>
         <translation>SMBIOS-versio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1956"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1957"/>
         <source>Structures</source>
         <translation>Rakenteet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1959"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
         <source>Structures Size</source>
         <translation>Rakenteiden koko</translation>
     </message>
@@ -10863,68 +10851,68 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetDrivers</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="132"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="133"/>
         <source>Continue Pending</source>
         <translation>Jatketaan</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="134"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="135"/>
         <source>Pause Pending</source>
         <translation>Keskeytetään</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="136"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="137"/>
         <source>Paused</source>
         <translation>Keskeytetty</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="139"/>
         <source>Running</source>
         <translation>Käynnissä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="140"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="141"/>
         <source>Start Pending</source>
         <translation>Käynnistetään</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="142"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="143"/>
         <source>Stop Pending</source>
         <translation>Pysäytetään</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="145"/>
         <source>Stopped</source>
         <translation>Pysäytetty</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="146"/>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="147"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="169"/>
         <source>Unknown</source>
         <translation>Tuntematon</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="158"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="159"/>
         <source>Auto Start</source>
         <translation>Automaattinen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="160"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="161"/>
         <source>Demand Start</source>
         <translation>Manuaalinen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="162"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="163"/>
         <source>Disabled</source>
         <translation>Poissa käytöstä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="164"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="165"/>
         <source>Boot Start</source>
         <translation>Käynnistyslataus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="166"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="167"/>
         <source>System Start</source>
         <translation>Järjestelmäkäynnistys</translation>
     </message>
@@ -10932,77 +10920,77 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetDrives</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="159"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="160"/>
         <source>Path</source>
         <translation>Polku</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="162"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="163"/>
         <source>Model</source>
         <translation>Malli</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="165"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="166"/>
         <source>Serial Number</source>
         <translation>Sarjanumero</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="169"/>
         <source>Firmware Revision</source>
         <translation>Laiteohjelmiston revisio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="172"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="173"/>
         <source>Bus Type</source>
         <translation>Väylätyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="175"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="176"/>
         <source>Size</source>
         <translation>Koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="180"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="181"/>
         <source>Media Type</source>
         <translation>Median tyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="183"/>
         <source>Solid State</source>
         <translation>SSD</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="183"/>
         <source>Rotating</source>
         <translation>Pyörivä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="187"/>
         <source>Rotation Rate</source>
         <translation>Pyörimisnopeus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="187"/>
         <source>%1 RPM</source>
         <translation>%1 RPM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="190"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="191"/>
         <source>Cache Size</source>
         <translation>Välimuistin koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="195"/>
         <source>Removable</source>
         <translation>Siirrettävä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="195"/>
         <source>Yes</source>
         <translation>Kyllä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="195"/>
         <source>No</source>
         <translation>Ei</translation>
     </message>
@@ -11010,47 +10998,47 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetEventLogs</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="68"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="69"/>
         <source>Application</source>
         <translation>Sovellus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="70"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="71"/>
         <source>Security</source>
         <translation>Suojaus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="72"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="73"/>
         <source>System</source>
         <translation>Järjestelmä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="308"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="309"/>
         <source>Information</source>
         <translation>Tiedot</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="310"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="311"/>
         <source>Warning</source>
         <translation>Varoitus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="312"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="313"/>
         <source>Error</source>
         <translation>Virhe</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="314"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="315"/>
         <source>Audit Success</source>
         <translation>Valvonnan onnistuminen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="316"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="317"/>
         <source>Audit Failure</source>
         <translation>Valvonnan epäonnistuminen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="318"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="319"/>
         <source>Unknown</source>
         <translation>Tuntematon</translation>
     </message>
@@ -11058,37 +11046,37 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetLicenses</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="139"/>
         <source>License Type</source>
         <translation>Lisenssityyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="141"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="142"/>
         <source>License Version</source>
         <translation>Lisenssiversio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="145"/>
         <source>Organization</source>
         <translation>Organisaatio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="147"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="148"/>
         <source>Owner</source>
         <translation>Omistaja</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="150"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="151"/>
         <source>Product ID</source>
         <translation>Tuote-ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="153"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="154"/>
         <source>Product Key</source>
         <translation>Tuoteavain</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="157"/>
         <source>Unknown Field</source>
         <translation>Tuntematon kenttä</translation>
     </message>
@@ -11096,56 +11084,56 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetLocalUsers</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="147"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="148"/>
         <source>Full Name</source>
         <translation>Koko nimi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="150"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="151"/>
         <source>Home Directory</source>
         <translation>Kotihakemisto</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <source>Disabled</source>
         <translation>Poissa käytöstä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="155"/>
         <source>Yes</source>
         <translation>Kyllä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="155"/>
         <source>No</source>
         <translation>Ei</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Password Expired</source>
         <translation>Salasana vanhentunut</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="155"/>
         <source>Don&apos;t Expire Password</source>
         <translation>Salasana ei vanhene</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="158"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="159"/>
         <source>Never</source>
         <translation>Ei koskaan</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="162"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="163"/>
         <source>Last Logon</source>
         <translation>Viimeisin kirjautuminen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="174"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="175"/>
         <source>Groups</source>
         <translation>Ryhmät</translation>
     </message>
@@ -11153,153 +11141,153 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetMonitors</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="155"/>
         <source>Monitor Name</source>
         <translation>Näytön nimi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="157"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="158"/>
         <source>Manufacturer Name</source>
         <translation>Valmistajan nimi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="160"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="161"/>
         <source>Monitor ID</source>
         <translation>Näyttö-ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="163"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="164"/>
         <source>Serial Number</source>
         <translation>Sarjanumero</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="167"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="168"/>
         <source>EDID Version</source>
         <translation>EDID-versio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="173"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="174"/>
         <source>Date Of Manufacture</source>
         <translation>Valmistuspäivä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="174"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="175"/>
         <source>Week %1 / %2</source>
         <translation>Viikko %1 / %2</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="179"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="180"/>
         <source>Gamma</source>
         <translation>Gamma</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="183"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>Image Size</source>
         <translation>Kuvan koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="184"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="185"/>
         <source>%1x%2 cm</source>
         <translation>%1x%2 cm</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="193"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="194"/>
         <source>Diagonal Size</source>
         <translation>Halkaisija</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="198"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="199"/>
         <source>Resolution</source>
         <translation>Tarkkuus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="205"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="206"/>
         <source>Horizontal Frequency</source>
         <translation>Vaakataajuus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="206"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="207"/>
         <source>%1 - %2 kHz</source>
         <translation>%1 - %2 kHz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="212"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="213"/>
         <source>Vertical Frequency</source>
         <translation>Pystytaajuus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="213"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="214"/>
         <source>%1 - %2 Hz</source>
         <translation>%1 - %2 Hz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="219"/>
         <source>Pixel Clock</source>
         <translation>Pikselikello</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="219"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="222"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="222"/>
         <source>Maximum Pixel Clock</source>
         <translation>Suurin pikselikello</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="223"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="224"/>
         <source>Input Signal Type</source>
         <translation>Tulosignaalin tyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="227"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="228"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="229"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="232"/>
         <source>Yes</source>
         <translation>Kyllä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="227"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="228"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="229"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="232"/>
         <source>No</source>
         <translation>Ei</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="234"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="235"/>
         <source>Supported Features</source>
         <translation>Tuetut ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="243"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="244"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="247"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="248"/>
         <source>Supported Video Modes</source>
         <translation>Tuetut näyttötilat</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="294"/>
         <source>Digital</source>
         <translation>Digitaalinen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="295"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="296"/>
         <source>Analog</source>
         <translation>Analoginen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="297"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="298"/>
         <source>Unknown</source>
         <translation>Tuntematon</translation>
     </message>
@@ -11307,67 +11295,67 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetNetAdapters</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="140"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="141"/>
         <source>Adapter Name</source>
         <translation>Sovittimen nimi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="143"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="144"/>
         <source>Interface Type</source>
         <translation>Liitäntätyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="147"/>
         <source>Connection Speed</source>
         <translation>Yhteysnopeus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
         <source>MAC Address</source>
         <translation>MAC-osoite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="152"/>
         <source>DHCP Enabled</source>
         <translation>DHCP käytössä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="152"/>
         <source>Yes</source>
         <translation>Kyllä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="152"/>
         <source>No</source>
         <translation>Ei</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="157"/>
         <source>DHCP Server #%1</source>
         <translation>DHCP-palvelin %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="157"/>
         <source>DHCP Server</source>
         <translation>DHCP-palvelin</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="169"/>
         <source>Address #%1</source>
         <translation>Osoite %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="169"/>
         <source>Address</source>
         <translation>Osoite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="177"/>
         <source>Gateway #%1</source>
         <translation>Yhdyskäytävä %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="177"/>
         <source>Gateway</source>
         <translation>Yhdyskäytävä</translation>
     </message>
@@ -11375,32 +11363,32 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetNetShares</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="133"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="134"/>
         <source>Description</source>
         <translation>Kuvaus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="136"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="137"/>
         <source>Type</source>
         <translation>Tyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="139"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="140"/>
         <source>Local Path</source>
         <translation>Paikallinen polku</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="141"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="142"/>
         <source>Current Uses</source>
         <translation>Nykyinen käyttömäärä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="145"/>
         <source>Not limited</source>
         <translation>Ei rajoitettu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="145"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="146"/>
         <source>Maximum Uses</source>
         <translation>Enimmäiskäyttömäärä</translation>
     </message>
@@ -11408,170 +11396,170 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetPowerOptions</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="157"/>
         <source>Power Source</source>
         <translation>Virtalähde</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="158"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="159"/>
         <source>Battery Status</source>
         <translation>Akun tila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="164"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="165"/>
         <source>Battery Life Percent</source>
         <translation>Akun varaus prosentteina</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="170"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="171"/>
         <source>Full Battery Life Time</source>
         <translation>Täyden akun kesto</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="177"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="178"/>
         <source>Remaining Battery Life Time</source>
         <translation>Jäljellä oleva akunkesto</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="193"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="194"/>
         <source>Device Name</source>
         <translation>Laitteen nimi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="196"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="197"/>
         <source>Manufacturer</source>
         <translation>Valmistaja</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="199"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="200"/>
         <source>Manufacture Date</source>
         <translation>Valmistuspäivä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="202"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="203"/>
         <source>Unique Id</source>
         <translation>Yksilöllinen ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="205"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="206"/>
         <source>Serial Number</source>
         <translation>Sarjanumero</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="208"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="209"/>
         <source>Temperature</source>
         <translation>Lämpötila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="212"/>
         <source>Design Capacity</source>
         <translation>Suunniteltu kapasiteetti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="212"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="218"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="224"/>
         <source>%1 mWh</source>
         <translation>%1 mWh</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="214"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="215"/>
         <source>Type</source>
         <translation>Tyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="218"/>
         <source>Full Charged Capacity</source>
         <translation>Täyden latauksen kapasiteetti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="220"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="221"/>
         <source>Depreciation</source>
         <translation>Kuluminen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="224"/>
         <source>Current Capacity</source>
         <translation>Nykyinen kapasiteetti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="227"/>
         <source>Voltage</source>
         <translation>Jännite</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="227"/>
         <source>%1 mV</source>
         <translation>%1 mV</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="315"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="233"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="316"/>
         <source>Charging</source>
         <translation>Latautuu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="233"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="236"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="239"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="242"/>
         <source>Yes</source>
         <translation>Kyllä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="313"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="236"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="314"/>
         <source>Critical</source>
         <translation>Kriittinen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="239"/>
         <source>Discharging</source>
         <translation>Purkautuu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="242"/>
         <source>Power OnLine</source>
         <translation>Verkkovirta kytketty</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="245"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="246"/>
         <source>State</source>
         <translation>Tila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="250"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="251"/>
         <source>Battery #%1</source>
         <translation>Akku %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="291"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="292"/>
         <source>DC Battery</source>
         <translation>Akkuvirta</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="294"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="295"/>
         <source>AC Line</source>
         <translation>Verkkovirta</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="297"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="319"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="298"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="320"/>
         <source>Unknown</source>
         <translation>Tuntematon</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="309"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="310"/>
         <source>High</source>
         <translation>Korkea</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="311"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="312"/>
         <source>Low</source>
         <translation>Matala</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="317"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="318"/>
         <source>No Battery</source>
         <translation>Ei akkua</translation>
     </message>
@@ -11579,44 +11567,44 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetPrinters</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="139"/>
         <source>Default</source>
         <translation>Oletus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="139"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="147"/>
         <source>Yes</source>
         <translation>Kyllä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="139"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="147"/>
         <source>No</source>
         <translation>Ei</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="141"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="142"/>
         <source>Port</source>
         <translation>Portti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="145"/>
         <source>Driver</source>
         <translation>Ohjain</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="147"/>
         <source>Shared</source>
         <translation>Jaettu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="149"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="150"/>
         <source>Share Name</source>
         <translation>Jaon nimi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="151"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="152"/>
         <source>Jobs Count</source>
         <translation>Töiden määrä</translation>
     </message>
@@ -11624,12 +11612,12 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetProcesses</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_processes.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.cc" line="145"/>
         <source>System Idle Process</source>
         <translation>Käyttämättömän ajan prosessi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_processes.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.cc" line="147"/>
         <source>Unknown Process</source>
         <translation>Tuntematon prosessi</translation>
     </message>
@@ -11637,68 +11625,68 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetServices</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="139"/>
         <source>Continue Pending</source>
         <translation>Jatketaan</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="140"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="141"/>
         <source>Pause Pending</source>
         <translation>Keskeytetään</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="142"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="143"/>
         <source>Paused</source>
         <translation>Keskeytetty</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="145"/>
         <source>Running</source>
         <translation>Käynnissä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="147"/>
         <source>Start Pending</source>
         <translation>Käynnistetään</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="148"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="149"/>
         <source>Stop Pending</source>
         <translation>Pysäytetään</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="150"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="151"/>
         <source>Stopped</source>
         <translation>Pysäytetty</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="152"/>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="174"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="153"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="175"/>
         <source>Unknown</source>
         <translation>Tuntematon</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="164"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="165"/>
         <source>Auto Start</source>
         <translation>Automaattinen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="166"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="167"/>
         <source>Demand Start</source>
         <translation>Manuaalinen</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="169"/>
         <source>Disabled</source>
         <translation>Poissa käytöstä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="170"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="171"/>
         <source>Boot Start</source>
         <translation>Käynnistyslataus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_services.cc" line="172"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="173"/>
         <source>System Start</source>
         <translation>Järjestelmäkäynnistys</translation>
     </message>
@@ -11706,214 +11694,214 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetSmart</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
         <source>Attribute</source>
         <translation>Attribuutti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="393"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="395"/>
         <source>Value</source>
         <translation>Arvo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
         <source>Worst</source>
         <translation>Huonoin</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
         <source>Threshold</source>
         <translation>Kynnysarvo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="393"/>
         <source>Raw</source>
         <translation>Raaka-arvo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="389"/>
         <source>Status</source>
         <translation>Tila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="393"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="395"/>
         <source>Parameter</source>
         <translation>Parametri</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="409"/>
         <source>Health Data</source>
         <translation>Kuntotiedot</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="409"/>
         <source>Not available</source>
         <translation>Ei saatavilla</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="425"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="426"/>
         <source>OK. Always passed</source>
         <translation>OK. Aina läpäisty</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="427"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="428"/>
         <source>OK. Value is normal</source>
         <translation>OK. Arvo on normaali</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="429"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="430"/>
         <source>Warning. Value is pre-failure</source>
         <translation>Varoitus. Arvo ennakoi vikaantumista</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="431"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="432"/>
         <source>Warning. Value is not normal</source>
         <translation>Varoitus. Arvo ei ole normaali</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="438"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="439"/>
         <source>Unknown Attribute</source>
         <translation>Tuntematon attribuutti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="461"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="462"/>
         <source>Spare capacity is below the threshold</source>
         <translation>Varakapasiteetti on kynnysarvon alapuolella</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="463"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="464"/>
         <source>Temperature is outside of the operating range</source>
         <translation>Lämpötila on käyttöalueen ulkopuolella</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="465"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="466"/>
         <source>Reliability is degraded</source>
         <translation>Luotettavuus on heikentynyt</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="467"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="468"/>
         <source>Media is in read-only mode</source>
         <translation>Media on vain luku -tilassa</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="469"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="470"/>
         <source>Volatile memory backup device failed</source>
         <translation>Haihtuvan muistin varmistuslaite vikaantui</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="471"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="472"/>
         <source>Persistent memory region is unreliable</source>
         <translation>Pysyvän muistin alue on epäluotettava</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="475"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="476"/>
         <source>Critical Warning</source>
         <translation>Kriittinen varoitus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="476"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="477"/>
         <source>None</source>
         <translation>Ei mitään</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="481"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="482"/>
         <source>Temperature</source>
         <translation>Lämpötila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="482"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="498"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="483"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="499"/>
         <source>%1 C</source>
         <translation>%1 C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="497"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="498"/>
         <source>Temperature Sensor %1</source>
         <translation>Lämpötila-anturi %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="503"/>
         <source>Available Spare</source>
         <translation>Käytettävissä oleva vara-alue</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="505"/>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="503"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="506"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="508"/>
         <source>%1%</source>
         <translation>%1 %</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="504"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="505"/>
         <source>Available Spare Threshold</source>
         <translation>Vara-alueen kynnysarvo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="508"/>
         <source>Percentage Used</source>
         <translation>Käytetty prosenttiosuus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="510"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="511"/>
         <source>Data Read</source>
         <translation>Luettu data</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="513"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="514"/>
         <source>Data Written</source>
         <translation>Kirjoitettu data</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="517"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="518"/>
         <source>Host Read Commands</source>
         <translation>Isännän lukukomennot</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="519"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="520"/>
         <source>Host Write Commands</source>
         <translation>Isännän kirjoituskomennot</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="521"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="522"/>
         <source>Controller Busy Time</source>
         <translation>Ohjaimen varattuna oloaika</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="524"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="525"/>
         <source>Power Cycles</source>
         <translation>Virrankytkentäkerrat</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="526"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="527"/>
         <source>Power-On Time</source>
         <translation>Käyttöaika</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="529"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="530"/>
         <source>Unsafe Shutdowns</source>
         <translation>Turvattomat sammutukset</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="531"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="532"/>
         <source>Media Errors</source>
         <translation>Mediavirheet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="533"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="534"/>
         <source>Error Log Entries</source>
         <translation>Virhelokin merkinnät</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="536"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="537"/>
         <source>Warning Temperature Time</source>
         <translation>Varoituslämpötilan aika</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="539"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="540"/>
         <source>Critical Temperature Time</source>
         <translation>Kriittisen lämpötilan aika</translation>
     </message>
@@ -11921,169 +11909,169 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetSummary</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="200"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="241"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="201"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="242"/>
         <source>Name</source>
         <translation>Nimi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="203"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="204"/>
         <source>Domain</source>
         <translation>Toimialue</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="206"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="207"/>
         <source>Workgroup</source>
         <translation>Työryhmä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="209"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="210"/>
         <source>Uptime</source>
         <translation>Käynnissäoloaika</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="212"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="213"/>
         <source>Computer</source>
         <translation>Tietokone</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="219"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="220"/>
         <source>Host Version</source>
         <translation>Isännän versio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="222"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="223"/>
         <source>Client Version</source>
         <translation>Asiakkaan versio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="227"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="228"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="230"/>
         <source>Router Version</source>
         <translation>Reitittimen versio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="232"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="233"/>
         <source>Aspia Information</source>
         <translation>Aspia-tiedot</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="244"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="316"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="245"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="317"/>
         <source>Version</source>
         <translation>Versio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="247"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="248"/>
         <source>Architecture</source>
         <translation>Arkkitehtuuri</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="250"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="251"/>
         <source>License Key</source>
         <translation>Lisenssiavain</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="253"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="254"/>
         <source>Install Date</source>
         <translation>Asennuspäivä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="258"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="259"/>
         <source>Operating System</source>
         <translation>Käyttöjärjestelmä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="268"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="340"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="269"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="341"/>
         <source>Manufacturer</source>
         <translation>Valmistaja</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="271"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="286"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="287"/>
         <source>Model</source>
         <translation>Malli</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="276"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="277"/>
         <source>Motherboard</source>
         <translation>Emolevy</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="289"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="313"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="290"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="314"/>
         <source>Vendor</source>
         <translation>Toimittaja</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="292"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="293"/>
         <source>Packages</source>
         <translation>Paketit</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="295"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="296"/>
         <source>Cores</source>
         <translation>Ytimet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="298"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="299"/>
         <source>Threads</source>
         <translation>Säikeet</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="303"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="304"/>
         <source>Processor</source>
         <translation>Suoritin</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="319"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="320"/>
         <source>Date</source>
         <translation>Päivämäärä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="343"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="344"/>
         <source>Size</source>
         <translation>Koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
         <source>Speed</source>
         <translation>Nopeus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="346"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="347"/>
         <source>Type</source>
         <translation>Tyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
         <source>Installed</source>
         <translation>Asennettu</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="230"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
         <source>No</source>
         <translation>Ei</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
         <source>%1 MT/s</source>
         <translation>%1 MT/s</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="363"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="364"/>
         <source>Memory</source>
         <translation>Muisti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="392"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="393"/>
         <source>%1 (%2 free)</source>
         <translation>%1 (%2 vapaana)</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="402"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="403"/>
         <source>Logical Drives</source>
         <translation>Loogiset asemat</translation>
     </message>
@@ -12091,133 +12079,133 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SysInfoWidgetVideoAdapters</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="84"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="85"/>
         <source>%1 C</source>
         <translation>%1 C</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="150"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="151"/>
         <source>Description</source>
         <translation>Kuvaus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="153"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="154"/>
         <source>Adapter String</source>
         <translation>Sovittimen merkkijono</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="157"/>
         <source>BIOS String</source>
         <translation>BIOS-merkkijono</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="159"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="160"/>
         <source>Chip Type</source>
         <translation>Piirityyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="162"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="163"/>
         <source>DAC Type</source>
         <translation>DAC-tyyppi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="168"/>
         <source>Location</source>
         <translation>Sijainti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="168"/>
         <source>Bus %1, device %2, function %3</source>
         <translation>Väylä %1, laite %2, funktio %3</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="175"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="176"/>
         <source>Memory Size</source>
         <translation>Muistin koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="181"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="182"/>
         <source>Memory Used</source>
         <translation>Käytetty muisti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="187"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="188"/>
         <source>Shared Memory Size</source>
         <translation>Jaetun muistin koko</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="193"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="194"/>
         <source>Shared Memory Used</source>
         <translation>Jaettua muistia käytössä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="199"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="200"/>
         <source>Memory Frequency</source>
         <translation>Muistin taajuus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="200"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="201"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="215"/>
         <source>Driver Model</source>
         <translation>Ohjainmalli</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="215"/>
         <source>WDDM %1.%2</source>
         <translation>WDDM %1.%2</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="221"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="222"/>
         <source>Temperature</source>
         <translation>Lämpötila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="227"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="228"/>
         <source>Maximum Temperature</source>
         <translation>Enimmäislämpötila</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="233"/>
         <source>Fan Speed</source>
         <translation>Tuulettimen nopeus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="233"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="237"/>
         <source>%1 RPM</source>
         <translation>%1 RPM</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="237"/>
         <source>Maximum Fan Speed</source>
         <translation>Tuulettimen enimmäisnopeus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="242"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="243"/>
         <source>Power Usage</source>
         <translation>Virrankulutus</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="243"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="244"/>
         <source>%1%</source>
         <translation>%1 %</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="204"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="205"/>
         <source>Driver Date</source>
         <translation>Ohjaimen päivämäärä</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="207"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="208"/>
         <source>Driver Version</source>
         <translation>Ohjainversio</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="210"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="211"/>
         <source>Driver Provider</source>
         <translation>Ohjaimen toimittaja</translation>
     </message>
@@ -12754,42 +12742,47 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>TempHostListModel</name>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="131"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="133"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="134"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="136"/>
         <source>Computer Name</source>
         <translation>Tietokoneen nimi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="137"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="139"/>
         <source>Operating System</source>
         <translation>Käyttöjärjestelmä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="140"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="142"/>
         <source>Version</source>
         <translation>Versio</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="145"/>
         <source>Address</source>
         <translation>Osoite</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="146"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="148"/>
+        <source>Connect Time</source>
+        <translation>Yhdistämisaika</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="151"/>
         <source>Type</source>
         <translation>Tyyppi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="213"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="225"/>
         <source>Quick Support</source>
         <translation>Quick Support</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="213"/>
+        <location filename="../client/desktop/management/temp_host_list_model.cc" line="225"/>
         <source>Installed</source>
         <translation>Asennettu</translation>
     </message>
