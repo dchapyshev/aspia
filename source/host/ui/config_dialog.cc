@@ -599,7 +599,7 @@ void ConfigDialog::onExportInstaller()
 
     const QString default_name = QString("aspia-host-%1-%2.msi").arg(ASPIA_VERSION_SHORT_STRING).arg(arch);
     QString file_path = QFileDialog::getSaveFileName(
-        this, tr("Export Installer"), desktopPath(default_name), tr("MSI-files (*.msi)"));
+        this, tr("Export"), desktopPath(default_name), tr("MSI-files (*.msi)"));
     if (file_path.isEmpty())
     {
         LOG(INFO) << "No selected file path";
@@ -634,8 +634,7 @@ void ConfigDialog::onExportPortable()
     LOG(INFO) << "[ACTION] Export portable";
 
     QString file_path = QFileDialog::getSaveFileName(
-        this, tr("Export Quick Support"), desktopPath("aspia-quick-support.exe"),
-        tr("Executable files (*.exe)"));
+        this, tr("Export"), desktopPath("aspia-quick-support.exe"), tr("Executable files (*.exe)"));
     if (file_path.isEmpty())
     {
         LOG(INFO) << "No selected file path";
