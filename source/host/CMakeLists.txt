@@ -389,3 +389,7 @@ if (APPLE)
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 endif()
+
+if (WIN32)
+    add_subdirectory(credentials)
+endif()
