@@ -75,13 +75,12 @@ bool isSystemProcess(quint32 pid)
         return false;
     }
 
-    HANDLE token_handle = nullptr;
-    if (!OpenProcessToken(process.get(), TOKEN_QUERY, &token_handle))
+    ScopedHandle token;
+    if (!OpenProcessToken(process.get(), TOKEN_QUERY, token.recieve()))
     {
         PLOG(ERROR) << "OpenProcessToken failed";
         return false;
     }
-    ScopedHandle token(token_handle);
 
     QString user_sid;
     if (!tokenUserSidString(token.get(), &user_sid))

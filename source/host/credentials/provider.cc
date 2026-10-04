@@ -26,6 +26,7 @@
 
 #include "host/credentials/dll_main.h"
 #include "host/credentials/logging.h"
+#include "host/credentials/utils.h"
 
 namespace {
 
@@ -53,6 +54,23 @@ IpcClient::ScreenType screenTypeForCpus(CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus)
         case CPUS_CREDUI:             return IpcClient::ScreenType::UAC;
         default:                      return IpcClient::ScreenType::UNKNOWN;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+bool validateCredentials(const wchar_t* domain, const wchar_t* username, const wchar_t* password)
+{
+    // An empty domain means a local account; "." makes LogonUserW use the local account database.
+    const wchar_t* logon_domain = (domain && *domain) ? domain : L".";
+
+    ScopedHandle token;
+    if (!LogonUserW(username, logon_domain, password, LOGON32_LOGON_INTERACTIVE,
+        LOGON32_PROVIDER_DEFAULT, token.recieve()))
+    {
+        LOG(L"LogonUserW failed: %lu", GetLastError());
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace
@@ -344,6 +362,16 @@ void Provider::onCredentials(const wchar_t* domain, const wchar_t* username, con
     if (!domain || !username || !password)
     {
         LOG(L"Invalid argument");
+        return;
+    }
+
+    // Reject invalid credentials here, before LogonUI ever sees them, and ask for new ones. This
+    // keeps a wrong password from triggering LogonUI's blocking "incorrect password" error.
+    if (!validateCredentials(domain, username, password))
+    {
+        LOG(L"Credentials rejected, requesting again");
+        if (ipc_client_)
+            ipc_client_->postRequest();
         return;
     }
 

@@ -70,6 +70,12 @@ public:
         return handle;
     }
 
+    HANDLE* recieve()
+    {
+        reset();
+        return &handle_;
+    }
+
 private:
     HANDLE handle_ = nullptr;
 };
