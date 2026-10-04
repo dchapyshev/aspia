@@ -399,7 +399,8 @@ void UserIpcWorker::sendServiceMessage()
         return;
 
     quint32 channel_id = makeUint32(proto::user::CHANNEL_ID_SERVICE, 0);
-    ipc_channel_->send(channel_id, outgoing_message_.serialize<proto::user::UserToService>());
+    ipc_channel_->send(channel_id, outgoing_message_.serialize<proto::user::UserToService>(),
+                       /* reliable */ true, /* secure */ true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -409,5 +410,5 @@ void UserIpcWorker::sendNetworkMessage(quint8 net_channel_id, const QByteArray& 
         return;
 
     quint32 channel_id = makeUint32(proto::user::CHANNEL_ID_NETWORK, net_channel_id);
-    ipc_channel_->send(channel_id, buffer);
+    ipc_channel_->send(channel_id, buffer, /* reliable */ true, /* secure */ true);
 }

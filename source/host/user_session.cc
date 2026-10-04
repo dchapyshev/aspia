@@ -388,7 +388,7 @@ void UserSession::onClientMessage(quint8 net_channel_id, const QByteArray& buffe
         return;
 
     quint32 channel_id = makeUint32(proto::user::CHANNEL_ID_NETWORK, net_channel_id);
-    ipc_channel_->send(channel_id, buffer);
+    ipc_channel_->send(channel_id, buffer, /* reliable */ true, /* secure */ true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1018,6 +1018,7 @@ void UserSession::sendMessage()
         return;
     }
 
-    ipc_channel_->send(
-        proto::user::CHANNEL_ID_SERVICE, outgoing_message_.serialize<proto::user::ServiceToUser>());
+    ipc_channel_->send(proto::user::CHANNEL_ID_SERVICE,
+        outgoing_message_.serialize<proto::user::ServiceToUser>(), /* reliable */ true,
+        /* secure */ true);
 }

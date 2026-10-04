@@ -21,6 +21,7 @@
 #include <QTimer>
 
 #include "base/location.h"
+#include "base/crypto/secure_memory.h"
 #include "base/threading/asio_event_dispatcher.h"
 
 #include <asio/read.hpp>
@@ -256,12 +257,12 @@ void IpcChannel::setPaused(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::send(quint32 channel_id, const QByteArray& buffer, bool reliable)
+void IpcChannel::send(quint32 channel_id, const QByteArray& buffer, bool reliable, bool secure)
 {
     const bool schedule_write = io_->write_queue.empty();
 
     // Add the buffer to the queue for sending.
-    io_->write_queue.emplace_back(channel_id, buffer, reliable);
+    io_->write_queue.emplace_back(channel_id, buffer, reliable, secure);
 
     if (schedule_write)
         doWriteHeader();
@@ -450,6 +451,9 @@ void IpcChannel::doWriteData()
 
         CDCHECK_EQ(bytes_transferred, io_->write_header.message_size);
         CDCHECK(!io_->write_queue.empty());
+
+        if (io_->write_queue.front().secure())
+            memZero(&io_->write_queue.front().data());
 
         // Delete the sent message from the queue.
         io_->write_queue.pop_front();

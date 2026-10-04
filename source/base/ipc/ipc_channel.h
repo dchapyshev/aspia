@@ -51,7 +51,7 @@ public:
     bool isPaused() const;
     void setPaused(bool enable);
 
-    void send(quint32 channel_id, const QByteArray& buffer, bool reliable = true);
+    void send(quint32 channel_id, const QByteArray& buffer, bool reliable = true, bool secure = false);
 
     quint32 instanceId() const { return instance_id_; }
     const QString& channelName() const { return channel_name_; }
@@ -92,10 +92,11 @@ private:
     class WriteTask
     {
     public:
-        WriteTask(quint32 channel_id, const QByteArray& data, bool reliable)
+        WriteTask(quint32 channel_id, const QByteArray& data, bool reliable, bool secure)
             : channel_id_(channel_id),
               data_(data),
-              reliable_(reliable)
+              reliable_(reliable),
+              secure_(secure)
         {
             // Nothing
         }
@@ -107,11 +108,13 @@ private:
         const QByteArray& data() const { return data_; }
         QByteArray& data() { return data_; }
         bool reliable() const { return reliable_; }
+        bool secure() const { return secure_; }
 
     private:
         quint32 channel_id_;
         QByteArray data_;
         bool reliable_;
+        bool secure_;
     };
 
     struct Header
