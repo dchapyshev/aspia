@@ -23,6 +23,7 @@
 
 #include <atomic>
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <thread>
 
@@ -52,6 +53,16 @@ public:
         UAC     = 3,
     };
 
+    enum class Reason : uint32_t
+    {
+        UNKNOWN             = 0,
+        INITIAL             = 1,
+        INVALID_CREDENTIALS = 2,
+        PASSWORD_EXPIRED    = 3,
+        ACCOUNT_LOCKED      = 4,
+        ACCOUNT_DISABLED    = 5,
+    };
+
     IpcClient(ScreenType screen_type, Delegate* delegate);
     ~IpcClient();
 
@@ -60,13 +71,12 @@ public:
 
     bool start();
     void stop();
-    void postRequest();
+    void postRequest(Reason reason);
 
 private:
     static const uint32_t kHeaderMagic = 0x43495341; // 'A','S','I','C' read little-endian.
     static const uint32_t kFlagReliable = 1;
     static const uint32_t kFlagSecure = 2;
-    static const uint32_t kRequestCredentials = 1;
     static const size_t kMaxChars = 256;
 
     struct Input
@@ -86,8 +96,9 @@ private:
         uint32_t message_size;
         uint32_t channel_id;
         uint32_t flags;
-        uint32_t request_type;
-        uint32_t screen_type;
+        uint8_t screen_type;
+        uint8_t reason;
+        uint8_t reserved[2];
     };
 
     using WorkGuard = asio::executor_work_guard<asio::io_context::executor_type>;
@@ -98,7 +109,7 @@ private:
     void tryConnect();
     void doRead();
     bool postCredentials();
-    void sendRequest();
+    void sendRequest(Reason reason);
     void scheduleReconnect();
     void fatalError();
 
@@ -112,7 +123,7 @@ private:
     Input input_ = {};
     Output output_ = {};
     bool writing_ = false;
-    bool request_pending_ = false;
+    std::optional<Reason> pending_request_;
 
     asio::io_context io_context_ { 1 };
     asio::windows::stream_handle stream_;

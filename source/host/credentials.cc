@@ -47,8 +47,9 @@ struct Reply
 
 struct Request
 {
-    quint32 request_type;
-    quint32 screen_type;
+    quint8 screen_type;
+    quint8 reason;
+    quint8 reserved[2];
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -286,8 +287,9 @@ void Credentials::onIpcMessageReceived(quint32 /* channel_id */, const QByteArra
 
     const Request* request = reinterpret_cast<const Request*>(buffer.constData());
 
-    LOG(INFO) << "Credentials requested by the credential provider (screen_type:" << request->screen_type << ")";
-    emit sig_connected(request->screen_type);
+    LOG(INFO) << "Credentials requested by the credential provider (screen_type:" << request->screen_type
+              << "reason:" << request->reason << ")";
+    emit sig_connected(request->screen_type, request->reason);
 }
 
 //--------------------------------------------------------------------------------------------------

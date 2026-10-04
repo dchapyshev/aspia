@@ -277,9 +277,9 @@ void IpcClient::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcClient::postRequest()
+void IpcClient::postRequest(Reason reason)
 {
-    asio::post(io_context_, [this]() { sendRequest(); });
+    asio::post(io_context_, [this, reason]() { sendRequest(reason); });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -353,7 +353,17 @@ void IpcClient::tryConnect()
 
         LOG(L"Connected");
 
-        sendRequest();
+        if (pending_request_)
+        {
+            const Reason pending = *pending_request_;
+            pending_request_.reset();
+            sendRequest(pending);
+        }
+        else
+        {
+            sendRequest(Reason::INITIAL);
+        }
+
         doRead();
         return;
     }
@@ -469,25 +479,25 @@ bool IpcClient::postCredentials()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcClient::sendRequest()
+void IpcClient::sendRequest(Reason reason)
 {
-    if (stopping_.load(std::memory_order_relaxed) || !stream_.is_open())
+    if (stopping_.load(std::memory_order_relaxed))
         return;
 
-    if (writing_)
+    if (!stream_.is_open() || writing_)
     {
-        request_pending_ = true;
+        pending_request_ = reason;
         return;
     }
 
     writing_ = true;
 
     output_.magic = kHeaderMagic;
-    output_.message_size = sizeof(output_) - offsetof(Output, request_type);
+    output_.message_size = sizeof(output_) - offsetof(Output, screen_type);
     output_.channel_id = 0;
     output_.flags = kFlagReliable | kFlagSecure;
-    output_.request_type = kRequestCredentials;
-    output_.screen_type = static_cast<uint32_t>(screen_type_);
+    output_.screen_type = static_cast<uint8_t>(screen_type_);
+    output_.reason = static_cast<uint8_t>(reason);
 
     asio::async_write(stream_, asio::buffer(&output_, sizeof(output_)),
                       [this](const std::error_code& error_code, size_t bytes_transferred)
@@ -498,7 +508,7 @@ void IpcClient::sendRequest()
 
         if (error_code)
         {
-            request_pending_ = false;
+            pending_request_.reset();
 
             if (error_code != asio::error::operation_aborted)
             {
@@ -510,17 +520,18 @@ void IpcClient::sendRequest()
 
         if (bytes_transferred != sizeof(output_))
         {
-            request_pending_ = false;
+            pending_request_.reset();
             LOG(L"Short write: %lu of %lu bytes", static_cast<DWORD>(bytes_transferred),
                 static_cast<DWORD>(sizeof(output_)));
             scheduleReconnect();
             return;
         }
 
-        if (request_pending_)
+        if (pending_request_)
         {
-            request_pending_ = false;
-            sendRequest();
+            const Reason pending = *pending_request_;
+            pending_request_.reset();
+            sendRequest(pending);
         }
     });
 }

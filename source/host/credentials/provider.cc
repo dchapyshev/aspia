@@ -57,8 +57,35 @@ IpcClient::ScreenType screenTypeForCpus(CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool validateCredentials(const wchar_t* domain, const wchar_t* username, const wchar_t* password)
+IpcClient::Reason reasonFromError(DWORD error)
 {
+    switch (error)
+    {
+        case ERROR_PASSWORD_EXPIRED:
+        case ERROR_PASSWORD_MUST_CHANGE:
+            return IpcClient::Reason::PASSWORD_EXPIRED;
+
+        case ERROR_ACCOUNT_LOCKED_OUT:
+            return IpcClient::Reason::ACCOUNT_LOCKED;
+
+        case ERROR_ACCOUNT_DISABLED:
+            return IpcClient::Reason::ACCOUNT_DISABLED;
+
+        default:
+            return IpcClient::Reason::INVALID_CREDENTIALS;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+bool validateCredentials(const wchar_t* domain, const wchar_t* username, const wchar_t* password,
+                         IpcClient::Reason* reason)
+{
+    if (!username || !password || !reason)
+    {
+        LOG(L"Invalid argument");
+        return false;
+    }
+
     // An empty domain means a local account; "." makes LogonUserW use the local account database.
     const wchar_t* logon_domain = (domain && *domain) ? domain : L".";
 
@@ -66,7 +93,9 @@ bool validateCredentials(const wchar_t* domain, const wchar_t* username, const w
     if (!LogonUserW(username, logon_domain, password, LOGON32_LOGON_INTERACTIVE,
         LOGON32_PROVIDER_DEFAULT, token.recieve()))
     {
-        LOG(L"LogonUserW failed: %lu", GetLastError());
+        const DWORD error = GetLastError();
+        LOG(L"LogonUserW failed: %lu", error);
+        *reason = reasonFromError(error);
         return false;
     }
 
@@ -367,11 +396,12 @@ void Provider::onCredentials(const wchar_t* domain, const wchar_t* username, con
 
     // Reject invalid credentials here, before LogonUI ever sees them, and ask for new ones. This
     // keeps a wrong password from triggering LogonUI's blocking "incorrect password" error.
-    if (!validateCredentials(domain, username, password))
+    IpcClient::Reason reason = IpcClient::Reason::UNKNOWN;
+    if (!validateCredentials(domain, username, password, &reason))
     {
         LOG(L"Credentials rejected, requesting again");
         if (ipc_client_)
-            ipc_client_->postRequest();
+            ipc_client_->postRequest(reason);
         return;
     }
 
@@ -419,5 +449,5 @@ void Provider::onCredentialsRejected()
     }
 
     if (ipc_client_)
-        ipc_client_->postRequest();
+        ipc_client_->postRequest(IpcClient::Reason::INVALID_CREDENTIALS);
 }

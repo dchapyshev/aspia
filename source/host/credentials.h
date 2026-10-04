@@ -39,7 +39,7 @@ public:
     bool sendCredentials(const SecureString& username, const SecureString& password);
 
 signals:
-    void sig_connected(quint32 screen_type);
+    void sig_connected(quint32 screen_type, quint32 reason);
 
 private slots:
     // Slots for IpcServer.

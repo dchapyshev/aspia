@@ -150,11 +150,12 @@ void DesktopClient::onUserMessage(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::onRequestCredentials(quint32 screen_type)
+void DesktopClient::onRequestCredentials(quint32 screen_type, quint32 reason)
 {
     proto::control::HostToClient message;
-    message.mutable_credentials_request()->set_screen_type(
-        static_cast<proto::control::CredentialsRequest::ScreenType>(screen_type));
+    proto::control::CredentialsRequest* request = message.mutable_credentials_request();
+    request->set_screen_type(static_cast<proto::control::CredentialsRequest::ScreenType>(screen_type));
+    request->set_reason(static_cast<proto::control::CredentialsRequest::Reason>(reason));
     send(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
 }
 
