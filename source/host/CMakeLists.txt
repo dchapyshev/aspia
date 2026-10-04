@@ -169,6 +169,8 @@ if (WIN32)
     list(APPEND SOURCE_HOST_CORE
         audio_capturer_win.cc
         audio_capturer_win.h
+        credentials.cc
+        credentials.h
         desktop_environment_win.cc
         desktop_environment_win.h
         desktop_resizer_win.cc
