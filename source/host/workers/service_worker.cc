@@ -697,7 +697,10 @@ void ServiceWorker::startClient(const PendingConfirmation& pending)
 
 #if defined(Q_OS_WINDOWS)
         if (credentials_)
+        {
             connect(credentials_, &Credentials::sig_connected, client, &DesktopClient::onRequestCredentials);
+            connect(client, &DesktopClient::sig_credentials, credentials_, &Credentials::sendCredentials);
+        }
 #endif // defined(Q_OS_WINDOWS)
     }
     else if (session_type == proto::peer::SESSION_TYPE_FILE_TRANSFER)

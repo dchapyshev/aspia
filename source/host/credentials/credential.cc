@@ -414,7 +414,27 @@ HRESULT Credential::initialize(CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus,
 HRESULT Credential::setCredentials(PCWSTR domain, PCWSTR username, PCWSTR password)
 {
     ScopedCoMem<wchar_t> domain_copy;
-    HRESULT hr = SHStrDupW(domain ? domain : L"", &domain_copy);
+    HRESULT hr;
+
+    if (domain && *domain)
+    {
+        hr = SHStrDupW(domain, &domain_copy);
+    }
+    else
+    {
+        wchar_t computer_name[MAX_COMPUTERNAME_LENGTH + 1] = {};
+        DWORD size = ARRAYSIZE(computer_name);
+
+        if (!GetComputerNameExW(ComputerNameNetBIOS, computer_name, &size))
+        {
+            const DWORD error = GetLastError();
+            LOG(L"GetComputerNameExW failed: %lu", error);
+            return HRESULT_FROM_WIN32(error);
+        }
+
+        hr = SHStrDupW(computer_name, &domain_copy);
+    }
+
     if (FAILED(hr))
     {
         LOG(L"SHStrDupW failed for domain: 0x%08lX", hr);
@@ -565,11 +585,12 @@ HRESULT Credential::GetBitmapValue(DWORD field_id, HBITMAP* bitmap)
         return E_INVALIDARG;
     }
 
-    HBITMAP loaded_bitmap = LoadBitmap(g_instance, L"LOGO");
+    HBITMAP loaded_bitmap = static_cast<HBITMAP>(
+        LoadImageW(g_instance, L"LOGO", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION));
     if (loaded_bitmap == nullptr)
     {
         DWORD error = GetLastError();
-        LOG(L"LoadBitmap failed: %lu", error);
+        LOG(L"LoadImageW failed: %lu", error);
         return HRESULT_FROM_WIN32(error);
     }
 

@@ -359,4 +359,11 @@ void Provider::onCredentialsRejected()
     secureClear(pending_domain_);
     secureClear(pending_username_);
     secureClear(pending_password_);
+
+    if (events_)
+    {
+        HRESULT hr = events_->CredentialsChanged(advise_context_);
+        if (FAILED(hr))
+            LOG(L"CredentialsChanged failed: 0x%08lX", hr);
+    }
 }

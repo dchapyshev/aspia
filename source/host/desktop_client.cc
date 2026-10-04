@@ -28,6 +28,8 @@
 #include "base/serialization.h"
 #include "base/session_id.h"
 #include "base/sys_info.h"
+#include "base/crypto/secure_memory.h"
+#include "base/crypto/secure_string.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "host/desktop_manager.h"
@@ -204,6 +206,16 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
         else if (message.has_feedback())
         {
             readFeedback(message.feedback());
+        }
+        else if (message.has_credentials())
+        {
+            proto::control::Credentials* credentials = message.mutable_credentials();
+
+            emit sig_credentials(SecureString(QString::fromStdString(credentials->username())),
+                                 SecureString(QString::fromStdString(credentials->password())));
+
+            memZero(credentials->mutable_username());
+            memZero(credentials->mutable_password());
         }
     }
     else if (net_channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)

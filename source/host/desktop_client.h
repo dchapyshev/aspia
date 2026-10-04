@@ -36,6 +36,7 @@ class Control;
 
 class IpcChannel;
 class IpcServer;
+class SecureString;
 class TaskMgrWorker;
 class ToolsWorker;
 
@@ -58,6 +59,7 @@ public slots:
 signals:
     void sig_switchSession(SessionId session_id);
     void sig_userMessage(quint8 channel_id, const QByteArray& buffer);
+    void sig_credentials(const SecureString& username, const SecureString& password);
 
 protected:
     void onStart() final;
