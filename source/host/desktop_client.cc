@@ -261,7 +261,10 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
     {
         quint32 channel_id = makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, net_channel_id);
         if (ipc_channel_)
-            ipc_channel_->send(channel_id, buffer);
+        {
+            const bool secure = (net_channel_id == proto::desktop::CHANNEL_ID_INPUT);
+            ipc_channel_->send(channel_id, buffer, /* reliable */ true, secure);
+        }
     }
 }
 
