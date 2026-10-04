@@ -18,7 +18,6 @@
 
 #include "host/workers/service_worker.h"
 
-#include <QCoreApplication>
 #include <QFileInfo>
 #include <QFileSystemWatcher>
 
@@ -698,8 +697,17 @@ void ServiceWorker::startClient(const PendingConfirmation& pending)
 #if defined(Q_OS_WINDOWS)
         if (credentials_)
         {
-            connect(credentials_, &Credentials::sig_connected, client, &DesktopClient::onRequestCredentials);
+            connect(credentials_, &Credentials::sig_credentialsRequested, client, &DesktopClient::onRequestCredentials);
             connect(client, &DesktopClient::sig_credentials, credentials_, &Credentials::sendCredentials);
+            connect(client, &DesktopClient::sig_ready, this, [this, client = QPointer<DesktopClient>(client)]()
+            {
+                if (!credentials_ || !client)
+                    return;
+
+                const std::optional<Credentials::PendingRequest>& request = credentials_->pendingRequest();
+                if (request)
+                    client->onRequestCredentials(request->screen_type, request->reason);
+            });
         }
 #endif // defined(Q_OS_WINDOWS)
     }

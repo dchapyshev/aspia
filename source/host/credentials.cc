@@ -32,6 +32,7 @@
 #include "base/ipc/ipc_server.h"
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
+#include "proto/desktop_control.h"
 
 namespace {
 
@@ -175,6 +176,7 @@ bool Credentials::sendCredentials(const SecureString& username, const SecureStri
     if (full_name.size() >= 2 * kFieldChars)
     {
         LOG(WARNING) << "User name is too long";
+        requestAgain();
         return false;
     }
 
@@ -191,18 +193,21 @@ bool Credentials::sendCredentials(const SecureString& username, const SecureStri
     if (user.isEmpty() || user.size() >= kFieldChars || !isValidAccountString(user))
     {
         LOG(WARNING) << "Invalid user name";
+        requestAgain();
         return false;
     }
 
     if (password.isEmpty() || password.size() >= kFieldChars)
     {
         LOG(WARNING) << "Invalid password";
+        requestAgain();
         return false;
     }
 
     if (domain.size() >= kFieldChars || !isValidAccountString(domain))
     {
         LOG(WARNING) << "Invalid domain";
+        requestAgain();
         return false;
     }
 
@@ -287,16 +292,32 @@ void Credentials::onIpcMessageReceived(quint32 /* channel_id */, const QByteArra
 
     const Request* request = reinterpret_cast<const Request*>(buffer.constData());
 
-    LOG(INFO) << "Credentials requested by the credential provider (screen_type:" << request->screen_type
-              << "reason:" << request->reason << ")";
-    emit sig_connected(request->screen_type, request->reason);
+    pending_request_ = PendingRequest{ request->screen_type, request->reason };
+
+    LOG(INFO) << "Credentials requested by the credential provider (screen_type:"
+              << pending_request_->screen_type << "reason:" << pending_request_->reason << ")";
+    emit sig_credentialsRequested(pending_request_->screen_type, pending_request_->reason);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Credentials::onIpcDisconnected()
 {
     LOG(INFO) << "Credential provider disconnected";
+
+    pending_request_.reset();
+
     if (ipc_channel_)
         ipc_channel_->disconnect(this);
     ipc_channel_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Credentials::requestAgain()
+{
+    if (!pending_request_)
+        return;
+
+    pending_request_->reason = static_cast<quint32>(
+        proto::control::CredentialsRequest::REASON_INVALID_CREDENTIALS);
+    emit sig_credentialsRequested(pending_request_->screen_type, pending_request_->reason);
 }

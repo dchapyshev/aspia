@@ -21,6 +21,8 @@
 
 #include <QObject>
 
+#include <optional>
+
 #include "base/scoped_qpointer.h"
 #include "base/crypto/secure_string.h"
 
@@ -35,11 +37,18 @@ public:
     explicit Credentials(QObject* parent = nullptr);
     ~Credentials() final;
 
+    struct PendingRequest
+    {
+        quint32 screen_type = 0;
+        quint32 reason = 0;
+    };
+
     bool start();
     bool sendCredentials(const SecureString& username, const SecureString& password);
+    const std::optional<PendingRequest>& pendingRequest() const { return pending_request_; }
 
 signals:
-    void sig_connected(quint32 screen_type, quint32 reason);
+    void sig_credentialsRequested(quint32 screen_type, quint32 reason);
 
 private slots:
     // Slots for IpcServer.
@@ -51,8 +60,12 @@ private slots:
     void onIpcDisconnected();
 
 private:
+    void requestAgain();
+
     ScopedQPointer<IpcServer> ipc_server_;
     ScopedQPointer<IpcChannel> ipc_channel_;
+
+    std::optional<PendingRequest> pending_request_;
 
     Q_DISABLE_COPY_MOVE(Credentials)
 };
