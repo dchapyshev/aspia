@@ -51,7 +51,7 @@ private:
     IFACEMETHODIMP Advise(ICredentialProviderEvents* events, UINT_PTR advise_context) final;
     IFACEMETHODIMP UnAdvise() final;
     IFACEMETHODIMP GetFieldDescriptorCount(DWORD* count) final;
-    IFACEMETHODIMP GetFieldDescriptorAt(DWORD index, CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR** ppcpfd) final;
+    IFACEMETHODIMP GetFieldDescriptorAt(DWORD index, CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR** descriptor) final;
     IFACEMETHODIMP GetCredentialCount(DWORD* count, DWORD* default_index, BOOL* auto_logon_with_default) final;
     IFACEMETHODIMP GetCredentialAt(DWORD index, ICredentialProviderCredential** credential) final;
 

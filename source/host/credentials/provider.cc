@@ -177,15 +177,15 @@ HRESULT Provider::GetFieldDescriptorCount(DWORD* count)
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT Provider::GetFieldDescriptorAt(DWORD index, CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR** ppcpfd)
+HRESULT Provider::GetFieldDescriptorAt(DWORD index, CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR** descriptor)
 {
-    if (!ppcpfd)
+    if (!descriptor)
     {
         LOG(L"Invalid argument");
         return E_INVALIDARG;
     }
 
-    *ppcpfd = nullptr;
+    *descriptor = nullptr;
 
     if (index >= SFI_NUM_FIELDS)
     {
@@ -194,7 +194,7 @@ HRESULT Provider::GetFieldDescriptorAt(DWORD index, CREDENTIAL_PROVIDER_FIELD_DE
     }
 
     const CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR& source = kFieldDescriptors[index];
-    DWORD struct_size = sizeof(**ppcpfd);
+    DWORD struct_size = sizeof(**descriptor);
 
     ScopedCoMem<CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR> result;
     result.reset(static_cast<CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR*>(CoTaskMemAlloc(struct_size)));
@@ -220,7 +220,7 @@ HRESULT Provider::GetFieldDescriptorAt(DWORD index, CREDENTIAL_PROVIDER_FIELD_DE
         }
     }
 
-    *ppcpfd = result.release();
+    *descriptor = result.release();
     return S_OK;
 }
 
