@@ -54,6 +54,10 @@ const quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 // 'A','S','I','C' (Aspia Ipc Channel) read little-endian.
 const quint32 kHeaderMagic = 0x43495341;
 
+// Bit flags carried in the message header's |flags| field.
+const quint32 kFlagReliable = 1;
+const quint32 kFlagSecure = 2;
+
 #if defined(Q_OS_UNIX)
 const char kNamePrefix[] = "/tmp/aspia_";
 using PipeHandle = int;
@@ -383,7 +387,14 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::onMessageReceived()
 {
-    emit sig_messageReceived(io_->read_header.channel_id, io_->read_buffer, !!io_->read_header.reliable);
+    const quint32 flags = io_->read_header.flags;
+
+    emit sig_messageReceived(
+        io_->read_header.channel_id, io_->read_buffer, (flags & kFlagReliable) != 0);
+
+    if (flags & kFlagSecure)
+        memZero(&io_->read_buffer);
+
     memset(&io_->read_header, 0, sizeof(Header));
 }
 
@@ -395,7 +406,7 @@ void IpcChannel::doWriteHeader()
     io_->write_header.magic = kHeaderMagic;
     io_->write_header.message_size = task.data().size();
     io_->write_header.channel_id = task.channelId();
-    io_->write_header.reliable = task.reliable() ? 1 : 0;
+    io_->write_header.flags = (task.reliable() ? kFlagReliable : 0) | (task.secure() ? kFlagSecure : 0);
 
     if (!io_->write_header.message_size || io_->write_header.message_size > kMaxMessageSize)
     {

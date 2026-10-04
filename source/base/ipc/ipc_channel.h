@@ -122,7 +122,7 @@ private:
         quint32 magic;
         quint32 message_size;
         quint32 channel_id;
-        quint32 reliable;
+        quint32 flags;
     };
 
     enum class ReadState
