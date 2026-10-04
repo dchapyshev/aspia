@@ -143,6 +143,12 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 
     *ppv = nullptr;
 
+    if (GetEnvironmentVariableW(L"ASPIA_DISABLE_CREDENTIALS", nullptr, 0) != 0)
+    {
+        LOG(L"Disabled via ASPIA_DISABLE_CREDENTIALS");
+        return CLASS_E_CLASSNOTAVAILABLE;
+    }
+
     if (CLSID_AspiaCredentials != rclsid)
     {
         LOG(L"Requested class is not available");

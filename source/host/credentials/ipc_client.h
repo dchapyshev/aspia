@@ -62,7 +62,7 @@ private:
         uint32_t magic;
         uint32_t message_size;
         uint32_t channel_id;
-        uint32_t reliable;
+        uint32_t flags;
         wchar_t domain[kMaxChars];
         wchar_t username[kMaxChars];
         wchar_t password[kMaxChars];
