@@ -39,7 +39,7 @@ public:
     bool sendCredentials(const SecureString& username, const SecureString& password);
 
 signals:
-    void sig_connected();
+    void sig_connected(quint32 screen_type);
 
 private slots:
     // Slots for IpcServer.
@@ -47,6 +47,7 @@ private slots:
     void onIpcErrorOccurred();
 
     // Slots for IpcChannel.
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
     void onIpcDisconnected();
 
 private:

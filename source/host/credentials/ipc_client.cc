@@ -27,7 +27,9 @@
 
 #include <asio/buffer.hpp>
 #include <asio/error.hpp>
+#include <asio/post.hpp>
 #include <asio/read.hpp>
+#include <asio/write.hpp>
 
 #include "host/credentials/dll_main.h"
 #include "host/credentials/logging.h"
@@ -141,8 +143,9 @@ bool isConnectionAllowed(HANDLE pipe)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-IpcClient::IpcClient(Delegate* delegate)
-    : delegate_(delegate),
+IpcClient::IpcClient(ScreenType screen_type, Delegate* delegate)
+    : screen_type_(screen_type),
+      delegate_(delegate),
       stream_(io_context_),
       connect_timer_(io_context_),
       work_guard_(asio::make_work_guard(io_context_))
@@ -197,7 +200,8 @@ IpcClient::~IpcClient()
 
     stop();
 
-    SecureZeroMemory(&message_, sizeof(message_));
+    SecureZeroMemory(&input_, sizeof(input_));
+    SecureZeroMemory(&output_, sizeof(output_));
 
     if (window_)
     {
@@ -273,6 +277,12 @@ void IpcClient::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
+void IpcClient::postRequest()
+{
+    asio::post(io_context_, [this]() { sendRequest(); });
+}
+
+//--------------------------------------------------------------------------------------------------
 // static
 LRESULT CALLBACK IpcClient::windowProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam)
 {
@@ -343,6 +353,7 @@ void IpcClient::tryConnect()
 
         LOG(L"Connected");
 
+        sendRequest();
         doRead();
         return;
     }
@@ -357,12 +368,12 @@ void IpcClient::tryConnect()
 //--------------------------------------------------------------------------------------------------
 void IpcClient::doRead()
 {
-    asio::async_read(stream_, asio::buffer(&message_, sizeof(message_)),
+    asio::async_read(stream_, asio::buffer(&input_, sizeof(input_)),
                      [this](const std::error_code& error_code, size_t bytes_transferred)
     {
         if (error_code)
         {
-            SecureZeroMemory(&message_, sizeof(message_));
+            SecureZeroMemory(&input_, sizeof(input_));
 
             if (error_code != asio::error::operation_aborted)
             {
@@ -374,27 +385,27 @@ void IpcClient::doRead()
 
         bool valid = true;
 
-        if (bytes_transferred != sizeof(message_))
+        if (bytes_transferred != sizeof(input_))
         {
             LOG(L"Short read: %lu of %lu bytes", static_cast<DWORD>(bytes_transferred),
-                static_cast<DWORD>(sizeof(message_)));
+                static_cast<DWORD>(sizeof(input_)));
             valid = false;
         }
-        else if (message_.magic != kHeaderMagic)
+        else if (input_.magic != kHeaderMagic)
         {
-            LOG(L"Invalid header magic: 0x%08lX", message_.magic);
+            LOG(L"Invalid header magic: 0x%08lX", input_.magic);
             valid = false;
         }
-        else if (message_.message_size != sizeof(message_) - offsetof(Message, domain))
+        else if (input_.message_size != sizeof(input_) - offsetof(Input, domain))
         {
-            LOG(L"Unexpected message size: %lu", message_.message_size);
+            LOG(L"Unexpected message size: %lu", input_.message_size);
             valid = false;
         }
 
         if (valid && !postCredentials())
             valid = false;
 
-        SecureZeroMemory(&message_, sizeof(message_));
+        SecureZeroMemory(&input_, sizeof(input_));
 
         if (!valid)
         {
@@ -412,15 +423,15 @@ void IpcClient::doRead()
 //--------------------------------------------------------------------------------------------------
 bool IpcClient::postCredentials()
 {
-    if (!isNullTerminated(message_.domain, kMaxChars) ||
-        !isNullTerminated(message_.username, kMaxChars) ||
-        !isNullTerminated(message_.password, kMaxChars))
+    if (!isNullTerminated(input_.domain, kMaxChars) ||
+        !isNullTerminated(input_.username, kMaxChars) ||
+        !isNullTerminated(input_.password, kMaxChars))
     {
         LOG(L"Malformed credentials message");
         return false;
     }
 
-    if (!isValidAccountString(message_.domain) || !isValidAccountString(message_.username))
+    if (!isValidAccountString(input_.domain) || !isValidAccountString(input_.username))
     {
         LOG(L"Credentials contain an invalid domain or username");
         return false;
@@ -435,9 +446,9 @@ bool IpcClient::postCredentials()
 
     try
     {
-        credentials->domain = message_.domain;
-        credentials->username = message_.username;
-        credentials->password = message_.password;
+        credentials->domain = input_.domain;
+        credentials->username = input_.username;
+        credentials->password = input_.password;
     }
     catch (...)
     {
@@ -455,6 +466,63 @@ bool IpcClient::postCredentials()
 
     credentials.release();
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void IpcClient::sendRequest()
+{
+    if (stopping_.load(std::memory_order_relaxed) || !stream_.is_open())
+        return;
+
+    if (writing_)
+    {
+        request_pending_ = true;
+        return;
+    }
+
+    writing_ = true;
+
+    output_.magic = kHeaderMagic;
+    output_.message_size = sizeof(output_) - offsetof(Output, request_type);
+    output_.channel_id = 0;
+    output_.flags = kFlagReliable | kFlagSecure;
+    output_.request_type = kRequestCredentials;
+    output_.screen_type = static_cast<uint32_t>(screen_type_);
+
+    asio::async_write(stream_, asio::buffer(&output_, sizeof(output_)),
+                      [this](const std::error_code& error_code, size_t bytes_transferred)
+    {
+        writing_ = false;
+
+        SecureZeroMemory(&output_, sizeof(output_));
+
+        if (error_code)
+        {
+            request_pending_ = false;
+
+            if (error_code != asio::error::operation_aborted)
+            {
+                LOG(L"Request write failed: %d", error_code.value());
+                scheduleReconnect();
+            }
+            return;
+        }
+
+        if (bytes_transferred != sizeof(output_))
+        {
+            request_pending_ = false;
+            LOG(L"Short write: %lu of %lu bytes", static_cast<DWORD>(bytes_transferred),
+                static_cast<DWORD>(sizeof(output_)));
+            scheduleReconnect();
+            return;
+        }
+
+        if (request_pending_)
+        {
+            request_pending_ = false;
+            sendRequest();
+        }
+    });
 }
 
 //--------------------------------------------------------------------------------------------------

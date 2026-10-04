@@ -94,7 +94,15 @@ message Feedback
 
 message CredentialsRequest
 {
-    uint32 dummy = 1; // Always set to 1.
+    enum ScreenType
+    {
+        SCREEN_TYPE_UNKNOWN = 0;
+        SCREEN_TYPE_LOGON   = 1;
+        SCREEN_TYPE_LOCK    = 2;
+        SCREEN_TYPE_UAC     = 3;
+    }
+
+    ScreenType screen_type = 1;
 }
 
 message Credentials

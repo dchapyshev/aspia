@@ -29,23 +29,36 @@
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 const FieldStatePair kFieldStatePairs[] =
 {
     { CPFS_DISPLAY_IN_BOTH, CPFIS_NONE }, // SFI_LOGO
     { CPFS_DISPLAY_IN_BOTH, CPFIS_NONE }, // SFI_LABEL
 };
 
+//--------------------------------------------------------------------------------------------------
 const CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR kFieldDescriptors[] =
 {
     { SFI_LOGO,  CPFT_TILE_IMAGE, const_cast<LPWSTR>(L"Image") },
     { SFI_LABEL, CPFT_LARGE_TEXT, const_cast<LPWSTR>(L"Aspia") },
 };
 
+//--------------------------------------------------------------------------------------------------
+IpcClient::ScreenType screenTypeForCpus(CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus)
+{
+    switch (cpus)
+    {
+        case CPUS_LOGON:              return IpcClient::ScreenType::LOGON;
+        case CPUS_UNLOCK_WORKSTATION: return IpcClient::ScreenType::LOCK;
+        case CPUS_CREDUI:             return IpcClient::ScreenType::UAC;
+        default:                      return IpcClient::ScreenType::UNKNOWN;
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 Provider::Provider()
-    : ipc_client_(this)
 {
     LOG(L"Ctor");
     moduleAddRef();
@@ -56,7 +69,8 @@ Provider::~Provider()
 {
     LOG(L"Dtor");
 
-    ipc_client_.stop();
+    if (ipc_client_)
+        ipc_client_->stop();
 
     if (credential_)
         credential_->setDelegate(nullptr);
@@ -122,12 +136,21 @@ HRESULT Provider::SetUsageScenario(CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus, DWOR
             cpus_ = cpus;
             recreate_enumerated_credentials_ = true;
 
-            if (!ipc_started_)
+            if (!ipc_client_)
             {
-                if (ipc_client_.start())
-                    ipc_started_ = true;
-                else
+                ipc_client_.reset(new(std::nothrow) IpcClient(screenTypeForCpus(cpus), this));
+                if (!ipc_client_)
+                {
+                    LOG(L"IpcClient allocation failed");
+                    return E_NOTIMPL;
+                }
+
+                if (!ipc_client_->start())
+                {
                     LOG(L"Failed to start the IPC client");
+                    ipc_client_.reset();
+                    return E_NOTIMPL;
+                }
             }
             return S_OK;
 
@@ -366,4 +389,7 @@ void Provider::onCredentialsRejected()
         if (FAILED(hr))
             LOG(L"CredentialsChanged failed: 0x%08lX", hr);
     }
+
+    if (ipc_client_)
+        ipc_client_->postRequest();
 }

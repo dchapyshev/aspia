@@ -44,7 +44,15 @@ public:
                                    const wchar_t* password) = 0;
     };
 
-    explicit IpcClient(Delegate* delegate);
+    enum class ScreenType : uint32_t
+    {
+        UNKNOWN = 0,
+        LOGON   = 1,
+        LOCK    = 2,
+        UAC     = 3,
+    };
+
+    IpcClient(ScreenType screen_type, Delegate* delegate);
     ~IpcClient();
 
     IpcClient(const IpcClient&) = delete;
@@ -52,12 +60,16 @@ public:
 
     bool start();
     void stop();
+    void postRequest();
 
 private:
     static const uint32_t kHeaderMagic = 0x43495341; // 'A','S','I','C' read little-endian.
+    static const uint32_t kFlagReliable = 1;
+    static const uint32_t kFlagSecure = 2;
+    static const uint32_t kRequestCredentials = 1;
     static const size_t kMaxChars = 256;
 
-    struct Message
+    struct Input
     {
         uint32_t magic;
         uint32_t message_size;
@@ -68,6 +80,16 @@ private:
         wchar_t password[kMaxChars];
     };
 
+    struct Output
+    {
+        uint32_t magic;
+        uint32_t message_size;
+        uint32_t channel_id;
+        uint32_t flags;
+        uint32_t request_type;
+        uint32_t screen_type;
+    };
+
     using WorkGuard = asio::executor_work_guard<asio::io_context::executor_type>;
 
     static LRESULT CALLBACK windowProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
@@ -76,16 +98,21 @@ private:
     void tryConnect();
     void doRead();
     bool postCredentials();
+    void sendRequest();
     void scheduleReconnect();
     void fatalError();
 
+    const ScreenType screen_type_;
     Delegate* const delegate_;
 
     HWND window_ = nullptr;
     ATOM window_class_ = 0;
 
     std::wstring path_;
-    Message message_ = {};
+    Input input_ = {};
+    Output output_ = {};
+    bool writing_ = false;
+    bool request_pending_ = false;
 
     asio::io_context io_context_ { 1 };
     asio::windows::stream_handle stream_;

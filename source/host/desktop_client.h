@@ -54,7 +54,7 @@ public:
 
 public slots:
     void onUserMessage(quint8 channel_id, const QByteArray& buffer);
-    void onRequestCredentials();
+    void onRequestCredentials(quint32 screen_type);
 
 signals:
     void sig_switchSession(SessionId session_id);

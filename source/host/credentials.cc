@@ -38,11 +38,17 @@ namespace {
 const char kChannelId[] = "org.aspia.host.credentials";
 const int kFieldChars = 256;
 
-struct Payload
+struct Reply
 {
     wchar_t domain[kFieldChars];
     wchar_t username[kFieldChars];
     wchar_t password[kFieldChars];
+};
+
+struct Request
+{
+    quint32 request_type;
+    quint32 screen_type;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -200,19 +206,19 @@ bool Credentials::sendCredentials(const SecureString& username, const SecureStri
         return false;
     }
 
-    Payload payload = {};
-    StringCchCopyW(payload.domain, kFieldChars, qUtf16Printable(domain));
-    StringCchCopyW(payload.username, kFieldChars, qUtf16Printable(user));
-    StringCchCopyW(payload.password, kFieldChars, qUtf16Printable(password.toString()));
+    Reply reply = {};
+    StringCchCopyW(reply.domain, kFieldChars, qUtf16Printable(domain));
+    StringCchCopyW(reply.username, kFieldChars, qUtf16Printable(user));
+    StringCchCopyW(reply.password, kFieldChars, qUtf16Printable(password.toString()));
 
     memZero(&domain);
     memZero(&user);
 
-    ipc_channel_->send(0, QByteArray(reinterpret_cast<const char*>(&payload),
-                                     static_cast<qsizetype>(sizeof(payload))),
+    ipc_channel_->send(0, QByteArray(reinterpret_cast<const char*>(&reply),
+                                     static_cast<qsizetype>(sizeof(reply))),
                        /* reliable */ true, /* secure */ true);
 
-    memZero(&payload, sizeof(payload));
+    memZero(&reply, sizeof(reply));
 
     LOG(INFO) << "Credentials sent to the credential provider";
     return true;
@@ -258,15 +264,31 @@ void Credentials::onIpcNewConnection()
     LOG(INFO) << "Credential provider connected (pid:" << ipc_channel_->processId()
               << "session:" << ipc_channel_->sessionId() << ")";
 
+    connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &Credentials::onIpcMessageReceived);
     connect(ipc_channel_, &IpcChannel::sig_disconnected, this, &Credentials::onIpcDisconnected);
 
-    emit sig_connected();
+    ipc_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Credentials::onIpcErrorOccurred()
 {
     LOG(WARNING) << "Credentials IPC server error";
+}
+
+//--------------------------------------------------------------------------------------------------
+void Credentials::onIpcMessageReceived(quint32 /* channel_id */, const QByteArray& buffer, bool /* reliable */)
+{
+    if (buffer.size() != sizeof(Request))
+    {
+        LOG(WARNING) << "Unexpected request size:" << buffer.size();
+        return;
+    }
+
+    const Request* request = reinterpret_cast<const Request*>(buffer.constData());
+
+    LOG(INFO) << "Credentials requested by the credential provider (screen_type:" << request->screen_type << ")";
+    emit sig_connected(request->screen_type);
 }
 
 //--------------------------------------------------------------------------------------------------

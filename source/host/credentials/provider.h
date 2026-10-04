@@ -23,6 +23,7 @@
 #include <wrl/client.h>
 
 #include <atomic>
+#include <memory>
 #include <string>
 
 #include "host/credentials/credential.h"
@@ -69,8 +70,7 @@ private:
     bool recreate_enumerated_credentials_ = false;
     CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus_ = CPUS_INVALID;
 
-    IpcClient ipc_client_;
-    bool ipc_started_ = false;
+    std::unique_ptr<IpcClient> ipc_client_;
 
     std::wstring pending_domain_;
     std::wstring pending_username_;

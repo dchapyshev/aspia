@@ -77,11 +77,27 @@
             </ServiceInstall>
             <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="$(var.ServiceName)" Wait="yes" />
         </Component>
+
+        <!-- Credential provider -->
+        <Component Id="CredentialProvider" DiskId="1" Guid="{5BABB151-F2F5-4BCE-B76C-C0046FFA03D1}">
+            <File Id="aspia_credentials.dll" Name="aspia_credentials.dll" KeyPath="yes" />
+            <RegistryKey Root="HKCR" Key="CLSID\{117ab3c4-881d-4914-a680-2a9d16e28580}" ForceDeleteOnUninstall="yes">
+                <RegistryValue Type="string" Value="aspia_credentials" />
+                <RegistryKey Key="InprocServer32">
+                    <RegistryValue Type="string" Value="[#aspia_credentials.dll]" />
+                    <RegistryValue Name="ThreadingModel" Type="string" Value="Apartment" />
+                </RegistryKey>
+            </RegistryKey>
+            <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\Credential Providers\{117ab3c4-881d-4914-a680-2a9d16e28580}" ForceDeleteOnUninstall="yes">
+                <RegistryValue Type="string" Value="aspia_credentials" />
+            </RegistryKey>
+        </Component>
     </DirectoryRef>
 
     <!-- Product features -->
     <Feature Id="FeatureProduct" Title="$(var.ProductName)" InstallDefault="local" Level="1">
         <ComponentRef Id="Applications" />
+        <ComponentRef Id="CredentialProvider" />
         <ComponentRef Id="ProgramMenuShortcut" />
         <ComponentRef Id="DesktopShortcut" />
     </Feature>
