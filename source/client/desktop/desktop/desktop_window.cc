@@ -33,6 +33,8 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/crypto/secure_memory.h"
+#include "base/crypto/secure_string.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/settings.h"
 #include "client/desktop/desktop/desktop_toolbar.h"
@@ -1230,6 +1232,10 @@ void DesktopWindow::onControlMessage(const QByteArray& buffer)
         LOG(INFO) << "Received:" << message.session_list();
         onSessionListChanged(message.session_list());
     }
+    else if (message.has_credentials_request())
+    {
+        readCredentialsRequest();
+    }
     else
     {
         LOG(ERROR) << "Unhandled service message from host";
@@ -1385,6 +1391,20 @@ void DesktopWindow::onSwitchSession(quint32 session_id)
 
     LOG(INFO) << "Send:" << *switch_session;
     sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onSendCredentials(const SecureString& username, const SecureString& password)
+{
+    proto::control::ClientToHost message;
+    proto::control::Credentials* credentials = message.mutable_credentials();
+    credentials->set_username(username.toString().toStdString());
+    credentials->set_password(password.toString().toStdString());
+
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+
+    memZero(credentials->mutable_username());
+    memZero(credentials->mutable_password());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1593,6 +1613,12 @@ void DesktopWindow::readLegacyClipboardEvent(const proto::legacy::ClipboardEvent
     proto::clipboard::Event event;
     Clipboard::addFormat(&event, clipboard_event.mime_type(), clipboard_event.data());
     readClipboardEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::readCredentialsRequest()
+{
+    LOG(INFO) << "Credentials requested by host";
 }
 
 //--------------------------------------------------------------------------------------------------

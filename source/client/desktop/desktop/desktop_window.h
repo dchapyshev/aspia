@@ -56,6 +56,7 @@ class MouseCursor;
 class QHBoxLayout;
 class QScrollArea;
 class QTimer;
+class SecureString;
 
 class DesktopToolBar;
 class DesktopWidget;
@@ -118,6 +119,7 @@ private slots:
     void onRecordingChanged(bool enable, const QString& file_path);
     void onPowerControl(proto::power::Control::Action action);
     void onSwitchSession(quint32 session_id);
+    void onSendCredentials(const SecureString& username, const SecureString& password);
     void onClipboardEvent(const proto::clipboard::Event& event);
     void onClipboardLocalFileListChanged(const QVector<LocalFileEntry>& files);
     void onClipboardFileDataRequest(int file_index);
@@ -145,6 +147,7 @@ private:
     void readExtension(const proto::legacy::Extension& extension);
     void readClipboardEvent(const proto::clipboard::Event& event);
     void readLegacyClipboardEvent(const proto::legacy::ClipboardEvent& clipboard_event);
+    void readCredentialsRequest();
     void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
     void onScreenListChanged(const proto::screen::ScreenList& screen_list);
     void onSessionListChanged(const proto::control::SessionList& sessions);
