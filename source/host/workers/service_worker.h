@@ -34,6 +34,7 @@ class Chat;
 } // namespace proto::chat
 
 class Client;
+class Credentials;
 class DesktopManager;
 class RouterManager;
 class UserSession;
@@ -91,6 +92,10 @@ private:
     ScopedQPointer<DesktopManager> desktop_manager_;
     ScopedQPointer<TcpServer> tcp_server_;
     ScopedQPointer<RouterManager> router_manager_;
+
+#if defined(Q_OS_WINDOWS)
+    ScopedQPointer<Credentials> credentials_;
+#endif // defined(Q_OS_WINDOWS)
 
     QList<PendingConfirmation> pending_confirmation_;
     QList<Client*> clients_;

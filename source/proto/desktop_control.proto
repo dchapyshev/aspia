@@ -92,11 +92,23 @@ message Feedback
     }
 }
 
+message CredentialsRequest
+{
+    uint32 dummy = 1; // Always set to 1.
+}
+
+message Credentials
+{
+    string username = 1;
+    string password = 2;
+}
+
 // Client <- Host (channel 1).
 message HostToClient
 {
-    Capabilities capabilities = 1;
-    SessionList session_list  = 2;
+    Capabilities capabilities              = 1;
+    SessionList session_list               = 2;
+    CredentialsRequest credentials_request = 3;
 }
 
 // Client -> Host (channel 1).
@@ -107,4 +119,5 @@ message ClientToHost
     SessionsRequest sessions_request = 3;
     SwitchSession switch_session     = 4;
     Feedback feedback                = 5;
+    Credentials credentials          = 6;
 }

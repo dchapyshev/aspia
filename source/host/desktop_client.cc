@@ -148,6 +148,14 @@ void DesktopClient::onUserMessage(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopClient::onRequestCredentials()
+{
+    proto::control::HostToClient message;
+    message.mutable_credentials_request()->set_dummy(1);
+    send(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopClient::onStart()
 {
     emit sig_started();

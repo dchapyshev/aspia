@@ -33,6 +33,7 @@
 #include "base/net/address.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
+#include "host/credentials.h"
 #include "host/database.h"
 #include "host/desktop_client.h"
 #include "host/desktop_manager.h"
@@ -52,6 +53,7 @@
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
+#include "host/win/portable_host.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace {
@@ -148,6 +150,11 @@ void ServiceWorker::onPrepare()
     connect(user_session_, &UserSession::sig_lockKeyboardChanged, desktop_manager_, &DesktopManager::onUserLockKeyboard);
     connect(desktop_manager_, &DesktopManager::sig_attached, this, &ServiceWorker::onDesktopManagerAttached);
 
+#if defined(Q_OS_WINDOWS)
+    if (!PortableHost::isActive())
+        credentials_ = new Credentials(this);
+#endif // defined(Q_OS_WINDOWS)
+
     connect(CoreApplication::instance(), &CoreApplication::sig_powerEvent,
             this, &ServiceWorker::onPowerEvent, Qt::QueuedConnection);
 
@@ -190,6 +197,11 @@ void ServiceWorker::onStart()
     // Open the desktop agent IPC server and keep an agent running for the active session from now on,
     // independent of connected clients.
     desktop_manager_->start();
+
+#if defined(Q_OS_WINDOWS)
+    if (credentials_)
+        credentials_->start();
+#endif // defined(Q_OS_WINDOWS)
 
     Database& db = Database::instance();
     tcp_server_->start(db.tcpPort());
@@ -682,6 +694,11 @@ void ServiceWorker::startClient(const PendingConfirmation& pending)
         connect(user_session_, &UserSession::sig_userMessage, client, &DesktopClient::onUserMessage);
 
         connect(desktop_manager_, &DesktopManager::sig_dettached, client, &DesktopClient::dettach);
+
+#if defined(Q_OS_WINDOWS)
+        if (credentials_)
+            connect(credentials_, &Credentials::sig_connected, client, &DesktopClient::onRequestCredentials);
+#endif // defined(Q_OS_WINDOWS)
     }
     else if (session_type == proto::peer::SESSION_TYPE_FILE_TRANSFER)
     {
