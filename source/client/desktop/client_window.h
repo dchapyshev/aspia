@@ -46,9 +46,8 @@ public:
     explicit ClientWindow(proto::peer::SessionType session_type, QWidget* parent = nullptr);
     virtual ~ClientWindow() override;
 
-    // Connects to a host.
-    // A direct connection asks for the missing credentials before the attempt; a connection by
-    // host id asks for them only if the connection offer selects the password handshake.
+    // Connects to a host. Asks for the missing credentials before the attempt and asks again if
+    // the host refuses credentials that are not stored for it.
     bool connectToHost(HostConfig host, const QString& display_name);
 
     std::shared_ptr<SessionState> sessionState() { return session_state_; }
@@ -155,6 +154,9 @@ private:
     void saveHostCredentials(const HostConfig& host, qint64 credential_id);
     void forgetRefusedCredentials();
     void setClientTitle(const HostConfig& host, proto::peer::SessionType session_type);
+    bool askCredentials(HostConfig* host);
+    void askCredentialsAgain();
+    void startConnection(HostConfig host, const QString& display_name);
     void fetchConnectionOffer();
     void startNewSession();
 

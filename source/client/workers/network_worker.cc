@@ -257,7 +257,7 @@ void NetworkWorker::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
         tcp_channel_.reset();
     }
 
-    if (!session_state_->isAutoReconnect())
+    if (!session_state_->isAutoReconnect() || error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
         return;
 
     LOG(INFO) << "Reconnect to host is enabled";

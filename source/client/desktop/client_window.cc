@@ -48,6 +48,27 @@ constexpr MilliSeconds kDragPollInterval{ 50 };
 const Seconds kReconnectRetryDelay { 5 };
 const Minutes kReconnectBudget { 5 };
 
+//--------------------------------------------------------------------------------------------------
+bool canSaveCredentials(const HostConfig& host)
+{
+    if (host.entryId() > 0)
+        return true;
+
+    return host.routerId() > 0 && !isTempHostId(stringToHostId(host.address()));
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<std::pair<QString, SecureString>> storedCredentials(const HostConfig& host)
+{
+    if (!canSaveCredentials(host))
+        return std::nullopt;
+
+    Database& db = Database::instance();
+    return host.entryId() > 0 ?
+        db.localHostCredentials(host.entryId()) :
+        db.routerHostCredentials(host.routerId(), stringToHostId(host.address()));
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -94,79 +115,23 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
     LOG(INFO) << "Connecting to host";
     setClientTitle(host, session_type_);
 
-    bool can_save_credentials = host.entryId() > 0;
-
-    if (host.entryId() <= 0 && host.routerId() > 0 && !isTempHostId(stringToHostId(host.address())))
-        can_save_credentials = true;
-
-    if (can_save_credentials)
+    std::optional<std::pair<QString, SecureString>> credentials = storedCredentials(host);
+    if (credentials.has_value())
     {
-        Database& db = Database::instance();
-        std::optional<std::pair<QString, SecureString>> credentials = host.entryId() > 0 ?
-            db.localHostCredentials(host.entryId()) :
-            db.routerHostCredentials(host.routerId(), stringToHostId(host.address()));
-        if (credentials.has_value())
-        {
-            LOG(INFO) << "Using stored credentials of host" << host.address();
-            host.setUsername(credentials->first);
-            host.setPassword(credentials->second);
-        }
+        LOG(INFO) << "Using stored credentials of host" << host.address();
+        host.setUsername(credentials->first);
+        host.setPassword(credentials->second);
     }
 
     if (host.username().isEmpty() || host.password().isEmpty())
     {
         LOG(INFO) << "Empty user name or password";
 
-        AutoQPointer<AuthorizationDialog> auth_dialog(new AuthorizationDialog(this));
-
-        auth_dialog->setOneTimePasswordEnabled(host.routerId() > 0);
-        auth_dialog->setOneTimePasswordOnly(host.isPortable());
-        auth_dialog->setSaveCredentialsVisible(can_save_credentials);
-        auth_dialog->setUserName(host.username());
-        auth_dialog->setPassword(host.password());
-
-        QList<CredentialConfig> credentials;
-        if (Database::instance().credentialList(&credentials) != Database::ReadResult::OK)
-            LOG(ERROR) << "Unable to read credentials";
-
-        auth_dialog->setSavedCredentials(credentials);
-
-        if (auth_dialog->exec() == AuthorizationDialog::Rejected)
-        {
-            LOG(INFO) << "Authorization rejected by user";
+        if (!askCredentials(&host))
             return false;
-        }
-
-        host.setUsername(auth_dialog->userName());
-        host.setPassword(auth_dialog->password());
-
-        if (can_save_credentials && auth_dialog->isSaveCredentialsChecked() && !host.username().isEmpty())
-        {
-            saveHostCredentials(host, auth_dialog->credentialId());
-            credentials_saved_ = true;
-        }
     }
 
-    // When connecting with a one-time password, the username must be in the following format:
-    // #host_id.
-    if (host.username().isEmpty())
-    {
-        LOG(INFO) << "User name is empty. Connection by ID";
-        host.setUsername(u"#" + host.address());
-    }
-
-    session_state_ = std::make_shared<SessionState>(host, session_type_, display_name);
-
-    LOG(INFO) << "Start client";
-    if (session_state_->isConnectionByHostId())
-    {
-        // Relay path: fetch the ConnectionOffer first; the session starts once we have it.
-        fetchConnectionOffer();
-    }
-    else
-    {
-        startNewSession();
-    }
+    startConnection(host, display_name);
     return true;
 }
 
@@ -304,6 +269,12 @@ void ClientWindow::onStatusChanged(NetworkWorker::Status status, const QVariant&
                     forgetRefusedCredentials();
 
                 onErrorOccurred(TcpChannel::errorToString(error_code));
+
+                if (error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
+                {
+                    reconnect_timeout_timer_->stop();
+                    askCredentialsAgain();
+                }
             }
             else
             {
@@ -498,6 +469,81 @@ void ClientWindow::setClientTitle(const HostConfig& host, proto::peer::SessionTy
     QString computer_name = host.name().isEmpty() ? host.address() : host.name();
 
     setWindowTitle(QString("%1 - %2").arg(computer_name, session_name));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ClientWindow::askCredentials(HostConfig* host)
+{
+    const bool can_save_credentials = canSaveCredentials(*host);
+
+    AutoQPointer<AuthorizationDialog> auth_dialog(new AuthorizationDialog(this));
+
+    auth_dialog->setOneTimePasswordEnabled(host->routerId() > 0);
+    auth_dialog->setOneTimePasswordOnly(host->isPortable());
+    auth_dialog->setSaveCredentialsVisible(can_save_credentials);
+    auth_dialog->setUserName(host->username());
+    auth_dialog->setPassword(host->password());
+
+    QList<CredentialConfig> credentials;
+    if (Database::instance().credentialList(&credentials) != Database::ReadResult::OK)
+        LOG(ERROR) << "Unable to read credentials";
+
+    auth_dialog->setSavedCredentials(credentials);
+
+    if (auth_dialog->exec() == AuthorizationDialog::Rejected)
+    {
+        LOG(INFO) << "Authorization rejected by user";
+        return false;
+    }
+
+    host->setUsername(auth_dialog->userName());
+    host->setPassword(auth_dialog->password());
+
+    if (can_save_credentials && auth_dialog->isSaveCredentialsChecked() && !host->username().isEmpty())
+    {
+        saveHostCredentials(*host, auth_dialog->credentialId());
+        credentials_saved_ = true;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::askCredentialsAgain()
+{
+    HostConfig host = session_state_->host();
+
+    // Stored credentials are changed in the host editor, not here.
+    if (storedCredentials(host).has_value())
+        return;
+
+    if (host.username().startsWith(u'#'))
+        host.setUsername(QString());
+    host.setPassword(SecureString());
+
+    if (!askCredentials(&host))
+        return;
+
+    startConnection(host, session_state_->displayName());
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::startConnection(HostConfig host, const QString& display_name)
+{
+    // When connecting with a one-time password, the username must be in the following format: #host_id.
+    if (host.username().isEmpty())
+    {
+        LOG(INFO) << "User name is empty. Connection by ID";
+        host.setUsername(u"#" + host.address());
+    }
+
+    session_state_ = std::make_shared<SessionState>(host, session_type_, display_name);
+
+    LOG(INFO) << "Start client";
+    if (session_state_->isConnectionByHostId())
+        fetchConnectionOffer();
+    else
+        startNewSession();
 }
 
 //--------------------------------------------------------------------------------------------------
