@@ -27,9 +27,12 @@
 
 #include "base/build_config.h"
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/files/base_paths.h"
+#include "base/net/udp_channel.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
+#include "proto/desktop_control.h"
 #include "proto/router.h"
 
 namespace {
@@ -49,6 +52,13 @@ constexpr auto kSettingBackupEnabled = "backup_on_startup";
 constexpr auto kSettingBackupPath    = "backup_path";
 constexpr auto kSettingBackupKeep    = "backup_retention";
 constexpr auto kSettingLockTimeout   = "lock_timeout";
+constexpr auto kSettingDesktopConfig = "desktop_config";
+constexpr auto kSettingRecordEnabled = "record_sessions";
+constexpr auto kSettingRecordPath    = "recording_path";
+constexpr auto kSettingKeyCombos     = "send_key_combinations";
+constexpr auto kSettingHwEncoding    = "hardware_video_encoding";
+constexpr auto kSettingHwDecoding    = "hardware_video_decoding";
+constexpr auto kSettingUdpMethods    = "udp_methods";
 constexpr auto kSettingSalt          = "master_password_salt";
 constexpr auto kSettingVerifier      = "master_password_verifier";
 constexpr auto kSettingVersion       = "master_password_version";
@@ -1820,6 +1830,116 @@ bool Database::setLockTimeout(Minutes timeout)
 }
 
 //--------------------------------------------------------------------------------------------------
+proto::control::Config Database::desktopConfig() const
+{
+    bool found = false;
+    const QString value = readSetting(kSettingDesktopConfig, &found);
+    if (found)
+    {
+        proto::control::Config config;
+        if (parse(QByteArray::fromBase64(value.toLatin1()), &config))
+            return config;
+    }
+
+    return defaultDesktopConfig();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setDesktopConfig(const proto::control::Config& config)
+{
+    return writeSetting(kSettingDesktopConfig, QString::fromLatin1(serialize(config).toBase64()));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::isRecordSessionsEnabled() const
+{
+    return readSetting(kSettingRecordEnabled) == "1";
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setRecordSessionsEnabled(bool enable)
+{
+    return writeSetting(kSettingRecordEnabled, enable ? "1" : "0");
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Database::recordingPath() const
+{
+    QString value = readSetting(kSettingRecordPath);
+    if (value.isEmpty())
+        value = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Aspia";
+    return value;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setRecordingPath(const QString& path)
+{
+    return writeSetting(kSettingRecordPath, path);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::isSendKeyCombinationsEnabled() const
+{
+    QString value = readSetting(kSettingKeyCombos);
+    if (value.isEmpty())
+        return true;
+    return value == "1";
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setSendKeyCombinationsEnabled(bool enable)
+{
+    return writeSetting(kSettingKeyCombos, enable ? "1" : "0");
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::isHardwareVideoEncodingEnabled() const
+{
+    QString value = readSetting(kSettingHwEncoding);
+    if (value.isEmpty())
+        return true;
+    return value == "1";
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setHardwareVideoEncodingEnabled(bool enable)
+{
+    return writeSetting(kSettingHwEncoding, enable ? "1" : "0");
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::isHardwareVideoDecodingEnabled() const
+{
+    QString value = readSetting(kSettingHwDecoding);
+    if (value.isEmpty())
+        return true;
+    return value == "1";
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setHardwareVideoDecodingEnabled(bool enable)
+{
+    return writeSetting(kSettingHwDecoding, enable ? "1" : "0");
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 Database::udpMethods() const
+{
+    bool ok = false;
+    const quint32 value = readSetting(kSettingUdpMethods).toUInt(&ok);
+    if (!ok)
+        return UDP_METHOD_ALL;
+
+    return value;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setUdpMethods(quint32 methods)
+{
+    return writeSetting(kSettingUdpMethods, QString::number(methods));
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Database::isMasterPasswordSet() const
 {
     SqlTransaction transaction(db_);
@@ -2072,8 +2192,11 @@ bool Database::setMasterPassword(const QByteArray& salt, const QByteArray& verif
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Database::readSetting(const QString& name) const
+QString Database::readSetting(const QString& name, bool* found) const
 {
+    if (found)
+        *found = false;
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
@@ -2085,6 +2208,9 @@ QString Database::readSetting(const QString& name) const
 
     if (query.next() != SqlQuery::StepResult::ROW)
         return QString();
+
+    if (found)
+        *found = true;
 
     return query.columnText(0);
 }

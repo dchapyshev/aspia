@@ -27,7 +27,7 @@
 #include "base/peer/client_authenticator.h"
 #include "base/peer/client_authenticator_legacy.h"
 #include "base/peer/relay_peer.h"
-#include "client/settings.h"
+#include "client/database.h"
 #include "client/udp_attempt.h"
 #include "proto/key_exchange.h"
 #include "proto/peer.h"
@@ -50,7 +50,7 @@ static const size_t kMaxUdpAttempts = 16;
 //--------------------------------------------------------------------------------------------------
 NetworkWorker::NetworkWorker()
     : Worker(Thread::AsioDispatcher, kReceiveRateInterval),
-      udp_methods_(Settings().udpMethods())
+      udp_methods_(Database::instance().udpMethods())
 {
     LOG(INFO) << "Ctor";
 }

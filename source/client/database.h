@@ -139,6 +139,27 @@ public:
     Minutes lockTimeout() const;
     bool setLockTimeout(Minutes timeout);
 
+    proto::control::Config desktopConfig() const;
+    bool setDesktopConfig(const proto::control::Config& config);
+
+    bool isRecordSessionsEnabled() const;
+    bool setRecordSessionsEnabled(bool enable);
+
+    QString recordingPath() const;
+    bool setRecordingPath(const QString& path);
+
+    bool isSendKeyCombinationsEnabled() const;
+    bool setSendKeyCombinationsEnabled(bool enable);
+
+    bool isHardwareVideoEncodingEnabled() const;
+    bool setHardwareVideoEncodingEnabled(bool enable);
+
+    bool isHardwareVideoDecodingEnabled() const;
+    bool setHardwareVideoDecodingEnabled(bool enable);
+
+    quint32 udpMethods() const;
+    bool setUdpMethods(quint32 methods);
+
     // Master password.
     bool isMasterPasswordSet() const;
 
@@ -174,7 +195,7 @@ private:
     bool openDatabase();
     bool setMasterPassword(const QByteArray& salt, const QByteArray& verifier, quint32 version);
 
-    QString readSetting(const QString& name) const;
+    QString readSetting(const QString& name, bool* found = nullptr) const;
     bool writeSetting(const QString& name, const QString& value);
 
     mutable SqlDatabase db_;

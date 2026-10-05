@@ -32,7 +32,6 @@
 #include "client/router_controller.h"
 #include "client/session_keeper.h"
 #include "client/session_state.h"
-#include "client/settings.h"
 #include "client/android/desktop_view.h"
 #include "client/android/key_bar.h"
 #include "client/android/statistics_dialog.h"
@@ -582,7 +581,7 @@ void DesktopWindow::requestConnectionOffer(RouterSession* session)
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::startNewSession()
 {
-    desktop_config_ = Settings().desktopConfig();
+    desktop_config_ = Database::instance().desktopConfig();
 
     if (!session_keeper_)
         session_keeper_ = SessionKeeper::create(this);

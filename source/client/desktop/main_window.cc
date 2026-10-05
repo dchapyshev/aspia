@@ -543,7 +543,7 @@ void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType sess
     {
         case proto::peer::SESSION_TYPE_DESKTOP:
         {
-            proto::control::Config desktop_config = Settings().desktopConfig();
+            proto::control::Config desktop_config = Database::instance().desktopConfig();
 
             // When the session opens in a tab, its visible area is bounded by the main window from
             // the very first frame. Pass the initial preferred size in the config so the host

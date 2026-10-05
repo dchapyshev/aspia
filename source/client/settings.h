@@ -21,10 +21,6 @@
 
 #include <QSettings>
 
-namespace proto::control {
-class Config;
-} // namespace proto::control
-
 namespace proto::peer {
 enum SessionType : int;
 } // namespace proto::peer
@@ -49,9 +45,6 @@ public:
 
     proto::peer::SessionType sessionType() const;
     void setSessionType(proto::peer::SessionType session_type);
-
-    proto::control::Config desktopConfig() const;
-    void setDesktopConfig(const proto::control::Config& config);
 
     bool isOneTimePasswordChecked() const;
     void setOneTimePasswordChecked(bool check);
@@ -86,26 +79,8 @@ public:
     bool openSessionsInTabs() const;
     void setOpenSessionsInTabs(bool enable);
 
-    QString recordingPath() const;
-    void setRecordingPath(const QString& path);
-
     QString lastDirectory() const;
     void setLastDirectory(const QString& path);
-
-    bool recordSessions() const;
-    void setRecordSessions(bool enable);
-
-    bool sendKeyCombinations() const;
-    void setSendKeyCombinations(bool enable);
-
-    bool hardwareVideoEncoding() const;
-    void setHardwareVideoEncoding(bool enable);
-
-    bool hardwareVideoDecoding() const;
-    void setHardwareVideoDecoding(bool enable);
-
-    quint32 udpMethods() const;
-    void setUdpMethods(quint32 methods);
 
     QByteArray tabState(const QString& name) const;
     void setTabState(const QString& name, const QByteArray& state);

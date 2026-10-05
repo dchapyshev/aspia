@@ -81,8 +81,8 @@ SettingsWidget::SettingsWidget(QWidget* parent)
       update_page_(new UpdateWidget(kClientUpdatePackage)),
       button_credentials_(new IconButton(":/img/material/key.svg", this)),
       button_about_(new IconButton(":/img/material/info.svg", this)),
-      desktop_config_(settings_.desktopConfig()),
-      udp_methods_(settings_.udpMethods())
+      desktop_config_(Database::instance().desktopConfig()),
+      udp_methods_(Database::instance().udpMethods())
 {
     // The actions live in the app bar; AppBar::setActions() reparents and shows them. Hidden by
     // default so they do not linger in this widget.
@@ -348,7 +348,7 @@ void SettingsWidget::buildUdpSection(QVBoxLayout* layout)
                 udp_methods_ |= flag;
             else
                 udp_methods_ &= ~flag;
-            settings_.setUdpMethods(udp_methods_);
+            Database::instance().setUdpMethods(udp_methods_);
         });
     };
 
@@ -367,48 +367,48 @@ void SettingsWidget::buildDesktopSection(QVBoxLayout* layout)
     addBoolSetting(layout, tr("Enable audio"), desktop_config_.audio(), [this](bool checked)
     {
         desktop_config_.set_audio(checked);
-        settings_.setDesktopConfig(desktop_config_);
+        Database::instance().setDesktopConfig(desktop_config_);
     });
     addBoolSetting(layout, tr("Enable clipboard"), desktop_config_.clipboard(), [this](bool checked)
     {
         desktop_config_.set_clipboard(checked);
-        settings_.setDesktopConfig(desktop_config_);
+        Database::instance().setDesktopConfig(desktop_config_);
     });
     addBoolSetting(layout, tr("Show shape of remote cursor"), desktop_config_.cursor_shape(),
                    [this](bool checked)
     {
         desktop_config_.set_cursor_shape(checked);
-        settings_.setDesktopConfig(desktop_config_);
+        Database::instance().setDesktopConfig(desktop_config_);
     });
     addBoolSetting(layout, tr("Show position of remote cursor"), desktop_config_.cursor_position(),
                    [this](bool checked)
     {
         desktop_config_.set_cursor_position(checked);
-        settings_.setDesktopConfig(desktop_config_);
+        Database::instance().setDesktopConfig(desktop_config_);
     });
     addBoolSetting(layout, tr("Disable desktop effects"), !desktop_config_.effects(),
                    [this](bool checked)
     {
         desktop_config_.set_effects(!checked);
-        settings_.setDesktopConfig(desktop_config_);
+        Database::instance().setDesktopConfig(desktop_config_);
     });
     addBoolSetting(layout, tr("Disable desktop wallpaper"), !desktop_config_.wallpaper(),
                    [this](bool checked)
     {
         desktop_config_.set_wallpaper(!checked);
-        settings_.setDesktopConfig(desktop_config_);
+        Database::instance().setDesktopConfig(desktop_config_);
     });
     addBoolSetting(layout, tr("Lock computer at disconnect"), desktop_config_.lock_at_disconnect(),
                    [this](bool checked)
     {
         desktop_config_.set_lock_at_disconnect(checked);
-        settings_.setDesktopConfig(desktop_config_);
+        Database::instance().setDesktopConfig(desktop_config_);
     });
     addBoolSetting(layout, tr("Block remote input"), desktop_config_.block_input(),
                    [this](bool checked)
     {
         desktop_config_.set_block_input(checked);
-        settings_.setDesktopConfig(desktop_config_);
+        Database::instance().setDesktopConfig(desktop_config_);
     });
 }
 

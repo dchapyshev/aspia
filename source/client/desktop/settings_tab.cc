@@ -212,7 +212,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->combo_lock_timeout->setEnabled(!auto_unlock);
 #endif // defined(Q_OS_LINUX)
 
-    const quint32 udp_methods = settings.udpMethods();
+    const quint32 udp_methods = db.udpMethods();
     ui->checkbox_udp_direct->setChecked(udp_methods & UDP_METHOD_DIRECT);
     ui->checkbox_udp_hole_punching->setChecked(udp_methods & UDP_METHOD_HOLE_PUNCHING);
     ui->checkbox_udp_pcp->setChecked(udp_methods & UDP_METHOD_PCP);
@@ -220,7 +220,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->checkbox_udp_upnp->setChecked(udp_methods & UDP_METHOD_UPNP);
 
     // Desktop page.
-    proto::control::Config desktop_config = settings.desktopConfig();
+    proto::control::Config desktop_config = db.desktopConfig();
     ui->checkbox_audio->setChecked(desktop_config.audio());
     ui->checkbox_clipboard->setChecked(desktop_config.clipboard());
     ui->checkbox_cursor_shape->setChecked(desktop_config.cursor_shape());
@@ -229,9 +229,9 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->checkbox_desktop_wallpaper->setChecked(!desktop_config.wallpaper());
     ui->checkbox_lock_at_disconnect->setChecked(desktop_config.lock_at_disconnect());
     ui->checkbox_block_remote_input->setChecked(desktop_config.block_input());
-    ui->checkbox_send_key_combinations->setChecked(settings.sendKeyCombinations());
-    ui->checkbox_hardware_encoding->setChecked(settings.hardwareVideoEncoding());
-    ui->checkbox_hardware_decoding->setChecked(settings.hardwareVideoDecoding());
+    ui->checkbox_send_key_combinations->setChecked(db.isSendKeyCombinationsEnabled());
+    ui->checkbox_hardware_encoding->setChecked(db.isHardwareVideoEncodingEnabled());
+    ui->checkbox_hardware_decoding->setChecked(db.isHardwareVideoDecodingEnabled());
 
     ui->combo_resolution->addItem(tr("None"), QSize());
     const QList<QSize> resolutions = availableResolutions();
@@ -252,8 +252,8 @@ SettingsTab::SettingsTab(QWidget* parent)
         ui->combo_resolution->setCurrentIndex(index);
     }
 
-    ui->checkbox_record_autostart->setChecked(settings.recordSessions());
-    ui->edit_record_dir->setText(settings.recordingPath());
+    ui->checkbox_record_autostart->setChecked(db.isRecordSessionsEnabled());
+    ui->edit_record_dir->setText(db.recordingPath());
 
     // Update page.
     ui->checkbox_check_updates->setChecked(db.isCheckUpdatesEnabled());
@@ -474,7 +474,7 @@ void SettingsTab::onUdpMethodsChanged()
     if (ui->checkbox_udp_upnp->isChecked())
         methods |= UDP_METHOD_UPNP;
 
-    Settings().setUdpMethods(methods);
+    Database::instance().setUdpMethods(methods);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -518,14 +518,14 @@ void SettingsTab::onDesktopFeatureChanged()
 void SettingsTab::onRecordAutostartChanged()
 {
     LOG(INFO) << "[ACTION] Record autostart changed";
-    Settings().setRecordSessions(ui->checkbox_record_autostart->isChecked());
+    Database::instance().setRecordSessionsEnabled(ui->checkbox_record_autostart->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::onRecordingPathChanged()
 {
     LOG(INFO) << "[ACTION] Recording path changed";
-    Settings().setRecordingPath(ui->edit_record_dir->text());
+    Database::instance().setRecordingPath(ui->edit_record_dir->text());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -545,7 +545,7 @@ void SettingsTab::onSelectRecordingPath()
 
     LOG(INFO) << "[ACTION] Recording path selected:" << path;
     ui->edit_record_dir->setText(path);
-    Settings().setRecordingPath(path);
+    Database::instance().setRecordingPath(path);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -792,9 +792,9 @@ void SettingsTab::saveDesktopConfig()
         resolution->set_height(preferred.height());
     }
 
-    Settings settings;
-    settings.setDesktopConfig(desktop_config);
-    settings.setSendKeyCombinations(ui->checkbox_send_key_combinations->isChecked());
-    settings.setHardwareVideoEncoding(ui->checkbox_hardware_encoding->isChecked());
-    settings.setHardwareVideoDecoding(ui->checkbox_hardware_decoding->isChecked());
+    Database& db = Database::instance();
+    db.setDesktopConfig(desktop_config);
+    db.setSendKeyCombinationsEnabled(ui->checkbox_send_key_combinations->isChecked());
+    db.setHardwareVideoEncodingEnabled(ui->checkbox_hardware_encoding->isChecked());
+    db.setHardwareVideoDecodingEnabled(ui->checkbox_hardware_decoding->isChecked());
 }

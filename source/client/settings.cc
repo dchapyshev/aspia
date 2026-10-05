@@ -19,16 +19,12 @@
 #include "client/settings.h"
 
 #include <QLocale>
-#include <QStandardPaths>
 #include <QVersionNumber>
 
 #include <mutex>
 
 #include "version.h"
 #include "base/logging.h"
-#include "base/net/udp_channel.h"
-#include "client/config.h"
-#include "proto/desktop_control.h"
 #include "proto/peer.h"
 
 namespace {
@@ -37,7 +33,6 @@ const QString kVersionParam = "version";
 const QString kLocaleParam = "locale";
 const QString kThemeParam = "theme";
 const QString kSessionTypeParam = "session_type";
-const QString kDesktopConfigParam = "desktop_config";
 const QString kOneTimePasswordCheckedParam = "one_time_password_checked";
 const QString kQuickConnectStateParam = "quick_connect_state";
 const QString kWindowGeometryParam = "window_geometry";
@@ -49,13 +44,7 @@ const QString kSearchFieldParam = "search_field";
 const QString kOnlineCheckParam = "online_check";
 const QString kAlwaysOnTopParam = "always_on_top";
 const QString kOpenSessionsInTabsParam = "open_sessions_in_tabs";
-const QString kRecordingPathParam = "recording_path";
 const QString kLastDirectoryParam = "last_directory";
-const QString kRecordSessionsParam = "record_sessions";
-const QString kSendKeyCombinationsParam = "send_key_combinations";
-const QString kHardwareVideoEncodingParam = "hardware_video_encoding";
-const QString kHardwareVideoDecodingParam = "hardware_video_decoding";
-const QString kUdpMethodsParam = "udp_methods";
 const QString kTabStateParam = "tab_state";
 const QString kDialogGeometryParam = "dialog_geometry";
 const QString kLocalGroupExpandedParam = "local_group_expanded";
@@ -140,30 +129,6 @@ proto::peer::SessionType Settings::sessionType() const
 void Settings::setSessionType(proto::peer::SessionType session_type)
 {
     settings_.setValue(kSessionTypeParam, static_cast<quint32>(session_type));
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::control::Config Settings::desktopConfig() const
-{
-    QByteArray buffer = settings_.value(kDesktopConfigParam).toByteArray();
-    if (!buffer.isEmpty())
-    {
-        proto::control::Config config;
-        if (config.ParseFromArray(buffer.data(), buffer.size()))
-            return config;
-    }
-
-    return defaultDesktopConfig();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setDesktopConfig(const proto::control::Config& config)
-{
-    QByteArray buffer;
-    buffer.resize(static_cast<qsizetype>(config.ByteSizeLong()));
-
-    config.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
-    settings_.setValue(kDesktopConfigParam, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -299,19 +264,6 @@ void Settings::setOpenSessionsInTabs(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Settings::recordingPath() const
-{
-    QString default_path = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Aspia";
-    return settings_.value(kRecordingPathParam, default_path).toString();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setRecordingPath(const QString& path)
-{
-    settings_.setValue(kRecordingPathParam, path);
-}
-
-//--------------------------------------------------------------------------------------------------
 QString Settings::lastDirectory() const
 {
     return settings_.value(kLastDirectoryParam).toString();
@@ -321,66 +273,6 @@ QString Settings::lastDirectory() const
 void Settings::setLastDirectory(const QString& path)
 {
     settings_.setValue(kLastDirectoryParam, path);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Settings::recordSessions() const
-{
-    return settings_.value(kRecordSessionsParam, false).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setRecordSessions(bool enable)
-{
-    settings_.setValue(kRecordSessionsParam, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Settings::sendKeyCombinations() const
-{
-    return settings_.value(kSendKeyCombinationsParam, true).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setSendKeyCombinations(bool enable)
-{
-    settings_.setValue(kSendKeyCombinationsParam, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Settings::hardwareVideoEncoding() const
-{
-    return settings_.value(kHardwareVideoEncodingParam, true).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setHardwareVideoEncoding(bool enable)
-{
-    settings_.setValue(kHardwareVideoEncodingParam, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Settings::hardwareVideoDecoding() const
-{
-    return settings_.value(kHardwareVideoDecodingParam, true).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setHardwareVideoDecoding(bool enable)
-{
-    settings_.setValue(kHardwareVideoDecodingParam, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-quint32 Settings::udpMethods() const
-{
-    return settings_.value(kUdpMethodsParam, UDP_METHOD_ALL).toUInt();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setUdpMethods(quint32 methods)
-{
-    settings_.setValue(kUdpMethodsParam, methods);
 }
 
 //--------------------------------------------------------------------------------------------------

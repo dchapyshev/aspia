@@ -30,10 +30,12 @@
 #include "base/crypto/os_crypt.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
+#include "base/net/udp_channel.h"
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
 #include "client/master_password.h"
 #include "client/router_test_fixture.h"
+#include "proto/desktop_control.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 
@@ -1242,6 +1244,70 @@ TEST_F(DatabaseTest, LockTimeoutIsOffUntilChosen)
 
     ASSERT_TRUE(db_.setLockTimeout(Minutes::zero()));
     EXPECT_EQ(db_.lockTimeout(), Minutes::zero());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Until the user changes them, sessions use the default desktop features; a change is kept.
+TEST_F(DatabaseTest, DesktopConfigIsKept)
+{
+    EXPECT_EQ(serialize(db_.desktopConfig()), serialize(defaultDesktopConfig()));
+
+    proto::control::Config config = defaultDesktopConfig();
+    config.set_audio(false);
+    config.set_block_input(true);
+    config.mutable_preferred_resolution()->set_width(1920);
+    config.mutable_preferred_resolution()->set_height(1080);
+
+    ASSERT_TRUE(db_.setDesktopConfig(config));
+    EXPECT_EQ(serialize(db_.desktopConfig()), serialize(config));
+
+    // With every feature turned off nothing is serialized; that is still not the defaults.
+    ASSERT_TRUE(db_.setDesktopConfig(proto::control::Config()));
+    const proto::control::Config reread = db_.desktopConfig();
+    EXPECT_FALSE(reread.audio());
+    EXPECT_FALSE(reread.clipboard());
+    EXPECT_FALSE(reread.cursor_shape());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Sessions are not recorded until the user turns it on; the directory always has a value.
+TEST_F(DatabaseTest, SessionRecordingIsOffUntilChosen)
+{
+    EXPECT_FALSE(db_.isRecordSessionsEnabled());
+    EXPECT_FALSE(db_.recordingPath().isEmpty());
+
+    ASSERT_TRUE(db_.setRecordSessionsEnabled(true));
+    ASSERT_TRUE(db_.setRecordingPath("/records"));
+    EXPECT_TRUE(db_.isRecordSessionsEnabled());
+    EXPECT_EQ(db_.recordingPath(), "/records");
+
+    ASSERT_TRUE(db_.setRecordSessionsEnabled(false));
+    EXPECT_FALSE(db_.isRecordSessionsEnabled());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Until the user changes them, key combinations are sent, hardware video is used and every UDP
+// method is allowed; a change is kept.
+TEST_F(DatabaseTest, SessionOptionsAreOnUntilChosen)
+{
+    EXPECT_TRUE(db_.isSendKeyCombinationsEnabled());
+    EXPECT_TRUE(db_.isHardwareVideoEncodingEnabled());
+    EXPECT_TRUE(db_.isHardwareVideoDecodingEnabled());
+    EXPECT_EQ(db_.udpMethods(), static_cast<quint32>(UDP_METHOD_ALL));
+
+    ASSERT_TRUE(db_.setSendKeyCombinationsEnabled(false));
+    ASSERT_TRUE(db_.setHardwareVideoEncodingEnabled(false));
+    ASSERT_TRUE(db_.setHardwareVideoDecodingEnabled(false));
+    ASSERT_TRUE(db_.setUdpMethods(UDP_METHOD_DIRECT | UDP_METHOD_UPNP));
+
+    EXPECT_FALSE(db_.isSendKeyCombinationsEnabled());
+    EXPECT_FALSE(db_.isHardwareVideoEncodingEnabled());
+    EXPECT_FALSE(db_.isHardwareVideoDecodingEnabled());
+    EXPECT_EQ(db_.udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT | UDP_METHOD_UPNP));
+
+    // No method at all is a choice too, not a missing value.
+    ASSERT_TRUE(db_.setUdpMethods(0));
+    EXPECT_EQ(db_.udpMethods(), 0u);
 }
 
 //--------------------------------------------------------------------------------------------------
