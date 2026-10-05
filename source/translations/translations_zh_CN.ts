@@ -1112,67 +1112,67 @@ Routers added: %4</source>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="270"/>
+        <location filename="../client/desktop/client_window.cc" line="235"/>
         <source>Session started.</source>
         <translation>会话已开始。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="517"/>
+        <location filename="../client/desktop/client_window.cc" line="563"/>
         <source>The specified router is unavailable.</source>
         <translation>指定的路由器不可用。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="519"/>
+        <location filename="../client/desktop/client_window.cc" line="565"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>路由器的数据已损坏。请编辑路由器并重新输入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="521"/>
+        <location filename="../client/desktop/client_window.cc" line="567"/>
         <source>The specified router is offline.</source>
         <translation>指定的路由器不在线。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="282"/>
+        <location filename="../client/desktop/client_window.cc" line="247"/>
         <source>Connecting to host %1...</source>
         <translation>正在连接到主机 %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="286"/>
+        <location filename="../client/desktop/client_window.cc" line="251"/>
         <source>Connecting to host %1:%2...</source>
         <translation>正在连接到主机 %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="316"/>
+        <location filename="../client/desktop/client_window.cc" line="287"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>主机当前不可用。正在等待重新连接...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="76"/>
+        <location filename="../client/desktop/client_window.cc" line="97"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>等待重新连接到主机超时。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="336"/>
+        <location filename="../client/desktop/client_window.cc" line="307"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>主机版本比客户端版本新（%1 &gt; %2）。请更新应用程序。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="342"/>
+        <location filename="../client/desktop/client_window.cc" line="313"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>正在尝试以兼容模式连接...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="528"/>
+        <location filename="../client/desktop/client_window.cc" line="574"/>
         <source>Requesting connection to the host...</source>
         <translation>正在请求连接到主机...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="536"/>
+        <location filename="../client/desktop/client_window.cc" line="582"/>
         <source>Connection offer received.</source>
         <translation>已收到连接请求。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="553"/>
+        <location filename="../client/desktop/client_window.cc" line="599"/>
         <source>Error requesting connection via router.</source>
         <translation>通过路由器请求连接时发生错误。</translation>
     </message>
@@ -2698,158 +2698,174 @@ Credentials replaced: %2</source>
         <translation>无法保存图像</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="514"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <source>Credentials</source>
+        <translation>凭据</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
+        <source>User name:</source>
+        <translation>用户名：</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <source>Password:</source>
+        <translation>密码：</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="513"/>
         <source>Connecting...</source>
         <translation>正在连接...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="538"/>
+        <location filename="../client/android/desktop_window.cc" line="537"/>
         <source>The specified router is unavailable.</source>
         <translation>指定的路由器不可用。</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="565"/>
+        <location filename="../client/android/desktop_window.cc" line="564"/>
         <source>Requesting connection to the host...</source>
         <translation>正在请求连接到主机...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="81"/>
+        <location filename="../client/android/desktop_window.cc" line="80"/>
         <source>Session %1</source>
         <translation>会话 %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="82"/>
+        <location filename="../client/android/desktop_window.cc" line="81"/>
         <source>Session %1 (%2)</source>
         <translation>会话 %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="537"/>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>路由器的数据已损坏。请编辑路由器并重新输入。</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="544"/>
+        <location filename="../client/android/desktop_window.cc" line="543"/>
         <source>Connecting to router...</source>
         <translation>正在连接到路由器...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="775"/>
+        <location filename="../client/android/desktop_window.cc" line="774"/>
         <source>Connecting to host %1...</source>
         <translation>正在连接到主机 %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="781"/>
+        <location filename="../client/android/desktop_window.cc" line="780"/>
         <source>Connection established.</source>
         <translation>连接已建立。</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="794"/>
+        <location filename="../client/android/desktop_window.cc" line="793"/>
         <source>The connection to the host has been lost.</source>
         <translation>与主机的连接已断开。</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="807"/>
+        <location filename="../client/android/desktop_window.cc" line="806"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>主机版本比客户端新。请更新应用程序。</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="811"/>
+        <location filename="../client/android/desktop_window.cc" line="810"/>
         <source>Legacy hosts are not supported.</source>
         <translation>不支持旧版主机。</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="361"/>
+        <location filename="../client/android/desktop_window.cc" line="360"/>
         <source>Monitor %1</source>
         <translation>显示器 %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="369"/>
+        <location filename="../client/android/desktop_window.cc" line="368"/>
         <source>Power</source>
         <translation>电源</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="373"/>
+        <location filename="../client/android/desktop_window.cc" line="372"/>
         <source>Keyboard</source>
         <translation>键盘</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="379"/>
+        <location filename="../client/android/desktop_window.cc" line="378"/>
         <source>Ctrl+Alt+Del</source>
         <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="386"/>
+        <location filename="../client/android/desktop_window.cc" line="385"/>
         <source>Users</source>
         <translation>用户</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="391"/>
+        <location filename="../client/android/desktop_window.cc" line="390"/>
         <source>Disconnect</source>
         <translation>断开连接</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="662"/>
-        <location filename="../client/android/desktop_window.cc" line="719"/>
+        <location filename="../client/android/desktop_window.cc" line="661"/>
+        <location filename="../client/android/desktop_window.cc" line="718"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="662"/>
         <source>Shutdown</source>
         <translation>关机</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="664"/>
+        <location filename="../client/android/desktop_window.cc" line="663"/>
         <source>Reboot</source>
         <translation>重新启动</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="669"/>
+        <location filename="../client/android/desktop_window.cc" line="668"/>
         <source>Safe Mode</source>
         <translation>安全模式</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="670"/>
+        <location filename="../client/android/desktop_window.cc" line="669"/>
         <source>Logoff</source>
         <translation>注销</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="671"/>
+        <location filename="../client/android/desktop_window.cc" line="670"/>
         <source>Lock</source>
         <translation>锁定</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="687"/>
+        <location filename="../client/android/desktop_window.cc" line="686"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>确定要关闭远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="691"/>
+        <location filename="../client/android/desktop_window.cc" line="690"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>确定要重新启动远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="695"/>
+        <location filename="../client/android/desktop_window.cc" line="694"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>确定要以安全模式重新启动远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="699"/>
+        <location filename="../client/android/desktop_window.cc" line="698"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>确定要结束远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="703"/>
+        <location filename="../client/android/desktop_window.cc" line="702"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>确定要锁定远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="758"/>
+        <location filename="../client/android/desktop_window.cc" line="757"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="758"/>
+        <location filename="../client/android/desktop_window.cc" line="757"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
@@ -4757,14 +4773,9 @@ Credentials imported: %5</source>
     <name>MainWindow</name>
     <message>
         <location filename="../client/desktop/main_window.ui" line="120"/>
-        <location filename="../client/desktop/main_window.ui" line="215"/>
+        <location filename="../client/desktop/main_window.ui" line="209"/>
         <source>Tool Bar</source>
         <translation>工具栏</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="150"/>
-        <source>F1</source>
-        <translation>F1</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="79"/>
@@ -4777,7 +4788,7 @@ Credentials imported: %5</source>
         <translation>查看</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="207"/>
+        <location filename="../client/desktop/main_window.ui" line="201"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
@@ -4808,52 +4819,47 @@ Credentials imported: %5</source>
         <translation>会话类型</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="168"/>
+        <location filename="../client/desktop/main_window.ui" line="165"/>
         <source>Quick Connect...</source>
         <translation>快速连接...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="171"/>
-        <source>F8</source>
-        <translation>F8</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="180"/>
+        <location filename="../client/desktop/main_window.ui" line="174"/>
         <source>Credentials...</source>
         <translation>凭据...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="198"/>
+        <location filename="../client/desktop/main_window.ui" line="192"/>
         <source>Lock</source>
         <translation>锁定</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="223"/>
+        <location filename="../client/desktop/main_window.ui" line="217"/>
         <source>Status Bar</source>
         <translation>状态栏</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="231"/>
+        <location filename="../client/desktop/main_window.ui" line="225"/>
         <source>Search Field</source>
         <translation>搜索字段</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="239"/>
+        <location filename="../client/desktop/main_window.ui" line="233"/>
         <source>Large icons</source>
         <translation>大图标</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="247"/>
+        <location filename="../client/desktop/main_window.ui" line="241"/>
         <source>Open Sessions in Tabs</source>
         <translation>在标签页中打开会话</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="255"/>
+        <location filename="../client/desktop/main_window.ui" line="249"/>
         <source>Always on Top</source>
         <translation>窗口置顶</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="159"/>
+        <location filename="../client/desktop/main_window.ui" line="156"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
@@ -4863,7 +4869,7 @@ Credentials imported: %5</source>
         <translation>操作</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="189"/>
+        <location filename="../client/desktop/main_window.ui" line="183"/>
         <source>Settings...</source>
         <translation>设置...</translation>
     </message>
@@ -4903,7 +4909,7 @@ Credentials imported: %5</source>
         <translation>请关闭所有对话框以锁定应用程序。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="523"/>
+        <location filename="../client/desktop/main_window.cc" line="527"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>主机属性中指定了按 ID 连接，但尚未配置路由器。请检查主机属性中的路由器参数。</translation>
     </message>

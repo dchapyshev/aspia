@@ -1115,67 +1115,67 @@ Roteadores adicionados: %4</translation>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="270"/>
+        <location filename="../client/desktop/client_window.cc" line="235"/>
         <source>Session started.</source>
         <translation>Sessão iniciada.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="517"/>
+        <location filename="../client/desktop/client_window.cc" line="563"/>
         <source>The specified router is unavailable.</source>
         <translation>O roteador especificado está indisponível.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="519"/>
+        <location filename="../client/desktop/client_window.cc" line="565"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Os dados do roteador estão corrompidos. Edite o roteador e digite-os novamente.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="521"/>
+        <location filename="../client/desktop/client_window.cc" line="567"/>
         <source>The specified router is offline.</source>
         <translation>O roteador especificado está offline.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="282"/>
+        <location filename="../client/desktop/client_window.cc" line="247"/>
         <source>Connecting to host %1...</source>
         <translation>Conectando ao host %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="286"/>
+        <location filename="../client/desktop/client_window.cc" line="251"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Conectando ao host %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="316"/>
+        <location filename="../client/desktop/client_window.cc" line="287"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>O host ainda não está disponível. Aguardando reconexão...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="76"/>
+        <location filename="../client/desktop/client_window.cc" line="97"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Tempo limite ao aguardar a reconexão com o host.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="336"/>
+        <location filename="../client/desktop/client_window.cc" line="307"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>A versão do Host é mais recente que a versão do Client (%1 &gt; %2). Atualize o aplicativo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="342"/>
+        <location filename="../client/desktop/client_window.cc" line="313"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Tentando conectar em modo de compatibilidade...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="528"/>
+        <location filename="../client/desktop/client_window.cc" line="574"/>
         <source>Requesting connection to the host...</source>
         <translation>Solicitando conexão ao host...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="536"/>
+        <location filename="../client/desktop/client_window.cc" line="582"/>
         <source>Connection offer received.</source>
         <translation>Oferta de conexão recebida.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="553"/>
+        <location filename="../client/desktop/client_window.cc" line="599"/>
         <source>Error requesting connection via router.</source>
         <translation>Erro ao solicitar conexão via roteador.</translation>
     </message>
@@ -2709,158 +2709,174 @@ Credenciais substituídas: %2</translation>
         <translation>Não foi possível salvar a imagem</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="514"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <source>Credentials</source>
+        <translation>Credenciais</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
+        <source>User name:</source>
+        <translation>Nome de usuário:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <source>Password:</source>
+        <translation>Senha:</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="513"/>
         <source>Connecting...</source>
         <translation>Conectando...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="538"/>
+        <location filename="../client/android/desktop_window.cc" line="537"/>
         <source>The specified router is unavailable.</source>
         <translation>O roteador especificado está indisponível.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="565"/>
+        <location filename="../client/android/desktop_window.cc" line="564"/>
         <source>Requesting connection to the host...</source>
         <translation>Solicitando conexão ao host...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="81"/>
+        <location filename="../client/android/desktop_window.cc" line="80"/>
         <source>Session %1</source>
         <translation>Sessão %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="82"/>
+        <location filename="../client/android/desktop_window.cc" line="81"/>
         <source>Session %1 (%2)</source>
         <translation>Sessão %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="537"/>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Os dados do roteador estão corrompidos. Edite o roteador e digite-os novamente.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="544"/>
+        <location filename="../client/android/desktop_window.cc" line="543"/>
         <source>Connecting to router...</source>
         <translation>Conectando ao roteador...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="775"/>
+        <location filename="../client/android/desktop_window.cc" line="774"/>
         <source>Connecting to host %1...</source>
         <translation>Conectando ao host %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="781"/>
+        <location filename="../client/android/desktop_window.cc" line="780"/>
         <source>Connection established.</source>
         <translation>Conexão estabelecida.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="794"/>
+        <location filename="../client/android/desktop_window.cc" line="793"/>
         <source>The connection to the host has been lost.</source>
         <translation>A conexão com o host foi perdida.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="807"/>
+        <location filename="../client/android/desktop_window.cc" line="806"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>A versão do host é mais recente que a do cliente. Atualize o aplicativo.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="811"/>
+        <location filename="../client/android/desktop_window.cc" line="810"/>
         <source>Legacy hosts are not supported.</source>
         <translation>Hosts legados não são suportados.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="361"/>
+        <location filename="../client/android/desktop_window.cc" line="360"/>
         <source>Monitor %1</source>
         <translation>Monitor %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="369"/>
+        <location filename="../client/android/desktop_window.cc" line="368"/>
         <source>Power</source>
         <translation>Energia</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="373"/>
+        <location filename="../client/android/desktop_window.cc" line="372"/>
         <source>Keyboard</source>
         <translation>Teclado</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="379"/>
+        <location filename="../client/android/desktop_window.cc" line="378"/>
         <source>Ctrl+Alt+Del</source>
         <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="386"/>
+        <location filename="../client/android/desktop_window.cc" line="385"/>
         <source>Users</source>
         <translation>Usuários</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="391"/>
+        <location filename="../client/android/desktop_window.cc" line="390"/>
         <source>Disconnect</source>
         <translation>Desconectar</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="662"/>
-        <location filename="../client/android/desktop_window.cc" line="719"/>
+        <location filename="../client/android/desktop_window.cc" line="661"/>
+        <location filename="../client/android/desktop_window.cc" line="718"/>
         <source>Back</source>
         <translation>Voltar</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="662"/>
         <source>Shutdown</source>
         <translation>Desligar</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="664"/>
+        <location filename="../client/android/desktop_window.cc" line="663"/>
         <source>Reboot</source>
         <translation>Reiniciar</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="669"/>
+        <location filename="../client/android/desktop_window.cc" line="668"/>
         <source>Safe Mode</source>
         <translation>Modo de segurança</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="670"/>
+        <location filename="../client/android/desktop_window.cc" line="669"/>
         <source>Logoff</source>
         <translation>Fazer logoff</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="671"/>
+        <location filename="../client/android/desktop_window.cc" line="670"/>
         <source>Lock</source>
         <translation>Bloquear</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="687"/>
+        <location filename="../client/android/desktop_window.cc" line="686"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Tem certeza de que deseja desligar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="691"/>
+        <location filename="../client/android/desktop_window.cc" line="690"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Tem certeza de que deseja reiniciar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="695"/>
+        <location filename="../client/android/desktop_window.cc" line="694"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Tem certeza de que deseja reiniciar o computador remoto em modo de segurança?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="699"/>
+        <location filename="../client/android/desktop_window.cc" line="698"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Tem certeza de que deseja encerrar a sessão do usuário no computador remoto?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="703"/>
+        <location filename="../client/android/desktop_window.cc" line="702"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Tem certeza de que deseja bloquear a sessão do usuário no computador remoto?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="758"/>
+        <location filename="../client/android/desktop_window.cc" line="757"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="758"/>
+        <location filename="../client/android/desktop_window.cc" line="757"/>
         <source>Yes</source>
         <translation>Sim</translation>
     </message>
@@ -4782,14 +4798,9 @@ Credenciais importadas: %5</translation>
     <name>MainWindow</name>
     <message>
         <location filename="../client/desktop/main_window.ui" line="120"/>
-        <location filename="../client/desktop/main_window.ui" line="215"/>
+        <location filename="../client/desktop/main_window.ui" line="209"/>
         <source>Tool Bar</source>
         <translation>Barra de ferramentas</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="150"/>
-        <source>F1</source>
-        <translation>F1</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="79"/>
@@ -4797,7 +4808,7 @@ Credenciais importadas: %5</translation>
         <translation>Ajuda</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="207"/>
+        <location filename="../client/desktop/main_window.ui" line="201"/>
         <source>Exit</source>
         <translation>Sair</translation>
     </message>
@@ -4828,52 +4839,47 @@ Credenciais importadas: %5</translation>
         <translation>Tipo de sessão</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="168"/>
+        <location filename="../client/desktop/main_window.ui" line="165"/>
         <source>Quick Connect...</source>
         <translation>Conexão rápida...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="171"/>
-        <source>F8</source>
-        <translation>F8</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="180"/>
+        <location filename="../client/desktop/main_window.ui" line="174"/>
         <source>Credentials...</source>
         <translation>Credenciais...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="198"/>
+        <location filename="../client/desktop/main_window.ui" line="192"/>
         <source>Lock</source>
         <translation>Bloquear</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="223"/>
+        <location filename="../client/desktop/main_window.ui" line="217"/>
         <source>Status Bar</source>
         <translation>Barra de status</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="231"/>
+        <location filename="../client/desktop/main_window.ui" line="225"/>
         <source>Search Field</source>
         <translation>Campo de pesquisa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="239"/>
+        <location filename="../client/desktop/main_window.ui" line="233"/>
         <source>Large icons</source>
         <translation>Ícones grandes</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="247"/>
+        <location filename="../client/desktop/main_window.ui" line="241"/>
         <source>Open Sessions in Tabs</source>
         <translation>Abrir sessões em abas</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="255"/>
+        <location filename="../client/desktop/main_window.ui" line="249"/>
         <source>Always on Top</source>
         <translation>Sempre no topo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="159"/>
+        <location filename="../client/desktop/main_window.ui" line="156"/>
         <source>About</source>
         <translation>Sobre</translation>
     </message>
@@ -4883,7 +4889,7 @@ Credenciais importadas: %5</translation>
         <translation>Ações</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="189"/>
+        <location filename="../client/desktop/main_window.ui" line="183"/>
         <source>Settings...</source>
         <translation>Configurações...</translation>
     </message>
@@ -4928,7 +4934,7 @@ Credenciais importadas: %5</translation>
         <translation>Feche todas as caixas de diálogo para bloquear o aplicativo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="523"/>
+        <location filename="../client/desktop/main_window.cc" line="527"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>A conexão por ID está especificada nas propriedades do host, mas o roteador não está configurado. Verifique os parâmetros do roteador nas propriedades do host.</translation>
     </message>

@@ -1115,67 +1115,67 @@ Lisättyjä reitittimiä: %4</translation>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="270"/>
+        <location filename="../client/desktop/client_window.cc" line="235"/>
         <source>Session started.</source>
         <translation>Istunto aloitettu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="517"/>
+        <location filename="../client/desktop/client_window.cc" line="563"/>
         <source>The specified router is unavailable.</source>
         <translation>Määritetty reititin ei ole käytettävissä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="519"/>
+        <location filename="../client/desktop/client_window.cc" line="565"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Reitittimen tiedot ovat vioittuneet. Muokkaa reititintä ja syötä ne uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="521"/>
+        <location filename="../client/desktop/client_window.cc" line="567"/>
         <source>The specified router is offline.</source>
         <translation>Määritetty reititin on offline-tilassa.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="282"/>
+        <location filename="../client/desktop/client_window.cc" line="247"/>
         <source>Connecting to host %1...</source>
         <translation>Yhdistetään isäntään %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="286"/>
+        <location filename="../client/desktop/client_window.cc" line="251"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Yhdistetään isäntään %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="316"/>
+        <location filename="../client/desktop/client_window.cc" line="287"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Isäntä ei ole vielä käytettävissä. Odotetaan yhteyden palautumista...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="76"/>
+        <location filename="../client/desktop/client_window.cc" line="97"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Aikakatkaisu odotettaessa yhteyden palautumista isäntään.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="336"/>
+        <location filename="../client/desktop/client_window.cc" line="307"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Isännän versio on uudempi kuin asiakkaan versio (%1 &gt; %2). Päivitä sovellus.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="342"/>
+        <location filename="../client/desktop/client_window.cc" line="313"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Yritetään yhdistää yhteensopivuustilassa...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="528"/>
+        <location filename="../client/desktop/client_window.cc" line="574"/>
         <source>Requesting connection to the host...</source>
         <translation>Pyydetään yhteyttä isäntään...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="536"/>
+        <location filename="../client/desktop/client_window.cc" line="582"/>
         <source>Connection offer received.</source>
         <translation>Yhteystarjous vastaanotettu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="553"/>
+        <location filename="../client/desktop/client_window.cc" line="599"/>
         <source>Error requesting connection via router.</source>
         <translation>Virhe pyydettäessä yhteyttä reitittimen kautta.</translation>
     </message>
@@ -2709,158 +2709,174 @@ Korvattuja kirjautumistietoja: %2</translation>
         <translation>Kuvaa ei voitu tallentaa</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="514"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <source>Credentials</source>
+        <translation>Kirjautumistiedot</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
+        <source>User name:</source>
+        <translation>Käyttäjänimi:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <source>Password:</source>
+        <translation>Salasana:</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="513"/>
         <source>Connecting...</source>
         <translation>Yhdistetään...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="538"/>
+        <location filename="../client/android/desktop_window.cc" line="537"/>
         <source>The specified router is unavailable.</source>
         <translation>Määritetty reititin ei ole käytettävissä.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="565"/>
+        <location filename="../client/android/desktop_window.cc" line="564"/>
         <source>Requesting connection to the host...</source>
         <translation>Pyydetään yhteyttä isäntään...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="81"/>
+        <location filename="../client/android/desktop_window.cc" line="80"/>
         <source>Session %1</source>
         <translation>Istunto %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="82"/>
+        <location filename="../client/android/desktop_window.cc" line="81"/>
         <source>Session %1 (%2)</source>
         <translation>Istunto %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="537"/>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Reitittimen tiedot ovat vioittuneet. Muokkaa reititintä ja syötä ne uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="544"/>
+        <location filename="../client/android/desktop_window.cc" line="543"/>
         <source>Connecting to router...</source>
         <translation>Yhdistetään reitittimeen...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="775"/>
+        <location filename="../client/android/desktop_window.cc" line="774"/>
         <source>Connecting to host %1...</source>
         <translation>Yhdistetään isäntään %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="781"/>
+        <location filename="../client/android/desktop_window.cc" line="780"/>
         <source>Connection established.</source>
         <translation>Yhteys muodostettu.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="794"/>
+        <location filename="../client/android/desktop_window.cc" line="793"/>
         <source>The connection to the host has been lost.</source>
         <translation>Yhteys isäntään on katkennut.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="807"/>
+        <location filename="../client/android/desktop_window.cc" line="806"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Isännän versio on uudempi kuin asiakkaan. Päivitä sovellus.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="811"/>
+        <location filename="../client/android/desktop_window.cc" line="810"/>
         <source>Legacy hosts are not supported.</source>
         <translation>Vanhoja isäntiä ei tueta.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="361"/>
+        <location filename="../client/android/desktop_window.cc" line="360"/>
         <source>Monitor %1</source>
         <translation>Näyttö %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="369"/>
+        <location filename="../client/android/desktop_window.cc" line="368"/>
         <source>Power</source>
         <translation>Virta</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="373"/>
+        <location filename="../client/android/desktop_window.cc" line="372"/>
         <source>Keyboard</source>
         <translation>Näppäimistö</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="379"/>
+        <location filename="../client/android/desktop_window.cc" line="378"/>
         <source>Ctrl+Alt+Del</source>
         <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="386"/>
+        <location filename="../client/android/desktop_window.cc" line="385"/>
         <source>Users</source>
         <translation>Käyttäjät</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="391"/>
+        <location filename="../client/android/desktop_window.cc" line="390"/>
         <source>Disconnect</source>
         <translation>Katkaise yhteys</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="662"/>
-        <location filename="../client/android/desktop_window.cc" line="719"/>
+        <location filename="../client/android/desktop_window.cc" line="661"/>
+        <location filename="../client/android/desktop_window.cc" line="718"/>
         <source>Back</source>
         <translation>Takaisin</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="662"/>
         <source>Shutdown</source>
         <translation>Sammuta</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="664"/>
+        <location filename="../client/android/desktop_window.cc" line="663"/>
         <source>Reboot</source>
         <translation>Käynnistä uudelleen</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="669"/>
+        <location filename="../client/android/desktop_window.cc" line="668"/>
         <source>Safe Mode</source>
         <translation>Vikasietotila</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="670"/>
+        <location filename="../client/android/desktop_window.cc" line="669"/>
         <source>Logoff</source>
         <translation>Kirjaa ulos</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="671"/>
+        <location filename="../client/android/desktop_window.cc" line="670"/>
         <source>Lock</source>
         <translation>Lukitse</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="687"/>
+        <location filename="../client/android/desktop_window.cc" line="686"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Haluatko varmasti sammuttaa etätietokoneen?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="691"/>
+        <location filename="../client/android/desktop_window.cc" line="690"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Haluatko varmasti käynnistää etätietokoneen uudelleen?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="695"/>
+        <location filename="../client/android/desktop_window.cc" line="694"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Haluatko varmasti käynnistää etätietokoneen uudelleen vikasietotilassa?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="699"/>
+        <location filename="../client/android/desktop_window.cc" line="698"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Haluatko varmasti lopettaa käyttäjäistunnon etätietokoneella?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="703"/>
+        <location filename="../client/android/desktop_window.cc" line="702"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Haluatko varmasti lukita käyttäjäistunnon etätietokoneella?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="758"/>
+        <location filename="../client/android/desktop_window.cc" line="757"/>
         <source>Confirmation</source>
         <translation>Vahvistus</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="758"/>
+        <location filename="../client/android/desktop_window.cc" line="757"/>
         <source>Yes</source>
         <translation>Kyllä</translation>
     </message>
@@ -4787,17 +4803,12 @@ Tuotuja kirjautumistietoja: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="120"/>
-        <location filename="../client/desktop/main_window.ui" line="215"/>
+        <location filename="../client/desktop/main_window.ui" line="209"/>
         <source>Tool Bar</source>
         <translation>Työkalurivi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="150"/>
-        <source>F1</source>
-        <translation>F1</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="223"/>
+        <location filename="../client/desktop/main_window.ui" line="217"/>
         <source>Status Bar</source>
         <translation>Tilarivi</translation>
     </message>
@@ -4807,7 +4818,7 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Ohje</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="207"/>
+        <location filename="../client/desktop/main_window.ui" line="201"/>
         <source>Exit</source>
         <translation>Lopeta</translation>
     </message>
@@ -4843,52 +4854,47 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Toiminnot</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="159"/>
+        <location filename="../client/desktop/main_window.ui" line="156"/>
         <source>About</source>
         <translation>Tietoja</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="168"/>
+        <location filename="../client/desktop/main_window.ui" line="165"/>
         <source>Quick Connect...</source>
         <translation>Pikayhteys...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="171"/>
-        <source>F8</source>
-        <translation>F8</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="180"/>
+        <location filename="../client/desktop/main_window.ui" line="174"/>
         <source>Credentials...</source>
         <translation>Kirjautumistiedot...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="189"/>
+        <location filename="../client/desktop/main_window.ui" line="183"/>
         <source>Settings...</source>
         <translation>Asetukset...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="198"/>
+        <location filename="../client/desktop/main_window.ui" line="192"/>
         <source>Lock</source>
         <translation>Lukitse</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="231"/>
+        <location filename="../client/desktop/main_window.ui" line="225"/>
         <source>Search Field</source>
         <translation>Hakukenttä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="239"/>
+        <location filename="../client/desktop/main_window.ui" line="233"/>
         <source>Large icons</source>
         <translation>Suuret kuvakkeet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="247"/>
+        <location filename="../client/desktop/main_window.ui" line="241"/>
         <source>Open Sessions in Tabs</source>
         <translation>Avaa istunnot välilehdillä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="255"/>
+        <location filename="../client/desktop/main_window.ui" line="249"/>
         <source>Always on Top</source>
         <translation>Aina päällimmäisenä</translation>
     </message>
@@ -4928,7 +4934,7 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Sulje kaikki valintaikkunat, jotta sovellus voidaan lukita.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="523"/>
+        <location filename="../client/desktop/main_window.cc" line="527"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Isännän ominaisuuksissa on määritetty yhteys ID:llä, mutta reititintä ei ole määritetty. Tarkista reitittimen asetukset isännän ominaisuuksista.</translation>
     </message>

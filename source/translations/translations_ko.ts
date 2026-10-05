@@ -1112,67 +1112,67 @@ Routers added: %4</source>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="76"/>
+        <location filename="../client/desktop/client_window.cc" line="97"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>호스트 다시 연결 대기 시간이 초과되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="270"/>
+        <location filename="../client/desktop/client_window.cc" line="235"/>
         <source>Session started.</source>
         <translation>세션이 시작되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="282"/>
+        <location filename="../client/desktop/client_window.cc" line="247"/>
         <source>Connecting to host %1...</source>
         <translation>%1 호스트에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="286"/>
+        <location filename="../client/desktop/client_window.cc" line="251"/>
         <source>Connecting to host %1:%2...</source>
         <translation>%1:%2 호스트에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="316"/>
+        <location filename="../client/desktop/client_window.cc" line="287"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>호스트를 아직 사용할 수 없습니다. 다시 연결을 기다리는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="336"/>
+        <location filename="../client/desktop/client_window.cc" line="307"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>호스트 버전이 클라이언트 버전보다 최신입니다(%1 &gt; %2). 응용 프로그램을 업데이트하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="342"/>
+        <location filename="../client/desktop/client_window.cc" line="313"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>호환 모드로 연결을 시도하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="517"/>
+        <location filename="../client/desktop/client_window.cc" line="563"/>
         <source>The specified router is unavailable.</source>
         <translation>지정한 라우터를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="519"/>
+        <location filename="../client/desktop/client_window.cc" line="565"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>라우터의 데이터가 손상되었습니다. 라우터를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="521"/>
+        <location filename="../client/desktop/client_window.cc" line="567"/>
         <source>The specified router is offline.</source>
         <translation>지정한 라우터가 오프라인 상태입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="528"/>
+        <location filename="../client/desktop/client_window.cc" line="574"/>
         <source>Requesting connection to the host...</source>
         <translation>호스트에 연결을 요청하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="536"/>
+        <location filename="../client/desktop/client_window.cc" line="582"/>
         <source>Connection offer received.</source>
         <translation>연결 제안을 받았습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="553"/>
+        <location filename="../client/desktop/client_window.cc" line="599"/>
         <source>Error requesting connection via router.</source>
         <translation>라우터를 통한 연결을 요청하는 동안 오류가 발생했습니다.</translation>
     </message>
@@ -2683,158 +2683,158 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="81"/>
+        <location filename="../client/android/desktop_window.cc" line="80"/>
         <source>Session %1</source>
         <translation>세션 %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="82"/>
+        <location filename="../client/android/desktop_window.cc" line="81"/>
         <source>Session %1 (%2)</source>
         <translation>세션 %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="514"/>
+        <location filename="../client/android/desktop_window.cc" line="513"/>
         <source>Connecting...</source>
         <translation>연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="537"/>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>라우터의 데이터가 손상되었습니다. 라우터를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="538"/>
+        <location filename="../client/android/desktop_window.cc" line="537"/>
         <source>The specified router is unavailable.</source>
         <translation>지정한 라우터를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="544"/>
+        <location filename="../client/android/desktop_window.cc" line="543"/>
         <source>Connecting to router...</source>
         <translation>라우터에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="565"/>
+        <location filename="../client/android/desktop_window.cc" line="564"/>
         <source>Requesting connection to the host...</source>
         <translation>호스트에 연결을 요청하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="775"/>
+        <location filename="../client/android/desktop_window.cc" line="774"/>
         <source>Connecting to host %1...</source>
         <translation>%1 호스트에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="781"/>
+        <location filename="../client/android/desktop_window.cc" line="780"/>
         <source>Connection established.</source>
         <translation>연결되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="794"/>
+        <location filename="../client/android/desktop_window.cc" line="793"/>
         <source>The connection to the host has been lost.</source>
         <translation>호스트와의 연결이 끊어졌습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="807"/>
+        <location filename="../client/android/desktop_window.cc" line="806"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>호스트 버전이 클라이언트보다 최신입니다. 응용 프로그램을 업데이트하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="811"/>
+        <location filename="../client/android/desktop_window.cc" line="810"/>
         <source>Legacy hosts are not supported.</source>
         <translation>레거시 호스트는 지원되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="361"/>
+        <location filename="../client/android/desktop_window.cc" line="360"/>
         <source>Monitor %1</source>
         <translation>모니터 %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="369"/>
+        <location filename="../client/android/desktop_window.cc" line="368"/>
         <source>Power</source>
         <translation>전원</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="373"/>
+        <location filename="../client/android/desktop_window.cc" line="372"/>
         <source>Keyboard</source>
         <translation>키보드</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="379"/>
+        <location filename="../client/android/desktop_window.cc" line="378"/>
         <source>Ctrl+Alt+Del</source>
         <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="386"/>
+        <location filename="../client/android/desktop_window.cc" line="385"/>
         <source>Users</source>
         <translation>사용자</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="391"/>
+        <location filename="../client/android/desktop_window.cc" line="390"/>
         <source>Disconnect</source>
         <translation>연결 끊기</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="662"/>
-        <location filename="../client/android/desktop_window.cc" line="719"/>
+        <location filename="../client/android/desktop_window.cc" line="661"/>
+        <location filename="../client/android/desktop_window.cc" line="718"/>
         <source>Back</source>
         <translation>뒤로</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="662"/>
         <source>Shutdown</source>
         <translation>시스템 종료</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="664"/>
+        <location filename="../client/android/desktop_window.cc" line="663"/>
         <source>Reboot</source>
         <translation>다시 시작</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="669"/>
+        <location filename="../client/android/desktop_window.cc" line="668"/>
         <source>Safe Mode</source>
         <translation>안전 모드</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="670"/>
+        <location filename="../client/android/desktop_window.cc" line="669"/>
         <source>Logoff</source>
         <translation>로그오프</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="671"/>
+        <location filename="../client/android/desktop_window.cc" line="670"/>
         <source>Lock</source>
         <translation>잠금</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="687"/>
+        <location filename="../client/android/desktop_window.cc" line="686"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>원격 컴퓨터를 종료하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="691"/>
+        <location filename="../client/android/desktop_window.cc" line="690"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>원격 컴퓨터를 다시 시작하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="695"/>
+        <location filename="../client/android/desktop_window.cc" line="694"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>원격 컴퓨터를 안전 모드로 다시 시작하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="699"/>
+        <location filename="../client/android/desktop_window.cc" line="698"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>원격 컴퓨터의 사용자 세션을 끝내시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="703"/>
+        <location filename="../client/android/desktop_window.cc" line="702"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>원격 컴퓨터의 사용자 세션을 잠그시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="758"/>
+        <location filename="../client/android/desktop_window.cc" line="757"/>
         <source>Confirmation</source>
         <translation>확인</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="758"/>
+        <location filename="../client/android/desktop_window.cc" line="757"/>
         <source>Yes</source>
         <translation>예</translation>
     </message>
@@ -2852,6 +2852,22 @@ Credentials replaced: %2</source>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="1031"/>
         <source>Could not save image</source>
         <translation>이미지를 저장할 수 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <source>Credentials</source>
+        <translation>자격 증명</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
+        <source>User name:</source>
+        <translation>사용자 이름:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <source>Password:</source>
+        <translation>암호:</translation>
     </message>
 </context>
 <context>
@@ -4793,7 +4809,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="120"/>
-        <location filename="../client/desktop/main_window.ui" line="215"/>
+        <location filename="../client/desktop/main_window.ui" line="209"/>
         <source>Tool Bar</source>
         <translation>도구 모음</translation>
     </message>
@@ -4803,67 +4819,57 @@ Credentials imported: %5</source>
         <translation>온라인 도움말...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="150"/>
-        <source>F1</source>
-        <translation>F1</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="159"/>
+        <location filename="../client/desktop/main_window.ui" line="156"/>
         <source>About</source>
         <translation>정보</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="168"/>
+        <location filename="../client/desktop/main_window.ui" line="165"/>
         <source>Quick Connect...</source>
         <translation>빠른 연결...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="171"/>
-        <source>F8</source>
-        <translation>F8</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="180"/>
+        <location filename="../client/desktop/main_window.ui" line="174"/>
         <source>Credentials...</source>
         <translation>자격 증명...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="189"/>
+        <location filename="../client/desktop/main_window.ui" line="183"/>
         <source>Settings...</source>
         <translation>설정...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="198"/>
+        <location filename="../client/desktop/main_window.ui" line="192"/>
         <source>Lock</source>
         <translation>잠금</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="207"/>
+        <location filename="../client/desktop/main_window.ui" line="201"/>
         <source>Exit</source>
         <translation>끝내기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="223"/>
+        <location filename="../client/desktop/main_window.ui" line="217"/>
         <source>Status Bar</source>
         <translation>상태 표시줄</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="231"/>
+        <location filename="../client/desktop/main_window.ui" line="225"/>
         <source>Search Field</source>
         <translation>검색 필드</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="239"/>
+        <location filename="../client/desktop/main_window.ui" line="233"/>
         <source>Large icons</source>
         <translation>큰 아이콘</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="247"/>
+        <location filename="../client/desktop/main_window.ui" line="241"/>
         <source>Open Sessions in Tabs</source>
         <translation>세션을 탭으로 열기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="255"/>
+        <location filename="../client/desktop/main_window.ui" line="249"/>
         <source>Always on Top</source>
         <translation>항상 위</translation>
     </message>
@@ -4903,7 +4909,7 @@ Credentials imported: %5</source>
         <translation>응용 프로그램을 잠그려면 모든 대화 상자를 닫으십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="523"/>
+        <location filename="../client/desktop/main_window.cc" line="527"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>호스트 속성에 ID로 연결하도록 지정되어 있지만 라우터가 구성되지 않았습니다. 호스트 속성에서 라우터 설정을 확인하십시오.</translation>
     </message>

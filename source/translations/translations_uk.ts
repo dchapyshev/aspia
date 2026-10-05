@@ -1118,67 +1118,67 @@ Routers added: %4</source>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="270"/>
+        <location filename="../client/desktop/client_window.cc" line="235"/>
         <source>Session started.</source>
         <translation>Сесію розпочато.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="517"/>
+        <location filename="../client/desktop/client_window.cc" line="563"/>
         <source>The specified router is unavailable.</source>
         <translation>Вказаний маршрутизатор недоступний.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="519"/>
+        <location filename="../client/desktop/client_window.cc" line="565"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Дані маршрутизатора пошкоджено. Відредагуйте маршрутизатор і введіть їх знову.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="521"/>
+        <location filename="../client/desktop/client_window.cc" line="567"/>
         <source>The specified router is offline.</source>
         <translation>Вказаний маршрутизатор не в мережі.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="282"/>
+        <location filename="../client/desktop/client_window.cc" line="247"/>
         <source>Connecting to host %1...</source>
         <translation>Підключення до хоста %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="286"/>
+        <location filename="../client/desktop/client_window.cc" line="251"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Підключення до хоста %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="316"/>
+        <location filename="../client/desktop/client_window.cc" line="287"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Хост недоступний. Очікування повторного підключення...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="76"/>
+        <location filename="../client/desktop/client_window.cc" line="97"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Перевищено час очікування при спробі повторного підключення до хоста.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="336"/>
+        <location filename="../client/desktop/client_window.cc" line="307"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Версія хоста новіша за версію клієнта (%1 &gt; %2). Будь ласка, оновіть застосунок.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="342"/>
+        <location filename="../client/desktop/client_window.cc" line="313"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Спроба підключення в режимі сумісності...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="528"/>
+        <location filename="../client/desktop/client_window.cc" line="574"/>
         <source>Requesting connection to the host...</source>
         <translation>Запит на підключення до хоста...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="536"/>
+        <location filename="../client/desktop/client_window.cc" line="582"/>
         <source>Connection offer received.</source>
         <translation>Отримано пропозицію підключення.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="553"/>
+        <location filename="../client/desktop/client_window.cc" line="599"/>
         <source>Error requesting connection via router.</source>
         <translation>Помилка при запиті з&apos;єднання через маршрутизатор.</translation>
     </message>
@@ -2720,158 +2720,174 @@ Credentials replaced: %2</source>
         <translation>Не вдалося зберегти зображення</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="514"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <source>Credentials</source>
+        <translation>Облікові дані</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
+        <source>User name:</source>
+        <translation>Ім&apos;я користувача:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <source>Password:</source>
+        <translation>Пароль:</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="513"/>
         <source>Connecting...</source>
         <translation>Підключення...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="538"/>
+        <location filename="../client/android/desktop_window.cc" line="537"/>
         <source>The specified router is unavailable.</source>
         <translation>Вказаний маршрутизатор недоступний.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="565"/>
+        <location filename="../client/android/desktop_window.cc" line="564"/>
         <source>Requesting connection to the host...</source>
         <translation>Запит на підключення до хоста...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="81"/>
+        <location filename="../client/android/desktop_window.cc" line="80"/>
         <source>Session %1</source>
         <translation>Сесія %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="82"/>
+        <location filename="../client/android/desktop_window.cc" line="81"/>
         <source>Session %1 (%2)</source>
         <translation>Сесія %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="537"/>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Дані маршрутизатора пошкоджено. Відредагуйте маршрутизатор і введіть їх знову.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="544"/>
+        <location filename="../client/android/desktop_window.cc" line="543"/>
         <source>Connecting to router...</source>
         <translation>Підключення до маршрутизатора...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="775"/>
+        <location filename="../client/android/desktop_window.cc" line="774"/>
         <source>Connecting to host %1...</source>
         <translation>Підключення до хоста %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="781"/>
+        <location filename="../client/android/desktop_window.cc" line="780"/>
         <source>Connection established.</source>
         <translation>З&apos;єднання встановлено.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="794"/>
+        <location filename="../client/android/desktop_window.cc" line="793"/>
         <source>The connection to the host has been lost.</source>
         <translation>З&apos;єднання з хостом втрачено.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="807"/>
+        <location filename="../client/android/desktop_window.cc" line="806"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Версія хоста новіша за клієнта. Оновіть застосунок.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="811"/>
+        <location filename="../client/android/desktop_window.cc" line="810"/>
         <source>Legacy hosts are not supported.</source>
         <translation>Застарілі хости не підтримуються.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="361"/>
+        <location filename="../client/android/desktop_window.cc" line="360"/>
         <source>Monitor %1</source>
         <translation>Монітор %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="369"/>
+        <location filename="../client/android/desktop_window.cc" line="368"/>
         <source>Power</source>
         <translation>Живлення</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="373"/>
+        <location filename="../client/android/desktop_window.cc" line="372"/>
         <source>Keyboard</source>
         <translation>Клавіатура</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="379"/>
+        <location filename="../client/android/desktop_window.cc" line="378"/>
         <source>Ctrl+Alt+Del</source>
         <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="386"/>
+        <location filename="../client/android/desktop_window.cc" line="385"/>
         <source>Users</source>
         <translation>Користувачі</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="391"/>
+        <location filename="../client/android/desktop_window.cc" line="390"/>
         <source>Disconnect</source>
         <translation>Відключити</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="662"/>
-        <location filename="../client/android/desktop_window.cc" line="719"/>
+        <location filename="../client/android/desktop_window.cc" line="661"/>
+        <location filename="../client/android/desktop_window.cc" line="718"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="662"/>
         <source>Shutdown</source>
         <translation>Вимкнення</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="664"/>
+        <location filename="../client/android/desktop_window.cc" line="663"/>
         <source>Reboot</source>
         <translation>Перезавантаження</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="669"/>
+        <location filename="../client/android/desktop_window.cc" line="668"/>
         <source>Safe Mode</source>
         <translation>Безпечний режим</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="670"/>
+        <location filename="../client/android/desktop_window.cc" line="669"/>
         <source>Logoff</source>
         <translation>Завершити сеанс</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="671"/>
+        <location filename="../client/android/desktop_window.cc" line="670"/>
         <source>Lock</source>
         <translation>Блокування</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="687"/>
+        <location filename="../client/android/desktop_window.cc" line="686"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Ви дійсно хочете вимкнути віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="691"/>
+        <location filename="../client/android/desktop_window.cc" line="690"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Ви дійсно хочете перезавантажити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="695"/>
+        <location filename="../client/android/desktop_window.cc" line="694"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Ви дійсно хочете перезавантажити віддалений комп&apos;ютер у безпечному режимі?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="699"/>
+        <location filename="../client/android/desktop_window.cc" line="698"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Ви дійсно хочете завершити сеанс користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="703"/>
+        <location filename="../client/android/desktop_window.cc" line="702"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Ви дійсно хочете заблокувати сеанс користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="758"/>
+        <location filename="../client/android/desktop_window.cc" line="757"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="758"/>
+        <location filename="../client/android/desktop_window.cc" line="757"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
@@ -4807,14 +4823,9 @@ Credentials imported: %5</source>
     <name>MainWindow</name>
     <message>
         <location filename="../client/desktop/main_window.ui" line="120"/>
-        <location filename="../client/desktop/main_window.ui" line="215"/>
+        <location filename="../client/desktop/main_window.ui" line="209"/>
         <source>Tool Bar</source>
         <translation>Панель інструментів</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="150"/>
-        <source>F1</source>
-        <translation>F1</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="79"/>
@@ -4827,7 +4838,7 @@ Credentials imported: %5</source>
         <translation>Вигляд</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="207"/>
+        <location filename="../client/desktop/main_window.ui" line="201"/>
         <source>Exit</source>
         <translation>Вихід</translation>
     </message>
@@ -4858,52 +4869,47 @@ Credentials imported: %5</source>
         <translation>Тип сесії</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="168"/>
+        <location filename="../client/desktop/main_window.ui" line="165"/>
         <source>Quick Connect...</source>
         <translation>Швидке підключення...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="171"/>
-        <source>F8</source>
-        <translation>F8</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="180"/>
+        <location filename="../client/desktop/main_window.ui" line="174"/>
         <source>Credentials...</source>
         <translation>Облікові дані...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="198"/>
+        <location filename="../client/desktop/main_window.ui" line="192"/>
         <source>Lock</source>
         <translation>Блокування</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="223"/>
+        <location filename="../client/desktop/main_window.ui" line="217"/>
         <source>Status Bar</source>
         <translation>Рядок стану</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="231"/>
+        <location filename="../client/desktop/main_window.ui" line="225"/>
         <source>Search Field</source>
         <translation>Поле пошуку</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="239"/>
+        <location filename="../client/desktop/main_window.ui" line="233"/>
         <source>Large icons</source>
         <translation>Великі іконки</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="247"/>
+        <location filename="../client/desktop/main_window.ui" line="241"/>
         <source>Open Sessions in Tabs</source>
         <translation>Відкривати сесії у вкладках</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="255"/>
+        <location filename="../client/desktop/main_window.ui" line="249"/>
         <source>Always on Top</source>
         <translation>Поверх усіх вікон</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="159"/>
+        <location filename="../client/desktop/main_window.ui" line="156"/>
         <source>About</source>
         <translation>Про програму</translation>
     </message>
@@ -4913,7 +4919,7 @@ Credentials imported: %5</source>
         <translation>Дії</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="189"/>
+        <location filename="../client/desktop/main_window.ui" line="183"/>
         <source>Settings...</source>
         <translation>Налаштування...</translation>
     </message>
@@ -4953,7 +4959,7 @@ Credentials imported: %5</source>
         <translation>Закрийте всі діалоги, щоб заблокувати застосунок.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="523"/>
+        <location filename="../client/desktop/main_window.cc" line="527"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>У властивостях хоста вказано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора у властивостях хоста.</translation>
     </message>
