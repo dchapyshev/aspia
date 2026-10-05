@@ -147,7 +147,7 @@ private:
     void readExtension(const proto::legacy::Extension& extension);
     void readClipboardEvent(const proto::clipboard::Event& event);
     void readLegacyClipboardEvent(const proto::legacy::ClipboardEvent& clipboard_event);
-    void readCredentialsRequest();
+    void readCredentialsRequest(const proto::control::CredentialsRequest& credentials_request);
     void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
     void onScreenListChanged(const proto::screen::ScreenList& screen_list);
     void onSessionListChanged(const proto::control::SessionList& sessions);

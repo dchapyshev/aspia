@@ -22,6 +22,8 @@
 #include <QBrush>
 #include <QClipboard>
 #include <QHBoxLayout>
+#include <QInputDialog>
+#include <QLineEdit>
 #include <QPalette>
 #include <QResizeEvent>
 #include <QPropertyAnimation>
@@ -1234,7 +1236,7 @@ void DesktopWindow::onControlMessage(const QByteArray& buffer)
     }
     else if (message.has_credentials_request())
     {
-        readCredentialsRequest();
+        readCredentialsRequest(message.credentials_request());
     }
     else
     {
@@ -1616,9 +1618,25 @@ void DesktopWindow::readLegacyClipboardEvent(const proto::legacy::ClipboardEvent
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::readCredentialsRequest()
+void DesktopWindow::readCredentialsRequest(const proto::control::CredentialsRequest& credentials_request)
 {
-    LOG(INFO) << "Credentials requested by host";
+    LOG(INFO) << "Credentials requested by host (screen_type:" << credentials_request.screen_type()
+              << "reason:" << credentials_request.reason() << ")";
+
+#if 0
+    bool ok = false;
+    QString username = QInputDialog::getText(
+        this, tr("Credentials"), tr("User name:"), QLineEdit::Normal, QString(), &ok);
+    if (!ok)
+        return;
+
+    QString password = QInputDialog::getText(
+        this, tr("Credentials"), tr("Password:"), QLineEdit::Password, QString(), &ok);
+    if (!ok)
+        return;
+
+    onSendCredentials(SecureString(username), SecureString(password));
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
