@@ -30,7 +30,7 @@ namespace {
 
 #if defined(Q_OS_WINDOWS)
 
-const MilliSeconds kOneTimePasswordExpire { 5 * 60 * 1000 }; // 5 minutes.
+const MilliSeconds kOneTimePasswordExpire { 15 * 60 * 1000 }; // 15 minutes.
 const int kSeedKeySize = 64;
 
 class PortableUserList final : public UserList
