@@ -3739,17 +3739,17 @@ Vervangen aanmeldgegevens: %2</translation>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="541"/>
+        <location filename="../base/gui_application.cc" line="565"/>
         <source>Dark</source>
         <translation>Donker</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="543"/>
+        <location filename="../base/gui_application.cc" line="567"/>
         <source>Light</source>
         <translation>Licht</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="544"/>
+        <location filename="../base/gui_application.cc" line="568"/>
         <source>Auto</source>
         <translation>Automatisch</translation>
     </message>
@@ -5931,11 +5931,67 @@ Aanmeldgegevens geïmporteerd: %5</translation>
     </message>
 </context>
 <context>
+    <name>QAbstractSpinBox</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="96"/>
+        <source>&amp;Select All</source>
+        <translation>&amp;Alles selecteren</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="97"/>
+        <source>&amp;Step up</source>
+        <translation>Waarde &amp;verhogen</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="98"/>
+        <source>Step &amp;down</source>
+        <translation>Waarde ver&amp;lagen</translation>
+    </message>
+</context>
+<context>
     <name>QGuiApplication</name>
     <message>
         <location filename="../base/gui_application.cc" line="75"/>
         <source>QT_LAYOUT_DIRECTION</source>
         <translation>LTR</translation>
+    </message>
+</context>
+<context>
+    <name>QLineEdit</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="81"/>
+        <source>&amp;Undo</source>
+        <translation>&amp;Ongedaan maken</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="82"/>
+        <source>&amp;Redo</source>
+        <translation>Opnie&amp;uw</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="83"/>
+        <source>Cu&amp;t</source>
+        <translation>K&amp;nippen</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="84"/>
+        <source>&amp;Copy</source>
+        <translation>&amp;Kopiëren</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="85"/>
+        <source>&amp;Paste</source>
+        <translation>&amp;Plakken</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="86"/>
+        <source>Delete</source>
+        <translation>Verwijderen</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="87"/>
+        <source>Select All</source>
+        <translation>Alles selecteren</translation>
     </message>
 </context>
 <context>
@@ -5949,6 +6005,49 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <location filename="../common/android/message_dialog.cc" line="51"/>
         <source>OK</source>
         <translation>OK</translation>
+    </message>
+</context>
+<context>
+    <name>QWidgetTextControl</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="88"/>
+        <source>&amp;Undo</source>
+        <translation>&amp;Ongedaan maken</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="89"/>
+        <source>&amp;Redo</source>
+        <translation>Opnie&amp;uw</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="90"/>
+        <source>Cu&amp;t</source>
+        <translation>K&amp;nippen</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="91"/>
+        <source>&amp;Copy</source>
+        <translation>&amp;Kopiëren</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="92"/>
+        <source>Copy &amp;Link Location</source>
+        <translation>Linkadr&amp;es kopiëren</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="93"/>
+        <source>&amp;Paste</source>
+        <translation>&amp;Plakken</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="94"/>
+        <source>Delete</source>
+        <translation>Verwijderen</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="95"/>
+        <source>Select All</source>
+        <translation>Alles selecteren</translation>
     </message>
 </context>
 <context>

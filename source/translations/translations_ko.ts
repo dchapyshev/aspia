@@ -3724,17 +3724,17 @@ Credentials replaced: %2</source>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="541"/>
+        <location filename="../base/gui_application.cc" line="565"/>
         <source>Dark</source>
         <translation>어둡게</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="543"/>
+        <location filename="../base/gui_application.cc" line="567"/>
         <source>Light</source>
         <translation>밝게</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="544"/>
+        <location filename="../base/gui_application.cc" line="568"/>
         <source>Auto</source>
         <translation>자동</translation>
     </message>
@@ -5905,11 +5905,67 @@ Credentials imported: %5</source>
     </message>
 </context>
 <context>
+    <name>QAbstractSpinBox</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="96"/>
+        <source>&amp;Select All</source>
+        <translation>모두 선택(&amp;A)</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="97"/>
+        <source>&amp;Step up</source>
+        <translation>값 증가(&amp;S)</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="98"/>
+        <source>Step &amp;down</source>
+        <translation>값 감소(&amp;D)</translation>
+    </message>
+</context>
+<context>
     <name>QGuiApplication</name>
     <message>
         <location filename="../base/gui_application.cc" line="75"/>
         <source>QT_LAYOUT_DIRECTION</source>
         <translation>LTR</translation>
+    </message>
+</context>
+<context>
+    <name>QLineEdit</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="81"/>
+        <source>&amp;Undo</source>
+        <translation>실행 취소(&amp;U)</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="82"/>
+        <source>&amp;Redo</source>
+        <translation>다시 실행(&amp;R)</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="83"/>
+        <source>Cu&amp;t</source>
+        <translation>잘라내기(&amp;T)</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="84"/>
+        <source>&amp;Copy</source>
+        <translation>복사(&amp;C)</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="85"/>
+        <source>&amp;Paste</source>
+        <translation>붙여넣기(&amp;P)</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="86"/>
+        <source>Delete</source>
+        <translation>삭제</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="87"/>
+        <source>Select All</source>
+        <translation>모두 선택</translation>
     </message>
 </context>
 <context>
@@ -5923,6 +5979,49 @@ Credentials imported: %5</source>
         <location filename="../common/android/message_dialog.cc" line="51"/>
         <source>OK</source>
         <translation>OK</translation>
+    </message>
+</context>
+<context>
+    <name>QWidgetTextControl</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="88"/>
+        <source>&amp;Undo</source>
+        <translation>실행 취소(&amp;U)</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="89"/>
+        <source>&amp;Redo</source>
+        <translation>다시 실행(&amp;R)</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="90"/>
+        <source>Cu&amp;t</source>
+        <translation>잘라내기(&amp;T)</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="91"/>
+        <source>&amp;Copy</source>
+        <translation>복사(&amp;C)</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="92"/>
+        <source>Copy &amp;Link Location</source>
+        <translation>링크 주소 복사(&amp;L)</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="93"/>
+        <source>&amp;Paste</source>
+        <translation>붙여넣기(&amp;P)</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="94"/>
+        <source>Delete</source>
+        <translation>삭제</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="95"/>
+        <source>Select All</source>
+        <translation>모두 선택</translation>
     </message>
 </context>
 <context>

@@ -3739,17 +3739,17 @@ Påloggingsinformasjon erstattet: %2</translation>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="541"/>
+        <location filename="../base/gui_application.cc" line="565"/>
         <source>Dark</source>
         <translation>Mørk</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="543"/>
+        <location filename="../base/gui_application.cc" line="567"/>
         <source>Light</source>
         <translation>Lys</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="544"/>
+        <location filename="../base/gui_application.cc" line="568"/>
         <source>Auto</source>
         <translation>Automatisk</translation>
     </message>
@@ -5931,11 +5931,67 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
 </context>
 <context>
+    <name>QAbstractSpinBox</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="96"/>
+        <source>&amp;Select All</source>
+        <translation>&amp;Merk alt</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="97"/>
+        <source>&amp;Step up</source>
+        <translation>&amp;Øk</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="98"/>
+        <source>Step &amp;down</source>
+        <translation>&amp;Reduser</translation>
+    </message>
+</context>
+<context>
     <name>QGuiApplication</name>
     <message>
         <location filename="../base/gui_application.cc" line="75"/>
         <source>QT_LAYOUT_DIRECTION</source>
         <translation>LTR</translation>
+    </message>
+</context>
+<context>
+    <name>QLineEdit</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="81"/>
+        <source>&amp;Undo</source>
+        <translation>&amp;Angre</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="82"/>
+        <source>&amp;Redo</source>
+        <translation>&amp;Gjør om</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="83"/>
+        <source>Cu&amp;t</source>
+        <translation>&amp;Klipp ut</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="84"/>
+        <source>&amp;Copy</source>
+        <translation>K&amp;opier</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="85"/>
+        <source>&amp;Paste</source>
+        <translation>&amp;Lim inn</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="86"/>
+        <source>Delete</source>
+        <translation>Slett</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="87"/>
+        <source>Select All</source>
+        <translation>Merk alt</translation>
     </message>
 </context>
 <context>
@@ -5949,6 +6005,49 @@ Påloggingsinformasjon importert: %5</translation>
         <location filename="../common/android/message_dialog.cc" line="51"/>
         <source>OK</source>
         <translation>OK</translation>
+    </message>
+</context>
+<context>
+    <name>QWidgetTextControl</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="88"/>
+        <source>&amp;Undo</source>
+        <translation>&amp;Angre</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="89"/>
+        <source>&amp;Redo</source>
+        <translation>&amp;Gjør om</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="90"/>
+        <source>Cu&amp;t</source>
+        <translation>&amp;Klipp ut</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="91"/>
+        <source>&amp;Copy</source>
+        <translation>K&amp;opier</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="92"/>
+        <source>Copy &amp;Link Location</source>
+        <translation>Kopier lenkeadr&amp;esse</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="93"/>
+        <source>&amp;Paste</source>
+        <translation>&amp;Lim inn</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="94"/>
+        <source>Delete</source>
+        <translation>Slett</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="95"/>
+        <source>Select All</source>
+        <translation>Merk alt</translation>
     </message>
 </context>
 <context>

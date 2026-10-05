@@ -3180,12 +3180,12 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="345"/>
         <source>&amp;Send	F11</source>
-        <translation>&amp;Envoyer	F11</translation>
+        <translation>&amp;Invia	F11</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="346"/>
         <source>&amp;Delete	Delete</source>
-        <translation>&amp;Supprimer	Delete</translation>
+        <translation>&amp;Elimina	Delete</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="356"/>
@@ -3739,17 +3739,17 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="541"/>
+        <location filename="../base/gui_application.cc" line="565"/>
         <source>Dark</source>
         <translation>Scuro</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="543"/>
+        <location filename="../base/gui_application.cc" line="567"/>
         <source>Light</source>
         <translation>Chiaro</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="544"/>
+        <location filename="../base/gui_application.cc" line="568"/>
         <source>Auto</source>
         <translation>Automatico</translation>
     </message>
@@ -5931,11 +5931,67 @@ Credenziali importate: %5</translation>
     </message>
 </context>
 <context>
+    <name>QAbstractSpinBox</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="96"/>
+        <source>&amp;Select All</source>
+        <translation>&amp;Seleziona tutto</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="97"/>
+        <source>&amp;Step up</source>
+        <translation>Incre&amp;menta</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="98"/>
+        <source>Step &amp;down</source>
+        <translation>&amp;Decrementa</translation>
+    </message>
+</context>
+<context>
     <name>QGuiApplication</name>
     <message>
         <location filename="../base/gui_application.cc" line="75"/>
         <source>QT_LAYOUT_DIRECTION</source>
         <translation>LTR</translation>
+    </message>
+</context>
+<context>
+    <name>QLineEdit</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="81"/>
+        <source>&amp;Undo</source>
+        <translation>&amp;Annulla</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="82"/>
+        <source>&amp;Redo</source>
+        <translation>&amp;Ripeti</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="83"/>
+        <source>Cu&amp;t</source>
+        <translation>&amp;Taglia</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="84"/>
+        <source>&amp;Copy</source>
+        <translation>&amp;Copia</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="85"/>
+        <source>&amp;Paste</source>
+        <translation>&amp;Incolla</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="86"/>
+        <source>Delete</source>
+        <translation>Elimina</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="87"/>
+        <source>Select All</source>
+        <translation>Seleziona tutto</translation>
     </message>
 </context>
 <context>
@@ -5949,6 +6005,49 @@ Credenziali importate: %5</translation>
         <location filename="../common/android/message_dialog.cc" line="51"/>
         <source>OK</source>
         <translation>OK</translation>
+    </message>
+</context>
+<context>
+    <name>QWidgetTextControl</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="88"/>
+        <source>&amp;Undo</source>
+        <translation>&amp;Annulla</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="89"/>
+        <source>&amp;Redo</source>
+        <translation>&amp;Ripeti</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="90"/>
+        <source>Cu&amp;t</source>
+        <translation>&amp;Taglia</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="91"/>
+        <source>&amp;Copy</source>
+        <translation>&amp;Copia</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="92"/>
+        <source>Copy &amp;Link Location</source>
+        <translation>Copia indiri&amp;zzo collegamento</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="93"/>
+        <source>&amp;Paste</source>
+        <translation>&amp;Incolla</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="94"/>
+        <source>Delete</source>
+        <translation>Elimina</translation>
+    </message>
+    <message>
+        <location filename="../base/gui_application.cc" line="95"/>
+        <source>Select All</source>
+        <translation>Seleziona tutto</translation>
     </message>
 </context>
 <context>
