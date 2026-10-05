@@ -24,7 +24,7 @@
 
 #include <atomic>
 
-#include "host/credentials/win/utils.h"
+#include "host/credentials/utils.h"
 
 class Credential final : public ICredentialProviderCredential
 {

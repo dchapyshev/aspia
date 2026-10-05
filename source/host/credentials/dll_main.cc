@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/credentials/win/dll_main.h"
+#include "host/credentials/dll_main.h"
 
 #include <initguid.h>
 #include <shlwapi.h>
@@ -26,8 +26,8 @@
 #include <atomic>
 #include <new>
 
-#include "host/credentials/win/logging.h"
-#include "host/credentials/win/provider.h"
+#include "host/credentials/logging.h"
+#include "host/credentials/provider.h"
 
 using Microsoft::WRL::ComPtr;
 

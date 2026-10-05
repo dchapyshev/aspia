@@ -26,8 +26,8 @@
 #include <memory>
 #include <string>
 
-#include "host/credentials/win/credential.h"
-#include "host/credentials/win/ipc_client.h"
+#include "host/credentials/credential.h"
+#include "host/credentials/ipc_client.h"
 
 class Provider final : public ICredentialProvider,
                        public IpcClient::Delegate,

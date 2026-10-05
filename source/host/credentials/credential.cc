@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/credentials/win/credential.h"
+#include "host/credentials/credential.h"
 
 #include <ntsecapi.h>
 #define SECURITY_WIN32
@@ -24,8 +24,8 @@
 #include <intsafe.h>
 #include <wincred.h>
 
-#include "host/credentials/win/dll_main.h"
-#include "host/credentials/win/logging.h"
+#include "host/credentials/dll_main.h"
+#include "host/credentials/logging.h"
 
 namespace {
 
