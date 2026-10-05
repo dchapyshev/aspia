@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/credentials/ipc_client.h"
+#include "host/credentials/win/ipc_client.h"
 
 #include <chrono>
 #include <cstddef>
@@ -32,9 +32,9 @@
 #include <asio/read.hpp>
 #include <asio/write.hpp>
 
-#include "host/credentials/dll_main.h"
-#include "host/credentials/logging.h"
-#include "host/credentials/utils.h"
+#include "host/credentials/win/dll_main.h"
+#include "host/credentials/win/logging.h"
+#include "host/credentials/win/utils.h"
 
 namespace {
 

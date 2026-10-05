@@ -20,13 +20,13 @@
 // are defined in this translation unit.
 #include <initguid.h>
 
-#include "host/credentials/provider.h"
+#include "host/credentials/win/provider.h"
 
 #include <new>
 
-#include "host/credentials/dll_main.h"
-#include "host/credentials/logging.h"
-#include "host/credentials/utils.h"
+#include "host/credentials/win/dll_main.h"
+#include "host/credentials/win/logging.h"
+#include "host/credentials/win/utils.h"
 
 namespace {
 
