@@ -74,6 +74,30 @@ const QString kTranslationsDir = ":/tr/";
 [[maybe_unused]] const char* const kLayoutDirection =
     QT_TRANSLATE_NOOP("QGuiApplication", "QT_LAYOUT_DIRECTION");
 
+// Qt translates the standard context menus of the text widgets with these strings. Qt's own
+// translations are not shipped, so the strings are translated in our files.
+[[maybe_unused]] const char* const kContextMenuStrings[] =
+{
+    QT_TRANSLATE_NOOP("QLineEdit", "&Undo"),
+    QT_TRANSLATE_NOOP("QLineEdit", "&Redo"),
+    QT_TRANSLATE_NOOP("QLineEdit", "Cu&t"),
+    QT_TRANSLATE_NOOP("QLineEdit", "&Copy"),
+    QT_TRANSLATE_NOOP("QLineEdit", "&Paste"),
+    QT_TRANSLATE_NOOP("QLineEdit", "Delete"),
+    QT_TRANSLATE_NOOP("QLineEdit", "Select All"),
+    QT_TRANSLATE_NOOP("QWidgetTextControl", "&Undo"),
+    QT_TRANSLATE_NOOP("QWidgetTextControl", "&Redo"),
+    QT_TRANSLATE_NOOP("QWidgetTextControl", "Cu&t"),
+    QT_TRANSLATE_NOOP("QWidgetTextControl", "&Copy"),
+    QT_TRANSLATE_NOOP("QWidgetTextControl", "Copy &Link Location"),
+    QT_TRANSLATE_NOOP("QWidgetTextControl", "&Paste"),
+    QT_TRANSLATE_NOOP("QWidgetTextControl", "Delete"),
+    QT_TRANSLATE_NOOP("QWidgetTextControl", "Select All"),
+    QT_TRANSLATE_NOOP("QAbstractSpinBox", "&Select All"),
+    QT_TRANSLATE_NOOP("QAbstractSpinBox", "&Step up"),
+    QT_TRANSLATE_NOOP("QAbstractSpinBox", "Step &down")
+};
+
 class CustomStyle final : public QProxyStyle
 {
 public:
