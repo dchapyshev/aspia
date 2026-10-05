@@ -24,6 +24,7 @@
 #include <cwchar>
 #include <memory>
 #include <new>
+#include <string_view>
 
 #include <asio/buffer.hpp>
 #include <asio/error.hpp>
@@ -38,6 +39,7 @@
 namespace {
 
 const wchar_t kChannelName[] = L"org.aspia.host.credentials";
+const wchar_t kServerImageName[] = L"aspia_host.exe";
 const UINT kCredentialsMessage = WM_APP;
 
 struct PendingCredentials
@@ -83,6 +85,46 @@ bool isValidAccountString(const wchar_t* field)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool isInProtectedLocation(const wchar_t* path)
+{
+    if (!path)
+        return false;
+
+    const std::wstring_view path_view(path);
+
+    // Returns true if |path| sits inside |directory| (a real parent, not just a string prefix).
+    auto isUnder = [path_view](std::wstring_view directory)
+    {
+        while (!directory.empty() && directory.back() == L'\\')
+            directory.remove_suffix(1);
+
+        if (directory.empty() || path_view.size() <= directory.size() ||
+            path_view[directory.size()] != L'\\')
+        {
+            return false;
+        }
+
+        return CompareStringOrdinal(path_view.data(), static_cast<int>(directory.size()),
+            directory.data(), static_cast<int>(directory.size()), TRUE) == CSTR_EQUAL;
+    };
+
+    wchar_t windows_dir[MAX_PATH] = {};
+    if (GetWindowsDirectoryW(windows_dir, ARRAYSIZE(windows_dir)) != 0 && isUnder(windows_dir))
+        return true;
+
+    const wchar_t* const kProgramFilesVars[] =
+        { L"ProgramFiles", L"ProgramFiles(x86)", L"ProgramFiles(Arm)", L"ProgramW6432" };
+    for (const wchar_t* variable : kProgramFilesVars)
+    {
+        wchar_t directory[MAX_PATH] = {};
+        if (GetEnvironmentVariableW(variable, directory, ARRAYSIZE(directory)) != 0 && isUnder(directory))
+            return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool isConnectionAllowed(HANDLE pipe)
 {
     ULONG session_id = 0;
@@ -109,6 +151,28 @@ bool isConnectionAllowed(HANDLE pipe)
     if (!process.isValid())
     {
         LOG(L"OpenProcess failed: %lu", GetLastError());
+        return false;
+    }
+
+    wchar_t image_path[MAX_PATH] = {};
+    DWORD image_path_size = ARRAYSIZE(image_path);
+    if (!QueryFullProcessImageNameW(process.get(), 0, image_path, &image_path_size))
+    {
+        LOG(L"QueryFullProcessImageNameW failed: %lu", GetLastError());
+        return false;
+    }
+
+    const wchar_t* image_name = PathFindFileNameW(image_path);
+
+    if (lstrcmpiW(image_name, kServerImageName) != 0)
+    {
+        LOG(L"Unexpected IPC server image: %s", image_name);
+        return false;
+    }
+
+    if (!isInProtectedLocation(image_path))
+    {
+        LOG(L"IPC server image is not in a protected location: %s", image_path);
         return false;
     }
 
