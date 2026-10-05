@@ -146,9 +146,6 @@
    <property name="text">
     <string>Online Help...</string>
    </property>
-   <property name="shortcut">
-    <string>F1</string>
-   </property>
   </action>
   <action name="action_about">
    <property name="icon">
@@ -166,9 +163,6 @@
    </property>
    <property name="text">
     <string>Quick Connect...</string>
-   </property>
-   <property name="shortcut">
-    <string>F8</string>
    </property>
   </action>
   <action name="action_credentials">

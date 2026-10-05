@@ -448,6 +448,10 @@ void MainWindow::onCurrentTabChanged(int index)
     if (!tab)
         return;
 
+    const bool is_session = tab->tabType() == Tab::Type::SESSION;
+    ui->action_help->setShortcut(is_session ? QKeySequence() : QKeySequence(Qt::Key_F1));
+    ui->action_quick_connect->setShortcut(is_session ? QKeySequence() : QKeySequence(Qt::Key_F8));
+
     active_tab_ = tab;
     installTabActions(active_tab_);
     active_tab_->activate(ui->statusbar);
