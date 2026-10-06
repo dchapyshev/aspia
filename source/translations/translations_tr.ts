@@ -4295,7 +4295,7 @@ Değiştirilen kimlik bilgileri: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="67"/>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="401"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="407"/>
         <source>Address:</source>
         <translation>Adres:</translation>
     </message>
@@ -4325,7 +4325,7 @@ Değiştirilen kimlik bilgileri: %2</translation>
         <translation>Yorum:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="264"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="270"/>
         <source>Without Router</source>
         <translation>Yönlendirici Olmadan</translation>
     </message>
@@ -4340,111 +4340,111 @@ Değiştirilen kimlik bilgileri: %2</translation>
         <translation>Ana Bilgisayar Ekle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="372"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="378"/>
         <source>&lt;deleted router&gt;</source>
         <translation>&lt;silinmiş yönlendirici&gt;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="331"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="337"/>
         <source>Local</source>
         <translation>Yerel</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="131"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="137"/>
         <source>Name cannot be empty.</source>
         <translation>Ad boş olamaz.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="139"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="145"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Ad çok uzun. Maksimum ad uzunluğu %n karakterdir.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="154"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="160"/>
         <source>An invalid host address was entered.</source>
         <translation>Geçersiz bir ana bilgisayar adresi girildi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="164"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="170"/>
         <source>An invalid host ID was entered.</source>
         <translation>Geçersiz bir ana bilgisayar ID&apos;si girildi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="183"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile &quot;_&quot;, &quot;-&quot;, &quot;.&quot; karakterlerini içerebilir.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="186"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="192"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Kullanıcı adı ile parolanın her ikisini de girin veya her ikisini de boş bırakın.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="194"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="200"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Yorum çok uzun. Maksimum yorum uzunluğu %n karakterdir.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="213"/>
         <source>Failed to read data from the local database.</source>
         <translation>Yerel veritabanından veriler okunamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="216"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="222"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Seçilen grupta bu ada sahip bir ana bilgisayar zaten var.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="240"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
         <source>Unable to add host</source>
         <translation>Ana bilgisayar eklenemiyor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="250"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="256"/>
         <source>Unable to modify host</source>
         <translation>Ana bilgisayar değiştirilemiyor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="272"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="278"/>
         <source>Failed to read the list of routers.</source>
         <translation>Yönlendirici listesi okunamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="293"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="299"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Kimlik bilgileri listesi okunamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="315"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="321"/>
         <source>Failed to read the list of groups.</source>
         <translation>Grup listesi okunamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="344"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="350"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Yerel veritabanından ana bilgisayar bilgileri alınamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="392"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="398"/>
         <source>The data of the host is damaged. Enter it again.</source>
         <translation>Ana bilgisayarın verileri hasarlı. Verileri yeniden girin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="402"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="408"/>
         <source>Host name or IP address</source>
         <translation>Ana bilgisayar adı veya IP adresi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="406"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="412"/>
         <source>ID:</source>
         <translation>ID:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="407"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="413"/>
         <source>Host ID</source>
         <translation>Ana Bilgisayar ID&apos;si</translation>
     </message>
@@ -6691,43 +6691,43 @@ Credentials imported: %5</source>
         <translation>Yorum:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="133"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="135"/>
         <source>Failed to get list of workspaces.</source>
         <translation>Çalışma alanı listesi alınamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="141"/>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="187"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="143"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="189"/>
         <source>Not assigned</source>
         <translation>Atanmamış</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="172"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="174"/>
         <source>Failed to get list of groups.</source>
         <translation>Grup listesi alınamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="246"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="248"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Kullanıcı adı ile parolanın her ikisini de girin veya her ikisini de boş bırakın.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="261"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="263"/>
         <source>Failed to save the credentials.</source>
         <translation>Kimlik bilgileri kaydedilemedi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="291"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="293"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Kimlik bilgileri listesi okunamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="337"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="339"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>Ana bilgisayarın kimlik bilgileri okunamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="342"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="344"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>Ana bilgisayarın kimlik bilgileri hasarlı. Bunları yeniden girin.</translation>
     </message>

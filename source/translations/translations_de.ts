@@ -4316,7 +4316,7 @@ Ersetzte Anmeldedaten: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="67"/>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="401"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="407"/>
         <source>Address:</source>
         <translation>Adresse:</translation>
     </message>
@@ -4346,7 +4346,7 @@ Ersetzte Anmeldedaten: %2</translation>
         <translation>Kommentar:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="264"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="270"/>
         <source>Without Router</source>
         <translation>Ohne Router</translation>
     </message>
@@ -4361,22 +4361,22 @@ Ersetzte Anmeldedaten: %2</translation>
         <translation>Host hinzufügen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="372"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="378"/>
         <source>&lt;deleted router&gt;</source>
         <translation>&lt;gelöschter Router&gt;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="331"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="337"/>
         <source>Local</source>
         <translation>Lokal</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="131"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="137"/>
         <source>Name cannot be empty.</source>
         <translation>Der Name darf nicht leer sein.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="139"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="145"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Der Name ist zu lang. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
@@ -4384,27 +4384,27 @@ Ersetzte Anmeldedaten: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="154"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="160"/>
         <source>An invalid host address was entered.</source>
         <translation>Es wurde eine ungültige Host-Adresse eingegeben.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="164"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="170"/>
         <source>An invalid host ID was entered.</source>
         <translation>Es wurde eine ungültige Host-ID eingegeben.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="183"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Ziffern sowie die Zeichen &quot;_&quot;, &quot;-&quot;, &quot;.&quot; enthalten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="186"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="192"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Geben Sie sowohl den Benutzernamen als auch das Kennwort ein oder lassen Sie beide Felder leer.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="194"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="200"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Der Kommentar ist zu lang. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
@@ -4412,62 +4412,62 @@ Ersetzte Anmeldedaten: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="213"/>
         <source>Failed to read data from the local database.</source>
         <translation>Die Daten konnten nicht aus der lokalen Datenbank gelesen werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="216"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="222"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Ein Host mit diesem Namen existiert bereits in der ausgewählten Gruppe.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="240"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
         <source>Unable to add host</source>
         <translation>Host kann nicht hinzugefügt werden</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="250"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="256"/>
         <source>Unable to modify host</source>
         <translation>Host kann nicht geändert werden</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="272"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="278"/>
         <source>Failed to read the list of routers.</source>
         <translation>Die Liste der Router konnte nicht gelesen werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="293"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="299"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Die Liste der Anmeldedaten konnte nicht gelesen werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="315"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="321"/>
         <source>Failed to read the list of groups.</source>
         <translation>Die Liste der Gruppen konnte nicht gelesen werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="344"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="350"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Host-Informationen konnten nicht aus der lokalen Datenbank abgerufen werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="392"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="398"/>
         <source>The data of the host is damaged. Enter it again.</source>
         <translation>Die Daten des Hosts sind beschädigt. Geben Sie sie erneut ein.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="402"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="408"/>
         <source>Host name or IP address</source>
         <translation>Hostname oder IP-Adresse</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="406"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="412"/>
         <source>ID:</source>
         <translation>ID:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="407"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="413"/>
         <source>Host ID</source>
         <translation>Host-ID</translation>
     </message>
@@ -6721,43 +6721,43 @@ Importierte Anmeldedaten: %5</translation>
         <translation>Kommentar:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="133"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="135"/>
         <source>Failed to get list of workspaces.</source>
         <translation>Die Liste der Arbeitsbereiche konnte nicht abgerufen werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="141"/>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="187"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="143"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="189"/>
         <source>Not assigned</source>
         <translation>Nicht zugeordnet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="172"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="174"/>
         <source>Failed to get list of groups.</source>
         <translation>Die Gruppenliste konnte nicht abgerufen werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="246"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="248"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Geben Sie sowohl den Benutzernamen als auch das Kennwort ein oder lassen Sie beide Felder leer.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="261"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="263"/>
         <source>Failed to save the credentials.</source>
         <translation>Die Anmeldedaten konnten nicht gespeichert werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="291"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="293"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Die Liste der Anmeldedaten konnte nicht gelesen werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="337"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="339"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>Die Anmeldedaten des Hosts konnten nicht gelesen werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="342"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="344"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>Die Anmeldedaten des Hosts sind beschädigt. Geben Sie sie erneut ein.</translation>
     </message>

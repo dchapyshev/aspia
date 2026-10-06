@@ -4337,7 +4337,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="67"/>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="401"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="407"/>
         <source>Address:</source>
         <translation>Адреса:</translation>
     </message>
@@ -4367,7 +4367,7 @@ Credentials replaced: %2</source>
         <translation>Коментар:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="264"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="270"/>
         <source>Without Router</source>
         <translation>Без маршрутизатора</translation>
     </message>
@@ -4382,22 +4382,22 @@ Credentials replaced: %2</source>
         <translation>Додати хост</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="372"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="378"/>
         <source>&lt;deleted router&gt;</source>
         <translation>&lt;маршрутизатор видалено&gt;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="331"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="337"/>
         <source>Local</source>
         <translation>Локальні</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="131"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="137"/>
         <source>Name cannot be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="139"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="145"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені - %n символ.</numerusform>
@@ -4406,27 +4406,27 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="154"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="160"/>
         <source>An invalid host address was entered.</source>
         <translation>Введено недопустиму адресу хоста.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="164"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="170"/>
         <source>An invalid host ID was entered.</source>
         <translation>Введено недопустимий ID хоста.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="183"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і може містити тільки літери, цифри та символи &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="186"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="192"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Введіть і ім&apos;я користувача, і пароль або залиште обидва поля порожніми.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="194"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="200"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря - %n символ.</numerusform>
@@ -4435,62 +4435,62 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="213"/>
         <source>Failed to read data from the local database.</source>
         <translation>Не вдалося прочитати дані з локальної бази даних.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="216"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="222"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Хост з таким ім&apos;ям вже існує у вибраній групі.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="240"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
         <source>Unable to add host</source>
         <translation>Не вдалося додати хост</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="250"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="256"/>
         <source>Unable to modify host</source>
         <translation>Не вдалося змінити хост</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="272"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="278"/>
         <source>Failed to read the list of routers.</source>
         <translation>Не вдалося прочитати список маршрутизаторів.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="293"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="299"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Не вдалося прочитати список облікових даних.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="315"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="321"/>
         <source>Failed to read the list of groups.</source>
         <translation>Не вдалося прочитати список груп.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="344"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="350"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Не вдалося отримати інформацію про хост із локальної бази даних.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="392"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="398"/>
         <source>The data of the host is damaged. Enter it again.</source>
         <translation>Дані хоста пошкоджено. Введіть їх знову.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="402"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="408"/>
         <source>Host name or IP address</source>
         <translation>Ім&apos;я хоста або IP-адреса</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="406"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="412"/>
         <source>ID:</source>
         <translation>ID:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="407"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="413"/>
         <source>Host ID</source>
         <translation>ID хоста</translation>
     </message>
@@ -6752,43 +6752,43 @@ Credentials imported: %5</source>
         <translation>Коментар:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="133"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="135"/>
         <source>Failed to get list of workspaces.</source>
         <translation>Не вдалося отримати список робочих просторів.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="141"/>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="187"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="143"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="189"/>
         <source>Not assigned</source>
         <translation>Не призначено</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="172"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="174"/>
         <source>Failed to get list of groups.</source>
         <translation>Не вдалося отримати список груп.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="246"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="248"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Введіть і ім&apos;я користувача, і пароль або залиште обидва поля порожніми.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="261"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="263"/>
         <source>Failed to save the credentials.</source>
         <translation>Не вдалося зберегти облікові дані.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="291"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="293"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Не вдалося прочитати список облікових даних.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="337"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="339"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>Не вдалося прочитати облікові дані хоста.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="342"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="344"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>Облікові дані хоста пошкоджено. Введіть їх знову.</translation>
     </message>

@@ -4295,7 +4295,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="67"/>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="401"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="407"/>
         <source>Address:</source>
         <translation>アドレス:</translation>
     </message>
@@ -4325,7 +4325,7 @@ Credentials replaced: %2</source>
         <translation>コメント:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="264"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="270"/>
         <source>Without Router</source>
         <translation>ルーターなし</translation>
     </message>
@@ -4340,111 +4340,111 @@ Credentials replaced: %2</source>
         <translation>ホストの追加</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="372"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="378"/>
         <source>&lt;deleted router&gt;</source>
         <translation>&lt;削除されたルーター&gt;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="331"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="337"/>
         <source>Local</source>
         <translation>ローカル</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="131"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="137"/>
         <source>Name cannot be empty.</source>
         <translation>名前を空にすることはできません。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="139"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="145"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名前が長すぎます。名前の最大長は %n 文字です。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="154"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="160"/>
         <source>An invalid host address was entered.</source>
         <translation>無効なホスト アドレスが入力されました。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="164"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="170"/>
         <source>An invalid host ID was entered.</source>
         <translation>無効なホスト ID が入力されました。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="183"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>ユーザー名は空にできず、英字、数字、および &quot;_&quot;、&quot;-&quot;、&quot;.&quot; の文字のみ使用できます。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="186"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="192"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>ユーザー名とパスワードの両方を入力するか、両方とも空欄のままにしてください。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="194"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="200"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>コメントが長すぎます。コメントの最大長は %n 文字です。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="213"/>
         <source>Failed to read data from the local database.</source>
         <translation>ローカル データベースからデータを読み取れませんでした。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="216"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="222"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>選択したグループには、この名前のホストが既に存在します。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="240"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
         <source>Unable to add host</source>
         <translation>ホストを追加できません</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="250"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="256"/>
         <source>Unable to modify host</source>
         <translation>ホストを変更できません</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="272"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="278"/>
         <source>Failed to read the list of routers.</source>
         <translation>ルーターの一覧を読み取れませんでした。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="293"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="299"/>
         <source>Failed to read the list of credentials.</source>
         <translation>資格情報の一覧を読み取れませんでした。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="315"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="321"/>
         <source>Failed to read the list of groups.</source>
         <translation>グループの一覧を読み取れませんでした。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="344"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="350"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>ローカル データベースからホスト情報を取得できませんでした。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="392"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="398"/>
         <source>The data of the host is damaged. Enter it again.</source>
         <translation>ホストのデータが破損しています。もう一度入力してください。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="402"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="408"/>
         <source>Host name or IP address</source>
         <translation>ホスト名または IP アドレス</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="406"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="412"/>
         <source>ID:</source>
         <translation>ID:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="407"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="413"/>
         <source>Host ID</source>
         <translation>ホスト ID</translation>
     </message>
@@ -6691,43 +6691,43 @@ Credentials imported: %5</source>
         <translation>コメント:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="133"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="135"/>
         <source>Failed to get list of workspaces.</source>
         <translation>ワークスペースの一覧を取得できませんでした。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="141"/>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="187"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="143"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="189"/>
         <source>Not assigned</source>
         <translation>未割り当て</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="172"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="174"/>
         <source>Failed to get list of groups.</source>
         <translation>グループの一覧を取得できませんでした。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="246"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="248"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>ユーザー名とパスワードの両方を入力するか、両方とも空欄のままにしてください。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="261"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="263"/>
         <source>Failed to save the credentials.</source>
         <translation>資格情報を保存できませんでした。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="291"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="293"/>
         <source>Failed to read the list of credentials.</source>
         <translation>資格情報の一覧を読み取れませんでした。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="337"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="339"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>ホストの資格情報を読み取れませんでした。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="342"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="344"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>ホストの資格情報が破損しています。もう一度入力してください。</translation>
     </message>
