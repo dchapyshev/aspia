@@ -766,7 +766,7 @@ void ScreenCapturerPipeWire::handleParamChanged(quint32 id, const spa_pod* param
     const spa_pod* params[5];
     params[0] = static_cast<const spa_pod*>(spa_pod_builder_add_object(&builder,
         SPA_TYPE_OBJECT_ParamBuffers, SPA_PARAM_Buffers,
-        SPA_PARAM_BUFFERS_buffers, SPA_POD_CHOICE_RANGE_Int(8, 2, 16),
+        SPA_PARAM_BUFFERS_buffers, SPA_POD_CHOICE_RANGE_Int(4, 2, 4),
         SPA_PARAM_BUFFERS_blocks, SPA_POD_Int(1),
         SPA_PARAM_BUFFERS_size, SPA_POD_Int(stride * height),
         SPA_PARAM_BUFFERS_stride, SPA_POD_Int(stride),
