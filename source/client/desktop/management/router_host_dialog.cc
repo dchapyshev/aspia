@@ -92,6 +92,8 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const RouterHost& host, QWi
 
     onSavedCredentialsToggled(ui->checkbox_saved_credentials->isChecked());
 
+    ui->edit_display_name->setFocus();
+
     connect(&RouterController::instance(), &RouterController::sig_statusChanged, this,
             [this](qint64 router_id, RouterStatus status)
     {
