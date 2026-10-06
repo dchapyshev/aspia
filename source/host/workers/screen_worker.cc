@@ -264,6 +264,9 @@ void ScreenWorker::onConfigure(
 
     createVideoEncoder();
 
+    if (!scale_reducer_)
+        scale_reducer_ = std::make_unique<ScaleReducer>(ScaleReducer::Quality::HIGH);
+
     cursor_encoder_.reset();
     if (config.cursor_shape())
     {
@@ -305,6 +308,20 @@ void ScreenWorker::onStopCapture()
     screen_resizer_.reset();
     desktop_environment_.reset();
     screen_count_ = 0;
+    preferred_size_ = QSize();
+    preferred_resolution_ = QSize();
+
+    video_encoder_.reset();
+    cursor_encoder_.reset();
+    scale_reducer_.reset();
+    video_encoding_ = proto::video::ENCODING_VP8;
+
+    capture_scheduler_.setFps(default_fps_);
+
+    last_bandwidth_ = 0;
+    pressure_score_ = 0;
+    stable_time_ = Seconds::zero();
+    cooldown_time_ = Seconds::zero();
 
     published_capture_type_ = ScreenCapturer::Type::UNKNOWN;
     published_screen_size_ = QSize();
@@ -484,8 +501,6 @@ void ScreenWorker::onPrepare()
     default_fps_ = defaultCaptureFps();
     min_fps_ = minCaptureFps();
     max_fps_ = maxCaptureFps();
-
-    scale_reducer_ = std::make_unique<ScaleReducer>(ScaleReducer::Quality::HIGH);
 
     capture_timer_ = new QTimer(this);
     capture_timer_->setTimerType(Qt::PreciseTimer);
