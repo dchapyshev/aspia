@@ -65,6 +65,12 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     connect(ui->combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LocalHostDialog::onRouterChanged);
     connect(ui->checkbox_saved_credentials, &QCheckBox::toggled, this, &LocalHostDialog::onSavedCredentialsToggled);
+    connect(ui->edit_address, &QLineEdit::textEdited, this, [this](const QString& text)
+    {
+        QLineEdit* edit_name = ui->edit_name;
+        if (entry_id_ == -1 && (!edit_name->isModified() || edit_name->text().isEmpty()))
+            edit_name->setText(text);
+    });
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalHostDialog::onButtonBoxClicked);
 
     int label_width = 0;
@@ -79,7 +85,7 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
 
     onSavedCredentialsToggled(ui->checkbox_saved_credentials->isChecked());
 
-    ui->edit_name->setFocus();
+    ui->edit_address->setFocus();
 
     QTimer::singleShot(MilliSeconds::zero(), this, &LocalHostDialog::onLoadData);
 }
