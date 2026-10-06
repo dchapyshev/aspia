@@ -501,6 +501,11 @@ int main(int argc, char* argv[])
 
     if (parser.isSet(import_option))
     {
+#if defined(Q_OS_WINDOWS)
+        if (HostUtils::isMigrationNeeded())
+            HostUtils::doMigrate();
+#endif // defined(Q_OS_WINDOWS)
+
         if (!SettingsUtil::importFromFile(parser.value(import_option), parser.isSet(silent_option)))
             return 1;
     }
