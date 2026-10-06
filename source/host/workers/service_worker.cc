@@ -227,6 +227,9 @@ void ServiceWorker::onStop()
 
     router_manager_.reset();
     tcp_server_.reset();
+#if defined(Q_OS_WINDOWS)
+    credentials_.reset();
+#endif // defined(Q_OS_WINDOWS)
     desktop_manager_.reset();
     user_session_.reset();
     settings_watcher_.reset();
