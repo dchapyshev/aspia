@@ -313,7 +313,7 @@ QString LocalHostListModel::textAt(const LocalHostConfig& host, Column column) c
             // One row, one line: a comment of several lines would otherwise stretch every row of
             // the list to its height.
             QString comment = host.comment();
-            return comment.replace('\n', ' ').replace('\r', ' ');
+            return comment.replace("\r\n", " ").replace('\n', ' ').replace('\r', ' ');
         }
 
         case Column::CREATED:

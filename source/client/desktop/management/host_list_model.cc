@@ -162,6 +162,9 @@ QVariant HostListModel::data(const QModelIndex& index, int role) const
         return QIcon(host->online ? ":/img/computer-online.svg" : ":/img/computer-offline.svg");
     }
 
+    if (role == Qt::ToolTipRole)
+        return columns_[index.column()] == Column::COMMENT ? host->comment : QVariant();
+
     if (role != Qt::DisplayRole)
         return QVariant();
 
@@ -277,7 +280,10 @@ QString HostListModel::textAt(const RouterHost& host, Column column) const
             return host.address;
 
         case Column::COMMENT:
-            return host.comment;
+        {
+            QString comment = host.comment;
+            return comment.replace("\r\n", " ").replace('\n', ' ').replace('\r', ' ');
+        }
 
         case Column::WORKSPACE:
             return workspace_names_.value(host.workspace_id);

@@ -219,6 +219,38 @@ TEST_F(HostListModelTest, RowShowsTheFieldsOfItsHost)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A comment of several lines would stretch the row it sits on, so it is drawn on one line and the
+// whole of it is only in the tooltip.
+TEST_F(HostListModelTest, CommentIsDrawnOnOneLineAndKeptWholeInTheTooltip)
+{
+    HostListModel* model = makeModel(kHostsLayout);
+
+    RouterHost host = makeHost(HostId(1), "host1", "alpha");
+    host.comment = "first\nsecond";
+    model->setHosts({ host });
+
+    EXPECT_EQ(textAt(model, 0, Column::COMMENT), QString("first second"));
+    EXPECT_EQ(model->index(0, model->sectionOf(Column::COMMENT)).data(Qt::ToolTipRole).toString(),
+              QString("first\nsecond"));
+
+    // The tooltip belongs to that column alone.
+    EXPECT_FALSE(model->index(0, model->sectionOf(Column::DISPLAY_NAME)).data(Qt::ToolTipRole).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A line break of Windows is one break, not two, and leaves one space between the lines.
+TEST_F(HostListModelTest, WindowsLineBreakInCommentIsOneSpace)
+{
+    HostListModel* model = makeModel(kHostsLayout);
+
+    RouterHost host = makeHost(HostId(1), "host1", "alpha");
+    host.comment = "first\r\nsecond";
+    model->setHosts({ host });
+
+    EXPECT_EQ(textAt(model, 0, Column::COMMENT), QString("first second"));
+}
+
+//--------------------------------------------------------------------------------------------------
 // A host is named by the administrator, and until then by the computer it runs on.
 TEST_F(HostListModelTest, UnnamedHostIsShownByItsComputerName)
 {

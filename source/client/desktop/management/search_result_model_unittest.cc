@@ -213,6 +213,17 @@ TEST_F(SearchResultModelTest, WhatDoesNotFitOnTheRowIsInTheTooltip)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A line break of Windows is one break, not two, and leaves one space between the lines.
+TEST_F(SearchResultModelTest, WindowsLineBreakInCommentIsOneSpace)
+{
+    Row row = makeLocalRow(11, "host", "192.168.0.2", "Local / Office");
+    row.host.setComment("first\r\nsecond");
+    model()->setRows({ row });
+
+    EXPECT_EQ(textAt(model(), 0, Column::COMMENT), QString("first second"));
+}
+
+//--------------------------------------------------------------------------------------------------
 // The icon belongs to the column that names the row and is not repeated across it.
 TEST_F(SearchResultModelTest, IconIsOnTheNameColumn)
 {

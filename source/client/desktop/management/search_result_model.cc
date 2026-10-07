@@ -254,7 +254,7 @@ QString SearchResultModel::textAt(const Row& row, Column column) const
             // One row, one line: a comment of several lines would otherwise stretch every row of
             // the list to its height.
             QString comment = row.host.comment();
-            return comment.replace('\n', ' ').replace('\r', ' ');
+            return comment.replace("\r\n", " ").replace('\n', ' ').replace('\r', ' ');
         }
     }
 

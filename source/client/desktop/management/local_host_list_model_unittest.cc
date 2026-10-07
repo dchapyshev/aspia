@@ -200,6 +200,18 @@ TEST_F(LocalHostListModelTest, CommentIsDrawnOnOneLineAndKeptWholeInTheTooltip)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A line break of Windows is one break, not two, and leaves one space between the lines.
+TEST_F(LocalHostListModelTest, WindowsLineBreakInCommentIsOneSpace)
+{
+    LocalHostConfig host = makeHost(1, "host", "192.168.0.1", 1000);
+    host.setComment("first\r\nsecond");
+
+    model()->setHosts({ host });
+
+    EXPECT_EQ(textAt(model(), 0, Column::COMMENT), QString("first second"));
+}
+
+//--------------------------------------------------------------------------------------------------
 // Until a host is probed it is neither online nor offline, and the row says nothing about it.
 TEST_F(LocalHostListModelTest, StatusIsEmptyUntilTheHostIsProbed)
 {
