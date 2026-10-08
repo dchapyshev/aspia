@@ -143,6 +143,9 @@ double measureThroughputMpps(QDBusInterface& screenshot)
     if (pipe2(fds, O_CLOEXEC) != 0)
         return 0.0;
 
+    const ScopedFd read_fd(fds[0]);
+    ScopedFd write_end(fds[1]);
+
     QVariantMap options;
     options.insert("include-cursor", false);
 
@@ -150,15 +153,14 @@ double measureThroughputMpps(QDBusInterface& screenshot)
 
     QDBusMessage reply;
     {
-        QDBusUnixFileDescriptor write_fd(fds[1]);
-        ::close(fds[1]);
+        QDBusUnixFileDescriptor write_fd(write_end.get());
+        write_end.reset();
         reply = screenshot.call(QDBus::Block, "CaptureWorkspace",
                                 QVariant::fromValue(options), QVariant::fromValue(write_fd));
     }
 
     if (reply.type() != QDBusMessage::ReplyMessage)
     {
-        ::close(fds[0]);
         return 0.0;
     }
 
@@ -168,7 +170,6 @@ double measureThroughputMpps(QDBusInterface& screenshot)
     const int stride = results.value("stride").toInt();
     if (width <= 0 || height <= 0 || stride < width * 4)
     {
-        ::close(fds[0]);
         return 0.0;
     }
 
@@ -177,7 +178,7 @@ double measureThroughputMpps(QDBusInterface& screenshot)
     char buffer[65536];
     while (received < total)
     {
-        const ssize_t count = ::read(fds[0], buffer, sizeof(buffer));
+        const ssize_t count = ::read(read_fd.get(), buffer, sizeof(buffer));
         if (count > 0)
             received += count;
         else if (count < 0 && errno == EINTR)
@@ -185,7 +186,6 @@ double measureThroughputMpps(QDBusInterface& screenshot)
         else
             break;
     }
-    ::close(fds[0]);
 
     const qint64 elapsed_us = DurationCast<MicroSeconds>(Clock::now() - start_time).count();
     if (received != total || elapsed_us <= 0)
@@ -241,7 +241,7 @@ bool importFb(EglDmaBuf* egl_dmabuf, int drm_fd, drmModeFB2* fb, quint8* dst, in
         (fb->flags & DRM_MODE_FB_MODIFIERS) ? fb->modifier : DRM_FORMAT_MOD_INVALID;
 
     std::array<EglDmaBuf::Plane, 4> planes;
-    std::array<int, 4> prime_fds = { -1, -1, -1, -1 };
+    std::array<ScopedFd, 4> prime_fds;
     int plane_count = 0;
 
     for (int i = 0; i < 4; ++i)
@@ -257,7 +257,7 @@ bool importFb(EglDmaBuf* egl_dmabuf, int drm_fd, drmModeFB2* fb, quint8* dst, in
             break;
         }
 
-        prime_fds[plane_count] = prime_fd;
+        prime_fds[plane_count].reset(prime_fd);
         planes[plane_count].fd = prime_fd;
         planes[plane_count].offset = fb->offsets[i];
         planes[plane_count].stride = fb->pitches[i];
@@ -269,12 +269,6 @@ bool importFb(EglDmaBuf* egl_dmabuf, int drm_fd, drmModeFB2* fb, quint8* dst, in
     {
         ok = egl_dmabuf->imageFromDmaBuf(size, fourcc, planes.data(), plane_count, modifier,
                                          QRect(QPoint(0, 0), size), dst, dst_stride);
-    }
-
-    for (int i = 0; i < plane_count; ++i)
-    {
-        if (prime_fds[i] >= 0)
-            ::close(prime_fds[i]);
     }
 
     closeFbHandles(drm_fd, fb);
@@ -357,9 +351,6 @@ ScreenCapturerKwin::ScreenCapturerKwin(uid_t session_uid, QObject* parent)
 //--------------------------------------------------------------------------------------------------
 ScreenCapturerKwin::~ScreenCapturerKwin()
 {
-    if (drm_fd_ >= 0)
-        ::close(drm_fd_);
-
     if (bus_.isConnected())
         QDBusConnection::disconnectFromBus(connection_name_);
 }
@@ -455,42 +446,40 @@ void ScreenCapturerKwin::initCursorCapture()
     for (int i = 0; i < kMaxCards; ++i)
     {
         const QByteArray path = QByteArray("/dev/dri/card") + QByteArray::number(i);
-        int fd = ::open(path.constData(), O_RDONLY | O_CLOEXEC);
-        if (fd < 0)
+        ScopedFd fd(::open(path.constData(), O_RDONLY | O_CLOEXEC));
+        if (!fd.isValid())
             continue;
 
-        drmModeRes* resources = LibDrm::modeGetResources(fd);
+        drmModeRes* resources = LibDrm::modeGetResources(fd.get());
         if (resources && resources->count_crtcs > 0)
         {
             LibDrm::modeFreeResources(resources);
-            drm_fd_ = fd;
+            drm_fd_ = std::move(fd);
             // The compositor owns DRM master; never take it (would block its modesetting). Reading the
             // cursor plane with CAP_SYS_ADMIN does not need master.
-            if (LibDrm::dropMaster(fd) != 0)
+            if (LibDrm::dropMaster(drm_fd_.get()) != 0)
                 LOG(INFO) << "drmDropMaster: not master (expected)";
             break;
         }
 
         if (resources)
             LibDrm::modeFreeResources(resources);
-        ::close(fd);
     }
 
-    if (drm_fd_ < 0)
+    if (!drm_fd_.isValid())
     {
         LOG(INFO) << "No DRM device for cursor capture; cursor will not be shown";
         return;
     }
 
-    if (LibDrm::setClientCap(drm_fd_, DRM_CLIENT_CAP_UNIVERSAL_PLANES, 1) != 0)
+    if (LibDrm::setClientCap(drm_fd_.get(), DRM_CLIENT_CAP_UNIVERSAL_PLANES, 1) != 0)
         LOG(INFO) << "DRM universal planes unavailable; hardware cursor will not be captured";
 
     // The client turns the cursor shape into its own cursor, which is wrong without the hotspot.
-    if (!hasCursorHotspot(drm_fd_))
+    if (!hasCursorHotspot(drm_fd_.get()))
     {
         LOG(INFO) << "DRM driver reports no cursor hotspot; cursor will not be shown";
-        ::close(drm_fd_);
-        drm_fd_ = -1;
+        drm_fd_.reset();
         return;
     }
 
@@ -499,8 +488,7 @@ void ScreenCapturerKwin::initCursorCapture()
     {
         LOG(INFO) << "EGL/GBM import not available; cursor will not be shown";
         egl_dmabuf_.reset();
-        ::close(drm_fd_);
-        drm_fd_ = -1;
+        drm_fd_.reset();
     }
 }
 
@@ -514,6 +502,9 @@ bool ScreenCapturerKwin::capture()
         return false;
     }
 
+    const ScopedFd read_fd(fds[0]);
+    ScopedFd write_end(fds[1]);
+
     QVariantMap options;
     options.insert("include-cursor", false);
 
@@ -521,8 +512,8 @@ bool ScreenCapturerKwin::capture()
     // blocking call returns before the read below drains the pipe.
     QDBusMessage reply;
     {
-        QDBusUnixFileDescriptor write_fd(fds[1]);
-        ::close(fds[1]);
+        QDBusUnixFileDescriptor write_fd(write_end.get());
+        write_end.reset();
         if (selected_output_.isEmpty())
         {
             reply = screenshot_->call(QDBus::Block, "CaptureWorkspace",
@@ -538,7 +529,6 @@ bool ScreenCapturerKwin::capture()
     if (reply.type() != QDBusMessage::ReplyMessage)
     {
         LOG(ERROR) << "CaptureWorkspace failed:" << reply.errorMessage();
-        ::close(fds[0]);
         return false;
     }
 
@@ -551,7 +541,6 @@ bool ScreenCapturerKwin::capture()
     if (width <= 0 || height <= 0 || stride < width * 4)
     {
         LOG(ERROR) << "Invalid capture metadata: size" << width << height << "stride" << stride;
-        ::close(fds[0]);
         return false;
     }
 
@@ -562,7 +551,7 @@ bool ScreenCapturerKwin::capture()
     qint64 received = 0;
     while (received < total)
     {
-        const ssize_t count = ::read(fds[0], read_buffer_.data() + received, total - received);
+        const ssize_t count = ::read(read_fd.get(), read_buffer_.data() + received, total - received);
         if (count > 0)
             received += count;
         else if (count < 0 && errno == EINTR)
@@ -570,7 +559,6 @@ bool ScreenCapturerKwin::capture()
         else
             break;
     }
-    ::close(fds[0]);
 
     if (received != total)
     {
@@ -771,7 +759,7 @@ const Frame* ScreenCapturerKwin::captureFrame(Error* error)
 //--------------------------------------------------------------------------------------------------
 const MouseCursor* ScreenCapturerKwin::captureCursor()
 {
-    if (drm_fd_ < 0 || !egl_dmabuf_)
+    if (!drm_fd_.isValid() || !egl_dmabuf_)
         return nullptr;
 
     quint32 cursor_fb_id = 0;
@@ -786,7 +774,7 @@ const MouseCursor* ScreenCapturerKwin::captureCursor()
         return nullptr;
     last_cursor_fb_id_ = cursor_fb_id;
 
-    drmModeFB2* fb = LibDrm::modeGetFB2(drm_fd_, cursor_fb_id);
+    drmModeFB2* fb = LibDrm::modeGetFB2(drm_fd_.get(), cursor_fb_id);
     if (!fb || !fb->handles[0])
     {
         if (fb)
@@ -797,7 +785,7 @@ const MouseCursor* ScreenCapturerKwin::captureCursor()
     QByteArray image;
     image.resize(cursor_size.width() * cursor_size.height() * MouseCursor::kBytesPerPixel);
 
-    const bool ok = readCursorFb(egl_dmabuf_.get(), drm_fd_, fb,
+    const bool ok = readCursorFb(egl_dmabuf_.get(), drm_fd_.get(), fb,
                                  reinterpret_cast<quint8*>(image.data()),
                                  cursor_size.width() * MouseCursor::kBytesPerPixel, cursor_size);
     LibDrm::modeFreeFB2(fb);
@@ -808,8 +796,7 @@ const MouseCursor* ScreenCapturerKwin::captureCursor()
         // capture after the first failure so it does not spam the kernel log on every cursor change.
         LOG(WARNING) << "Cursor framebuffer import failed; disabling hardware cursor capture";
         egl_dmabuf_.reset();
-        ::close(drm_fd_);
-        drm_fd_ = -1;
+        drm_fd_.reset();
         return nullptr;
     }
 
@@ -852,7 +839,7 @@ QPoint ScreenCapturerKwin::cursorPosition()
 bool ScreenCapturerKwin::findCursorPlane(quint32* fb_id, QSize* size, QPoint* position,
                                          QPoint* hotspot, int* crtc_width)
 {
-    drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(drm_fd_);
+    drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(drm_fd_.get());
     if (!plane_res)
         return false;
 
@@ -863,13 +850,13 @@ bool ScreenCapturerKwin::findCursorPlane(quint32* fb_id, QSize* size, QPoint* po
     // workspace is captured, so the cursor on any CRTC is on screen.
     for (uint32_t i = 0; i < plane_res->count_planes && !found; ++i)
     {
-        drmModePlane* plane = LibDrm::modeGetPlane(drm_fd_, plane_res->planes[i]);
+        drmModePlane* plane = LibDrm::modeGetPlane(drm_fd_.get(), plane_res->planes[i]);
         if (!plane)
             continue;
 
         if (plane->fb_id && plane->crtc_id)
         {
-            drmModeFB2* fb = LibDrm::modeGetFB2(drm_fd_, plane->fb_id);
+            drmModeFB2* fb = LibDrm::modeGetFB2(drm_fd_.get(), plane->fb_id);
             if (fb && fb->width && fb->height &&
                 fb->width <= kMaxCursorSize && fb->height <= kMaxCursorSize)
             {
@@ -882,7 +869,7 @@ bool ScreenCapturerKwin::findCursorPlane(quint32* fb_id, QSize* size, QPoint* po
                 if (crtc_width)
                 {
                     // Physical resolution of the cursor's CRTC, to derive the output scale.
-                    drmModeCrtc* crtc = LibDrm::modeGetCrtc(drm_fd_, plane->crtc_id);
+                    drmModeCrtc* crtc = LibDrm::modeGetCrtc(drm_fd_.get(), plane->crtc_id);
                     if (crtc)
                     {
                         *crtc_width = static_cast<int>(crtc->width);
@@ -894,12 +881,12 @@ bool ScreenCapturerKwin::findCursorPlane(quint32* fb_id, QSize* size, QPoint* po
                     // Paravirtual drivers (vmwgfx) report the cursor hotspot in plane properties rather
                     // than via the plane position.
                     drmModeObjectProperties* props = LibDrm::modeObjectGetProperties(
-                        drm_fd_, plane->plane_id, DRM_MODE_OBJECT_PLANE);
+                        drm_fd_.get(), plane->plane_id, DRM_MODE_OBJECT_PLANE);
                     if (props)
                     {
                         for (uint32_t p = 0; p < props->count_props; ++p)
                         {
-                            drmModePropertyRes* prop = LibDrm::modeGetProperty(drm_fd_, props->props[p]);
+                            drmModePropertyRes* prop = LibDrm::modeGetProperty(drm_fd_.get(), props->props[p]);
                             if (!prop)
                                 continue;
 
@@ -917,7 +904,7 @@ bool ScreenCapturerKwin::findCursorPlane(quint32* fb_id, QSize* size, QPoint* po
             }
             if (fb)
             {
-                closeFbHandles(drm_fd_, fb);
+                closeFbHandles(drm_fd_.get(), fb);
                 LibDrm::modeFreeFB2(fb);
             }
         }

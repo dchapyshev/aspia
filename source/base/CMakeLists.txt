@@ -103,6 +103,7 @@ if (LINUX)
         event_enumerator_linux.h
         physical_drive_reader_linux.cc
         physical_drive_reader_linux.h
+        scoped_fd.h
         service_controller_systemd.cc
         service_controller_systemd.h
         sys_info_linux.cc)
@@ -117,6 +118,7 @@ if (APPLE)
         event_enumerator_mac.mm
         physical_drive_reader_mac.h
         physical_drive_reader_mac.mm
+        scoped_fd.h
         service_controller_launchd.cc
         service_controller_launchd.h
         sys_info_mac.mm)

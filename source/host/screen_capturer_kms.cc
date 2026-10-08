@@ -277,12 +277,12 @@ void logDrmCards()
     for (int i = 0; i < kMaxCards; ++i)
     {
         const QByteArray path = QByteArray("/dev/dri/card") + QByteArray::number(i);
-        const int fd = ::open(path.constData(), O_RDONLY | O_CLOEXEC);
-        if (fd < 0)
+        const ScopedFd fd(::open(path.constData(), O_RDONLY | O_CLOEXEC));
+        if (!fd.isValid())
             continue;
 
         // Opening a card can make us its DRM master and keep the compositor from modesetting.
-        LibDrm::dropMaster(fd);
+        LibDrm::dropMaster(fd.get());
 
         const QString driver = QFileInfo(QFileInfo(
             QString("/sys/class/drm/card%1/device/driver").arg(i)).symLinkTarget()).fileName();
@@ -290,7 +290,7 @@ void logDrmCards()
         int crtc_count = 0;
         QStringList connected;
 
-        drmModeRes* resources = LibDrm::modeGetResources(fd);
+        drmModeRes* resources = LibDrm::modeGetResources(fd.get());
         if (resources)
         {
             crtc_count = resources->count_crtcs;
@@ -298,7 +298,7 @@ void logDrmCards()
             for (int j = 0; j < resources->count_connectors; ++j)
             {
                 drmModeConnector* connector =
-                    LibDrm::modeGetConnectorCurrent(fd, resources->connectors[j]);
+                    LibDrm::modeGetConnectorCurrent(fd.get(), resources->connectors[j]);
                 if (!connector)
                     continue;
 
@@ -316,7 +316,7 @@ void logDrmCards()
         }
 
         QStringList lit_up;
-        for (const Monitor& monitor : activeMonitors(fd))
+        for (const Monitor& monitor : activeMonitors(fd.get()))
         {
             lit_up.append(QString("%1 (CRTC %2, %3x%4)").arg(monitor.connector).arg(monitor.crtc_id)
                 .arg(monitor.mode_size.width()).arg(monitor.mode_size.height()));
@@ -324,8 +324,6 @@ void logDrmCards()
 
         LOG(INFO) << "DRM device:" << path.constData() << "driver:" << driver
                   << "CRTCs:" << crtc_count << "connected:" << connected << "lit up:" << lit_up;
-
-        ::close(fd);
     }
 }
 
@@ -443,11 +441,7 @@ ScreenCapturerKms::ScreenCapturerKms(QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturerKms::~ScreenCapturerKms()
-{
-    for (const Card& card : cards_)
-        ::close(card.fd);
-}
+ScreenCapturerKms::~ScreenCapturerKms() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -472,7 +466,7 @@ int ScreenCapturerKms::screenCount()
 {
     int count = 0;
     for (const Card& card : cards_)
-        count += activeCrtcCount(card.fd);
+        count += activeCrtcCount(card.fd.get());
     return count;
 }
 
@@ -493,7 +487,7 @@ bool ScreenCapturerKms::screenList(ScreenList* screens)
 
     for (size_t card_index = 0; card_index < cards_.size(); ++card_index)
     {
-        const QList<Monitor> monitors = activeMonitors(cards_[card_index].fd);
+        const QList<Monitor> monitors = activeMonitors(cards_[card_index].fd.get());
         if (!monitors.isEmpty() && !outputs_queried)
         {
             outputs = queryCompositorOutputs();
@@ -586,7 +580,7 @@ bool ScreenCapturerKms::selectScreen(ScreenId screen_id)
         return true;
     }
 
-    const QList<Monitor> monitors = activeMonitors(cards_[card_index].fd);
+    const QList<Monitor> monitors = activeMonitors(cards_[card_index].fd.get());
     for (const Monitor& monitor : std::as_const(monitors))
     {
         if (monitor.crtc_id != crtc_id)
@@ -639,7 +633,7 @@ const Frame* ScreenCapturerKms::captureFrame(Error* error)
     if (!fb_id)
         return nullptr;
 
-    drmModeFB2* fb = LibDrm::modeGetFB2(card().fd, fb_id);
+    drmModeFB2* fb = LibDrm::modeGetFB2(card().fd.get(), fb_id);
     if (!fb || !fb->width || !fb->height || !fb->handles[0])
     {
         if (fb)
@@ -721,7 +715,7 @@ const MouseCursor* ScreenCapturerKms::captureCursor()
         return nullptr;
     last_cursor_fb_id_ = cursor_fb_id;
 
-    drmModeFB2* fb = LibDrm::modeGetFB2(card().fd, cursor_fb_id);
+    drmModeFB2* fb = LibDrm::modeGetFB2(card().fd.get(), cursor_fb_id);
     if (!fb || !fb->handles[0])
     {
         if (fb)
@@ -788,19 +782,19 @@ bool ScreenCapturerKms::init()
     for (int i = 0; i < kMaxCards; ++i)
     {
         const QByteArray path = QByteArray("/dev/dri/card") + QByteArray::number(i);
-        int fd = ::open(path.constData(), O_RDONLY | O_CLOEXEC);
-        if (fd < 0)
+        ScopedFd fd(::open(path.constData(), O_RDONLY | O_CLOEXEC));
+        if (!fd.isValid())
             continue;
 
         // Never hold DRM master, the compositor (e.g. the greeter's gnome-shell) must be able to
         // acquire it for modesetting. Opening a DRM node can implicitly grant master to the first
         // client, which would block the compositor and leave the physical screen black. With
         // CAP_SYS_ADMIN, drmModeGetFB2() reads the scanout buffer without holding master.
-        if (LibDrm::dropMaster(fd) != 0)
+        if (LibDrm::dropMaster(fd.get()) != 0)
             LOG(INFO) << "drmDropMaster: not master (expected)";
 
         bool has_crtcs = false;
-        drmModeRes* resources = LibDrm::modeGetResources(fd);
+        drmModeRes* resources = LibDrm::modeGetResources(fd.get());
         if (resources)
         {
             has_crtcs = resources->count_crtcs > 0;
@@ -809,21 +803,18 @@ bool ScreenCapturerKms::init()
 
         // The render node has no CRTCs.
         if (!has_crtcs)
-        {
-            ::close(fd);
             continue;
-        }
 
         Card card;
         card.path = path;
-        card.fd = fd;
+        card.fd = std::move(fd);
 
         // Enumerate all planes (primary, cursor, overlay), not just overlays, so the hardware cursor
         // plane can be found in captureCursor(). The client turns the cursor shape into its own cursor,
         // which is wrong without the hotspot, so a cursor without one is not captured.
-        if (LibDrm::setClientCap(fd, DRM_CLIENT_CAP_UNIVERSAL_PLANES, 1) != 0)
+        if (LibDrm::setClientCap(card.fd.get(), DRM_CLIENT_CAP_UNIVERSAL_PLANES, 1) != 0)
             LOG(INFO) << "DRM universal planes unavailable; hardware cursor will not be captured";
-        else if (!hasCursorHotspot(fd))
+        else if (!hasCursorHotspot(card.fd.get()))
             LOG(INFO) << "DRM driver reports no cursor hotspot; hardware cursor will not be captured";
         else
             card.cursor_hotspot = true;
@@ -842,12 +833,12 @@ bool ScreenCapturerKms::init()
     std::vector<int> order;
     for (size_t i = 0; i < cards_.size(); ++i)
     {
-        if (activeCrtcCount(cards_[i].fd) > 0)
+        if (activeCrtcCount(cards_[i].fd.get()) > 0)
             order.push_back(static_cast<int>(i));
     }
     for (size_t i = 0; i < cards_.size(); ++i)
     {
-        if (activeCrtcCount(cards_[i].fd) == 0)
+        if (activeCrtcCount(cards_[i].fd.get()) == 0)
             order.push_back(static_cast<int>(i));
     }
 
@@ -916,7 +907,7 @@ bool ScreenCapturerKms::probeReadback()
 {
     quint32 crtc_id = 0;
     int active_count = 0;
-    const quint32 fb_id = litFramebufferId(card().fd, 0, &crtc_id, &active_count);
+    const quint32 fb_id = litFramebufferId(card().fd.get(), 0, &crtc_id, &active_count);
     if (!fb_id)
     {
         // The probe repeats for as long as no capturer can be created, so describe the cards once.
@@ -943,7 +934,7 @@ bool ScreenCapturerKms::probeReadback()
                            (method == Readback::DMABUF_CPU) ? "CPU DMA-BUF mapping" :
                                                               "CPU dumb-buffer mapping";
 
-        drmModeFB2* fb = LibDrm::modeGetFB2(card().fd, fb_id);
+        drmModeFB2* fb = LibDrm::modeGetFB2(card().fd.get(), fb_id);
         if (!fb || !fb->width || !fb->height || !fb->handles[0])
         {
             LOG(ERROR) << "KMS probe: framebuffer" << fb_id << "not readable: handle0="
@@ -985,7 +976,7 @@ bool ScreenCapturerKms::importFb(drmModeFB2* fb, quint8* dst, int dst_stride)
     if (card().readback == Readback::DUMB_CPU)
     {
         // The driver cannot PRIME-export the scan-out: map the GEM handle as a dumb buffer instead.
-        ok = readDumbBufferCpu(card().fd, fb, dst, dst_stride);
+        ok = readDumbBufferCpu(card().fd.get(), fb, dst, dst_stride);
     }
     else
     {
@@ -997,7 +988,7 @@ bool ScreenCapturerKms::importFb(drmModeFB2* fb, quint8* dst, int dst_stride)
             (fb->flags & DRM_MODE_FB_MODIFIERS) ? fb->modifier : DRM_FORMAT_MOD_INVALID;
 
         std::array<EglDmaBuf::Plane, 4> planes;
-        std::array<int, 4> prime_fds = { -1, -1, -1, -1 };
+        std::array<ScopedFd, 4> prime_fds;
         int plane_count = 0;
 
         for (int i = 0; i < 4; ++i)
@@ -1006,13 +997,13 @@ bool ScreenCapturerKms::importFb(drmModeFB2* fb, quint8* dst, int dst_stride)
                 continue;
 
             int prime_fd = -1;
-            if (LibDrm::primeHandleToFD(card().fd, fb->handles[i], DRM_CLOEXEC, &prime_fd) != 0 ||
+            if (LibDrm::primeHandleToFD(card().fd.get(), fb->handles[i], DRM_CLOEXEC, &prime_fd) != 0 ||
                 prime_fd < 0)
             {
                 break;
             }
 
-            prime_fds[plane_count] = prime_fd;
+            prime_fds[plane_count].reset(prime_fd);
             planes[plane_count].fd = prime_fd;
             planes[plane_count].offset = fb->offsets[i];
             planes[plane_count].stride = fb->pitches[i];
@@ -1024,15 +1015,9 @@ bool ScreenCapturerKms::importFb(drmModeFB2* fb, quint8* dst, int dst_stride)
             ok = card().egl->imageFromDmaBuf(size, fourcc, planes.data(), plane_count, modifier,
                                               QRect(QPoint(0, 0), size), dst, dst_stride);
         }
-        else if (card().readback == Readback::DMABUF_CPU && plane_count == 1 && prime_fds[0] >= 0)
+        else if (card().readback == Readback::DMABUF_CPU && plane_count == 1 && prime_fds[0].isValid())
         {
-            ok = readDmaBufCpu(prime_fds[0], fb, dst, dst_stride);
-        }
-
-        for (int i = 0; i < plane_count; ++i)
-        {
-            if (prime_fds[i] >= 0)
-                ::close(prime_fds[i]);
+            ok = readDmaBufCpu(prime_fds[0].get(), fb, dst, dst_stride);
         }
     }
 
@@ -1052,7 +1037,7 @@ bool ScreenCapturerKms::importFb(drmModeFB2* fb, quint8* dst, int dst_stride)
             }
         }
         if (!duplicate)
-            LibDrm::closeBufferHandle(card().fd, fb->handles[i]);
+            LibDrm::closeBufferHandle(card().fd.get(), fb->handles[i]);
     }
 
     return ok;
@@ -1083,7 +1068,7 @@ quint32 ScreenCapturerKms::activeFramebufferId()
         const quint32 preferred_crtc = (index == selected_card_) ? selected_crtc_id_ : 0;
         quint32 crtc_id = 0;
         int card_active = 0;
-        const quint32 fb_id = litFramebufferId(cards_[static_cast<size_t>(index)].fd,
+        const quint32 fb_id = litFramebufferId(cards_[static_cast<size_t>(index)].fd.get(),
                                                preferred_crtc, &crtc_id, &card_active);
         active += card_active;
 
@@ -1186,11 +1171,11 @@ QString ScreenCapturerKms::capturedConnectorName()
     if (!crtc_id_)
         return QString();
 
-    drmModeRes* resources = LibDrm::modeGetResources(card().fd);
+    drmModeRes* resources = LibDrm::modeGetResources(card().fd.get());
     if (!resources)
         return QString();
 
-    const QString name = connectorNameForCrtc(card().fd, resources, crtc_id_);
+    const QString name = connectorNameForCrtc(card().fd.get(), resources, crtc_id_);
     LibDrm::modeFreeResources(resources);
     return name;
 }
@@ -1198,7 +1183,7 @@ QString ScreenCapturerKms::capturedConnectorName()
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* position, QPoint* hotspot)
 {
-    drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(card().fd);
+    drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(card().fd.get());
     if (!plane_res)
         return false;
 
@@ -1209,7 +1194,7 @@ bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* pos
     // the cursor on the captured CRTC counts - on another output it is not on the screen we serve.
     for (uint32_t i = 0; i < plane_res->count_planes && !found; ++i)
     {
-        drmModePlane* plane = LibDrm::modeGetPlane(card().fd, plane_res->planes[i]);
+        drmModePlane* plane = LibDrm::modeGetPlane(card().fd.get(), plane_res->planes[i]);
         if (!plane)
             continue;
 
@@ -1217,7 +1202,7 @@ bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* pos
             plane->crtc_id && (crtc_id_ == 0 || plane->crtc_id == crtc_id_);
         if (plane->fb_id && on_captured_crtc)
         {
-            drmModeFB2* fb = LibDrm::modeGetFB2(card().fd, plane->fb_id);
+            drmModeFB2* fb = LibDrm::modeGetFB2(card().fd.get(), plane->fb_id);
             if (fb && fb->width && fb->height &&
                 fb->width <= kMaxCursorSize && fb->height <= kMaxCursorSize)
             {
@@ -1233,12 +1218,12 @@ bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* pos
                     // Paravirtual drivers (vmwgfx) report the cursor hotspot in plane properties rather
                     // than via the plane position.
                     drmModeObjectProperties* props = LibDrm::modeObjectGetProperties(
-                        card().fd, plane->plane_id, DRM_MODE_OBJECT_PLANE);
+                        card().fd.get(), plane->plane_id, DRM_MODE_OBJECT_PLANE);
                     if (props)
                     {
                         for (uint32_t p = 0; p < props->count_props; ++p)
                         {
-                            drmModePropertyRes* prop = LibDrm::modeGetProperty(card().fd, props->props[p]);
+                            drmModePropertyRes* prop = LibDrm::modeGetProperty(card().fd.get(), props->props[p]);
                             if (!prop)
                                 continue;
 

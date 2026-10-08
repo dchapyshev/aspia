@@ -28,6 +28,7 @@
 
 #include <sys/types.h>
 
+#include "base/scoped_fd.h"
 #include "base/time_types.h"
 #include "base/desktop/frame.h"
 #include "host/screen_capturer.h"
@@ -117,7 +118,7 @@ private:
     // Hardware cursor read straight from the DRM cursor plane (ScreenShot2 exposes no separate cursor;
     // a root process can read the plane regardless of the compositor). The shape is only re-read when
     // the cursor plane's framebuffer changes.
-    int drm_fd_ = -1;
+    ScopedFd drm_fd_;
     std::unique_ptr<EglDmaBuf> egl_dmabuf_;
     std::unique_ptr<MouseCursor> mouse_cursor_;
     quint32 last_cursor_fb_id_ = 0;

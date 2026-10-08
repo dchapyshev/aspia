@@ -26,6 +26,7 @@
 #include <memory>
 #include <vector>
 
+#include "base/scoped_fd.h"
 #include "host/screen_capturer.h"
 
 class Differ;
@@ -77,7 +78,7 @@ private:
     struct Card
     {
         QByteArray path;
-        int fd = -1;
+        ScopedFd fd;
         Readback readback = Readback::UNKNOWN;
         std::unique_ptr<EglDmaBuf> egl;
         bool cursor_hotspot = false;
