@@ -85,6 +85,11 @@ public final class MediaProjection
     private static HandlerThread sHandlerThread = null;
     private static Handler sHandler = null;
 
+    // A rotation changes the size of the default display, and the virtual display is resized after it.
+    // Otherwise the system letterboxes the rotated screen into the old size.
+    private static DisplayManager sDisplayManager = null;
+    private static DisplayManager.DisplayListener sDisplayListener = null;
+
     // Serialises the ImageReader listener (runs on the capture HandlerThread) with sReader.close()
     // (runs on the native capture thread via stopCapture()). Without it, acquiring an image while the
     // reader is being closed throws IllegalStateException on the listener thread.
@@ -309,37 +314,38 @@ public final class MediaProjection
             final int height = metrics.heightPixels;
             final int dpi = metrics.densityDpi;
 
-            sReader = ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 2);
-            sReader.setOnImageAvailableListener(reader ->
-            {
-                // Hold sReaderLock so this cannot run while releaseInternal() closes the reader. The
-                // identity check skips frames once the reader has been closed (sReader nulled) or
-                // replaced by a later session.
-                synchronized (sReaderLock)
-                {
-                    if (sReader != reader)
-                        return;
-
-                    Image image = reader.acquireLatestImage();
-                    if (image == null)
-                        return;
-
-                    try
-                    {
-                        Image.Plane[] planes = image.getPlanes();
-                        ByteBuffer buffer = planes[0].getBuffer();
-                        nativeOnFrame(buffer, image.getWidth(), image.getHeight(),
-                                      planes[0].getPixelStride(), planes[0].getRowStride());
-                    }
-                    finally
-                    {
-                        image.close();
-                    }
-                }
-            }, sHandler);
+            sReader = createReader(width, height);
 
             sVirtualDisplay = sProjection.createVirtualDisplay("AspiaScreenCapture", width, height, dpi,
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, sReader.getSurface(), null, sHandler);
+
+            final Context app_context = context.getApplicationContext();
+            sDisplayManager = (DisplayManager) app_context.getSystemService(Context.DISPLAY_SERVICE);
+            sDisplayListener = new DisplayManager.DisplayListener()
+            {
+                @Override
+                public void onDisplayAdded(int displayId)
+                {
+                    // Nothing
+                }
+
+                @Override
+                public void onDisplayRemoved(int displayId)
+                {
+                    // Nothing
+                }
+
+                @Override
+                public void onDisplayChanged(int displayId)
+                {
+                    if (displayId == Display.DEFAULT_DISPLAY)
+                        resizeCapture(app_context);
+                }
+            };
+            sDisplayManager.registerDisplayListener(sDisplayListener, sHandler);
+
+            // The display may have rotated before the listener was registered.
+            resizeCapture(app_context);
 
             // The playback capture is bound to the projection. After a restart (the system stopped the
             // previous projection on the device lock) the audio the session had running is dead, its
@@ -360,6 +366,88 @@ public final class MediaProjection
             releaseInternal();
             nativeOnStarted(false, 0, 0, 0);
         }
+    }
+
+    private static ImageReader createReader(int width, int height)
+    {
+        ImageReader reader = ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 2);
+        reader.setOnImageAvailableListener(source ->
+        {
+            // Hold sReaderLock so this cannot run while releaseInternal() closes the reader. The
+            // identity check skips frames once the reader has been closed (sReader nulled) or
+            // replaced by a later session or a resize.
+            synchronized (sReaderLock)
+            {
+                if (sReader != source)
+                    return;
+
+                Image image = source.acquireLatestImage();
+                if (image == null)
+                    return;
+
+                try
+                {
+                    Image.Plane[] planes = image.getPlanes();
+                    ByteBuffer buffer = planes[0].getBuffer();
+                    nativeOnFrame(buffer, image.getWidth(), image.getHeight(),
+                                  planes[0].getPixelStride(), planes[0].getRowStride());
+                }
+                finally
+                {
+                    image.close();
+                }
+            }
+        }, sHandler);
+        return reader;
+    }
+
+    // Since Android 14 a projection allows only one createVirtualDisplay() call, so the existing virtual
+    // display gets the new size and a new surface instead of being created again.
+    private static synchronized void resizeCapture(Context context)
+    {
+        if (sVirtualDisplay == null || sReader == null)
+            return;
+
+        DisplayMetrics metrics = realMetrics(context);
+        final int width = metrics.widthPixels;
+        final int height = metrics.heightPixels;
+
+        if (width == sReader.getWidth() && height == sReader.getHeight())
+            return;
+
+        ImageReader reader = null;
+        try
+        {
+            reader = createReader(width, height);
+            sVirtualDisplay.resize(width, height, metrics.densityDpi);
+            sVirtualDisplay.setSurface(reader.getSurface());
+        }
+        catch (Throwable t)
+        {
+            Log.e(TAG, "Unable to resize screen capture", t);
+
+            if (reader != null)
+                reader.close();
+
+            // The display may already have the new size while it still draws into the old reader.
+            try
+            {
+                sVirtualDisplay.resize(sReader.getWidth(), sReader.getHeight(), metrics.densityDpi);
+            }
+            catch (Throwable ignored)
+            {
+                // Ignore.
+            }
+            return;
+        }
+
+        synchronized (sReaderLock)
+        {
+            sReader.close();
+            sReader = reader;
+        }
+
+        Log.i(TAG, "Screen capture resized: " + width + "x" + height);
     }
 
     // Stops the capture: stops the foreground service (which releases the projection in its onDestroy) and
@@ -422,6 +510,13 @@ public final class MediaProjection
             sScreenOffContext.unregisterReceiver(sScreenOffReceiver);
             sScreenOffReceiver = null;
             sScreenOffContext = null;
+        }
+
+        if (sDisplayListener != null)
+        {
+            sDisplayManager.unregisterDisplayListener(sDisplayListener);
+            sDisplayListener = null;
+            sDisplayManager = null;
         }
 
         if (sVirtualDisplay != null)

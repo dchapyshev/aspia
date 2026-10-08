@@ -240,10 +240,7 @@ void ScreenCapturerAndroid::onStarted(bool success, const QSize& size, const QPo
     started_ = true;
 
     if (!size.isEmpty())
-    {
-        screen_rect_ = QRect(QPoint(0, 0), size);
         dpi_ = dpi;
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -272,7 +269,6 @@ void ScreenCapturerAndroid::onFrame(const quint8* src, int width, int height, in
     // swaps the red and blue channels while copying, honouring the padded source stride.
     libyuv::ABGRToARGB(src, row_stride, frame->frameData(), frame->stride(), width, height);
 
-    screen_rect_ = QRect(QPoint(0, 0), size);
     has_new_frame_ = true;
 }
 
@@ -353,6 +349,8 @@ const Frame* ScreenCapturerAndroid::captureFrame(Error* error)
             *error = Error::TEMPORARY;
             return nullptr;
         }
+
+        screen_rect_ = QRect(QPoint(0, 0), frame->size());
 
         // MediaProjection carries no damage information, so the whole frame is reported as updated.
         frame->updatedRegion()->clear();

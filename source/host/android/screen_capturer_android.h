@@ -95,8 +95,8 @@ private:
 
     bool active_ = false;
 
-    // The virtual display geometry reported by start(); |screen_rect_| tracks the frame size and stays
-    // valid before the first frame arrives so screenList() can report a resolution.
+    // |screen_rect_| is used only on the capturer's thread. It holds the display geometry from start()
+    // until captureFrame() hands out the first frame, and the size of the latest handed out frame after.
     QRect screen_rect_;
     QPoint dpi_ = QPoint(96, 96);
 
