@@ -32,23 +32,15 @@ class StreamEncryptor
 public:
     ~StreamEncryptor() = default;
 
-    // |ratchet| enables the periodic key change; the old protocol does not have it.
-    static std::unique_ptr<StreamEncryptor> createForAes256Gcm(
-        const SecureByteArray& key, const QByteArray& iv, bool ratchet = true);
-
-    static std::unique_ptr<StreamEncryptor> createForChaCha20Poly1305(
-        const SecureByteArray& key, const QByteArray& iv, bool ratchet = true);
+    static std::unique_ptr<StreamEncryptor> create(const SecureByteArray& key, const QByteArray& iv);
 
     qint64 encryptedDataSize(qint64 in_size);
     bool encrypt(const void* in, qint64 in_size, void* out);
     bool encrypt(const void* in, qint64 in_size, const void* aad, qint64 aad_size, void* out);
 
 private:
-    StreamEncryptor(CipherType type, EVP_CIPHER_CTX_ptr ctx,
-                    const SecureByteArray& key, const QByteArray& iv, bool ratchet);
+    StreamEncryptor(EVP_CIPHER_CTX_ptr ctx, const SecureByteArray& key, const QByteArray& iv);
 
-    const CipherType type_;
-    const bool ratchet_;
     EVP_CIPHER_CTX_ptr ctx_;
     SecureByteArray key_;
     QByteArray iv_;

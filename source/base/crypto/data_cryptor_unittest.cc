@@ -31,7 +31,7 @@ TEST(DataCryptorTest, EncryptDecrypt)
         QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"
                 "5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
 
-    DataCryptor cryptor(CipherType::CHACHA20_POLY1305, key);
+    DataCryptor cryptor(key);
 
     std::optional<QByteArray> encrypted_message = cryptor.encrypt(message);
     ASSERT_TRUE(encrypted_message.has_value());
@@ -49,8 +49,8 @@ TEST(DataCryptorTest, WrongKey)
     const SecureByteArray wrong_key(QByteArray::fromHex("2ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
     const QByteArray message = QByteArray::fromHex("3da8b455bd39746dc50145ce26794165a808ec425684e9384c27c2249951256812125683");
 
-    DataCryptor cryptor1(CipherType::CHACHA20_POLY1305, key);
-    DataCryptor cryptor2(CipherType::CHACHA20_POLY1305, wrong_key);
+    DataCryptor cryptor1(key);
+    DataCryptor cryptor2(wrong_key);
 
     std::optional<QByteArray> encrypted_message = cryptor1.encrypt(message);
     ASSERT_TRUE(encrypted_message.has_value());
@@ -66,7 +66,7 @@ TEST(DataCryptorTest, AssociatedData)
     const QByteArray message = QByteArray::fromHex("3da8b455bd39746dc50145ce26794165a808ec425684e9384");
     const QByteArray aad("hosts");
 
-    DataCryptor cryptor(CipherType::AES256_GCM, key);
+    DataCryptor cryptor(key);
 
     std::optional<QByteArray> encrypted_message = cryptor.encrypt(message, aad);
     ASSERT_TRUE(encrypted_message.has_value());
@@ -84,7 +84,7 @@ TEST(DataCryptorTest, WrongAssociatedData)
     const SecureByteArray key(QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
     const QByteArray message = QByteArray::fromHex("3da8b455bd39746dc50145ce26794165a808ec425684e9384");
 
-    DataCryptor cryptor(CipherType::AES256_GCM, key);
+    DataCryptor cryptor(key);
 
     std::optional<QByteArray> encrypted_message = cryptor.encrypt(message, QByteArray("hosts"));
     ASSERT_TRUE(encrypted_message.has_value());
@@ -99,7 +99,7 @@ TEST(DataCryptorTest, AssociatedDataExpected)
     const SecureByteArray key(QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
     const QByteArray message = QByteArray::fromHex("3da8b455bd39746dc50145ce26794165a808ec425684e9384");
 
-    DataCryptor cryptor(CipherType::AES256_GCM, key);
+    DataCryptor cryptor(key);
 
     std::optional<QByteArray> encrypted_message = cryptor.encrypt(message);
     ASSERT_TRUE(encrypted_message.has_value());

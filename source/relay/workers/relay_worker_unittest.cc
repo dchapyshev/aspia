@@ -196,7 +196,7 @@ protected:
     // The handshake a genuine peer sends. The session key is derived exactly the way the relay
     // derives it from its half, so the relay can open the secret.
     void sendHandshake(asio::ip::tcp::socket& socket, const OfferedKey& key,
-                       const QByteArray& secret, bool legacy = false)
+                       const QByteArray& secret)
     {
         KeyPair peer_pair = KeyPair::create(KeyPair::Type::X25519);
         CHECK(peer_pair.isValid());
@@ -204,23 +204,14 @@ protected:
         SecureByteArray shared_secret = peer_pair.sessionKey(key.relay_public_key);
         CHECK(!shared_secret.isEmpty());
 
-        SecureByteArray session_key;
-        std::unique_ptr<StreamEncryptor> encryptor;
-        if (legacy)
-        {
-            session_key = SecureByteArray(
-                GenericHash::hash(GenericHash::Type::BLAKE2s256, shared_secret.toByteArray()));
-            encryptor = StreamEncryptor::createForChaCha20Poly1305(session_key, key.iv);
-        }
-        else
-        {
-            GenericHash hash(GenericHash::Type::SHA256);
-            hash.addData(shared_secret);
-            hash.addData(key.relay_public_key);
-            hash.addData(peer_pair.publicKey());
-            session_key = SecureByteArray(hash.result());
-            encryptor = StreamEncryptor::createForAes256Gcm(session_key, key.iv);
-        }
+        GenericHash hash(GenericHash::Type::SHA256);
+        hash.addData(shared_secret);
+        hash.addData(key.relay_public_key);
+        hash.addData(peer_pair.publicKey());
+        SecureByteArray session_key(hash.result());
+
+        std::unique_ptr<StreamEncryptor> encryptor =
+            StreamEncryptor::create(session_key, key.iv);
         CHECK(encryptor);
 
         QByteArray ciphertext(encryptor->encryptedDataSize(secret.size()), 0);
@@ -228,8 +219,7 @@ protected:
 
         proto::relay::PeerToRelay message;
         message.set_key_id(key.key_id);
-        if (!legacy)
-            message.set_encryption(proto::relay::PeerToRelay::ENCRYPTION_AES256_GCM);
+        message.set_encryption(proto::relay::PeerToRelay::ENCRYPTION_AES256_GCM);
         message.set_public_key(peer_pair.publicKey().toStdString());
         message.set_data(ciphertext.toStdString());
 
@@ -345,26 +335,6 @@ TEST_F(RelayWorkerTest, PeersWithTheSameSecretArePaired)
     const QByteArray from_host = QByteArrayLiteral("host-to-client!!");
     send(host, from_host);
     EXPECT_EQ(receive(client, from_host.size()), from_host);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The legacy derivation, as peers that predate AES support use it.
-TEST_F(RelayWorkerTest, LegacyPeersArePaired)
-{
-    const OfferedKey key = announceKey();
-    const QByteArray shared_secret = secret();
-
-    asio::ip::tcp::socket client = connectPeer();
-    sendHandshake(client, key, shared_secret, true);
-
-    asio::ip::tcp::socket host = connectPeer();
-    sendHandshake(host, key, shared_secret, true);
-
-    ASSERT_TRUE(session_started_.wait(1, kWaitTimeout));
-
-    const QByteArray data = QByteArrayLiteral("legacy-bytes");
-    send(client, data);
-    EXPECT_EQ(receive(host, data.size()), data);
 }
 
 //--------------------------------------------------------------------------------------------------

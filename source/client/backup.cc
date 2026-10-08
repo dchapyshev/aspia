@@ -676,7 +676,7 @@ Backup::Result openContent(
         key = SecureByteArray(PasswordHash::hash(
             PasswordHash::ARGON2ID, password, fileSalt(file_message)));
 
-    DataCryptor cryptor(CipherType::AES256_GCM, key);
+    DataCryptor cryptor(key);
 
     // Tells a key that does not open this file from a file that is damaged.
     if (!cryptor.decrypt(QByteArray::fromStdString(file_message.verifier())).has_value())
@@ -792,7 +792,7 @@ Backup::Result Backup::exportToFile(Database& db, const QString& file_path, Repo
     if (counted.total() == 0)
         return Result::NOTHING_EXPORTED;
 
-    DataCryptor cryptor(CipherType::AES256_GCM, key);
+    DataCryptor cryptor(key);
 
     // Serialized, the address book is in the clear, so it goes into a buffer that wipes itself.
     std::optional<QByteArray> sealed;

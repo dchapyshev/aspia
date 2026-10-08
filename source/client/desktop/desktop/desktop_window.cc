@@ -56,7 +56,6 @@
 #include "proto/desktop_control.h"
 #include "proto/desktop_cursor.h"
 #include "proto/desktop_input.h"
-#include "proto/desktop_legacy.h"
 #include "proto/desktop_screen.h"
 #include "proto/desktop_tools.h"
 #include "proto/desktop_user.h"
@@ -256,8 +255,6 @@ void DesktopWindow::onRegisterWorkers()
             Qt::QueuedConnection);
     connect(network_worker, &NetworkWorker::sig_channel_12, this, &DesktopWindow::onToolsMessage,
             Qt::QueuedConnection);
-    connect(network_worker, &NetworkWorker::sig_channel_0, this, &DesktopWindow::onLegacyMessage,
-            Qt::QueuedConnection);
 
     connect(this, &DesktopWindow::sig_cursorConfig, video_worker_, &VideoWorker::onCursorConfig,
             Qt::QueuedConnection);
@@ -324,11 +321,8 @@ void DesktopWindow::onSessionStarted()
 
     emit sig_showRequested();
     toolbar_->enableTextChat(true);
-    toolbar_->enableTerminal(!isLegacy());
-    toolbar_->enableSystemInfo(!isLegacy());
-
-    if (isLegacy())
-        return;
+    toolbar_->enableTerminal(true);
+    toolbar_->enableSystemInfo(true);
 
     sendCapabilities();
 }
@@ -914,19 +908,10 @@ void DesktopWindow::onKeyEvent(const proto::input::KeyEvent& event)
 {
     ++send_key_count_;
 
-    if (isLegacy())
-    {
-        proto::legacy::ClientToSession message;
-        message.mutable_key_event()->CopyFrom(event);
-        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
-    }
-    else
-    {
-        proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
-        message.mutable_key()->CopyFrom(event);
-        sendMessage(proto::desktop::CHANNEL_ID_INPUT,
-                    outgoing_message_.serialize<proto::input::ClientToHost>());
-    }
+    proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
+    message.mutable_key()->CopyFrom(event);
+    sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                outgoing_message_.serialize<proto::input::ClientToHost>());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1060,14 +1045,11 @@ void DesktopWindow::onResizeTimer()
 
     LOG(INFO) << "Resize timer timeout (desktop_size=" << desktop_size << ")";
 
-    if (!isLegacy())
-    {
-        proto::video::ClientToHost message;
-        proto::video::PreferredSize* preferred_size = message.mutable_preferred_size();
-        preferred_size->set_width(desktop_size.width());
-        preferred_size->set_height(desktop_size.height());
-        sendMessage(proto::desktop::CHANNEL_ID_VIDEO, serialize(message));
-    }
+    proto::video::ClientToHost message;
+    proto::video::PreferredSize* preferred_size = message.mutable_preferred_size();
+    preferred_size->set_width(desktop_size.width());
+    preferred_size->set_height(desktop_size.height());
+    sendMessage(proto::desktop::CHANNEL_ID_VIDEO, serialize(message));
 
     resize_timer_->stop();
 }
@@ -1113,20 +1095,10 @@ void DesktopWindow::onPasteKeystrokes()
 
         ++send_text_count_;
 
-        if (isLegacy())
-        {
-            proto::legacy::ClientToSession message;
-            message.mutable_text_event()->set_text(text.toStdString());
-            sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
-        }
-        else
-        {
-            proto::input::ClientToHost& message =
-                outgoing_message_.newMessage<proto::input::ClientToHost>();
-            message.mutable_text()->set_text(text.toStdString());
-            sendMessage(proto::desktop::CHANNEL_ID_INPUT,
-                        outgoing_message_.serialize<proto::input::ClientToHost>());
-        }
+        proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
+        message.mutable_text()->set_text(text.toStdString());
+        sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                    outgoing_message_.serialize<proto::input::ClientToHost>());
     }
     else
     {
@@ -1159,19 +1131,10 @@ void DesktopWindow::sendMouseEvent(const proto::input::MouseEvent& event)
 
     ++send_mouse_count_;
 
-    if (isLegacy())
-    {
-        proto::legacy::ClientToSession message;
-        message.mutable_mouse_event()->CopyFrom(event);
-        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
-    }
-    else
-    {
-        proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
-        message.mutable_mouse()->CopyFrom(event);
-        sendMessage(proto::desktop::CHANNEL_ID_INPUT,
-                    outgoing_message_.serialize<proto::input::ClientToHost>());
-    }
+    proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
+    message.mutable_mouse()->CopyFrom(event);
+    sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                outgoing_message_.serialize<proto::input::ClientToHost>());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1257,26 +1220,6 @@ void DesktopWindow::onToolsMessage(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::onLegacyMessage(const QByteArray& buffer)
-{
-    // The media workers pick out video, audio and cursor updates from this channel themselves; the
-    // GUI thread handles only clipboard, capabilities and extensions.
-    proto::legacy::SessionToClient message;
-    if (!parse(buffer, &message))
-    {
-        LOG(ERROR) << "Invalid session message from host";
-        return;
-    }
-
-    if (message.has_clipboard_event())
-        readLegacyClipboardEvent(message.clipboard_event());
-    else if (message.has_capabilities())
-        readLegacyCapabilities(message.capabilities());
-    else if (message.has_extension())
-        readExtension(message.extension());
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopWindow::onDesktopConfigChanged(const proto::control::Config& config)
 {
     desktop_config_ = config;
@@ -1289,20 +1232,9 @@ void DesktopWindow::onCurrentScreenChanged(const proto::screen::Screen& screen)
 {
     LOG(INFO) << "Current screen changed:" << screen.id();
 
-    if (isLegacy())
-    {
-        proto::legacy::ClientToSession message;
-        proto::legacy::Extension* extension = message.mutable_extension();
-        extension->set_name(kSelectScreenExtension);
-        extension->set_data(screen.SerializeAsString());
-        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
-    }
-    else
-    {
-        proto::screen::ClientToHost message;
-        message.mutable_screen()->CopyFrom(screen);
-        sendMessage(proto::desktop::CHANNEL_ID_SCREEN, serialize(message));
-    }
+    proto::screen::ClientToHost message;
+    message.mutable_screen()->CopyFrom(screen);
+    sendMessage(proto::desktop::CHANNEL_ID_SCREEN, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1331,31 +1263,15 @@ void DesktopWindow::onRecordingChanged(bool enable, const QString& file_path)
         worker->onSetRecording(enable, file_path, computer_name);
     }, Qt::QueuedConnection);
 
-    if (isLegacy())
-        return;
-
     sendMessage(proto::desktop::CHANNEL_ID_USER, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::onPowerControl(proto::power::Control::Action action)
 {
-    if (isLegacy())
-    {
-        proto::legacy::ClientToSession message;
-        proto::legacy::Extension* extension = message.mutable_extension();
-        proto::power::Control power_control;
-        power_control.set_action(action);
-        extension->set_name(kPowerControlExtension);
-        extension->set_data(power_control.SerializeAsString());
-        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
-    }
-    else
-    {
-        proto::power::ClientToHost message;
-        message.mutable_power_control()->set_action(action);
-        sendMessage(proto::desktop::CHANNEL_ID_POWER, serialize(message));
-    }
+    proto::power::ClientToHost message;
+    message.mutable_power_control()->set_action(action);
+    sendMessage(proto::desktop::CHANNEL_ID_POWER, serialize(message));
 }
 
 
@@ -1398,26 +1314,9 @@ void DesktopWindow::onClipboardEvent(const proto::clipboard::Event& event)
         return;
     }
 
-    if (isLegacy())
-    {
-        // Legacy hosts support only the text clipboard.
-        const proto::clipboard::Event::Format* text_format =
-            Clipboard::findFormat(event, Clipboard::kMimeTypeTextUtf8);
-        if (!text_format)
-            return;
-
-        proto::legacy::ClientToSession message;
-        proto::legacy::ClipboardEvent* clipboard_event = message.mutable_clipboard_event();
-        clipboard_event->set_mime_type(text_format->mime_type());
-        clipboard_event->set_data(text_format->data());
-        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
-    }
-    else
-    {
-        proto::clipboard::ClientToHost message;
-        message.mutable_event()->CopyFrom(event);
-        sendMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, serialize(message));
-    }
+    proto::clipboard::ClientToHost message;
+    message.mutable_event()->CopyFrom(event);
+    sendMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1454,113 +1353,6 @@ void DesktopWindow::readCapabilities(const proto::control::Capabilities& capabil
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::readLegacyCapabilities(const proto::legacy::Capabilities& legacy_capabilities)
-{
-    LOG(INFO) << "Received:" << legacy_capabilities;
-
-    proto::control::Capabilities capabilities;
-
-    auto add_flag = [&capabilities](const char* name, bool value)
-    {
-        proto::control::Capabilities::Flag* flag = capabilities.add_flag();
-        flag->set_name(name);
-        flag->set_value(value);
-    };
-
-    if (legacy_capabilities.os_type() == proto::legacy::Capabilities::OS_TYPE_WINDOWS)
-        add_flag(kFlagOSWindows, true);
-
-    quint32 video_encodings = legacy_capabilities.video_encodings();
-    if (video_encodings & proto::video::ENCODING_VP8)
-        add_flag(kFlagVideoVP8, true);
-    if (video_encodings & proto::video::ENCODING_VP9)
-        add_flag(kFlagVideoVP9, true);
-
-    quint32 audio_encodings = legacy_capabilities.audio_encodings();
-    if (audio_encodings & proto::audio::ENCODING_OPUS)
-        add_flag(kFlagAudioOpus, true);
-
-    // Convert legacy "disable_*" flags (inverted logic) to new positive flags.
-    // If a disable flag is absent in the legacy message, the feature is considered enabled.
-    bool paste_as_keystrokes = true;
-    bool clipboard = true;
-    bool cursor_shape = true;
-    bool cursor_position = true;
-    bool desktop_effects = true;
-    bool desktop_wallpaper = true;
-    bool lock_at_disconnect = true;
-    bool block_input = true;
-
-    for (int i = 0; i < legacy_capabilities.flag_size(); ++i)
-    {
-        const proto::legacy::Capabilities::Flag& flag = legacy_capabilities.flag(i);
-        const std::string& name = flag.name();
-        bool value = flag.value();
-
-        if (name == kFlagDisablePasteAsKeystrokes)
-            paste_as_keystrokes = !value;
-        else if (name == kFlagDisableClipboard)
-            clipboard = !value;
-        else if (name == kFlagDisableCursorShape)
-            cursor_shape = !value;
-        else if (name == kFlagDisableCursorPosition)
-            cursor_position = !value;
-        else if (name == kFlagDisableDesktopEffects)
-            desktop_effects = !value;
-        else if (name == kFlagDisableDesktopWallpaper)
-            desktop_wallpaper = !value;
-        else if (name == kFlagDisableLockAtDisconnect)
-            lock_at_disconnect = !value;
-        else if (name == kFlagDisableBlockInput)
-            block_input = !value;
-    }
-
-    add_flag(kFlagPasteAsKeystrokes, paste_as_keystrokes);
-    add_flag(kFlagClipboard, clipboard);
-    add_flag(kFlagCursorShape, cursor_shape);
-    add_flag(kFlagCursorPosition, cursor_position);
-    add_flag(kFlagDesktopEffects, desktop_effects);
-    add_flag(kFlagDesktopWallpaper, desktop_wallpaper);
-    add_flag(kFlagLockAtDisconnect, lock_at_disconnect);
-    add_flag(kFlagBlockInput, block_input);
-
-    // Convert legacy extensions string (semicolon-separated) to new flags.
-    QString extensions = QString::fromStdString(legacy_capabilities.extensions());
-    QStringList extension_list = extensions.split(';', Qt::SkipEmptyParts);
-
-    add_flag(kFlagSelectScreen, extension_list.contains(kSelectScreenExtension));
-    add_flag(kFlagPowerControl, extension_list.contains(kPowerControlExtension));
-
-    LOG(INFO) << "Converted:" << capabilities;
-    onCapabilitiesChanged(capabilities);
-    sendConfig(desktop_config_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::readExtension(const proto::legacy::Extension& extension)
-{
-    if (!isLegacy())
-        return;
-
-    if (extension.name() == kSelectScreenExtension)
-    {
-        proto::screen::ScreenList screen_list;
-        if (!screen_list.ParseFromString(extension.data()))
-        {
-            LOG(ERROR) << "Unable to parse select screen extension data";
-            return;
-        }
-
-        LOG(INFO) << "Screen list receive:" << screen_list;
-        onScreenListChanged(screen_list);
-    }
-    else
-    {
-        LOG(ERROR) << "Unknown extension:" << extension.name();
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopWindow::readClipboardEvent(const proto::clipboard::Event& event)
 {
     if (Clipboard::findFormat(event, Clipboard::kMimeTypeFileList) && !file_clipboard_supported_)
@@ -1575,14 +1367,6 @@ void DesktopWindow::readClipboardEvent(const proto::clipboard::Event& event)
         if (clipboard_)
             clipboard_->injectClipboardEvent(event);
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::readLegacyClipboardEvent(const proto::legacy::ClipboardEvent& clipboard_event)
-{
-    proto::clipboard::Event event;
-    Clipboard::addFormat(&event, clipboard_event.mime_type(), clipboard_event.data());
-    readClipboardEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1621,41 +1405,10 @@ void DesktopWindow::sendConfig(const proto::control::Config& config)
 {
     LOG(INFO) << "Send:" << config;
 
-    if (isLegacy())
-    {
-        proto::legacy::ClientToSession message;
-        proto::legacy::Config* legacy_config = message.mutable_config();
-
-        quint32 flags = proto::legacy::NO_FLAGS;
-        if (config.cursor_shape())
-            flags |= proto::legacy::ENABLE_CURSOR_SHAPE;
-        if (config.clipboard())
-            flags |= proto::legacy::ENABLE_CLIPBOARD;
-        if (!config.effects())
-            flags |= proto::legacy::DISABLE_EFFECTS;
-        if (!config.wallpaper())
-            flags |= proto::legacy::DISABLE_WALLPAPER;
-        if (config.block_input())
-            flags |= proto::legacy::BLOCK_REMOTE_INPUT;
-        if (config.lock_at_disconnect())
-            flags |= proto::legacy::LOCK_AT_DISCONNECT;
-        if (config.cursor_position())
-            flags |= proto::legacy::CURSOR_POSITION;
-
-        legacy_config->set_flags(flags);
-        legacy_config->set_video_encoding(proto::video::ENCODING_VP8);
-        legacy_config->set_audio_encoding(
-            config.audio() ? proto::audio::ENCODING_OPUS : proto::audio::ENCODING_UNKNOWN);
-
-        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
-    }
-    else
-    {
-        proto::control::ClientToHost message;
-        message.mutable_config()->CopyFrom(desktop_config_);
-        sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
-        sendSessionListRequest();
-    }
+    proto::control::ClientToHost message;
+    message.mutable_config()->CopyFrom(desktop_config_);
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+    sendSessionListRequest();
 }
 
 //--------------------------------------------------------------------------------------------------

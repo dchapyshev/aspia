@@ -57,9 +57,6 @@ void AudioWorker::onPrepare()
         // Audio channel (CHANNEL_ID_AUDIO == 7).
         connect(network_worker, &NetworkWorker::sig_channel_7, this, &AudioWorker::onAudioMessage,
                 Qt::QueuedConnection);
-        // Legacy channel (CHANNEL_ID_LEGACY == 0), where old hosts multiplex audio.
-        connect(network_worker, &NetworkWorker::sig_channel_0, this, &AudioWorker::onLegacyMessage,
-                Qt::QueuedConnection);
     }
     else
     {
@@ -103,21 +100,6 @@ void AudioWorker::onAudioMessage(const QByteArray& buffer)
     }
 
     decodePacket(message->packet());
-}
-
-//--------------------------------------------------------------------------------------------------
-void AudioWorker::onLegacyMessage(const QByteArray& buffer)
-{
-    proto::legacy::SessionToClient* message =
-        incoming_message_.parse<proto::legacy::SessionToClient>(buffer);
-    if (!message)
-    {
-        LOG(ERROR) << "Unable to parse legacy message";
-        return;
-    }
-
-    if (message->has_audio_packet())
-        decodePacket(message->audio_packet());
 }
 
 //--------------------------------------------------------------------------------------------------

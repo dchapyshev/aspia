@@ -135,7 +135,7 @@ protected:
         const SecureByteArray key(PasswordHash::hash(PasswordHash::ARGON2ID, password(), salt));
 
         const std::optional<QByteArray> verifier =
-            DataCryptor(CipherType::AES256_GCM, key).encrypt(Random::byteArray(32));
+            DataCryptor(key).encrypt(Random::byteArray(32));
         ASSERT_TRUE(verifier.has_value());
 
         ASSERT_TRUE(source_.reencryptAll({}, {}, {}, {}, salt, *verifier, 1));
@@ -344,7 +344,7 @@ protected:
         SecureByteArray key(PasswordHash::hash(
             PasswordHash::ARGON2ID, password(),
             QByteArray::fromStdString(file_message.salt())));
-        DataCryptor cryptor(CipherType::AES256_GCM, key);
+        DataCryptor cryptor(key);
 
         std::optional<QByteArray> decrypted =
             cryptor.decrypt(QByteArray::fromStdString(file_message.data()));
@@ -381,7 +381,7 @@ protected:
             QByteArray::fromStdString(file_message.salt())));
 
         std::optional<QByteArray> sealed =
-            DataCryptor(CipherType::AES256_GCM, key).encrypt(payload);
+            DataCryptor(key).encrypt(payload);
         ASSERT_TRUE(sealed.has_value());
 
         file_message.set_data(sealed->toStdString());

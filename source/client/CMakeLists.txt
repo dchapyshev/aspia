@@ -19,8 +19,6 @@
 # The implementation lives in a static library so both the client binary and the unit tests
 # link the same objects; the executable itself is only the entry point.
 list(APPEND SOURCE_CLIENT_CORE
-    aab_importer.cc
-    aab_importer.h
     application.cc
     application.h
     audio_output.cc

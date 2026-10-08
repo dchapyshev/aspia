@@ -33,8 +33,7 @@ class DatagramDecryptor
 public:
     ~DatagramDecryptor();
 
-    static std::unique_ptr<DatagramDecryptor> createForAes256Gcm(
-        const SecureByteArray& key, const QByteArray& iv);
+    static std::unique_ptr<DatagramDecryptor> create(const SecureByteArray& key, const QByteArray& iv);
 
     // Returns the size of decrypted output for a given input size.
     qint64 decryptedDataSize(qint64 in_size);

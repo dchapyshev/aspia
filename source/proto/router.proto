@@ -51,9 +51,8 @@ message RelayKey
 
     enum Encryption
     {
-        ENCRYPTION_UNKNOWN           = 0;
-        ENCRYPTION_CHACHA20_POLY1305 = 1;
-        ENCRYPTION_AES256_GCM        = 2;
+        ENCRYPTION_UNKNOWN    = 0;
+        ENCRYPTION_AES256_GCM = 2;
     }
 
     // Unique key identifier in the proxy pool.

@@ -28,9 +28,8 @@ message PeerToRelay
 {
     enum Encryption
     {
-        ENCRYPTION_UNKNOWN           = 0;
-        ENCRYPTION_CHACHA20_POLY1305 = 1;
-        ENCRYPTION_AES256_GCM        = 2;
+        ENCRYPTION_UNKNOWN    = 0;
+        ENCRYPTION_AES256_GCM = 2;
     }
 
     // Unique key identifier in the relay pool.
@@ -51,7 +50,6 @@ message PeerToRelay
     // Encrypted secret.
     bytes data = 3;
 
-    // Algorithm used to encrypt 'data'. Absent (UNKNOWN) means ChaCha20-Poly1305, for peers that
-    // predate AES support.
+    // Algorithm used to encrypt 'data'.
     Encryption encryption = 4;
 }

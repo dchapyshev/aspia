@@ -87,29 +87,6 @@ RouterUser readUser(const SqlQuery& query)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool hasColumn(SqlDatabase& db, std::string_view table, std::string_view column)
-{
-    SqlQuery query(db, "SELECT 1 FROM pragma_table_info(?) WHERE name=?");
-    query.addText(table);
-    query.addText(column);
-
-    if (!query.isValid())
-    {
-        LOG(ERROR) << "Unable to query table info:" << db.lastError();
-        return true; // Pessimistic: pretend it exists, do not attempt ALTER.
-    }
-
-    const SqlQuery::StepResult step = query.next();
-    if (step == SqlQuery::StepResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to query table info:" << db.lastError();
-        return true; // Same pessimism as above: a failed check must not trigger an ALTER.
-    }
-
-    return step == SqlQuery::StepResult::ROW;
-}
-
-//--------------------------------------------------------------------------------------------------
 bool ensureSchema(SqlDatabase& db)
 {
     SqlTransaction transaction(db);
@@ -127,6 +104,13 @@ bool ensureSchema(SqlDatabase& db)
         return false;
     };
 
+    // |otp_secret| is the shared secret, stored as generated (empty until self-enrollment
+    // completes; non-empty implies 2FA is active for the user). TOTP requires the verifying
+    // side to hold the secret itself, so the column cannot keep a hash the way
+    // client_device_tokens does.
+    // |otp_counter| is the highest TOTP step already consumed; the server refuses any
+    // subsequent code whose step is less-than-or-equal to it (replay protection, per RFC 6238
+    // section 5.2).
     if (!run("CREATE TABLE IF NOT EXISTS \"users\" ("
              "\"id\" INTEGER UNIQUE,"
              "\"name\" TEXT NOT NULL UNIQUE,"
@@ -135,6 +119,8 @@ bool ensureSchema(SqlDatabase& db)
              "\"verifier\" BLOB NOT NULL,"
              "\"sessions\" INTEGER DEFAULT 0,"
              "\"flags\" INTEGER DEFAULT 0,"
+             "\"otp_secret\" BLOB NOT NULL DEFAULT X'',"
+             "\"otp_counter\" INTEGER NOT NULL DEFAULT 0,"
              "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         return false;
@@ -240,49 +226,6 @@ bool ensureSchema(SqlDatabase& db)
         return false;
     }
 
-    // |otp_secret| is the shared secret, stored as generated (empty until self-enrollment
-    // completes; non-empty implies 2FA is active for the user). TOTP requires the verifying
-    // side to hold the secret itself, so the column cannot keep a hash the way
-    // client_device_tokens does.
-    // |otp_counter| is the highest TOTP step already consumed; the server refuses any
-    // subsequent code whose step is less-than-or-equal to it (replay protection, per RFC 6238
-    // section 5.2).
-    static const struct { const char* name; const char* definition; } kUserColumns[] = {
-        { "otp_secret",  "BLOB NOT NULL DEFAULT X''" },
-        { "otp_counter", "INTEGER NOT NULL DEFAULT 0" }
-    };
-
-    // A users table without these columns has the 2.7.0 layout. The manager role did not exist
-    // in 2.7.0, so the administrators of such a table lack the MANAGER bit their level implies.
-    const bool users_from_2_7 = !hasColumn(db, "users", "otp_secret");
-
-    for (const auto& column : kUserColumns)
-    {
-        if (hasColumn(db, "users", column.name))
-            continue;
-
-        const std::string sql = strCat({"ALTER TABLE \"users\" ADD COLUMN \"",
-                                         column.name, "\" ", column.definition});
-        if (!db.exec(sql.c_str()))
-        {
-            LOG(ERROR) << "Unable to add column" << column.name << ":" << db.lastError();
-            return false;
-        }
-    }
-
-    if (users_from_2_7)
-    {
-        SqlQuery query(db, "UPDATE users SET sessions=sessions|? WHERE (sessions&?)!=0");
-        query.addInt64(proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_OPERATOR);
-        query.addInt64(proto::router::SESSION_TYPE_ADMIN);
-
-        if (!query.exec())
-        {
-            LOG(ERROR) << "Unable to expand the sessions of administrators:" << db.lastError();
-            return false;
-        }
-    }
-
     // Bearer "remember this device" tokens issued during client sessions (host and relay
     // sessions do not use this flow). The raw token never reaches the database - only its SHA-256
     // hash is stored, so a leak of |router.db3| does not yield usable tokens.
@@ -308,43 +251,8 @@ bool ensureSchema(SqlDatabase& db)
         return false;
     }
 
-    // hosts used to be a thin (id, key) table; the columns below were added later (most moved
-    // in from the now-gone computers table). Backfill any column that's missing on upgraded
-    // databases.
-    static const struct { const char* name; const char* definition; } kHostColumns[] = {
-        { "hwid",          "BLOB NOT NULL DEFAULT X''"   },
-        { "revision",      "INTEGER NOT NULL DEFAULT 1"  },
-        { "workspace_id",  "INTEGER NOT NULL DEFAULT 0"  },
-        { "group_id",      "INTEGER NOT NULL DEFAULT 0"  },
-        { "display_name",  "TEXT NOT NULL DEFAULT ''"    },
-        { "computer_name", "TEXT NOT NULL DEFAULT ''"    },
-        { "cpu_arch",      "TEXT NOT NULL DEFAULT ''"    },
-        { "version",       "TEXT NOT NULL DEFAULT ''"    },
-        { "os_name",       "TEXT NOT NULL DEFAULT ''"    },
-        { "address",       "TEXT NOT NULL DEFAULT ''"    },
-        { "comment",       "TEXT NOT NULL DEFAULT ''"    },
-        { "last_connect",  "INTEGER NOT NULL DEFAULT 0"  },
-        { "last_modify",   "INTEGER NOT NULL DEFAULT 0"  },
-        { "telemetry",     "TEXT NOT NULL DEFAULT ''"    }
-    };
-
-    for (const auto& column : kHostColumns)
-    {
-        if (hasColumn(db, "hosts", column.name))
-            continue;
-
-        const std::string sql = strCat({"ALTER TABLE \"hosts\" ADD COLUMN \"",
-                                         column.name, "\" ", column.definition});
-        if (!db.exec(sql.c_str()))
-        {
-            LOG(ERROR) << "Unable to add column" << column.name << ":" << db.lastError();
-            return false;
-        }
-    }
-
     // Composite index for the dominant host list/count query (hosts of a given workspace and
-    // group). Without it list-by-group does a full table scan once hosts grows. It follows the
-    // backfill above: on an upgraded database the columns it names exist only from there on.
+    // group). Without it list-by-group does a full table scan once hosts grows.
     if (!run("CREATE INDEX IF NOT EXISTS \"hosts_workspace_group\" "
              "ON \"hosts\"(\"workspace_id\", \"group_id\")"))
     {

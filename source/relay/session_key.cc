@@ -105,17 +105,6 @@ SecureByteArray SessionKey::sessionKey(const std::string& peer_public_key) const
 }
 
 //--------------------------------------------------------------------------------------------------
-SecureByteArray SessionKey::legacySessionKey(const std::string& peer_public_key) const
-{
-    SecureByteArray shared_secret = key_pair_.sessionKey(QByteArray::fromStdString(peer_public_key));
-    if (shared_secret.isEmpty())
-        return SecureByteArray();
-
-    return SecureByteArray(
-        GenericHash::hash(GenericHash::Type::BLAKE2s256, shared_secret.toByteArray()));
-}
-
-//--------------------------------------------------------------------------------------------------
 QByteArray SessionKey::iv() const
 {
     return iv_;

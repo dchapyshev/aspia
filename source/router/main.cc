@@ -93,9 +93,8 @@ int installService(QTextStream& out)
     // The service is never installed without a configuration. On a clean system there is none yet,
     // so this is a no-op (the package install must not fail); the user creates the configuration
     // first and runs --install afterwards. On an upgrade the existing configuration is present, so
-    // the service is reinstalled and its parameters refreshed. The configuration of a previous
-    // version has a different file name and counts as present too: the service converts it when
-    // it starts.
+    // the service is reinstalled and its parameters refreshed. A configuration that needs a
+    // migration counts as present too: the service migrates it when it starts.
     Settings settings;
     if (settings.hasError())
     {

@@ -149,19 +149,19 @@ TEST(CryptorAes256GcmTest, TestVector)
     EXPECT_EQ(decrypt_iv.size(), 12);
 
     std::unique_ptr<StreamEncryptor> client_encryptor =
-        StreamEncryptor::createForAes256Gcm(key, encrypt_iv);
+        StreamEncryptor::create(key, encrypt_iv);
     ASSERT_NE(client_encryptor, nullptr);
 
     std::unique_ptr<StreamDecryptor> client_decryptor =
-        StreamDecryptor::createForAes256Gcm(key, decrypt_iv);
+        StreamDecryptor::create(key, decrypt_iv);
     ASSERT_NE(client_decryptor, nullptr);
 
     std::unique_ptr<StreamEncryptor> host_encryptor =
-        StreamEncryptor::createForAes256Gcm(key, decrypt_iv);
+        StreamEncryptor::create(key, decrypt_iv);
     ASSERT_NE(host_encryptor, nullptr);
 
     std::unique_ptr<StreamDecryptor> host_decryptor =
-        StreamDecryptor::createForAes256Gcm(key, encrypt_iv);
+        StreamDecryptor::create(key, encrypt_iv);
     ASSERT_NE(host_encryptor, nullptr);
 
     for (int i = 0; i < 100; ++i)
@@ -171,41 +171,31 @@ TEST(CryptorAes256GcmTest, TestVector)
     }
 }
 
-// The old protocol never changes the key. A stream without the ratchet stays readable past the
-// ratchet interval, while a peer with the ratchet loses sync exactly there.
-TEST(CryptorAes256GcmTest, NoRatchet)
+// Both sides change the key after the same number of messages, so the stream stays readable past
+// the ratchet interval.
+TEST(CryptorAes256GcmTest, RatchetKeepsPeersInSync)
 {
     const SecureByteArray key(
         QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
     const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
     const QByteArray message = QByteArray::fromHex("6006ee8029610876ec2facd5fc9ce6bd");
 
-    std::unique_ptr<StreamEncryptor> encryptor =
-        StreamEncryptor::createForAes256Gcm(key, iv, /* ratchet */ false);
+    std::unique_ptr<StreamEncryptor> encryptor = StreamEncryptor::create(key, iv);
     ASSERT_NE(encryptor, nullptr);
 
-    std::unique_ptr<StreamDecryptor> old_peer =
-        StreamDecryptor::createForAes256Gcm(key, iv, /* ratchet */ false);
-    ASSERT_NE(old_peer, nullptr);
-
-    std::unique_ptr<StreamDecryptor> new_peer = StreamDecryptor::createForAes256Gcm(key, iv);
-    ASSERT_NE(new_peer, nullptr);
+    std::unique_ptr<StreamDecryptor> decryptor = StreamDecryptor::create(key, iv);
+    ASSERT_NE(decryptor, nullptr);
 
     QByteArray encrypted(static_cast<qsizetype>(encryptor->encryptedDataSize(message.size())), 0);
-    QByteArray decrypted(static_cast<qsizetype>(old_peer->decryptedDataSize(encrypted.size())), 0);
+    QByteArray decrypted(static_cast<qsizetype>(decryptor->decryptedDataSize(encrypted.size())), 0);
 
     // Well past the ratchet interval of 256 messages.
-    for (int i = 0; i < 300; ++i)
+    for (int i = 0; i < 600; ++i)
     {
         ASSERT_TRUE(encryptor->encrypt(message.data(), message.size(), encrypted.data()));
-
-        ASSERT_TRUE(old_peer->decrypt(encrypted.data(), encrypted.size(), decrypted.data()));
+        ASSERT_TRUE(decryptor->decrypt(encrypted.data(), encrypted.size(), decrypted.data()))
+            << "message #" << i;
         EXPECT_EQ(decrypted, message);
-
-        // The 256th message the ratcheting peer decrypts changes its key; the 257th no longer
-        // opens.
-        EXPECT_EQ(new_peer->decrypt(encrypted.data(), encrypted.size(), decrypted.data()),
-                  i < 256) << "message #" << i;
     }
 }
 
@@ -221,11 +211,11 @@ TEST(CryptorAes256GcmTest, WrongKey)
     EXPECT_EQ(iv.size(), 12);
 
     std::unique_ptr<StreamEncryptor> client_encryptor =
-        StreamEncryptor::createForAes256Gcm(client_key, iv);
+        StreamEncryptor::create(client_key, iv);
     ASSERT_NE(client_encryptor, nullptr);
 
     std::unique_ptr<StreamDecryptor> host_decryptor =
-        StreamDecryptor::createForAes256Gcm(host_key, iv);
+        StreamDecryptor::create(host_key, iv);
     ASSERT_NE(host_decryptor, nullptr);
 
     wrongKey(client_encryptor.get(), host_decryptor.get());
@@ -237,83 +227,10 @@ TEST(CryptorAes256GcmTest, WrongAad)
         QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
     const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
 
-    std::unique_ptr<StreamEncryptor> encryptor = StreamEncryptor::createForAes256Gcm(key, iv);
+    std::unique_ptr<StreamEncryptor> encryptor = StreamEncryptor::create(key, iv);
     ASSERT_NE(encryptor, nullptr);
 
-    std::unique_ptr<StreamDecryptor> decryptor = StreamDecryptor::createForAes256Gcm(key, iv);
-    ASSERT_NE(decryptor, nullptr);
-
-    wrongAad(encryptor.get(), decryptor.get());
-}
-
-TEST(CryptorChaCha20Poly1305Test, TestVector)
-{
-    const SecureByteArray key(
-        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
-    const QByteArray encrypt_iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
-    const QByteArray decrypt_iv = QByteArray::fromHex("924988304848184805f07167");
-
-    EXPECT_EQ(key.size(), 32);
-    EXPECT_EQ(encrypt_iv.size(), 12);
-    EXPECT_EQ(decrypt_iv.size(), 12);
-
-    std::unique_ptr<StreamEncryptor> client_encryptor =
-        StreamEncryptor::createForChaCha20Poly1305(key, encrypt_iv);
-    ASSERT_NE(client_encryptor, nullptr);
-
-    std::unique_ptr<StreamDecryptor> client_decryptor =
-        StreamDecryptor::createForChaCha20Poly1305(key, decrypt_iv);
-    ASSERT_NE(client_decryptor, nullptr);
-
-    std::unique_ptr<StreamEncryptor> host_encryptor =
-        StreamEncryptor::createForChaCha20Poly1305(key, decrypt_iv);
-    ASSERT_NE(host_encryptor, nullptr);
-
-    std::unique_ptr<StreamDecryptor> host_decryptor =
-        StreamDecryptor::createForChaCha20Poly1305(key, encrypt_iv);
-    ASSERT_NE(host_encryptor, nullptr);
-
-    for (int i = 0; i < 100; ++i)
-    {
-        testVector(client_encryptor.get(), client_decryptor.get(),
-                   host_encryptor.get(), host_decryptor.get());
-    }
-}
-
-TEST(CryptorChaCha20Poly1305Test, WrongKey)
-{
-    const SecureByteArray client_key(
-        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
-    const SecureByteArray host_key(
-        QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
-    const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
-
-    EXPECT_EQ(client_key.size(), 32);
-    EXPECT_EQ(iv.size(), 12);
-
-    std::unique_ptr<StreamEncryptor> client_encryptor =
-        StreamEncryptor::createForAes256Gcm(client_key, iv);
-    ASSERT_NE(client_encryptor, nullptr);
-
-    std::unique_ptr<StreamDecryptor> host_decryptor =
-        StreamDecryptor::createForAes256Gcm(host_key, iv);
-    ASSERT_NE(host_decryptor, nullptr);
-
-    wrongKey(client_encryptor.get(), host_decryptor.get());
-}
-
-TEST(CryptorChaCha20Poly1305Test, WrongAad)
-{
-    const SecureByteArray key(
-        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
-    const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
-
-    std::unique_ptr<StreamEncryptor> encryptor =
-        StreamEncryptor::createForChaCha20Poly1305(key, iv);
-    ASSERT_NE(encryptor, nullptr);
-
-    std::unique_ptr<StreamDecryptor> decryptor =
-        StreamDecryptor::createForChaCha20Poly1305(key, iv);
+    std::unique_ptr<StreamDecryptor> decryptor = StreamDecryptor::create(key, iv);
     ASSERT_NE(decryptor, nullptr);
 
     wrongAad(encryptor.get(), decryptor.get());

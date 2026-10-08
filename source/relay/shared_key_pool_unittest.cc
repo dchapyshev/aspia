@@ -80,7 +80,6 @@ TEST_F(SharedKeyPoolTest, UnknownKeyIsNotFound)
     const std::string peer_public_key = peer.publicKey().toStdString();
 
     EXPECT_FALSE(pool().find(key_id + 1, peer_public_key).has_value());
-    EXPECT_FALSE(pool().findLegacy(key_id + 1, peer_public_key).has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -113,28 +112,6 @@ TEST_F(SharedKeyPoolTest, KeyIdIsNotReused)
 
     const quint32 second_id = pool().add(SessionKey::create());
     EXPECT_NE(first_id, second_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The two lookups differ only in the cipher the peer negotiated, so they must derive different keys
-// but report the same initialization vector.
-TEST_F(SharedKeyPoolTest, LegacyLookupDerivesAnotherKey)
-{
-    const quint32 key_id = pool().add(SessionKey::create());
-
-    SessionKey peer = SessionKey::create();
-    ASSERT_TRUE(peer.isValid());
-
-    const std::string peer_public_key = peer.publicKey().toStdString();
-
-    std::optional<SharedKeyPool::Key> key = pool().find(key_id, peer_public_key);
-    std::optional<SharedKeyPool::Key> legacy_key = pool().findLegacy(key_id, peer_public_key);
-
-    ASSERT_TRUE(key.has_value());
-    ASSERT_TRUE(legacy_key.has_value());
-
-    EXPECT_NE(key->first, legacy_key->first);
-    EXPECT_EQ(key->second, legacy_key->second);
 }
 
 //--------------------------------------------------------------------------------------------------

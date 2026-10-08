@@ -40,7 +40,6 @@ message Rect
 enum Encoding
 {
     ENCODING_UNKNOWN = 0;
-    // Field 1 (ZSTD) is deprecated.
     ENCODING_VP8     = 2;
     ENCODING_VP9     = 4;
     // Field 8 (H264) is deprecated.
@@ -64,7 +63,6 @@ enum ScreenCapturerType
 message PacketFormat
 {
     Rect video_rect                  = 1;
-    // Field 2 (pixel format) is deprecated.
     Size screen_size                 = 3;
     ScreenCapturerType capturer_type = 4;
 }

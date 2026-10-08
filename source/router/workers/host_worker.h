@@ -35,7 +35,6 @@
 
 class Host;
 class TcpServer;
-class TcpServerLegacy;
 
 class HostWorker final : public Worker
 {
@@ -83,7 +82,7 @@ public:
     // so the host reconnects and receives its permanent id.
     void approveHost(HostId host_id, QObject* context, ErrorCodeCallback callback);
 
-    // Delivers the connection offer to the host |host_id| (converting it for legacy hosts).
+    // Delivers the connection offer to the host |host_id|.
     // Fire-and-forget: if the host has disconnected, the offer is dropped.
     void sendConnectionOffer(HostId host_id, const proto::router::ConnectionOffer& offer);
 
@@ -100,10 +99,8 @@ protected:
 
 private slots:
     void onNewHostConnection();
-    void onNewLegacyHostConnection();
     void onHostFinished();
     void onHostIdAssigned(HostId host_id);
-    void onHostIdRemoved(HostId host_id);
 
 private:
     void removeHostSession(Host* host);
@@ -117,10 +114,8 @@ private:
 
     QString listen_interface_;
     quint16 listen_port_ = 0;
-    quint16 legacy_listen_port_ = 0;
 
     ScopedQPointer<TcpServer> server_;
-    ScopedQPointer<TcpServerLegacy> legacy_server_;
     std::vector<Host*> hosts_;
 
     // The holder of each assigned host id. At most one holder per id at any moment; a reconnecting

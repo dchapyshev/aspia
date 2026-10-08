@@ -47,7 +47,6 @@ message DriveList
 
         Type type   = 1;
         string path = 2;
-        // Fields 3-5 deprecated.
     }
 
     repeated Item item = 1;

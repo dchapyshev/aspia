@@ -2,73 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="da">
 <context>
-    <name>AabImporter</name>
-    <message>
-        <location filename="../client/aab_importer.cc" line="144"/>
-        <source>%1 (Imported)</source>
-        <translation>%1 (Importeret)</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="314"/>
-        <source>Unable to open file &quot;%1&quot;: %2</source>
-        <translation>Kan ikke åbne filen &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="323"/>
-        <source>Selected file is empty.</source>
-        <translation>Den valgte fil er tom.</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="330"/>
-        <location filename="../client/aab_importer.cc" line="379"/>
-        <source>The address book file is corrupted or has an unknown format.</source>
-        <translation>Adressebogsfilen er beskadiget eller har et ukendt format.</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="371"/>
-        <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation>Adressebogsfilen er krypteret med en ikke-understøttet krypteringstype.</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="390"/>
-        <source>Failed to read data from the local database.</source>
-        <translation>Kunne ikke læse dataene fra den lokale database.</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="409"/>
-        <source>Import completed successfully.
-Groups added: %1
-Hosts added: %2
-Hosts skipped: %3
-Routers added: %4</source>
-        <translation>Importen er fuldført.
-Grupper tilføjet: %1
-Værter tilføjet: %2
-Værter sprunget over: %3
-Routere tilføjet: %4</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="363"/>
-        <source>Unable to decrypt the address book with the specified password.</source>
-        <translation>Kan ikke dekryptere adressebogen med den angivne adgangskode.</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="346"/>
-        <source>Unlock</source>
-        <translation>Lås op</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="348"/>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation>Adressebogen er krypteret. For at åbne den skal du indtaste en adgangskode.</translation>
-    </message>
-    <message>
-        <location filename="../client/aab_importer.cc" line="404"/>
-        <source>Nothing was imported.</source>
-        <translation>Intet blev importeret.</translation>
-    </message>
-</context>
-<context>
     <name>AboutDialog</name>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="14"/>
@@ -391,115 +324,115 @@ Routere tilføjet: %4</translation>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="175"/>
-        <location filename="../client/android/main_window.cc" line="350"/>
-        <location filename="../client/android/main_window.cc" line="398"/>
+        <location filename="../client/android/main_window.cc" line="174"/>
+        <location filename="../client/android/main_window.cc" line="346"/>
+        <location filename="../client/android/main_window.cc" line="388"/>
         <source>Local</source>
         <translation>Lokal</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="176"/>
-        <location filename="../client/android/main_window.cc" line="354"/>
-        <location filename="../client/android/main_window.cc" line="418"/>
+        <location filename="../client/android/main_window.cc" line="175"/>
+        <location filename="../client/android/main_window.cc" line="350"/>
+        <location filename="../client/android/main_window.cc" line="408"/>
         <source>Remote</source>
         <translation>Ekstern</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="177"/>
-        <location filename="../client/android/main_window.cc" line="358"/>
-        <location filename="../client/android/main_window.cc" line="408"/>
+        <location filename="../client/android/main_window.cc" line="176"/>
+        <location filename="../client/android/main_window.cc" line="354"/>
+        <location filename="../client/android/main_window.cc" line="398"/>
         <source>Routers</source>
         <translation>Routere</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="178"/>
-        <location filename="../client/android/main_window.cc" line="362"/>
-        <location filename="../client/android/main_window.cc" line="428"/>
-        <location filename="../host/android/main_window.cc" line="84"/>
-        <location filename="../host/android/main_window.cc" line="100"/>
-        <location filename="../host/android/main_window.cc" line="390"/>
+        <location filename="../client/android/main_window.cc" line="177"/>
+        <location filename="../client/android/main_window.cc" line="358"/>
+        <location filename="../client/android/main_window.cc" line="418"/>
+        <location filename="../host/android/main_window.cc" line="88"/>
+        <location filename="../host/android/main_window.cc" line="104"/>
+        <location filename="../host/android/main_window.cc" line="479"/>
         <source>Settings</source>
         <translation>Indstillinger</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="782"/>
+        <location filename="../client/android/main_window.cc" line="772"/>
         <source>Update</source>
         <translation>Opdater</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="783"/>
+        <location filename="../client/android/main_window.cc" line="773"/>
         <source>Version %1 is available.</source>
         <translation>Version %1 er tilgængelig.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="832"/>
+        <location filename="../client/android/main_window.cc" line="822"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Routeren, der er knyttet til denne vært, er blevet slettet. Rediger værten for at vælge en anden router eller skifte til direkte forbindelse.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="642"/>
+        <location filename="../client/android/main_window.cc" line="632"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Tofaktorgodkendelse - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="520"/>
-        <location filename="../client/android/main_window.cc" line="1099"/>
+        <location filename="../client/android/main_window.cc" line="510"/>
+        <location filename="../client/android/main_window.cc" line="1089"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Dataene for værten er beskadigede. Rediger værten, og indtast dem igen.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="831"/>
-        <location filename="../client/android/main_window.cc" line="1057"/>
+        <location filename="../client/android/main_window.cc" line="821"/>
+        <location filename="../client/android/main_window.cc" line="1047"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Dataene for routeren er beskadigede. Rediger routeren, og indtast dem igen.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1009"/>
+        <location filename="../client/android/main_window.cc" line="999"/>
         <source>Invalid link.</source>
         <translation>Ugyldigt link.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1017"/>
+        <location filename="../client/android/main_window.cc" line="1007"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>En anden session er aktiv. Luk den, og åbn linket igen.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1027"/>
+        <location filename="../client/android/main_window.cc" line="1017"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>Sessionstypen fra linket understøttes ikke på denne enhed.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1048"/>
+        <location filename="../client/android/main_window.cc" line="1038"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Routeren, som linket henviser til, er ikke blandt de gemte routere.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1100"/>
+        <location filename="../client/android/main_window.cc" line="1090"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Værten, som linket henviser til, er ikke blandt de gemte værter.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="519"/>
-        <location filename="../client/android/main_window.cc" line="829"/>
-        <location filename="../client/android/main_window.cc" line="1009"/>
+        <location filename="../client/android/main_window.cc" line="509"/>
+        <location filename="../client/android/main_window.cc" line="819"/>
+        <location filename="../client/android/main_window.cc" line="999"/>
+        <location filename="../client/android/main_window.cc" line="1006"/>
         <location filename="../client/android/main_window.cc" line="1016"/>
-        <location filename="../client/android/main_window.cc" line="1026"/>
-        <location filename="../client/android/main_window.cc" line="1047"/>
-        <location filename="../client/android/main_window.cc" line="1056"/>
-        <location filename="../client/android/main_window.cc" line="1097"/>
-        <location filename="../host/android/main_window.cc" line="83"/>
-        <location filename="../host/android/main_window.cc" line="99"/>
-        <location filename="../host/android/main_window.cc" line="388"/>
+        <location filename="../client/android/main_window.cc" line="1037"/>
+        <location filename="../client/android/main_window.cc" line="1046"/>
+        <location filename="../client/android/main_window.cc" line="1087"/>
+        <location filename="../host/android/main_window.cc" line="87"/>
+        <location filename="../host/android/main_window.cc" line="103"/>
+        <location filename="../host/android/main_window.cc" line="477"/>
         <source>Connection</source>
         <translation>Forbindelse</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="357"/>
+        <location filename="../host/android/main_window.cc" line="428"/>
         <source>Permissions</source>
         <translation>Tilladelser</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="783"/>
+        <location filename="../client/android/main_window.cc" line="773"/>
         <source>Open</source>
         <translation>Åbn</translation>
     </message>
@@ -1115,37 +1048,37 @@ Routere tilføjet: %4</translation>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="235"/>
+        <location filename="../client/desktop/client_window.cc" line="229"/>
         <source>Session started.</source>
         <translation>Sessionen er startet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="563"/>
+        <location filename="../client/desktop/client_window.cc" line="542"/>
         <source>The specified router is unavailable.</source>
         <translation>Den angivne router er ikke tilgængelig.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="565"/>
+        <location filename="../client/desktop/client_window.cc" line="544"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Dataene for routeren er beskadigede. Rediger routeren, og indtast dem igen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="567"/>
+        <location filename="../client/desktop/client_window.cc" line="546"/>
         <source>The specified router is offline.</source>
         <translation>Den angivne router er offline.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="247"/>
+        <location filename="../client/desktop/client_window.cc" line="241"/>
         <source>Connecting to host %1...</source>
         <translation>Opretter forbindelse til værten %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="251"/>
+        <location filename="../client/desktop/client_window.cc" line="245"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Opretter forbindelse til værten %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="287"/>
+        <location filename="../client/desktop/client_window.cc" line="281"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Værten er ikke tilgængelig endnu. Venter på at oprette forbindelse igen...</translation>
     </message>
@@ -1155,27 +1088,22 @@ Routere tilføjet: %4</translation>
         <translation>Timeout under ventning på genoprettelse af forbindelse til værten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="307"/>
+        <location filename="../client/desktop/client_window.cc" line="301"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Værtsversionen er nyere end klientversionen (%1 &gt; %2). Opdater venligst programmet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="313"/>
-        <source>Attempting to connect in compatibility mode...</source>
-        <translation>Forsøger at oprette forbindelse i kompatibilitetstilstand...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/client_window.cc" line="574"/>
+        <location filename="../client/desktop/client_window.cc" line="553"/>
         <source>Requesting connection to the host...</source>
         <translation>Anmoder om forbindelse til værten...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="582"/>
+        <location filename="../client/desktop/client_window.cc" line="561"/>
         <source>Connection offer received.</source>
         <translation>Forbindelsestilbud modtaget.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="599"/>
+        <location filename="../client/desktop/client_window.cc" line="578"/>
         <source>Error requesting connection via router.</source>
         <translation>Fejl ved anmodning om forbindelse via routeren.</translation>
     </message>
@@ -1664,64 +1592,64 @@ Routere tilføjet: %4</translation>
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="244"/>
+        <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>Your ID</source>
         <translation>Dit ID</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="245"/>
+        <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>One-time password</source>
         <translation>Engangsadgangskode</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="246"/>
+        <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Access</source>
         <translation>Adgang</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="247"/>
+        <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>Desktop</source>
         <translation>Skrivebord</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="248"/>
+        <location filename="../host/android/connection_widget.cc" line="249"/>
         <source>File Transfer</source>
         <translation>Filoverførsel</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="369"/>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Waiting for a connection</source>
         <translation>Venter på forbindelse</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="369"/>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="376"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>Aspia-ID: %1
 Adgangskode: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="415"/>
+        <location filename="../host/android/connection_widget.cc" line="419"/>
         <source>Router is disabled</source>
         <translation>Routeren er deaktiveret</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="418"/>
+        <location filename="../host/android/connection_widget.cc" line="422"/>
         <source>Connecting to router...</source>
         <translation>Opretter forbindelse til routeren...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="421"/>
+        <location filename="../host/android/connection_widget.cc" line="425"/>
         <source>Connected to router</source>
         <translation>Forbundet til router</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="424"/>
+        <location filename="../host/android/connection_widget.cc" line="428"/>
         <source>Failed to connect to router</source>
         <translation>Kunne ikke oprette forbindelse til routeren</translation>
     </message>
@@ -2689,33 +2617,33 @@ Legitimationsoplysninger erstattet: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="978"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="963"/>
         <source>Save File</source>
         <translation>Gem fil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="964"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-billede (*.png);;BMP-billede (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1010"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="995"/>
         <source>Could not save image</source>
         <translation>Kunne ikke gemme billedet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1597"/>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1602"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1381"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1386"/>
         <source>Credentials</source>
         <translation>Legitimationsoplysninger</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1597"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1381"/>
         <source>User name:</source>
         <translation>Brugernavn:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1602"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1386"/>
         <source>Password:</source>
         <translation>Adgangskode:</translation>
     </message>
@@ -2773,11 +2701,6 @@ Legitimationsoplysninger erstattet: %2</translation>
         <location filename="../client/android/desktop_window.cc" line="797"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Værtsversionen er nyere end klienten. Opdater venligst programmet.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/desktop_window.cc" line="801"/>
-        <source>Legacy hosts are not supported.</source>
-        <translation>Ældre værter understøttes ikke.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="164"/>
@@ -5136,180 +5059,165 @@ Importerede legitimationsoplysninger: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="407"/>
-        <source>Import Old Address Book...</source>
-        <translation>Importer gammel adressebog...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.ui" line="416"/>
         <source>Create Backup...</source>
         <translation>Opret sikkerhedskopi...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="425"/>
+        <location filename="../client/desktop/management_tab.ui" line="416"/>
         <source>Restore from Backup...</source>
         <translation>Gendan fra sikkerhedskopi...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="433"/>
+        <location filename="../client/desktop/management_tab.ui" line="424"/>
         <source>Auto-refresh Status</source>
         <translation>Opdater status automatisk</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1074"/>
+        <location filename="../client/desktop/management_tab.cc" line="1071"/>
         <source>(copy)</source>
         <translation>(kopi)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1042"/>
-        <location filename="../client/desktop/management_tab.cc" line="1116"/>
-        <location filename="../client/desktop/management_tab.cc" line="2229"/>
+        <location filename="../client/desktop/management_tab.cc" line="1039"/>
+        <location filename="../client/desktop/management_tab.cc" line="1113"/>
+        <location filename="../client/desktop/management_tab.cc" line="2201"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Kunne ikke hente værtsoplysninger fra den lokale database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="852"/>
+        <location filename="../client/desktop/management_tab.cc" line="849"/>
         <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
         <translation>Sessionstypen &quot;%1&quot; er ikke tilgængelig for Quick Support.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1079"/>
+        <location filename="../client/desktop/management_tab.cc" line="1076"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Kunne ikke tilføje værten til den lokale database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1120"/>
+        <location filename="../client/desktop/management_tab.cc" line="1117"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Er du sikker på, at du vil slette værten &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1130"/>
+        <location filename="../client/desktop/management_tab.cc" line="1127"/>
         <source>Unable to remove host</source>
         <translation>Kan ikke fjerne værten</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1193"/>
-        <location filename="../client/desktop/management_tab.cc" line="1253"/>
-        <location filename="../client/desktop/management_tab.cc" line="1279"/>
+        <location filename="../client/desktop/management_tab.cc" line="1190"/>
+        <location filename="../client/desktop/management_tab.cc" line="1250"/>
+        <location filename="../client/desktop/management_tab.cc" line="1276"/>
         <source>Copy Row</source>
         <translation>Kopier række</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1194"/>
-        <location filename="../client/desktop/management_tab.cc" line="1254"/>
-        <location filename="../client/desktop/management_tab.cc" line="1280"/>
+        <location filename="../client/desktop/management_tab.cc" line="1191"/>
+        <location filename="../client/desktop/management_tab.cc" line="1251"/>
+        <location filename="../client/desktop/management_tab.cc" line="1277"/>
         <source>Copy Value</source>
         <translation>Kopier værdi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1381"/>
+        <location filename="../client/desktop/management_tab.cc" line="1378"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Er du sikker på, at du vil slette arbejdsområdet &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1401"/>
+        <location filename="../client/desktop/management_tab.cc" line="1398"/>
         <source>Failed to delete the workspace.</source>
         <translation>Kunne ikke slette arbejdsområdet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1503"/>
+        <location filename="../client/desktop/management_tab.cc" line="1500"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Er du sikker på, at du vil slette gruppen &quot;%1&quot;? Værter, der er tildelt denne gruppe eller dens undergrupper, flyttes til arbejdsområdets rod.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1521"/>
+        <location filename="../client/desktop/management_tab.cc" line="1518"/>
         <source>Failed to delete the group.</source>
         <translation>Kunne ikke slette gruppen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1560"/>
-        <source>Import Old Address Book</source>
-        <translation>Importer gammel adressebog</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1561"/>
-        <source>Address Book (*.aab);;All files (*)</source>
-        <translation>Adressebog (*.aab);;Alle filer (*)</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1584"/>
-        <location filename="../client/desktop/management_tab.cc" line="1641"/>
+        <location filename="../client/desktop/management_tab.cc" line="1557"/>
+        <location filename="../client/desktop/management_tab.cc" line="1614"/>
         <source>The database is not available.</source>
         <translation>Databasen er ikke tilgængelig.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1590"/>
+        <location filename="../client/desktop/management_tab.cc" line="1563"/>
         <source>Create Backup</source>
         <translation>Opret sikkerhedskopi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1607"/>
+        <location filename="../client/desktop/management_tab.cc" line="1580"/>
         <source>There is nothing to save.</source>
         <translation>Der er intet at gemme.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2224"/>
+        <location filename="../client/desktop/management_tab.cc" line="2196"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Dataene for værten er beskadigede. Rediger værten, og indtast dem igen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2245"/>
+        <location filename="../client/desktop/management_tab.cc" line="2217"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Dataene for routeren er beskadigede. Rediger routeren, og indtast dem igen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1619"/>
+        <location filename="../client/desktop/management_tab.cc" line="1592"/>
         <source>Failed to create the backup.</source>
         <translation>Kunne ikke oprette sikkerhedskopien.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1647"/>
-        <location filename="../client/desktop/management_tab.cc" line="1673"/>
+        <location filename="../client/desktop/management_tab.cc" line="1620"/>
+        <location filename="../client/desktop/management_tab.cc" line="1646"/>
         <source>Restore from Backup</source>
         <translation>Gendan fra sikkerhedskopi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1656"/>
+        <location filename="../client/desktop/management_tab.cc" line="1629"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Alt, hvad der er gemt nu, slettes og erstattes med indholdet af sikkerhedskopien. Vil du fortsætte?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1675"/>
+        <location filename="../client/desktop/management_tab.cc" line="1648"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Sikkerhedskopien blev oprettet på en anden installation. Indtast hovedadgangskoden, der blev brugt der.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1700"/>
+        <location filename="../client/desktop/management_tab.cc" line="1673"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Sikkerhedskopien indeholder ingen data, så intet blev ændret.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1708"/>
+        <location filename="../client/desktop/management_tab.cc" line="1681"/>
         <source>The file is not a valid backup.</source>
         <translation>Filen er ikke en gyldig sikkerhedskopi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1712"/>
+        <location filename="../client/desktop/management_tab.cc" line="1685"/>
         <source>Failed to restore from the backup.</source>
         <translation>Kunne ikke gendanne fra sikkerhedskopien.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1591"/>
-        <location filename="../client/desktop/management_tab.cc" line="1648"/>
+        <location filename="../client/desktop/management_tab.cc" line="1564"/>
+        <location filename="../client/desktop/management_tab.cc" line="1621"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia Backup (*.aspia-backup);;Alle filer (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1611"/>
+        <location filename="../client/desktop/management_tab.cc" line="1584"/>
         <source>Unable to write the file.</source>
         <translation>Kan ikke skrive filen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1704"/>
+        <location filename="../client/desktop/management_tab.cc" line="1677"/>
         <source>Unable to read the file.</source>
         <translation>Kan ikke læse filen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1624"/>
+        <location filename="../client/desktop/management_tab.cc" line="1597"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5324,22 +5232,22 @@ Eksporterede gemte adgangskoder: %4
 Eksporterede legitimationsoplysninger: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1615"/>
+        <location filename="../client/desktop/management_tab.cc" line="1588"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Nogle poster i databasen er beskadigede. Ret eller slet dem, og prøv igen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1692"/>
+        <location filename="../client/desktop/management_tab.cc" line="1665"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Kan ikke dekryptere filen med den angivne adgangskode.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1696"/>
+        <location filename="../client/desktop/management_tab.cc" line="1669"/>
         <source>Unsupported file format version.</source>
         <translation>Ikke-understøttet filformatversion.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1717"/>
+        <location filename="../client/desktop/management_tab.cc" line="1690"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5354,29 +5262,29 @@ Importerede gemte adgangskoder: %4
 Importerede legitimationsoplysninger: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2152"/>
-        <location filename="../client/desktop/management_tab.cc" line="2183"/>
+        <location filename="../client/desktop/management_tab.cc" line="2124"/>
+        <location filename="../client/desktop/management_tab.cc" line="2155"/>
         <source>Copy Link</source>
         <translation>Kopier link</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2171"/>
-        <location filename="../client/desktop/management_tab.cc" line="2205"/>
+        <location filename="../client/desktop/management_tab.cc" line="2143"/>
+        <location filename="../client/desktop/management_tab.cc" line="2177"/>
         <source>Unable to create a link for this host.</source>
         <translation>Kan ikke oprette et link til denne vært.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2246"/>
+        <location filename="../client/desktop/management_tab.cc" line="2218"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Routeren, der er knyttet til denne vært, er blevet slettet. Rediger værten for at vælge en anden router eller skifte til direkte forbindelse.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2253"/>
+        <location filename="../client/desktop/management_tab.cc" line="2225"/>
         <source>The host has an invalid host ID.</source>
         <translation>Værten har et ugyldigt værts-ID.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2262"/>
+        <location filename="../client/desktop/management_tab.cc" line="2234"/>
         <source>The host has an incorrect address.</source>
         <translation>Værten har en forkert adresse.</translation>
     </message>
@@ -5637,7 +5545,7 @@ Importerede legitimationsoplysninger: %5</translation>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="382"/>
+        <location filename="../client/workers/network_worker.cc" line="359"/>
         <source>Failed to connect to the relay server</source>
         <translation>Kunne ikke oprette forbindelse til relæserveren</translation>
     </message>
@@ -5926,11 +5834,6 @@ Importerede legitimationsoplysninger: %5</translation>
         <location filename="../host/android/permissions_widget.cc" line="109"/>
         <source>Granted</source>
         <translation>Tildelt</translation>
-    </message>
-    <message>
-        <location filename="../host/android/permissions_widget.cc" line="125"/>
-        <source>The service is turned on, but Android has stopped it. Turn it off and on again.</source>
-        <translation>Tjenesten er aktiveret, men Android har stoppet den. Deaktiver den, og aktiver den igen.</translation>
     </message>
 </context>
 <context>
@@ -7604,6 +7507,14 @@ Importerede legitimationsoplysninger: %5</translation>
     </message>
 </context>
 <context>
+    <name>ServerWorker</name>
+    <message>
+        <location filename="../host/android/server_worker.cc" line="552"/>
+        <source>Waiting for connections</source>
+        <translation>Venter på forbindelser</translation>
+    </message>
+</context>
+<context>
     <name>ServiceItem</name>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="192"/>
@@ -8310,7 +8221,7 @@ Importerede legitimationsoplysninger: %5</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="442"/>
-        <location filename="../host/android/settings_widget.cc" line="405"/>
+        <location filename="../host/android/settings_widget.cc" line="439"/>
         <source>Updates</source>
         <translation>Opdateringer</translation>
     </message>
@@ -8321,49 +8232,49 @@ Importerede legitimationsoplysninger: %5</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="453"/>
-        <location filename="../host/android/settings_widget.cc" line="408"/>
+        <location filename="../host/android/settings_widget.cc" line="442"/>
         <source>Update channel</source>
         <translation>Opdateringskanal</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="454"/>
-        <location filename="../host/android/settings_widget.cc" line="409"/>
+        <location filename="../host/android/settings_widget.cc" line="443"/>
         <source>Stable</source>
         <translation>Stabil</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="455"/>
-        <location filename="../host/android/settings_widget.cc" line="410"/>
+        <location filename="../host/android/settings_widget.cc" line="444"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="456"/>
-        <location filename="../host/android/settings_widget.cc" line="411"/>
+        <location filename="../host/android/settings_widget.cc" line="445"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="467"/>
-        <location filename="../host/android/settings_widget.cc" line="425"/>
+        <location filename="../host/android/settings_widget.cc" line="459"/>
         <source>Update server</source>
         <translation>Opdateringsserver</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="472"/>
-        <location filename="../host/android/settings_widget.cc" line="430"/>
+        <location filename="../host/android/settings_widget.cc" line="464"/>
         <source>Public key</source>
         <translation>Offentlig nøgle</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="478"/>
-        <location filename="../host/android/settings_widget.cc" line="436"/>
+        <location filename="../host/android/settings_widget.cc" line="470"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>Hvis opdateringsserveren ikke er angivet, bruges standardserveren. Hvis den offentlige nøgle ikke er angivet, bruges den indbyggede.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="532"/>
-        <location filename="../host/android/settings_widget.cc" line="490"/>
+        <location filename="../host/android/settings_widget.cc" line="524"/>
         <source>Check for updates</source>
         <translation>Søg efter opdateringer</translation>
     </message>
@@ -8394,68 +8305,88 @@ Importerede legitimationsoplysninger: %5</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="285"/>
+        <source>Background mode</source>
+        <translation>Baggrundstilstand</translation>
+    </message>
+    <message>
+        <location filename="../host/android/settings_widget.cc" line="297"/>
+        <source>The host accepts connections in the local network and stays connected to the router while the application is not on the screen, so it can be reached at any time.</source>
+        <translation>Værten accepterer forbindelser i det lokale netværk og forbliver forbundet til routeren, mens programmet ikke vises på skærmen, så der kan oprettes forbindelse til den når som helst.</translation>
+    </message>
+    <message>
+        <location filename="../host/android/settings_widget.cc" line="303"/>
+        <source>Confirm screen capture automatically</source>
+        <translation>Bekræft skærmoptagelse automatisk</translation>
+    </message>
+    <message>
+        <location filename="../host/android/settings_widget.cc" line="314"/>
+        <source>The screen capture request is confirmed automatically. It may not work on some devices.</source>
+        <translation>Anmodningen om skærmoptagelse bekræftes automatisk. Det fungerer muligvis ikke på nogle enheder.</translation>
+    </message>
+    <message>
+        <location filename="../host/android/settings_widget.cc" line="319"/>
         <source>Manage users</source>
         <translation>Administrer brugere</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="293"/>
+        <location filename="../host/android/settings_widget.cc" line="327"/>
         <source>Change password</source>
         <translation>Skift adgangskode</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="297"/>
+        <location filename="../host/android/settings_widget.cc" line="331"/>
         <source>Disable password protection</source>
         <translation>Deaktiver adgangskodebeskyttelse</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="306"/>
+        <location filename="../host/android/settings_widget.cc" line="340"/>
         <source>Enable password protection</source>
         <translation>Aktiver adgangskodebeskyttelse</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="321"/>
+        <location filename="../host/android/settings_widget.cc" line="355"/>
         <source>Router</source>
         <translation>Router</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="326"/>
+        <location filename="../host/android/settings_widget.cc" line="360"/>
         <source>Enable the use of a router</source>
         <translation>Aktiver brug af en router</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="331"/>
+        <location filename="../host/android/settings_widget.cc" line="365"/>
         <source>Address</source>
         <translation>Adresse</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="337"/>
+        <location filename="../host/android/settings_widget.cc" line="371"/>
         <source>Public Key</source>
         <translation>Offentlig nøgle</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="342"/>
+        <location filename="../host/android/settings_widget.cc" line="376"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>En router er nødvendig for at oprette forbindelse til en computer, hvis der ikke er en direkte forbindelse (omgå NAT). Aspia stiller ikke en offentlig router til rådighed, men du kan installere din egen. Du kan downloade routeren på det &lt;a href=&quot;https://aspia.org&quot;&gt;officielle websted&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="504"/>
-        <location filename="../host/android/settings_widget.cc" line="525"/>
+        <location filename="../host/android/settings_widget.cc" line="538"/>
+        <location filename="../host/android/settings_widget.cc" line="559"/>
         <source>Error</source>
         <translation>Fejl</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="504"/>
-        <location filename="../host/android/settings_widget.cc" line="525"/>
+        <location filename="../host/android/settings_widget.cc" line="538"/>
+        <location filename="../host/android/settings_widget.cc" line="559"/>
         <source>An error occurred while processing the password.</source>
         <translation>Der opstod en fejl under behandling af adgangskoden.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="547"/>
+        <location filename="../host/android/settings_widget.cc" line="581"/>
         <source>Import</source>
         <translation>Importer</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="547"/>
+        <location filename="../host/android/settings_widget.cc" line="581"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-filer (*.json)</translation>
     </message>
@@ -12301,11 +12232,6 @@ Importerede legitimationsoplysninger: %5</translation>
         <location filename="../host/ui/system_info_window.cc" line="46"/>
         <source>System Information</source>
         <translation>Systemoplysninger</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="133"/>
-        <source>System information is not available for hosts older than version 3.0.0.</source>
-        <translation>Systemoplysninger er ikke tilgængelige for værter, der er ældre end version 3.0.0.</translation>
     </message>
 </context>
 <context>

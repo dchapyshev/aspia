@@ -46,8 +46,7 @@ protected:
         const SecureByteArray key(
             PasswordHash::hash(PasswordHash::ARGON2ID, SecureString(QString("Password123")), salt));
 
-        const std::optional<QByteArray> verifier =
-            DataCryptor(CipherType::AES256_GCM, key).encrypt(Random::byteArray(32));
+        const std::optional<QByteArray> verifier = DataCryptor(key).encrypt(Random::byteArray(32));
         ASSERT_TRUE(verifier.has_value());
         ASSERT_TRUE(db_.reencryptAll({}, {}, {}, {}, salt, *verifier, 1));
 

@@ -34,15 +34,13 @@ const int kHeaderSize = kIVSize + kTagSize;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DataCryptor::DataCryptor(CipherType type)
-    : type_(type)
+DataCryptor::DataCryptor()
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-DataCryptor::DataCryptor(CipherType type, const SecureByteArray& key)
-    : type_(type)
+DataCryptor::DataCryptor(const SecureByteArray& key)
 {
     setKey(key);
 }
@@ -51,7 +49,6 @@ DataCryptor::DataCryptor(CipherType type, const SecureByteArray& key)
 DataCryptor::DataCryptor(DataCryptor&& other) noexcept
 {
     std::scoped_lock lock(other.mutex_);
-    type_        = other.type_;
     key_         = std::move(other.key_);
     encrypt_ctx_ = std::move(other.encrypt_ctx_);
     decrypt_ctx_ = std::move(other.decrypt_ctx_);
@@ -64,7 +61,6 @@ DataCryptor& DataCryptor::operator=(DataCryptor&& other) noexcept
         return *this;
 
     std::scoped_lock lock(mutex_, other.mutex_);
-    type_        = other.type_;
     key_         = std::move(other.key_);
     encrypt_ctx_ = std::move(other.encrypt_ctx_);
     decrypt_ctx_ = std::move(other.decrypt_ctx_);
@@ -93,11 +89,11 @@ void DataCryptor::setKey(const SecureByteArray& key)
         return;
     }
 
-    encrypt_ctx_ = createCipher(type_, CipherMode::ENCRYPT, key, kIVSize);
+    encrypt_ctx_ = createCipher(CipherMode::ENCRYPT, key, kIVSize);
     if (!encrypt_ctx_)
         LOG(ERROR) << "Unable to create encrypt cipher";
 
-    decrypt_ctx_ = createCipher(type_, CipherMode::DECRYPT, key, kIVSize);
+    decrypt_ctx_ = createCipher(CipherMode::DECRYPT, key, kIVSize);
     if (!decrypt_ctx_)
         LOG(ERROR) << "Unable to create decrypt cipher";
 }
@@ -267,8 +263,7 @@ std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in, QByteArrayView
 DataCryptor& DataCryptor::instance()
 {
     // Process-wide singleton so the master key is shared across all threads (GUI and IO).
-    // EVP_CIPHER_CTX state is guarded by the per-instance mutex. AES256 GCM is pinned
-    // here because the existing client database was written with that cipher.
-    static DataCryptor cryptor(CipherType::AES256_GCM);
+    // EVP_CIPHER_CTX state is guarded by the per-instance mutex.
+    static DataCryptor cryptor;
     return cryptor;
 }

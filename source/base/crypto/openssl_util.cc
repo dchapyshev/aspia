@@ -64,23 +64,6 @@ void EVP_PKEY_Deleter::operator()(evp_pkey_st* pkey)
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-const EVP_CIPHER* cipherType(CipherType type)
-{
-    switch (type)
-    {
-        case CipherType::AES256_GCM:
-            return EVP_aes_256_gcm();
-
-        case CipherType::CHACHA20_POLY1305:
-            return EVP_chacha20_poly1305();
-
-        default:
-            NOTREACHED();
-            return nullptr;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 int cipherMode(CipherMode mode)
 {
     switch (mode)
@@ -100,7 +83,7 @@ int cipherMode(CipherMode mode)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const SecureByteArray& key, int iv_size)
+EVP_CIPHER_CTX_ptr createCipher(CipherMode mode, const SecureByteArray& key, int iv_size)
 {
     EVP_CIPHER_CTX_ptr ctx(EVP_CIPHER_CTX_new());
     if (!ctx)
@@ -109,7 +92,7 @@ EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const SecureBy
         return nullptr;
     }
 
-    if (EVP_CipherInit_ex(ctx.get(), cipherType(type), nullptr, nullptr, nullptr,
+    if (EVP_CipherInit_ex(ctx.get(), EVP_aes_256_gcm(), nullptr, nullptr, nullptr,
                           cipherMode(mode)) != 1)
     {
         LOG(ERROR) << "EVP_EncryptInit_ex failed";

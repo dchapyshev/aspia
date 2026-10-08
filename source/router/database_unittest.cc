@@ -31,7 +31,6 @@
 #include "base/peer/router_user.h"
 #include "base/peer/user.h"
 #include "base/sql/sql_database.h"
-#include "base/sql/sql_query.h"
 #include "proto/router.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
@@ -182,21 +181,6 @@ TEST_F(RouterDatabaseTest, AddUserStoresTheFullMaskOfTheLevel)
     EXPECT_EQ(findUser("root").sessions, kAllSessions);
     EXPECT_EQ(findUser("lead").sessions,
               proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_OPERATOR);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The expansion of the 2.7.0 records belongs to the upgrade of the table only: a database that
-// already has the 3.0.0 layout keeps its rows as they are when it is opened again.
-TEST_F(RouterDatabaseTest, ReopenLeavesSessionsOfAnUpgradedDatabaseAlone)
-{
-    ASSERT_TRUE(execRaw("UPDATE users SET sessions=1 WHERE id=1"));
-
-    Database reopened;
-    ASSERT_TRUE(reopened.open(file_path_));
-
-    RouterUser admin;
-    ASSERT_EQ(reopened.findUser("admin", &admin), proto::router::kErrorOk);
-    EXPECT_EQ(admin.sessions, quint32(proto::router::SESSION_TYPE_ADMIN));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1016,84 +1000,3 @@ TEST(RouterDatabaseFreshTest, AddHostBeforeAnyAutoincrementInsert)
     ASSERT_EQ(db.hostId("hash-1", &host_id), proto::router::kErrorOk);
     EXPECT_EQ(host_id, HostId(1));
 }
-
-//--------------------------------------------------------------------------------------------------
-// A 2.7.0 database knows no manager role: its administrators carry ADMIN|CLIENT (3), the other
-// users CLIENT (2, the OPERATOR of 3.0.0). The upgrade of the users table gives the
-// administrators the MANAGER bit their level implies and leaves the other users alone.
-TEST(RouterDatabaseFreshTest, UpgradeFrom27GrantsManagerToAdministrators)
-{
-    QTemporaryDir temp_dir;
-    ASSERT_TRUE(temp_dir.isValid());
-    const QString file_path = temp_dir.path() + "/router.db3";
-
-    {
-        SqlDatabase raw;
-        ASSERT_TRUE(raw.open(file_path));
-        ASSERT_TRUE(raw.exec("CREATE TABLE \"users\" ("
-                             "\"id\" INTEGER UNIQUE,"
-                             "\"name\" TEXT NOT NULL UNIQUE,"
-                             "\"group\" TEXT NOT NULL,"
-                             "\"salt\" BLOB NOT NULL,"
-                             "\"verifier\" BLOB NOT NULL,"
-                             "\"sessions\" INTEGER DEFAULT 0,"
-                             "\"flags\" INTEGER DEFAULT 0,"
-                             "PRIMARY KEY(\"id\" AUTOINCREMENT))"));
-        ASSERT_TRUE(raw.exec("INSERT INTO users (name, \"group\", salt, verifier, sessions, flags) "
-                             "VALUES ('admin', '8192', X'00', X'00', 3, 1), "
-                             "('bob', '8192', X'00', X'00', 2, 1)"));
-    }
-
-    Database db;
-    ASSERT_TRUE(db.open(file_path));
-
-    RouterUser user;
-    ASSERT_EQ(db.findUser("admin", &user), proto::router::kErrorOk);
-    EXPECT_EQ(user.sessions, kAllSessions);
-
-    ASSERT_EQ(db.findUser("bob", &user), proto::router::kErrorOk);
-    EXPECT_EQ(user.sessions, quint32(proto::router::SESSION_TYPE_OPERATOR));
-}
-
-//--------------------------------------------------------------------------------------------------
-// The hosts table of 2.7.0 is (id, key); the columns of 3.0.0 are added on the upgrade, and the
-// index over two of them may be declared only once they exist. Declared earlier it was silently
-// built over two string constants (SQLite reads an unknown double-quoted name as a string), read
-// fine and failed every later write of the table. The upgraded table must pass the full
-// integrity check and take an edit.
-TEST(RouterDatabaseFreshTest, UpgradeFrom27KeepsHostsWritable)
-{
-    QTemporaryDir temp_dir;
-    ASSERT_TRUE(temp_dir.isValid());
-    const QString file_path = temp_dir.path() + "/router.db3";
-
-    {
-        SqlDatabase raw;
-        ASSERT_TRUE(raw.open(file_path));
-        ASSERT_TRUE(raw.exec("CREATE TABLE \"hosts\" ("
-                             "\"id\" INTEGER UNIQUE,"
-                             "\"key\" BLOB NOT NULL UNIQUE,"
-                             "PRIMARY KEY(\"id\" AUTOINCREMENT))"));
-        ASSERT_TRUE(raw.exec("INSERT INTO hosts (key) VALUES (X'01')"));
-    }
-
-    Database db;
-    ASSERT_TRUE(db.open(file_path));
-
-    {
-        SqlDatabase raw;
-        ASSERT_TRUE(raw.open(file_path));
-        SqlQuery check(raw, "PRAGMA integrity_check");
-        ASSERT_EQ(check.next(), SqlQuery::StepResult::ROW);
-        EXPECT_EQ(check.columnText(0), "ok");
-    }
-
-    EXPECT_EQ(db.modifyHost(HostId(1), 1, 0, 0, "renamed", std::string_view()),
-              proto::router::kErrorOk);
-
-    std::string telemetry;
-    EXPECT_TRUE(db.updateHostTelemetry(HostId(1), "{\"version\":1}"));
-    EXPECT_EQ(db.hostTelemetry(HostId(1), &telemetry), proto::router::kErrorOk);
-    EXPECT_EQ(telemetry, "{\"version\":1}");
-}
-

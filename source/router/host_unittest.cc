@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/host_ng.h"
+#include "router/host.h"
 
 #include <optional>
 
@@ -43,10 +43,10 @@ const char kSecondTelemetry[] = "{\"version\":1,\"update\":{\"channel\":\"beta\"
 
 // Hands the host a telemetry report with a synthetic clock. In production the report is read with
 // the real time, and the tests cannot wait the real interval out.
-class HostNGTestPeer
+class HostTestPeer
 {
 public:
-    static void readTelemetry(HostNG& host, const std::string& json, TimePoint now)
+    static void readTelemetry(Host& host, const std::string& json, TimePoint now)
     {
         proto::router::HostTelemetry telemetry;
         telemetry.set_json(json);
@@ -55,9 +55,9 @@ public:
 };
 
 // A host connection end to end: what it answers to an id request, which hosts it announces to the
-// rest of the router and what it leaves behind when it goes away. The host is the real HostNG, in a
-// real worker thread, against a real database - only the socket is a stand-in.
-class HostNGTest : public RouterTestBase
+// rest of the router and what it leaves behind when it goes away. The host object is the real
+// one, in a real worker thread, against a real database - only the socket is a stand-in.
+class HostTest : public RouterTestBase
 {
 protected:
     void SetUp() override
@@ -79,7 +79,7 @@ protected:
 
     // Creates the host in the worker thread, runs |body| there and destroys it there. The channel
     // belongs to the host, so it goes away with it.
-    void withHost(const std::function<void(HostNG&, FakeTcpChannel*)>& body)
+    void withHost(const std::function<void(Host&, FakeTcpChannel*)>& body)
     {
         worker_->invoke([&]()
         {
@@ -89,10 +89,10 @@ protected:
             // authenticator collected.
             channel->setPeer(0, std::string(), proto::router::SESSION_TYPE_HOST, kVersion_3_0_0);
 
-            HostNG host(worker_->database(), channel, nullptr);
+            Host host(worker_->database(), channel, nullptr);
 
             announced_.clear();
-            QObject::connect(&host, &HostNG::sig_hostIdAssigned, &host,
+            QObject::connect(&host, &Host::sig_hostIdAssigned, &host,
                              [this](HostId host_id) { announced_.append(host_id); });
 
             body(host, channel);
@@ -153,9 +153,9 @@ protected:
 //--------------------------------------------------------------------------------------------------
 // A host nobody approved yet gets a temporary id and a key of its own, and nothing is written to
 // the database: the record appears only when an administrator approves it.
-TEST_F(HostNGTest, NewHostGetsATemporaryIdAndIsAnnounced)
+TEST_F(HostTest, NewHostGetsATemporaryIdAndIsAnnounced)
 {
-    withHost([this](HostNG& host, FakeTcpChannel* channel)
+    withHost([this](Host& host, FakeTcpChannel* channel)
     {
         host.start();
         channel->clearSent();
@@ -178,12 +178,12 @@ TEST_F(HostNGTest, NewHostGetsATemporaryIdAndIsAnnounced)
 
 //--------------------------------------------------------------------------------------------------
 // An approved host presents its key and gets the id that was issued to it.
-TEST_F(HostNGTest, ApprovedHostGetsItsPermanentIdAndIsAnnounced)
+TEST_F(HostTest, ApprovedHostGetsItsPermanentIdAndIsAnnounced)
 {
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
 
-    withHost([this, host_id](HostNG& host, FakeTcpChannel* channel)
+    withHost([this, host_id](Host& host, FakeTcpChannel* channel)
     {
         host.start();
         channel->clearSent();
@@ -204,12 +204,12 @@ TEST_F(HostNGTest, ApprovedHostGetsItsPermanentIdAndIsAnnounced)
 //--------------------------------------------------------------------------------------------------
 // An approved host has the telemetry it reports stored in its record, each report replacing the one
 // before. A report over the size bound is dropped.
-TEST_F(HostNGTest, TelemetryOfAnApprovedHostIsStored)
+TEST_F(HostTest, TelemetryOfAnApprovedHostIsStored)
 {
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
 
-    withHost([&](HostNG& host, FakeTcpChannel* channel)
+    withHost([&](Host& host, FakeTcpChannel* channel)
     {
         host.start();
 
@@ -218,8 +218,8 @@ TEST_F(HostNGTest, TelemetryOfAnApprovedHostIsStored)
         EXPECT_TRUE(hasTelemetry(host_id, kFirstTelemetry));
 
         const TimePoint later = Clock::now() + kTelemetryInterval;
-        HostNGTestPeer::readTelemetry(host, kSecondTelemetry, later);
-        HostNGTestPeer::readTelemetry(host, std::string(8192, 'x'), later + kTelemetryInterval);
+        HostTestPeer::readTelemetry(host, kSecondTelemetry, later);
+        HostTestPeer::readTelemetry(host, std::string(8192, 'x'), later + kTelemetryInterval);
     });
 
     EXPECT_TRUE(hasTelemetry(host_id, kSecondTelemetry));
@@ -227,25 +227,25 @@ TEST_F(HostNGTest, TelemetryOfAnApprovedHostIsStored)
 
 //--------------------------------------------------------------------------------------------------
 // A report that repeats the one already stored over the same connection is not written again.
-TEST_F(HostNGTest, RepeatedTelemetryIsNotWrittenAgain)
+TEST_F(HostTest, RepeatedTelemetryIsNotWrittenAgain)
 {
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
 
-    withHost([&](HostNG& host, FakeTcpChannel* channel)
+    withHost([&](Host& host, FakeTcpChannel* channel)
     {
         host.start();
         channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
 
         const TimePoint now = Clock::now();
-        HostNGTestPeer::readTelemetry(host, kFirstTelemetry, now);
+        HostTestPeer::readTelemetry(host, kFirstTelemetry, now);
 
         // A write would put the report back over the marker.
         ASSERT_TRUE(execRaw(QString("UPDATE hosts SET telemetry='marker' WHERE id=%1").arg(host_id)));
-        HostNGTestPeer::readTelemetry(host, kFirstTelemetry, now + kTelemetryInterval);
+        HostTestPeer::readTelemetry(host, kFirstTelemetry, now + kTelemetryInterval);
         EXPECT_TRUE(hasTelemetry(host_id, "marker"));
 
-        HostNGTestPeer::readTelemetry(host, kSecondTelemetry, now + 2 * kTelemetryInterval);
+        HostTestPeer::readTelemetry(host, kSecondTelemetry, now + 2 * kTelemetryInterval);
     });
 
     EXPECT_TRUE(hasTelemetry(host_id, kSecondTelemetry));
@@ -254,23 +254,23 @@ TEST_F(HostNGTest, RepeatedTelemetryIsNotWrittenAgain)
 //--------------------------------------------------------------------------------------------------
 // A report that comes sooner than the interval after the one accepted before it is dropped, so a
 // host cannot keep the router writing to the database.
-TEST_F(HostNGTest, TooFrequentTelemetryIsDropped)
+TEST_F(HostTest, TooFrequentTelemetryIsDropped)
 {
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
 
-    withHost([&](HostNG& host, FakeTcpChannel* channel)
+    withHost([&](Host& host, FakeTcpChannel* channel)
     {
         host.start();
         channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
 
         const TimePoint now = Clock::now();
-        HostNGTestPeer::readTelemetry(host, kFirstTelemetry, now);
+        HostTestPeer::readTelemetry(host, kFirstTelemetry, now);
 
-        HostNGTestPeer::readTelemetry(host, kSecondTelemetry, now + kTelemetryInterval - Seconds(1));
+        HostTestPeer::readTelemetry(host, kSecondTelemetry, now + kTelemetryInterval - Seconds(1));
         EXPECT_TRUE(hasTelemetry(host_id, kFirstTelemetry));
 
-        HostNGTestPeer::readTelemetry(host, kSecondTelemetry, now + kTelemetryInterval);
+        HostTestPeer::readTelemetry(host, kSecondTelemetry, now + kTelemetryInterval);
         EXPECT_TRUE(hasTelemetry(host_id, kSecondTelemetry));
     });
 }
@@ -279,22 +279,22 @@ TEST_F(HostNGTest, TooFrequentTelemetryIsDropped)
 // A repeat of the stored report does not hold the next one back. Saving the host settings sends a
 // report with the old values first and one with the new values right after it, and the second one
 // must not be dropped as too frequent.
-TEST_F(HostNGTest, RepeatedTelemetryDoesNotHoldTheNextOne)
+TEST_F(HostTest, RepeatedTelemetryDoesNotHoldTheNextOne)
 {
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
 
-    withHost([&](HostNG& host, FakeTcpChannel* channel)
+    withHost([&](Host& host, FakeTcpChannel* channel)
     {
         host.start();
         channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
 
         const TimePoint now = Clock::now();
-        HostNGTestPeer::readTelemetry(host, kFirstTelemetry, now);
+        HostTestPeer::readTelemetry(host, kFirstTelemetry, now);
 
         const TimePoint later = now + kTelemetryInterval;
-        HostNGTestPeer::readTelemetry(host, kFirstTelemetry, later);
-        HostNGTestPeer::readTelemetry(host, kSecondTelemetry, later + Seconds(1));
+        HostTestPeer::readTelemetry(host, kFirstTelemetry, later);
+        HostTestPeer::readTelemetry(host, kSecondTelemetry, later + Seconds(1));
         EXPECT_TRUE(hasTelemetry(host_id, kSecondTelemetry));
     });
 }
@@ -302,20 +302,20 @@ TEST_F(HostNGTest, RepeatedTelemetryDoesNotHoldTheNextOne)
 //--------------------------------------------------------------------------------------------------
 // A reconnected host that reports what is already in the database causes no write. The report does
 // not hold the interval either, so a changed report right after it is taken.
-TEST_F(HostNGTest, StoredTelemetryIsNotWrittenAgainOnReconnect)
+TEST_F(HostTest, StoredTelemetryIsNotWrittenAgainOnReconnect)
 {
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
     ASSERT_TRUE(db_.updateHostTelemetry(host_id, kFirstTelemetry));
 
-    withHost([&](HostNG& host, FakeTcpChannel* channel)
+    withHost([&](Host& host, FakeTcpChannel* channel)
     {
         host.start();
         channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
 
         const TimePoint now = Clock::now();
-        HostNGTestPeer::readTelemetry(host, kFirstTelemetry, now);
-        HostNGTestPeer::readTelemetry(host, kSecondTelemetry, now + Seconds(1));
+        HostTestPeer::readTelemetry(host, kFirstTelemetry, now);
+        HostTestPeer::readTelemetry(host, kSecondTelemetry, now + Seconds(1));
         EXPECT_TRUE(hasTelemetry(host_id, kSecondTelemetry));
     });
 }
@@ -325,13 +325,13 @@ TEST_F(HostNGTest, StoredTelemetryIsNotWrittenAgainOnReconnect)
 // The command goes out before the id is reported to the worker, which is what keeps the host out of
 // the reachable ones - the record is gone from every list, so nothing else would stop a client that
 // still knows the id from asking for a connection offer to a host the administrator removed.
-TEST_F(HostNGTest, HostWithPendingRemovalIsToldBeforeItsIdIsReported)
+TEST_F(HostTest, HostWithPendingRemovalIsToldBeforeItsIdIsReported)
 {
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
     ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
 
-    withHost([this, host_id](HostNG& host, FakeTcpChannel* channel)
+    withHost([this, host_id](Host& host, FakeTcpChannel* channel)
     {
         host.start();
         channel->clearSent();
@@ -361,14 +361,14 @@ TEST_F(HostNGTest, HostWithPendingRemovalIsToldBeforeItsIdIsReported)
 //--------------------------------------------------------------------------------------------------
 // The removal is finished when the connection goes away: the host was told, and whether it acted on
 // the command or simply dropped, the id will not come back.
-TEST_F(HostNGTest, RemovalIsFinalizedWhenTheHostGoesAway)
+TEST_F(HostTest, RemovalIsFinalizedWhenTheHostGoesAway)
 {
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
     ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
     ASSERT_TRUE(hasPendingRemoval(host_id));
 
-    withHost([](HostNG& host, FakeTcpChannel* channel)
+    withHost([](Host& host, FakeTcpChannel* channel)
     {
         host.start();
         channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
@@ -381,12 +381,12 @@ TEST_F(HostNGTest, RemovalIsFinalizedWhenTheHostGoesAway)
 //--------------------------------------------------------------------------------------------------
 // A host asks for its id once per connection. A repeat is ignored: an untrusted host must not be
 // able to swap the id it was already given.
-TEST_F(HostNGTest, RepeatedIdRequestIsIgnored)
+TEST_F(HostTest, RepeatedIdRequestIsIgnored)
 {
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
 
-    withHost([this, host_id](HostNG& host, FakeTcpChannel* channel)
+    withHost([this, host_id](Host& host, FakeTcpChannel* channel)
     {
         host.start();
         channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
@@ -403,12 +403,12 @@ TEST_F(HostNGTest, RepeatedIdRequestIsIgnored)
 //--------------------------------------------------------------------------------------------------
 // The hardware id is what the router stores to recognize the machine later. A host that reports
 // none is not served at all.
-TEST_F(HostNGTest, HostWithoutAHardwareIdIsDisconnected)
+TEST_F(HostTest, HostWithoutAHardwareIdIsDisconnected)
 {
-    withHost([](HostNG& host, FakeTcpChannel* channel)
+    withHost([](Host& host, FakeTcpChannel* channel)
     {
         int finished = 0;
-        QObject::connect(&host, &HostNG::sig_finished, &host,
+        QObject::connect(&host, &Host::sig_finished, &host,
                          [&finished](qint64) { ++finished; });
 
         host.start();
@@ -424,9 +424,9 @@ TEST_F(HostNGTest, HostWithoutAHardwareIdIsDisconnected)
 //--------------------------------------------------------------------------------------------------
 // A key that belongs to no host is answered with "not found" instead of an id, and the host is not
 // announced.
-TEST_F(HostNGTest, UnknownKeyIsRefused)
+TEST_F(HostTest, UnknownKeyIsRefused)
 {
-    withHost([this](HostNG& host, FakeTcpChannel* channel)
+    withHost([this](Host& host, FakeTcpChannel* channel)
     {
         host.start();
         channel->clearSent();

@@ -18,26 +18,6 @@
 
 #include "common/desktop_session_constants.h"
 
-// Deprectaed.
-const char kSelectScreenExtension[] = "select_screen";
-const char kPreferredSizeExtension[] = "preferred_size";
-const char kPowerControlExtension[] = "power_control";
-const char kTaskManagerExtension[] = "task_manager";
-const char kVideoPauseExtension[] = "video_pause";
-const char kAudioPauseExtension[] = "audio_pause";
-const char kScreenTypeExtension[] = "screen_type";
-
-// Deprectaed.
-const char kFlagDisablePasteAsKeystrokes[] = "disable_paste_as_keystrokes";
-const char kFlagDisableAudio[] = "disable_audio";
-const char kFlagDisableClipboard[] = "disable_clipboard";
-const char kFlagDisableCursorShape[] = "disable_cursor_shape";
-const char kFlagDisableCursorPosition[] = "disable_cursor_position";
-const char kFlagDisableDesktopEffects[] = "disable_desktop_effects";
-const char kFlagDisableDesktopWallpaper[] = "disable_desktop_wallpaper";
-const char kFlagDisableLockAtDisconnect[] = "disable_lock_at_disconnect";
-const char kFlagDisableBlockInput[] = "disable_block_input";
-
 const char kFlagVideoVP8[] = "vp8";
 const char kFlagVideoVP9[] = "vp9";
 const char kFlagAudioOpus[] = "opus";

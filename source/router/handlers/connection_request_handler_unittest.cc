@@ -35,7 +35,6 @@ protected:
         SharedKeyPool::instance().clear();
 
         client_.host_id = kHostId;
-        client_.version = kVersion_3_0_0;
         client_.address = "203.0.113.5";
         client_.user_name = "operator";
     }
@@ -55,7 +54,6 @@ protected:
     {
         proto::router::RelayKey key;
         key.set_key_id(key_id);
-        key.set_encryption(proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
 
         SharedKeyPool::instance().add(relay_session_id, "relay.example", 8080, key);
     }
@@ -148,48 +146,14 @@ TEST_F(ConnectionRequestHandlerTest, EmptyKeyPoolIsReported)
 }
 
 //--------------------------------------------------------------------------------------------------
-// AES is used only when both ends understand it. A pair where either side is older falls back to
-// the cipher the legacy relay code speaks - otherwise the session would fail after the handshake.
-TEST_F(ConnectionRequestHandlerTest, CipherIsTheBestBothPeersUnderstand)
+// The relay announces its keys without a cipher, and the offer always sets AES.
+TEST_F(ConnectionRequestHandlerTest, CipherIsAes)
 {
-    const QVersionNumber legacy(2, 7, 0);
-
     addHost(kVersion_3_0_0);
     addRelayKey(42, 7);
-    client_.version = kVersion_3_0_0;
+
     EXPECT_EQ(build().offer.relay().key().encryption(),
               proto::router::RelayKey::ENCRYPTION_AES256_GCM);
-
-    SharedHosts::instance().clear();
-    addHost(legacy);
-    addRelayKey(42, 8);
-    client_.version = kVersion_3_0_0;
-    EXPECT_EQ(build().offer.relay().key().encryption(),
-              proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
-
-    SharedHosts::instance().clear();
-    addHost(kVersion_3_0_0);
-    addRelayKey(42, 9);
-    client_.version = legacy;
-    EXPECT_EQ(build().offer.relay().key().encryption(),
-              proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The client is told upfront whether it is about to talk to an old host, so it can speak the
-// protocol that host understands.
-TEST_F(ConnectionRequestHandlerTest, LegacyHostIsAnnouncedToTheClient)
-{
-    addHost(QVersionNumber(2, 7, 0));
-    addRelayKey(42, 7);
-
-    EXPECT_TRUE(build().offer.peer_info().is_legacy());
-
-    SharedHosts::instance().clear();
-    addHost(kVersion_3_0_0);
-    addRelayKey(42, 8);
-
-    EXPECT_FALSE(build().offer.peer_info().is_legacy());
 }
 
 //--------------------------------------------------------------------------------------------------

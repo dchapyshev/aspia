@@ -797,11 +797,6 @@ void DesktopWindow::onStatusChanged(NetworkWorker::Status status, const QVariant
             setStatusText(tr("The host version is newer than the client. Please update the application."));
             break;
 
-        case NetworkWorker::Status::LEGACY_HOST:
-            setStatusText(tr("Legacy hosts are not supported."));
-            connected_ = false;
-            break;
-
         default:
             break;
     }

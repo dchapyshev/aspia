@@ -16,8 +16,6 @@
 #ifndef ROUTER_HANDLERS_CONNECTION_REQUEST_HANDLER_H
 #define ROUTER_HANDLERS_CONNECTION_REQUEST_HANDLER_H
 
-#include <QVersionNumber>
-
 #include <string>
 
 #include "base/peer/host_id.h"
@@ -30,14 +28,13 @@ class SharedKeyPool;
 // same relay - the whole point of the router. Unlike the database-backed handlers, everything the
 // answer depends on lives in the two registries the workers keep (which hosts are online, which
 // one-time relay keys are available) and in what the authenticated channel knows about the client,
-// so the rules - what a client is told when the host is offline or the pool is empty, which cipher
-// the two peers end up with, and what identity travels to the relay - hold without a socket.
+// so the rules - what a client is told when the host is offline or the pool is empty and what
+// identity travels to the relay - hold without a socket.
 
 // The client asking for the connection, as its authenticated channel describes it.
 struct ConnectionRequestClient
 {
     HostId host_id = kInvalidHostId; // The host it wants to reach.
-    QVersionNumber version;
     std::string address;
     std::string user_name;
 

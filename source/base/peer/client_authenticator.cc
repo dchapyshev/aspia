@@ -73,7 +73,7 @@ bool verifyNg(std::string_view N, std::string_view g)
 
 //--------------------------------------------------------------------------------------------------
 ClientAuthenticator::ClientAuthenticator(QObject* parent)
-    : Authenticator(Authenticator::Protocol::NG, parent)
+    : Authenticator(parent)
 {
     CLOG(TRACE) << "Ctor";
 }
@@ -262,15 +262,6 @@ void ClientAuthenticator::sendClientHello()
 
         // No further use of the keypair.
         key_pair_ = KeyPair();
-    }
-
-    // Remove this after support for versions below 3.0.0 ends.
-    if (kMinimumSupportedVersion < kVersion_3_0_0)
-    {
-        proto::peer::Version* version = client_hello.mutable_version();
-        version->set_major(ASPIA_VERSION_MAJOR);
-        version->set_minor(ASPIA_VERSION_MINOR);
-        version->set_patch(ASPIA_VERSION_PATCH);
     }
 
     QByteArray message = serialize(client_hello);

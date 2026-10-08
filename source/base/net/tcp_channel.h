@@ -131,7 +131,6 @@ signals:
 protected:
     LOG_DECLARE_CONTEXT(TcpChannel);
 
-    friend class TcpServerLegacy;
     friend class TcpServer;
     friend class RelayPeer;
 

@@ -40,7 +40,7 @@ constexpr size_t kIvSize = 12;
 
 //--------------------------------------------------------------------------------------------------
 ServerAuthenticator::ServerAuthenticator(QObject* parent)
-    : Authenticator(Authenticator::Protocol::NG, parent)
+    : Authenticator(parent)
 {
     CLOG(TRACE) << "Ctor";
 }

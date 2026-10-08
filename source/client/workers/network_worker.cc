@@ -21,11 +21,9 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/version_constants.h"
-#include "base/net/tcp_channel_legacy.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/net/udp_channel.h"
 #include "base/peer/client_authenticator.h"
-#include "base/peer/client_authenticator_legacy.h"
 #include "base/peer/relay_peer.h"
 #include "client/database.h"
 #include "client/udp_attempt.h"
@@ -206,7 +204,7 @@ void NetworkWorker::onTimer(TimePoint now)
     receive_rate_last_total_ = total;
 
     // An idle interval carries no information about the path capacity.
-    if (bytes <= 0 || interval <= MilliSeconds::zero() || !tcp_channel_ || is_legacy_mode_)
+    if (bytes <= 0 || interval <= MilliSeconds::zero() || !tcp_channel_)
         return;
 
     proto::peer::ClientToHost message;
@@ -227,26 +225,6 @@ void NetworkWorker::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void NetworkWorker::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 {
-    clearAttempts();
-
-    // Remove this after support for versions below 3.0.0 ends.
-    if (kMinimumSupportedVersion < kVersion_3_0_0)
-    {
-        if (error_code == TcpChannel::ErrorCode::REMOTE_HOST_CLOSED && !is_legacy_mode_ &&
-            !session_state_->isConnectionByHostId() && !tcp_channel_->isAuthenticated())
-        {
-            LOG(INFO) << "Host may be out of date. Trying to connect in legacy mode";
-            emit sig_statusChanged(Status::LEGACY_HOST);
-
-            tcp_channel_->disconnect();
-            tcp_channel_.reset();
-
-            is_legacy_mode_ = true;
-            startConnection();
-            return;
-        }
-    }
-
     connectionLost(error_code);
 }
 
@@ -465,28 +443,9 @@ void NetworkWorker::startConnection()
             emit sig_statusChanged(Status::STARTED);
         }
 
-        // The connection offer tells which protocol the host speaks; RelayPeer picks the channel
-        // by it, and the authenticator must match the channel.
-        Authenticator* relay_authenticator = nullptr;
-
-        // Remove this after support for versions below 3.0.0 ends.
-        if (kMinimumSupportedVersion < kVersion_3_0_0 && offer.peer_info().is_legacy())
-        {
-            is_legacy_mode_ = true;
-            emit sig_statusChanged(Status::LEGACY_HOST);
-
-            auto* auth = new ClientAuthenticatorLegacy();
-            setupAuthenticator(auth);
-            relay_authenticator = auth;
-        }
-        else
-        {
-            auto* auth = new ClientAuthenticator();
-            setupAuthenticator(auth);
-            relay_authenticator = auth;
-        }
-
-        relay_peer_ = new RelayPeer(relay_authenticator, this);
+        auto* authenticator = new ClientAuthenticator();
+        setupAuthenticator(authenticator);
+        relay_peer_ = new RelayPeer(authenticator, this);
 
         connect(relay_peer_, &RelayPeer::sig_connectionError,
                 this, &NetworkWorker::onRelayConnectionError);
@@ -505,28 +464,9 @@ void NetworkWorker::startConnection()
             emit sig_statusChanged(Status::STARTED);
         }
 
-        // Remove this after support for versions below 3.0.0 ends.
-        if (kMinimumSupportedVersion < kVersion_3_0_0)
-        {
-            if (is_legacy_mode_)
-            {
-                auto* auth = new ClientAuthenticatorLegacy();
-                setupAuthenticator(auth);
-                tcp_channel_ = new TcpChannelLegacy(auth, this);
-            }
-            else
-            {
-                auto* auth = new ClientAuthenticator();
-                setupAuthenticator(auth);
-                tcp_channel_ = new TcpChannelNG(auth, this);
-            }
-        }
-        else
-        {
-            auto* auth = new ClientAuthenticator();
-            setupAuthenticator(auth);
-            tcp_channel_ = new TcpChannelNG(auth, this);
-        }
+        auto* authenticator = new ClientAuthenticator();
+        setupAuthenticator(authenticator);
+        tcp_channel_ = new TcpChannelNG(authenticator, this);
 
         connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &NetworkWorker::onTcpConnected);
         connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &NetworkWorker::onTcpErrorOccurred);

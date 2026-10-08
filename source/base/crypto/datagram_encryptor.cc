@@ -46,8 +46,7 @@ DatagramEncryptor::~DatagramEncryptor() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<DatagramEncryptor> DatagramEncryptor::createForAes256Gcm(
-    const SecureByteArray& key, const QByteArray& iv)
+std::unique_ptr<DatagramEncryptor> DatagramEncryptor::create(const SecureByteArray& key, const QByteArray& iv)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
@@ -55,7 +54,7 @@ std::unique_ptr<DatagramEncryptor> DatagramEncryptor::createForAes256Gcm(
         return nullptr;
     }
 
-    EVP_CIPHER_CTX_ptr ctx = createCipher(CipherType::AES256_GCM, CipherMode::ENCRYPT, key, kIVSize);
+    EVP_CIPHER_CTX_ptr ctx = createCipher(CipherMode::ENCRYPT, key, kIVSize);
     if (!ctx)
     {
         LOG(ERROR) << "createCipher failed";

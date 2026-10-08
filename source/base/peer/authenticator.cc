@@ -124,11 +124,11 @@ bool isValidText(std::string_view text, size_t max_length, bool (*is_valid_char)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Authenticator::Authenticator(Protocol protocol, QObject* parent)
+Authenticator::Authenticator(QObject* parent)
     : QObject(parent),
       encryption_(proto::key_exchange::ENCRYPTION_UNKNOWN),
       identify_(proto::key_exchange::IDENTIFY_SRP),
-      transcript_hash_(protocol == Protocol::NG ? GenericHash::SHA256 : GenericHash::BLAKE2s256),
+      transcript_hash_(GenericHash::SHA256),
       timer_(new QTimer(this))
 {
     CLOG(TRACE) << "Ctor";
@@ -173,13 +173,9 @@ SecureByteArray Authenticator::sessionKey(Direction direction) const
     if (!key_ready_)
         return SecureByteArray();
 
-    QByteArray label = keyLabel(direction);
-    if (label.isEmpty())
-        return SecureByteArray(transcript_hash_.result());
-
     GenericHash hash(transcript_hash_.type());
     hash.addData(transcript_hash_.result());
-    hash.addData(label);
+    hash.addData(keyLabel(direction));
 
     return SecureByteArray(hash.result());
 }

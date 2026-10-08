@@ -116,23 +116,6 @@ TEST(SessionKeyTest, SessionKeyIsBoundToBothPublicKeys)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The legacy variant hashes the bare shared secret, so both peers arrive at the same key.
-TEST(SessionKeyTest, LegacySessionKeyIsSymmetric)
-{
-    SessionKey first = SessionKey::create();
-    SessionKey second = SessionKey::create();
-
-    ASSERT_TRUE(first.isValid());
-    ASSERT_TRUE(second.isValid());
-
-    const SecureByteArray first_key = first.legacySessionKey(publicKeyOf(second));
-    const SecureByteArray second_key = second.legacySessionKey(publicKeyOf(first));
-
-    EXPECT_FALSE(first_key.isEmpty());
-    EXPECT_EQ(first_key, second_key);
-}
-
-//--------------------------------------------------------------------------------------------------
 TEST(SessionKeyTest, DifferentPeersGetDifferentKeys)
 {
     SessionKey local = SessionKey::create();
@@ -155,5 +138,4 @@ TEST(SessionKeyTest, MalformedPeerKeyYieldsEmptySessionKey)
 
     EXPECT_TRUE(local.sessionKey(std::string()).isEmpty());
     EXPECT_TRUE(local.sessionKey(std::string("not a public key")).isEmpty());
-    EXPECT_TRUE(local.legacySessionKey(std::string("not a public key")).isEmpty());
 }

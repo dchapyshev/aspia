@@ -69,7 +69,7 @@ protected:
     bool writeContent(const proto::storage::CredentialFile::Content& content)
     {
         const QByteArray salt = Random::byteArray(32);
-        DataCryptor cryptor(CipherType::AES256_GCM,
+        DataCryptor cryptor(
             SecureByteArray(PasswordHash::hash(PasswordHash::ARGON2ID, password(), salt)));
 
         const std::optional<QByteArray> verifier = cryptor.encrypt(Random::byteArray(32));

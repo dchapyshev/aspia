@@ -94,7 +94,7 @@ CredentialFile::Result CredentialFile::exportToFile(
     }
 
     const QByteArray salt = Random::byteArray(kSaltSize);
-    DataCryptor cryptor(CipherType::AES256_GCM, fileKey(password, salt));
+    DataCryptor cryptor(fileKey(password, salt));
 
     const std::optional<QByteArray> verifier = cryptor.encrypt(Random::byteArray(kVerifierPayloadSize));
 
@@ -171,7 +171,7 @@ CredentialFile::Result CredentialFile::importFromFile(
     if (file_message.version() != kFormatVersion)
         return Result::UNSUPPORTED_VERSION;
 
-    DataCryptor cryptor(CipherType::AES256_GCM, fileKey(password, salt));
+    DataCryptor cryptor(fileKey(password, salt));
 
     if (!cryptor.decrypt(QByteArray::fromStdString(file_message.verifier())).has_value())
         return Result::WRONG_PASSWORD;

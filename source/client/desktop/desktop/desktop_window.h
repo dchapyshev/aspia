@@ -42,12 +42,6 @@ namespace proto::audio {
 class Packet;
 } // namespace proto::audio
 
-namespace proto::legacy {
-class Capabilities;
-class ClipboardEvent;
-class Extension;
-} // namespace proto::legacy
-
 namespace proto::video {
 class Packet;
 } // namespace proto::video
@@ -103,7 +97,6 @@ private slots:
     void onClipboardMessage(const QByteArray& buffer);
     void onFileMessage(const QByteArray& buffer);
     void onToolsMessage(const QByteArray& buffer);
-    void onLegacyMessage(const QByteArray& buffer);
 
     // Video worker feedback.
     void onFrameError(proto::video::ErrorCode error_code);
@@ -141,10 +134,7 @@ private:
     void sendSessionListRequest();
     void onDesktopConfigChanged(const proto::control::Config& config);
     void readCapabilities(const proto::control::Capabilities& capabilities);
-    void readLegacyCapabilities(const proto::legacy::Capabilities& capabilities);
-    void readExtension(const proto::legacy::Extension& extension);
     void readClipboardEvent(const proto::clipboard::Event& event);
-    void readLegacyClipboardEvent(const proto::legacy::ClipboardEvent& clipboard_event);
     void readCredentialsRequest(const proto::control::CredentialsRequest& credentials_request);
     void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
     void onScreenListChanged(const proto::screen::ScreenList& screen_list);

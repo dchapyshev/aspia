@@ -17,7 +17,6 @@
 #
 
 list(APPEND SOURCE_PROTO
-    address_book.proto
     chat.proto
     desktop_audio.proto
     desktop_channel.proto
@@ -27,7 +26,6 @@ list(APPEND SOURCE_PROTO
     desktop_file.proto
     desktop_input.proto
     desktop_internal.proto
-    desktop_legacy.proto
     desktop_power.proto
     desktop_screen.proto
     desktop_tools.proto
@@ -40,7 +38,6 @@ list(APPEND SOURCE_PROTO
     router.proto
     router_admin.proto
     router_client.proto
-    router_legacy_host.proto
     router_manager.proto
     router_host.proto
     router_peer.proto

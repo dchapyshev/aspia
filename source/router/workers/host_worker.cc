@@ -25,13 +25,10 @@
 #include "base/net/net_utils.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
-#include "base/net/tcp_server_legacy.h"
 #include "proto/router.h"
 #include "proto/router_constants.h"
-#include "proto/router_legacy_host.h"
 #include "router/database.h"
-#include "router/host_ng.h"
-#include "router/host_legacy.h"
+#include "router/host.h"
 #include "router/settings.h"
 #include "router/shared_hosts.h"
 #include "router/workers/client_worker.h"
@@ -107,21 +104,7 @@ void HostWorker::sendConnectionOffer(HostId host_id, const proto::router::Connec
             return;
         }
 
-        if (HostNG* host_ng = dynamic_cast<HostNG*>(host))
-        {
-            host_ng->sendConnectionOffer(offer);
-            return;
-        }
-
-        HostLegacy* host_legacy = static_cast<HostLegacy*>(host);
-
-        proto::router::legacy::ConnectionOffer legacy_offer;
-        legacy_offer.set_peer_role(proto::router::legacy::ConnectionOffer::HOST);
-        legacy_offer.set_error_code(proto::router::legacy::ConnectionOffer::SUCCESS);
-        legacy_offer.mutable_relay()->CopyFrom(offer.relay());
-        legacy_offer.mutable_host_data()->set_host_id(host_id);
-
-        host_legacy->sendConnectionOffer(legacy_offer);
+        host->sendConnectionOffer(offer);
     });
 }
 
@@ -151,13 +134,6 @@ void HostWorker::onPrepare()
         return;
     }
 
-    quint16 legacy_port = settings.legacyHostPort();
-    if (!legacy_port)
-    {
-        LOG(ERROR) << "Invalid legacy port specified in configuration file";
-        return;
-    }
-
     QStringList host_white_list = settings.hostWhiteList();
     if (host_white_list.isEmpty())
         LOG(INFO) << "Connections from all hosts will be allowed";
@@ -179,20 +155,8 @@ void HostWorker::onPrepare()
     server_->setMaxConnectionsPerMinute(kMaxConnectionsPerMinute);
     server_->setWhiteList(host_white_list);
 
-    legacy_server_ = new TcpServerLegacy();
-    connect(legacy_server_, &TcpServerLegacy::sig_newConnection,
-            this, &HostWorker::onNewLegacyHostConnection);
-
-    legacy_server_->setPrivateKey(private_key);
-    legacy_server_->setAnonymousAccess(
-        ServerAuthenticatorLegacy::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_HOST);
-    legacy_server_->setMaxPendingConnections(kMaxPendingConnections);
-    legacy_server_->setMaxConnectionsPerMinute(kMaxConnectionsPerMinute);
-    legacy_server_->setWhiteList(host_white_list);
-
     listen_interface_ = listen_interface;
     listen_port_ = port;
-    legacy_listen_port_ = legacy_port;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -205,14 +169,6 @@ void HostWorker::onStart()
     {
         LOG(ERROR) << "Unable to start host listener";
         server_.reset();
-        legacy_server_.reset();
-        return;
-    }
-
-    if (!legacy_server_->start(legacy_listen_port_, listen_interface_))
-    {
-        LOG(ERROR) << "Unable to start legacy host listener";
-        legacy_server_.reset();
     }
 }
 
@@ -220,7 +176,6 @@ void HostWorker::onStart()
 void HostWorker::onStop()
 {
     server_.reset();
-    legacy_server_.reset();
 
     for (auto* host : std::as_const(hosts_))
     {
@@ -243,15 +198,7 @@ void HostWorker::onTimer(TimePoint now)
         if (now - host->startTime() < kIdentifyTimeout)
             continue;
 
-        if (HostNG* host_ng = dynamic_cast<HostNG*>(host))
-        {
-            if (host_ng->hostId() == kInvalidHostId)
-                silent.emplace_back(host);
-            continue;
-        }
-
-        HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
-        if (host_legacy && host_legacy->hostIdList().empty())
+        if (host->hostId() == kInvalidHostId)
             silent.emplace_back(host);
     }
 
@@ -279,28 +226,9 @@ void HostWorker::onNewHostConnection()
         TcpChannel* channel = server_->nextReadyConnection();
         LOG(INFO) << "New host:" << channel->peerAddress();
 
-        HostNG* host = new HostNG(Database::instance(), channel, this);
+        Host* host = new Host(Database::instance(), channel, this);
         hosts_.emplace_back(host);
-        connect(host, &HostNG::sig_hostIdAssigned, this, &HostWorker::onHostIdAssigned);
-        connect(host, &Host::sig_finished, this, &HostWorker::onHostFinished);
-        connect(host, &Host::sig_notifyChanged, this, &HostWorker::sig_notify);
-        host->start();
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostWorker::onNewLegacyHostConnection()
-{
-    CHECK(legacy_server_);
-    while (legacy_server_->hasReadyConnections())
-    {
-        TcpChannel* channel = legacy_server_->nextReadyConnection();
-        LOG(INFO) << "New legacy host:" << channel->peerAddress();
-
-        HostLegacy* host = new HostLegacy(Database::instance(), channel, this);
-        hosts_.emplace_back(host);
-        connect(host, &HostLegacy::sig_hostIdAssigned, this, &HostWorker::onHostIdAssigned);
-        connect(host, &HostLegacy::sig_hostIdRemoved, this, &HostWorker::onHostIdRemoved);
+        connect(host, &Host::sig_hostIdAssigned, this, &HostWorker::onHostIdAssigned);
         connect(host, &Host::sig_finished, this, &HostWorker::onHostFinished);
         connect(host, &Host::sig_notifyChanged, this, &HostWorker::sig_notify);
         host->start();
@@ -338,42 +266,19 @@ void HostWorker::onHostIdAssigned(HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostWorker::onHostIdRemoved(HostId host_id)
-{
-    // Only the holder of the id gives it up this way, so the entry is its own.
-    if (hostByHostId(host_id) == sender())
-        hosts_by_id_.erase(host_id);
-
-    publishHostState(host_id);
-}
-
-//--------------------------------------------------------------------------------------------------
 void HostWorker::removeHostSession(Host* host)
 {
+    const HostId host_id = host->hostId();
+
     quint32 flags = ClientWorker::NOTIFY_HOSTS;
-    std::vector<HostId> host_ids;
+    if (isTempHostId(host_id))
+        flags |= ClientWorker::NOTIFY_TEMP_HOSTS;
 
-    if (HostNG* host_ng = dynamic_cast<HostNG*>(host))
-    {
-        if (host_ng->hostId() != kInvalidHostId)
-            host_ids.emplace_back(host_ng->hostId());
+    host->stop();
+    host->deleteLater();
+    std::erase(hosts_, host);
 
-        if (isTempHostId(host_ng->hostId()))
-            flags |= ClientWorker::NOTIFY_TEMP_HOSTS;
-    }
-    else if (HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host))
-    {
-        host_ids = host_legacy->hostIdList();
-    }
-
-    if (host)
-    {
-        host->stop();
-        host->deleteLater();
-        std::erase(hosts_, host);
-    }
-
-    for (HostId host_id : std::as_const(host_ids))
+    if (host_id != kInvalidHostId)
     {
         // The id may already be held by the newcomer that displaced this host. Only the own
         // entries go away, and the publication below then keeps the newcomer announced.
@@ -401,8 +306,7 @@ void HostWorker::publishHostState(HostId host_id)
     // A host that was told to remove itself is not announced, whatever it does with the command.
     // An announced host is one a client may be offered a connection to, and its record is already
     // on its way out of the database.
-    HostNG* host_ng = dynamic_cast<HostNG*>(host);
-    if (host_ng && host_ng->isRemoveCommandSent())
+    if (host && host->isRemoveCommandSent())
         host = nullptr;
 
     if (host)
@@ -423,18 +327,17 @@ proto::router::TempHostList HostWorker::doTempHostList(bool with_address, qint64
         return temp_host_list;
     }
 
-    std::vector<HostNG*> temp_hosts;
+    std::vector<Host*> temp_hosts;
     for (Host* host : std::as_const(hosts_))
     {
-        HostNG* host_ng = dynamic_cast<HostNG*>(host);
-        if (host_ng && isTempHostId(host_ng->hostId()))
-            temp_hosts.emplace_back(host_ng);
+        if (isTempHostId(host->hostId()))
+            temp_hosts.emplace_back(host);
     }
 
     // The connections are kept in the order they arrived. The page has to name the same records
     // every time it is asked for, so the order is fixed here.
     std::sort(temp_hosts.begin(), temp_hosts.end(),
-              [](const HostNG* a, const HostNG* b) { return a->hostId() < b->hostId(); });
+              [](const Host* a, const Host* b) { return a->hostId() < b->hostId(); });
 
     temp_host_list.set_error_code(proto::router::kErrorOk);
     temp_host_list.set_total_count(static_cast<qint64>(temp_hosts.size()));
@@ -447,19 +350,19 @@ proto::router::TempHostList HostWorker::doTempHostList(bool with_address, qint64
 
     for (size_t i = begin; i < end; ++i)
     {
-        HostNG* host_ng = temp_hosts[i];
+        Host* host = temp_hosts[i];
 
         proto::router::TempHost* temp_host = temp_host_list.add_host();
-        temp_host->set_temp_id(host_ng->hostId());
-        temp_host->set_computer_name(host_ng->computerName());
-        temp_host->set_version(host_ng->version().toString().toStdString());
-        temp_host->set_os_name(host_ng->osName());
-        temp_host->set_portable(host_ng->isPortable());
+        temp_host->set_temp_id(host->hostId());
+        temp_host->set_computer_name(host->computerName());
+        temp_host->set_version(host->version().toString().toStdString());
+        temp_host->set_os_name(host->osName());
+        temp_host->set_portable(host->isPortable());
         temp_host->set_connect_time(
-            wall_now - DurationCast<Seconds>(monotonic_now - host_ng->startTime()).count());
+            wall_now - DurationCast<Seconds>(monotonic_now - host->startTime()).count());
 
         if (with_address)
-            temp_host->set_address(host_ng->address());
+            temp_host->set_address(host->address());
     }
 
     return temp_host_list;
@@ -503,35 +406,19 @@ HostWorker::RemoveHostResult HostWorker::doRemoveHost(HostId host_id)
     }
 
     // The hosts row is now in hosts_remove; if the host is online send it the remove command and
-    // let HostNG finalize the hosts_remove row on disconnect. Legacy hosts have no router->host
-    // remove command, so remove the id from the live legacy host and finalize the pending row
-    // immediately. Offline legacy hosts are handled on the next HostIdRequest.
+    // let Host finalize the hosts_remove row on disconnect.
     Host* host = hostByHostId(host_id);
     result.error_code = proto::router::kErrorOk;
     result.scheduled = true;
     result.online = host != nullptr;
 
-    if (HostNG* host_ng = dynamic_cast<HostNG*>(host))
+    if (host)
     {
-        host_ng->sendRemoveCommand();
+        host->sendRemoveCommand();
 
         // The connection lives on until the host carries the command out, and an announced host
         // is one a client may be offered a connection to.
         publishHostState(host_id);
-    }
-    else if (HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host))
-    {
-        if (host_legacy->removeHostId(host_id))
-        {
-            if (!database.finalizeHostRemoval(host_id))
-            {
-                LOG(ERROR) << "Failed to finalize removal for legacy host_id:" << host_id;
-                result.error_code = proto::router::kErrorInternalError;
-            }
-
-            if (host_legacy->hostIdList().empty())
-                removeHostSession(host_legacy);
-        }
     }
 
     emit sig_notify(ClientWorker::NOTIFY_HOSTS);
@@ -541,7 +428,7 @@ HostWorker::RemoveHostResult HostWorker::doRemoveHost(HostId host_id)
 //--------------------------------------------------------------------------------------------------
 bool HostWorker::doUpdateHost(HostId host_id)
 {
-    HostNG* host = dynamic_cast<HostNG*>(hostByHostId(host_id));
+    Host* host = hostByHostId(host_id);
     if (!host)
         return false;
 
@@ -558,7 +445,7 @@ std::string_view HostWorker::doApproveHost(HostId host_id)
         return proto::router::kErrorInvalidEntryId;
     }
 
-    HostNG* host = dynamic_cast<HostNG*>(hostByHostId(host_id));
+    Host* host = hostByHostId(host_id);
     if (!host)
         return proto::router::kErrorInvalidEntryId;
 

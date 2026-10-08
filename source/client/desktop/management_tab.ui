@@ -398,15 +398,6 @@
     <string>F5</string>
    </property>
   </action>
-  <action name="action_import_old_book">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/import.svg</normaloff>:/img/import.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Import Old Address Book...</string>
-   </property>
-  </action>
   <action name="action_export_book">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">

@@ -39,11 +39,8 @@ constexpr quint64 kRatchetInterval = 256;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-StreamEncryptor::StreamEncryptor(CipherType type, EVP_CIPHER_CTX_ptr ctx,
-    const SecureByteArray& key, const QByteArray& iv, bool ratchet)
-    : type_(type),
-      ratchet_(ratchet),
-      ctx_(std::move(ctx)),
+StreamEncryptor::StreamEncryptor(EVP_CIPHER_CTX_ptr ctx, const SecureByteArray& key, const QByteArray& iv)
+    : ctx_(std::move(ctx)),
       key_(key),
       iv_(iv)
 {
@@ -53,8 +50,7 @@ StreamEncryptor::StreamEncryptor(CipherType type, EVP_CIPHER_CTX_ptr ctx,
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<StreamEncryptor> StreamEncryptor::createForAes256Gcm(
-    const SecureByteArray& key, const QByteArray& iv, bool ratchet)
+std::unique_ptr<StreamEncryptor> StreamEncryptor::create(const SecureByteArray& key, const QByteArray& iv)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
@@ -62,37 +58,14 @@ std::unique_ptr<StreamEncryptor> StreamEncryptor::createForAes256Gcm(
         return nullptr;
     }
 
-    EVP_CIPHER_CTX_ptr ctx = createCipher(CipherType::AES256_GCM, CipherMode::ENCRYPT, key, kIVSize);
+    EVP_CIPHER_CTX_ptr ctx = createCipher(CipherMode::ENCRYPT, key, kIVSize);
     if (!ctx)
     {
         LOG(ERROR) << "createCipher failed";
         return nullptr;
     }
 
-    return std::unique_ptr<StreamEncryptor>(new StreamEncryptor(
-        CipherType::AES256_GCM, std::move(ctx), key, iv, ratchet));
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-std::unique_ptr<StreamEncryptor> StreamEncryptor::createForChaCha20Poly1305(
-    const SecureByteArray& key, const QByteArray& iv, bool ratchet)
-{
-    if (key.size() != kKeySize || iv.size() != kIVSize)
-    {
-        LOG(ERROR) << "Key size:" << key.size() << "IV size:" << iv.size();
-        return nullptr;
-    }
-
-    EVP_CIPHER_CTX_ptr ctx = createCipher(CipherType::CHACHA20_POLY1305, CipherMode::ENCRYPT, key, kIVSize);
-    if (!ctx)
-    {
-        LOG(ERROR) << "createCipher failed";
-        return nullptr;
-    }
-
-    return std::unique_ptr<StreamEncryptor>(new StreamEncryptor(
-        CipherType::CHACHA20_POLY1305, std::move(ctx), key, iv, ratchet));
+    return std::unique_ptr<StreamEncryptor>(new StreamEncryptor(std::move(ctx), key, iv));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,14 +123,14 @@ bool StreamEncryptor::encrypt(const void* in, qint64 in_size, const void* aad, q
 
     largeNumberIncrement(&iv_);
 
-    if (ratchet_ && ++msg_count_ >= kRatchetInterval)
+    if (++msg_count_ >= kRatchetInterval)
     {
         GenericHash hash(GenericHash::BLAKE2s256);
         hash.addData(key_);
         hash.addData(QByteArrayLiteral("aspia/v1/ratchet"));
         SecureByteArray new_key(hash.result());
 
-        EVP_CIPHER_CTX_ptr new_ctx = createCipher(type_, CipherMode::ENCRYPT, new_key, kIVSize);
+        EVP_CIPHER_CTX_ptr new_ctx = createCipher(CipherMode::ENCRYPT, new_key, kIVSize);
         if (!new_ctx)
         {
             LOG(ERROR) << "ratchet: createCipher failed";

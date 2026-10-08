@@ -36,7 +36,6 @@
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
-#include "client/aab_importer.h"
 #include "client/backup.h"
 #include "client/database.h"
 #include "client/host_url.h"
@@ -133,7 +132,6 @@ ManagementTab::ManagementTab(QWidget* parent)
 
     ui->action_online_check->setChecked(settings.isOnlineCheckEnabled());
 
-    ui->action_import_old_book->setProperty(Tab::kMenuOnlyProperty, true);
     ui->action_export_book->setProperty(Tab::kMenuOnlyProperty, true);
     ui->action_import_book->setProperty(Tab::kMenuOnlyProperty, true);
     ui->action_online_check->setProperty(Tab::kMenuOnlyProperty, true);
@@ -262,7 +260,6 @@ ManagementTab::ManagementTab(QWidget* parent)
     connect(ui->action_delete_workspace, &QAction::triggered, this, &ManagementTab::onDeleteWorkspaceAction);
     connect(ui->action_reload, &QAction::triggered, this, &ManagementTab::onReloadAction);
     connect(ui->action_save, &QAction::triggered, this, &ManagementTab::onSaveAction);
-    connect(ui->action_import_old_book, &QAction::triggered, this, &ManagementTab::onImportOldBookAction);
     connect(ui->action_export_book, &QAction::triggered, this, &ManagementTab::onExportBookAction);
     connect(ui->action_import_book, &QAction::triggered, this, &ManagementTab::onImportBookAction);
     connect(ui->action_disconnect, &QAction::triggered, this, &ManagementTab::onDisconnectAction);
@@ -277,7 +274,7 @@ ManagementTab::ManagementTab(QWidget* parent)
     // Register actions for toolbar and menus.
     addActions(ActionRole::FILE,
     {
-        ui->action_save, ui->action_import_old_book, ui->action_export_book, ui->action_import_book
+        ui->action_save, ui->action_export_book, ui->action_import_book
     });
     addActions(ActionRole::EDIT, { ui->action_add_user, ui->action_edit_user, ui->action_delete_user });
     addActions(ActionRole::EDIT,
@@ -1551,30 +1548,6 @@ void ManagementTab::onClearRouterEvents()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ManagementTab::onImportOldBookAction()
-{
-    LOG(INFO) << "[ACTION] Import old address book";
-
-    QString file_path = FileDialog::getOpenFileName(
-        this,
-        tr("Import Old Address Book"),
-        tr("Address Book (*.aab);;All files (*)"));
-
-    if (file_path.isEmpty())
-    {
-        LOG(INFO) << "[ACTION] Cancelled by user";
-        return;
-    }
-
-    if (!AabImporter::import(this, file_path))
-        return;
-
-    reloadRouters();
-    ui->sidebar->reloadGroups();
-    updateActionsState();
-}
-
-//--------------------------------------------------------------------------------------------------
 void ManagementTab::onExportBookAction()
 {
     LOG(INFO) << "[ACTION] Create backup";
@@ -2079,7 +2052,6 @@ void ManagementTab::updateActionsState()
     // The address book is saved and restored as a whole, routers included, so its actions go with
     // every item of the sidebar.
     const bool book_actions = sidebar_item && current_content_ != search_widget_;
-    ui->action_import_old_book->setVisible(book_actions);
     ui->action_export_book->setVisible(book_actions);
     ui->action_import_book->setVisible(book_actions);
 

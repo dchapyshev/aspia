@@ -130,7 +130,6 @@ protected:
     void sendMessage(quint8 channel_id, const QByteArray& buffer);
 
     NetworkWorker* networkWorker() const;
-    bool isLegacy() const;
 
     // Returns actions that launch every session type except this window's own, targeting the
     // current host, in a fixed order. Built once on construction. The default tabActionGroups()
@@ -173,7 +172,6 @@ private:
     std::unique_ptr<WorkerManager> worker_manager_;
     QPointer<NetworkWorker> network_worker_;
     SessionKeeper* session_keeper_ = nullptr;
-    bool is_legacy_mode_ = false;
     bool credentials_saved_ = false;
 };
 

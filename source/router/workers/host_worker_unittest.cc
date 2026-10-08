@@ -157,7 +157,6 @@ protected:
         settings.setHostPrivateKey(SecureByteArray(router_keys_.privateKey()));
         settings.setHostListenInterface("127.0.0.1");
         settings.setHostPort(host_port_);
-        settings.setLegacyHostPort(pickFreePort());
         settings.sync();
 
         // The host is already approved, so it presents its key and gets its permanent id.

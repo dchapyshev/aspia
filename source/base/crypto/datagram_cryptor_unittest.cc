@@ -35,10 +35,10 @@ const QByteArray kMessage = QByteArray::fromHex(
 
 TEST(DatagramCryptorAes256GcmTest, EncryptDecrypt)
 {
-    auto encryptor = DatagramEncryptor::createForAes256Gcm(kKey, kIV);
+    auto encryptor = DatagramEncryptor::create(kKey, kIV);
     ASSERT_NE(encryptor, nullptr);
 
-    auto decryptor = DatagramDecryptor::createForAes256Gcm(kKey, kIV);
+    auto decryptor = DatagramDecryptor::create(kKey, kIV);
     ASSERT_NE(decryptor, nullptr);
 
     QByteArray encrypted;
@@ -57,10 +57,10 @@ TEST(DatagramCryptorAes256GcmTest, EncryptDecrypt)
 
 TEST(DatagramCryptorAes256GcmTest, OutOfOrderDecrypt)
 {
-    auto encryptor = DatagramEncryptor::createForAes256Gcm(kKey, kIV);
+    auto encryptor = DatagramEncryptor::create(kKey, kIV);
     ASSERT_NE(encryptor, nullptr);
 
-    auto decryptor = DatagramDecryptor::createForAes256Gcm(kKey, kIV);
+    auto decryptor = DatagramDecryptor::create(kKey, kIV);
     ASSERT_NE(decryptor, nullptr);
 
     // Encrypt three packets with counters 1, 2, 3.
@@ -89,10 +89,10 @@ TEST(DatagramCryptorAes256GcmTest, OutOfOrderDecrypt)
 
 TEST(DatagramCryptorAes256GcmTest, WrongCounterFails)
 {
-    auto encryptor = DatagramEncryptor::createForAes256Gcm(kKey, kIV);
+    auto encryptor = DatagramEncryptor::create(kKey, kIV);
     ASSERT_NE(encryptor, nullptr);
 
-    auto decryptor = DatagramDecryptor::createForAes256Gcm(kKey, kIV);
+    auto decryptor = DatagramDecryptor::create(kKey, kIV);
     ASSERT_NE(decryptor, nullptr);
 
     QByteArray encrypted;
@@ -110,10 +110,10 @@ TEST(DatagramCryptorAes256GcmTest, WrongKeyFails)
     const SecureByteArray other_key(
         QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
 
-    auto encryptor = DatagramEncryptor::createForAes256Gcm(kKey, kIV);
+    auto encryptor = DatagramEncryptor::create(kKey, kIV);
     ASSERT_NE(encryptor, nullptr);
 
-    auto decryptor = DatagramDecryptor::createForAes256Gcm(other_key, kIV);
+    auto decryptor = DatagramDecryptor::create(other_key, kIV);
     ASSERT_NE(decryptor, nullptr);
 
     QByteArray encrypted;
@@ -127,10 +127,10 @@ TEST(DatagramCryptorAes256GcmTest, WrongKeyFails)
 
 TEST(DatagramCryptorAes256GcmTest, WithAad)
 {
-    auto encryptor = DatagramEncryptor::createForAes256Gcm(kKey, kIV);
+    auto encryptor = DatagramEncryptor::create(kKey, kIV);
     ASSERT_NE(encryptor, nullptr);
 
-    auto decryptor = DatagramDecryptor::createForAes256Gcm(kKey, kIV);
+    auto decryptor = DatagramDecryptor::create(kKey, kIV);
     ASSERT_NE(decryptor, nullptr);
 
     const QByteArray aad = QByteArray::fromHex("0307000000000040");
@@ -149,10 +149,10 @@ TEST(DatagramCryptorAes256GcmTest, WithAad)
 
 TEST(DatagramCryptorAes256GcmTest, WrongAadFails)
 {
-    auto encryptor = DatagramEncryptor::createForAes256Gcm(kKey, kIV);
+    auto encryptor = DatagramEncryptor::create(kKey, kIV);
     ASSERT_NE(encryptor, nullptr);
 
-    auto decryptor = DatagramDecryptor::createForAes256Gcm(kKey, kIV);
+    auto decryptor = DatagramDecryptor::create(kKey, kIV);
     ASSERT_NE(decryptor, nullptr);
 
     const QByteArray aad = QByteArray::fromHex("0307000000000040");
@@ -172,7 +172,7 @@ TEST(DatagramCryptorAes256GcmTest, WrongAadFails)
 
 TEST(DatagramCryptorAes256GcmTest, SameCounterProducesSameCiphertext)
 {
-    auto encryptor = DatagramEncryptor::createForAes256Gcm(kKey, kIV);
+    auto encryptor = DatagramEncryptor::create(kKey, kIV);
     ASSERT_NE(encryptor, nullptr);
 
     QByteArray enc1, enc2;
@@ -188,7 +188,7 @@ TEST(DatagramCryptorAes256GcmTest, SameCounterProducesSameCiphertext)
 
 TEST(DatagramCryptorAes256GcmTest, DifferentCounterProducesDifferentCiphertext)
 {
-    auto encryptor = DatagramEncryptor::createForAes256Gcm(kKey, kIV);
+    auto encryptor = DatagramEncryptor::create(kKey, kIV);
     ASSERT_NE(encryptor, nullptr);
 
     QByteArray enc1, enc2;
@@ -203,10 +203,10 @@ TEST(DatagramCryptorAes256GcmTest, DifferentCounterProducesDifferentCiphertext)
 
 TEST(DatagramCryptorAes256GcmTest, ManyCounters)
 {
-    auto encryptor = DatagramEncryptor::createForAes256Gcm(kKey, kIV);
+    auto encryptor = DatagramEncryptor::create(kKey, kIV);
     ASSERT_NE(encryptor, nullptr);
 
-    auto decryptor = DatagramDecryptor::createForAes256Gcm(kKey, kIV);
+    auto decryptor = DatagramDecryptor::create(kKey, kIV);
     ASSERT_NE(decryptor, nullptr);
 
     QByteArray encrypted;
@@ -225,10 +225,10 @@ TEST(DatagramCryptorAes256GcmTest, ManyCounters)
 
 TEST(DatagramCryptorAes256GcmTest, TamperedCiphertextFails)
 {
-    auto encryptor = DatagramEncryptor::createForAes256Gcm(kKey, kIV);
+    auto encryptor = DatagramEncryptor::create(kKey, kIV);
     ASSERT_NE(encryptor, nullptr);
 
-    auto decryptor = DatagramDecryptor::createForAes256Gcm(kKey, kIV);
+    auto decryptor = DatagramDecryptor::create(kKey, kIV);
     ASSERT_NE(decryptor, nullptr);
 
     QByteArray encrypted;
@@ -248,13 +248,13 @@ TEST(DatagramCryptorAes256GcmTest, TamperedCiphertextFails)
 TEST(DatagramCryptorTest, InvalidKeySize)
 {
     const SecureByteArray short_key(QByteArray::fromHex("5ce26794165a808ec425684e9384c27c"));
-    EXPECT_EQ(DatagramEncryptor::createForAes256Gcm(short_key, kIV), nullptr);
-    EXPECT_EQ(DatagramDecryptor::createForAes256Gcm(short_key, kIV), nullptr);
+    EXPECT_EQ(DatagramEncryptor::create(short_key, kIV), nullptr);
+    EXPECT_EQ(DatagramDecryptor::create(short_key, kIV), nullptr);
 }
 
 TEST(DatagramCryptorTest, InvalidIvSize)
 {
     const QByteArray short_iv = QByteArray::fromHex("ee7eb0e6fb24d445");
-    EXPECT_EQ(DatagramEncryptor::createForAes256Gcm(kKey, short_iv), nullptr);
-    EXPECT_EQ(DatagramDecryptor::createForAes256Gcm(kKey, short_iv), nullptr);
+    EXPECT_EQ(DatagramEncryptor::create(kKey, short_iv), nullptr);
+    EXPECT_EQ(DatagramDecryptor::create(kKey, short_iv), nullptr);
 }

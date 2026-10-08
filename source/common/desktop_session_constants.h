@@ -19,24 +19,6 @@
 #ifndef COMMON_DESKTOP_SESSION_CONSTANTS_H
 #define COMMON_DESKTOP_SESSION_CONSTANTS_H
 
-extern const char kSelectScreenExtension[]; // Deprecated.
-extern const char kPreferredSizeExtension[]; // Deprecated.
-extern const char kPowerControlExtension[]; // Deprecated.
-extern const char kTaskManagerExtension[]; // Deprecated.
-extern const char kVideoPauseExtension[]; // Deprecated.
-extern const char kAudioPauseExtension[]; // Deprecated.
-extern const char kScreenTypeExtension[]; // Deprecated.
-
-extern const char kFlagDisablePasteAsKeystrokes[]; // Deprecated.
-extern const char kFlagDisableAudio[]; // Deprecated.
-extern const char kFlagDisableClipboard[]; // Deprecated.
-extern const char kFlagDisableCursorShape[]; // Deprecated.
-extern const char kFlagDisableCursorPosition[]; // Deprecated.
-extern const char kFlagDisableDesktopEffects[]; // Deprecated.
-extern const char kFlagDisableDesktopWallpaper[]; // Deprecated.
-extern const char kFlagDisableLockAtDisconnect[]; // Deprecated.
-extern const char kFlagDisableBlockInput[]; // Deprecated.
-
 extern const char kFlagVideoVP8[];
 extern const char kFlagVideoVP9[];
 extern const char kFlagAudioOpus[];

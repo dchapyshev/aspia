@@ -60,7 +60,6 @@ public:
         HOST_DISCONNECTED,
         WAIT_FOR_HOST,
         VERSION_MISMATCH,
-        LEGACY_HOST, // Remove this after support for versions below 3.0.0 ends.
         RELAY_ERROR
     };
     Q_ENUM(Status)
@@ -138,7 +137,6 @@ private:
     void clearAttempts();
     void selectAttempt(UdpAttempt* attempt);
 
-    bool is_legacy_mode_ = false;
     ScopedQPointer<TcpChannel> tcp_channel_;
     ScopedQPointer<UdpChannel> udp_channel_;
     ScopedQPointer<RelayPeer> relay_peer_;

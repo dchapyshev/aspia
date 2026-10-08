@@ -59,13 +59,13 @@ QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const SharedK
         return QByteArray();
     }
 
-    // Peers that predate AES support leave the field unset (UNKNOWN), which means ChaCha20-Poly1305.
-    std::unique_ptr<StreamDecryptor> decryptor;
-    if (message.encryption() == proto::relay::PeerToRelay::ENCRYPTION_AES256_GCM)
-        decryptor = StreamDecryptor::createForAes256Gcm(key.first, key.second);
-    else
-        decryptor = StreamDecryptor::createForChaCha20Poly1305(key.first, key.second);
+    if (message.encryption() != proto::relay::PeerToRelay::ENCRYPTION_AES256_GCM)
+    {
+        LOG(ERROR) << "Unsupported encryption:" << message.encryption();
+        return QByteArray();
+    }
 
+    std::unique_ptr<StreamDecryptor> decryptor = StreamDecryptor::create(key.first, key.second);
     if (!decryptor)
     {
         LOG(ERROR) << "Decryptor not created";
@@ -362,15 +362,9 @@ void RelayWorker::onPendingSessionReady(const proto::relay::PeerToRelay& message
     PendingSession* pending_session = dynamic_cast<PendingSession*>(sender());
     CHECK(pending_session);
 
-    // Looking for a key with the specified identifier. Peers that predate AES support leave the
-    // encryption field unset (UNKNOWN), which means ChaCha20-Poly1305 - and the old derivation
-    // with it.
-    const bool is_aes256_gcm =
-        message.encryption() == proto::relay::PeerToRelay::ENCRYPTION_AES256_GCM;
-
-    std::optional<SharedKeyPool::Key> key = is_aes256_gcm
-        ? SharedKeyPool::instance().find(message.key_id(), message.public_key())
-        : SharedKeyPool::instance().findLegacy(message.key_id(), message.public_key());
+    // Looking for a key with the specified identifier.
+    std::optional<SharedKeyPool::Key> key =
+        SharedKeyPool::instance().find(message.key_id(), message.public_key());
     if (!key.has_value())
     {
         LOG(ERROR) << "Key with id" << message.key_id() << "is NOT found!";

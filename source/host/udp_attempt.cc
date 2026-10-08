@@ -161,9 +161,8 @@ bool UdpAttempt::deriveCrypto(const proto::peer::UdpReply& reply,
         return false;
     }
 
-    *encryptor = DatagramEncryptor::createForAes256Gcm(session_key, iv_);
-    *decryptor = DatagramDecryptor::createForAes256Gcm(
-        session_key, QByteArray::fromStdString(reply.iv()));
+    *encryptor = DatagramEncryptor::create(session_key, iv_);
+    *decryptor = DatagramDecryptor::create(session_key, QByteArray::fromStdString(reply.iv()));
     if (!*encryptor || !*decryptor)
     {
         CLOG(ERROR) << "Failed to create UDP encryptor/decryptor";

@@ -191,12 +191,6 @@ NetworkWorker* ClientWindow::networkWorker() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ClientWindow::isLegacy() const
-{
-    return is_legacy_mode_;
-}
-
-//--------------------------------------------------------------------------------------------------
 void ClientWindow::closeEvent(QCloseEvent* /* event */)
 {
     LOG(INFO) << "Close event";
@@ -309,10 +303,6 @@ void ClientWindow::onStatusChanged(NetworkWorker::Status status, const QVariant&
         }
         break;
 
-        case NetworkWorker::Status::LEGACY_HOST:
-            onErrorOccurred(tr("Attempting to connect in compatibility mode..."));
-            break;
-
         default:
             break;
     }
@@ -334,18 +324,7 @@ void ClientWindow::onDragPoll()
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data)
 {
-    if (status == NetworkWorker::Status::LEGACY_HOST)
-    {
-        is_legacy_mode_ = true;
-
-        for (QAction* action : std::as_const(session_connect_actions_))
-        {
-            const int type = action->data().toInt();
-            if (type == proto::peer::SESSION_TYPE_TERMINAL || type == proto::peer::SESSION_TYPE_SYSTEM_INFO)
-                action->setVisible(false);
-        }
-    }
-    else if (status == NetworkWorker::Status::HOST_DISCONNECTED)
+    if (status == NetworkWorker::Status::HOST_DISCONNECTED)
     {
         if (session_keeper_)
             session_keeper_->release();

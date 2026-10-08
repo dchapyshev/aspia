@@ -368,7 +368,6 @@ void ClientOperator::sendConnectionOffer(qint64 request_id, HostId host_id)
 
     ConnectionRequestClient client;
     client.host_id = host_id;
-    client.version = version();
     client.address = address();
     client.user_name = userName();
     client.stun_port = stun_port_;

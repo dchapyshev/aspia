@@ -29,10 +29,6 @@ list(APPEND SOURCE_ROUTER_CORE
     database.h
     host.cc
     host.h
-    host_legacy.cc
-    host_legacy.h
-    host_ng.cc
-    host_ng.h
     migration_utils.cc
     migration_utils.h
     relay.cc
@@ -58,7 +54,7 @@ list(APPEND SOURCE_ROUTER_TESTS
     database_unittest.cc
     fake_tcp_channel.h
     host_lifecycle_unittest.cc
-    host_ng_unittest.cc
+    host_unittest.cc
     relay_unittest.cc
     router_test_base.h
     router_test_worker.h

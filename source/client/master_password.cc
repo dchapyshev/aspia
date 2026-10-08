@@ -44,8 +44,7 @@ SecureByteArray deriveKey(const SecureString& password, const QByteArray& salt)
 //--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> makeVerifier(const SecureByteArray& key)
 {
-    return DataCryptor(CipherType::AES256_GCM, key)
-        .encrypt(Random::byteArray(kVerifierPayloadSize));
+    return DataCryptor(key).encrypt(Random::byteArray(kVerifierPayloadSize));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -53,7 +52,7 @@ bool checkVerifier(const SecureByteArray& key, const QByteArray& verifier)
 {
     // AES256 GCM is an AEAD cipher: successful decryption (i.e. valid auth tag)
     // is itself the proof that the key is correct. The plaintext content does not matter.
-    return DataCryptor(CipherType::AES256_GCM, key).decrypt(verifier).has_value();
+    return DataCryptor(key).decrypt(verifier).has_value();
 }
 
 //--------------------------------------------------------------------------------------------------

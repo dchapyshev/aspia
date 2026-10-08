@@ -451,7 +451,7 @@ protected:
         proto::router::RelayKey* key = relay->mutable_key();
         key->set_key_id(1);
         key->set_type(proto::router::RelayKey::TYPE_X25519);
-        key->set_encryption(proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
+        key->set_encryption(proto::router::RelayKey::ENCRYPTION_AES256_GCM);
         key->set_public_key(relay_key_pair_.publicKey().toStdString());
         key->set_iv(relay_iv_);
     }

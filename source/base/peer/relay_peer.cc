@@ -25,7 +25,6 @@
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/stream_encryptor.h"
-#include "base/net/tcp_channel_legacy.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/authenticator.h"
 #include "base/threading/asio_event_dispatcher.h"
@@ -90,8 +89,7 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
 
     QString host = QString::fromStdString(credentials.host());
 
-    CLOG(INFO) << "Start resolving for" << host << ":" << credentials.port()
-               << "(legacy" << offer.peer_info().is_legacy() << ")";
+    CLOG(INFO) << "Start resolving for" << host << ":" << credentials.port();
 
     auto guard = alive_guard_;
     resolver_.async_resolve(host.toLocal8Bit().data(), std::to_string(credentials.port()),
@@ -199,16 +197,8 @@ void RelayPeer::onConnected()
                 return;
             }
 
-            if (connection_offer_.peer_info().is_legacy())
-            {
-                pending_channel_ = new TcpChannelLegacy(
-                    TcpChannel::Type::RELAY, std::move(socket_), authenticator_.release(), this);
-            }
-            else
-            {
-                pending_channel_ = new TcpChannelNG(
-                    TcpChannel::Type::RELAY, std::move(socket_), authenticator_.release(), this);
-            }
+            pending_channel_ = new TcpChannelNG(
+                TcpChannel::Type::RELAY, std::move(socket_), authenticator_.release(), this);
 
             connect(pending_channel_, &TcpChannel::sig_authenticated, this, [this]()
             {
@@ -261,8 +251,7 @@ QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, 
         return QByteArray();
     }
 
-    if (key.encryption() != proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305 &&
-        key.encryption() != proto::router::RelayKey::ENCRYPTION_AES256_GCM)
+    if (key.encryption() != proto::router::RelayKey::ENCRYPTION_AES256_GCM)
     {
         CLOG(ERROR) << "Unsupported encryption type:" << key.encryption();
         return QByteArray();
@@ -294,7 +283,6 @@ QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, 
     }
 
     const QByteArray relay_public_key = QByteArray::fromStdString(key.public_key());
-    const bool is_aes256_gcm = key.encryption() == proto::router::RelayKey::ENCRYPTION_AES256_GCM;
 
     SecureByteArray shared_secret(key_pair.sessionKey(relay_public_key));
     if (shared_secret.isEmpty())
@@ -303,38 +291,15 @@ QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, 
         return QByteArray();
     }
 
-    SecureByteArray session_key;
+    GenericHash hash(GenericHash::Type::SHA256);
+    hash.addData(shared_secret);
+    hash.addData(relay_public_key);
+    hash.addData(key_pair.publicKey());
 
-    if (is_aes256_gcm)
-    {
-        GenericHash hash(GenericHash::Type::SHA256);
+    SecureByteArray session_key(hash.result());
 
-        hash.addData(shared_secret);
-        hash.addData(relay_public_key);
-        hash.addData(key_pair.publicKey());
-
-        session_key = SecureByteArray(hash.result());
-    }
-    else
-    {
-        session_key = SecureByteArray(
-            GenericHash::hash(GenericHash::Type::BLAKE2s256, shared_secret.toByteArray()));
-    }
-
-    std::unique_ptr<StreamEncryptor> encryptor;
-    proto::relay::PeerToRelay::Encryption encryption;
-
-    if (is_aes256_gcm)
-    {
-        encryptor = StreamEncryptor::createForAes256Gcm(session_key, QByteArray::fromStdString(key.iv()));
-        encryption = proto::relay::PeerToRelay::ENCRYPTION_AES256_GCM;
-    }
-    else
-    {
-        encryptor = StreamEncryptor::createForChaCha20Poly1305(session_key, QByteArray::fromStdString(key.iv()));
-        encryption = proto::relay::PeerToRelay::ENCRYPTION_CHACHA20_POLY1305;
-    }
-
+    std::unique_ptr<StreamEncryptor> encryptor =
+        StreamEncryptor::create(session_key, QByteArray::fromStdString(key.iv()));
     if (!encryptor)
     {
         CLOG(ERROR) << "Failed to create encryptor";
@@ -353,7 +318,7 @@ QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, 
     message.set_key_id(key.key_id());
     message.set_public_key(key_pair.publicKey().toStdString());
     message.set_data(std::move(encrypted_secret));
-    message.set_encryption(encryption);
+    message.set_encryption(proto::relay::PeerToRelay::ENCRYPTION_AES256_GCM);
 
     return serialize(message);
 }

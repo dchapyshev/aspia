@@ -124,7 +124,7 @@ bool OSCrypt::encryptBytes(const QByteArray& plaintext, QByteArray* ciphertext)
     if (key.isEmpty())
         return false;
 
-    const DataCryptor cryptor(CipherType::AES256_GCM, key);
+    const DataCryptor cryptor(key);
     std::optional<QByteArray> sealed = cryptor.encrypt(plaintext, kAad);
     if (!sealed.has_value())
     {
@@ -150,7 +150,7 @@ bool OSCrypt::decryptBytes(const QByteArray& ciphertext, QByteArray* plaintext)
     if (key.isEmpty())
         return false;
 
-    const DataCryptor cryptor(CipherType::AES256_GCM, key);
+    const DataCryptor cryptor(key);
     std::optional<QByteArray> opened = cryptor.decrypt(ciphertext, kAad);
     if (!opened.has_value())
     {

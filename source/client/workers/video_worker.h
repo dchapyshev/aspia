@@ -31,7 +31,6 @@
 #include "proto/desktop_audio.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_cursor.h"
-#include "proto/desktop_legacy.h"
 #include "proto/desktop_video.h"
 
 class CursorDecoder;
@@ -87,7 +86,6 @@ protected:
 
 private slots:
     void onVideoMessage(const QByteArray& buffer);
-    void onLegacyMessage(const QByteArray& buffer);
     void onCursorMessage(const QByteArray& buffer);
     void onAudioMessage(const QByteArray& buffer);
     void onEncodeTimer();
@@ -107,18 +105,12 @@ private:
 
     Parser<proto::video::HostToClient,
            proto::cursor::HostToClient,
-           proto::audio::HostToClient,
-           proto::legacy::SessionToClient> incoming_message_;
+           proto::audio::HostToClient> incoming_message_;
 
     std::unique_ptr<VideoDecoder> decoder_;
     proto::video::Encoding encoding_ = proto::video::ENCODING_UNKNOWN;
     bool key_frame_received_ = false;
     int stale_packet_count_ = 0;
-
-    // Set from the packet source: NG packets arrive on the video channel (onVideoMessage), legacy
-    // packets through the multiplexed channel (onLegacyMessage). Keyframe requests are only sent in
-    // the NG mode, as the legacy protocol has no such request.
-    bool legacy_ = false;
 
     std::unique_ptr<CursorDecoder> cursor_decoder_;
     bool cursor_shape_enabled_ = false;

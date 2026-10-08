@@ -34,8 +34,8 @@
 class DataCryptor
 {
 public:
-    explicit DataCryptor(CipherType type);
-    DataCryptor(CipherType type, const SecureByteArray& key);
+    DataCryptor();
+    explicit DataCryptor(const SecureByteArray& key);
     DataCryptor(DataCryptor&& other) noexcept;
     DataCryptor& operator=(DataCryptor&& other) noexcept;
     ~DataCryptor();
@@ -55,7 +55,6 @@ public:
 
 private:
     mutable std::mutex mutex_;
-    CipherType type_;
     SecureByteArray key_;
     EVP_CIPHER_CTX_ptr encrypt_ctx_;
     EVP_CIPHER_CTX_ptr decrypt_ctx_;

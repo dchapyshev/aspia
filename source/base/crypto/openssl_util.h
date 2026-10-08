@@ -67,18 +67,12 @@ using EVP_MD_CTX_ptr = std::unique_ptr<evp_md_ctx_st, EVP_MD_CTX_Deleter>;
 using EVP_PKEY_CTX_ptr = std::unique_ptr<evp_pkey_ctx_st, EVP_PKEY_CTX_Deleter>;
 using EVP_PKEY_ptr = std::unique_ptr<evp_pkey_st, EVP_PKEY_Deleter>;
 
-enum class CipherType
-{
-    AES256_GCM,
-    CHACHA20_POLY1305
-};
-
 enum class CipherMode
 {
     ENCRYPT,
     DECRYPT
 };
 
-EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const SecureByteArray& key, int iv_size);
+EVP_CIPHER_CTX_ptr createCipher(CipherMode mode, const SecureByteArray& key, int iv_size);
 
 #endif // BASE_CRYPTO_OPENSSL_UTIL_H

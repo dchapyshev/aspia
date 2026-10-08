@@ -38,13 +38,12 @@ inline constexpr QLatin1StringView kHostUpdatePackage("host");
 inline constexpr QLatin1StringView kRelayUpdatePackage("relay");
 inline constexpr QLatin1StringView kRouterUpdatePackage("router");
 
-inline constexpr quint16 kDefaultHostTcpPort             = 8050;
-inline constexpr quint16 kDefaultRouterLegacyHostTcpPort = 8060;
-inline constexpr quint16 kDefaultRouterHostTcpPort       = 8061;
-inline constexpr quint16 kDefaultRouterClientTcpPort     = 8062;
-inline constexpr quint16 kDefaultRouterRelayTcpPort      = 8063;
-inline constexpr quint16 kDefaultRelayPeerTcpPort        = 8070;
-inline constexpr quint16 kDefaultStunPort                = 8065;
+inline constexpr quint16 kDefaultHostTcpPort         = 8050;
+inline constexpr quint16 kDefaultRouterHostTcpPort   = 8061;
+inline constexpr quint16 kDefaultRouterClientTcpPort = 8062;
+inline constexpr quint16 kDefaultRouterRelayTcpPort  = 8063;
+inline constexpr quint16 kDefaultRelayPeerTcpPort    = 8070;
+inline constexpr quint16 kDefaultStunPort            = 8065;
 
 // Public keys the update files are signed with. There is room for more than one so that a key
 // can be replaced without cutting off the applications that know only the old one.

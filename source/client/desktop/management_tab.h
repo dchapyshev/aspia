@@ -102,7 +102,6 @@ private slots:
     void onDeleteGroupAction();
     void onChangeRouterPassword();
     void onClearRouterEvents();
-    void onImportOldBookAction();
     void onExportBookAction();
     void onImportBookAction();
     void onReloadAction();

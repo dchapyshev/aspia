@@ -376,10 +376,10 @@ void TcpChannelNG::init()
 
     connect(authenticator_, &Authenticator::sig_keyChanged, this, [this]()
     {
-        encryptor_ = StreamEncryptor::createForAes256Gcm(
+        encryptor_ = StreamEncryptor::create(
             authenticator_->sessionKey(Authenticator::Direction::ENCRYPT),
             authenticator_->iv(Authenticator::Direction::ENCRYPT));
-        decryptor_ = StreamDecryptor::createForAes256Gcm(
+        decryptor_ = StreamDecryptor::create(
             authenticator_->sessionKey(Authenticator::Direction::DECRYPT),
             authenticator_->iv(Authenticator::Direction::DECRYPT));
 

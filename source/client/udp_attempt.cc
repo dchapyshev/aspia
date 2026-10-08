@@ -115,10 +115,8 @@ UdpChannel* UdpAttempt::createChannel()
 
     SecureByteArray session_key(hash.result());
 
-    std::unique_ptr<DatagramEncryptor> encryptor =
-        DatagramEncryptor::createForAes256Gcm(session_key, iv_);
-    std::unique_ptr<DatagramDecryptor> decryptor =
-        DatagramDecryptor::createForAes256Gcm(session_key, host_iv_);
+    std::unique_ptr<DatagramEncryptor> encryptor = DatagramEncryptor::create(session_key, iv_);
+    std::unique_ptr<DatagramDecryptor> decryptor = DatagramDecryptor::create(session_key, host_iv_);
     if (!encryptor || !decryptor)
     {
         CLOG(ERROR) << "Failed to create UDP encryptor/decryptor";

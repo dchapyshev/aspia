@@ -126,9 +126,6 @@ void VideoWorker::onPrepare()
                 Qt::QueuedConnection);
         connect(network_worker, &NetworkWorker::sig_channel_4, this, &VideoWorker::onCursorMessage,
                 Qt::QueuedConnection);
-        // Legacy channel (CHANNEL_ID_LEGACY == 0), where old hosts multiplex video, cursor and audio.
-        connect(network_worker, &NetworkWorker::sig_channel_0, this, &VideoWorker::onLegacyMessage,
-                Qt::QueuedConnection);
         // Audio channel (CHANNEL_ID_AUDIO == 7); parsed only while recording, to mux into the file.
         connect(network_worker, &NetworkWorker::sig_channel_7, this, &VideoWorker::onAudioMessage,
                 Qt::QueuedConnection);
@@ -201,8 +198,6 @@ void VideoWorker::onTimer(TimePoint now)
 //--------------------------------------------------------------------------------------------------
 void VideoWorker::onVideoMessage(const QByteArray& buffer)
 {
-    legacy_ = false;
-
     proto::video::HostToClient* message = incoming_message_.parse<proto::video::HostToClient>(buffer);
     if (!message)
     {
@@ -212,29 +207,6 @@ void VideoWorker::onVideoMessage(const QByteArray& buffer)
 
     if (message->has_packet())
         decodePacket(message->packet());
-}
-
-//--------------------------------------------------------------------------------------------------
-void VideoWorker::onLegacyMessage(const QByteArray& buffer)
-{
-    legacy_ = true;
-
-    proto::legacy::SessionToClient* message =
-        incoming_message_.parse<proto::legacy::SessionToClient>(buffer);
-    if (!message)
-    {
-        LOG(ERROR) << "Unable to parse legacy message";
-        return;
-    }
-
-    if (message->has_video_packet())
-        decodePacket(message->video_packet());
-    if (message->has_cursor_shape())
-        readCursorShape(message->cursor_shape());
-    if (message->has_cursor_position())
-        readCursorPosition(message->cursor_position());
-    if (writer_ && message->has_audio_packet())
-        writer_->addAudioPacket(message->audio_packet());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -436,10 +408,6 @@ void VideoWorker::decodePacket(const proto::video::Packet& packet)
 //--------------------------------------------------------------------------------------------------
 void VideoWorker::sendKeyFrameRequest()
 {
-    // The legacy protocol has no keyframe request; the host sends keyframes on its own schedule.
-    if (legacy_)
-        return;
-
     proto::video::ClientToHost message;
     message.mutable_key_frame()->set_dummy(1);
     emit sig_sendMessage(proto::desktop::CHANNEL_ID_VIDEO, serialize(message));
@@ -460,10 +428,6 @@ void VideoWorker::enableForceReliable()
 //--------------------------------------------------------------------------------------------------
 void VideoWorker::sendForceReliable(bool enable)
 {
-    // The legacy protocol has no such feedback command.
-    if (legacy_)
-        return;
-
     proto::control::ClientToHost message;
     proto::control::Feedback* feedback = message.mutable_feedback();
     feedback->set_command_name("reliable");
