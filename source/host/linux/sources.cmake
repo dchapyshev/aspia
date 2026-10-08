@@ -17,6 +17,8 @@
 #
 
 collect_sources(SOURCE_HOST_LINUX
+    drm_pixel_format.cc
+    drm_pixel_format.h
     egl_dmabuf.cc
     egl_dmabuf.h
     libdrm.cc

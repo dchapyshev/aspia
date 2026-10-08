@@ -22,6 +22,8 @@
 
 #include <QByteArray>
 
+#include <drm/drm_fourcc.h>
+
 #include <sys/mman.h>
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -34,12 +36,28 @@
 #include "base/desktop/differ.h"
 #include "base/desktop/frame_aligned.h"
 #include "base/linux/session_util.h"
+#include "host/linux/drm_pixel_format.h"
 
 #include "wlr-screencopy-unstable-v1-client-protocol.h"
 
 namespace {
 
 const int kAlignment = 32;
+
+//--------------------------------------------------------------------------------------------------
+// The wl_shm formats are the DRM fourcc codes, except the two that wl_shm numbers 0 and 1.
+uint32_t drmFormat(uint32_t shm_format)
+{
+    switch (shm_format)
+    {
+        case WL_SHM_FORMAT_ARGB8888:
+            return DRM_FORMAT_ARGB8888;
+        case WL_SHM_FORMAT_XRGB8888:
+            return DRM_FORMAT_XRGB8888;
+        default:
+            return shm_format;
+    }
+}
 
 //--------------------------------------------------------------------------------------------------
 // Connects to |uid|'s Wayland socket directly (no per-uid auth on the socket, unlike D-Bus).
@@ -265,7 +283,8 @@ bool ScreenCapturerWlr::init()
         return false;
     }
 
-    LOG(INFO) << "wlr-screencopy capturer initialized, output:" << screen_rect_.size();
+    LOG(INFO) << "wlr-screencopy capturer initialized, output:" << screen_rect_.size()
+              << "format:" << Qt::hex << frame_format_;
     return true;
 }
 
@@ -325,16 +344,19 @@ bool ScreenCapturerWlr::capture()
 
     Frame* current = queue_.currentFrame();
     const quint8* src = static_cast<const quint8*>(shm_data_);
-    quint8* dst = current->frameData();
-    const int dst_stride = current->stride();
-    const int row_bytes = std::min(frame_width_ * 4, frame_stride_);
+    int src_stride = frame_stride_;
 
-    // The shm format is XRGB8888/ARGB8888 (packed BGRA in memory) - copy straight, flipping rows when
-    // the compositor reports the buffer as y-inverted.
-    for (int y = 0; y < frame_height_; ++y)
+    // A y-inverted buffer is read from its last row up.
+    if (y_invert_)
     {
-        const int src_y = y_invert_ ? (frame_height_ - 1 - y) : y;
-        memcpy(dst + y * dst_stride, src + src_y * frame_stride_, row_bytes);
+        src += static_cast<ptrdiff_t>(frame_height_ - 1) * frame_stride_;
+        src_stride = -src_stride;
+    }
+
+    if (!DrmPixelFormat::toBgra(src, src_stride, drmFormat(frame_format_), size, current->frameData(),
+                                current->stride()))
+    {
+        return false;
     }
 
     screen_rect_ = QRect(QPoint(0, 0), size);
@@ -504,8 +526,9 @@ void ScreenCapturerWlr::onRegistryGlobal(wl_registry* registry, uint32_t name, c
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerWlr::onBuffer(uint32_t format, uint32_t width, uint32_t height, uint32_t stride)
 {
-    // Take the first advertised shm buffer (compositors list a packed BGRA format first).
-    if (frame_width_ == 0)
+    // Take the first advertised shm buffer in a format the frame can be converted from. Compositors
+    // differ in the format they prefer: labwc on a Raspberry Pi offers XBGR8888 (R,G,B in memory).
+    if (frame_width_ == 0 && DrmPixelFormat::isSupported(drmFormat(format)))
     {
         frame_format_ = format;
         frame_width_ = static_cast<int>(width);

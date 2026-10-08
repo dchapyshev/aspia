@@ -24,8 +24,6 @@
 #include <QStringList>
 
 #include <drm/drm_fourcc.h>
-#include <libyuv/convert_argb.h>
-#include <libyuv/planar_functions.h>
 
 #include <fcntl.h>
 #include <linux/dma-buf.h>
@@ -45,6 +43,7 @@
 #include "base/desktop/mouse_cursor.h"
 #include "base/linux/libsystemd.h"
 #include "base/linux/session_util.h"
+#include "host/linux/drm_pixel_format.h"
 #include "host/linux/egl_dmabuf.h"
 #include "host/linux/libdrm.h"
 #include "host/linux/wayland_output_layout.h"
@@ -349,49 +348,6 @@ QList<WaylandOutputLayout::Output> queryCompositorOutputs()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool convertToBgra(const quint8* src, int src_stride, const drmModeFB2* fb, quint8* dst, int dst_stride)
-{
-    const int width = static_cast<int>(fb->width);
-    const int height = static_cast<int>(fb->height);
-    int rc = -1;
-    switch (fb->pixel_format)
-    {
-        case DRM_FORMAT_XRGB8888:
-        case DRM_FORMAT_ARGB8888:  // memory B,G,R,A - already the target layout
-            rc = libyuv::ARGBCopy(src, src_stride, dst, dst_stride, width, height);
-            break;
-        case DRM_FORMAT_XBGR8888:
-        case DRM_FORMAT_ABGR8888:  // memory R,G,B,A
-            rc = libyuv::ABGRToARGB(src, src_stride, dst, dst_stride, width, height);
-            break;
-        case DRM_FORMAT_RGBX8888:
-        case DRM_FORMAT_RGBA8888:  // memory A,B,G,R
-            rc = libyuv::RGBAToARGB(src, src_stride, dst, dst_stride, width, height);
-            break;
-        case DRM_FORMAT_BGRX8888:
-        case DRM_FORMAT_BGRA8888:  // memory A,R,G,B
-            rc = libyuv::BGRAToARGB(src, src_stride, dst, dst_stride, width, height);
-            break;
-        case DRM_FORMAT_XRGB2101010:
-        case DRM_FORMAT_ARGB2101010:  // 2-bit alpha + 10-bit R,G,B
-            rc = libyuv::AR30ToARGB(src, src_stride, dst, dst_stride, width, height);
-            break;
-        case DRM_FORMAT_XBGR2101010:
-        case DRM_FORMAT_ABGR2101010:  // 2-bit alpha + 10-bit B,G,R
-            rc = libyuv::AB30ToARGB(src, src_stride, dst, dst_stride, width, height);
-            break;
-        case DRM_FORMAT_RGB565:
-            rc = libyuv::RGB565ToARGB(src, src_stride, dst, dst_stride, width, height);
-            break;
-        default:
-            LOG(ERROR) << "Unsupported scan-out pixel format for CPU readback:"
-                       << Qt::hex << fb->pixel_format;
-            break;
-    }
-    return rc == 0;
-}
-
-//--------------------------------------------------------------------------------------------------
 // Reads a single-plane scan-out buffer into |dst| (packed BGRA) through a CPU mapping of its exported
 // DMA-BUF. Used when the EGL/GL readback is unavailable: a VM whose 3D acceleration is inactive runs on
 // software GL, which cannot read the hardware scan-out buffer.
@@ -408,8 +364,9 @@ bool readDmaBufCpu(int dmabuf_fd, const drmModeFB2* fb, quint8* dst, int dst_str
     sync.flags = DMA_BUF_SYNC_START | DMA_BUF_SYNC_READ;
     ioctl(dmabuf_fd, DMA_BUF_IOCTL_SYNC, &sync);
 
-    const bool ok = convertToBgra(static_cast<const quint8*>(map) + fb->offsets[0],
-                                  static_cast<int>(fb->pitches[0]), fb, dst, dst_stride);
+    const bool ok = DrmPixelFormat::toBgra(static_cast<const quint8*>(map) + fb->offsets[0],
+        static_cast<int>(fb->pitches[0]), fb->pixel_format,
+        QSize(static_cast<int>(fb->width), static_cast<int>(fb->height)), dst, dst_stride);
 
     sync.flags = DMA_BUF_SYNC_END | DMA_BUF_SYNC_READ;
     ioctl(dmabuf_fd, DMA_BUF_IOCTL_SYNC, &sync);
@@ -435,8 +392,8 @@ bool readDumbBufferCpu(int drm_fd, const drmModeFB2* fb, quint8* dst, int dst_st
     if (map == MAP_FAILED)
         return false;
 
-    const bool ok = convertToBgra(static_cast<const quint8*>(map),
-                                  static_cast<int>(fb->pitches[0]), fb, dst, dst_stride);
+    const bool ok = DrmPixelFormat::toBgra(static_cast<const quint8*>(map), static_cast<int>(fb->pitches[0]),
+        fb->pixel_format, QSize(static_cast<int>(fb->width), static_cast<int>(fb->height)), dst, dst_stride);
     munmap(map, map_size);
     return ok;
 }
