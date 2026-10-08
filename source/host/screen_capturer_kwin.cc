@@ -764,8 +764,14 @@ const MouseCursor* ScreenCapturerKwin::captureCursor()
     last_cursor_fb_id_ = cursor_fb_id;
 
     const LibDrm::ScopedFB2 fb = LibDrm::modeGetFB2(drm_fd_.get(), cursor_fb_id);
-    if (!fb || !fb->handles[0])
+    if (!fb)
         return nullptr;
+
+    if (!fb->handles[0])
+    {
+        closeFbHandles(drm_fd_.get(), fb.get());
+        return nullptr;
+    }
 
     QByteArray image;
     image.resize(cursor_size.width() * cursor_size.height() * MouseCursor::kBytesPerPixel);

@@ -366,6 +366,29 @@ bool readDumbBufferCpu(int drm_fd, const drmModeFB2* fb, quint8* dst, int dst_st
 }
 
 //--------------------------------------------------------------------------------------------------
+// Closes the unique GEM handles opened by drmModeGetFB2() for |fb|.
+void closeFbHandles(int drm_fd, const drmModeFB2* fb)
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        if (!fb->handles[i])
+            continue;
+
+        bool duplicate = false;
+        for (int j = 0; j < i; ++j)
+        {
+            if (fb->handles[j] == fb->handles[i])
+            {
+                duplicate = true;
+                break;
+            }
+        }
+        if (!duplicate)
+            LibDrm::closeBufferHandle(drm_fd, fb->handles[i]);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 // Returns true if the driver reports the cursor hotspot in the HOTSPOT_X/Y properties of its cursor
 // planes (paravirtual drivers such as vmwgfx). The property set is fixed, so one check per device does.
 bool hasCursorHotspot(int drm_fd)
@@ -596,8 +619,14 @@ const Frame* ScreenCapturerKms::captureFrame(Error* error)
         return nullptr;
 
     const LibDrm::ScopedFB2 fb = LibDrm::modeGetFB2(card().fd.get(), fb_id);
-    if (!fb || !fb->width || !fb->height || !fb->handles[0])
+    if (!fb)
         return nullptr;
+
+    if (!fb->width || !fb->height || !fb->handles[0])
+    {
+        closeFbHandles(card().fd.get(), fb.get());
+        return nullptr;
+    }
 
     const QSize size(static_cast<int>(fb->width), static_cast<int>(fb->height));
     // Capture alternately into the two queue frames so the previous one can be diffed against.
@@ -609,6 +638,7 @@ const Frame* ScreenCapturerKms::captureFrame(Error* error)
             // Without a frame of the new size there is nothing to import into: the frame left in the
             // queue is sized for the previous mode and writing this framebuffer into it would go
             // past its buffer.
+            closeFbHandles(card().fd.get(), fb.get());
             return nullptr;
         }
 
@@ -671,8 +701,14 @@ const MouseCursor* ScreenCapturerKms::captureCursor()
     last_cursor_fb_id_ = cursor_fb_id;
 
     const LibDrm::ScopedFB2 fb = LibDrm::modeGetFB2(card().fd.get(), cursor_fb_id);
-    if (!fb || !fb->handles[0])
+    if (!fb)
         return nullptr;
+
+    if (!fb->handles[0])
+    {
+        closeFbHandles(card().fd.get(), fb.get());
+        return nullptr;
+    }
 
     QByteArray image;
     image.resize(cursor_size.width() * cursor_size.height() * MouseCursor::kBytesPerPixel);
@@ -884,6 +920,8 @@ bool ScreenCapturerKms::probeReadback()
                        << (fb ? fb->handles[0] : 0) << "size="
                        << (fb ? fb->width : 0) << "x" << (fb ? fb->height : 0) << "format="
                        << (fb ? fb->pixel_format : 0);
+            if (fb)
+                closeFbHandles(card().fd.get(), fb.get());
             card().readback = Readback::UNKNOWN;
             return false;
         }
@@ -961,25 +999,7 @@ bool ScreenCapturerKms::importFb(drmModeFB2* fb, quint8* dst, int dst_stride)
         }
     }
 
-    // Close the unique GEM handles opened by drmModeGetFB2().
-    for (int i = 0; i < 4; ++i)
-    {
-        if (!fb->handles[i])
-            continue;
-
-        bool duplicate = false;
-        for (int j = 0; j < i; ++j)
-        {
-            if (fb->handles[j] == fb->handles[i])
-            {
-                duplicate = true;
-                break;
-            }
-        }
-        if (!duplicate)
-            LibDrm::closeBufferHandle(card().fd.get(), fb->handles[i]);
-    }
-
+    closeFbHandles(card().fd.get(), fb);
     return ok;
 }
 
@@ -1174,6 +1194,8 @@ bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* pos
                 }
                 found = true;
             }
+            if (fb)
+                closeFbHandles(card().fd.get(), fb.get());
         }
     }
 
