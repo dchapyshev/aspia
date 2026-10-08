@@ -82,22 +82,21 @@ Differ::Differ(const QSize& size, int stride)
 // static
 Differ::DiffFullBlockFunc Differ::diffFunction()
 {
+#if defined(Q_PROCESSOR_X86)
+    // The CPU flags of libyuv are per architecture (on ARM the bit of SSE2 is the bit of NEON).
     if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
-#if defined(Q_PROCESSOR_X86)
         if constexpr (kBlockSize == 16)
             return diffFullBlock_32bpp_16x16_SSE2;
         else if constexpr (kBlockSize == 32)
             return diffFullBlock_32bpp_32x32_SSE2;
+    }
 #endif // defined(Q_PROCESSOR_X86)
-    }
-    else
-    {
-        if constexpr (kBlockSize == 16)
-            return diffFullBlock_32bpp_16x16_C;
-        else if constexpr (kBlockSize == 32)
-            return diffFullBlock_32bpp_32x32_C;
-    }
+
+    if constexpr (kBlockSize == 16)
+        return diffFullBlock_32bpp_16x16_C;
+    else if constexpr (kBlockSize == 32)
+        return diffFullBlock_32bpp_32x32_C;
 
     return nullptr;
 }
