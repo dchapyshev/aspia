@@ -76,6 +76,14 @@ const quint32 kVideoFormats[] = {
 };
 
 //--------------------------------------------------------------------------------------------------
+// Size of the cursor metadata that holds a |side| x |side| bitmap.
+int cursorMetaSize(int side)
+{
+    return static_cast<int>(sizeof(struct spa_meta_cursor) + sizeof(struct spa_meta_bitmap) +
+                            side * side * kBytesPerPixel);
+}
+
+//--------------------------------------------------------------------------------------------------
 quint32 drmFourcc(quint32 spa_format)
 {
     switch (spa_format)
@@ -776,9 +784,8 @@ void ScreenCapturerPipeWire::handleParamChanged(quint32 id, const spa_pod* param
     params[1] = static_cast<const spa_pod*>(spa_pod_builder_add_object(&builder,
         SPA_TYPE_OBJECT_ParamMeta, SPA_PARAM_Meta,
         SPA_PARAM_META_type, SPA_POD_Id(SPA_META_Cursor),
-        SPA_PARAM_META_size, SPA_POD_Int(static_cast<int>(
-            sizeof(struct spa_meta_cursor) + sizeof(struct spa_meta_bitmap) +
-            kMaxCursorSide * kMaxCursorSide * kBytesPerPixel))));
+        SPA_PARAM_META_size, SPA_POD_CHOICE_RANGE_Int(
+            cursorMetaSize(64), cursorMetaSize(1), cursorMetaSize(kMaxCursorSide))));
     params[2] = static_cast<const spa_pod*>(spa_pod_builder_add_object(&builder,
         SPA_TYPE_OBJECT_ParamMeta, SPA_PARAM_Meta,
         SPA_PARAM_META_type, SPA_POD_Id(SPA_META_Header),
