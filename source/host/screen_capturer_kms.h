@@ -80,6 +80,7 @@ private:
         int fd = -1;
         Readback readback = Readback::UNKNOWN;
         std::unique_ptr<EglDmaBuf> egl;
+        bool cursor_hotspot = false;
     };
 
     bool init();

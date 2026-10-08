@@ -398,6 +398,41 @@ bool readDumbBufferCpu(int drm_fd, const drmModeFB2* fb, quint8* dst, int dst_st
     return ok;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Returns true if the driver reports the cursor hotspot in the HOTSPOT_X/Y properties of its cursor
+// planes (paravirtual drivers such as vmwgfx). The property set is fixed, so one check per device does.
+bool hasCursorHotspot(int drm_fd)
+{
+    drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(drm_fd);
+    if (!plane_res)
+        return false;
+
+    bool found = false;
+
+    for (uint32_t i = 0; i < plane_res->count_planes && !found; ++i)
+    {
+        drmModeObjectProperties* props =
+            LibDrm::modeObjectGetProperties(drm_fd, plane_res->planes[i], DRM_MODE_OBJECT_PLANE);
+        if (!props)
+            continue;
+
+        for (uint32_t p = 0; p < props->count_props && !found; ++p)
+        {
+            drmModePropertyRes* prop = LibDrm::modeGetProperty(drm_fd, props->props[p]);
+            if (!prop)
+                continue;
+
+            found = strcmp(prop->name, "HOTSPOT_X") == 0;
+            LibDrm::modeFreeProperty(prop);
+        }
+
+        LibDrm::modeFreeObjectProperties(props);
+    }
+
+    LibDrm::modeFreePlaneResources(plane_res);
+    return found;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -672,6 +707,9 @@ const Frame* ScreenCapturerKms::captureFrame(Error* error)
 //--------------------------------------------------------------------------------------------------
 const MouseCursor* ScreenCapturerKms::captureCursor()
 {
+    if (!card().cursor_hotspot)
+        return nullptr;
+
     quint32 cursor_fb_id = 0;
     QSize cursor_size;
     QPoint hotspot;
@@ -702,8 +740,7 @@ const MouseCursor* ScreenCapturerKms::captureCursor()
         return nullptr;
 
     // Paravirtual drivers (vmwgfx) place the cursor plane at the pointer position and report the
-    // hotspot in plane properties; standard drivers place the image top-left and report no hotspot.
-    // Either way the client draws the image so the hotspot lands on cursorPosition().
+    // hotspot in plane properties.
     mouse_cursor_ = std::make_unique<MouseCursor>(std::move(image), cursor_size, hotspot);
     return mouse_cursor_.get();
 }
@@ -777,14 +814,20 @@ bool ScreenCapturerKms::init()
             continue;
         }
 
-        // Enumerate all planes (primary, cursor, overlay), not just overlays, so the hardware cursor
-        // plane can be found in captureCursor().
-        if (LibDrm::setClientCap(fd, DRM_CLIENT_CAP_UNIVERSAL_PLANES, 1) != 0)
-            LOG(INFO) << "DRM universal planes unavailable; hardware cursor will not be captured";
-
         Card card;
         card.path = path;
         card.fd = fd;
+
+        // Enumerate all planes (primary, cursor, overlay), not just overlays, so the hardware cursor
+        // plane can be found in captureCursor(). The client turns the cursor shape into its own cursor,
+        // which is wrong without the hotspot, so a cursor without one is not captured.
+        if (LibDrm::setClientCap(fd, DRM_CLIENT_CAP_UNIVERSAL_PLANES, 1) != 0)
+            LOG(INFO) << "DRM universal planes unavailable; hardware cursor will not be captured";
+        else if (!hasCursorHotspot(fd))
+            LOG(INFO) << "DRM driver reports no cursor hotspot; hardware cursor will not be captured";
+        else
+            card.cursor_hotspot = true;
+
         cards_.push_back(std::move(card));
     }
 

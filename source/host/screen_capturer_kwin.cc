@@ -307,6 +307,41 @@ bool readCursorFb(EglDmaBuf* egl_dmabuf, int drm_fd, drmModeFB2* fb, quint8* dst
     return importFb(egl_dmabuf, drm_fd, fb, dst, dst_stride);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Returns true if the driver reports the cursor hotspot in the HOTSPOT_X/Y properties of its cursor
+// planes (paravirtual drivers such as vmwgfx). The property set is fixed, so one check per device does.
+bool hasCursorHotspot(int drm_fd)
+{
+    drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(drm_fd);
+    if (!plane_res)
+        return false;
+
+    bool found = false;
+
+    for (uint32_t i = 0; i < plane_res->count_planes && !found; ++i)
+    {
+        drmModeObjectProperties* props =
+            LibDrm::modeObjectGetProperties(drm_fd, plane_res->planes[i], DRM_MODE_OBJECT_PLANE);
+        if (!props)
+            continue;
+
+        for (uint32_t p = 0; p < props->count_props && !found; ++p)
+        {
+            drmModePropertyRes* prop = LibDrm::modeGetProperty(drm_fd, props->props[p]);
+            if (!prop)
+                continue;
+
+            found = strcmp(prop->name, "HOTSPOT_X") == 0;
+            LibDrm::modeFreeProperty(prop);
+        }
+
+        LibDrm::modeFreeObjectProperties(props);
+    }
+
+    LibDrm::modeFreePlaneResources(plane_res);
+    return found;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -449,6 +484,15 @@ void ScreenCapturerKwin::initCursorCapture()
 
     if (LibDrm::setClientCap(drm_fd_, DRM_CLIENT_CAP_UNIVERSAL_PLANES, 1) != 0)
         LOG(INFO) << "DRM universal planes unavailable; hardware cursor will not be captured";
+
+    // The client turns the cursor shape into its own cursor, which is wrong without the hotspot.
+    if (!hasCursorHotspot(drm_fd_))
+    {
+        LOG(INFO) << "DRM driver reports no cursor hotspot; cursor will not be shown";
+        ::close(drm_fd_);
+        drm_fd_ = -1;
+        return;
+    }
 
     egl_dmabuf_ = std::make_unique<EglDmaBuf>();
     if (!egl_dmabuf_->isInitialized())
