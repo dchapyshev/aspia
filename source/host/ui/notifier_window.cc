@@ -26,6 +26,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QScreen>
+#include <QShowEvent>
 #include <QTimer>
 #include <QTranslator>
 #include <QToolButton>
@@ -41,6 +42,10 @@
 #include <qt_windows.h>
 #include "base/win/windows_version.h"
 #endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_LINUX)
+#include "host/linux/x_window_util.h"
+#endif // defined(Q_OS_LINUX)
 
 namespace {
 
@@ -367,6 +372,17 @@ bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
     }
 
     return QWidget::eventFilter(object, event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void NotifierWindow::showEvent(QShowEvent* event)
+{
+#if defined(Q_OS_LINUX)
+    // The native window is created by now and is mapped right after this event.
+    XWindowUtil::removeTakeFocusProtocol(winId());
+#endif // defined(Q_OS_LINUX)
+
+    QWidget::showEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

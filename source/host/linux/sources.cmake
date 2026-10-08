@@ -42,4 +42,6 @@ collect_sources(SOURCE_HOST_LINUX
     x_error_trap.cc
     x_error_trap.h
     x_server_pixel_buffer.cc
-    x_server_pixel_buffer.h)
+    x_server_pixel_buffer.h
+    x_window_util.cc
+    x_window_util.h)

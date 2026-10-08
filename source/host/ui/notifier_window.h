@@ -58,6 +58,7 @@ signals:
 protected:
     // QWidget implementation.
     bool eventFilter(QObject* object, QEvent* event) final;
+    void showEvent(QShowEvent* event) final;
     void hideEvent(QHideEvent* event) final;
     void closeEvent(QCloseEvent* event) final;
     void moveEvent(QMoveEvent* event) final;
