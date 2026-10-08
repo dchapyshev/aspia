@@ -144,56 +144,29 @@ bool LibDrm::ensureLoaded()
 
 //--------------------------------------------------------------------------------------------------
 // static
-drmModeRes* LibDrm::modeGetResources(int fd)
+LibDrm::ScopedResources LibDrm::modeGetResources(int fd)
 {
     if (!ensureLoaded())
         return nullptr;
-    return g_mode_get_resources(fd);
+    return ScopedResources(g_mode_get_resources(fd));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-void LibDrm::modeFreeResources(drmModeRes* resources)
-{
-    if (!ensureLoaded())
-        return;
-    g_mode_free_resources(resources);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-drmModeCrtc* LibDrm::modeGetCrtc(int fd, uint32_t crtc_id)
+LibDrm::ScopedCrtc LibDrm::modeGetCrtc(int fd, uint32_t crtc_id)
 {
     if (!ensureLoaded())
         return nullptr;
-    return g_mode_get_crtc(fd, crtc_id);
+    return ScopedCrtc(g_mode_get_crtc(fd, crtc_id));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-void LibDrm::modeFreeCrtc(drmModeCrtc* crtc)
-{
-    if (!ensureLoaded())
-        return;
-    g_mode_free_crtc(crtc);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-drmModeFB2* LibDrm::modeGetFB2(int fd, uint32_t fb_id)
+LibDrm::ScopedFB2 LibDrm::modeGetFB2(int fd, uint32_t fb_id)
 {
     if (!ensureLoaded())
         return nullptr;
-    return g_mode_get_fb2(fd, fb_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-void LibDrm::modeFreeFB2(drmModeFB2* fb)
-{
-    if (!ensureLoaded())
-        return;
-    g_mode_free_fb2(fb);
+    return ScopedFB2(g_mode_get_fb2(fd, fb_id));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -234,74 +207,38 @@ int LibDrm::setClientCap(int fd, uint64_t capability, uint64_t value)
 
 //--------------------------------------------------------------------------------------------------
 // static
-drmModePlaneRes* LibDrm::modeGetPlaneResources(int fd)
+LibDrm::ScopedPlaneResources LibDrm::modeGetPlaneResources(int fd)
 {
     if (!ensureLoaded())
         return nullptr;
-    return g_mode_get_plane_resources(fd);
+    return ScopedPlaneResources(g_mode_get_plane_resources(fd));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-void LibDrm::modeFreePlaneResources(drmModePlaneRes* resources)
-{
-    if (!ensureLoaded())
-        return;
-    g_mode_free_plane_resources(resources);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-drmModePlane* LibDrm::modeGetPlane(int fd, uint32_t plane_id)
+LibDrm::ScopedPlane LibDrm::modeGetPlane(int fd, uint32_t plane_id)
 {
     if (!ensureLoaded())
         return nullptr;
-    return g_mode_get_plane(fd, plane_id);
+    return ScopedPlane(g_mode_get_plane(fd, plane_id));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-void LibDrm::modeFreePlane(drmModePlane* plane)
-{
-    if (!ensureLoaded())
-        return;
-    g_mode_free_plane(plane);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-drmModeConnector* LibDrm::modeGetConnectorCurrent(int fd, uint32_t connector_id)
+LibDrm::ScopedConnector LibDrm::modeGetConnectorCurrent(int fd, uint32_t connector_id)
 {
     if (!ensureLoaded())
         return nullptr;
-    return g_mode_get_connector_current(fd, connector_id);
+    return ScopedConnector(g_mode_get_connector_current(fd, connector_id));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-void LibDrm::modeFreeConnector(drmModeConnector* connector)
-{
-    if (!ensureLoaded())
-        return;
-    g_mode_free_connector(connector);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-drmModeEncoder* LibDrm::modeGetEncoder(int fd, uint32_t encoder_id)
+LibDrm::ScopedEncoder LibDrm::modeGetEncoder(int fd, uint32_t encoder_id)
 {
     if (!ensureLoaded())
         return nullptr;
-    return g_mode_get_encoder(fd, encoder_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-void LibDrm::modeFreeEncoder(drmModeEncoder* encoder)
-{
-    if (!ensureLoaded())
-        return;
-    g_mode_free_encoder(encoder);
+    return ScopedEncoder(g_mode_get_encoder(fd, encoder_id));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -323,12 +260,83 @@ int LibDrm::mapDumbBuffer(int fd, uint32_t handle, uint64_t* offset)
 
 //--------------------------------------------------------------------------------------------------
 // static
-drmModeObjectProperties* LibDrm::modeObjectGetProperties(int fd, uint32_t object_id,
-                                                         uint32_t object_type)
+LibDrm::ScopedObjectProperties LibDrm::modeObjectGetProperties(int fd, uint32_t object_id, uint32_t object_type)
 {
     if (!ensureLoaded() || !g_mode_object_get_properties)
         return nullptr;
-    return g_mode_object_get_properties(fd, object_id, object_type);
+    return ScopedObjectProperties(g_mode_object_get_properties(fd, object_id, object_type));
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+LibDrm::ScopedProperty LibDrm::modeGetProperty(int fd, uint32_t property_id)
+{
+    if (!ensureLoaded() || !g_mode_get_property)
+        return nullptr;
+    return ScopedProperty(g_mode_get_property(fd, property_id));
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void LibDrm::modeFreeResources(drmModeRes* resources)
+{
+    if (!ensureLoaded())
+        return;
+    g_mode_free_resources(resources);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void LibDrm::modeFreeCrtc(drmModeCrtc* crtc)
+{
+    if (!ensureLoaded())
+        return;
+    g_mode_free_crtc(crtc);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void LibDrm::modeFreeFB2(drmModeFB2* fb)
+{
+    if (!ensureLoaded())
+        return;
+    g_mode_free_fb2(fb);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void LibDrm::modeFreePlaneResources(drmModePlaneRes* resources)
+{
+    if (!ensureLoaded())
+        return;
+    g_mode_free_plane_resources(resources);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void LibDrm::modeFreePlane(drmModePlane* plane)
+{
+    if (!ensureLoaded())
+        return;
+    g_mode_free_plane(plane);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void LibDrm::modeFreeConnector(drmModeConnector* connector)
+{
+    if (!ensureLoaded())
+        return;
+    g_mode_free_connector(connector);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void LibDrm::modeFreeEncoder(drmModeEncoder* encoder)
+{
+    if (!ensureLoaded())
+        return;
+    g_mode_free_encoder(encoder);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -338,15 +346,6 @@ void LibDrm::modeFreeObjectProperties(drmModeObjectProperties* props)
     if (!ensureLoaded() || !g_mode_free_object_properties)
         return;
     g_mode_free_object_properties(props);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-drmModePropertyRes* LibDrm::modeGetProperty(int fd, uint32_t property_id)
-{
-    if (!ensureLoaded() || !g_mode_get_property)
-        return nullptr;
-    return g_mode_get_property(fd, property_id);
 }
 
 //--------------------------------------------------------------------------------------------------

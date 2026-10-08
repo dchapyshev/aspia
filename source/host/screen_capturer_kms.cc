@@ -106,27 +106,20 @@ QString connectorNameForCrtc(int drm_fd, drmModeRes* resources, quint32 crtc_id)
     QString name;
     for (int i = 0; i < resources->count_connectors && name.isEmpty(); ++i)
     {
-        drmModeConnector* connector =
-            LibDrm::modeGetConnectorCurrent(drm_fd, resources->connectors[i]);
+        const LibDrm::ScopedConnector connector = LibDrm::modeGetConnectorCurrent(drm_fd, resources->connectors[i]);
         if (!connector)
             continue;
 
         // The connector drives the CRTC through its currently bound encoder.
         if (connector->encoder_id)
         {
-            drmModeEncoder* encoder = LibDrm::modeGetEncoder(drm_fd, connector->encoder_id);
-            if (encoder)
+            const LibDrm::ScopedEncoder encoder = LibDrm::modeGetEncoder(drm_fd, connector->encoder_id);
+            if (encoder && encoder->crtc_id == crtc_id)
             {
-                if (encoder->crtc_id == crtc_id)
-                {
-                    name = QString("%1-%2").arg(connectorTypeName(connector->connector_type))
-                                           .arg(connector->connector_type_id);
-                }
-                LibDrm::modeFreeEncoder(encoder);
+                name = QString("%1-%2").arg(connectorTypeName(connector->connector_type))
+                                       .arg(connector->connector_type_id);
             }
         }
-
-        LibDrm::modeFreeConnector(connector);
     }
 
     return name;
@@ -137,23 +130,18 @@ QString connectorNameForCrtc(int drm_fd, drmModeRes* resources, quint32 crtc_id)
 // call on every captured frame: it issues only DRM ioctls and resolves no connector names.
 int activeCrtcCount(int drm_fd)
 {
-    drmModeRes* resources = LibDrm::modeGetResources(drm_fd);
+    const LibDrm::ScopedResources resources = LibDrm::modeGetResources(drm_fd);
     if (!resources)
         return 0;
 
     int active = 0;
     for (int i = 0; i < resources->count_crtcs; ++i)
     {
-        drmModeCrtc* crtc = LibDrm::modeGetCrtc(drm_fd, resources->crtcs[i]);
-        if (crtc)
-        {
-            if (crtc->mode_valid && crtc->buffer_id)
-                ++active;
-            LibDrm::modeFreeCrtc(crtc);
-        }
+        const LibDrm::ScopedCrtc crtc = LibDrm::modeGetCrtc(drm_fd, resources->crtcs[i]);
+        if (crtc && crtc->mode_valid && crtc->buffer_id)
+            ++active;
     }
 
-    LibDrm::modeFreeResources(resources);
     return active;
 }
 
@@ -164,30 +152,24 @@ QList<Monitor> activeMonitors(int drm_fd)
 {
     QList<Monitor> monitors;
 
-    drmModeRes* resources = LibDrm::modeGetResources(drm_fd);
+    const LibDrm::ScopedResources resources = LibDrm::modeGetResources(drm_fd);
     if (!resources)
         return monitors;
 
     for (int i = 0; i < resources->count_crtcs; ++i)
     {
-        drmModeCrtc* crtc = LibDrm::modeGetCrtc(drm_fd, resources->crtcs[i]);
-        if (crtc)
+        const LibDrm::ScopedCrtc crtc = LibDrm::modeGetCrtc(drm_fd, resources->crtcs[i]);
+        if (crtc && crtc->mode_valid && crtc->buffer_id)
         {
-            if (crtc->mode_valid && crtc->buffer_id)
-            {
-                Monitor monitor;
-                monitor.crtc_id = resources->crtcs[i];
-                monitor.fb_id = crtc->buffer_id;
-                monitor.mode_size =
-                    QSize(static_cast<int>(crtc->width), static_cast<int>(crtc->height));
-                monitor.connector = connectorNameForCrtc(drm_fd, resources, monitor.crtc_id);
-                monitors.append(monitor);
-            }
-            LibDrm::modeFreeCrtc(crtc);
+            Monitor monitor;
+            monitor.crtc_id = resources->crtcs[i];
+            monitor.fb_id = crtc->buffer_id;
+            monitor.mode_size = QSize(static_cast<int>(crtc->width), static_cast<int>(crtc->height));
+            monitor.connector = connectorNameForCrtc(drm_fd, resources.get(), monitor.crtc_id);
+            monitors.append(monitor);
         }
     }
 
-    LibDrm::modeFreeResources(resources);
     return monitors;
 }
 
@@ -200,7 +182,7 @@ quint32 litFramebufferId(int drm_fd, quint32 preferred_crtc, quint32* crtc_id, i
     *crtc_id = 0;
     *active_count = 0;
 
-    drmModeRes* resources = LibDrm::modeGetResources(drm_fd);
+    const LibDrm::ScopedResources resources = LibDrm::modeGetResources(drm_fd);
     if (!resources)
         return 0;
 
@@ -209,25 +191,19 @@ quint32 litFramebufferId(int drm_fd, quint32 preferred_crtc, quint32* crtc_id, i
     quint32 preferred_fb_id = 0;
     for (int i = 0; i < resources->count_crtcs; ++i)
     {
-        drmModeCrtc* crtc = LibDrm::modeGetCrtc(drm_fd, resources->crtcs[i]);
-        if (crtc)
+        const LibDrm::ScopedCrtc crtc = LibDrm::modeGetCrtc(drm_fd, resources->crtcs[i]);
+        if (crtc && crtc->mode_valid && crtc->buffer_id)
         {
-            if (crtc->mode_valid && crtc->buffer_id)
+            ++*active_count;
+            if (!first_fb_id)
             {
-                ++*active_count;
-                if (!first_fb_id)
-                {
-                    first_fb_id = crtc->buffer_id;
-                    first_crtc_id = resources->crtcs[i];
-                }
-                if (preferred_crtc && resources->crtcs[i] == preferred_crtc)
-                    preferred_fb_id = crtc->buffer_id;
+                first_fb_id = crtc->buffer_id;
+                first_crtc_id = resources->crtcs[i];
             }
-            LibDrm::modeFreeCrtc(crtc);
+            if (preferred_crtc && resources->crtcs[i] == preferred_crtc)
+                preferred_fb_id = crtc->buffer_id;
         }
     }
-
-    LibDrm::modeFreeResources(resources);
 
     if (preferred_fb_id)
     {
@@ -290,29 +266,22 @@ void logDrmCards()
         int crtc_count = 0;
         QStringList connected;
 
-        drmModeRes* resources = LibDrm::modeGetResources(fd.get());
+        const LibDrm::ScopedResources resources = LibDrm::modeGetResources(fd.get());
         if (resources)
         {
             crtc_count = resources->count_crtcs;
 
             for (int j = 0; j < resources->count_connectors; ++j)
             {
-                drmModeConnector* connector =
+                const LibDrm::ScopedConnector connector =
                     LibDrm::modeGetConnectorCurrent(fd.get(), resources->connectors[j]);
-                if (!connector)
-                    continue;
-
-                if (connector->connection == DRM_MODE_CONNECTED)
+                if (connector && connector->connection == DRM_MODE_CONNECTED)
                 {
                     connected.append(QString("%1-%2")
                         .arg(connectorTypeName(connector->connector_type))
                         .arg(connector->connector_type_id));
                 }
-
-                LibDrm::modeFreeConnector(connector);
             }
-
-            LibDrm::modeFreeResources(resources);
         }
 
         QStringList lit_up;
@@ -401,7 +370,7 @@ bool readDumbBufferCpu(int drm_fd, const drmModeFB2* fb, quint8* dst, int dst_st
 // planes (paravirtual drivers such as vmwgfx). The property set is fixed, so one check per device does.
 bool hasCursorHotspot(int drm_fd)
 {
-    drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(drm_fd);
+    const LibDrm::ScopedPlaneResources plane_res = LibDrm::modeGetPlaneResources(drm_fd);
     if (!plane_res)
         return false;
 
@@ -409,25 +378,18 @@ bool hasCursorHotspot(int drm_fd)
 
     for (uint32_t i = 0; i < plane_res->count_planes && !found; ++i)
     {
-        drmModeObjectProperties* props =
+        const LibDrm::ScopedObjectProperties props =
             LibDrm::modeObjectGetProperties(drm_fd, plane_res->planes[i], DRM_MODE_OBJECT_PLANE);
         if (!props)
             continue;
 
         for (uint32_t p = 0; p < props->count_props && !found; ++p)
         {
-            drmModePropertyRes* prop = LibDrm::modeGetProperty(drm_fd, props->props[p]);
-            if (!prop)
-                continue;
-
-            found = strcmp(prop->name, "HOTSPOT_X") == 0;
-            LibDrm::modeFreeProperty(prop);
+            const LibDrm::ScopedProperty prop = LibDrm::modeGetProperty(drm_fd, props->props[p]);
+            found = prop && strcmp(prop->name, "HOTSPOT_X") == 0;
         }
-
-        LibDrm::modeFreeObjectProperties(props);
     }
 
-    LibDrm::modeFreePlaneResources(plane_res);
     return found;
 }
 
@@ -633,13 +595,9 @@ const Frame* ScreenCapturerKms::captureFrame(Error* error)
     if (!fb_id)
         return nullptr;
 
-    drmModeFB2* fb = LibDrm::modeGetFB2(card().fd.get(), fb_id);
+    const LibDrm::ScopedFB2 fb = LibDrm::modeGetFB2(card().fd.get(), fb_id);
     if (!fb || !fb->width || !fb->height || !fb->handles[0])
-    {
-        if (fb)
-            LibDrm::modeFreeFB2(fb);
         return nullptr;
-    }
 
     const QSize size(static_cast<int>(fb->width), static_cast<int>(fb->height));
     // Capture alternately into the two queue frames so the previous one can be diffed against.
@@ -651,7 +609,6 @@ const Frame* ScreenCapturerKms::captureFrame(Error* error)
             // Without a frame of the new size there is nothing to import into: the frame left in the
             // queue is sized for the previous mode and writing this framebuffer into it would go
             // past its buffer.
-            LibDrm::modeFreeFB2(fb);
             return nullptr;
         }
 
@@ -661,9 +618,7 @@ const Frame* ScreenCapturerKms::captureFrame(Error* error)
 
     Frame* current = queue_.currentFrame();
 
-    const bool ok = current && importFb(fb, current->frameData(), current->stride());
-
-    LibDrm::modeFreeFB2(fb);
+    const bool ok = current && importFb(fb.get(), current->frameData(), current->stride());
 
     if (!ok || !current)
         return nullptr;
@@ -715,20 +670,15 @@ const MouseCursor* ScreenCapturerKms::captureCursor()
         return nullptr;
     last_cursor_fb_id_ = cursor_fb_id;
 
-    drmModeFB2* fb = LibDrm::modeGetFB2(card().fd.get(), cursor_fb_id);
+    const LibDrm::ScopedFB2 fb = LibDrm::modeGetFB2(card().fd.get(), cursor_fb_id);
     if (!fb || !fb->handles[0])
-    {
-        if (fb)
-            LibDrm::modeFreeFB2(fb);
         return nullptr;
-    }
 
     QByteArray image;
     image.resize(cursor_size.width() * cursor_size.height() * MouseCursor::kBytesPerPixel);
 
-    const bool ok = importFb(fb, reinterpret_cast<quint8*>(image.data()),
+    const bool ok = importFb(fb.get(), reinterpret_cast<quint8*>(image.data()),
                              cursor_size.width() * MouseCursor::kBytesPerPixel);
-    LibDrm::modeFreeFB2(fb);
 
     if (!ok)
         return nullptr;
@@ -793,16 +743,9 @@ bool ScreenCapturerKms::init()
         if (LibDrm::dropMaster(fd.get()) != 0)
             LOG(INFO) << "drmDropMaster: not master (expected)";
 
-        bool has_crtcs = false;
-        drmModeRes* resources = LibDrm::modeGetResources(fd.get());
-        if (resources)
-        {
-            has_crtcs = resources->count_crtcs > 0;
-            LibDrm::modeFreeResources(resources);
-        }
-
         // The render node has no CRTCs.
-        if (!has_crtcs)
+        const LibDrm::ScopedResources resources = LibDrm::modeGetResources(fd.get());
+        if (!resources || resources->count_crtcs <= 0)
             continue;
 
         Card card;
@@ -934,15 +877,13 @@ bool ScreenCapturerKms::probeReadback()
                            (method == Readback::DMABUF_CPU) ? "CPU DMA-BUF mapping" :
                                                               "CPU dumb-buffer mapping";
 
-        drmModeFB2* fb = LibDrm::modeGetFB2(card().fd.get(), fb_id);
+        const LibDrm::ScopedFB2 fb = LibDrm::modeGetFB2(card().fd.get(), fb_id);
         if (!fb || !fb->width || !fb->height || !fb->handles[0])
         {
             LOG(ERROR) << "KMS probe: framebuffer" << fb_id << "not readable: handle0="
                        << (fb ? fb->handles[0] : 0) << "size="
                        << (fb ? fb->width : 0) << "x" << (fb ? fb->height : 0) << "format="
                        << (fb ? fb->pixel_format : 0);
-            if (fb)
-                LibDrm::modeFreeFB2(fb);
             card().readback = Readback::UNKNOWN;
             return false;
         }
@@ -951,8 +892,7 @@ bool ScreenCapturerKms::probeReadback()
         QByteArray scratch(static_cast<qsizetype>(stride) * fb->height, Qt::Uninitialized);
 
         card().readback = method;
-        const bool ok = importFb(fb, reinterpret_cast<quint8*>(scratch.data()), stride);
-        LibDrm::modeFreeFB2(fb);
+        const bool ok = importFb(fb.get(), reinterpret_cast<quint8*>(scratch.data()), stride);
 
         if (ok)
         {
@@ -1171,19 +1111,17 @@ QString ScreenCapturerKms::capturedConnectorName()
     if (!crtc_id_)
         return QString();
 
-    drmModeRes* resources = LibDrm::modeGetResources(card().fd.get());
+    const LibDrm::ScopedResources resources = LibDrm::modeGetResources(card().fd.get());
     if (!resources)
         return QString();
 
-    const QString name = connectorNameForCrtc(card().fd.get(), resources, crtc_id_);
-    LibDrm::modeFreeResources(resources);
-    return name;
+    return connectorNameForCrtc(card().fd.get(), resources.get(), crtc_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* position, QPoint* hotspot)
 {
-    drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(card().fd.get());
+    const LibDrm::ScopedPlaneResources plane_res = LibDrm::modeGetPlaneResources(card().fd.get());
     if (!plane_res)
         return false;
 
@@ -1194,7 +1132,7 @@ bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* pos
     // the cursor on the captured CRTC counts - on another output it is not on the screen we serve.
     for (uint32_t i = 0; i < plane_res->count_planes && !found; ++i)
     {
-        drmModePlane* plane = LibDrm::modeGetPlane(card().fd.get(), plane_res->planes[i]);
+        const LibDrm::ScopedPlane plane = LibDrm::modeGetPlane(card().fd.get(), plane_res->planes[i]);
         if (!plane)
             continue;
 
@@ -1202,7 +1140,7 @@ bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* pos
             plane->crtc_id && (crtc_id_ == 0 || plane->crtc_id == crtc_id_);
         if (plane->fb_id && on_captured_crtc)
         {
-            drmModeFB2* fb = LibDrm::modeGetFB2(card().fd.get(), plane->fb_id);
+            const LibDrm::ScopedFB2 fb = LibDrm::modeGetFB2(card().fd.get(), plane->fb_id);
             if (fb && fb->width && fb->height &&
                 fb->width <= kMaxCursorSize && fb->height <= kMaxCursorSize)
             {
@@ -1217,13 +1155,13 @@ bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* pos
                 {
                     // Paravirtual drivers (vmwgfx) report the cursor hotspot in plane properties rather
                     // than via the plane position.
-                    drmModeObjectProperties* props = LibDrm::modeObjectGetProperties(
+                    const LibDrm::ScopedObjectProperties props = LibDrm::modeObjectGetProperties(
                         card().fd.get(), plane->plane_id, DRM_MODE_OBJECT_PLANE);
                     if (props)
                     {
                         for (uint32_t p = 0; p < props->count_props; ++p)
                         {
-                            drmModePropertyRes* prop = LibDrm::modeGetProperty(card().fd.get(), props->props[p]);
+                            const LibDrm::ScopedProperty prop = LibDrm::modeGetProperty(card().fd.get(), props->props[p]);
                             if (!prop)
                                 continue;
 
@@ -1231,21 +1169,13 @@ bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* pos
                                 hotspot->setX(static_cast<int>(props->prop_values[p]));
                             else if (strcmp(prop->name, "HOTSPOT_Y") == 0)
                                 hotspot->setY(static_cast<int>(props->prop_values[p]));
-
-                            LibDrm::modeFreeProperty(prop);
                         }
-                        LibDrm::modeFreeObjectProperties(props);
                     }
                 }
                 found = true;
             }
-            if (fb)
-                LibDrm::modeFreeFB2(fb);
         }
-
-        LibDrm::modeFreePlane(plane);
     }
 
-    LibDrm::modeFreePlaneResources(plane_res);
     return found;
 }

@@ -306,7 +306,7 @@ bool readCursorFb(EglDmaBuf* egl_dmabuf, int drm_fd, drmModeFB2* fb, quint8* dst
 // planes (paravirtual drivers such as vmwgfx). The property set is fixed, so one check per device does.
 bool hasCursorHotspot(int drm_fd)
 {
-    drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(drm_fd);
+    const LibDrm::ScopedPlaneResources plane_res = LibDrm::modeGetPlaneResources(drm_fd);
     if (!plane_res)
         return false;
 
@@ -314,25 +314,18 @@ bool hasCursorHotspot(int drm_fd)
 
     for (uint32_t i = 0; i < plane_res->count_planes && !found; ++i)
     {
-        drmModeObjectProperties* props =
+        const LibDrm::ScopedObjectProperties props =
             LibDrm::modeObjectGetProperties(drm_fd, plane_res->planes[i], DRM_MODE_OBJECT_PLANE);
         if (!props)
             continue;
 
         for (uint32_t p = 0; p < props->count_props && !found; ++p)
         {
-            drmModePropertyRes* prop = LibDrm::modeGetProperty(drm_fd, props->props[p]);
-            if (!prop)
-                continue;
-
-            found = strcmp(prop->name, "HOTSPOT_X") == 0;
-            LibDrm::modeFreeProperty(prop);
+            const LibDrm::ScopedProperty prop = LibDrm::modeGetProperty(drm_fd, props->props[p]);
+            found = prop && strcmp(prop->name, "HOTSPOT_X") == 0;
         }
-
-        LibDrm::modeFreeObjectProperties(props);
     }
 
-    LibDrm::modeFreePlaneResources(plane_res);
     return found;
 }
 
@@ -450,10 +443,9 @@ void ScreenCapturerKwin::initCursorCapture()
         if (!fd.isValid())
             continue;
 
-        drmModeRes* resources = LibDrm::modeGetResources(fd.get());
+        const LibDrm::ScopedResources resources = LibDrm::modeGetResources(fd.get());
         if (resources && resources->count_crtcs > 0)
         {
-            LibDrm::modeFreeResources(resources);
             drm_fd_ = std::move(fd);
             // The compositor owns DRM master; never take it (would block its modesetting). Reading the
             // cursor plane with CAP_SYS_ADMIN does not need master.
@@ -461,9 +453,6 @@ void ScreenCapturerKwin::initCursorCapture()
                 LOG(INFO) << "drmDropMaster: not master (expected)";
             break;
         }
-
-        if (resources)
-            LibDrm::modeFreeResources(resources);
     }
 
     if (!drm_fd_.isValid())
@@ -774,21 +763,16 @@ const MouseCursor* ScreenCapturerKwin::captureCursor()
         return nullptr;
     last_cursor_fb_id_ = cursor_fb_id;
 
-    drmModeFB2* fb = LibDrm::modeGetFB2(drm_fd_.get(), cursor_fb_id);
+    const LibDrm::ScopedFB2 fb = LibDrm::modeGetFB2(drm_fd_.get(), cursor_fb_id);
     if (!fb || !fb->handles[0])
-    {
-        if (fb)
-            LibDrm::modeFreeFB2(fb);
         return nullptr;
-    }
 
     QByteArray image;
     image.resize(cursor_size.width() * cursor_size.height() * MouseCursor::kBytesPerPixel);
 
-    const bool ok = readCursorFb(egl_dmabuf_.get(), drm_fd_.get(), fb,
+    const bool ok = readCursorFb(egl_dmabuf_.get(), drm_fd_.get(), fb.get(),
                                  reinterpret_cast<quint8*>(image.data()),
                                  cursor_size.width() * MouseCursor::kBytesPerPixel, cursor_size);
-    LibDrm::modeFreeFB2(fb);
 
     if (!ok)
     {
@@ -839,7 +823,7 @@ QPoint ScreenCapturerKwin::cursorPosition()
 bool ScreenCapturerKwin::findCursorPlane(quint32* fb_id, QSize* size, QPoint* position,
                                          QPoint* hotspot, int* crtc_width)
 {
-    drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(drm_fd_.get());
+    const LibDrm::ScopedPlaneResources plane_res = LibDrm::modeGetPlaneResources(drm_fd_.get());
     if (!plane_res)
         return false;
 
@@ -850,13 +834,13 @@ bool ScreenCapturerKwin::findCursorPlane(quint32* fb_id, QSize* size, QPoint* po
     // workspace is captured, so the cursor on any CRTC is on screen.
     for (uint32_t i = 0; i < plane_res->count_planes && !found; ++i)
     {
-        drmModePlane* plane = LibDrm::modeGetPlane(drm_fd_.get(), plane_res->planes[i]);
+        const LibDrm::ScopedPlane plane = LibDrm::modeGetPlane(drm_fd_.get(), plane_res->planes[i]);
         if (!plane)
             continue;
 
         if (plane->fb_id && plane->crtc_id)
         {
-            drmModeFB2* fb = LibDrm::modeGetFB2(drm_fd_.get(), plane->fb_id);
+            const LibDrm::ScopedFB2 fb = LibDrm::modeGetFB2(drm_fd_.get(), plane->fb_id);
             if (fb && fb->width && fb->height &&
                 fb->width <= kMaxCursorSize && fb->height <= kMaxCursorSize)
             {
@@ -869,24 +853,21 @@ bool ScreenCapturerKwin::findCursorPlane(quint32* fb_id, QSize* size, QPoint* po
                 if (crtc_width)
                 {
                     // Physical resolution of the cursor's CRTC, to derive the output scale.
-                    drmModeCrtc* crtc = LibDrm::modeGetCrtc(drm_fd_.get(), plane->crtc_id);
+                    const LibDrm::ScopedCrtc crtc = LibDrm::modeGetCrtc(drm_fd_.get(), plane->crtc_id);
                     if (crtc)
-                    {
                         *crtc_width = static_cast<int>(crtc->width);
-                        LibDrm::modeFreeCrtc(crtc);
-                    }
                 }
                 if (hotspot)
                 {
                     // Paravirtual drivers (vmwgfx) report the cursor hotspot in plane properties rather
                     // than via the plane position.
-                    drmModeObjectProperties* props = LibDrm::modeObjectGetProperties(
+                    const LibDrm::ScopedObjectProperties props = LibDrm::modeObjectGetProperties(
                         drm_fd_.get(), plane->plane_id, DRM_MODE_OBJECT_PLANE);
                     if (props)
                     {
                         for (uint32_t p = 0; p < props->count_props; ++p)
                         {
-                            drmModePropertyRes* prop = LibDrm::modeGetProperty(drm_fd_.get(), props->props[p]);
+                            const LibDrm::ScopedProperty prop = LibDrm::modeGetProperty(drm_fd_.get(), props->props[p]);
                             if (!prop)
                                 continue;
 
@@ -894,25 +875,16 @@ bool ScreenCapturerKwin::findCursorPlane(quint32* fb_id, QSize* size, QPoint* po
                                 hotspot->setX(static_cast<int>(props->prop_values[p]));
                             else if (strcmp(prop->name, "HOTSPOT_Y") == 0)
                                 hotspot->setY(static_cast<int>(props->prop_values[p]));
-
-                            LibDrm::modeFreeProperty(prop);
                         }
-                        LibDrm::modeFreeObjectProperties(props);
                     }
                 }
                 found = true;
             }
             if (fb)
-            {
-                closeFbHandles(drm_fd_.get(), fb);
-                LibDrm::modeFreeFB2(fb);
-            }
+                closeFbHandles(drm_fd_.get(), fb.get());
         }
-
-        LibDrm::modeFreePlane(plane);
     }
 
-    LibDrm::modeFreePlaneResources(plane_res);
     return found;
 }
 
