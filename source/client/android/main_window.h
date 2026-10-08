@@ -52,6 +52,10 @@ public:
     explicit AndroidMainWindow(QWidget* parent = nullptr);
     ~AndroidMainWindow() final;
 
+protected:
+    // QObject implementation.
+    bool eventFilter(QObject* watched, QEvent* event) final;
+
 private slots:
     void onSectionChanged(int index);
     void onRouterActionsChanged();
@@ -127,6 +131,9 @@ private:
     // already active, the link is ignored with a notification.
     void connectToUrl(const QString& url);
 
+    // Returns the dialog, sheet or menu on top of the window, or nullptr when none is shown.
+    QWidget* visibleOverlay() const;
+
     QStackedWidget* stack_root_ = nullptr;
     QWidget* shell_ = nullptr;
     AppBar* app_bar_ = nullptr;
@@ -150,6 +157,10 @@ private:
     QString pending_url_;
     UpdateInfo pending_update_;
     bool unlocked_ = false;
+
+    // The last press of the system Back that came to this window, see eventFilter().
+    enum class BackPress { NONE, TAKEN, PASSED };
+    BackPress back_press_ = BackPress::NONE;
 
     Q_DISABLE_COPY_MOVE(AndroidMainWindow)
 };

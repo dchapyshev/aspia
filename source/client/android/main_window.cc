@@ -22,8 +22,10 @@
 #include <QDialog>
 #include <QEvent>
 #include <QJniObject>
+#include <QKeyEvent>
 #include <QStackedWidget>
 #include <QVBoxLayout>
+#include <QWindow>
 
 #include <optional>
 
@@ -50,6 +52,8 @@
 #include "client/workers/update_worker.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
+#include "common/android/bottom_sheet.h"
+#include "common/android/menu.h"
 #include "common/android/message_dialog.h"
 #include "proto/peer.h"
 #include "proto/router_constants.h"
@@ -216,12 +220,84 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     // The gate runs once the event loop is active so the window is laid out and the dialog scrim
     // covers it.
     QMetaObject::invokeMethod(this, [this]() { runMasterPasswordGate(); }, Qt::QueuedConnection);
+
+    // The system Back is taken before it reaches the focused widget, see eventFilter().
+    qApp->installEventFilter(this);
 }
 
 //--------------------------------------------------------------------------------------------------
 AndroidMainWindow::~AndroidMainWindow()
 {
     delete two_factor_dialog_;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AndroidMainWindow::eventFilter(QObject* watched, QEvent* event)
+{
+    // Only the system Back that comes to this window. It is taken here, before the focused widget: a
+    // line edit shows the on-screen keyboard on the release of any key, and the desktop view sends the
+    // keys to the host.
+    if (watched != windowHandle() ||
+        (event->type() != QEvent::KeyPress && event->type() != QEvent::KeyRelease) ||
+        static_cast<QKeyEvent*>(event)->key() != Qt::Key_Back)
+    {
+        return QWidget::eventFilter(watched, event);
+    }
+
+    if (event->type() == QEvent::KeyPress)
+    {
+        // The system Back nobody handles closes the window on the release, and with it the application.
+        // Taking the press keeps Qt from doing that; only the root page of a section lets it through.
+        if (!visibleOverlay() && stack_root_->currentWidget() == shell_ && !app_bar_->isBackVisible())
+        {
+            back_press_ = BackPress::PASSED;
+            return QWidget::eventFilter(watched, event);
+        }
+
+        back_press_ = BackPress::TAKEN;
+        return true;
+    }
+
+    const BackPress back_press = back_press_;
+    back_press_ = BackPress::NONE;
+
+    // While the on-screen keyboard is up, the press goes to the keyboard, which hides itself, and only
+    // the release may come here. It is dropped, otherwise the line edit shows the keyboard again.
+    if (back_press == BackPress::NONE)
+        return true;
+
+    if (back_press == BackPress::PASSED)
+        return QWidget::eventFilter(watched, event);
+
+    // The action follows on the release, so the whole press is over before the screen changes. An
+    // overlay is closed as with a tap outside of it.
+    if (QWidget* overlay = visibleOverlay())
+    {
+        if (QDialog* dialog = qobject_cast<QDialog*>(overlay))
+            dialog->reject();
+        else if (BottomSheet* sheet = qobject_cast<BottomSheet*>(overlay))
+            sheet->dismiss();
+        else
+            overlay->close();
+        return true;
+    }
+
+    // A session screen returns the same way as with the back button of its app bar. The desktop has
+    // none: a stray swipe must not drop the connection, so its actions are opened, Disconnect among
+    // them.
+    QWidget* screen = stack_root_->currentWidget();
+    if (screen == desktop_)
+        desktop_->onShowActions();
+    else if (screen == file_transfer_)
+        onFileTransferClosed();
+    else if (screen == chat_)
+        onChatClosed();
+    else if (screen == authorization_)
+        onAuthorizationClosed();
+    else
+        onBackClicked();
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1017,5 +1093,27 @@ void AndroidMainWindow::connectToUrl(const QString& url)
 
         openSession(HostConfig::forLocalHost(entry), session_type);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+QWidget* AndroidMainWindow::visibleOverlay() const
+{
+    // The dialogs, sheets and menus are shown inside this window over its content; the one raised last
+    // is the last child and is on top.
+    const QObjectList& objects = children();
+    for (auto it = objects.crbegin(); it != objects.crend(); ++it)
+    {
+        QWidget* widget = qobject_cast<QWidget*>(*it);
+        if (!widget || !widget->isVisible())
+            continue;
+
+        if (qobject_cast<QDialog*>(widget) || qobject_cast<BottomSheet*>(widget) ||
+            qobject_cast<Menu*>(widget))
+        {
+            return widget;
+        }
+    }
+
+    return nullptr;
 }
 

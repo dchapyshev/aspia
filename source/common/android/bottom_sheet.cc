@@ -133,21 +133,9 @@ void BottomSheet::showSheet()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool BottomSheet::eventFilter(QObject* watched, QEvent* event)
+void BottomSheet::dismiss()
 {
-    // Follow the host window through resizes so the sheet keeps covering it and relays out for the
-    // new orientation. The pressed item is dropped because its hit rectangle is now stale.
-    if (watched == parentWidget() && event->type() == QEvent::Resize)
-    {
-        offset_animation_->stop();
-        offset_ = 0;
-        setGeometry(parentWidget()->rect());
-        updateBottomInset();
-        active_ = -1;
-        update();
-    }
-
-    return QWidget::eventFilter(watched, event);
+    animateTo(sheetRect().height(), true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -384,6 +372,24 @@ void BottomSheet::mouseReleaseEvent(QMouseEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool BottomSheet::eventFilter(QObject* watched, QEvent* event)
+{
+    // Follow the host window through resizes so the sheet keeps covering it and relays out for the
+    // new orientation. The pressed item is dropped because its hit rectangle is now stale.
+    if (watched == parentWidget() && event->type() == QEvent::Resize)
+    {
+        offset_animation_->stop();
+        offset_ = 0;
+        setGeometry(parentWidget()->rect());
+        updateBottomInset();
+        active_ = -1;
+        update();
+    }
+
+    return QWidget::eventFilter(watched, event);
+}
+
+//--------------------------------------------------------------------------------------------------
 void BottomSheet::animateTo(int target_offset, bool close_after)
 {
     close_on_finish_ = close_after;
@@ -391,12 +397,6 @@ void BottomSheet::animateTo(int target_offset, bool close_after)
     offset_animation_->setStartValue(offset_);
     offset_animation_->setEndValue(target_offset);
     offset_animation_->start();
-}
-
-//--------------------------------------------------------------------------------------------------
-void BottomSheet::dismiss()
-{
-    animateTo(sheetRect().height(), true);
 }
 
 //--------------------------------------------------------------------------------------------------

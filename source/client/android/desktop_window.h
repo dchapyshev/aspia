@@ -65,6 +65,10 @@ public:
     DesktopWindow(const HostConfig& host, bool credentials_saved, QWidget* parent = nullptr);
     ~DesktopWindow() final;
 
+public slots:
+    // Opens the sheet of the session actions, as the floating button does.
+    void onShowActions();
+
 signals:
     void sig_closed();
     void sig_screenSelected(const proto::screen::Screen& screen);
@@ -105,7 +109,6 @@ private slots:
     void onClipboardEvent(const proto::clipboard::Event& event);
     void onMetricsRequest();
 
-    void onShowActions();
     void onShowStatistics();
     void onKeyboardInsetChanged(int inset);
     void onApplicationStateChanged(Qt::ApplicationState state);

@@ -54,6 +54,9 @@ public:
     // Covers the top-level window and shows the sheet over its content.
     void showSheet();
 
+    // Slides the sheet down and out, then closes it.
+    void dismiss();
+
 signals:
     void sig_triggered(int index);
 
@@ -83,9 +86,6 @@ private:
     // Animates the vertical offset to |target_offset| (0 = fully shown), closing the sheet when the
     // animation finishes if |close_after| is set.
     void animateTo(int target_offset, bool close_after);
-
-    // Slides the sheet down and out, then closes it.
-    void dismiss();
 
     bool isPortrait() const;
 
