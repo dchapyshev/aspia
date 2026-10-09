@@ -178,6 +178,8 @@ void CredentialImportWidget::onOpenClicked()
             db.findCredentialByGuid(credential.guid(), &existing) != Database::FindResult::NOT_FOUND;
 
         CredentialSelectionList::Item item;
+        item.icon = credential.type() == CredentialConfig::Type::OS
+            ? ":/img/key-os.svg" : ":/img/key-aspia.svg";
         item.name = credential.displayName();
         item.details = credential.username();
         item.status = exists ? tr("Exists") : tr("New");

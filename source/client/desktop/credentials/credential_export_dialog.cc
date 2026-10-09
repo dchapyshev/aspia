@@ -21,7 +21,9 @@
 #include <QAbstractButton>
 #include <QIcon>
 #include <QPushButton>
+#include <QSignalBlocker>
 #include <QTimer>
+#include <QTreeWidgetItemIterator>
 
 #include "base/logging.h"
 #include "client/credential_file.h"
@@ -38,6 +40,34 @@ enum Column
     COLUMN_NAME = 0,
     COLUMN_USERNAME = 1
 };
+
+//--------------------------------------------------------------------------------------------------
+void updateGroupCheckState(QTreeWidgetItem* group)
+{
+    int enabled = 0;
+    int checked = 0;
+
+    for (int i = 0; i < group->childCount(); ++i)
+    {
+        const QTreeWidgetItem* item = group->child(i);
+        if (!(item->flags() & Qt::ItemIsEnabled))
+            continue;
+
+        ++enabled;
+        if (item->checkState(COLUMN_NAME) == Qt::Checked)
+            ++checked;
+    }
+
+    if (!enabled)
+        return;
+
+    if (!checked)
+        group->setCheckState(COLUMN_NAME, Qt::Unchecked);
+    else if (checked == enabled)
+        group->setCheckState(COLUMN_NAME, Qt::Checked);
+    else
+        group->setCheckState(COLUMN_NAME, Qt::PartiallyChecked);
+}
 
 } // namespace
 
@@ -60,10 +90,8 @@ CredentialExportDialog::CredentialExportDialog(QWidget* parent)
     connect(ui->button_box, &QDialogButtonBox::clicked,
             this, &CredentialExportDialog::onButtonBoxClicked);
 
-    connect(ui->tree_credentials, &QTreeWidget::itemChanged, this, [this]()
-    {
-        ui->button_box->button(QDialogButtonBox::Save)->setEnabled(!checkedCredentials().isEmpty());
-    });
+    connect(ui->tree_credentials, &QTreeWidget::itemChanged,
+            this, &CredentialExportDialog::onItemChanged);
 
     QTimer::singleShot(MilliSeconds::zero(), this, &CredentialExportDialog::onLoadData);
 }
@@ -143,6 +171,18 @@ void CredentialExportDialog::onLoadData()
         return;
     }
 
+    auto add_group = [this](const QString& icon, const QString& text)
+    {
+        QTreeWidgetItem* group = new QTreeWidgetItem(ui->tree_credentials);
+        group->setIcon(COLUMN_NAME, QIcon(icon));
+        group->setText(COLUMN_NAME, text);
+        group->setFirstColumnSpanned(true);
+        return group;
+    };
+
+    QTreeWidgetItem* aspia_group = add_group(":/img/key-aspia.svg", tr("Aspia Credentials"));
+    QTreeWidgetItem* os_group = add_group(":/img/key-os.svg", tr("OS Credentials"));
+
     for (int i = 0; i < credentials_.size(); ++i)
     {
         const CredentialConfig& credential = credentials_[i];
@@ -164,11 +204,54 @@ void CredentialExportDialog::onLoadData()
             item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         }
 
-        ui->tree_credentials->addTopLevelItem(item);
+        QTreeWidgetItem* group = credential.type() == CredentialConfig::Type::OS ? os_group : aspia_group;
+        group->addChild(item);
     }
 
-    ui->tree_credentials->sortItems(COLUMN_NAME, Qt::AscendingOrder);
+    for (QTreeWidgetItem* group : { aspia_group, os_group })
+    {
+        if (group->childCount() == 0)
+        {
+            delete group;
+            continue;
+        }
+
+        group->sortChildren(COLUMN_NAME, Qt::AscendingOrder);
+        updateGroupCheckState(group);
+    }
+
+    ui->tree_credentials->expandAll();
     ui->tree_credentials->resizeColumnToContents(COLUMN_NAME);
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialExportDialog::onItemChanged(QTreeWidgetItem* item, int column)
+{
+    if (column == COLUMN_NAME)
+    {
+        // The changes made here are not reported back to this slot.
+        const QSignalBlocker blocker(ui->tree_credentials);
+
+        if (item->childCount() > 0)
+        {
+            const Qt::CheckState state = item->checkState(COLUMN_NAME);
+            if (state != Qt::PartiallyChecked)
+            {
+                for (int i = 0; i < item->childCount(); ++i)
+                {
+                    QTreeWidgetItem* child = item->child(i);
+                    if (child->flags() & Qt::ItemIsEnabled)
+                        child->setCheckState(COLUMN_NAME, state);
+                }
+            }
+        }
+        else if (item->parent())
+        {
+            updateGroupCheckState(item->parent());
+        }
+    }
+
+    ui->button_box->button(QDialogButtonBox::Save)->setEnabled(!checkedCredentials().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -176,9 +259,9 @@ void CredentialExportDialog::setCheckState(Qt::CheckState state)
 {
     for (int i = 0; i < ui->tree_credentials->topLevelItemCount(); ++i)
     {
-        QTreeWidgetItem* item = ui->tree_credentials->topLevelItem(i);
-        if (item->flags() & Qt::ItemIsEnabled)
-            item->setCheckState(COLUMN_NAME, state);
+        QTreeWidgetItem* group = ui->tree_credentials->topLevelItem(i);
+        if (group->data(COLUMN_NAME, Qt::CheckStateRole).isValid())
+            group->setCheckState(COLUMN_NAME, state);
     }
 }
 
@@ -187,12 +270,10 @@ QList<CredentialConfig> CredentialExportDialog::checkedCredentials() const
 {
     QList<CredentialConfig> credentials;
 
-    for (int i = 0; i < ui->tree_credentials->topLevelItemCount(); ++i)
-    {
-        const QTreeWidgetItem* item = ui->tree_credentials->topLevelItem(i);
-        if (item->checkState(COLUMN_NAME) == Qt::Checked)
-            credentials.append(credentials_[item->data(COLUMN_NAME, Qt::UserRole).toInt()]);
-    }
+    QTreeWidgetItemIterator it(ui->tree_credentials,
+                               QTreeWidgetItemIterator::Checked | QTreeWidgetItemIterator::NoChildren);
+    for (; *it; ++it)
+        credentials.append(credentials_[(*it)->data(COLUMN_NAME, Qt::UserRole).toInt()]);
 
     return credentials;
 }

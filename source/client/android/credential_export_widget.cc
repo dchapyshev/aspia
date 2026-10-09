@@ -124,6 +124,12 @@ void CredentialExportWidget::prepare()
         CredentialSelectionList::Item item;
         item.name = credential.displayName();
         item.enabled = credential.isValid();
+        if (!item.enabled)
+            item.icon = ":/img/key-corrupted.svg";
+        else if (credential.type() == CredentialConfig::Type::OS)
+            item.icon = ":/img/key-os.svg";
+        else
+            item.icon = ":/img/key-aspia.svg";
         item.details = item.enabled ? credential.username() : tr("Damaged");
         items.append(item);
     }

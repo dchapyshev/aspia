@@ -21,6 +21,7 @@
 #include <QAbstractButton>
 #include <QIcon>
 #include <QPushButton>
+#include <QTreeWidgetItemIterator>
 
 #include "base/logging.h"
 #include "client/credential_file.h"
@@ -132,6 +133,19 @@ void CredentialImportDialog::onOpenButtonPressed()
             return;
     }
 
+    auto add_group = [this](const QString& icon, const QString& text)
+    {
+        QTreeWidgetItem* group = new QTreeWidgetItem(ui->tree_credentials);
+        group->setIcon(COLUMN_NAME, QIcon(icon));
+        group->setText(COLUMN_NAME, text);
+        group->setFlags(group->flags() | Qt::ItemIsAutoTristate);
+        group->setFirstColumnSpanned(true);
+        return group;
+    };
+
+    QTreeWidgetItem* aspia_group = add_group(":/img/key-aspia.svg", tr("Aspia Credentials"));
+    QTreeWidgetItem* os_group = add_group(":/img/key-os.svg", tr("OS Credentials"));
+
     Database& db = Database::instance();
 
     for (int i = 0; i < credentials.size(); ++i)
@@ -150,12 +164,21 @@ void CredentialImportDialog::onOpenButtonPressed()
         item->setData(COLUMN_NAME, Qt::UserRole, i);
         item->setCheckState(COLUMN_NAME, Qt::Checked);
 
-        ui->tree_credentials->addTopLevelItem(item);
+        QTreeWidgetItem* group = credential.type() == CredentialConfig::Type::OS ? os_group : aspia_group;
+        group->addChild(item);
     }
 
     credentials_ = std::move(credentials);
 
-    ui->tree_credentials->sortItems(COLUMN_NAME, Qt::AscendingOrder);
+    for (QTreeWidgetItem* group : { aspia_group, os_group })
+    {
+        if (group->childCount() == 0)
+            delete group;
+        else
+            group->sortChildren(COLUMN_NAME, Qt::AscendingOrder);
+    }
+
+    ui->tree_credentials->expandAll();
     ui->tree_credentials->resizeColumnToContents(COLUMN_NAME);
 
     updateButtons();
@@ -260,12 +283,10 @@ QList<CredentialConfig> CredentialImportDialog::checkedCredentials() const
 {
     QList<CredentialConfig> credentials;
 
-    for (int i = 0; i < ui->tree_credentials->topLevelItemCount(); ++i)
-    {
-        const QTreeWidgetItem* item = ui->tree_credentials->topLevelItem(i);
-        if (item->checkState(COLUMN_NAME) == Qt::Checked)
-            credentials.append(credentials_[item->data(COLUMN_NAME, Qt::UserRole).toInt()]);
-    }
+    QTreeWidgetItemIterator it(ui->tree_credentials,
+                               QTreeWidgetItemIterator::Checked | QTreeWidgetItemIterator::NoChildren);
+    for (; *it; ++it)
+        credentials.append(credentials_[(*it)->data(COLUMN_NAME, Qt::UserRole).toInt()]);
 
     return credentials;
 }

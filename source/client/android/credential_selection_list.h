@@ -25,8 +25,8 @@
 class QVBoxLayout;
 class Switch;
 
-// A scrolling list of two-line items, each selected with a switch at its trailing end. A separator
-// at the bottom sets the list off from the panel below it.
+// A scrolling list of two-line items, each with an optional leading icon and selected with a switch
+// at its trailing end. A separator at the bottom sets the list off from the panel below it.
 class CredentialSelectionList final : public QWidget
 {
     Q_OBJECT
@@ -34,6 +34,7 @@ class CredentialSelectionList final : public QWidget
 public:
     struct Item
     {
+        QString icon; // Path to an SVG file; no icon is shown when it is empty.
         QString name;
         QString details;
         QString status;

@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QVBoxLayout>
 
+#include "base/gui_application.h"
 #include "common/android/label.h"
 #include "common/android/scroll_area.h"
 #include "common/android/switch.h"
@@ -32,6 +33,7 @@ namespace {
 constexpr int kHorizontalMargin = 16;
 constexpr int kVerticalMargin = 10;
 constexpr int kSpacing = 12;
+constexpr int kIconSize = 24;
 
 // A tap anywhere on the item toggles its switch. A drag that scrolls the list releases the press
 // outside the item, so it toggles nothing.
@@ -57,6 +59,13 @@ public:
         QHBoxLayout* layout = new QHBoxLayout(this);
         layout->setContentsMargins(kHorizontalMargin, kVerticalMargin, kHorizontalMargin, kVerticalMargin);
         layout->setSpacing(kSpacing);
+        if (!item.icon.isEmpty())
+        {
+            QLabel* icon = new QLabel();
+            icon->setFixedSize(kIconSize, kIconSize);
+            icon->setPixmap(GuiApplication::svgPixmap(item.icon, QSize(kIconSize, kIconSize)));
+            layout->addWidget(icon);
+        }
         layout->addLayout(text_layout, 1);
         if (!item.status.isEmpty())
             layout->addWidget(new Label(item.status, Label::Role::CAPTION));

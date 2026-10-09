@@ -26,6 +26,7 @@
 #include "client/config.h"
 
 class QAbstractButton;
+class QTreeWidgetItem;
 
 namespace Ui {
 class CredentialExportDialog;
@@ -44,6 +45,7 @@ private slots:
     void onCheckNoneButtonPressed();
     void onButtonBoxClicked(QAbstractButton* button);
     void onLoadData();
+    void onItemChanged(QTreeWidgetItem* item, int column);
 
 private:
     void setCheckState(Qt::CheckState state);
