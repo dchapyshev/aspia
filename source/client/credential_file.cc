@@ -61,6 +61,13 @@ bool isValidGuid(const QString& guid)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool isValidCredentialType(quint32 type)
+{
+    return type == static_cast<quint32>(CredentialConfig::Type::ASPIA) ||
+           type == static_cast<quint32>(CredentialConfig::Type::OS);
+}
+
+//--------------------------------------------------------------------------------------------------
 SecureByteArray fileKey(const SecureString& password, const QByteArray& salt)
 {
     return SecureByteArray(PasswordHash::hash(PasswordHash::ARGON2ID, password, salt));
@@ -203,12 +210,13 @@ CredentialFile::Result CredentialFile::importFromFile(
 
         CredentialConfig config;
         config.setGuid(guid);
+        config.setType(static_cast<CredentialConfig::Type>(credential.type()));
         config.setDisplayName(QString::fromStdString(credential.display_name()));
         config.setUsername(QString::fromStdString(credential.username()));
         config.setPassword(SecureString(QString::fromStdString(credential.password())));
 
-        if (!config.isValid() || credential.type() != static_cast<quint32>(CredentialConfig::Type::HOST) ||
-            !isValidGuid(guid) || guids.contains(guid))
+        if (!config.isValid() || !isValidCredentialType(credential.type()) || !isValidGuid(guid) ||
+            guids.contains(guid))
         {
             LOG(ERROR) << "The file carries an invalid record";
             eraseSecretFields(&content);

@@ -20,12 +20,15 @@
 
 #include <QVBoxLayout>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/os_account.h"
 #include "base/crypto/secure_string.h"
 #include "base/peer/user.h"
 #include "client/config.h"
 #include "client/database.h"
 #include "common/android/button.h"
+#include "common/android/combo_box.h"
 #include "common/android/controls.h"
 #include "common/android/label.h"
 #include "common/android/line_edit.h"
@@ -42,11 +45,18 @@ constexpr int kFormSpacing = 8;
 //--------------------------------------------------------------------------------------------------
 CredentialEditor::CredentialEditor(QWidget* parent)
     : QWidget(parent),
+      combo_type_(new ComboBox()),
       edit_name_(new LineEdit()),
       edit_username_(new LineEdit()),
       edit_password_(new LineEdit()),
       label_error_(new Label(QString(), Label::Role::CAPTION))
 {
+    combo_type_->setLabel(tr("Type"));
+    combo_type_->addItem(GuiApplication::svgIcon(":/img/key-aspia.svg"), tr("Aspia Credentials"),
+                         static_cast<int>(CredentialConfig::Type::ASPIA));
+    combo_type_->addItem(GuiApplication::svgIcon(":/img/key-os.svg"), tr("OS Credentials"),
+                         static_cast<int>(CredentialConfig::Type::OS));
+
     edit_name_->setLabel(tr("Name"));
     edit_username_->setLabel(tr("User Name"));
     edit_password_->setLabel(tr("Password"));
@@ -70,6 +80,7 @@ CredentialEditor::CredentialEditor(QWidget* parent)
     form_layout->setContentsMargins(kFormMargin, kFormMargin, kFormMargin, kFormMargin);
     form_layout->setSpacing(kFormSpacing);
     form_layout->addWidget(label_error_);
+    form_layout->addWidget(combo_type_);
     form_layout->addWidget(edit_name_);
     form_layout->addWidget(edit_username_);
     form_layout->addWidget(edit_password_);
@@ -97,6 +108,8 @@ void CredentialEditor::prepareForAdd()
 {
     credential_id_ = -1;
 
+    combo_type_->setCurrentIndex(0);
+    combo_type_->setEnabled(true);
     edit_name_->clear();
     edit_username_->clear();
     edit_password_->clear();
@@ -119,6 +132,8 @@ bool CredentialEditor::prepareForEdit(qint64 credential_id)
 
     credential_id_ = credential_id;
 
+    combo_type_->setCurrentIndex(combo_type_->findData(static_cast<int>(credential.type())));
+    combo_type_->setEnabled(false);
     edit_name_->setText(credential.displayName());
     edit_username_->setText(credential.username());
     edit_password_->setText(credential.password().toString());
@@ -156,10 +171,21 @@ void CredentialEditor::onSaveClicked()
         return;
     }
 
-    if (!User::isValidUserName(edit_username_->text()))
+    const CredentialConfig::Type type = static_cast<CredentialConfig::Type>(combo_type_->currentData().toInt());
+
+    if (type == CredentialConfig::Type::OS)
     {
-        showError(tr("The user name can not be empty and can contain only alphabet characters,"
-                     " numbers and \"_\", \"-\", \".\" characters."));
+        if (!OsAccount::isValidUserName(edit_username_->text()))
+        {
+            showError(tr("Invalid user name."));
+            edit_username_->setFocus();
+            edit_username_->selectAll();
+            return;
+        }
+    }
+    else if (!User::isValidUserName(edit_username_->text()))
+    {
+        showError(tr("Invalid user name."));
         edit_username_->setFocus();
         edit_username_->selectAll();
         return;
@@ -174,7 +200,7 @@ void CredentialEditor::onSaveClicked()
 
     CredentialConfig credential;
     credential.setId(credential_id_);
-    credential.setType(CredentialConfig::Type::HOST);
+    credential.setType(type);
     credential.setDisplayName(name);
     credential.setUsername(edit_username_->text());
     credential.setPassword(SecureString(edit_password_->text()));

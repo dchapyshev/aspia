@@ -1868,7 +1868,7 @@ TEST_F(DatabaseTest, CredentialSurvivesARoundTrip)
     const std::optional<CredentialConfig> stored = findCredential(db_, credential_id);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->id(), credential_id);
-    EXPECT_EQ(stored->type(), CredentialConfig::Type::HOST);
+    EXPECT_EQ(stored->type(), CredentialConfig::Type::ASPIA);
     EXPECT_EQ(stored->displayName(), QString("office"));
     EXPECT_EQ(stored->username(), QString("user"));
     EXPECT_EQ(stored->password().toString(), QString("secret"));
@@ -1877,6 +1877,34 @@ TEST_F(DatabaseTest, CredentialSurvivesARoundTrip)
     const std::optional<CredentialConfig> by_guid = findCredentialByGuid(db_, stored->guid());
     ASSERT_TRUE(by_guid.has_value());
     EXPECT_EQ(by_guid->id(), credential_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(DatabaseTest, OsCredentialKeepsItsType)
+{
+    CredentialConfig added = credential("workstation", "DOMAIN\\user", "secret");
+    added.setType(CredentialConfig::Type::OS);
+    ASSERT_TRUE(db_.addCredential(added));
+
+    std::optional<CredentialConfig> stored = findCredential(db_, added.id());
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->type(), CredentialConfig::Type::OS);
+    EXPECT_EQ(stored->username(), QString("DOMAIN\\user"));
+
+    CredentialConfig edited = credential("renamed", "DOMAIN\\other-user", "other-secret");
+    edited.setId(added.id());
+    edited.setType(CredentialConfig::Type::OS);
+    EXPECT_TRUE(db_.modifyCredential(edited));
+
+    stored = findCredential(db_, added.id());
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->type(), CredentialConfig::Type::OS);
+    EXPECT_EQ(stored->displayName(), QString("renamed"));
+    EXPECT_EQ(stored->username(), QString("DOMAIN\\other-user"));
+
+    const QList<CredentialConfig> credentials = credentialList();
+    ASSERT_EQ(credentials.size(), 1);
+    EXPECT_EQ(credentials[0].type(), CredentialConfig::Type::OS);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -166,3 +166,55 @@ TEST_F(CredentialListModelTest, RecordThatDidNotOpenIsMarked)
     ASSERT_FALSE(icon(1).isNull());
     EXPECT_NE(icon(1), icon(0));
 }
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(CredentialListModelTest, TypeColumnNamesTheKind)
+{
+    CredentialConfig os_record = credential(2, "Workstation", "DOMAIN\\admin");
+    os_record.setType(CredentialConfig::Type::OS);
+
+    model_->setCredentials({ credential(1, "Office", "admin"), os_record });
+
+    const int column = static_cast<int>(Column::TYPE);
+
+    EXPECT_EQ(model_->headerData(column, Qt::Horizontal, Qt::DisplayRole).toString(), QString("Type"));
+    EXPECT_EQ(model_->index(0, column).data(Qt::DisplayRole).toString(), QString("Aspia Credentials"));
+    EXPECT_EQ(model_->index(1, column).data(Qt::DisplayRole).toString(), QString("OS Credentials"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(CredentialListModelTest, SortByType)
+{
+    CredentialConfig os_record = credential(2, "Workstation", "DOMAIN\\admin");
+    os_record.setType(CredentialConfig::Type::OS);
+
+    model_->setCredentials({ os_record, credential(1, "Office", "admin"), credential(3, "Warehouse", "admin") });
+
+    model_->sort(static_cast<int>(Column::TYPE), Qt::AscendingOrder);
+    EXPECT_EQ(names(), QStringList({ "Office", "Warehouse", "Workstation" }));
+
+    model_->sort(static_cast<int>(Column::TYPE), Qt::DescendingOrder);
+    EXPECT_EQ(names(), QStringList({ "Workstation", "Office", "Warehouse" }));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(CredentialListModelTest, IconShowsTheKind)
+{
+    CredentialConfig os_record = credential(2, "Workstation", "DOMAIN\\admin");
+    os_record.setType(CredentialConfig::Type::OS);
+
+    model_->setCredentials({ credential(1, "Office", "admin"), os_record, credential(3, "Warehouse", QString()) });
+
+    auto icon = [this](int row)
+    {
+        return model_->index(row, static_cast<int>(Column::NAME))
+            .data(Qt::DecorationRole).value<QIcon>().pixmap(16, 16).toImage();
+    };
+
+    ASSERT_FALSE(icon(0).isNull());
+    ASSERT_FALSE(icon(1).isNull());
+    ASSERT_FALSE(icon(2).isNull());
+    EXPECT_NE(icon(1), icon(0));
+    EXPECT_NE(icon(2), icon(0));
+    EXPECT_NE(icon(2), icon(1));
+}

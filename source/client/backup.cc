@@ -573,7 +573,8 @@ bool hasValidRouterHosts(
 //--------------------------------------------------------------------------------------------------
 bool isValidCredentialType(quint32 type)
 {
-    return type == static_cast<quint32>(CredentialConfig::Type::HOST);
+    return type == static_cast<quint32>(CredentialConfig::Type::ASPIA) ||
+           type == static_cast<quint32>(CredentialConfig::Type::OS);
 }
 
 //--------------------------------------------------------------------------------------------------

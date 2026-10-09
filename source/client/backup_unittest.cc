@@ -1248,9 +1248,33 @@ TEST_F(BackupTest, CredentialKeepsItsGuidThroughTheFile)
 
     const std::optional<CredentialConfig> stored = findCredentialByGuid(target_, original->guid());
     ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->type(), CredentialConfig::Type::HOST);
+    EXPECT_EQ(stored->type(), CredentialConfig::Type::ASPIA);
     EXPECT_EQ(stored->displayName(), QString("office"));
     EXPECT_EQ(stored->username(), QString("user"));
+    EXPECT_EQ(stored->password().toString(), QString("secret"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(BackupTest, OsCredentialKeepsItsTypeThroughTheFile)
+{
+    CredentialConfig credential;
+    credential.setType(CredentialConfig::Type::OS);
+    credential.setDisplayName("workstation");
+    credential.setUsername("DOMAIN\\user");
+    credential.setPassword(SecureString(QString("secret")));
+    ASSERT_TRUE(source_.addCredential(credential));
+
+    const std::optional<CredentialConfig> original = findCredential(source_, credential.id());
+    ASSERT_TRUE(original.has_value());
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+
+    const std::optional<CredentialConfig> stored = findCredentialByGuid(target_, original->guid());
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->type(), CredentialConfig::Type::OS);
+    EXPECT_EQ(stored->displayName(), QString("workstation"));
+    EXPECT_EQ(stored->username(), QString("DOMAIN\\user"));
     EXPECT_EQ(stored->password().toString(), QString("secret"));
 }
 

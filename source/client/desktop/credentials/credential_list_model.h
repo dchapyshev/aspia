@@ -32,7 +32,8 @@ public:
     enum class Column
     {
         NAME,
-        USERNAME
+        USERNAME,
+        TYPE
     };
 
     explicit CredentialListModel(QObject* parent = nullptr);

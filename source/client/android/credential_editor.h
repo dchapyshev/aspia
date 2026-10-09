@@ -22,6 +22,7 @@
 #include <QWidget>
 
 class Button;
+class ComboBox;
 class Label;
 class LineEdit;
 
@@ -51,6 +52,7 @@ private slots:
 private:
     void showError(const QString& message);
 
+    ComboBox* combo_type_ = nullptr;
     LineEdit* edit_name_ = nullptr;
     LineEdit* edit_username_ = nullptr;
     LineEdit* edit_password_ = nullptr;

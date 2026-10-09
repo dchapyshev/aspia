@@ -19,10 +19,12 @@
 #include "client/desktop/credentials/credential_dialog.h"
 
 #include <QAbstractButton>
+#include <QIcon>
 #include <QPushButton>
 #include <QTimer>
 
 #include "base/logging.h"
+#include "base/os_account.h"
 #include "base/peer/user.h"
 #include "client/database.h"
 #include "client/desktop/credentials/ui_credential_dialog.h"
@@ -37,6 +39,11 @@ CredentialDialog::CredentialDialog(qint64 credential_id, QWidget* parent)
     LOG(INFO) << "Ctor";
 
     ui->setupUi(this);
+
+    ui->combo_type->addItem(QIcon(":/img/key-aspia.svg"), tr("Aspia Credentials"),
+                            static_cast<int>(CredentialConfig::Type::ASPIA));
+    ui->combo_type->addItem(QIcon(":/img/key-os.svg"), tr("OS Credentials"),
+                            static_cast<int>(CredentialConfig::Type::OS));
 
     ui->edit_password->setShowPasswordButtonVisible(true);
 
@@ -81,7 +88,20 @@ void CredentialDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    if (!User::isValidUserName(ui->edit_username->text()))
+    const CredentialConfig::Type type =
+        static_cast<CredentialConfig::Type>(ui->combo_type->currentData().toInt());
+
+    if (type == CredentialConfig::Type::OS)
+    {
+        if (!OsAccount::isValidUserName(ui->edit_username->text()))
+        {
+            MsgBox::warning(this, tr("Invalid user name."));
+            ui->edit_username->setFocus();
+            ui->edit_username->selectAll();
+            return;
+        }
+    }
+    else if (!User::isValidUserName(ui->edit_username->text()))
     {
         MsgBox::warning(this,
             tr("The user name can not be empty and can contain only"
@@ -100,7 +120,7 @@ void CredentialDialog::onButtonBoxClicked(QAbstractButton* button)
 
     CredentialConfig credential;
     credential.setId(credential_id_);
-    credential.setType(CredentialConfig::Type::HOST);
+    credential.setType(type);
     credential.setDisplayName(name);
     credential.setUsername(ui->edit_username->text());
     credential.setPassword(ui->edit_password->password());
@@ -147,6 +167,8 @@ void CredentialDialog::onLoadData()
         return;
     }
 
+    ui->combo_type->setCurrentIndex(ui->combo_type->findData(static_cast<int>(credential.type())));
+    ui->combo_type->setEnabled(false);
     ui->edit_name->setText(credential.displayName());
     ui->edit_username->setText(credential.username());
     ui->edit_password->setPassword(credential.password());

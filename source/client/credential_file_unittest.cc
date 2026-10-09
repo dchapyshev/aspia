@@ -94,11 +94,12 @@ TEST_F(CredentialFileTest, RecordsTravel)
 {
     ASSERT_TRUE(dir_.isValid());
 
-    const QList<CredentialConfig> exported =
+    QList<CredentialConfig> exported =
     {
         makeCredential("first", "user1", "secret1"),
-        makeCredential("second", "user2", "secret2")
+        makeCredential("second", "DOMAIN\\user2", "secret2")
     };
+    exported[1].setType(CredentialConfig::Type::OS);
 
     ASSERT_EQ(CredentialFile::exportToFile(exported, filePath(), password()),
               CredentialFile::Result::SUCCESS);
@@ -203,6 +204,27 @@ TEST_F(CredentialFileTest, FileWithInvalidRecordIsRefused)
         credential->set_username("user");
         credential->set_password("secret");
     }
+
+    ASSERT_TRUE(writeContent(content));
+
+    QList<CredentialConfig> imported;
+    EXPECT_EQ(CredentialFile::importFromFile(filePath(), password(), &imported),
+              CredentialFile::Result::INVALID_FORMAT);
+    EXPECT_TRUE(imported.isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(CredentialFileTest, FileWithUnknownTypeIsRefused)
+{
+    ASSERT_TRUE(dir_.isValid());
+
+    proto::storage::CredentialFile::Content content;
+    proto::storage::CredentialFile::Credential* credential = content.add_credentials();
+    credential->set_guid(QUuid::createUuid().toString(QUuid::WithoutBraces).toStdString());
+    credential->set_type(100500);
+    credential->set_display_name("name");
+    credential->set_username("user");
+    credential->set_password("secret");
 
     ASSERT_TRUE(writeContent(content));
 

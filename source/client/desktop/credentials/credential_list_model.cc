@@ -24,7 +24,7 @@
 
 namespace {
 
-constexpr int kColumnCount = 2;
+constexpr int kColumnCount = 3;
 
 } // namespace
 
@@ -102,7 +102,10 @@ QVariant CredentialListModel::data(const QModelIndex& index, int role) const
         if (column != Column::NAME)
             return QVariant();
 
-        return QIcon(credential->isValid() ? ":/img/keys.svg" : ":/img/key-corrupted.svg");
+        if (!credential->isValid())
+            return QIcon(":/img/key-corrupted.svg");
+
+        return QIcon(credential->type() == CredentialConfig::Type::OS ? ":/img/key-os.svg" : ":/img/key-aspia.svg");
     }
 
     if (role != Qt::DisplayRole)
@@ -124,6 +127,9 @@ QVariant CredentialListModel::headerData(int section, Qt::Orientation orientatio
 
         case Column::USERNAME:
             return tr("User Name");
+
+        case Column::TYPE:
+            return tr("Type");
     }
 
     return QVariant();
@@ -179,6 +185,9 @@ QString CredentialListModel::textAt(const CredentialConfig& credential, Column c
 
         case Column::USERNAME:
             return credential.username();
+
+        case Column::TYPE:
+            return credential.type() == CredentialConfig::Type::OS ? tr("OS Credentials") : tr("Aspia Credentials");
     }
 
     return QString();

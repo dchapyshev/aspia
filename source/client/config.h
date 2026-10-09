@@ -258,7 +258,7 @@ class CredentialConfig final
 public:
     CredentialConfig() = default;
 
-    enum class Type { HOST = 0 };
+    enum class Type { ASPIA = 0, OS = 1 };
 
     static constexpr int kMaxNameLength = 64;
 
@@ -290,7 +290,7 @@ public:
 private:
     qint64 id_ = -1;
     QString guid_;
-    Type type_ = Type::HOST;
+    Type type_ = Type::ASPIA;
     QString display_name_;
     QString username_;
     SecureString password_;
