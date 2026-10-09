@@ -858,7 +858,8 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
     if (host.username().isEmpty() || host.password().isEmpty())
     {
         QList<CredentialConfig> credentials;
-        if (Database::instance().credentialList(&credentials) != Database::ReadResult::OK)
+        if (Database::instance().credentialList(&credentials, CredentialConfig::Type::ASPIA) !=
+            Database::ReadResult::OK)
             LOG(ERROR) << "Unable to read credentials";
 
         authorization_ =

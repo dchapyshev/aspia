@@ -292,7 +292,8 @@ void LocalHostDialog::onLoadData()
     }
 
     QList<CredentialConfig> credentials;
-    const Database::ReadResult credentials_result = db.credentialList(&credentials);
+    const Database::ReadResult credentials_result = db.credentialList(
+        &credentials, CredentialConfig::Type::ASPIA);
     if (credentials_result == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the list of credentials";

@@ -1357,7 +1357,8 @@ bool Database::updateRouterHostCheckTime(qint64 router_id, HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-Database::ReadResult Database::credentialList(QList<CredentialConfig>* credentials) const
+Database::ReadResult Database::credentialList(
+    QList<CredentialConfig>* credentials, std::optional<CredentialConfig::Type> type) const
 {
     CHECK(credentials);
     credentials->clear();
@@ -1368,7 +1369,11 @@ Database::ReadResult Database::credentialList(QList<CredentialConfig>* credentia
         return ReadResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT id, type, name, data, guid FROM credentials ORDER BY casefold(name)");
+    SqlQuery query(db_, type.has_value() ?
+        "SELECT id, type, name, data, guid FROM credentials WHERE type=? ORDER BY casefold(name)" :
+        "SELECT id, type, name, data, guid FROM credentials ORDER BY casefold(name)");
+    if (type.has_value())
+        query.addInt64(static_cast<qint64>(*type));
 
     ReadResult result = ReadResult::OK;
 

@@ -209,7 +209,8 @@ bool LocalHostEditor::loadCredentials(qint64 selected_credential_id)
     combo_credential_->clear();
 
     QList<CredentialConfig> credentials;
-    const Database::ReadResult result = Database::instance().credentialList(&credentials);
+    const Database::ReadResult result = Database::instance().credentialList(
+        &credentials, CredentialConfig::Type::ASPIA);
     if (result == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the list of credentials";

@@ -464,7 +464,8 @@ bool ClientWindow::askCredentials(HostConfig* host)
     auth_dialog->setPassword(host->password());
 
     QList<CredentialConfig> credentials;
-    if (Database::instance().credentialList(&credentials) != Database::ReadResult::OK)
+    if (Database::instance().credentialList(&credentials, CredentialConfig::Type::ASPIA) !=
+        Database::ReadResult::OK)
         LOG(ERROR) << "Unable to read credentials";
 
     auth_dialog->setSavedCredentials(credentials);

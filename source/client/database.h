@@ -100,7 +100,8 @@ public:
     bool updateRouterHostCheckTime(qint64 router_id, HostId host_id);
 
     // Credentials.
-    ReadResult credentialList(QList<CredentialConfig>* credentials) const;
+    ReadResult credentialList(QList<CredentialConfig>* credentials,
+        std::optional<CredentialConfig::Type> type = std::nullopt) const;
     bool addCredential(CredentialConfig& credential);
     bool modifyCredential(const CredentialConfig& credential);
     bool removeCredential(qint64 credential_id);

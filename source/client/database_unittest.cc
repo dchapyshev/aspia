@@ -1908,6 +1908,31 @@ TEST_F(DatabaseTest, OsCredentialKeepsItsType)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A list asked for one type holds only the records of that type, still by name.
+TEST_F(DatabaseTest, CredentialsAreListedByType)
+{
+    addCredential("office", "user", "secret");
+
+    CredentialConfig os = credential("workstation", "DOMAIN\\user", "secret");
+    os.setType(CredentialConfig::Type::OS);
+    ASSERT_TRUE(db_.addCredential(os));
+
+    addCredential("backup", "user", "secret");
+
+    QList<CredentialConfig> credentials;
+    EXPECT_EQ(db_.credentialList(&credentials, CredentialConfig::Type::ASPIA), Database::ReadResult::OK);
+    ASSERT_EQ(credentials.size(), 2);
+    EXPECT_EQ(credentials[0].displayName(), "backup");
+    EXPECT_EQ(credentials[1].displayName(), "office");
+
+    EXPECT_EQ(db_.credentialList(&credentials, CredentialConfig::Type::OS), Database::ReadResult::OK);
+    ASSERT_EQ(credentials.size(), 1);
+    EXPECT_EQ(credentials[0].displayName(), "workstation");
+
+    EXPECT_EQ(credentialList().size(), 3);
+}
+
+//--------------------------------------------------------------------------------------------------
 // An edit changes the name and the pair and keeps the guid, since the records referring to it would
 // stop resolving otherwise. A record that was never added has no row to edit, and removing takes
 // the row out.

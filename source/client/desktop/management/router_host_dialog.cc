@@ -286,7 +286,8 @@ void RouterHostDialog::onLoadData()
     Database& db = Database::instance();
 
     QList<CredentialConfig> saved_credentials;
-    const Database::ReadResult credentials_result = db.credentialList(&saved_credentials);
+    const Database::ReadResult credentials_result = db.credentialList(
+        &saved_credentials, CredentialConfig::Type::ASPIA);
     if (credentials_result == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the list of credentials";
