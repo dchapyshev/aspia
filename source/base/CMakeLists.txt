@@ -49,6 +49,8 @@ list(APPEND SOURCE_BASE
     logging_file.cc
     logging_file.h
     numeric_utils.h
+    os_account.cc
+    os_account.h
     physical_drive_reader.cc
     physical_drive_reader.h
     power_controller.cc
@@ -137,6 +139,7 @@ list(APPEND SOURCE_BASE_TESTS
     edid_unittest.cc
     ini_file_unittest.cc
     numeric_utils_unittest.cc
+    os_account_unittest.cc
     scoped_clear_last_error_unittest.cc
     serialization_unittest.cc
     shared_pointer_unittest.cc
