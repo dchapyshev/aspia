@@ -22,8 +22,6 @@
 #include <QBrush>
 #include <QClipboard>
 #include <QHBoxLayout>
-#include <QInputDialog>
-#include <QLineEdit>
 #include <QPalette>
 #include <QResizeEvent>
 #include <QPropertyAnimation>
@@ -39,6 +37,7 @@
 #include "base/crypto/secure_string.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/database.h"
+#include "client/desktop/credentials/credential_panel.h"
 #include "client/desktop/desktop/desktop_toolbar.h"
 #include "client/desktop/desktop/desktop_widget.h"
 #include "client/desktop/desktop/statistics_dialog.h"
@@ -113,6 +112,14 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
 
     toolbar_ = new DesktopToolBar(scroll_area_);
     toolbar_->installEventFilter(this);
+
+    credential_panel_ = new CredentialPanel(this);
+    connect(credential_panel_, &CredentialPanel::sig_credentialSelected,
+            this, [this](qint64 credential_id, const QString& user_name, const SecureString& password)
+    {
+        setOsCredentialId(credential_id);
+        onSendCredentials(SecureString(user_name), password);
+    });
 
     resize_timer_ = new QTimer(this);
     connect(resize_timer_, &QTimer::timeout, this, &DesktopWindow::onResizeTimer);
@@ -551,6 +558,7 @@ void DesktopWindow::onInternalReset()
     LOG(INFO) << "Internal reset";
 
     toolbar_->setToolList(proto::tools::ToolList());
+    credential_panel_->onDismiss();
 
     if (task_manager_)
     {
@@ -1374,21 +1382,7 @@ void DesktopWindow::readCredentialsRequest(const proto::control::CredentialsRequ
 {
     LOG(INFO) << "Credentials requested by host (screen_type:" << credentials_request.screen_type()
               << "reason:" << credentials_request.reason() << ")";
-
-#if 0
-    bool ok = false;
-    QString username = QInputDialog::getText(
-        this, tr("Credentials"), tr("User name:"), QLineEdit::Normal, QString(), &ok);
-    if (!ok)
-        return;
-
-    QString password = QInputDialog::getText(
-        this, tr("Credentials"), tr("Password:"), QLineEdit::Password, QString(), &ok);
-    if (!ok)
-        return;
-
-    onSendCredentials(SecureString(username), SecureString(password));
-#endif
+    credential_panel_->popup(osCredentialId());
 }
 
 //--------------------------------------------------------------------------------------------------

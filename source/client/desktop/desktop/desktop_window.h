@@ -52,6 +52,7 @@ class QScrollArea;
 class QTimer;
 class SecureString;
 
+class CredentialPanel;
 class DesktopToolBar;
 class DesktopWidget;
 class StatisticsDialog;
@@ -146,6 +147,7 @@ private:
     QScrollArea* scroll_area_ = nullptr;
     DesktopToolBar* toolbar_ = nullptr;
     DesktopWidget* desktop_ = nullptr;
+    CredentialPanel* credential_panel_ = nullptr;
 
     QPointer<TaskManagerWindow> task_manager_;
     QPointer<StatisticsDialog> statistics_dialog_;
