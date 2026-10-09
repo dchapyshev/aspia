@@ -34,13 +34,13 @@ public:
     explicit CredentialPanel(QWidget* parent);
     ~CredentialPanel() final;
 
-    void popup();
+    void popup(qint64 credential_id);
 
 public slots:
     void onDismiss();
 
 signals:
-    void sig_credentialSelected(const QString& user_name, const SecureString& password);
+    void sig_credentialSelected(qint64 credential_id, const QString& user_name, const SecureString& password);
 
 protected:
     // QObject implementation.

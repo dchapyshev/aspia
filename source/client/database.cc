@@ -78,6 +78,7 @@ Database::ReadResult readLocalHost(const SqlQuery& query, LocalHostConfig* host)
     host->setConnectTime(query.columnInt64(8));
     host->setGuid(query.columnText(9));
     host->setCredentialId(query.columnInt64(10));
+    host->setOsCredentialId(query.columnInt64(11));
 
     if (!host->setEncryptedData(query.columnBlob(5)))
     {
@@ -127,6 +128,7 @@ Database::ReadResult readRouterHost(const SqlQuery& query, RouterHostConfig* hos
     host->setRouterId(query.columnInt64(0));
     host->setHostId(query.columnUInt64(1));
     host->setCredentialId(query.columnInt64(3));
+    host->setOsCredentialId(query.columnInt64(4));
 
     if (!host->setEncryptedData(query.columnBlob(2)))
     {
@@ -152,6 +154,37 @@ Database::ReadResult readCredential(const SqlQuery& query, CredentialConfig* cre
     }
 
     return Database::ReadResult::OK;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Adds |column| to a |table| that was made before the column was there.
+bool addMissingColumn(SqlDatabase& db, const QString& table, const QString& column, const QString& definition)
+{
+    SqlQuery query(db, "SELECT 1 FROM pragma_table_info(?) WHERE name=? LIMIT 1");
+    query.addText(table);
+    query.addText(column);
+
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the schema of table" << table << ":" << db.lastError();
+        return false;
+    }
+
+    if (step == SqlQuery::StepResult::ROW)
+        return true;
+
+    LOG(INFO) << "Adding column" << column << "to table" << table;
+
+    const QString sql = QString("ALTER TABLE \"%1\" ADD COLUMN \"%2\" %3").arg(table, column, definition);
+    if (!db.exec(sql.toUtf8().constData()))
+    {
+        LOG(ERROR) << "Unable to add column" << column << "to table" << table << ":" << db.lastError();
+        return false;
+    }
+
+    LOG(INFO) << "Column" << column << "added to table" << table;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -183,6 +216,7 @@ bool createTables(SqlDatabase& db)
                  "\"connect_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"guid\" TEXT NOT NULL UNIQUE,"
                  "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
+                 "\"os_credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create local_hosts table:" << db.lastError();
@@ -207,6 +241,7 @@ bool createTables(SqlDatabase& db)
                  "\"check_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"data\" BLOB DEFAULT X'',"
                  "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
+                 "\"os_credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
                  "PRIMARY KEY(\"router_id\",\"host_id\"))"))
     {
         LOG(ERROR) << "Unable to create router_hosts table:" << db.lastError();
@@ -224,6 +259,26 @@ bool createTables(SqlDatabase& db)
         LOG(ERROR) << "Unable to create credentials table:" << db.lastError();
         return false;
     }
+
+    //==============================================================================================
+    // Migration begin.
+    {
+        const char kOsCredentialId[] = "INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL";
+
+        if (!addMissingColumn(db, "local_hosts", "os_credential_id", kOsCredentialId))
+        {
+            LOG(ERROR) << "Unable to add os_credential_id column to local_hosts table:" << db.lastError();
+            return false;
+        }
+
+        if (!addMissingColumn(db, "router_hosts", "os_credential_id", kOsCredentialId))
+        {
+            LOG(ERROR) << "Unable to add os_credential_id column to router_hosts table:" << db.lastError();
+            return false;
+        }
+    }
+    // Migration end.
+    //==============================================================================================
 
     if (!db.exec("CREATE TABLE IF NOT EXISTS \"settings\" ("
                  "\"name\" TEXT PRIMARY KEY NOT NULL,"
@@ -295,6 +350,47 @@ QString Database::filePath()
 }
 
 //--------------------------------------------------------------------------------------------------
+bool Database::open(const QString& file_path)
+{
+    LOG(INFO) << (!QFileInfo::exists(file_path) ? "Creating" : "Opening") << "database:" << file_path;
+
+    if (!db_.open(file_path))
+        return false;
+
+    if (!db_.exec("PRAGMA secure_delete = ON"))
+        LOG(WARNING) << "Unable to enable secure_delete:" << db_.lastError();
+
+    {
+        SqlQuery pragma(db_, "PRAGMA quick_check");
+        if (pragma.next() == SqlQuery::StepResult::ROW)
+        {
+            const QString result = pragma.columnText(0);
+            if (result != "ok")
+                LOG(ERROR) << "Database integrity check failed:" << result;
+        }
+        else
+        {
+            LOG(WARNING) << "Unable to run quick_check:" << db_.lastError();
+        }
+    }
+
+    if (!createTables(db_))
+    {
+        db_.close();
+        return false;
+    }
+
+    if (!db_.exec("PRAGMA foreign_keys = ON"))
+    {
+        LOG(ERROR) << "Unable to enable foreign keys:" << db_.lastError();
+        db_.close();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Database::isValid() const
 {
     return db_.isOpen();
@@ -313,7 +409,8 @@ Database::ReadResult Database::localHostList(qint64 group_id, QList<LocalHostCon
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
+                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
+                        "IFNULL(os_credential_id, 0) "
                         "FROM local_hosts WHERE group_id IS NULLIF(?, 0) ORDER BY casefold(name)");
     query.addInt64(group_id);
 
@@ -355,7 +452,8 @@ Database::ReadResult Database::allLocalHosts(QList<LocalHostConfig>* hosts) cons
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
+                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
+                        "IFNULL(os_credential_id, 0) "
                         "FROM local_hosts");
 
     ReadResult result = ReadResult::OK;
@@ -548,6 +646,28 @@ bool Database::setLocalHostConnectTime(qint64 entry_id, qint64 connect_time)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool Database::setLocalHostOsCredentialId(qint64 entry_id, qint64 credential_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    SqlQuery query(db_, "UPDATE local_hosts SET os_credential_id=NULLIF(?, 0) WHERE id=?");
+    query.addInt64(credential_id);
+    query.addInt64(entry_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 Database::FindResult Database::findLocalHost(qint64 entry_id, LocalHostConfig* host) const
 {
     CHECK(host);
@@ -560,7 +680,8 @@ Database::FindResult Database::findLocalHost(qint64 entry_id, LocalHostConfig* h
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
+                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
+                        "IFNULL(os_credential_id, 0) "
                         "FROM local_hosts WHERE id=?");
     query.addInt64(entry_id);
 
@@ -599,7 +720,8 @@ Database::FindResult Database::findLocalHostByGuid(const QString& guid, LocalHos
         return FindResult::NOT_FOUND;
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
+                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
+                        "IFNULL(os_credential_id, 0) "
                         "FROM local_hosts WHERE guid=?");
     query.addText(guid);
 
@@ -653,7 +775,8 @@ Database::ReadResult Database::searchLocalHosts(
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
+                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
+                        "IFNULL(os_credential_id, 0) "
                         "FROM local_hosts ORDER BY casefold(name)");
 
     ReadResult result = ReadResult::OK;
@@ -1109,7 +1232,8 @@ Database::ReadResult Database::allRouterHosts(QList<RouterHostConfig>* hosts) co
         return ReadResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0) FROM router_hosts");
+    SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0) "
+                        "FROM router_hosts");
 
     ReadResult result = ReadResult::OK;
 
@@ -1247,8 +1371,8 @@ Database::FindResult Database::findRouterHost(qint64 router_id, HostId host_id, 
         return FindResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0) FROM router_hosts "
-                        "WHERE router_id=? AND host_id=?");
+    SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0) "
+                        "FROM router_hosts WHERE router_id=? AND host_id=?");
     query.addInt64(router_id);
     query.addUInt64(host_id);
 
@@ -1350,6 +1474,29 @@ bool Database::updateRouterHostCheckTime(qint64 router_id, HostId host_id)
     if (db_.changes() == 0)
     {
         LOG(ERROR) << "Credentials of router host" << host_id << "not found";
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setRouterHostOsCredentialId(qint64 router_id, HostId host_id, qint64 credential_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    SqlQuery query(db_, "UPDATE router_hosts SET os_credential_id=NULLIF(?, 0) WHERE router_id=? AND host_id=?");
+    query.addInt64(credential_id);
+    query.addInt64(router_id);
+    query.addUInt64(host_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -2113,47 +2260,6 @@ bool Database::openDatabase()
     }
 
     return open(file_path);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::open(const QString& file_path)
-{
-    LOG(INFO) << (!QFileInfo::exists(file_path) ? "Creating" : "Opening") << "database:" << file_path;
-
-    if (!db_.open(file_path))
-        return false;
-
-    if (!db_.exec("PRAGMA secure_delete = ON"))
-        LOG(WARNING) << "Unable to enable secure_delete:" << db_.lastError();
-
-    {
-        SqlQuery pragma(db_, "PRAGMA quick_check");
-        if (pragma.next() == SqlQuery::StepResult::ROW)
-        {
-            const QString result = pragma.columnText(0);
-            if (result != "ok")
-                LOG(ERROR) << "Database integrity check failed:" << result;
-        }
-        else
-        {
-            LOG(WARNING) << "Unable to run quick_check:" << db_.lastError();
-        }
-    }
-
-    if (!createTables(db_))
-    {
-        db_.close();
-        return false;
-    }
-
-    if (!db_.exec("PRAGMA foreign_keys = ON"))
-    {
-        LOG(ERROR) << "Unable to enable foreign keys:" << db_.lastError();
-        db_.close();
-        return false;
-    }
-
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

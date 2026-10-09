@@ -131,6 +131,9 @@ public:
     qint64 credentialId() const { return credential_id_; }
     void setCredentialId(qint64 id) { credential_id_ = id; }
 
+    qint64 osCredentialId() const { return os_credential_id_; }
+    void setOsCredentialId(qint64 id) { os_credential_id_ = id; }
+
     const QString& username() const { return username_; }
     void setUsername(const QString& value) { username_ = value; }
 
@@ -145,6 +148,7 @@ private:
     qint64 router_id_ = -1;
     HostId host_id_ = kInvalidHostId;
     qint64 credential_id_ = 0;
+    qint64 os_credential_id_ = 0;
     QString username_;
     SecureString password_;
 };
@@ -172,6 +176,9 @@ public:
 
     qint64 credentialId() const { return credential_id_; }
     void setCredentialId(qint64 id) { credential_id_ = id; }
+
+    qint64 osCredentialId() const { return os_credential_id_; }
+    void setOsCredentialId(qint64 id) { os_credential_id_ = id; }
 
     const QString& guid() const { return guid_; }
     void setGuid(const QString& value) { guid_ = value; }
@@ -209,6 +216,7 @@ private:
     qint64 group_id_ = 0;
     qint64 router_id_ = 0;
     qint64 credential_id_ = 0;
+    qint64 os_credential_id_ = 0;
     QString guid_;
     qint64 create_time_ = 0;
     qint64 modify_time_ = 0;

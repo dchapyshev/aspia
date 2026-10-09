@@ -57,8 +57,9 @@ TerminalWindow::TerminalWindow(QWidget* parent)
     connect(terminal_widget_, &TerminalWidget::sig_resize, this, &TerminalWindow::onResize);
 
     connect(credential_panel_, &CredentialPanel::sig_credentialSelected,
-            this, [this](const QString& user_name, const SecureString& password)
+            this, [this](qint64 credential_id, const QString& user_name, const SecureString& password)
     {
+        setOsCredentialId(credential_id);
         terminal_widget_->login(user_name, password.toString());
     });
 }
@@ -99,7 +100,7 @@ void TerminalWindow::onRegisterWorkers()
 //--------------------------------------------------------------------------------------------------
 void TerminalWindow::onSessionStarted()
 {
-    credential_panel_->popup();
+    credential_panel_->popup(osCredentialId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -123,7 +124,7 @@ void TerminalWindow::onChannelMessage(const QByteArray& buffer)
         terminal_widget_->onResult(message.result().code());
 
         if (message.result().code() == proto::terminal::Result::CODE_AUTHENTICATION_ERROR)
-            credential_panel_->popup();
+            credential_panel_->popup(osCredentialId());
     }
 }
 

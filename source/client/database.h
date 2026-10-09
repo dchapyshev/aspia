@@ -65,6 +65,7 @@ public:
     bool moveLocalHost(qint64 entry_id, qint64 new_group_id);
     bool removeLocalHost(qint64 entry_id);
     bool setLocalHostConnectTime(qint64 entry_id, qint64 connect_time);
+    bool setLocalHostOsCredentialId(qint64 entry_id, qint64 credential_id);
     FindResult findLocalHost(qint64 entry_id, LocalHostConfig* host) const;
     FindResult findLocalHostByGuid(const QString& guid, LocalHostConfig* host) const;
     std::optional<std::pair<QString, SecureString>> localHostCredentials(qint64 entry_id) const;
@@ -98,6 +99,7 @@ public:
         qint64 router_id, HostId host_id) const;
     bool outdatedRouterHosts(qint64 router_id, QList<HostId>* hosts) const;
     bool updateRouterHostCheckTime(qint64 router_id, HostId host_id);
+    bool setRouterHostOsCredentialId(qint64 router_id, HostId host_id, qint64 credential_id);
 
     // Credentials.
     ReadResult credentialList(QList<CredentialConfig>* credentials,

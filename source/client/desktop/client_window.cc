@@ -191,6 +191,47 @@ NetworkWorker* ClientWindow::networkWorker() const
 }
 
 //--------------------------------------------------------------------------------------------------
+qint64 ClientWindow::osCredentialId() const
+{
+    const HostConfig& host = session_state_->host();
+    if (!canSaveCredentials(host))
+        return 0;
+
+    Database& db = Database::instance();
+
+    if (host.entryId() > 0)
+    {
+        LocalHostConfig local_host;
+        if (db.findLocalHost(host.entryId(), &local_host) != Database::FindResult::FOUND)
+            return 0;
+
+        return local_host.osCredentialId();
+    }
+
+    RouterHostConfig router_host;
+    if (db.findRouterHost(host.routerId(), stringToHostId(host.address()), &router_host) != Database::FindResult::FOUND)
+        return 0;
+
+    return router_host.osCredentialId();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::setOsCredentialId(qint64 credential_id)
+{
+    const HostConfig& host = session_state_->host();
+    if (!canSaveCredentials(host))
+        return;
+
+    Database& db = Database::instance();
+
+    const bool saved = host.entryId() > 0 ?
+        db.setLocalHostOsCredentialId(host.entryId(), credential_id) :
+        db.setRouterHostOsCredentialId(host.routerId(), stringToHostId(host.address()), credential_id);
+    if (!saved)
+        LOG(ERROR) << "Unable to save the operating system credentials of the host";
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::closeEvent(QCloseEvent* /* event */)
 {
     LOG(INFO) << "Close event";

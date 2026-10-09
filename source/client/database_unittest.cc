@@ -2187,6 +2187,78 @@ TEST_F(DatabaseTest, BatchLinksHostsToItsCredentials)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The operating system credentials last chosen for a host are kept through an edit of the host,
+// which does not know about them. A removed record leaves the host without one. A host of a router
+// keeps them only in the row of its stored credentials.
+TEST_F(DatabaseTest, HostsKeepTheOsCredentialsLastChosenForThem)
+{
+    CredentialConfig os = credential("workstation", "DOMAIN\\user", "secret");
+    os.setType(CredentialConfig::Type::OS);
+    ASSERT_TRUE(db_.addCredential(os));
+
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    ASSERT_TRUE(db_.addLocalHost(host));
+    EXPECT_EQ(findLocalHost(db_, host.id())->osCredentialId(), 0);
+
+    ASSERT_TRUE(db_.setLocalHostOsCredentialId(host.id(), os.id()));
+    EXPECT_EQ(findLocalHost(db_, host.id())->osCredentialId(), os.id());
+
+    LocalHostConfig edited;
+    edited.setId(host.id());
+    edited.setName("renamed");
+    edited.setAddress("192.168.0.1");
+    ASSERT_TRUE(db_.modifyLocalHost(edited));
+    EXPECT_EQ(findLocalHost(db_, host.id())->osCredentialId(), os.id());
+
+    const qint64 router_id = addRouter("router");
+    ASSERT_TRUE(db_.addRouterHost(routerHost(router_id, 100500, "user", "secret")));
+
+    ASSERT_TRUE(db_.setRouterHostOsCredentialId(router_id, 100500, os.id()));
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, "other-user", "other-secret")));
+    EXPECT_EQ(findRouterHost(db_, router_id, 100500)->osCredentialId(), os.id());
+
+    ASSERT_TRUE(db_.setRouterHostOsCredentialId(router_id, 100501, os.id()));
+    EXPECT_EQ(allRouterHosts().size(), 1);
+
+    ASSERT_TRUE(db_.removeCredential(os.id()));
+    EXPECT_EQ(findLocalHost(db_, host.id())->osCredentialId(), 0);
+    EXPECT_EQ(findRouterHost(db_, router_id, 100500)->osCredentialId(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The tables of hosts made before the column of the operating system credentials get it when the
+// file is opened, and a file that has it already is opened as it is.
+TEST_F(DatabaseTest, OldTablesOfHostsGetTheOsCredentialColumn)
+{
+    const QString file_path = QFileInfo(file_path_).dir().filePath("old.db3");
+
+    {
+        SqlDatabase raw;
+        ASSERT_TRUE(raw.open(file_path));
+        ASSERT_TRUE(raw.exec("CREATE TABLE local_hosts (id INTEGER PRIMARY KEY, credential_id INTEGER)"));
+        ASSERT_TRUE(raw.exec("CREATE TABLE router_hosts (router_id INTEGER, host_id INTEGER, credential_id INTEGER)"));
+    }
+
+    for (int i = 0; i < 2; ++i)
+    {
+        Database db;
+        ASSERT_TRUE(db.open(file_path));
+    }
+
+    SqlDatabase raw;
+    ASSERT_TRUE(raw.open(file_path));
+
+    for (const char* table : { "local_hosts", "router_hosts" })
+    {
+        SqlQuery query(raw, "SELECT 1 FROM pragma_table_info(?) WHERE name='os_credential_id'");
+        query.addText(std::string_view(table));
+        EXPECT_EQ(query.next(), SqlQuery::StepResult::ROW) << table;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 // A host is entered with the pair of the record of credentials it refers to, whatever pair of its
 // own it keeps, or with its own pair when it refers to none. Once the record is removed the host
 // refers to none and is entered with its own pair again.

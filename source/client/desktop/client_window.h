@@ -131,6 +131,10 @@ protected:
 
     NetworkWorker* networkWorker() const;
 
+    // The operating system credentials last chosen for the host, 0 if there are none.
+    qint64 osCredentialId() const;
+    void setOsCredentialId(qint64 credential_id);
+
     // Returns actions that launch every session type except this window's own, targeting the
     // current host, in a fixed order. Built once on construction. The default tabActionGroups()
     // exposes them in the ACTION group; subclasses that override tabActionGroups() insert them

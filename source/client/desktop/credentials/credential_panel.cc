@@ -72,7 +72,7 @@ CredentialPanel::CredentialPanel(QWidget* parent)
 CredentialPanel::~CredentialPanel() = default;
 
 //--------------------------------------------------------------------------------------------------
-void CredentialPanel::popup()
+void CredentialPanel::popup(qint64 credential_id)
 {
     QList<CredentialConfig> credentials;
     if (Database::instance().credentialList(&credentials, CredentialConfig::Type::OS) != Database::ReadResult::OK)
@@ -90,6 +90,9 @@ void CredentialPanel::popup()
 
         combo_credential_->addItem(icon, credential.displayName());
         credentials_.append(credential);
+
+        if (credential.id() == credential_id)
+            combo_credential_->setCurrentIndex(combo_credential_->count() - 1);
     }
 
     if (credentials_.isEmpty())
@@ -148,7 +151,7 @@ void CredentialPanel::onSignIn()
     LOG(INFO) << "[ACTION] Sign in with saved credentials";
     onDismiss();
 
-    emit sig_credentialSelected(credential.username(), credential.password());
+    emit sig_credentialSelected(credential.id(), credential.username(), credential.password());
 }
 
 //--------------------------------------------------------------------------------------------------
