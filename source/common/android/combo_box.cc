@@ -19,12 +19,12 @@
 #include "common/android/combo_box.h"
 
 #include <QApplication>
+#include <QDialog>
 #include <QFrame>
 #include <QIcon>
 #include <QListView>
 #include <QPainter>
 #include <QPainterPath>
-#include <QProxyStyle>
 #include <QStyledItemDelegate>
 
 #include "common/android/animation.h"
@@ -53,6 +53,7 @@ constexpr int kMaxVisibleItems = 8;
 // draws it with a leading indent.
 constexpr int kIndentRole = Qt::UserRole + 1;
 constexpr int kPopupRadius = 8;
+constexpr int kPopupMargin = 8;
 constexpr double kFloatedLabelScale = 0.78;
 constexpr double kDisabledOpacity = 0.38;
 constexpr double kMutedLabelOpacity = 0.55;
@@ -83,23 +84,8 @@ QPainterPath itemPath(const QRectF& rect, double radius, bool round_top, bool ro
     return path;
 }
 
-// Forces the list-style drop-down instead of the menu-style popup. The menu style (reported by the
-// Android platform style) ignores the visible item limit and manages its own scrolling, which
-// fights the kinetic scroller, so it is turned off.
-class PopupStyle final : public QProxyStyle
-{
-public:
-    int styleHint(StyleHint hint, const QStyleOption* option, const QWidget* widget,
-                  QStyleHintReturn* return_data) const final
-    {
-        if (hint == QStyle::SH_ComboBox_Popup)
-            return 0;
-        return QProxyStyle::styleHint(hint, option, widget, return_data);
-    }
-};
-
-// List view that paints a rounded surface with an outline for the drop-down. The popup container
-// is made translucent, so the area outside the rounded corners shows the content behind it.
+// List view that paints a rounded surface with an outline for the drop-down. The overlay holding it
+// paints nothing, so the area outside the rounded corners shows the content behind it.
 class PopupView final : public QListView
 {
 public:
@@ -225,6 +211,50 @@ public:
     }
 };
 
+// The drop-down is shown inside the window over its content, because on Android a separate native
+// window aborts the application when its surface is created while the keyboard is calling into the
+// application. It is a QDialog, so the Back key closes it like the other dialogs of the window.
+class Popup final : public QDialog
+{
+public:
+    explicit Popup(QWidget* window)
+        : QDialog(window),
+          view_(new PopupView(this))
+    {
+        setWindowFlags(Qt::Widget);
+        setAttribute(Qt::WA_DeleteOnClose);
+        setGeometry(window->rect());
+
+        // The combo box keeps the focus while its list is open.
+        view_->setFocusPolicy(Qt::NoFocus);
+
+        // A rotation moves the field away from the list, so the list is closed.
+        window->installEventFilter(this);
+    }
+
+    PopupView* view() const { return view_; }
+
+protected:
+    // QObject implementation.
+    bool eventFilter(QObject* object, QEvent* event) final
+    {
+        if (object == parentWidget() && event->type() == QEvent::Resize)
+            reject();
+
+        return QDialog::eventFilter(object, event);
+    }
+
+    // QDialog implementation.
+    void mousePressEvent(QMouseEvent* /* event */) final
+    {
+        // The list takes the presses on itself, so this one is outside of it.
+        reject();
+    }
+
+private:
+    PopupView* view_ = nullptr;
+};
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -234,25 +264,7 @@ ComboBox::ComboBox(QWidget* parent)
       focus_progress_(0.0)
 {
     setFont(Controls::scaledFont(font(), Controls::kFontScale));
-
-    // The proxy style is parented to the widget so it is destroyed with it.
-    PopupStyle* popup_style = new PopupStyle();
-    popup_style->setParent(this);
-    setStyle(popup_style);
     setMaxVisibleItems(kMaxVisibleItems);
-
-    setView(new PopupView(this));
-    setItemDelegate(new ItemDelegate(this));
-    view()->setFont(font());
-
-    if (QFrame* container = qobject_cast<QFrame*>(view()->parentWidget()))
-    {
-        // The container restores its rectangular frame on style changes, so the frame is removed
-        // with a style sheet instead of setFrameShape().
-        container->setStyleSheet(
-            "QComboBoxPrivateContainer { background: transparent; border: none; }");
-        container->setAttribute(Qt::WA_TranslucentBackground);
-    }
 
     connect(focus_animation_, &Animation::sig_valueChanged, this, [this](double value)
     {
@@ -262,7 +274,10 @@ ComboBox::ComboBox(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-ComboBox::~ComboBox() = default;
+ComboBox::~ComboBox()
+{
+    hidePopup();
+}
 
 //--------------------------------------------------------------------------------------------------
 void ComboBox::setLabel(const QString& label)
@@ -298,6 +313,69 @@ QSize ComboBox::sizeHint() const
 QSize ComboBox::minimumSizeHint() const
 {
     return QSize(QComboBox::minimumSizeHint().width(), kFieldHeight + labelOverflow());
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComboBox::showPopup()
+{
+    if (popup_ || count() == 0)
+        return;
+
+    QWidget* host = window();
+
+    Popup* popup = new Popup(host);
+    popup_ = popup;
+
+    PopupView* list = popup->view();
+    list->setFont(font());
+    list->setItemDelegate(new ItemDelegate(list));
+    list->setModel(model());
+    list->setRootIndex(rootModelIndex());
+    list->setModelColumn(modelColumn());
+
+    const QModelIndex current = model()->index(currentIndex(), modelColumn(), rootModelIndex());
+    list->setCurrentIndex(current);
+
+    int list_height = 0;
+    for (int row = 0; row < qMin(count(), maxVisibleItems()); ++row)
+        list_height += list->sizeHintForRow(row);
+
+    // The list drops below the field and goes above it only when there is more room there.
+    const QRect field(mapTo(host, QPoint(0, 0)), size());
+    const int below = host->height() - kPopupMargin - field.bottom() - 1;
+    const int above = field.top() - kPopupMargin;
+
+    QRect list_rect(field.left(), field.bottom() + 1, field.width(), list_height);
+    if (list_height > below && above > below)
+    {
+        list_rect.setHeight(qMin(list_height, above));
+        list_rect.moveBottom(field.top() - 1);
+    }
+    else
+    {
+        list_rect.setHeight(qMin(list_height, below));
+    }
+
+    list->setGeometry(list_rect);
+    list->scrollTo(current, QAbstractItemView::PositionAtCenter);
+
+    connect(list, &QAbstractItemView::clicked, this, [this](const QModelIndex& index)
+    {
+        hidePopup();
+        setCurrentIndex(index.row());
+        emit activated(index.row());
+        emit textActivated(itemText(index.row()));
+    });
+
+    popup->raise();
+    popup->show();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComboBox::hidePopup()
+{
+    if (popup_)
+        popup_->close();
 }
 
 //--------------------------------------------------------------------------------------------------

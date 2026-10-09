@@ -21,12 +21,14 @@
 
 #include <QComboBox>
 #include <QIcon>
+#include <QPointer>
 
 class Animation;
 
 // QComboBox adapted for touch screens: a taller field with a rounded outline that highlights on
 // focus, a label resting on the outline and a drop-down indicator. Keeps the QComboBox API, so it
-// is used the same way.
+// is used the same way. Like Dialog, Menu and BottomSheet, the drop-down list is an overlay child
+// widget covering the window rather than a separate native window.
 class ComboBox final : public QComboBox
 {
     Q_OBJECT
@@ -50,6 +52,8 @@ public:
     // QComboBox implementation.
     QSize sizeHint() const final;
     QSize minimumSizeHint() const final;
+    void showPopup() final;
+    void hidePopup() final;
 
 protected:
     // QComboBox implementation.
@@ -65,6 +69,7 @@ private:
     QString label_;
     QString field_text_;
     QIcon field_icon_;
+    QPointer<QWidget> popup_;
 
     Q_DISABLE_COPY_MOVE(ComboBox)
 };
