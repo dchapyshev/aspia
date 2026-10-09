@@ -2228,6 +2228,48 @@ TEST_F(DatabaseTest, HostsKeepTheOsCredentialsLastChosenForThem)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The hosts of a batch name their operating system credentials by the keys of the batch as well.
+TEST_F(DatabaseTest, BatchLinksHostsToTheirOsCredentials)
+{
+    CredentialConfig aspia = credential("office", "user", "secret");
+    aspia.setId(-1);
+
+    CredentialConfig os = credential("workstation", "DOMAIN\\user", "secret");
+    os.setId(-2);
+    os.setType(CredentialConfig::Type::OS);
+
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    host.setOsCredentialId(-2);
+
+    RouterConfig router;
+    router.setRouterId(-1);
+    router.setDisplayName("router");
+    router.setAddress("router.example.com");
+    router.setUsername("router-user");
+    router.setPassword(SecureString(QString("router-secret")));
+
+    RouterHostConfig router_host = routerHost(-1, 100500, QString(), QString());
+    router_host.setCredentialId(-1);
+    router_host.setOsCredentialId(-2);
+
+    ASSERT_TRUE(db_.import({ router }, {}, { host }, { router_host }, { aspia, os }));
+
+    QList<CredentialConfig> credentials;
+    ASSERT_EQ(db_.credentialList(&credentials, CredentialConfig::Type::OS), Database::ReadResult::OK);
+    ASSERT_EQ(credentials.size(), 1);
+
+    const QList<LocalHostConfig> hosts = allLocalHosts();
+    ASSERT_EQ(hosts.size(), 1);
+    EXPECT_EQ(hosts.front().osCredentialId(), credentials.front().id());
+
+    const QList<RouterHostConfig> router_hosts = allRouterHosts();
+    ASSERT_EQ(router_hosts.size(), 1);
+    EXPECT_EQ(router_hosts.front().osCredentialId(), credentials.front().id());
+}
+
+//--------------------------------------------------------------------------------------------------
 // The tables of hosts made before the column of the operating system credentials get it when the
 // file is opened, and a file that has it already is opened as it is.
 TEST_F(DatabaseTest, OldTablesOfHostsGetTheOsCredentialColumn)

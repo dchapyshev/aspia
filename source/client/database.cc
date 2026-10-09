@@ -509,8 +509,8 @@ bool Database::addLocalHost(LocalHostConfig& host)
         host.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
     SqlQuery query(db_, "INSERT INTO local_hosts (id, group_id, router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid, credential_id) "
-                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0))");
+                        "create_time, modify_time, connect_time, guid, credential_id, os_credential_id) "
+                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), NULLIF(?, 0))");
     query.addInt64(host.groupId());
     query.addInt64(host.routerId());
     query.addText(host.name());
@@ -521,6 +521,7 @@ bool Database::addLocalHost(LocalHostConfig& host)
     query.addInt64(host.connectTime());
     query.addText(host.guid());
     query.addInt64(host.credentialId());
+    query.addInt64(host.osCredentialId());
 
     if (!query.exec())
     {
@@ -1279,12 +1280,13 @@ bool Database::addRouterHost(const RouterHostConfig& host)
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(db_, "INSERT INTO router_hosts (router_id, host_id, data, credential_id) "
-                        "VALUES (?, ?, ?, NULLIF(?, 0))");
+    SqlQuery query(db_, "INSERT INTO router_hosts (router_id, host_id, data, credential_id, os_credential_id) "
+                        "VALUES (?, ?, ?, NULLIF(?, 0), NULLIF(?, 0))");
     query.addInt64(host.routerId());
     query.addUInt64(host.hostId());
     query.addBlob(*encrypted_data);
     query.addInt64(host.credentialId());
+    query.addInt64(host.osCredentialId());
 
     if (!query.exec())
     {
@@ -1825,6 +1827,7 @@ bool Database::import(const QList<RouterConfig>& routers,
         config.setGroupId(group_ids.value(host.groupId(), host.groupId()));
         config.setRouterId(router_ids.value(host.routerId(), host.routerId()));
         config.setCredentialId(credential_ids.value(host.credentialId(), host.credentialId()));
+        config.setOsCredentialId(credential_ids.value(host.osCredentialId(), host.osCredentialId()));
 
         if (!config.isValid())
         {
@@ -1840,8 +1843,8 @@ bool Database::import(const QList<RouterConfig>& routers,
             config.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
         SqlQuery query(db_, "INSERT INTO local_hosts (id, group_id, router_id, name, comment, data, "
-                            "create_time, modify_time, connect_time, guid, credential_id) "
-                            "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0))");
+                            "create_time, modify_time, connect_time, guid, credential_id, os_credential_id) "
+                            "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), NULLIF(?, 0))");
         query.addInt64(config.groupId());
         query.addInt64(config.routerId());
         query.addText(config.name());
@@ -1852,6 +1855,7 @@ bool Database::import(const QList<RouterConfig>& routers,
         query.addInt64(config.connectTime());
         query.addText(config.guid());
         query.addInt64(config.credentialId());
+        query.addInt64(config.osCredentialId());
 
         if (!query.exec())
         {
@@ -1865,6 +1869,7 @@ bool Database::import(const QList<RouterConfig>& routers,
         RouterHostConfig config = host;
         config.setRouterId(router_ids.value(host.routerId(), host.routerId()));
         config.setCredentialId(credential_ids.value(host.credentialId(), host.credentialId()));
+        config.setOsCredentialId(credential_ids.value(host.osCredentialId(), host.osCredentialId()));
 
         if (!addRouterHost(config))
             return false;

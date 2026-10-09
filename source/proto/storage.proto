@@ -55,11 +55,12 @@ message BackupFile
 
     message RouterHost
     {
-        string router_guid     = 1;
-        uint64 host_id         = 2;
-        string username        = 3;
-        string password        = 4;
-        string credential_guid = 5;
+        string router_guid        = 1;
+        uint64 host_id            = 2;
+        string username           = 3;
+        string password           = 4;
+        string credential_guid    = 5;
+        string os_credential_guid = 6;
     }
 
     message LocalGroup
@@ -72,18 +73,19 @@ message BackupFile
 
     message LocalHost
     {
-        string guid        = 1;
-        string group_guid  = 2;
-        string router_guid = 3;
-        string name        = 4;
-        string comment     = 5;
-        string address     = 6;
-        string username    = 7;
-        string password    = 8;
-        int64 create_time  = 9;
-        int64 modify_time  = 10;
-        int64 connect_time = 11;
-        string credential_guid = 12;
+        string guid               = 1;
+        string group_guid         = 2;
+        string router_guid        = 3;
+        string name               = 4;
+        string comment            = 5;
+        string address            = 6;
+        string username           = 7;
+        string password           = 8;
+        int64 create_time         = 9;
+        int64 modify_time         = 10;
+        int64 connect_time        = 11;
+        string credential_guid    = 12;
+        string os_credential_guid = 13;
     }
 
     message Credential

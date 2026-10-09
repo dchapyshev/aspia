@@ -82,11 +82,12 @@ void buildLocalGroup(const LocalGroupConfig& group, const QString& parent_guid,
 //--------------------------------------------------------------------------------------------------
 void buildLocalHost(const LocalHostConfig& host, const QString& group_guid,
                     const QString& router_guid, const QString& credential_guid,
-                    BackupLocalHost* out)
+                    const QString& os_credential_guid, BackupLocalHost* out)
 {
     out->set_group_guid(group_guid.toStdString());
     out->set_router_guid(router_guid.toStdString());
     out->set_credential_guid(credential_guid.toStdString());
+    out->set_os_credential_guid(os_credential_guid.toStdString());
     out->set_guid(host.guid().toStdString());
     out->set_name(host.name().toStdString());
     out->set_comment(host.comment().toStdString());
@@ -102,10 +103,12 @@ void buildLocalHost(const LocalHostConfig& host, const QString& group_guid,
 
 //--------------------------------------------------------------------------------------------------
 void buildRouterHost(const RouterHostConfig& host, const QString& router_guid,
-                     const QString& credential_guid, BackupRouterHost* out)
+                     const QString& credential_guid, const QString& os_credential_guid,
+                     BackupRouterHost* out)
 {
     out->set_router_guid(router_guid.toStdString());
     out->set_credential_guid(credential_guid.toStdString());
+    out->set_os_credential_guid(os_credential_guid.toStdString());
     out->set_host_id(host.hostId());
     out->set_username(host.username().toStdString());
 
@@ -238,14 +241,15 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
         // so that the user is shown a host whose router is gone. The file names only the records it
         // carries, so elsewhere such a host stands on its own.
         buildLocalHost(host, group_guids.value(host.groupId()), router_guids.value(host.routerId()),
-                       credential_guids.value(host.credentialId()), data->add_local_hosts());
+                       credential_guids.value(host.credentialId()), credential_guids.value(host.osCredentialId()),
+                       data->add_local_hosts());
         ++report->local_hosts;
     }
 
     for (const RouterHostConfig& host : std::as_const(router_hosts))
     {
-        buildRouterHost(host, router_guids.value(host.routerId()),
-                        credential_guids.value(host.credentialId()), data->add_router_hosts());
+        buildRouterHost(host, router_guids.value(host.routerId()), credential_guids.value(host.credentialId()),
+                        credential_guids.value(host.osCredentialId()), data->add_router_hosts());
         ++report->router_hosts;
     }
 
@@ -336,6 +340,8 @@ void buildLocalHosts(
         config.setRouterId(router_links.value(QString::fromStdString(host.router_guid()), 0));
         config.setCredentialId(
             credential_links.value(QString::fromStdString(host.credential_guid()), 0));
+        config.setOsCredentialId(
+            credential_links.value(QString::fromStdString(host.os_credential_guid()), 0));
         config.setGuid(QString::fromStdString(host.guid()));
         config.setName(QString::fromStdString(host.name()));
         config.setComment(QString::fromStdString(host.comment()));
@@ -364,6 +370,8 @@ void buildRouterHosts(
         config.setHostId(host.host_id());
         config.setCredentialId(
             credential_links.value(QString::fromStdString(host.credential_guid()), 0));
+        config.setOsCredentialId(
+            credential_links.value(QString::fromStdString(host.os_credential_guid()), 0));
         config.setUsername(QString::fromStdString(host.username()));
         config.setPassword(toSecureString(host.password()));
 
@@ -528,6 +536,10 @@ bool hasValidLocalHosts(
         const QString credential_guid = QString::fromStdString(host.credential_guid());
         if (!credential_guid.isEmpty() && !credential_guids.contains(credential_guid))
             return false;
+
+        const QString os_credential_guid = QString::fromStdString(host.os_credential_guid());
+        if (!os_credential_guid.isEmpty() && !credential_guids.contains(os_credential_guid))
+            return false;
     }
 
     return true;
@@ -548,6 +560,10 @@ bool hasValidRouterHosts(
 
         const QString credential_guid = QString::fromStdString(host.credential_guid());
         if (!credential_guid.isEmpty() && !credential_guids.contains(credential_guid))
+            return false;
+
+        const QString os_credential_guid = QString::fromStdString(host.os_credential_guid());
+        if (!os_credential_guid.isEmpty() && !credential_guids.contains(os_credential_guid))
             return false;
 
         RouterHostConfig config;

@@ -1347,6 +1347,84 @@ TEST_F(BackupTest, HostsKeepTheirLinksToCredentialsThroughTheFile)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The operating system credentials last chosen for a host travel by guid as well.
+TEST_F(BackupTest, HostsKeepTheirOsCredentialsThroughTheFile)
+{
+    CredentialConfig os;
+    os.setType(CredentialConfig::Type::OS);
+    os.setDisplayName("workstation");
+    os.setUsername("DOMAIN\\user");
+    os.setPassword(SecureString(QString("secret")));
+    ASSERT_TRUE(source_.addCredential(os));
+
+    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+
+    LocalHostConfig local_host;
+    local_host.setName("host");
+    local_host.setAddress("192.168.0.1");
+    ASSERT_TRUE(source_.addLocalHost(local_host));
+    ASSERT_TRUE(source_.setLocalHostOsCredentialId(local_host.id(), os.id()));
+
+    RouterHostConfig router_host;
+    router_host.setRouterId(router_id);
+    router_host.setHostId(100500);
+    router_host.setUsername("user");
+    router_host.setPassword(SecureString(QString("secret")));
+    ASSERT_TRUE(source_.addRouterHost(router_host));
+    ASSERT_TRUE(source_.setRouterHostOsCredentialId(router_id, 100500, os.id()));
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+
+    const QList<CredentialConfig> credentials = credentialList(target_);
+    ASSERT_EQ(credentials.size(), 1);
+
+    const QList<LocalHostConfig> local_hosts = allLocalHosts(target_);
+    ASSERT_EQ(local_hosts.size(), 1);
+    EXPECT_EQ(local_hosts.front().osCredentialId(), credentials.front().id());
+
+    const QList<RouterHostConfig> router_hosts = allRouterHosts(target_);
+    ASSERT_EQ(router_hosts.size(), 1);
+    EXPECT_EQ(router_hosts.front().osCredentialId(), credentials.front().id());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The operating system credentials of a host are a record the file carries, or none.
+TEST_F(BackupTest, FileWhereAHostNamesOsCredentialsItDoesNotCarryIsNotImported)
+{
+    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+
+    LocalHostConfig local_host;
+    local_host.setName("host");
+    local_host.setAddress("192.168.0.1");
+    ASSERT_TRUE(source_.addLocalHost(local_host));
+
+    RouterHostConfig router_host;
+    router_host.setRouterId(router_id);
+    router_host.setHostId(100500);
+    router_host.setUsername("user");
+    router_host.setPassword(SecureString(QString("secret")));
+    ASSERT_TRUE(source_.addRouterHost(router_host));
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        data->mutable_local_hosts(0)->set_os_credential_guid("6f1d2c3b-4a59-4e8f-9a0b-1c2d3e4f5a6b");
+    });
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        data->mutable_router_hosts(0)->set_os_credential_guid("6f1d2c3b-4a59-4e8f-9a0b-1c2d3e4f5a6b");
+    });
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+
+    EXPECT_TRUE(allLocalHosts(target_).isEmpty());
+    EXPECT_TRUE(allRouterHosts(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
 // A host refers to a record of credentials the file carries, or to none.
 TEST_F(BackupTest, FileWhereAHostNamesCredentialsItDoesNotCarryIsNotImported)
 {
