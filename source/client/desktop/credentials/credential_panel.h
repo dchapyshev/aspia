@@ -25,6 +25,7 @@
 #include "client/config.h"
 
 class QComboBox;
+class QToolButton;
 
 class CredentialPanel final : public QWidget
 {
@@ -51,11 +52,13 @@ protected:
 
 private slots:
     void onSignIn();
+    void onCurrentCredentialChanged();
 
 private:
     void updatePosition();
 
     QComboBox* combo_credential_ = nullptr;
+    QToolButton* sign_in_button_ = nullptr;
     QList<CredentialConfig> credentials_;
 
     Q_DISABLE_COPY_MOVE(CredentialPanel)

@@ -44,13 +44,14 @@ CredentialPanel::CredentialPanel(QWidget* parent)
 
     combo_credential_ = new QComboBox(this);
     combo_credential_->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+    connect(combo_credential_, &QComboBox::currentIndexChanged, this, &CredentialPanel::onCurrentCredentialChanged);
 
-    QToolButton* sign_in_button = new QToolButton(this);
-    sign_in_button->setIcon(QIcon(":/img/login.svg"));
-    sign_in_button->setIconSize(QSize(24, 24));
-    sign_in_button->setToolTip(tr("Sign In"));
-    sign_in_button->setAutoRaise(true);
-    connect(sign_in_button, &QToolButton::clicked, this, &CredentialPanel::onSignIn);
+    sign_in_button_ = new QToolButton(this);
+    sign_in_button_->setIcon(QIcon(":/img/login.svg"));
+    sign_in_button_->setIconSize(QSize(24, 24));
+    sign_in_button_->setToolTip(tr("Sign In"));
+    sign_in_button_->setAutoRaise(true);
+    connect(sign_in_button_, &QToolButton::clicked, this, &CredentialPanel::onSignIn);
 
     QToolButton* close_button = new QToolButton(this);
     close_button->setIcon(QIcon(":/img/close.svg"));
@@ -61,7 +62,7 @@ CredentialPanel::CredentialPanel(QWidget* parent)
 
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(combo_credential_);
-    layout->addWidget(sign_in_button);
+    layout->addWidget(sign_in_button_);
     layout->addWidget(close_button);
 
     parent->installEventFilter(this);
@@ -81,18 +82,17 @@ void CredentialPanel::popup(qint64 credential_id)
     credentials_.clear();
     combo_credential_->clear();
 
-    const QIcon icon(":/img/keys.svg");
+    int current = -1;
 
     for (const CredentialConfig& credential : std::as_const(credentials))
     {
         if (!credential.isValid())
             continue;
 
-        combo_credential_->addItem(icon, credential.displayName());
-        credentials_.append(credential);
-
         if (credential.id() == credential_id)
-            combo_credential_->setCurrentIndex(combo_credential_->count() - 1);
+            current = credentials_.size();
+
+        credentials_.append(credential);
     }
 
     if (credentials_.isEmpty())
@@ -100,6 +100,22 @@ void CredentialPanel::popup(qint64 credential_id)
         onDismiss();
         return;
     }
+
+    const QIcon icon(":/img/keys.svg");
+
+    if (current < 0)
+    {
+        const QPixmap disabled = icon.pixmap(combo_credential_->iconSize(), devicePixelRatioF(), QIcon::Disabled);
+        combo_credential_->addItem(QIcon(disabled), tr("Not Selected"));
+    }
+
+    for (int i = 0; i < credentials_.size(); ++i)
+        combo_credential_->addItem(icon, credentials_[i].displayName(), i);
+
+    if (current >= 0)
+        combo_credential_->setCurrentIndex(combo_credential_->findData(current));
+
+    onCurrentCredentialChanged();
 
     adjustSize();
     updatePosition();
@@ -142,7 +158,11 @@ void CredentialPanel::paintEvent(QPaintEvent* /* event */)
 //--------------------------------------------------------------------------------------------------
 void CredentialPanel::onSignIn()
 {
-    const int index = combo_credential_->currentIndex();
+    const QVariant data = combo_credential_->currentData();
+    if (!data.isValid())
+        return;
+
+    const int index = data.toInt();
     if (index < 0 || index >= credentials_.size())
         return;
 
@@ -152,6 +172,12 @@ void CredentialPanel::onSignIn()
     onDismiss();
 
     emit sig_credentialSelected(credential.id(), credential.username(), credential.password());
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialPanel::onCurrentCredentialChanged()
+{
+    sign_in_button_->setEnabled(combo_credential_->currentData().isValid());
 }
 
 //--------------------------------------------------------------------------------------------------
