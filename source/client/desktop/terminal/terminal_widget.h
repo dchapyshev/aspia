@@ -63,6 +63,9 @@ public:
     explicit TerminalWidget(QWidget* parent = nullptr);
     ~TerminalWidget() final;
 
+    // Completes the login prompt with the given credentials as if they were typed in it.
+    void login(const QString& user_name, const QString& password);
+
 public slots:
     void writeOutput(const QByteArray& data);
     void onResult(int result_code);
@@ -107,6 +110,7 @@ private:
 
     void startLoginPrompt();
     void handleLoginKey(QKeyEvent* event);
+    void finishLogin();
     void writeLocal(const QString& text);
     void flushInput();
     void drawCell(QPainter& painter, int column, int row, const VTermScreenCell& cell, bool selected) const;

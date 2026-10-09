@@ -218,6 +218,24 @@ TerminalWidget::~TerminalWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
+void TerminalWidget::login(const QString& user_name, const QString& password)
+{
+    if (mode_ == Mode::CONNECTED)
+        return;
+
+    if (mode_ == Mode::LOGIN_USER)
+        writeLocal(QString("\b \b").repeated(login_user_.size()));
+    else
+        writeLocal("\r\n" + tr("User name") + ": ");
+
+    login_user_ = user_name;
+    login_password_ = password;
+
+    writeLocal(user_name + "\r\n" + tr("Password") + ": ");
+    finishLogin();
+}
+
+//--------------------------------------------------------------------------------------------------
 void TerminalWidget::writeOutput(const QByteArray& data)
 {
     vterm_input_write(vterm_, data.constData(), data.size());
@@ -1153,12 +1171,7 @@ void TerminalWidget::handleLoginKey(QKeyEvent* event)
             }
             else
             {
-                writeLocal("\r\n");
-                mode_ = Mode::CONNECTED;
-                emit sig_credentials(login_user_, login_password_);
-
-                // Make sure the host pseudo-terminal matches the current widget size.
-                emit sig_resize(columns_, rows_);
+                finishLogin();
             }
             return;
 
@@ -1191,6 +1204,17 @@ void TerminalWidget::handleLoginKey(QKeyEvent* event)
     {
         login_password_ += text;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::finishLogin()
+{
+    writeLocal("\r\n");
+    mode_ = Mode::CONNECTED;
+    emit sig_credentials(login_user_, login_password_);
+
+    // Make sure the host pseudo-terminal matches the current widget size.
+    emit sig_resize(columns_, rows_);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -23,6 +23,7 @@
 
 #include "client/desktop/client_window.h"
 
+class CredentialPanel;
 class TerminalWidget;
 class ZstdStreamDecompressor;
 
@@ -35,6 +36,9 @@ public:
     ~TerminalWindow() final;
 
 protected:
+    // QObject implementation.
+    bool eventFilter(QObject* object, QEvent* event) final;
+
     // ClientWindow implementation.
     void onInternalReset() final;
     void onRegisterWorkers() final;
@@ -48,6 +52,7 @@ private slots:
 
 private:
     TerminalWidget* terminal_widget_ = nullptr;
+    CredentialPanel* credential_panel_ = nullptr;
 
     std::unique_ptr<ZstdStreamDecompressor> output_decompressor_;
 

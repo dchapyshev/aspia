@@ -18,11 +18,13 @@
 
 #include "client/desktop/terminal/terminal_window.h"
 
+#include <QKeyEvent>
 #include <QVBoxLayout>
 
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/codec/zstd_stream_decompressor.h"
+#include "client/desktop/credentials/credential_panel.h"
 #include "client/desktop/terminal/terminal_widget.h"
 #include "client/workers/network_worker.h"
 #include "proto/peer.h"
@@ -38,7 +40,8 @@ const qint64 kMaxTerminalOutputSize = 32 * 1024 * 1024; // 32 MB.
 //--------------------------------------------------------------------------------------------------
 TerminalWindow::TerminalWindow(QWidget* parent)
     : ClientWindow(proto::peer::SESSION_TYPE_TERMINAL, parent),
-      terminal_widget_(new TerminalWidget(this))
+      terminal_widget_(new TerminalWidget(this)),
+      credential_panel_(new CredentialPanel(this))
 {
     LOG(INFO) << "Ctor";
 
@@ -47,16 +50,35 @@ TerminalWindow::TerminalWindow(QWidget* parent)
     layout->addWidget(terminal_widget_);
 
     setFocusProxy(terminal_widget_);
+    terminal_widget_->installEventFilter(this);
 
     connect(terminal_widget_, &TerminalWidget::sig_credentials, this, &TerminalWindow::onCredentials);
     connect(terminal_widget_, &TerminalWidget::sig_input, this, &TerminalWindow::onInput);
     connect(terminal_widget_, &TerminalWidget::sig_resize, this, &TerminalWindow::onResize);
+
+    connect(credential_panel_, &CredentialPanel::sig_credentialSelected,
+            this, [this](const QString& user_name, const SecureString& password)
+    {
+        terminal_widget_->login(user_name, password.toString());
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
 TerminalWindow::~TerminalWindow()
 {
     LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+bool TerminalWindow::eventFilter(QObject* object, QEvent* event)
+{
+    if (object == terminal_widget_ && event->type() == QEvent::KeyPress && credential_panel_->isVisible() &&
+        !static_cast<QKeyEvent*>(event)->text().isEmpty())
+    {
+        credential_panel_->onDismiss();
+    }
+
+    return ClientWindow::eventFilter(object, event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -77,7 +99,7 @@ void TerminalWindow::onRegisterWorkers()
 //--------------------------------------------------------------------------------------------------
 void TerminalWindow::onSessionStarted()
 {
-    // Nothing.
+    credential_panel_->popup();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -97,12 +119,19 @@ void TerminalWindow::onChannelMessage(const QByteArray& buffer)
     }
 
     if (message.has_result())
+    {
         terminal_widget_->onResult(message.result().code());
+
+        if (message.result().code() == proto::terminal::Result::CODE_AUTHENTICATION_ERROR)
+            credential_panel_->popup();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void TerminalWindow::onCredentials(const QString& user_name, const QString& password)
 {
+    credential_panel_->onDismiss();
+
     proto::terminal::ClientToHost message;
     proto::terminal::Credentials* credentials = message.mutable_credentials();
     credentials->set_user_name(user_name.toStdString());

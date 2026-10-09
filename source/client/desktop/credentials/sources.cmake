@@ -27,4 +27,6 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP_CREDENTIALS
     credential_import_dialog.h
     credential_import_dialog.ui
     credential_list_model.cc
-    credential_list_model.h)
+    credential_list_model.h
+    credential_panel.cc
+    credential_panel.h)
