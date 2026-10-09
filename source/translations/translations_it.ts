@@ -1663,41 +1663,56 @@ Password: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.ui" line="25"/>
+        <source>Type:</source>
+        <translation>Tipo:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.ui" line="35"/>
         <source>Name:</source>
         <translation>Nome:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.ui" line="32"/>
+        <location filename="../client/desktop/credentials/credential_dialog.ui" line="42"/>
         <source>Display name</source>
         <translation>Nome visualizzato</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.ui" line="39"/>
+        <location filename="../client/desktop/credentials/credential_dialog.ui" line="49"/>
         <source>User Name:</source>
         <translation>Nome Utente:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.ui" line="49"/>
+        <location filename="../client/desktop/credentials/credential_dialog.ui" line="59"/>
         <source>Password:</source>
         <translation>Password:</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="43"/>
+        <source>Aspia Credentials</source>
+        <translation>Credenziali Aspia</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="45"/>
+        <source>OS Credentials</source>
+        <translation>Credenziali SO</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="50"/>
         <source>Edit Credentials</source>
         <translation>Modifica credenziali</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="43"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="50"/>
         <source>Add Credentials</source>
         <translation>Aggiungi credenziali</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="69"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="76"/>
         <source>Name cannot be empty.</source>
         <translation>Il nome non può essere vuoto.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="77"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="84"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
@@ -1705,32 +1720,37 @@ Password: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="87"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="98"/>
+        <source>Invalid user name.</source>
+        <translation>Nome utente non valido.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="107"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="96"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="116"/>
         <source>Password cannot be empty.</source>
         <translation>La password non può essere vuota.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="114"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="134"/>
         <source>Unable to add credentials</source>
         <translation>Impossibile aggiungere le credenziali</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="125"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="145"/>
         <source>Unable to modify credentials</source>
         <translation>Impossibile modificare le credenziali</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="145"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="165"/>
         <source>Failed to read the credentials.</source>
         <translation>Impossibile leggere le credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="157"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="179"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>Le credenziali sono danneggiate. Inseriscile di nuovo.</translation>
     </message>
@@ -1738,43 +1758,58 @@ Password: %2</translation>
 <context>
     <name>CredentialEditor</name>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="50"/>
+        <location filename="../client/android/credential_editor.cc" line="54"/>
+        <source>Type</source>
+        <translation>Tipo</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_editor.cc" line="55"/>
+        <source>Aspia Credentials</source>
+        <translation>Credenziali Aspia</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_editor.cc" line="57"/>
+        <source>OS Credentials</source>
+        <translation>Credenziali SO</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_editor.cc" line="60"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="51"/>
+        <location filename="../client/android/credential_editor.cc" line="61"/>
         <source>User Name</source>
         <translation>Nome utente</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="52"/>
+        <location filename="../client/android/credential_editor.cc" line="62"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="61"/>
+        <location filename="../client/android/credential_editor.cc" line="71"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="64"/>
-        <location filename="../client/android/credential_editor.cc" line="199"/>
+        <location filename="../client/android/credential_editor.cc" line="74"/>
+        <location filename="../client/android/credential_editor.cc" line="225"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="133"/>
+        <location filename="../client/android/credential_editor.cc" line="148"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>Le credenziali sono danneggiate. Inseriscile di nuovo.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="145"/>
+        <location filename="../client/android/credential_editor.cc" line="160"/>
         <source>Name cannot be empty.</source>
         <translation>Il nome non può essere vuoto.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/credential_editor.cc" line="152"/>
+        <location filename="../client/android/credential_editor.cc" line="167"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
@@ -1782,32 +1817,33 @@ Password: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="161"/>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
+        <location filename="../client/android/credential_editor.cc" line="180"/>
+        <location filename="../client/android/credential_editor.cc" line="188"/>
+        <source>Invalid user name.</source>
+        <translation>Nome utente non valido.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="170"/>
+        <location filename="../client/android/credential_editor.cc" line="196"/>
         <source>Password cannot be empty.</source>
         <translation>La password non può essere vuota.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="188"/>
+        <location filename="../client/android/credential_editor.cc" line="214"/>
         <source>Failed to save the credentials.</source>
         <translation>Impossibile salvare le credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="198"/>
+        <location filename="../client/android/credential_editor.cc" line="224"/>
         <source>Delete Credentials</source>
         <translation>Elimina credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="199"/>
+        <location filename="../client/android/credential_editor.cc" line="225"/>
         <source>Delete the credentials &quot;%1&quot;?</source>
         <translation>Eliminare le credenziali &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="206"/>
+        <location filename="../client/android/credential_editor.cc" line="232"/>
         <source>Failed to delete the credentials.</source>
         <translation>Impossibile eliminare le credenziali.</translation>
     </message>
@@ -1816,7 +1852,7 @@ Password: %2</translation>
     <name>CredentialExportDialog</name>
     <message>
         <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="14"/>
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="107"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="135"/>
         <source>Export Credentials</source>
         <translation>Esporta credenziali</translation>
     </message>
@@ -1836,49 +1872,59 @@ Password: %2</translation>
         <translation>Deseleziona tutto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="114"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="105"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="119"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="110"/>
         <source>User Name</source>
         <translation>Nome utente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="131"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.ui" line="122"/>
         <source>Password:</source>
         <translation>Password:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="108"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="136"/>
         <source>Aspia Credentials (*.aspia-credentials);;All files (*)</source>
         <translation>Credenziali Aspia (*.aspia-credentials);;Tutti i file (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="122"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="150"/>
         <source>Unable to write the file.</source>
         <translation>Impossibile scrivere il file.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="126"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="154"/>
         <source>Failed to export the credentials.</source>
         <translation>Impossibile esportare le credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="130"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="158"/>
         <source>Export completed successfully.
 Credentials exported: %1</source>
         <translation>Esportazione completata con successo.
 Credenziali esportate: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="141"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="169"/>
         <source>Failed to read the credentials.</source>
         <translation>Impossibile leggere le credenziali.</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="183"/>
+        <source>Aspia Credentials</source>
+        <translation>Credenziali Aspia</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="184"/>
+        <source>OS Credentials</source>
+        <translation>Credenziali SO</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="207"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="288"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
@@ -1886,12 +1932,12 @@ Credenziali esportate: %1</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="215"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="296"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>La password inserita non soddisfa i requisiti di sicurezza!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="216"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="297"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
@@ -1899,7 +1945,7 @@ Credenziali esportate: %1</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="219"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="300"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vuoi inserire una password diversa?</translation>
     </message>
@@ -1922,45 +1968,45 @@ Credenziali esportate: %1</translation>
         <translation>Impossibile leggere le credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_export_widget.cc" line="127"/>
+        <location filename="../client/android/credential_export_widget.cc" line="133"/>
         <source>Damaged</source>
         <translation>Danneggiata</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_export_widget.cc" line="153"/>
-        <location filename="../client/android/credential_export_widget.cc" line="172"/>
+        <location filename="../client/android/credential_export_widget.cc" line="159"/>
+        <location filename="../client/android/credential_export_widget.cc" line="178"/>
         <source>Export Credentials</source>
         <translation>Esporta credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_export_widget.cc" line="154"/>
+        <location filename="../client/android/credential_export_widget.cc" line="160"/>
         <source>Aspia Credentials (*.aspia-credentials)</source>
         <translation>Credenziali Aspia (*.aspia-credentials)</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_export_widget.cc" line="164"/>
+        <location filename="../client/android/credential_export_widget.cc" line="170"/>
         <source>Unable to write the file.</source>
         <translation>Impossibile scrivere il file.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_export_widget.cc" line="168"/>
+        <location filename="../client/android/credential_export_widget.cc" line="174"/>
         <source>Failed to export the credentials.</source>
         <translation>Impossibile esportare le credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_export_widget.cc" line="173"/>
+        <location filename="../client/android/credential_export_widget.cc" line="179"/>
         <source>Export completed successfully.
 Credentials exported: %1</source>
         <translation>Esportazione completata con successo.
 Credenziali esportate: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_export_widget.cc" line="182"/>
+        <location filename="../client/android/credential_export_widget.cc" line="188"/>
         <source>Save (%1)</source>
         <translation>Salva (%1)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/credential_export_widget.cc" line="204"/>
+        <location filename="../client/android/credential_export_widget.cc" line="210"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
@@ -1968,7 +2014,7 @@ Credenziali esportate: %1</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/credential_export_widget.cc" line="213"/>
+        <location filename="../client/android/credential_export_widget.cc" line="219"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
@@ -1976,12 +2022,12 @@ Credenziali esportate: %1</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/credential_export_widget.cc" line="216"/>
+        <location filename="../client/android/credential_export_widget.cc" line="222"/>
         <source>Weak Password</source>
         <translation>Password debole</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_export_widget.cc" line="216"/>
+        <location filename="../client/android/credential_export_widget.cc" line="222"/>
         <source>Continue</source>
         <translation>Continua</translation>
     </message>
@@ -1990,7 +2036,7 @@ Credenziali esportate: %1</translation>
     <name>CredentialImportDialog</name>
     <message>
         <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="14"/>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="88"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="89"/>
         <source>Import Credentials</source>
         <translation>Importa credenziali</translation>
     </message>
@@ -2030,67 +2076,77 @@ Credenziali esportate: %1</translation>
         <translation>Deseleziona tutto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="152"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="143"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="157"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="148"/>
         <source>User Name</source>
         <translation>Nome utente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="162"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="153"/>
         <source>Status</source>
         <translation>Stato</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="54"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="55"/>
         <source>Import</source>
         <translation>Importa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="89"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="90"/>
         <source>Aspia Credentials (*.aspia-credentials);;All files (*)</source>
         <translation>Credenziali Aspia (*.aspia-credentials);;Tutti i file (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="113"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="114"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Impossibile decifrare il file con la password specificata.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="119"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="120"/>
         <source>Unable to read the file.</source>
         <translation>Impossibile leggere il file.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="123"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="124"/>
         <source>Unsupported file format version.</source>
         <translation>Versione del formato file non supportata.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="127"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="128"/>
         <source>The file is not a valid credentials file.</source>
         <translation>Il file non è un file di credenziali valido.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="131"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="132"/>
         <source>Failed to import the credentials.</source>
         <translation>Impossibile importare le credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="146"/>
+        <source>Aspia Credentials</source>
+        <translation>Credenziali Aspia</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="147"/>
+        <source>OS Credentials</source>
+        <translation>Credenziali SO</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="163"/>
         <source>Exists</source>
         <translation>Esistente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="149"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="163"/>
         <source>New</source>
         <translation>Nuova</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="220"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="243"/>
         <source>Unable to write credentials &quot;%1&quot;. The import was interrupted.
 Credentials added: %2
 Credentials replaced: %3</source>
@@ -2099,7 +2155,7 @@ Credenziali aggiunte: %2
 Credenziali sostituite: %3</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="230"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="253"/>
         <source>Import completed successfully.
 Credentials added: %1
 Credentials replaced: %2</source>
@@ -2151,23 +2207,23 @@ Credenziali sostituite: %2</translation>
         <translation>Impossibile importare le credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="183"/>
+        <location filename="../client/android/credential_import_widget.cc" line="185"/>
         <source>Exists</source>
         <translation>Esistente</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="183"/>
+        <location filename="../client/android/credential_import_widget.cc" line="185"/>
         <source>New</source>
         <translation>Nuova</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="231"/>
-        <location filename="../client/android/credential_import_widget.cc" line="241"/>
+        <location filename="../client/android/credential_import_widget.cc" line="233"/>
+        <location filename="../client/android/credential_import_widget.cc" line="243"/>
         <source>Import Credentials</source>
         <translation>Importa credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="232"/>
+        <location filename="../client/android/credential_import_widget.cc" line="234"/>
         <source>Unable to write credentials &quot;%1&quot;. The import was interrupted.
 Credentials added: %2
 Credentials replaced: %3</source>
@@ -2176,7 +2232,7 @@ Credenziali aggiunte: %2
 Credenziali sostituite: %3</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="242"/>
+        <location filename="../client/android/credential_import_widget.cc" line="244"/>
         <source>Import completed successfully.
 Credentials added: %1
 Credentials replaced: %2</source>
@@ -2185,17 +2241,17 @@ Credenziali aggiunte: %1
 Credenziali sostituite: %2</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="252"/>
+        <location filename="../client/android/credential_import_widget.cc" line="254"/>
         <source>The checked credentials will be imported, and the ones that already exist will be replaced.</source>
         <translation>Le credenziali selezionate verranno importate e quelle già esistenti verranno sostituite.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="254"/>
+        <location filename="../client/android/credential_import_widget.cc" line="256"/>
         <source>Enter the password the file was exported with.</source>
         <translation>Inserisci la password con cui è stato esportato il file.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="267"/>
+        <location filename="../client/android/credential_import_widget.cc" line="269"/>
         <source>Import (%1)</source>
         <translation>Importa (%1)</translation>
     </message>
@@ -2203,14 +2259,29 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>CredentialListModel</name>
     <message>
-        <location filename="../client/desktop/credentials/credential_list_model.cc" line="123"/>
+        <location filename="../client/desktop/credentials/credential_list_model.cc" line="126"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_list_model.cc" line="126"/>
+        <location filename="../client/desktop/credentials/credential_list_model.cc" line="129"/>
         <source>User Name</source>
         <translation>Nome utente</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_list_model.cc" line="132"/>
+        <source>Type</source>
+        <translation>Tipo</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_list_model.cc" line="190"/>
+        <source>OS Credentials</source>
+        <translation>Credenziali SO</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_list_model.cc" line="190"/>
+        <source>Aspia Credentials</source>
+        <translation>Credenziali Aspia</translation>
     </message>
 </context>
 <context>
@@ -2299,35 +2370,35 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>CredentialsWidget</name>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="160"/>
+        <location filename="../client/android/credentials_widget.cc" line="168"/>
         <source>Add Credentials</source>
         <translation>Aggiungi credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="170"/>
-        <location filename="../client/android/credentials_widget.cc" line="200"/>
-        <location filename="../client/android/credentials_widget.cc" line="206"/>
+        <location filename="../client/android/credentials_widget.cc" line="178"/>
+        <location filename="../client/android/credentials_widget.cc" line="208"/>
+        <location filename="../client/android/credentials_widget.cc" line="214"/>
         <source>Import Credentials</source>
         <translation>Importa credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="171"/>
-        <location filename="../client/android/credentials_widget.cc" line="192"/>
+        <location filename="../client/android/credentials_widget.cc" line="179"/>
+        <location filename="../client/android/credentials_widget.cc" line="200"/>
         <source>Export Credentials</source>
         <translation>Esporta credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="200"/>
+        <location filename="../client/android/credentials_widget.cc" line="208"/>
         <source>Aspia Credentials (*.aspia-credentials)</source>
         <translation>Credenziali Aspia (*.aspia-credentials)</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="217"/>
+        <location filename="../client/android/credentials_widget.cc" line="225"/>
         <source>Edit Credentials</source>
         <translation>Modifica credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="236"/>
+        <location filename="../client/android/credentials_widget.cc" line="244"/>
         <source>Credentials</source>
         <translation>Credenziali</translation>
     </message>
