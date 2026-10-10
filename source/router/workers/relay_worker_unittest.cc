@@ -21,9 +21,8 @@
 #include <gtest/gtest.h>
 
 #include "base/serialization.h"
-#include "base/version_constants.h"
 #include "proto/router_relay.h"
-#include "router/fake_tcp_channel.h"
+#include "router/loopback_channel.h"
 #include "router/relay.h"
 #include "router/router_test_base.h"
 #include "router/router_test_worker.h"
@@ -45,8 +44,8 @@ public:
     }
 };
 
-// The relays of the router. A session is the real Relay in a real worker thread and only the socket
-// is a stand-in.
+// The relays of the router. A session is the real Relay in a real worker thread over a real channel on
+// the loopback interface.
 class RelayWorkerTest : public RouterTestBase
 {
 protected:
@@ -61,14 +60,6 @@ protected:
         workers_.start();
     }
 
-    // The socket of a relay session, with the peer facts the authenticator collects for it.
-    static FakeTcpChannel* makeRelayChannel()
-    {
-        FakeTcpChannel* channel = new FakeTcpChannel();
-        channel->setPeer(0, std::string(), proto::router::SESSION_TYPE_RELAY, kVersion_3_0_0);
-        return channel;
-    }
-
     WorkerManager workers_;
     RouterTestWorker* worker_ = nullptr;
 };
@@ -81,10 +72,12 @@ TEST_F(RelayWorkerTest, RelaysAreNotPolledWithoutAdministrators)
     worker_->invoke([]()
     {
         RelayWorker relay_worker;
-        FakeTcpChannel* channel = nullptr;
-        Relay relay(channel = makeRelayChannel(), nullptr);
+        LoopbackChannel channel(proto::router::SESSION_TYPE_RELAY);
+        ASSERT_NE(channel.routerEnd(), nullptr);
+
+        Relay relay(channel.routerEnd(), nullptr);
         relay.start();
-        channel->clearSent();
+        channel.clearSent();
 
         RelayWorkerTestPeer::addRelay(&relay_worker, &relay);
 
@@ -96,7 +89,7 @@ TEST_F(RelayWorkerTest, RelaysAreNotPolledWithoutAdministrators)
         relay_worker.onClientsChanged(ClientWorker::CLIENT_OPERATORS | ClientWorker::CLIENT_MANAGERS);
         RelayWorkerTestPeer::fireTimer(&relay_worker, now + Minutes(20));
 
-        EXPECT_TRUE(channel->sent().isEmpty());
+        EXPECT_TRUE(channel.sent().isEmpty());
     });
 }
 
@@ -110,35 +103,37 @@ TEST_F(RelayWorkerTest, RelaysArePolledWhileAnAdministratorIsConnected)
     worker_->invoke([]()
     {
         RelayWorker relay_worker;
-        FakeTcpChannel* channel = nullptr;
-        Relay relay(channel = makeRelayChannel(), nullptr);
+        LoopbackChannel channel(proto::router::SESSION_TYPE_RELAY);
+        ASSERT_NE(channel.routerEnd(), nullptr);
+
+        Relay relay(channel.routerEnd(), nullptr);
         relay.start();
-        channel->clearSent();
+        channel.clearSent();
 
         RelayWorkerTestPeer::addRelay(&relay_worker, &relay);
 
         // An administrator connects: waiting a whole interval would show an empty list first.
         relay_worker.onClientsChanged(ClientWorker::CLIENT_ADMINS);
-        ASSERT_EQ(channel->sent().size(), 1);
+        ASSERT_EQ(channel.sent().size(), 1);
 
         proto::router::RouterToRelay message;
-        ASSERT_TRUE(parse(channel->sent().back().buffer, &message));
+        ASSERT_TRUE(parse(channel.sent().back().buffer, &message));
         EXPECT_TRUE(message.has_statistics_request());
 
         // A client of another kind comes and goes without disturbing the schedule.
         relay_worker.onClientsChanged(ClientWorker::CLIENT_ADMINS | ClientWorker::CLIENT_OPERATORS);
-        EXPECT_EQ(channel->sent().size(), 1);
+        EXPECT_EQ(channel.sent().size(), 1);
 
         const TimePoint now = Clock::now();
         RelayWorkerTestPeer::fireTimer(&relay_worker, now + kStatisticsInterval - Seconds(1));
-        EXPECT_EQ(channel->sent().size(), 1);
+        EXPECT_EQ(channel.sent().size(), 1);
 
         RelayWorkerTestPeer::fireTimer(&relay_worker, now + kStatisticsInterval);
-        EXPECT_EQ(channel->sent().size(), 2);
+        EXPECT_EQ(channel.sent().size(), 2);
 
         // The last administrator leaves and the relays are left alone again.
         relay_worker.onClientsChanged(ClientWorker::CLIENT_OPERATORS);
         RelayWorkerTestPeer::fireTimer(&relay_worker, now + Minutes(10));
-        EXPECT_EQ(channel->sent().size(), 2);
+        EXPECT_EQ(channel.sent().size(), 2);
     });
 }

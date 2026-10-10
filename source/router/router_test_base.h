@@ -48,6 +48,9 @@ protected:
     static constexpr quint32 kAllSessions = proto::router::SESSION_TYPE_ADMIN |
         proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_OPERATOR;
 
+    // The password of every user the fixture adds.
+    static constexpr char kUserPassword[] = "Password1234!";
+
     void SetUp() override
     {
         ASSERT_TRUE(temp_dir_.isValid());
@@ -65,7 +68,7 @@ protected:
 
     static RouterUser makeUser(const QString& name, quint32 sessions)
     {
-        RouterUser user = RouterUser::create(name, SecureString("Password1234!"));
+        RouterUser user = RouterUser::create(name, SecureString(kUserPassword));
         user.sessions = sessions;
         user.flags = User::ENABLED;
         return user;

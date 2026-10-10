@@ -21,11 +21,10 @@
 #include <optional>
 
 #include "base/serialization.h"
-#include "base/version_constants.h"
 #include "base/crypto/generic_hash.h"
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
-#include "router/fake_tcp_channel.h"
+#include "router/loopback_channel.h"
 #include "router/router_test_base.h"
 #include "router/router_test_worker.h"
 
@@ -54,9 +53,10 @@ public:
     }
 };
 
-// A host connection end to end: what it answers to an id request, which hosts it announces to the
-// rest of the router and what it leaves behind when it goes away. The host object is the real
-// one, in a real worker thread, against a real database - only the socket is a stand-in.
+// A host connection end to end, covering what it answers to an id request, which hosts it announces
+// to the rest of the router and what it leaves behind when it goes away. The host object is the
+// real one, in a real worker thread, against a real database, over a real channel on the loopback
+// interface.
 class HostTest : public RouterTestBase
 {
 protected:
@@ -79,23 +79,20 @@ protected:
 
     // Creates the host in the worker thread, runs |body| there and destroys it there. The channel
     // belongs to the host, so it goes away with it.
-    void withHost(const std::function<void(Host&, FakeTcpChannel*)>& body)
+    void withHost(const std::function<void(Host&, LoopbackChannel*)>& body)
     {
         worker_->invoke([&]()
         {
-            FakeTcpChannel* channel = new FakeTcpChannel();
+            LoopbackChannel channel(proto::router::SESSION_TYPE_HOST);
+            ASSERT_NE(channel.routerEnd(), nullptr);
 
-            // A host authenticates anonymously: it has no user, only the peer facts the
-            // authenticator collected.
-            channel->setPeer(0, std::string(), proto::router::SESSION_TYPE_HOST, kVersion_3_0_0);
-
-            Host host(worker_->database(), channel, nullptr);
+            Host host(worker_->database(), channel.routerEnd(), nullptr);
 
             announced_.clear();
             QObject::connect(&host, &Host::sig_hostIdAssigned, &host,
                              [this](HostId host_id) { announced_.append(host_id); });
 
-            body(host, channel);
+            body(host, &channel);
         });
     }
 
@@ -125,7 +122,7 @@ protected:
     }
 
     // The reply the host was sent last, parsed as RouterToHost.
-    static std::optional<proto::router::RouterToHost> lastMessage(const FakeTcpChannel* channel)
+    static std::optional<proto::router::RouterToHost> lastMessage(LoopbackChannel* channel)
     {
         if (channel->sent().isEmpty())
             return std::nullopt;
@@ -155,7 +152,7 @@ protected:
 // the database: the record appears only when an administrator approves it.
 TEST_F(HostTest, NewHostGetsATemporaryIdAndIsAnnounced)
 {
-    withHost([this](Host& host, FakeTcpChannel* channel)
+    withHost([this](Host& host, LoopbackChannel* channel)
     {
         host.start();
         channel->clearSent();
@@ -183,7 +180,7 @@ TEST_F(HostTest, ApprovedHostGetsItsPermanentIdAndIsAnnounced)
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
 
-    withHost([this, host_id](Host& host, FakeTcpChannel* channel)
+    withHost([this, host_id](Host& host, LoopbackChannel* channel)
     {
         host.start();
         channel->clearSent();
@@ -209,7 +206,7 @@ TEST_F(HostTest, TelemetryOfAnApprovedHostIsStored)
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
 
-    withHost([&](Host& host, FakeTcpChannel* channel)
+    withHost([&](Host& host, LoopbackChannel* channel)
     {
         host.start();
 
@@ -232,7 +229,7 @@ TEST_F(HostTest, RepeatedTelemetryIsNotWrittenAgain)
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
 
-    withHost([&](Host& host, FakeTcpChannel* channel)
+    withHost([&](Host& host, LoopbackChannel* channel)
     {
         host.start();
         channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
@@ -259,7 +256,7 @@ TEST_F(HostTest, TooFrequentTelemetryIsDropped)
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
 
-    withHost([&](Host& host, FakeTcpChannel* channel)
+    withHost([&](Host& host, LoopbackChannel* channel)
     {
         host.start();
         channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
@@ -284,7 +281,7 @@ TEST_F(HostTest, RepeatedTelemetryDoesNotHoldTheNextOne)
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
 
-    withHost([&](Host& host, FakeTcpChannel* channel)
+    withHost([&](Host& host, LoopbackChannel* channel)
     {
         host.start();
         channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
@@ -308,7 +305,7 @@ TEST_F(HostTest, StoredTelemetryIsNotWrittenAgainOnReconnect)
     ASSERT_NE(host_id, kInvalidHostId);
     ASSERT_TRUE(db_.updateHostTelemetry(host_id, kFirstTelemetry));
 
-    withHost([&](Host& host, FakeTcpChannel* channel)
+    withHost([&](Host& host, LoopbackChannel* channel)
     {
         host.start();
         channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
@@ -331,7 +328,7 @@ TEST_F(HostTest, HostWithPendingRemovalIsToldBeforeItsIdIsReported)
     ASSERT_NE(host_id, kInvalidHostId);
     ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
 
-    withHost([this, host_id](Host& host, FakeTcpChannel* channel)
+    withHost([this, host_id](Host& host, LoopbackChannel* channel)
     {
         host.start();
         channel->clearSent();
@@ -368,7 +365,7 @@ TEST_F(HostTest, RemovalIsFinalizedWhenTheHostGoesAway)
     ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
     ASSERT_TRUE(hasPendingRemoval(host_id));
 
-    withHost([](Host& host, FakeTcpChannel* channel)
+    withHost([](Host& host, LoopbackChannel* channel)
     {
         host.start();
         channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
@@ -386,7 +383,7 @@ TEST_F(HostTest, RepeatedIdRequestIsIgnored)
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
 
-    withHost([this, host_id](Host& host, FakeTcpChannel* channel)
+    withHost([this, host_id](Host& host, LoopbackChannel* channel)
     {
         host.start();
         channel->receive(0, idRequest(proto::router::HostIdRequest::EXISTING_ID, kHostKey));
@@ -405,7 +402,7 @@ TEST_F(HostTest, RepeatedIdRequestIsIgnored)
 // none is not served at all.
 TEST_F(HostTest, HostWithoutAHardwareIdIsDisconnected)
 {
-    withHost([](Host& host, FakeTcpChannel* channel)
+    withHost([](Host& host, LoopbackChannel* channel)
     {
         int finished = 0;
         QObject::connect(&host, &Host::sig_finished, &host,
@@ -426,7 +423,7 @@ TEST_F(HostTest, HostWithoutAHardwareIdIsDisconnected)
 // announced.
 TEST_F(HostTest, UnknownKeyIsRefused)
 {
-    withHost([this](Host& host, FakeTcpChannel* channel)
+    withHost([this](Host& host, LoopbackChannel* channel)
     {
         host.start();
         channel->clearSent();

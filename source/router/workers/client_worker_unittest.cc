@@ -26,11 +26,10 @@
 #include <memory>
 
 #include "base/serialization.h"
-#include "base/version_constants.h"
 #include "base/crypto/totp.h"
 #include "router/client_admin.h"
 #include "router/client_operator.h"
-#include "router/fake_tcp_channel.h"
+#include "router/loopback_channel.h"
 #include "router/router_test_base.h"
 #include "router/router_test_worker.h"
 #include "router/handlers/two_factor_handler.h"
@@ -128,10 +127,11 @@ public:
     }
 };
 
-// The stop command against live sessions: which of them the pair (user, token list) takes down.
-// The sessions are the real ClientOperator over the fake channel, created and stopped in the
-// worker thread the way the router does it. The worker object itself is never started: the
-// command is a plain call, and the thread the sessions need is the test worker's.
+// The stop command against live sessions and which of them the pair (user, token list) takes down.
+// The sessions are the real ClientOperator over a real channel on the loopback interface, created
+// and stopped in the worker thread the way the router does it. The worker object itself is never
+// started, because the command is a plain call and the thread the sessions need is the test
+// worker's.
 class ClientWorkerStopTest : public RouterTestBase
 {
 protected:
@@ -149,22 +149,27 @@ protected:
         workers_.start();
     }
 
+    void TearDown() override
+    {
+        worker_->invoke([this]() { channels_.clear(); });
+    }
+
     // A session of |user| held by the worker. Of the wiring onNewConnection sets up, the stand
     // reproduces the mask update on passing the stage and the removal on sig_finished. A negative
     // |code_time| leaves the session at the two-factor stage; otherwise the stage is passed with
     // the code of that step (the secret of the built-in administrator). Runs in the worker thread.
     template <typename ClientT = ClientOperator>
     ClientT* addSession(ClientWorker& worker, const RouterUser& user, qint64 code_time,
-                        FakeTcpChannel** channel_out = nullptr,
+                        LoopbackChannel** channel_out = nullptr,
                         quint32 session_type = proto::router::SESSION_TYPE_OPERATOR)
     {
-        FakeTcpChannel* channel = new FakeTcpChannel();
-        channel->setPeer(user.entry_id, user.name.toStdString(), session_type,
-                         kVersion_3_0_0);
+        channels_.push_back(std::make_unique<LoopbackChannel>(user, kUserPassword, session_type));
+        LoopbackChannel* channel = channels_.back().get();
+        EXPECT_NE(channel->routerEnd(), nullptr);
         if (channel_out)
             *channel_out = channel;
 
-        ClientT* client = new ClientT(worker_->database(), channel, nullptr);
+        ClientT* client = new ClientT(worker_->database(), channel->routerEnd(), nullptr);
         ClientWorkerTestPeer::clients(worker).push_back(client);
         QObject::connect(client, &ClientOperator::sig_twoFactorCompleted, client,
                          [&worker]() { ClientWorkerTestPeer::updateClientsMask(worker); });
@@ -189,6 +194,9 @@ protected:
         const std::vector<ClientOperator*>& clients = ClientWorkerTestPeer::clients(worker);
         return std::ranges::find(clients, client) != clients.end();
     }
+
+    // The peers of the sessions. They live in the worker thread and go away there.
+    std::vector<std::unique_ptr<LoopbackChannel>> channels_;
 
     // Destroyed before the database and the temporary directory of the base fixture: the worker
     // thread must be gone before the file it works with.
@@ -295,11 +303,11 @@ TEST_F(ClientWorkerStopTest, SocketDeathDropsOnlyTheDeadSession)
         ClientWorker worker;
 
         const qint64 now = QDateTime::currentSecsSinceEpoch();
-        FakeTcpChannel* channel = nullptr;
+        LoopbackChannel* channel = nullptr;
         ClientOperator* dying = addSession(worker, admin_, now, &channel);
         ClientOperator* kept = addSession(worker, admin_, now + Totp::kDefaultStepSec);
 
-        channel->fail(TcpChannel::ErrorCode::REMOTE_HOST_CLOSED);
+        channel->close();
 
         EXPECT_FALSE(holds(worker, dying));
         EXPECT_TRUE(holds(worker, kept));
@@ -343,8 +351,8 @@ TEST_F(ClientWorkerStopTest, NotificationsWaitForTheSecondFactor)
     {
         ClientWorker worker;
 
-        FakeTcpChannel* ready_channel = nullptr;
-        FakeTcpChannel* stuck_channel = nullptr;
+        LoopbackChannel* ready_channel = nullptr;
+        LoopbackChannel* stuck_channel = nullptr;
         addSession(worker, admin_, QDateTime::currentSecsSinceEpoch(), &ready_channel);
         addSession(worker, admin_, -1, &stuck_channel);
 
@@ -376,8 +384,8 @@ TEST_F(ClientWorkerStopTest, UsersDirtyReachesTheAdminSessions)
         ClientWorker worker;
 
         const qint64 now = QDateTime::currentSecsSinceEpoch();
-        FakeTcpChannel* admin_channel = nullptr;
-        FakeTcpChannel* operator_channel = nullptr;
+        LoopbackChannel* admin_channel = nullptr;
+        LoopbackChannel* operator_channel = nullptr;
         addSession<ClientAdmin>(worker, admin_, now, &admin_channel,
                                 proto::router::SESSION_TYPE_ADMIN);
         addSession(worker, admin_, now + Totp::kDefaultStepSec, &operator_channel);
@@ -410,7 +418,7 @@ TEST_F(ClientWorkerStopTest, ClientsMaskWaitsForTheSecondFactor)
     {
         ClientWorker worker;
 
-        FakeTcpChannel* channel = nullptr;
+        LoopbackChannel* channel = nullptr;
         ClientOperator* client = addSession(worker, admin_, -1, &channel);
         ClientWorkerTestPeer::updateClientsMask(worker);
         EXPECT_EQ(ClientWorkerTestPeer::clientsMask(worker), 0u);

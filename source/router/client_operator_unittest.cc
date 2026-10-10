@@ -20,21 +20,21 @@
 #include <optional>
 
 #include "base/serialization.h"
-#include "base/version_constants.h"
 #include "base/crypto/totp.h"
 #include "proto/router_admin.h"
 #include "proto/router_manager.h"
 #include "router/client_admin.h"
 #include "router/client_manager.h"
-#include "router/fake_tcp_channel.h"
+#include "router/loopback_channel.h"
 #include "router/router_test_base.h"
 #include "router/router_test_worker.h"
 #include "router/handlers/two_factor_handler.h"
 #include "router/workers/client_worker.h"
 
-// A whole session end to end: the messages it answers, the ones it drops, and the order the stages
-// come in. The session is driven through the fake channel, so nothing here mocks the router - it is
-// the real ClientOperator, in a real worker thread, with a real database.
+// A whole session end to end, covering the messages it answers, the ones it drops and the order the
+// stages come in. Nothing here mocks the router. The session is the real ClientOperator in a real
+// worker thread with a real database, and it is driven through a real channel on the loopback
+// interface.
 class ClientOperatorTest : public RouterTestBase
 {
 protected:
@@ -56,33 +56,33 @@ protected:
     // channel belongs to the session, so it goes away with it.
     template <typename ClientT>
     void withClient(const RouterUser& user, quint32 session_type,
-                    const std::function<void(ClientT&, FakeTcpChannel*)>& body)
+                    const std::function<void(ClientT&, LoopbackChannel*)>& body)
     {
         worker_->invoke([&]()
         {
-            FakeTcpChannel* channel = new FakeTcpChannel();
-            channel->setPeer(user.entry_id, user.name.toStdString(), session_type, kVersion_3_0_0);
+            LoopbackChannel channel(user, kUserPassword, session_type);
+            ASSERT_NE(channel.routerEnd(), nullptr);
 
-            ClientT client(worker_->database(), channel, nullptr);
-            body(client, channel);
+            ClientT client(worker_->database(), channel.routerEnd(), nullptr);
+            body(client, &channel);
         });
     }
 
     // The common case: the session of the built-in administrator.
     template <typename ClientT>
     void withClient(quint32 session_type,
-                    const std::function<void(ClientT&, FakeTcpChannel*)>& body)
+                    const std::function<void(ClientT&, LoopbackChannel*)>& body)
     {
         withClient<ClientT>(admin_, session_type, body);
     }
 
     // The reply the session sent last, parsed as |MessageT|.
     template<typename MessageT>
-    static std::optional<MessageT> lastMessage(const FakeTcpChannel* channel, quint8 channel_id)
+    static std::optional<MessageT> lastMessage(LoopbackChannel* channel, quint8 channel_id)
     {
         for (int i = channel->sent().size() - 1; i >= 0; --i)
         {
-            const FakeTcpChannel::Sent& sent = channel->sent().at(i);
+            const LoopbackChannel::Sent& sent = channel->sent().at(i);
             if (sent.channel_id != channel_id)
                 continue;
 
@@ -169,7 +169,7 @@ protected:
     }
 
     // Walks the session through the two-factor stage the way a client does.
-    void passTwoFactor(ClientOperator* client, FakeTcpChannel* channel)
+    void passTwoFactor(ClientOperator* client, LoopbackChannel* channel)
     {
         client->start();
 
@@ -204,7 +204,7 @@ protected:
 TEST_F(ClientOperatorTest, TwoFactorStageOpensOnStart)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                       [](ClientOperator& client, FakeTcpChannel* channel)
+                       [](ClientOperator& client, LoopbackChannel* channel)
     {
         client.start();
 
@@ -224,7 +224,7 @@ TEST_F(ClientOperatorTest, TwoFactorStageOpensOnStart)
 TEST_F(ClientOperatorTest, AnswerSentBeforeTheChallengeWaitsForIt)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                       [this](ClientOperator& client, FakeTcpChannel* channel)
+                       [this](ClientOperator& client, LoopbackChannel* channel)
     {
         channel->receive(proto::router::CHANNEL_ID_CLIENT,
                          totpResponse(Totp::code(secret_, QDateTime::currentSecsSinceEpoch())));
@@ -234,6 +234,7 @@ TEST_F(ClientOperatorTest, AnswerSentBeforeTheChallengeWaitsForIt)
         EXPECT_FALSE(client.isTwoFactorCompleted());
 
         client.start();
+        channel->settle();
 
         EXPECT_FALSE(channel->isPaused());
         EXPECT_TRUE(client.isTwoFactorCompleted());
@@ -251,7 +252,7 @@ TEST_F(ClientOperatorTest, AnswerSentBeforeTheChallengeWaitsForIt)
 TEST_F(ClientOperatorTest, RequestsBeforeTheSecondFactorAreDropped)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                       [](ClientOperator& client, FakeTcpChannel* channel)
+                       [](ClientOperator& client, LoopbackChannel* channel)
     {
         client.start();
         channel->clearSent();
@@ -267,7 +268,7 @@ TEST_F(ClientOperatorTest, RequestsBeforeTheSecondFactorAreDropped)
 TEST_F(ClientOperatorTest, AdminRequestsBeforeTheSecondFactorAreDropped)
 {
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                            [](ClientAdmin& client, FakeTcpChannel* channel)
+                            [](ClientAdmin& client, LoopbackChannel* channel)
     {
         client.start();
         channel->clearSent();
@@ -284,7 +285,7 @@ TEST_F(ClientOperatorTest, AdminRequestsBeforeTheSecondFactorAreDropped)
 TEST_F(ClientOperatorTest, ManagerRequestsBeforeTheSecondFactorAreDropped)
 {
     withClient<ClientManager>(proto::router::SESSION_TYPE_MANAGER,
-                              [](ClientManager& client, FakeTcpChannel* channel)
+                              [](ClientManager& client, LoopbackChannel* channel)
     {
         client.start();
         channel->clearSent();
@@ -306,7 +307,7 @@ TEST_F(ClientOperatorTest, ManagerRequestsBeforeTheSecondFactorAreDropped)
 TEST_F(ClientOperatorTest, ValidCodeOpensTheSessionWithAToken)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                       [this](ClientOperator& client, FakeTcpChannel* channel)
+                       [this](ClientOperator& client, LoopbackChannel* channel)
     {
         client.start();
         channel->clearSent();
@@ -334,7 +335,7 @@ TEST_F(ClientOperatorTest, PassedStageMarksTheUsersDirty)
     std::string token;
 
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                       [&](ClientOperator& client, FakeTcpChannel* channel)
+                       [&](ClientOperator& client, LoopbackChannel* channel)
     {
         quint32 notified = 0;
         QObject::connect(&client, &ClientOperator::sig_notifyChanged,
@@ -361,7 +362,7 @@ TEST_F(ClientOperatorTest, PassedStageMarksTheUsersDirty)
 
     // The token path writes too - the row of the token is refreshed.
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                       [&](ClientOperator& client, FakeTcpChannel* channel)
+                       [&](ClientOperator& client, LoopbackChannel* channel)
     {
         quint32 notified = 0;
         QObject::connect(&client, &ClientOperator::sig_notifyChanged,
@@ -382,7 +383,7 @@ TEST_F(ClientOperatorTest, PassedStageMarksTheUsersDirty)
 TEST_F(ClientOperatorTest, WrongCodeEndsTheConnection)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                       [this](ClientOperator& client, FakeTcpChannel* channel)
+                       [this](ClientOperator& client, LoopbackChannel* channel)
     {
         int finished = 0;
         QObject::connect(&client, &ClientOperator::sig_finished, [&finished](qint64) { ++finished; });
@@ -404,7 +405,7 @@ TEST_F(ClientOperatorTest, WrongCodeEndsTheConnection)
     });
 
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                       [](ClientOperator& client, FakeTcpChannel* channel)
+                       [](ClientOperator& client, LoopbackChannel* channel)
     {
         client.start();
 
@@ -426,7 +427,7 @@ TEST_F(ClientOperatorTest, WrongCodeEndsTheConnection)
 TEST_F(ClientOperatorTest, RejectedTokenIsAnnouncedOnTheWire)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                       [](ClientOperator& client, FakeTcpChannel* channel)
+                       [](ClientOperator& client, LoopbackChannel* channel)
     {
         client.start();
         channel->clearSent();
@@ -451,7 +452,7 @@ TEST_F(ClientOperatorTest, EnrollmentUriIsCarriedOnTheWire)
     ASSERT_GT(user.entry_id, 0);
 
     withClient<ClientOperator>(user, proto::router::SESSION_TYPE_OPERATOR,
-                       [](ClientOperator& client, FakeTcpChannel* channel)
+                       [](ClientOperator& client, LoopbackChannel* channel)
     {
         client.start();
 
@@ -493,7 +494,7 @@ TEST_F(ClientOperatorTest, BlockRemainderIsAnnouncedOnTheWire)
     }
 
     withClient<ClientOperator>(user, proto::router::SESSION_TYPE_OPERATOR,
-                       [](ClientOperator& client, FakeTcpChannel* channel)
+                       [](ClientOperator& client, LoopbackChannel* channel)
     {
         client.start();
 
@@ -521,7 +522,7 @@ TEST_F(ClientOperatorTest, DisabledUserDoesNotFinishTheStage)
     ASSERT_TRUE(db_.setUserOtp(user.entry_id, secret, 0));
 
     withClient<ClientOperator>(user, proto::router::SESSION_TYPE_OPERATOR,
-                       [&](ClientOperator& client, FakeTcpChannel* channel)
+                       [&](ClientOperator& client, LoopbackChannel* channel)
     {
         int finished = 0;
         QObject::connect(&client, &ClientOperator::sig_finished, [&finished](qint64) { ++finished; });
@@ -552,7 +553,7 @@ TEST_F(ClientOperatorTest, DisabledUserDoesNotPassWithAToken)
 
     std::string token;
     withClient<ClientOperator>(user, proto::router::SESSION_TYPE_OPERATOR,
-                       [&](ClientOperator& client, FakeTcpChannel* channel)
+                       [&](ClientOperator& client, LoopbackChannel* channel)
     {
         client.start();
         channel->clearSent();
@@ -571,7 +572,7 @@ TEST_F(ClientOperatorTest, DisabledUserDoesNotPassWithAToken)
     disableUser(db_, user.entry_id);
 
     withClient<ClientOperator>(user, proto::router::SESSION_TYPE_OPERATOR,
-                       [&](ClientOperator& client, FakeTcpChannel* channel)
+                       [&](ClientOperator& client, LoopbackChannel* channel)
     {
         int finished = 0;
         QObject::connect(&client, &ClientOperator::sig_finished, [&finished](qint64) { ++finished; });
@@ -595,7 +596,7 @@ TEST_F(ClientOperatorTest, WorkspaceListIsAnsweredAfterTheStage)
     ASSERT_GT(addWorkspace("alpha"), 0);
 
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                            [this](ClientAdmin& client, FakeTcpChannel* channel)
+                            [this](ClientAdmin& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -618,7 +619,7 @@ TEST_F(ClientOperatorTest, WorkspaceListIsAnsweredAfterTheStage)
 TEST_F(ClientOperatorTest, PlainClientIgnoresThePrivilegedChannels)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                       [this](ClientOperator& client, FakeTcpChannel* channel)
+                       [this](ClientOperator& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -634,7 +635,7 @@ TEST_F(ClientOperatorTest, PlainClientIgnoresThePrivilegedChannels)
 TEST_F(ClientOperatorTest, AdminChannelIsAnsweredByAnAdministrator)
 {
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                            [this](ClientAdmin& client, FakeTcpChannel* channel)
+                            [this](ClientAdmin& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -656,7 +657,7 @@ TEST_F(ClientOperatorTest, AdminChannelIsAnsweredByAnAdministrator)
 TEST_F(ClientOperatorTest, ManagerIgnoresTheAdminChannel)
 {
     withClient<ClientManager>(proto::router::SESSION_TYPE_MANAGER,
-                              [this](ClientManager& client, FakeTcpChannel* channel)
+                              [this](ClientManager& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -686,7 +687,7 @@ TEST_F(ClientOperatorTest, ManagerIgnoresTheAdminChannel)
 TEST_F(ClientOperatorTest, SecondTwoFactorResponseIsIgnored)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                       [this](ClientOperator& client, FakeTcpChannel* channel)
+                       [this](ClientOperator& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -704,7 +705,7 @@ TEST_F(ClientOperatorTest, SecondTwoFactorResponseIsIgnored)
 TEST_F(ClientOperatorTest, UnknownAdminCommandIsRefusedNotIgnored)
 {
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                            [this](ClientAdmin& client, FakeTcpChannel* channel)
+                            [this](ClientAdmin& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -731,7 +732,7 @@ TEST_F(ClientOperatorTest, UnknownAdminCommandIsRefusedNotIgnored)
 TEST_F(ClientOperatorTest, UnknownPeerCommandDisconnectsNobody)
 {
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                            [this](ClientAdmin& client, FakeTcpChannel* channel)
+                            [this](ClientAdmin& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -759,7 +760,7 @@ TEST_F(ClientOperatorTest, UnknownPeerCommandDisconnectsNobody)
 TEST_F(ClientOperatorTest, MalformedMessagesAreIgnored)
 {
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                            [this](ClientAdmin& client, FakeTcpChannel* channel)
+                            [this](ClientAdmin& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -778,7 +779,7 @@ TEST_F(ClientOperatorTest, MalformedMessagesAreIgnored)
 TEST_F(ClientOperatorTest, PasswordChangeEndsEverySessionOfTheUser)
 {
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                            [this](ClientAdmin& client, FakeTcpChannel* channel)
+                            [this](ClientAdmin& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -829,7 +830,7 @@ TEST_F(ClientOperatorTest, TokenRevokeCommandRaisesStopAndNotify)
     ASSERT_TRUE(db_.issueClientDeviceToken(bob.entry_id, "127.0.0.1", &token, &token_id));
 
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                            [&, this](ClientAdmin& client, FakeTcpChannel* channel)
+                            [&, this](ClientAdmin& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -876,7 +877,7 @@ TEST_F(ClientOperatorTest, UserDeleteCommandRaisesStopAndNotify)
     ASSERT_TRUE(bob.isValid());
 
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                            [&, this](ClientAdmin& client, FakeTcpChannel* channel)
+                            [&, this](ClientAdmin& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -920,7 +921,7 @@ TEST_F(ClientOperatorTest, UserDeleteCommandRaisesStopAndNotify)
 TEST_F(ClientOperatorTest, TokenListOnTheWireNamesTheTokenOfTheSession)
 {
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                            [this](ClientAdmin& client, FakeTcpChannel* channel)
+                            [this](ClientAdmin& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
         ASSERT_GT(client.tokenId(), 0);
@@ -953,7 +954,7 @@ TEST_F(ClientOperatorTest, TokenListOnTheWireNamesTheTokenOfTheSession)
         ASSERT_TRUE(mine != nullptr);
 
         // Issued through the live session, so the row carries the address of its channel.
-        EXPECT_EQ(mine->address(), "203.0.113.5");
+        EXPECT_EQ(mine->address(), "127.0.0.1");
 
         // The aging put the two timestamps a day apart, and the wire must keep them apart.
         EXPECT_EQ(mine->last_used_at() - mine->created_at(), 86400);
@@ -970,7 +971,7 @@ TEST_F(ClientOperatorTest, HostStatusTellsAMissingHostFromAnOfflineOne)
     ASSERT_NE(host_id, kInvalidHostId);
 
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                               [this, host_id](ClientOperator& client, FakeTcpChannel* channel)
+                               [this, host_id](ClientOperator& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -1014,7 +1015,7 @@ public:
 TEST_F(ClientOperatorTest, IssuedOffersAreCapped)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                               [](ClientOperator& client, FakeTcpChannel* /* channel */)
+                               [](ClientOperator& client, LoopbackChannel* /* channel */)
     {
         const TimePoint start = Clock::now();
 
@@ -1037,7 +1038,7 @@ TEST_F(ClientOperatorTest, IssuedOffersAreCapped)
 TEST_F(ClientOperatorTest, RefusedRequestsDoNotSpendTheBudget)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                               [this](ClientOperator& client, FakeTcpChannel* channel)
+                               [this](ClientOperator& client, LoopbackChannel* channel)
     {
         passTwoFactor(&client, channel);
 

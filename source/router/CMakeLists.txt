@@ -52,9 +52,9 @@ list(APPEND SOURCE_ROUTER
 list(APPEND SOURCE_ROUTER_TESTS
     client_operator_unittest.cc
     database_unittest.cc
-    fake_tcp_channel.h
     host_lifecycle_unittest.cc
     host_unittest.cc
+    loopback_channel.h
     relay_unittest.cc
     router_test_base.h
     router_test_worker.h

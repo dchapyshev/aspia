@@ -22,19 +22,18 @@
 #include <vector>
 
 #include "base/serialization.h"
-#include "base/version_constants.h"
 #include "base/net/tcp_channel.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "proto/router_relay.h"
-#include "router/fake_tcp_channel.h"
+#include "router/loopback_channel.h"
 #include "router/router_test_base.h"
 #include "router/router_test_worker.h"
 #include "router/shared_key_pool.h"
 
 // The relay side of the router. A relay announces one time keys, reports statistics and takes
-// commands back. The session is the real Relay in a real worker thread and only the socket is a
-// stand-in. The key pool is process-wide, so every test starts from an empty one.
+// commands back. The session is the real Relay in a real worker thread over a real channel on the
+// loopback interface. The key pool is process-wide, so every test starts from an empty one.
 class RelayTest : public RouterTestBase
 {
 protected:
@@ -57,21 +56,18 @@ protected:
 
     // Creates the session in the worker thread, runs |body| there and destroys it there. The
     // channel belongs to the session, so it goes away with it.
-    void withRelay(const std::function<void(Relay&, FakeTcpChannel*)>& body)
+    void withRelay(const std::function<void(Relay&, LoopbackChannel*)>& body)
     {
         worker_->invoke([&]()
         {
-            FakeTcpChannel* channel = new FakeTcpChannel();
+            LoopbackChannel channel(proto::router::SESSION_TYPE_RELAY);
+            ASSERT_NE(channel.routerEnd(), nullptr);
 
-            // A relay authenticates anonymously and has no user, only the peer facts the
-            // authenticator collected.
-            channel->setPeer(0, std::string(), proto::router::SESSION_TYPE_RELAY, kVersion_3_0_0);
-
-            Relay relay(channel, nullptr);
+            Relay relay(channel.routerEnd(), nullptr);
             relay.start();
-            channel->clearSent();
+            channel.clearSent();
 
-            body(relay, channel);
+            body(relay, &channel);
         });
     }
 
@@ -141,7 +137,7 @@ protected:
 // endpoint the peers are sent to.
 TEST_F(RelayTest, AnnouncedKeysBecomeOffers)
 {
-    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    withRelay([](Relay& relay, LoopbackChannel* channel)
     {
         channel->receive(0, keyPool("relay.example", 8080, { makeKey(10), makeKey(11) }));
 
@@ -162,7 +158,7 @@ TEST_F(RelayTest, AnnouncedKeysBecomeOffers)
 // nothing reachable would send them nowhere and waste a one time key on every offer.
 TEST_F(RelayTest, PoolWithAnUnusableEndpointIsIgnored)
 {
-    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    withRelay([](Relay& relay, LoopbackChannel* channel)
     {
         channel->receive(0, keyPool(std::string(), 8080, { makeKey(10) }));
         channel->receive(0, keyPool("relay example/8080", 8080, { makeKey(11) }));
@@ -177,7 +173,7 @@ TEST_F(RelayTest, PoolWithAnUnusableEndpointIsIgnored)
 // A host name and an IPv6 address have no character set in common, so both forms are checked.
 TEST_F(RelayTest, PoolWithAnIpv6EndpointIsAccepted)
 {
-    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    withRelay([](Relay& relay, LoopbackChannel* channel)
     {
         channel->receive(0, keyPool("2001:db8::1", 8080, { makeKey(10) }));
 
@@ -191,7 +187,7 @@ TEST_F(RelayTest, PoolWithAnIpv6EndpointIsAccepted)
 // the pool writes a line to the log, so one pool can fill it with tens of thousands of them.
 TEST_F(RelayTest, PoolLargerThanTheCapacityOfARelayIsIgnored)
 {
-    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    withRelay([](Relay& relay, LoopbackChannel* channel)
     {
         constexpr int kMaxKeysPerPool = 1000;
 
@@ -216,7 +212,7 @@ TEST_F(RelayTest, PoolLargerThanTheCapacityOfARelayIsIgnored)
 // retry with, because the pool holds more keys like that one.
 TEST_F(RelayTest, KeyWithoutUsableMaterialIsRejected)
 {
-    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    withRelay([](Relay& relay, LoopbackChannel* channel)
     {
         proto::router::RelayKey without_public_key = makeKey(10);
         without_public_key.clear_public_key();
@@ -239,7 +235,7 @@ TEST_F(RelayTest, KeyWithoutUsableMaterialIsRejected)
 // A malformed key is dropped on its own and the usable keys of the same pool are still announced.
 TEST_F(RelayTest, GoodKeysOfAPartlyMalformedPoolAreKept)
 {
-    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    withRelay([](Relay& relay, LoopbackChannel* channel)
     {
         proto::router::RelayKey broken = makeKey(10);
         broken.clear_iv();
@@ -259,7 +255,7 @@ TEST_F(RelayTest, GoodKeysOfAPartlyMalformedPoolAreKept)
 // What the relay reports about its sessions is what the administrator console shows.
 TEST_F(RelayTest, StatisticsOfTheRelayIsKept)
 {
-    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    withRelay([](Relay& relay, LoopbackChannel* channel)
     {
         proto::router::RelayToRouter message;
         proto::router::RelayStatistics* statistics = message.mutable_statistics();
@@ -289,15 +285,17 @@ TEST_F(RelayTest, StatisticsOfSeveralRelaysStayWithinOneMessage)
     {
         constexpr size_t kReportSize = 3 * 1024 * 1024;
 
+        std::vector<std::unique_ptr<LoopbackChannel>> channels;
         std::vector<std::unique_ptr<Relay>> relays;
         std::vector<Relay*> reported;
 
         for (int i = 0; i < 3; ++i)
         {
-            FakeTcpChannel* channel = new FakeTcpChannel();
-            channel->setPeer(0, std::string(), proto::router::SESSION_TYPE_RELAY, kVersion_3_0_0);
+            channels.push_back(std::make_unique<LoopbackChannel>(proto::router::SESSION_TYPE_RELAY));
+            LoopbackChannel* channel = channels.back().get();
+            ASSERT_NE(channel->routerEnd(), nullptr);
 
-            std::unique_ptr<Relay> relay = std::make_unique<Relay>(channel, nullptr);
+            std::unique_ptr<Relay> relay = std::make_unique<Relay>(channel->routerEnd(), nullptr);
             relay->start();
 
             const QByteArray report = statistics(kReportSize);
@@ -322,15 +320,17 @@ TEST_F(RelayTest, TheFullRelayListFitsOneMessage)
 
     worker_->invoke([]()
     {
+        std::vector<std::unique_ptr<LoopbackChannel>> channels;
         std::vector<std::unique_ptr<Relay>> relays;
         std::vector<Relay*> reported;
 
         for (int i = 0; i < kMaxRelays; ++i)
         {
-            FakeTcpChannel* channel = new FakeTcpChannel();
-            channel->setPeer(0, std::string(), proto::router::SESSION_TYPE_RELAY, kVersion_3_0_0);
+            channels.push_back(std::make_unique<LoopbackChannel>(proto::router::SESSION_TYPE_RELAY));
+            LoopbackChannel* channel = channels.back().get();
+            ASSERT_NE(channel->routerEnd(), nullptr);
 
-            std::unique_ptr<Relay> relay = std::make_unique<Relay>(channel, nullptr);
+            std::unique_ptr<Relay> relay = std::make_unique<Relay>(channel->routerEnd(), nullptr);
             relay->start();
 
             channel->receive(0, statistics(kMaxStatisticsSize - 1024));
@@ -349,7 +349,7 @@ TEST_F(RelayTest, TheFullRelayListFitsOneMessage)
 // administrator is sent.
 TEST_F(RelayTest, StatisticsOfAFullRelayIsKept)
 {
-    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    withRelay([](Relay& relay, LoopbackChannel* channel)
     {
         constexpr int kMaxPeerCount = 1000; // The capacity limit of the relay.
 
@@ -378,7 +378,7 @@ TEST_F(RelayTest, StatisticsOfAFullRelayIsKept)
 // already handed to a pair of peers.
 TEST_F(RelayTest, KeyUsedIsForwardedToTheRelay)
 {
-    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    withRelay([](Relay& relay, LoopbackChannel* channel)
     {
         relay.sendKeyUsed(42);
 
@@ -396,7 +396,7 @@ TEST_F(RelayTest, KeyUsedIsForwardedToTheRelay)
 // report the administrator console shows.
 TEST_F(RelayTest, StatisticsRequestIsForwardedToTheRelay)
 {
-    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    withRelay([](Relay& relay, LoopbackChannel* channel)
     {
         relay.sendStatisticsRequest();
         relay.sendStatisticsRequest();
@@ -419,7 +419,7 @@ TEST_F(RelayTest, StatisticsRequestIsForwardedToTheRelay)
 // The administrator drops a peer session of a relay and this command carries that decision.
 TEST_F(RelayTest, PeerRequestIsForwardedToTheRelay)
 {
-    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    withRelay([](Relay& relay, LoopbackChannel* channel)
     {
         proto::router::PeerRequest request;
         request.set_command_name(proto::router::kCommandPeerDisconnect);
@@ -445,7 +445,7 @@ TEST_F(RelayTest, KeysDoNotOutliveTheirSession)
 {
     qint64 session_id = 0;
 
-    withRelay([&session_id](Relay& relay, FakeTcpChannel* channel)
+    withRelay([&session_id](Relay& relay, LoopbackChannel* channel)
     {
         session_id = relay.sessionId();
 
@@ -461,7 +461,7 @@ TEST_F(RelayTest, KeysDoNotOutliveTheirSession)
 // Anything the router cannot make sense of leaves no keys, no statistics and no answer behind.
 TEST_F(RelayTest, GarbageFromTheRelayIsIgnored)
 {
-    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    withRelay([](Relay& relay, LoopbackChannel* channel)
     {
         proto::router::RelayToRouter empty;
         channel->receive(0, serialize(empty));

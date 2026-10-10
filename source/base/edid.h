@@ -1,4 +1,4 @@
-﻿//
+//
 // Aspia Project
 // Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
 //
