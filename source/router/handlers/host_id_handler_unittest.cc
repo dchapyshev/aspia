@@ -163,7 +163,7 @@ TEST_F(HostIdHandlerTest, RepeatedRequestIsIgnored)
 
     const HostIdResult result = handle(existingIdRequest("key-1"), host_id);
 
-    EXPECT_EQ(result.action, HostIdResult::Action::IGNORE);
+    EXPECT_EQ(result.action, HostIdResult::Action::SKIP);
     EXPECT_EQ(result.notify_flags, 0u);
 }
 
@@ -210,7 +210,7 @@ TEST_F(HostIdHandlerTest, UnknownRequestTypeIsIgnored)
     proto::router::HostIdRequest request = newIdRequest();
     request.set_type(static_cast<proto::router::HostIdRequest::Type>(42));
 
-    EXPECT_EQ(handle(request).action, HostIdResult::Action::IGNORE);
+    EXPECT_EQ(handle(request).action, HostIdResult::Action::SKIP);
 }
 
 //--------------------------------------------------------------------------------------------------

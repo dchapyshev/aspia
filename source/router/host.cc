@@ -239,7 +239,7 @@ void Host::readHostIdRequest(const proto::router::HostIdRequest& host_id_request
     const HostIdResult result =
         handleHostIdRequest(database_, host_id_request, peer, host_id_, id_request_count_);
 
-    if (result.action == HostIdResult::Action::IGNORE)
+    if (result.action == HostIdResult::Action::SKIP)
         return;
 
     if (result.action == HostIdResult::Action::CLOSE)

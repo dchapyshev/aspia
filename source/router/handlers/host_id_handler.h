@@ -49,13 +49,13 @@ struct HostIdResult
 {
     enum class Action
     {
-        IGNORE,        // Repeated or malformed request: no answer at all.
+        SKIP,          // Repeated or malformed request: no answer at all.
         CLOSE,         // The host misbehaved (no hardware id, or an oversized one).
         ISSUE_TEMP_ID, // Not approved yet: the caller issues a temporary id and a fresh key.
         SEND_RESPONSE  // The database answered - with an id or with an error code.
     };
 
-    Action action = Action::IGNORE;
+    Action action = Action::SKIP;
 
     // SEND_RESPONSE: the answer for the host.
     std::string error_code;

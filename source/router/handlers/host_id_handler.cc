@@ -58,7 +58,7 @@ HostIdResult handleHostIdRequest(Database& database, const proto::router::HostId
     {
         LOG(ERROR) << "Ignoring repeated host id request; host id" << current_host_id
                    << "already assigned";
-        result.action = Action::IGNORE;
+        result.action = Action::SKIP;
         return result;
     }
 
@@ -92,7 +92,7 @@ HostIdResult handleHostIdRequest(Database& database, const proto::router::HostId
     if (request.type() != proto::router::HostIdRequest::EXISTING_ID)
     {
         LOG(ERROR) << "Unknown request type:" << request.type();
-        result.action = Action::IGNORE;
+        result.action = Action::SKIP;
         return result;
     }
 
