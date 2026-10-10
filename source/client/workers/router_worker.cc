@@ -21,7 +21,6 @@
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/net/address.h"
-#include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
 #include "client/config.h"
 #include "client/database.h"
@@ -173,7 +172,7 @@ void RouterWorker::startConnection(qint64 router_id)
     authenticator->setPassword(config.password());
 
     // The channel takes ownership of the authenticator and lives on this worker thread.
-    TcpChannel* channel = new TcpChannelNG(authenticator, this);
+    TcpChannel* channel = new TcpChannel(authenticator, this);
     it->channel = channel;
 
     connect(channel, &TcpChannel::sig_authenticated, this, [this, router_id]()

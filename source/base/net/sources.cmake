@@ -35,8 +35,6 @@ collect_sources(SOURCE_BASE_NET
     pcp_port_mapper.h
     tcp_channel.cc
     tcp_channel.h
-    tcp_channel_ng.cc
-    tcp_channel_ng.h
     tcp_server.cc
     tcp_server.h
     udp_channel.cc

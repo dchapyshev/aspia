@@ -25,7 +25,6 @@
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/stream_encryptor.h"
-#include "base/net/tcp_channel_ng.h"
 #include "base/peer/authenticator.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "proto/relay_peer.h"
@@ -197,7 +196,7 @@ void RelayPeer::onConnected()
                 return;
             }
 
-            pending_channel_ = new TcpChannelNG(
+            pending_channel_ = new TcpChannel(
                 TcpChannel::Type::RELAY, std::move(socket_), authenticator_.release(), this);
 
             connect(pending_channel_, &TcpChannel::sig_authenticated, this, [this]()

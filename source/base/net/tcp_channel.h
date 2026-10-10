@@ -20,14 +20,24 @@
 #define BASE_NET_TCP_CHANNEL_H
 
 #include <QObject>
+#include <QQueue>
 #include <QVersionNumber>
 
+#include <asio/ip/tcp.hpp>
+
 #include "base/logging.h"
+#include "base/scoped_qpointer.h"
+#include "base/shared_pointer.h"
 #include "base/time_types.h"
 
+class Authenticator;
+class Location;
 class RelayPeer;
+class StreamDecryptor;
+class StreamEncryptor;
+class TcpServer;
 
-class TcpChannel : public QObject
+class TcpChannel final : public QObject
 {
     Q_OBJECT
 
@@ -35,8 +45,9 @@ public:
     enum class Type { DIRECT, RELAY };
     Q_ENUM(Type)
 
-    TcpChannel(Type type, QObject* parent);
-    ~TcpChannel() override = default;
+    // Constructor available for client.
+    TcpChannel(Authenticator* authenticator, QObject* parent = nullptr);
+    ~TcpChannel() final;
 
     static const quint32 kMaxMessageSize;
 
@@ -94,16 +105,34 @@ public:
 
     static QString errorToString(ErrorCode error_code);
 
-    virtual void connectTo(const QString& address, quint16 port, Seconds timeout = Seconds(30)) = 0;
-    virtual bool isConnected() const = 0;
-    virtual bool isAuthenticated() const = 0;
-    virtual bool isPaused() const = 0;
-    virtual void setPaused(bool enable) = 0;
-    virtual void send(quint8 channel_id, const QByteArray& buffer) = 0;
-    virtual bool setReadBufferSize(int size) = 0;
-    virtual bool setWriteBufferSize(int size) = 0;
-    virtual qint64 pendingBytes() const = 0;
-    virtual void tick(TimePoint now) = 0;
+    // Connects to a host at the specified address and port.
+    void connectTo(const QString& address, quint16 port, Seconds timeout = Seconds(30));
+
+    // Returns true if the channel is connected and false if not connected.
+    bool isConnected() const { return connected_; }
+
+    // Returns true if the channel has already been fully authenticated.
+    bool isAuthenticated() const { return authenticated_; }
+
+    // Returns true if the channel is paused and false if not. If the channel is not connected,
+    // then the return value is undefined.
+    bool isPaused() const { return paused_; }
+
+    // Pauses or resume the channel. After calling the method, new messages will not be read from
+    // the socket. If at the time the method was called with |true', the message was read, then
+    // notification of this message will be received only after calling method with |false|.
+    void setPaused(bool enable);
+
+    // Sending a message. After the call, the message will be added to the queue to be sent.
+    void send(quint8 channel_id, const QByteArray& buffer);
+
+    bool setReadBufferSize(int size);
+    bool setWriteBufferSize(int size);
+
+    qint64 pendingBytes() const;
+
+    // Called by the channel owner about once per second.
+    void tick(TimePoint now);
 
     quint32 instanceId() const { return instance_id_; }
     Type type() const { return type_; }
@@ -128,16 +157,80 @@ signals:
     void sig_errorOccurred(TcpChannel::ErrorCode error_code);
     void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
 
-protected:
+private:
     LOG_DECLARE_CONTEXT(TcpChannel);
 
     friend class TcpServer;
     friend class RelayPeer;
 
-    virtual void doAuthentication() = 0;
+    // Constructor available for server. An already connected socket is being moved.
+    TcpChannel(Type type, asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent);
 
+    enum class ReadState
+    {
+        IDLE,        // No reads are in progress right now.
+        READ_HEADER, // Reading the contents of the header.
+        READ_DATA,   // Reading the contents of the data.
+        PENDING      // There is a message about which we did not notify.
+    };
+
+    enum MessageType
+    {
+        KEEP_ALIVE = 1,
+        AUTH_DATA  = 2,
+        USER_DATA  = 3
+    };
+
+    enum KeepAliveFlags
+    {
+        KEEP_ALIVE_PONG = 0,
+        KEEP_ALIVE_PING = 1
+    };
+
+    // Keep-alive state machine driven by the owner through tick().
+    enum class KeepAliveState
+    {
+        INACTIVE,      // Channel is paused or not authenticated yet.
+        WAIT_INTERVAL, // Waiting for the idle interval to elapse before sending a PING.
+        WAIT_PONG      // PING sent; the PONG must arrive before the deadline.
+    };
+
+    struct Header
+    {
+        quint8 type;
+        quint8 param1; // Depends on the message type.
+        quint8 param2; // Not used yet.
+        quint8 param3; // Not used yet.
+        quint32 length;
+    };
+
+    struct IoState
+    {
+        bool alive = true;
+        Header read_header;
+        QByteArray read_buffer;
+        QQueue<QByteArray> write_queue;
+    };
+
+    // Starts authentication. In the client channel, it starts automatically when a connection is
+    // established. In the server channel, it is started by the RelayPeer or TcpServer.
+    void doAuthentication();
+
+    void init();
+    void setConnected(bool connected);
+    void onErrorOccurred(const Location& location, const std::error_code& error_code);
+    void onErrorOccurred(const Location& location, ErrorCode error_code);
+    void onMessageReceived();
+    void addWriteTask(quint8 type, quint8 param, const QByteArray& data, bool encrypted);
+    void doWrite();
+    void doReadHeader();
+    void doReadData();
+    void startKeepAliveInterval();
     void addTxBytes(size_t bytes_count);
     void addRxBytes(size_t bytes_count);
+
+    const quint32 instance_id_;
+    const Type type_;
 
     std::string address_;
     QVersionNumber version_;
@@ -149,10 +242,6 @@ protected:
     qint64 user_id_ = 0;
     quint32 session_type_ = 0;
 
-private:
-    const quint32 instance_id_;
-    const Type type_;
-
     qint64 total_tx_ = 0;
     qint64 total_rx_ = 0;
 
@@ -163,6 +252,32 @@ private:
     TimePoint begin_time_rx_;
     qint64 bytes_rx_ = 0;
     int speed_rx_ = 0;
+
+    SharedPointer<IoState> io_ { new IoState() };
+    asio::io_context& io_context_;
+    asio::ip::tcp::socket socket_;
+    std::unique_ptr<asio::ip::tcp::resolver> resolver_;
+
+    KeepAliveState keep_alive_state_ = KeepAliveState::INACTIVE;
+    TimePoint keep_alive_deadline_;
+    QByteArray keep_alive_counter_;
+    // Set to true on any successfully received message; checked and cleared when the
+    // idle interval elapses. Lets us avoid sending PINGs when the peer is obviously
+    // alive due to incoming traffic, without touching the deadline on every message.
+    bool rx_since_last_check_ = false;
+
+    bool connected_ = false;
+    bool authenticated_ = false;
+    bool paused_ = true;
+
+    ScopedQPointer<Authenticator> authenticator_;
+    std::unique_ptr<StreamEncryptor> encryptor_;
+    std::unique_ptr<StreamDecryptor> decryptor_;
+
+    QList<QByteArray> write_pool_;
+
+    ReadState state_ = ReadState::IDLE;
+    QByteArray decrypt_buffer_;
 
     Q_DISABLE_COPY_MOVE(TcpChannel)
 };
