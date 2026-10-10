@@ -98,7 +98,6 @@ private slots:
 
     void onFrameChanged(const QSize& screen_size, SharedFrame frame);
     void onCursorPositionChanged(const proto::cursor::Position& position);
-    void onVideoH264Disabled();
 
     void onMouseEvent(const proto::input::MouseEvent& event);
     void onKeyEvent(const proto::input::KeyEvent& event);
@@ -158,8 +157,6 @@ private:
 
     int read_clipboard_count_ = 0;
     int send_clipboard_count_ = 0;
-
-    bool h264_sw_enabled_ = true;
 
     proto::screen::ScreenList screen_list_;
     proto::control::SessionList session_list_;

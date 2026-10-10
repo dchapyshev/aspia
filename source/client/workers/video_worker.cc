@@ -97,26 +97,6 @@ void VideoWorker::onCursorConfig(bool shape_enabled, bool position_enabled)
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoWorker::onHardwareDecoding(bool enable)
-{
-    if (h264_hw_enabled_ == enable)
-        return;
-
-    LOG(INFO) << "Hardware decoding" << (enable ? "enabled" : "disabled");
-    h264_hw_enabled_ = enable;
-
-    // A running H264 decoder is replaced right away; the new one starts from a keyframe.
-    if (decoder_ && encoding_ == proto::video::ENCODING_H264)
-    {
-        decoder_ = VideoDecoder::create(encoding_, h264_hw_enabled_);
-        key_frame_received_ = false;
-
-        metrics_.hardware_decoder = decoder_ && decoder_->isHardwareAccelerated();
-        sendKeyFrameRequest();
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void VideoWorker::onSetRecording(bool enable, const QString& file_path, const QString& computer_name)
 {
     if (enable)
@@ -328,7 +308,7 @@ void VideoWorker::decodePacket(const proto::video::Packet& packet)
     if (encoding_ != packet.encoding())
     {
         LOG(INFO) << "Video encoding changed from" << encoding_ << "to" << packet.encoding();
-        decoder_ = VideoDecoder::create(packet.encoding(), h264_hw_enabled_);
+        decoder_ = VideoDecoder::create(packet.encoding());
         encoding_ = packet.encoding();
         key_frame_received_ = false;
     }
@@ -374,7 +354,6 @@ void VideoWorker::decodePacket(const proto::video::Packet& packet)
         screen_size_ = screen_size;
 
         metrics_.encoder_type = static_cast<quint32>(encoding_);
-        metrics_.hardware_decoder = decoder_->isHardwareAccelerated();
     }
 
     if (packet.flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME)
@@ -388,38 +367,6 @@ void VideoWorker::decodePacket(const proto::video::Packet& packet)
     }
 
     const VideoDecoder::Result decode_result = decoder_->decode(packet);
-    if (decode_result == VideoDecoder::Result::PERMANENT_ERROR)
-    {
-        if (encoding_ != proto::video::ENCODING_H264)
-            return;
-
-        if (h264_hw_enabled_)
-        {
-            // First permanent failure - HW decoder cannot proceed. Swap in OpenH264 SW decoder
-            // and ask the host for a keyframe so the new decoder starts from a known state.
-            LOG(WARNING) << "Permanent HW H264 decoder failure. Falling back to SW H264";
-            h264_hw_enabled_ = false;
-            decoder_ = VideoDecoder::create(encoding_, false);
-            key_frame_received_ = false;
-
-            metrics_.encoder_type = static_cast<quint32>(encoding_);
-            metrics_.hardware_decoder = decoder_ && decoder_->isHardwareAccelerated();
-            sendKeyFrameRequest();
-        }
-        else if (h264_sw_enabled_)
-        {
-            // SW decoder also failed - H264 just cannot handle this stream (resolution above the
-            // level limits is the typical reason). Drop H264 from capabilities and re-negotiate;
-            // host will pick VP8 and the decoder gets recreated on the encoding change.
-            LOG(WARNING) << "Permanent SW H264 decoder failure. Disabling H264";
-            h264_sw_enabled_ = false;
-            decoder_.reset();
-
-            emit sig_h264Disabled();
-        }
-        return;
-    }
-
     if (decode_result == VideoDecoder::Result::TEMPORARY_ERROR)
     {
         LOG(ERROR) << "Unable to decode video packet";

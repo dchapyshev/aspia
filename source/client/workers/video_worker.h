@@ -58,7 +58,6 @@ public:
         int fps = 0;
         quint32 capturer_type = 0;
         quint32 encoder_type = 0;
-        bool hardware_decoder = false;
         int cursor_shape_count = 0;
         int cursor_pos_count = 0;
         int cursor_cached = 0;
@@ -67,7 +66,6 @@ public:
 
 public slots:
     void onCursorConfig(bool shape_enabled, bool position_enabled);
-    void onHardwareDecoding(bool enable);
     void onSetRecording(bool enable, const QString& file_path, const QString& computer_name);
 
 signals:
@@ -75,7 +73,6 @@ signals:
     void sig_frameError(proto::video::ErrorCode error_code);
     void sig_frameChanged(const QSize& screen_size, SharedFrame frame);
     void sig_drawFrame(const QList<QRect>& dirty_rects);
-    void sig_h264Disabled();
     void sig_mouseCursorChanged(std::shared_ptr<MouseCursor> mouse_cursor);
     void sig_cursorPositionChanged(const proto::cursor::Position& position);
     void sig_metrics(const VideoWorker::Metrics& metrics);
@@ -132,13 +129,6 @@ private:
     Metrics metrics_;
     qint64 fps_frame_count_ = 0;
     TimePoint fps_time_;
-
-    // Cleared by the client setting or once a hardware H264 decoder reports a permanent failure;
-    // the software backend is then picked on every subsequent VideoDecoder::create() call.
-    bool h264_hw_enabled_ = true;
-    // Set after both HW and SW H264 decoders failed permanently (e.g. resolution exceeds H264
-    // level limits). The client drops H264 from its capabilities so the host switches to VP.
-    bool h264_sw_enabled_ = true;
 
     // Force-reliable transport state, driven by temporary decode failures. |reliable_hold_|
     // counts down on the metrics timer; the switch is applied at most twice per session.

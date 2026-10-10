@@ -81,7 +81,6 @@ public:
 signals:
     // Pushes the cursor configuration to the video worker.
     void sig_cursorConfig(bool shape_enabled, bool position_enabled);
-    void sig_hardwareDecoding(bool enable);
 
 protected:
     // ClientWindow implementation.
@@ -112,7 +111,6 @@ private slots:
     void onDrawFrame(const QList<QRect>& dirty_rects);
     void onMouseCursorChanged(std::shared_ptr<MouseCursor> mouse_cursor);
     void onCursorPositionChanged(const proto::cursor::Position& position);
-    void onVideoH264Disabled();
 
     // Outgoing user actions.
     void onCurrentScreenChanged(const proto::screen::Screen& screen);
@@ -189,9 +187,6 @@ private:
     int send_clipboard_count_ = 0;
 
     bool file_clipboard_supported_ = false;
-    bool h264_sw_enabled_ = true;
-    bool hardware_encoding_ = true;
-    bool hardware_decoding_ = true;
 
     bool is_minimized_from_full_screen_ = false;
 

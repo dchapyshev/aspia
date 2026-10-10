@@ -199,10 +199,9 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     ui->combo_video_capturer->addItem(
         "X11", static_cast<quint32>(ScreenCapturer::Type::LINUX_X11));
 
-    // The capturer is chosen by the session type and there is no hardware encoder on Linux.
+    // The capturer is chosen by the session type.
     ui->label_video_capturer->hide();
     ui->combo_video_capturer->hide();
-    ui->checkbox_hardware_encoding->hide();
 #elif defined(Q_OS_MACOS)
     ui->combo_video_capturer->addItem(
         "MACOSX", static_cast<quint32>(ScreenCapturer::Type::MACOSX));
@@ -214,7 +213,6 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     {
         setConfigChanged(FROM_HERE, true);
     });
-    connect(ui->checkbox_hardware_encoding, &QCheckBox::toggled, this, &ConfigDialog::onConfigChanged);
 
     //---------------------------------------------------------------------------------------------
     // Security Tab
@@ -753,7 +751,6 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setUpdateServer(update_server);
         settings.setUpdatePublicKey(QByteArray::fromHex(update_public_key_hex));
         settings.setPreferredVideoCapturer(ui->combo_video_capturer->currentData().toUInt());
-        settings.setHardwareVideoEncodingEnabled(ui->checkbox_hardware_encoding->isChecked());
 
         db.setOneTimePassword(ui->checkbox_onetime_password->isChecked());
         db.setOneTimePasswordExpire(Minutes(
@@ -877,7 +874,6 @@ void ConfigDialog::reloadAll()
     int current_video_capturer = ui->combo_video_capturer->findData(settings.preferredVideoCapturer());
     if (current_video_capturer != -1)
         ui->combo_video_capturer->setCurrentIndex(current_video_capturer);
-    ui->checkbox_hardware_encoding->setChecked(settings.isHardwareVideoEncodingEnabled());
 
     reloadUserList();
 

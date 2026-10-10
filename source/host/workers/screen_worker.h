@@ -78,8 +78,7 @@ public:
 public slots:
     // Applies the configuration merged over all connected clients and (re)starts capturing. Codec
     // flags carry the capability intersection of the clients.
-    void onConfigure(const proto::control::Config& config,
-                     bool vp8_supported, bool vp9_supported, bool h264_supported);
+    void onConfigure(const proto::control::Config& config, bool vp8_supported, bool vp9_supported);
 
     // Stops capturing (the last client disconnected).
     void onStopCapture();
@@ -179,8 +178,6 @@ private:
 
     bool vp8_supported_ = false;
     bool vp9_supported_ = false;
-    bool h264_supported_ = false;
-    bool h264_enabled_ = false;
 
     proto::video::Encoding video_encoding_ = proto::video::ENCODING_VP8;
     qint64 last_bandwidth_ = 0;

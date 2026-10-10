@@ -213,7 +213,7 @@ set_property(TARGET aspia_base PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_base INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
 
 if (WIN32)
-    set(BASE_PLATFORM_LIBS mfuuid pdh strmiids wevtapi)
+    set(BASE_PLATFORM_LIBS pdh wevtapi)
 endif()
 
 if (LINUX)
@@ -228,7 +228,7 @@ if (LINUX)
 endif()
 
 if (ANDROID)
-    set(BASE_PLATFORM_LIBS log mediandk oboe::oboe)
+    set(BASE_PLATFORM_LIBS log oboe::oboe)
 endif()
 
 if (APPLE)

@@ -294,14 +294,13 @@ void DesktopAgentClient::readCapabilities(const proto::control::Capabilities& ca
 
     vp8_supported_ = has_flag(capabilities, kFlagVideoVP8);
     vp9_supported_ = has_flag(capabilities, kFlagVideoVP9);
-    h264_supported_ = has_flag(capabilities, kFlagVideoH264);
     opus_supported_ = has_flag(capabilities, kFlagAudioOpus);
     file_clipboard_supported_ = has_flag(capabilities, kFlagFileClipboard);
 
     sendCapabilities();
 
-    // If the client has already been configured and is now revoking a capability (e.g. dropping
-    // H264 after the decoder failed) - the agent must re-evaluate which codec to use.
+    // If the client has already been configured and is now revoking a capability, the agent must
+    // re-evaluate which codec to use.
     if (config_.has_value())
         emit sig_configured();
 }

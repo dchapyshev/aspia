@@ -24,12 +24,7 @@
 #include "base/time_types.h"
 #include "proto/desktop_video.h"
 
-#include <libyuv/convert.h>
-
 namespace {
-
-// Defines the dimension of a macro block.
-const int kMacroBlockSize = 16;
 
 const MilliSeconds kTargetFrameInterval{ 80 };
 
@@ -90,17 +85,12 @@ bool WebmVideoEncoder::encode(const VideoDecoder::YuvView& frame, proto::video::
 
     packet->set_encoding(proto::video::ENCODING_VP8);
 
-    const bool size_changed = (last_frame_size_ != frame.size());
-    if (size_changed || last_frame_format_ != frame.format())
-    {
-        last_frame_size_ = frame.size();
-        last_frame_format_ = frame.format();
-        createImage();
-    }
-
-    if (size_changed)
+    if (last_frame_size_ != frame.size())
     {
         LOG(INFO) << "Frame size changed to" << frame.size();
+        last_frame_size_ = frame.size();
+
+        createImage();
 
         if (!createCodec())
         {
@@ -113,26 +103,13 @@ bool WebmVideoEncoder::encode(const VideoDecoder::YuvView& frame, proto::video::
         video_rect->set_height(last_frame_size_.height());
     }
 
-    if (last_frame_format_ == VideoDecoder::YuvFormat::NV12)
-    {
-        // VP8 needs planar I420, so split the interleaved chroma into the owned image buffer.
-        libyuv::NV12ToI420(frame.planeData(0), frame.planeStride(0),
-                           frame.planeData(1), frame.planeStride(1),
-                           image_->planes[0], image_->stride[0],
-                           image_->planes[1], image_->stride[1],
-                           image_->planes[2], image_->stride[2],
-                           last_frame_size_.width(),
-                           last_frame_size_.height());
-    }
-    else
-    {
-        image_->planes[0] = const_cast<quint8*>(frame.planeData(0));
-        image_->planes[1] = const_cast<quint8*>(frame.planeData(1));
-        image_->planes[2] = const_cast<quint8*>(frame.planeData(2));
-        image_->stride[0] = frame.planeStride(0);
-        image_->stride[1] = frame.planeStride(1);
-        image_->stride[2] = frame.planeStride(2);
-    }
+    // The frame is fed to the encoder straight from the decoder's planes.
+    image_->planes[0] = const_cast<quint8*>(frame.planeData(0));
+    image_->planes[1] = const_cast<quint8*>(frame.planeData(1));
+    image_->planes[2] = const_cast<quint8*>(frame.planeData(2));
+    image_->stride[0] = frame.planeStride(0);
+    image_->stride[1] = frame.planeStride(1);
+    image_->stride[2] = frame.planeStride(2);
 
     // Do the actual encoding.
     vpx_codec_err_t ret = vpx_codec_encode(
@@ -180,39 +157,6 @@ void WebmVideoEncoder::createImage()
     image_->fmt = VPX_IMG_FMT_YV12;
     image_->x_chroma_shift = 1;
     image_->y_chroma_shift = 1;
-
-    // An I420 frame is fed to the encoder straight from the decoder's planes (set per encode), so no
-    // buffer is needed here. NV12 is converted into this owned, macroblock-padded I420 buffer.
-    if (last_frame_format_ != VideoDecoder::YuvFormat::NV12)
-        return;
-
-    // libyuv's fast-path requires 16-byte aligned pointers and strides, so pad the Y, U and V
-    // planes' strides to multiples of 16 bytes.
-    const int y_stride = ((static_cast<int>(image_->w) - 1) & ~15) + 16;
-    const int uv_unaligned_stride = y_stride >> image_->x_chroma_shift;
-    const int uv_stride = ((uv_unaligned_stride - 1) & ~15) + 16;
-
-    // libvpx accesses the source image in macro blocks, and will over-read if the image is not
-    // padded out to the next macroblock: crbug.com/119633.
-    // Pad the Y, U and V planes' height out to compensate.
-    // Assuming macroblocks are 16x16, aligning the planes' strides above also macroblock aligned
-    // them.
-    const int y_rows = ((static_cast<int>(image_->h) - 1) & ~(kMacroBlockSize - 1)) + kMacroBlockSize;
-    const int uv_rows = y_rows >> image_->y_chroma_shift;
-
-    // Allocate a YUV buffer large enough for the aligned data & padding.
-    image_buffer_.resize(static_cast<size_t>(y_stride * y_rows + (2 * uv_stride) * uv_rows));
-
-    // Reset image value to 128 so we just need to fill in the y plane.
-    memset(image_buffer_.data(), 128, image_buffer_.size());
-
-    // Fill in the information.
-    image_->planes[0] = reinterpret_cast<quint8*>(image_buffer_.data());
-    image_->planes[1] = image_->planes[0] + y_stride * y_rows;
-    image_->planes[2] = image_->planes[1] + uv_stride * uv_rows;
-
-    image_->stride[0] = y_stride;
-    image_->stride[1] = image_->stride[2] = uv_stride;
 }
 
 //--------------------------------------------------------------------------------------------------

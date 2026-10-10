@@ -322,13 +322,6 @@ void DesktopWindow::onCursorPositionChanged(const proto::cursor::Position& posit
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::onVideoH264Disabled()
-{
-    h264_sw_enabled_ = false;
-    sendCapabilities();
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopWindow::onMouseEvent(const proto::input::MouseEvent& event)
 {
     proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
@@ -627,8 +620,6 @@ void DesktopWindow::startNewSession()
             view_, &DesktopView::setCursorShape, Qt::QueuedConnection);
     connect(video_worker_, &VideoWorker::sig_cursorPositionChanged,
             this, &DesktopWindow::onCursorPositionChanged, Qt::QueuedConnection);
-    connect(video_worker_, &VideoWorker::sig_h264Disabled,
-            this, &DesktopWindow::onVideoH264Disabled, Qt::QueuedConnection);
 
     emit sig_cursorConfig(desktop_config_.cursor_shape(), desktop_config_.cursor_position());
 
@@ -888,8 +879,6 @@ void DesktopWindow::sendCapabilities()
 
     add_flag(kFlagVideoVP8, true);
     add_flag(kFlagVideoVP9, true);
-    if (h264_sw_enabled_)
-        add_flag(kFlagVideoH264, true);
     add_flag(kFlagAudioOpus, true);
 
     sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));

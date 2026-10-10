@@ -48,13 +48,12 @@ QString capturerToString(quint32 type)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString encoderToString(quint32 type, bool hardware_decoder)
+QString encoderToString(quint32 type)
 {
     switch (static_cast<proto::video::Encoding>(type))
     {
         case proto::video::ENCODING_VP8: return "VP8";
         case proto::video::ENCODING_VP9: return "VP9";
-        case proto::video::ENCODING_H264: return hardware_decoder ? "H264HW" : "H264SW";
         default: return "UNKNOWN";
     }
 }
@@ -116,7 +115,7 @@ void StatisticsDialog::onVideoMetrics(const VideoWorker::Metrics& metrics)
     setValue(7, Formatter::sizeToString(metrics.min_packet) + " / " +
         Formatter::sizeToString(metrics.max_packet) + " / " + Formatter::sizeToString(metrics.avg_packet));
     setValue(10, capturerToString(metrics.capturer_type) + " / " +
-        encoderToString(metrics.encoder_type, metrics.hardware_decoder));
+        encoderToString(metrics.encoder_type));
     setValue(11, QString::number(metrics.fps));
     setValue(16, QString::number(metrics.cursor_shape_count) + " / " +
         QString::number(metrics.cursor_taken_from_cache));

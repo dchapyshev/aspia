@@ -20,7 +20,6 @@
       "name": "oboe",
       "platform": "android"
     },
-    "openh264",
     "openssl",
     "opus",
     "protobuf",

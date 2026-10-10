@@ -40,8 +40,6 @@ collect_sources(SOURCE_BASE_CODEC
     vector_math.h
     video_decoder.cc
     video_decoder.h
-    video_decoder_h264_sw.cc
-    video_decoder_h264_sw.h
     video_decoder_vpx.cc
     video_decoder_vpx.h
     video_encoder.cc
@@ -57,39 +55,6 @@ collect_sources(SOURCE_BASE_CODEC
     zstd_stream_decompressor.cc
     zstd_stream_decompressor.h)
 
-if (WIN32)
-    collect_sources(SOURCE_BASE_CODEC
-        d3d11_video_context.cc
-        d3d11_video_context.h
-        mf_runtime.cc
-        mf_runtime.h
-        video_decoder_h264_mf.cc
-        video_decoder_h264_mf.h
-        video_encoder_h264_mf.cc
-        video_encoder_h264_mf.h)
-endif()
-
-if (APPLE)
-    collect_sources(SOURCE_BASE_CODEC
-        video_decoder_h264_vt.cc
-        video_decoder_h264_vt.h
-        video_encoder_h264_vt.cc
-        video_encoder_h264_vt.h)
-endif()
-
-if (ANDROID)
-    collect_sources(SOURCE_BASE_CODEC
-        video_decoder_h264_mc.cc
-        video_decoder_h264_mc.h
-        video_encoder_h264_mc.cc
-        video_encoder_h264_mc.h)
-endif()
-
 collect_sources(SOURCE_BASE_CODEC_TESTS
     cursor_codec_unittest.cc
     zstd_stream_unittest.cc)
-
-if (WIN32)
-    collect_sources(SOURCE_BASE_CODEC_TESTS
-        video_codec_h264_mf_unittest.cc)
-endif()

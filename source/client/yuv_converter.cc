@@ -57,48 +57,25 @@ YuvConverter::Result YuvConverter::convert(
     Frame& dst = access.get();
 
     const int y_stride = src.planeStride(0);
+    const int u_stride = src.planeStride(1);
+    const int v_stride = src.planeStride(2);
     const QRect frame_rect(QPoint(0, 0), src.size());
 
-    if (src.format() == VideoDecoder::YuvFormat::NV12)
+    for (const QRect& rect : dirty_rects)
     {
-        const int uv_stride = src.planeStride(1);
+        const QRect clipped = rect.intersected(frame_rect);
+        if (clipped.isEmpty())
+            continue;
 
-        for (const QRect& rect : dirty_rects)
-        {
-            const QRect clipped = rect.intersected(frame_rect);
-            if (clipped.isEmpty())
-                continue;
+        const int y_offset = clipped.y() * y_stride + clipped.x();
+        const int u_offset = (clipped.y() / 2) * u_stride + (clipped.x() / 2);
+        const int v_offset = (clipped.y() / 2) * v_stride + (clipped.x() / 2);
 
-            const int y_offset = clipped.y() * y_stride + clipped.x();
-            const int uv_offset = (clipped.y() / 2) * uv_stride + (clipped.x() & ~1);
-
-            libyuv::NV12ToARGB(src.planeData(0) + y_offset, y_stride,
-                               src.planeData(1) + uv_offset, uv_stride,
-                               dst.frameDataAtPos(clipped.topLeft()), dst.stride(),
-                               clipped.width(), clipped.height());
-        }
-    }
-    else
-    {
-        const int u_stride = src.planeStride(1);
-        const int v_stride = src.planeStride(2);
-
-        for (const QRect& rect : dirty_rects)
-        {
-            const QRect clipped = rect.intersected(frame_rect);
-            if (clipped.isEmpty())
-                continue;
-
-            const int y_offset = clipped.y() * y_stride + clipped.x();
-            const int u_offset = (clipped.y() / 2) * u_stride + (clipped.x() / 2);
-            const int v_offset = (clipped.y() / 2) * v_stride + (clipped.x() / 2);
-
-            libyuv::I420ToARGB(src.planeData(0) + y_offset, y_stride,
-                               src.planeData(1) + u_offset, u_stride,
-                               src.planeData(2) + v_offset, v_stride,
-                               dst.frameDataAtPos(clipped.topLeft()), dst.stride(),
-                               clipped.width(), clipped.height());
-        }
+        libyuv::I420ToARGB(src.planeData(0) + y_offset, y_stride,
+                           src.planeData(1) + u_offset, u_stride,
+                           src.planeData(2) + v_offset, v_stride,
+                           dst.frameDataAtPos(clipped.topLeft()), dst.stride(),
+                           clipped.width(), clipped.height());
     }
 
     return result;

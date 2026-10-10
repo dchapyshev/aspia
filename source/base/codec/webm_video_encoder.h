@@ -19,7 +19,6 @@
 #ifndef BASE_CODEC_WEBM_VIDEO_ENCODER_H
 #define BASE_CODEC_WEBM_VIDEO_ENCODER_H
 
-#include <QByteArray>
 #include <QSize>
 
 #include "base/codec/scoped_vpx_codec.h"
@@ -46,11 +45,9 @@ private:
     bool createCodec();
 
     QSize last_frame_size_;
-    VideoDecoder::YuvFormat last_frame_format_ = VideoDecoder::YuvFormat::I420;
 
-    // VPX image and buffer to hold the actual YUV planes.
+    // VPX image pointing at the YUV planes of the frame being encoded.
     std::unique_ptr<vpx_image_t> image_;
-    QByteArray image_buffer_;
 
     vpx_codec_enc_cfg_t config_;
     ScopedVpxCodec codec_;

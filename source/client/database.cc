@@ -56,8 +56,6 @@ constexpr auto kSettingDesktopConfig = "desktop_config";
 constexpr auto kSettingRecordEnabled = "record_sessions";
 constexpr auto kSettingRecordPath    = "recording_path";
 constexpr auto kSettingKeyCombos     = "send_key_combinations";
-constexpr auto kSettingHwEncoding    = "hardware_video_encoding";
-constexpr auto kSettingHwDecoding    = "hardware_video_decoding";
 constexpr auto kSettingUdpMethods    = "udp_methods";
 constexpr auto kSettingSalt          = "master_password_salt";
 constexpr auto kSettingVerifier      = "master_password_verifier";
@@ -1890,36 +1888,6 @@ bool Database::isSendKeyCombinationsEnabled() const
 bool Database::setSendKeyCombinationsEnabled(bool enable)
 {
     return writeSetting(kSettingKeyCombos, enable ? "1" : "0");
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::isHardwareVideoEncodingEnabled() const
-{
-    QString value = readSetting(kSettingHwEncoding);
-    if (value.isEmpty())
-        return true;
-    return value == "1";
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setHardwareVideoEncodingEnabled(bool enable)
-{
-    return writeSetting(kSettingHwEncoding, enable ? "1" : "0");
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::isHardwareVideoDecodingEnabled() const
-{
-    QString value = readSetting(kSettingHwDecoding);
-    if (value.isEmpty())
-        return true;
-    return value == "1";
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setHardwareVideoDecodingEnabled(bool enable)
-{
-    return writeSetting(kSettingHwDecoding, enable ? "1" : "0");
 }
 
 //--------------------------------------------------------------------------------------------------

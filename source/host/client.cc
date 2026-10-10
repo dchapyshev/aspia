@@ -783,9 +783,9 @@ void Client::checkBandwidth()
 //--------------------------------------------------------------------------------------------------
 void Client::publishBandwidth(qint64 bandwidth)
 {
-    // Consumers map the estimate onto coarse quality tiers; propagating every fluctuation would make
-    // the tiers flap at band boundaries (and the Windows H264 encoder re-creates itself on every
-    // change). Only meaningful moves go through - see the threshold constants for the asymmetry.
+    // Consumers map the estimate onto coarse quality tiers. Propagating every fluctuation would make
+    // the tiers flap at band boundaries, so only meaningful moves go through. The threshold
+    // constants explain the asymmetry.
     if (published_bandwidth_ != 0)
     {
         const qint64 delta = bandwidth - published_bandwidth_;

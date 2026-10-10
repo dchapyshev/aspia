@@ -326,7 +326,6 @@ if (APPLE)
         ${COREMEDIA_LIB}
         ${COREVIDEO_LIB}
         ${COREGRAPHICS_LIB}
-        ${VIDEOTOOLBOX_LIB}
         ${AUDIOTOOLBOX_LIB}
         ${SECURITY_LIB}
         ${OSLOG_LIB})

@@ -72,9 +72,8 @@ signals:
 
     // Result of merging the configuration over all clients. |config| carries the merged wallpaper,
     // effects, cursor and preferred-resolution flags for the screen worker; the codec flags are the
-    // client capability intersection (the host still gates hardware H264 itself).
-    void sig_configure(const proto::control::Config& config,
-                       bool vp8_supported, bool vp9_supported, bool h264_supported);
+    // client capability intersection.
+    void sig_configure(const proto::control::Config& config, bool vp8_supported, bool vp9_supported);
 
     // Derived from the merged configuration, targeting the audio and input workers.
     void sig_audioEnabled(bool enable);

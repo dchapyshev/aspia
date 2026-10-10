@@ -230,8 +230,6 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->checkbox_lock_at_disconnect->setChecked(desktop_config.lock_at_disconnect());
     ui->checkbox_block_remote_input->setChecked(desktop_config.block_input());
     ui->checkbox_send_key_combinations->setChecked(db.isSendKeyCombinationsEnabled());
-    ui->checkbox_hardware_encoding->setChecked(db.isHardwareVideoEncodingEnabled());
-    ui->checkbox_hardware_decoding->setChecked(db.isHardwareVideoDecodingEnabled());
 
     ui->combo_resolution->addItem(tr("None"), QSize());
     const QList<QSize> resolutions = availableResolutions();
@@ -301,8 +299,6 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->checkbox_lock_at_disconnect, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->checkbox_block_remote_input, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->checkbox_send_key_combinations, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
-    connect(ui->checkbox_hardware_encoding, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
-    connect(ui->checkbox_hardware_decoding, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->combo_resolution, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onDesktopFeatureChanged);
 
@@ -795,6 +791,4 @@ void SettingsTab::saveDesktopConfig()
     Database& db = Database::instance();
     db.setDesktopConfig(desktop_config);
     db.setSendKeyCombinationsEnabled(ui->checkbox_send_key_combinations->isChecked());
-    db.setHardwareVideoEncodingEnabled(ui->checkbox_hardware_encoding->isChecked());
-    db.setHardwareVideoDecodingEnabled(ui->checkbox_hardware_decoding->isChecked());
 }

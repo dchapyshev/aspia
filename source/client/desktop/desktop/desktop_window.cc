@@ -131,8 +131,6 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
     Database& db = Database::instance();
     desktop_->enableKeyCombinations(db.isSendKeyCombinationsEnabled());
     desktop_->enableRemoteCursorPosition(desktop_config_.cursor_position());
-    hardware_encoding_ = db.isHardwareVideoEncodingEnabled();
-    hardware_decoding_ = db.isHardwareVideoDecodingEnabled();
 
     connect(toolbar_, &DesktopToolBar::sig_keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
     connect(toolbar_, &DesktopToolBar::sig_switchToAutosize, this, &DesktopWindow::onAutosizeWindow);
@@ -263,8 +261,6 @@ void DesktopWindow::onRegisterWorkers()
 
     connect(this, &DesktopWindow::sig_cursorConfig, video_worker_, &VideoWorker::onCursorConfig,
             Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_hardwareDecoding, video_worker_, &VideoWorker::onHardwareDecoding,
-            Qt::QueuedConnection);
 
     connect(video_worker_, &VideoWorker::sig_frameError, this, &DesktopWindow::onFrameError,
             Qt::QueuedConnection);
@@ -275,8 +271,6 @@ void DesktopWindow::onRegisterWorkers()
     connect(video_worker_, &VideoWorker::sig_mouseCursorChanged, this, &DesktopWindow::onMouseCursorChanged,
             Qt::QueuedConnection);
     connect(video_worker_, &VideoWorker::sig_cursorPositionChanged, this, &DesktopWindow::onCursorPositionChanged,
-            Qt::QueuedConnection);
-    connect(video_worker_, &VideoWorker::sig_h264Disabled, this, &DesktopWindow::onVideoH264Disabled,
             Qt::QueuedConnection);
     connect(video_worker_, &VideoWorker::sig_recordingStopped, this, [this](const QString& error_text)
     {
@@ -290,7 +284,6 @@ void DesktopWindow::onRegisterWorkers()
 
     // Push the initial cursor configuration; refreshed later on every onDesktopConfigChanged.
     emit sig_cursorConfig(desktop_config_.cursor_shape(), desktop_config_.cursor_position());
-    emit sig_hardwareDecoding(hardware_decoding_);
 
     // Created only when enabled to avoid monitoring the local clipboard.
     clipboard_.reset(desktop_config_.clipboard() ? Clipboard::create(this) : nullptr);
@@ -368,20 +361,6 @@ void DesktopWindow::applySettings()
         desktop_->setCursorShape(QPixmap(), QPoint());
 
     desktop_->enableKeyCombinations(db.isSendKeyCombinationsEnabled());
-    const bool hardware_decoding = db.isHardwareVideoDecodingEnabled();
-    if (hardware_decoding != hardware_decoding_)
-    {
-        hardware_decoding_ = hardware_decoding;
-        emit sig_hardwareDecoding(hardware_decoding_);
-    }
-
-    const bool hardware_encoding = db.isHardwareVideoEncodingEnabled();
-    if (hardware_encoding != hardware_encoding_)
-    {
-        hardware_encoding_ = hardware_encoding;
-        if (!isLegacy())
-            sendCapabilities();
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1456,13 +1435,6 @@ void DesktopWindow::onClipboardFileDataRequest(int file_index)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::onVideoH264Disabled()
-{
-    h264_sw_enabled_ = false;
-    sendCapabilities();
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopWindow::readCapabilities(const proto::control::Capabilities& capabilities)
 {
     LOG(INFO) << "Received:" << capabilities;
@@ -1701,8 +1673,6 @@ void DesktopWindow::sendCapabilities()
 
     add_flag(kFlagVideoVP8, true);
     add_flag(kFlagVideoVP9, true);
-    if (h264_sw_enabled_ && hardware_encoding_)
-        add_flag(kFlagVideoH264, true);
     add_flag(kFlagAudioOpus, true);
 
 #if defined(Q_OS_WINDOWS) || defined(Q_OS_MACOS)

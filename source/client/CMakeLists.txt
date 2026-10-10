@@ -182,10 +182,7 @@ if (LINUX)
 endif()
 
 if (APPLE)
-    # VideoToolbox/CoreMedia/CoreVideo back the hardware H264 decoder.
-    set(CLIENT_PLATFORM_LIBS
-        ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB} portaudio
-        ${VIDEOTOOLBOX_LIB} ${COREMEDIA_LIB} ${COREVIDEO_LIB})
+    set(CLIENT_PLATFORM_LIBS ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB} portaudio)
     set(aspia_client_ICON ${PROJECT_SOURCE_DIR}/source/common/resources/aspia.icns)
     configure_file(${PROJECT_SOURCE_DIR}/source/client/Info.plist.in
         ${CMAKE_CURRENT_BINARY_DIR}/Info.plist @ONLY)

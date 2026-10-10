@@ -25,9 +25,9 @@
 #include "base/codec/video_decoder.h"
 #include "base/desktop/shared_frame.h"
 
-// Converts decoded YUV video frames (I420 / NV12) into the ARGB pixel format used for rendering and
-// owns the ARGB output frame. Only the rectangles in the source frame's updated region are converted,
-// so the rest of the output is preserved between frames.
+// Converts decoded I420 video frames into the ARGB pixel format used for rendering and owns the ARGB
+// output frame. Only the rectangles in the source frame's updated region are converted, so the rest
+// of the output is preserved between frames.
 class YuvConverter
 {
 public:

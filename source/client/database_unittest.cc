@@ -1286,23 +1286,17 @@ TEST_F(DatabaseTest, SessionRecordingIsOffUntilChosen)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Until the user changes them, key combinations are sent, hardware video is used and every UDP
-// method is allowed; a change is kept.
+// Until the user changes them, key combinations are sent and every UDP method is allowed; a change
+// is kept.
 TEST_F(DatabaseTest, SessionOptionsAreOnUntilChosen)
 {
     EXPECT_TRUE(db_.isSendKeyCombinationsEnabled());
-    EXPECT_TRUE(db_.isHardwareVideoEncodingEnabled());
-    EXPECT_TRUE(db_.isHardwareVideoDecodingEnabled());
     EXPECT_EQ(db_.udpMethods(), static_cast<quint32>(UDP_METHOD_ALL));
 
     ASSERT_TRUE(db_.setSendKeyCombinationsEnabled(false));
-    ASSERT_TRUE(db_.setHardwareVideoEncodingEnabled(false));
-    ASSERT_TRUE(db_.setHardwareVideoDecodingEnabled(false));
     ASSERT_TRUE(db_.setUdpMethods(UDP_METHOD_DIRECT | UDP_METHOD_UPNP));
 
     EXPECT_FALSE(db_.isSendKeyCombinationsEnabled());
-    EXPECT_FALSE(db_.isHardwareVideoEncodingEnabled());
-    EXPECT_FALSE(db_.isHardwareVideoDecodingEnabled());
     EXPECT_EQ(db_.udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT | UDP_METHOD_UPNP));
 
     // No method at all is a choice too, not a missing value.

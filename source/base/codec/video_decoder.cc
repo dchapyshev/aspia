@@ -19,50 +19,18 @@
 #include "base/codec/video_decoder.h"
 
 #include "base/logging.h"
-#include "base/codec/video_decoder_h264_sw.h"
 #include "base/codec/video_decoder_vpx.h"
 #include "proto/desktop_video.h"
 
-#if defined(Q_OS_WINDOWS)
-#include "base/codec/video_decoder_h264_mf.h"
-#elif defined(Q_OS_MACOS)
-#include "base/codec/video_decoder_h264_vt.h"
-#elif defined(Q_OS_ANDROID)
-#include "base/codec/video_decoder_h264_mc.h"
-#endif
-
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::video::Encoding encoding, bool allow_hardware)
+std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::video::Encoding encoding)
 {
     switch (encoding)
     {
         case proto::video::ENCODING_VP8:
         case proto::video::ENCODING_VP9:
             return VideoDecoderVpx::create(encoding);
-
-        case proto::video::ENCODING_H264:
-        {
-            if (allow_hardware)
-            {
-                // Prefer the platform HW decoder; fall back to OpenH264 when it is unavailable (no HW
-                // MFT / AVC codec, broken driver, or an output format we cannot read).
-#if defined(Q_OS_WINDOWS)
-                if (auto decoder = VideoDecoderH264MF::create())
-                    return decoder;
-                LOG(WARNING) << "Media Foundation H264 decoder unavailable, falling back to OpenH264";
-#elif defined(Q_OS_MACOS)
-                if (auto decoder = VideoDecoderH264VT::create())
-                    return decoder;
-                LOG(WARNING) << "VideoToolbox H264 decoder unavailable, falling back to OpenH264";
-#elif defined(Q_OS_ANDROID)
-                if (auto decoder = VideoDecoderH264MC::create())
-                    return decoder;
-                LOG(WARNING) << "MediaCodec H264 decoder unavailable, falling back to OpenH264";
-#endif
-            }
-            return VideoDecoderH264SW::create();
-        }
 
         default:
             LOG(ERROR) << "Unsupported video encoding:" << encoding;

@@ -228,8 +228,7 @@ void ScreenWorker::releaseAllInput()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenWorker::onConfigure(
-    const proto::control::Config& config, bool vp8_supported, bool vp9_supported, bool h264_supported)
+void ScreenWorker::onConfigure(const proto::control::Config& config, bool vp8_supported, bool vp9_supported)
 {
     if (!vp8_supported && !vp9_supported)
     {
@@ -240,10 +239,8 @@ void ScreenWorker::onConfigure(
 
     vp8_supported_ = vp8_supported;
     vp9_supported_ = vp9_supported;
-    h264_supported_ = h264_supported && h264_enabled_;
 
-    LOG(INFO) << "Configuration:" << config << "vp8:" << vp8_supported_ << "vp9:" << vp9_supported_
-              << "h264:" << h264_supported_;
+    LOG(INFO) << "Configuration:" << config << "vp8:" << vp8_supported_ << "vp9:" << vp9_supported_;
 
     // The first client that requested a preferred resolution wins. It is applied to the monitors
     // in onCaptureScreen.
@@ -253,14 +250,6 @@ void ScreenWorker::onConfigure(
         preferred_resolution_.setWidth(config.preferred_resolution().width());
         preferred_resolution_.setHeight(config.preferred_resolution().height());
     }
-
-    // Prefer hardware H264 when both endpoints support it; fall back to VP otherwise. The
-    // explicit reset of an H264 encoding when h264_supported_ flipped to false handles the case
-    // where the client revokes H264 capability mid-session (decoder failure -> renegotiation).
-    if (h264_supported_)
-        video_encoding_ = proto::video::ENCODING_H264;
-    else if (video_encoding_ == proto::video::ENCODING_H264)
-        video_encoding_ = proto::video::ENCODING_VP8;
 
     createVideoEncoder();
 
@@ -462,18 +451,14 @@ void ScreenWorker::onBandwidthChanged(qint64 bandwidth)
     proto::video::Encoding desired_encoding = video_encoding_;
     const qint64 kVp9SwitchingThreshold = 1.5 * 1024 * 1024; // 1.5 MB/s
 
-    // Hardware H264 outperforms VP at every bandwidth - if it was selected at startup, keep it.
-    if (video_encoding_ != proto::video::ENCODING_H264)
+    if (bandwidth < kVp9SwitchingThreshold && vp9_supported_)
     {
-        if (bandwidth < kVp9SwitchingThreshold && vp9_supported_)
-        {
-            // For low bandwidth connections, VP9 provides better compression.
-            desired_encoding = proto::video::ENCODING_VP9;
-        }
-        else if (bandwidth >= kVp9SwitchingThreshold && vp8_supported_)
-        {
-            desired_encoding = proto::video::ENCODING_VP8;
-        }
+        // For low bandwidth connections, VP9 provides better compression.
+        desired_encoding = proto::video::ENCODING_VP9;
+    }
+    else if (bandwidth >= kVp9SwitchingThreshold && vp8_supported_)
+    {
+        desired_encoding = proto::video::ENCODING_VP8;
     }
 
     if (desired_encoding != video_encoding_ && video_encoder_)
@@ -495,8 +480,6 @@ void ScreenWorker::onPrepare()
 {
     SystemSettings settings;
     preferred_capturer_ = static_cast<ScreenCapturer::Type>(settings.preferredVideoCapturer());
-    h264_enabled_ = settings.isHardwareVideoEncodingEnabled() &&
-                    VideoEncoder::isSupported(proto::video::ENCODING_H264);
 
     default_fps_ = defaultCaptureFps();
     min_fps_ = minCaptureFps();
@@ -1367,9 +1350,8 @@ void ScreenWorker::encodeScreen(const Frame* frame)
     const VideoEncoder::Result encode_result = video_encoder_->encode(scaled_frame, packet);
     if (encode_result == VideoEncoder::Result::PERMANENT_ERROR)
     {
-        // HW encoder cannot handle this frame size or driver state - fall back to VP8.
+        // The encoder cannot handle this frame size - fall back to VP8.
         LOG(ERROR) << "Permanent encoder failure for" << video_encoding_ << "- falling back to VP8";
-        h264_enabled_ = false;
         video_encoding_ = proto::video::ENCODING_VP8;
         createVideoEncoder();
         return;

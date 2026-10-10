@@ -51,8 +51,7 @@ DesktopAgent::DesktopAgent(QObject* parent)
     : QObject(parent),
       capture_timer_(new QTimer(this)),
       scale_reducer_(std::make_unique<ScaleReducer>(ScaleReducer::Quality::NORMAL)),
-      video_encoding_(proto::video::ENCODING_VP8),
-      h264_enabled_(VideoEncoder::isSupported(proto::video::ENCODING_H264))
+      video_encoding_(proto::video::ENCODING_VP8)
 {
     LOG(INFO) << "Ctor";
 
@@ -98,7 +97,6 @@ void DesktopAgent::onClientConfigured()
     bool has_configured = false;
     bool vp8_supported = true;
     bool vp9_supported = true;
-    bool h264_supported = true;
 
     // A codec is usable only if every configured client can decode it.
     for (auto* client : std::as_const(clients_))
@@ -112,19 +110,12 @@ void DesktopAgent::onClientConfigured()
             vp8_supported = false;
         if (!client->isVp9Supported())
             vp9_supported = false;
-        if (!client->isH264Supported())
-            h264_supported = false;
     }
 
     if (!has_configured)
         return;
 
-    // Prefer hardware H264 when both endpoints support it; fall back to VP otherwise. The explicit
-    // reset of an H264 encoding handles a client revoking the capability mid-session (decoder
-    // failure -> renegotiation) as well as a runtime encoder failure clearing |h264_enabled_|.
-    if (h264_supported && h264_enabled_)
-        video_encoding_ = proto::video::ENCODING_H264;
-    else if (vp8_supported)
+    if (vp8_supported)
         video_encoding_ = proto::video::ENCODING_VP8;
     else if (vp9_supported)
         video_encoding_ = proto::video::ENCODING_VP9;
@@ -488,9 +479,8 @@ void DesktopAgent::encodeScreen(const Frame* frame)
     const VideoEncoder::Result result = video_encoder_->encode(scaled_frame, packet);
     if (result == VideoEncoder::Result::PERMANENT_ERROR)
     {
-        // HW encoder cannot handle this frame size or driver state. Fall back to VP8.
+        // The encoder cannot handle this frame size. Fall back to VP8.
         LOG(ERROR) << "Permanent encoder failure for" << video_encoding_ << "- falling back to VP8";
-        h264_enabled_ = false;
         video_encoding_ = proto::video::ENCODING_VP8;
         createVideoEncoder();
         return;

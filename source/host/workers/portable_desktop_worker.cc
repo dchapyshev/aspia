@@ -222,7 +222,6 @@ void PortableDesktopWorker::onClientConfigured()
     bool opus_supported = true;
     bool vp8_supported = true;
     bool vp9_supported = true;
-    bool h264_supported = true;
 
     for (const ClientEntry& entry : std::as_const(clients_))
     {
@@ -237,8 +236,6 @@ void PortableDesktopWorker::onClientConfigured()
             vp8_supported = false;
         if (!entry.client->isVp9Supported())
             vp9_supported = false;
-        if (!entry.client->isH264Supported())
-            h264_supported = false;
         if (!entry.client->isOpusSupported())
             opus_supported = false;
 
@@ -264,9 +261,9 @@ void PortableDesktopWorker::onClientConfigured()
         return;
 
     LOG(INFO) << "Merged configuration:" << merged_config << "vp8:" << vp8_supported
-              << "vp9:" << vp9_supported << "h264:" << h264_supported << "opus:" << opus_supported;
+              << "vp9:" << vp9_supported << "opus:" << opus_supported;
 
-    emit sig_configure(merged_config, vp8_supported, vp9_supported, h264_supported);
+    emit sig_configure(merged_config, vp8_supported, vp9_supported);
     emit sig_audioEnabled(merged_config.audio() && opus_supported);
 }
 

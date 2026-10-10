@@ -40,17 +40,12 @@ public:
     {
         SUCCESS,         // Packet was produced and is ready to send.
         TEMPORARY_ERROR, // Recoverable failure (transient driver/codec hiccup); retry next frame.
-        PERMANENT_ERROR, // Encoder cannot proceed (e.g. HW does not support this frame size);
-                         // the caller should fall back to another encoding.
+        PERMANENT_ERROR, // Encoder cannot proceed (e.g. the codec cannot be created for this
+                         // frame size); the caller should fall back to another encoding.
     };
     Q_ENUM(Result)
 
     static std::unique_ptr<VideoEncoder> create(proto::video::Encoding encoding);
-
-    // Returns true when the encoding can be instantiated on this system. Used by callers to pick
-    // a supported encoding upfront without paying the cost of constructing and tearing down an
-    // encoder just to probe availability.
-    static bool isSupported(proto::video::Encoding encoding);
 
     virtual ~VideoEncoder() = default;
 

@@ -151,12 +151,6 @@ public:
     bool isSendKeyCombinationsEnabled() const;
     bool setSendKeyCombinationsEnabled(bool enable);
 
-    bool isHardwareVideoEncodingEnabled() const;
-    bool setHardwareVideoEncodingEnabled(bool enable);
-
-    bool isHardwareVideoDecodingEnabled() const;
-    bool setHardwareVideoDecodingEnabled(bool enable);
-
     quint32 udpMethods() const;
     bool setUdpMethods(quint32 methods);
 

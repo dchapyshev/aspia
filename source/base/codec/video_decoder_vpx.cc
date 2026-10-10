@@ -55,7 +55,7 @@ VideoDecoder::Result VideoDecoderVpx::decode(const proto::video::Packet& packet)
 
     // The view still points at the previous image, which vpx_codec_decode() is about to reuse or
     // free. Drop the planes now so that the error paths below leave frame() invalid.
-    frame_.reset(YuvFormat::I420, size);
+    frame_.reset(size);
 
     // Do the actual decoding.
     vpx_codec_err_t ret =
