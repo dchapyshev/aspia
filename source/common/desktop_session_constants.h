@@ -39,7 +39,6 @@ extern const char kFlagDisableBlockInput[]; // Deprecated.
 
 extern const char kFlagVideoVP8[];
 extern const char kFlagVideoVP9[];
-extern const char kFlagVideoH264[];
 extern const char kFlagAudioOpus[];
 extern const char kFlagOSWindows[];
 extern const char kFlagOSMacOS[];
