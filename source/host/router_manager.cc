@@ -403,7 +403,7 @@ void RouterManager::connectToRouter()
     authenticator->setPeerPublicKey(public_key_);
     authenticator->setSessionType(proto::router::SESSION_TYPE_HOST);
 
-    tcp_channel_ = new TcpChannelNative(authenticator, this);
+    tcp_channel_ = new TcpChannelNative(TcpChannel::Type::DIRECT, authenticator, this);
 
     connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &RouterManager::onTcpReady);
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &RouterManager::onTcpErrorOccurred);

@@ -20,46 +20,19 @@
 
 #include <QtEndian>
 
-#include "base/location.h"
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/stream_encryptor.h"
-#include "base/net/tcp_channel_native.h"
+#include "base/net/net_utils.h"
 #include "base/peer/authenticator.h"
-#include "base/threading/asio_event_dispatcher.h"
 #include "proto/relay_peer.h"
 #include "proto/router.h"
-
-#include <asio/connect.hpp>
-#include <asio/write.hpp>
-
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
-{
-    if (endpoints.empty())
-        return QStringList();
-
-    QStringList list;
-    list.reserve(endpoints.size());
-
-    for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end; ++it)
-        list.emplace_back(QString::fromLocal8Bit(it->endpoint().address().to_string()));
-
-    return list;
-}
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 RelayPeer::RelayPeer(Authenticator* authenticator, QObject* parent)
     : QObject(parent),
-      authenticator_(authenticator),
-      io_context_(AsioEventDispatcher::ioContext()),
-      socket_(io_context_),
-      resolver_(io_context_)
+      authenticator_(authenticator)
 {
     CLOG(INFO) << "Ctor";
 }
@@ -68,63 +41,66 @@ RelayPeer::RelayPeer(Authenticator* authenticator, QObject* parent)
 RelayPeer::~RelayPeer()
 {
     CLOG(INFO) << "Dtor";
-
-    // Mark guard before releasing resources so that any pending ASIO handlers
-    // (already completed but not yet dispatched) will see the object is gone.
-    *alive_guard_ = false;
-
-    std::error_code ignored_code;
-    socket_.cancel(ignored_code);
-    socket_.close(ignored_code);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayPeer::start(const proto::router::ConnectionOffer& offer)
+void RelayPeer::start(const proto::router::ConnectionOffer& offer,
+                      const std::optional<TcpChannelProxy::ProxySettings>& proxy)
 {
     connection_offer_ = offer;
 
     const proto::router::RelayCredentials& credentials = connection_offer_.relay();
+    const QString host = QString::fromStdString(credentials.host());
 
-    message_ = authenticationMessage(credentials.key(), credentials.secret());
-
-    QString host = QString::fromStdString(credentials.host());
-
-    CLOG(INFO) << "Start resolving for" << host << ":" << credentials.port();
-
-    auto guard = alive_guard_;
-    resolver_.async_resolve(host.toLocal8Bit().data(), std::to_string(credentials.port()),
-        [this, guard](const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
+    const QByteArray message = authenticationMessage(credentials.key(), credentials.secret());
+    if (message.isEmpty() || !NetUtils::isValidPort(credentials.port()))
     {
-        if (!*guard)
-            return;
+        CLOG(ERROR) << "Invalid relay credentials for" << host << ":" << credentials.port();
 
-        if (error_code)
+        // The owner gets the error after start() returns, as with any other failure.
+        QMetaObject::invokeMethod(this, [this]()
         {
-            if (error_code != asio::error::operation_aborted)
-                onErrorOccurred(FROM_HERE, error_code);
-            return;
-        }
+            onErrorOccurred(TcpChannel::ErrorCode::UNKNOWN);
+        }, Qt::QueuedConnection);
+        return;
+    }
 
-        CLOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints) << ". Start connecting...";
+    // The relay reads the size of the message in network byte order and then the message itself.
+    const quint32 message_size = qToBigEndian(static_cast<quint32>(message.size()));
 
-        asio::async_connect(socket_, endpoints,
-            [this, guard](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
-        {
-            if (!*guard)
-                return;
+    QByteArray preamble;
+    preamble.reserve(static_cast<qsizetype>(sizeof(message_size)) + message.size());
+    preamble.append(reinterpret_cast<const char*>(&message_size), sizeof(message_size));
+    preamble.append(message);
 
-            if (error_code)
-            {
-                if (error_code == asio::error::operation_aborted)
-                    return;
-                onErrorOccurred(FROM_HERE, error_code);
-                return;
-            }
+    pending_channel_ = TcpChannelProxy::create(TcpChannel::Type::RELAY, proxy, authenticator_.release(), this);
+    pending_channel_->setPreamble(std::move(preamble));
 
-            CLOG(INFO) << "Connected to:" << endpoint.address().to_string();
-            onConnected();
-        });
+    connect(pending_channel_, &TcpChannel::sig_connected, this, [this]()
+    {
+        CLOG(INFO) << "Connected to relay, start authentication";
+        relay_connected_ = true;
     });
+
+    connect(pending_channel_, &TcpChannel::sig_authenticated, this, [this]()
+    {
+        CLOG(INFO) << "Authentication finished";
+
+        // Disconnect all connected signals between the RelayPeer and channel.
+        disconnect(pending_channel_, nullptr, this, nullptr);
+        is_finished_ = true;
+
+        emit sig_connectionReady();
+    });
+
+    connect(pending_channel_, &TcpChannel::sig_errorOccurred, this, [this](TcpChannel::ErrorCode error_code)
+    {
+        onErrorOccurred(error_code);
+    });
+
+    CLOG(INFO) << "Connecting to relay" << host << ":" << credentials.port()
+               << (proxy.has_value() ? "through proxy" : "directly");
+    pending_channel_->connectTo(host, static_cast<quint16>(credentials.port()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -147,99 +123,24 @@ bool RelayPeer::hasChannel() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayPeer::onConnected()
+void RelayPeer::onErrorOccurred(TcpChannel::ErrorCode error_code)
 {
-    if (message_.isEmpty())
+    if (relay_connected_)
+        CLOG(ERROR) << "Authentication failed:" << error_code;
+    else
+        CLOG(ERROR) << "Failed to connect to relay server:" << error_code;
+
+    if (pending_channel_)
     {
-        onErrorOccurred(FROM_HERE, std::error_code());
-        return;
+        // Disconnect all connected signals between the RelayPeer and channel.
+        disconnect(pending_channel_, nullptr, this, nullptr);
     }
 
-    message_size_ = qToBigEndian(static_cast<quint32>(message_.size()));
-
-    auto guard = alive_guard_;
-    asio::async_write(socket_, asio::const_buffer(&message_size_, sizeof(message_size_)),
-        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
-    {
-        if (!*guard)
-            return;
-
-        if (error_code)
-        {
-            if (error_code != asio::error::operation_aborted)
-                onErrorOccurred(FROM_HERE, error_code);
-            return;
-        }
-
-        if (bytes_transferred != sizeof(message_size_))
-        {
-            onErrorOccurred(FROM_HERE, std::error_code());
-            return;
-        }
-
-        asio::async_write(socket_, asio::const_buffer(message_.data(), message_.size()),
-            [this, guard](const std::error_code& error_code, size_t bytes_transferred)
-        {
-            if (!*guard)
-                return;
-
-            if (error_code)
-            {
-                if (error_code == asio::error::operation_aborted)
-                    return;
-                onErrorOccurred(FROM_HERE, error_code);
-                return;
-            }
-
-            if (bytes_transferred != message_.size())
-            {
-                onErrorOccurred(FROM_HERE, std::error_code());
-                return;
-            }
-
-            pending_channel_ = new TcpChannelNative(
-                TcpChannel::Type::RELAY, std::move(socket_), authenticator_.release(), this);
-
-            connect(pending_channel_, &TcpChannel::sig_authenticated, this, [this]()
-            {
-                CLOG(INFO) << "Authentication finished";
-
-                // Disconnect all connected signals between the RelayPeer and channel.
-                disconnect(pending_channel_, nullptr, this, nullptr);
-                is_finished_ = true;
-
-                emit sig_connectionReady();
-            });
-
-            connect(pending_channel_, &TcpChannel::sig_errorOccurred,
-                    this, [this](TcpChannel::ErrorCode error_code)
-            {
-                CLOG(ERROR) << "Authentication failed:" << error_code;
-
-                // Disconnect all connected signals between the RelayPeer and channel.
-                disconnect(pending_channel_, nullptr, this, nullptr);
-                is_finished_ = true;
-
-                // Propagate the real authentication error (e.g. ACCESS_DENIED) so the owner can tell a
-                // wrong user name/password from a relay transport failure.
-                emit sig_connectionError(std::make_optional(error_code));
-            });
-
-            CLOG(INFO) << "Start authentication";
-            pending_channel_->doAuthentication();
-        });
-    });
-}
-
-//--------------------------------------------------------------------------------------------------
-void RelayPeer::onErrorOccurred(const Location& location, const std::error_code& error_code)
-{
-    CLOG(ERROR) << "Failed to connect to relay server:" << error_code << "(" << location << ")";
     is_finished_ = true;
 
-    // RelayPeer's own failure to reach the relay server (no peer authentication happened) - report it
-    // without a channel error code.
-    emit sig_connectionError(std::nullopt);
+    // The real error lets the owner tell a wrong user name or password, or a proxy failure, from a
+    // relay that could not be reached.
+    emit sig_connectionError(error_code, relay_connected_);
 }
 
 //--------------------------------------------------------------------------------------------------

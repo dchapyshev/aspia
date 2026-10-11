@@ -338,25 +338,26 @@ void NetworkWorker::onRelayConnectionReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-void NetworkWorker::onRelayConnectionError(std::optional<TcpChannel::ErrorCode> error_code)
+void NetworkWorker::onRelayConnectionError(TcpChannel::ErrorCode error_code, bool relay_connected)
 {
-    LOG(INFO) << "Relay connection error:" << error_code.has_value();
+    LOG(INFO) << "Relay connection error:" << error_code << "(relay connected:" << relay_connected << ")";
     CHECK(relay_peer_);
 
     relay_peer_->disconnect();
     relay_peer_.reset();
 
-    if (error_code.has_value())
+    if (relay_connected)
     {
         // The relay transport was established, but the peer authentication failed. This is a
         // host-level error (e.g. wrong user name or password), so report it the same way as the
         // direct connection path instead of a misleading "failed to connect to the relay".
-        emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(*error_code));
+        emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
     }
     else
     {
         // RelayPeer could not reach the relay server itself.
-        emit sig_statusChanged(Status::RELAY_ERROR, tr("Failed to connect to the relay server"));
+        emit sig_statusChanged(Status::RELAY_ERROR, QString("%1. %2").arg(
+            tr("Failed to connect to the relay server"), TcpChannel::errorToString(error_code)));
     }
 }
 
@@ -442,6 +443,14 @@ void NetworkWorker::startConnection()
             emit sig_statusChanged(Status::STARTED);
         }
 
+        ProxyConfig proxy;
+        if (Database::instance().proxyConfig(&proxy) != Database::ReadResult::OK)
+        {
+            LOG(ERROR) << "No readable proxy config";
+            onTcpErrorOccurred(TcpChannel::ErrorCode::UNKNOWN);
+            return;
+        }
+
         auto* authenticator = new ClientAuthenticator();
         setupAuthenticator(authenticator);
         relay_peer_ = new RelayPeer(authenticator, this);
@@ -451,7 +460,7 @@ void NetworkWorker::startConnection()
         connect(relay_peer_, &RelayPeer::sig_connectionReady,
                 this, &NetworkWorker::onRelayConnectionReady);
 
-        relay_peer_->start(offer);
+        relay_peer_->start(offer, proxy.channelSettings());
     }
     else
     {
@@ -473,7 +482,7 @@ void NetworkWorker::startConnection()
 
         auto* authenticator = new ClientAuthenticator();
         setupAuthenticator(authenticator);
-        tcp_channel_ = TcpChannelProxy::create(proxy.channelSettings(), authenticator, this);
+        tcp_channel_ = TcpChannelProxy::create(TcpChannel::Type::DIRECT, proxy.channelSettings(), authenticator, this);
 
         connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &NetworkWorker::onTcpConnected);
         connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &NetworkWorker::onTcpErrorOccurred);

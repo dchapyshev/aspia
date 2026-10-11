@@ -267,7 +267,7 @@ protected:
             authenticator->setPassword(SecureString(password));
             authenticator->setSessionType(session_type);
 
-            client_channel_ = new TcpChannelNative(authenticator);
+            client_channel_ = new TcpChannelNative(TcpChannel::Type::DIRECT, authenticator);
 
             QObject::connect(client_channel_, &TcpChannel::sig_authenticated, client_channel_,
                              [this]() { client_authenticated_.signal(); });

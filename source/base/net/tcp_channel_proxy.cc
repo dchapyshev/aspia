@@ -173,8 +173,9 @@ const char* proxyAuthName(long auth)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-TcpChannelProxy::TcpChannelProxy(const ProxySettings& settings, Authenticator* authenticator, QObject* parent)
-    : TcpChannel(Type::DIRECT, authenticator, parent),
+TcpChannelProxy::TcpChannelProxy(
+    Type type, const ProxySettings& settings, Authenticator* authenticator, QObject* parent)
+    : TcpChannel(type, authenticator, parent),
       io_context_(AsioEventDispatcher::ioContext()),
       resolver_(io_context_),
       connect_timer_(io_context_),
@@ -195,13 +196,13 @@ TcpChannelProxy::~TcpChannelProxy()
 
 //--------------------------------------------------------------------------------------------------
 // static
-TcpChannel* TcpChannelProxy::create(const std::optional<ProxySettings>& settings, Authenticator* authenticator,
-                                    QObject* parent)
+TcpChannel* TcpChannelProxy::create(Type type, const std::optional<ProxySettings>& settings,
+                                    Authenticator* authenticator, QObject* parent)
 {
     if (!settings.has_value())
-        return new TcpChannelNative(authenticator, parent);
+        return new TcpChannelNative(type, authenticator, parent);
 
-    return new TcpChannelProxy(*settings, authenticator, parent);
+    return new TcpChannelProxy(type, *settings, authenticator, parent);
 }
 
 //--------------------------------------------------------------------------------------------------

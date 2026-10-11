@@ -184,7 +184,8 @@ void RouterWorker::startConnection(qint64 router_id)
     authenticator->setPassword(config.password());
 
     // The channel takes ownership of the authenticator and lives on this worker thread.
-    TcpChannel* channel = TcpChannelProxy::create(proxy.channelSettings(), authenticator, this);
+    TcpChannel* channel = TcpChannelProxy::create(
+        TcpChannel::Type::DIRECT, proxy.channelSettings(), authenticator, this);
     it->channel = channel;
 
     connect(channel, &TcpChannel::sig_authenticated, this, [this, router_id]()

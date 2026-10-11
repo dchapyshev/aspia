@@ -292,9 +292,26 @@ void TcpChannel::doAuthentication()
         return;
     }
 
+    if (!preamble_.isEmpty())
+    {
+        CLOG(TRACE) << "Sending preamble of" << preamble_.size() << "bytes";
+
+        const bool schedule_write = io_->write_queue.isEmpty();
+        io_->write_queue.emplace_back(std::move(preamble_));
+        preamble_.clear();
+        if (schedule_write)
+            doWrite();
+    }
+
     CLOG(TRACE) << "Start authentication";
     authenticator_->start();
     setPaused(false);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::setPreamble(QByteArray preamble)
+{
+    preamble_ = std::move(preamble);
 }
 
 //--------------------------------------------------------------------------------------------------

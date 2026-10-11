@@ -500,7 +500,7 @@ protected:
             client->peer = new RelayPeer(authenticator, nullptr);
 
             QObject::connect(client->peer, &RelayPeer::sig_connectionError, client->peer,
-                             [client](std::optional<TcpChannel::ErrorCode> /* error_code */)
+                             [client](TcpChannel::ErrorCode /* error_code */, bool /* relay_connected */)
             {
                 client->failed = true;
             });
@@ -527,7 +527,7 @@ protected:
             offer.set_error_code(proto::router::kErrorOk);
             fillRelayCredentials(offer.mutable_relay());
 
-            client->peer->start(offer);
+            client->peer->start(offer, std::nullopt);
         });
     }
 

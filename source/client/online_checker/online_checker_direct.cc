@@ -100,7 +100,7 @@ void OnlineCheckerDirect::Instance::start()
     authenticator->setSessionType(proto::peer::SESSION_TYPE_DESKTOP);
     authenticator->setProbe(true);
 
-    tcp_channel_ = TcpChannelProxy::create(proxy_.channelSettings(), authenticator, this);
+    tcp_channel_ = TcpChannelProxy::create(TcpChannel::Type::DIRECT, proxy_.channelSettings(), authenticator, this);
 
     connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &Instance::onTcpAuthenticated);
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Instance::onTcpErrorOccurred);

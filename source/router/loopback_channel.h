@@ -178,7 +178,7 @@ private:
 
     void connectTo(TcpServer* server, ClientAuthenticator* authenticator)
     {
-        peer_ = new TcpChannelNative(authenticator);
+        peer_ = new TcpChannelNative(TcpChannel::Type::DIRECT, authenticator);
 
         const quint16 port = freePort();
         if (!server->start(port, "127.0.0.1"))

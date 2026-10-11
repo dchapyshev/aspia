@@ -24,7 +24,6 @@
 #include <deque>
 #include <list>
 #include <memory>
-#include <optional>
 
 #include "base/net/tcp_channel.h"
 #include "base/scoped_qpointer.h"
@@ -117,7 +116,7 @@ private slots:
     void onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onUdpErrorOccurred();
     void onRelayConnectionReady();
-    void onRelayConnectionError(std::optional<TcpChannel::ErrorCode> error_code);
+    void onRelayConnectionError(TcpChannel::ErrorCode error_code, bool relay_connected);
     void onAttemptConnected(quint32 request_id, quint8 channel_id, const QByteArray& buffer);
     void onAttemptError(quint32 request_id);
 

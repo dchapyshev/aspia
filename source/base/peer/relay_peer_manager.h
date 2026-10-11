@@ -23,8 +23,6 @@
 #include <QObject>
 #include <QQueue>
 
-#include "base/time_types.h"
-
 namespace proto::router {
 class ConnectionOffer;
 } // namespace proto::router
@@ -54,18 +52,11 @@ signals:
 private slots:
     void onRelayConnectionReady();
     void onRelayConnectionError();
-    void onTimer(TimePoint now);
 
 private:
     void cleanup();
 
-    struct PendingPeer
-    {
-        RelayPeer* peer;
-        TimePoint start_time;
-    };
-
-    QList<PendingPeer> pending_;
+    QList<RelayPeer*> pending_;
     QQueue<ReadyConnection> ready_;
 
     Q_DISABLE_COPY_MOVE(RelayPeerManager)

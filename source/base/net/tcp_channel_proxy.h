@@ -50,11 +50,12 @@ public:
     };
 
     // An empty |user| in |settings| means that the proxy does not require authentication.
-    TcpChannelProxy(const ProxySettings& settings, Authenticator* authenticator, QObject* parent = nullptr);
+    TcpChannelProxy(Type type, const ProxySettings& settings, Authenticator* authenticator,
+                    QObject* parent = nullptr);
     ~TcpChannelProxy() final;
 
-    static TcpChannel* create(const std::optional<ProxySettings>& settings, Authenticator* authenticator,
-                              QObject* parent = nullptr);
+    static TcpChannel* create(Type type, const std::optional<ProxySettings>& settings,
+                              Authenticator* authenticator, QObject* parent = nullptr);
 
     // TcpChannel implementation.
     void connectTo(const QString& address, quint16 port, Seconds timeout) final;

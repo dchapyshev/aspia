@@ -21,13 +21,10 @@
 
 #include <QObject>
 
-#include <asio/ip/tcp.hpp>
-
 #include <optional>
 
 #include "base/logging.h"
-#include "base/shared_pointer.h"
-#include "base/net/tcp_channel.h"
+#include "base/net/tcp_channel_proxy.h"
 #include "proto/router_peer.h"
 
 namespace proto::router {
@@ -35,7 +32,6 @@ class RelayKey;
 } // namespace proto::router
 
 class Authenticator;
-class Location;
 
 class RelayPeer final : public QObject
 {
@@ -45,7 +41,9 @@ public:
     explicit RelayPeer(Authenticator* authenticator, QObject* parent = nullptr);
     ~RelayPeer();
 
-    void start(const proto::router::ConnectionOffer& offer);
+    // Connects to the relay from |offer| through the proxy with |proxy|, or directly without it.
+    void start(const proto::router::ConnectionOffer& offer,
+               const std::optional<TcpChannelProxy::ProxySettings>& proxy);
     bool isFinished() const { return is_finished_; }
     const proto::router::ConnectionOffer& connectionOffer() const { return connection_offer_; }
 
@@ -54,13 +52,12 @@ public:
 
 signals:
     void sig_connectionReady();
-    // |error_code| is set when the relay transport was established but peer authentication failed
-    // (carries the real channel error); it is empty for RelayPeer's own failure to reach the relay.
-    void sig_connectionError(std::optional<TcpChannel::ErrorCode> error_code);
+    // |relay_connected| is true when the relay was reached and the peer authentication failed, and
+    // false when the relay itself (or the proxy on the way to it) could not be reached.
+    void sig_connectionError(TcpChannel::ErrorCode error_code, bool relay_connected);
 
 private:
-    void onConnected();
-    void onErrorOccurred(const Location& location, const std::error_code& error_code);
+    void onErrorOccurred(TcpChannel::ErrorCode error_code);
 
     QByteArray authenticationMessage(const proto::router::RelayKey& key, const std::string& secret);
 
@@ -68,13 +65,9 @@ private:
     proto::router::ConnectionOffer connection_offer_;
     bool is_finished_ = false;
 
-    quint32 message_size_ = 0;
-    QByteArray message_;
-
-    SharedPointer<bool> alive_guard_ { new bool(true) };
-    asio::io_context& io_context_;
-    asio::ip::tcp::socket socket_;
-    asio::ip::tcp::resolver resolver_;
+    // Set once the relay (through the proxy, if any) accepted the connection. The channel resets its own
+    // connected state before it reports an error, so the peer keeps this one.
+    bool relay_connected_ = false;
 
     TcpChannel* pending_channel_ = nullptr;
 

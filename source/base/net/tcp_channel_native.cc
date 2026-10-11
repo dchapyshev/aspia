@@ -47,8 +47,8 @@ QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-TcpChannelNative::TcpChannelNative(Authenticator* authenticator, QObject* parent)
-    : TcpChannel(Type::DIRECT, authenticator, parent),
+TcpChannelNative::TcpChannelNative(Type type, Authenticator* authenticator, QObject* parent)
+    : TcpChannel(type, authenticator, parent),
       io_context_(AsioEventDispatcher::ioContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_))

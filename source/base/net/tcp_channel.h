@@ -190,9 +190,13 @@ protected:
     virtual void writeTransport(const void* data, size_t size) = 0;
     virtual void closeTransport() = 0;
 
-    // Starts authentication. In the client channel, it starts automatically when a connection is
-    // established. In the server channel, it is started by the RelayPeer or TcpServer.
+    // Starts authentication. A channel that connects by itself starts it once the connection is
+    // established. A channel accepted by TcpServer is started by the server.
     void doAuthentication();
+
+    // Bytes that go out as they are ahead of the first handshake frame. The relay reads its own
+    // message this way before it joins the peers.
+    void setPreamble(QByteArray preamble);
 
     // Called by the subclass once its transport is connected.
     void setConnected(const std::string& peer_address);
@@ -292,6 +296,7 @@ private:
     std::unique_ptr<StreamDecryptor> decryptor_;
 
     QList<QByteArray> write_pool_;
+    QByteArray preamble_;
 
     ReadState state_ = ReadState::IDLE;
     QByteArray decrypt_buffer_;
