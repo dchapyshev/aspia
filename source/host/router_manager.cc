@@ -587,7 +587,7 @@ void RouterManager::readConnectionOffer(const proto::router::ConnectionOffer& of
         });
     }
 
-    peer_manager_->addConnectionOffer(offer, authenticator.release());
+    peer_manager_->addConnectionOffer(offer, proxy_, authenticator.release());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -27,6 +27,7 @@
 #include "base/update/update_checker.h"
 #include "base/update/update_info.h"
 #include "base/update/update_installer.h"
+#include "host/database.h"
 #include "host/host_storage.h"
 #include "host/system_settings.h"
 
@@ -85,6 +86,7 @@ void UpdateWorker::onCheckUpdates()
 
     update_checker_ = new UpdateChecker(settings.updateChannel(), kHostUpdatePackage, this);
     update_checker_->setServer(settings.updateServer());
+    update_checker_->setProxy(Database::instance().proxySettings());
     if (!public_key.isEmpty())
         update_checker_->setPublicKeys({ public_key });
 
@@ -181,6 +183,7 @@ void UpdateWorker::onUpdateCheckFinished(const UpdateInfo& update_info)
         HostStorage().setUpdateInstallVersion(update_info.version().toString());
 
         update_downloader_ = new HttpFileDownloader(update_info.url(), file_path, this);
+        update_downloader_->setProxy(Database::instance().proxySettings());
 
         connect(update_downloader_, &HttpFileDownloader::sig_downloadError,
                 this, &UpdateWorker::onFileDownloaderError);

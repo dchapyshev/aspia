@@ -46,7 +46,7 @@ RelayPeerManager::~RelayPeerManager()
 
 //--------------------------------------------------------------------------------------------------
 void RelayPeerManager::addConnectionOffer(
-    const proto::router::ConnectionOffer& offer, Authenticator* authenticator)
+    const proto::router::ConnectionOffer& offer, const ProxySettings& proxy, Authenticator* authenticator)
 {
     if (pending_.size() >= kMaxPendingPeers)
     {
@@ -63,7 +63,7 @@ void RelayPeerManager::addConnectionOffer(
     connect(peer, &RelayPeer::sig_connectionReady, this, &RelayPeerManager::onRelayConnectionReady);
 
     pending_.emplace_back(peer);
-    peer->start(offer, ProxySettings());
+    peer->start(offer, proxy);
 }
 
 //--------------------------------------------------------------------------------------------------

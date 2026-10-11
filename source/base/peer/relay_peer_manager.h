@@ -23,6 +23,8 @@
 #include <QObject>
 #include <QQueue>
 
+#include "base/net/proxy_settings.h"
+
 namespace proto::router {
 class ConnectionOffer;
 } // namespace proto::router
@@ -39,7 +41,8 @@ public:
     explicit RelayPeerManager(QObject* parent = nullptr);
     ~RelayPeerManager() final;
 
-    void addConnectionOffer(const proto::router::ConnectionOffer& offer, Authenticator* authenticator);
+    void addConnectionOffer(const proto::router::ConnectionOffer& offer,
+        const ProxySettings& proxy, Authenticator* authenticator);
 
     using ReadyConnection = std::pair<TcpChannel*, proto::router::ConnectionOffer>;
 
