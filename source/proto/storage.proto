@@ -42,11 +42,12 @@ message RouterBlob
 // The encrypted proxy settings of the client.
 message ProxyBlob
 {
-    uint32 type     = 1;
-    string address  = 2;
-    uint32 port     = 3;
-    string username = 4;
-    string password = 5;
+    bool enabled    = 1;
+    uint32 type     = 2;
+    string address  = 3;
+    uint32 port     = 4;
+    string username = 5;
+    string password = 6;
 }
 
 // The exported backup. |data| and |verifier| are sealed with a key derived from |salt| and the

@@ -338,9 +338,25 @@ bool CredentialConfig::setEncryptedData(const QByteArray& blob)
 }
 
 //--------------------------------------------------------------------------------------------------
+std::optional<TcpChannelProxy::ProxySettings> ProxyConfig::channelSettings() const
+{
+    if (!enabled_)
+        return std::nullopt;
+
+    TcpChannelProxy::ProxySettings settings;
+    settings.type = type_;
+    settings.address = address_;
+    settings.port = port_;
+    settings.user = username_;
+    settings.password = password_;
+    return settings;
+}
+
+//--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> ProxyConfig::encryptedData() const
 {
     proto::storage::ProxyBlob data;
+    data.set_enabled(enabled_);
     data.set_type(static_cast<quint32>(type_));
     data.set_address(address_.toStdString());
     data.set_port(port_);
@@ -361,7 +377,8 @@ std::optional<QByteArray> ProxyConfig::encryptedData() const
 //--------------------------------------------------------------------------------------------------
 bool ProxyConfig::setEncryptedData(const QByteArray& blob)
 {
-    type_ = Type::NONE;
+    enabled_ = false;
+    type_ = TcpChannelProxy::ProxyType::HTTP;
     address_.clear();
     port_ = 0;
     username_.clear();
@@ -374,10 +391,12 @@ bool ProxyConfig::setEncryptedData(const QByteArray& blob)
     if (!unsealMessage(blob, kProxyAad, &data))
         return false;
 
-    const bool valid = data.type() <= static_cast<quint32>(Type::SOCKS5H) && data.port() <= 0xFFFF;
+    const bool valid = data.type() <= static_cast<quint32>(TcpChannelProxy::ProxyType::SOCKS5H) &&
+                       data.port() <= 0xFFFF;
     if (valid)
     {
-        type_ = static_cast<Type>(data.type());
+        enabled_ = data.enabled();
+        type_ = static_cast<TcpChannelProxy::ProxyType>(data.type());
         address_ = QString::fromStdString(data.address());
         port_ = static_cast<quint16>(data.port());
         username_ = QString::fromStdString(data.username());

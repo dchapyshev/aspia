@@ -102,7 +102,7 @@ void TcpChannelNative::connectTo(const QString& address, quint16 port, Seconds t
     asio::ip::address ip_address = asio::ip::make_address(host, address_error);
     if (!address_error)
     {
-        CLOG(INFO) << "Address is an IP, skipping resolve for" << host << ":" << service;
+        CLOG(TRACE) << "Address is an IP, skipping resolve for" << host << ":" << service;
 
         asio::ip::tcp::endpoint endpoint(ip_address, port);
         socket_.async_connect(endpoint, [this, io = ioState(), watchdog, endpoint](
@@ -120,7 +120,7 @@ void TcpChannelNative::connectTo(const QString& address, quint16 port, Seconds t
                 return;
             }
 
-            CLOG(INFO) << "Connected to:" << endpoint.address().to_string() << ":" << endpoint.port();
+            CLOG(TRACE) << "Connected to:" << endpoint.address().to_string() << ":" << endpoint.port();
             watchdog->cancel();
 
             onConnected();
@@ -131,7 +131,7 @@ void TcpChannelNative::connectTo(const QString& address, quint16 port, Seconds t
         return;
     }
 
-    CLOG(INFO) << "Start resolving for" << host << ":" << service;
+    CLOG(TRACE) << "Start resolving for" << host << ":" << service;
 
     resolver_->async_resolve(host, service, [this, io = ioState(), watchdog](
         const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
@@ -177,7 +177,7 @@ void TcpChannelNative::connectTo(const QString& address, quint16 port, Seconds t
                 return;
             }
 
-            CLOG(INFO) << "Connected to:" << endpoint.address().to_string() << ":" << endpoint.port();
+            CLOG(TRACE) << "Connected to:" << endpoint.address().to_string() << ":" << endpoint.port();
             watchdog->cancel();
 
             onConnected();

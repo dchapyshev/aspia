@@ -26,6 +26,7 @@
 #include <optional>
 
 #include "base/crypto/secure_string.h"
+#include "base/net/tcp_channel_proxy.h"
 #include "base/peer/host_id.h"
 
 namespace proto::router {
@@ -306,17 +307,14 @@ private:
 
 class ProxyConfig final
 {
-    Q_GADGET
-
 public:
-    // NONE means a direct connection, the rest name the protocol of the proxy.
-    enum class Type { NONE = 0, HTTP = 1, HTTPS = 2, SOCKS4 = 3, SOCKS4A = 4, SOCKS5 = 5, SOCKS5H = 6 };
-    Q_ENUM(Type)
-
     ProxyConfig() = default;
 
-    Type type() const { return type_; }
-    void setType(Type value) { type_ = value; }
+    bool isEnabled() const { return enabled_; }
+    void setEnabled(bool enable) { enabled_ = enable; }
+
+    TcpChannelProxy::ProxyType type() const { return type_; }
+    void setType(TcpChannelProxy::ProxyType value) { type_ = value; }
 
     const QString& address() const { return address_; }
     void setAddress(const QString& value) { address_ = value; }
@@ -331,12 +329,16 @@ public:
     const SecureString& password() const { return password_; }
     void setPassword(const SecureString& value) { password_ = value; }
 
+    // Nothing when the proxy is not enabled.
+    std::optional<TcpChannelProxy::ProxySettings> channelSettings() const;
+
     // The sealed value for database I/O. See RouterConfig for what the two answer.
     std::optional<QByteArray> encryptedData() const;
     bool setEncryptedData(const QByteArray& blob);
 
 private:
-    Type type_ = Type::NONE;
+    bool enabled_ = false;
+    TcpChannelProxy::ProxyType type_ = TcpChannelProxy::ProxyType::HTTP;
     QString address_;
     quint16 port_ = 0;
     QString username_;

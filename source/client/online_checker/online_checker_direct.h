@@ -48,6 +48,7 @@ private:
     void onFinished(const Location& location);
 
     HostList pending_queue_;
+    ProxyConfig proxy_;
 
     class Instance;
     QQueue<Instance*> work_queue_;

@@ -25,8 +25,8 @@
 #include "base/logging.h"
 #include "base/time_types.h"
 #include "base/net/address.h"
-#include "base/net/tcp_channel_native.h"
 #include "base/peer/client_authenticator.h"
+#include "client/database.h"
 #include "proto/key_exchange.h"
 #include "proto/peer.h"
 
@@ -40,7 +40,7 @@ const Seconds kTimeout { 15 };
 class OnlineCheckerDirect::Instance final : public QObject
 {
 public:
-    Instance(const LocalHostConfig& host, QObject* parent);
+    Instance(const LocalHostConfig& host, const ProxyConfig& proxy, QObject* parent);
     ~Instance() final;
 
     void start();
@@ -54,6 +54,7 @@ private:
     void onFinished(const Location& location, OnlineStatus status);
 
     const LocalHostConfig host_;
+    const ProxyConfig proxy_;
 
     TcpChannel* tcp_channel_ = nullptr;
     QTimer timer_;
@@ -61,9 +62,10 @@ private:
 };
 
 //--------------------------------------------------------------------------------------------------
-OnlineCheckerDirect::Instance::Instance(const LocalHostConfig& host, QObject* parent)
+OnlineCheckerDirect::Instance::Instance(const LocalHostConfig& host, const ProxyConfig& proxy, QObject* parent)
     : QObject(parent),
-      host_(host)
+      host_(host),
+      proxy_(proxy)
 {
     timer_.setSingleShot(true);
 
@@ -98,7 +100,7 @@ void OnlineCheckerDirect::Instance::start()
     authenticator->setSessionType(proto::peer::SESSION_TYPE_DESKTOP);
     authenticator->setProbe(true);
 
-    tcp_channel_ = new TcpChannelNative(authenticator, this);
+    tcp_channel_ = TcpChannelProxy::create(proxy_.channelSettings(), authenticator, this);
 
     connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &Instance::onTcpAuthenticated);
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Instance::onTcpErrorOccurred);
@@ -162,11 +164,19 @@ void OnlineCheckerDirect::start()
         return;
     }
 
+    if (Database::instance().proxyConfig(&proxy_) != Database::ReadResult::OK)
+    {
+        LOG(ERROR) << "No readable proxy config";
+        pending_queue_.clear();
+        onFinished(FROM_HERE);
+        return;
+    }
+
     qsizetype count = std::min(pending_queue_.size(), kNumberOfParallelTasks);
     while (count != 0)
     {
         const LocalHostConfig& host = pending_queue_.front();
-        Instance* instance = new Instance(host, this);
+        Instance* instance = new Instance(host, proxy_, this);
 
         LOG(TRACE) << "Instance for" << host.id() << "is created (" << host.address() << ")";
         work_queue_.emplace_back(instance);
@@ -201,7 +211,7 @@ void OnlineCheckerDirect::onChecked(qint64 entry_id, OnlineStatus status)
     if (!pending_queue_.isEmpty())
     {
         const LocalHostConfig& host = pending_queue_.front();
-        Instance* instance = new Instance(host, this);
+        Instance* instance = new Instance(host, proxy_, this);
 
         LOG(TRACE) << "Instance for" << host.id() << "is created (" << host.address() << ")";
 

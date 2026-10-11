@@ -25,6 +25,7 @@
 #include <asio/steady_timer.hpp>
 
 #include <map>
+#include <optional>
 #include <string_view>
 
 #include "base/crypto/secure_string.h"
@@ -51,6 +52,9 @@ public:
     // An empty |user| in |settings| means that the proxy does not require authentication.
     TcpChannelProxy(const ProxySettings& settings, Authenticator* authenticator, QObject* parent = nullptr);
     ~TcpChannelProxy() final;
+
+    static TcpChannel* create(const std::optional<ProxySettings>& settings, Authenticator* authenticator,
+                              QObject* parent = nullptr);
 
     // TcpChannel implementation.
     void connectTo(const QString& address, quint16 port, Seconds timeout) final;

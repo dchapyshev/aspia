@@ -58,6 +58,8 @@
 
 namespace {
 
+const int kNoProxy = -1;
+
 // Most common screen resolutions offered in addition to the client's own monitors.
 const QSize kPredefinedResolutions[] =
 {
@@ -213,17 +215,18 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->combo_lock_timeout->setEnabled(!auto_unlock);
 #endif // defined(Q_OS_LINUX)
 
-    ui->combo_proxy_type->addItem(tr("No proxy"), static_cast<int>(ProxyConfig::Type::NONE));
-    ui->combo_proxy_type->addItem("HTTP", static_cast<int>(ProxyConfig::Type::HTTP));
-    ui->combo_proxy_type->addItem("HTTPS", static_cast<int>(ProxyConfig::Type::HTTPS));
-    ui->combo_proxy_type->addItem("SOCKS4", static_cast<int>(ProxyConfig::Type::SOCKS4));
-    ui->combo_proxy_type->addItem("SOCKS4A", static_cast<int>(ProxyConfig::Type::SOCKS4A));
-    ui->combo_proxy_type->addItem("SOCKS5", static_cast<int>(ProxyConfig::Type::SOCKS5));
-    ui->combo_proxy_type->addItem("SOCKS5H", static_cast<int>(ProxyConfig::Type::SOCKS5H));
+    ui->combo_proxy_type->addItem(tr("No proxy"), kNoProxy);
+    ui->combo_proxy_type->addItem("HTTP", static_cast<int>(TcpChannelProxy::ProxyType::HTTP));
+    ui->combo_proxy_type->addItem("HTTPS", static_cast<int>(TcpChannelProxy::ProxyType::HTTPS));
+    ui->combo_proxy_type->addItem("SOCKS4", static_cast<int>(TcpChannelProxy::ProxyType::SOCKS4));
+    ui->combo_proxy_type->addItem("SOCKS4A", static_cast<int>(TcpChannelProxy::ProxyType::SOCKS4A));
+    ui->combo_proxy_type->addItem("SOCKS5", static_cast<int>(TcpChannelProxy::ProxyType::SOCKS5));
+    ui->combo_proxy_type->addItem("SOCKS5H", static_cast<int>(TcpChannelProxy::ProxyType::SOCKS5H));
 
     ProxyConfig proxy;
     db.proxyConfig(&proxy);
-    ui->combo_proxy_type->setCurrentIndex(ui->combo_proxy_type->findData(static_cast<int>(proxy.type())));
+    ui->combo_proxy_type->setCurrentIndex(
+        ui->combo_proxy_type->findData(proxy.isEnabled() ? static_cast<int>(proxy.type()) : kNoProxy));
     ui->edit_proxy_address->setText(proxy.address());
     if (proxy.port())
         ui->spinbox_proxy_port->setValue(proxy.port());
@@ -481,14 +484,21 @@ void SettingsTab::onBackupRetentionChanged()
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::onProxyChanged()
 {
+    const int type = ui->combo_proxy_type->currentData().toInt();
+
     ProxyConfig proxy;
-    proxy.setType(static_cast<ProxyConfig::Type>(ui->combo_proxy_type->currentData().toInt()));
+    proxy.setEnabled(type != kNoProxy);
+    if (proxy.isEnabled())
+        proxy.setType(static_cast<TcpChannelProxy::ProxyType>(type));
     proxy.setAddress(ui->edit_proxy_address->text().trimmed());
     proxy.setPort(static_cast<quint16>(ui->spinbox_proxy_port->value()));
     proxy.setUsername(ui->edit_proxy_username->text());
     proxy.setPassword(ui->edit_proxy_password->password());
 
-    LOG(INFO) << "[ACTION] Proxy changed:" << proxy.type();
+    if (proxy.isEnabled())
+        LOG(INFO) << "[ACTION] Proxy changed:" << proxy.type();
+    else
+        LOG(INFO) << "[ACTION] Proxy turned off";
 
     updateProxyFields();
     Database::instance().setProxyConfig(proxy);
@@ -730,8 +740,7 @@ void SettingsTab::loadUpdateServer()
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::updateProxyFields()
 {
-    const ProxyConfig::Type type = static_cast<ProxyConfig::Type>(ui->combo_proxy_type->currentData().toInt());
-    const bool enabled = type != ProxyConfig::Type::NONE;
+    const bool enabled = ui->combo_proxy_type->currentData().toInt() != kNoProxy;
 
     const QList<QWidget*> widgets =
     {

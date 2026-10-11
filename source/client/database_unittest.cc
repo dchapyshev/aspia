@@ -1310,9 +1310,11 @@ TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
 {
     ProxyConfig proxy;
     ASSERT_EQ(db_.proxyConfig(&proxy), Database::ReadResult::OK);
-    EXPECT_EQ(proxy.type(), ProxyConfig::Type::NONE);
+    EXPECT_FALSE(proxy.isEnabled());
+    EXPECT_FALSE(proxy.channelSettings().has_value());
 
-    proxy.setType(ProxyConfig::Type::SOCKS5H);
+    proxy.setEnabled(true);
+    proxy.setType(TcpChannelProxy::ProxyType::SOCKS5H);
     proxy.setAddress("proxy.example.com");
     proxy.setPort(1080);
     proxy.setUsername("user");
@@ -1321,7 +1323,8 @@ TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
 
     ProxyConfig reread;
     ASSERT_EQ(db_.proxyConfig(&reread), Database::ReadResult::OK);
-    EXPECT_EQ(reread.type(), ProxyConfig::Type::SOCKS5H);
+    EXPECT_TRUE(reread.isEnabled());
+    EXPECT_EQ(reread.type(), TcpChannelProxy::ProxyType::SOCKS5H);
     EXPECT_EQ(reread.address(), QString("proxy.example.com"));
     EXPECT_EQ(reread.port(), 1080);
     EXPECT_EQ(reread.username(), QString("user"));
@@ -1329,12 +1332,13 @@ TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The password of the proxy is a secret like the ones of the address book: a change of the master
-// password reseals it, and under a key that does not open it nothing of it is handed out.
+// The password of the proxy is a secret like the ones of the address book. A change of the master
+// password reseals it, and a key that does not open it gets nothing of it.
 TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
 {
     ProxyConfig proxy;
-    proxy.setType(ProxyConfig::Type::HTTPS);
+    proxy.setEnabled(true);
+    proxy.setType(TcpChannelProxy::ProxyType::HTTPS);
     proxy.setAddress("10.0.0.1");
     proxy.setPort(3128);
     proxy.setUsername("user");
@@ -1345,7 +1349,7 @@ TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
 
     ProxyConfig unreadable;
     EXPECT_EQ(db_.proxyConfig(&unreadable), Database::ReadResult::INCOMPLETE);
-    EXPECT_EQ(unreadable.type(), ProxyConfig::Type::NONE);
+    EXPECT_FALSE(unreadable.isEnabled());
     EXPECT_TRUE(unreadable.address().isEmpty());
     EXPECT_TRUE(unreadable.password().isEmpty());
 
@@ -1354,7 +1358,8 @@ TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
 
     ProxyConfig reread;
     ASSERT_EQ(db_.proxyConfig(&reread), Database::ReadResult::OK);
-    EXPECT_EQ(reread.type(), ProxyConfig::Type::HTTPS);
+    EXPECT_TRUE(reread.isEnabled());
+    EXPECT_EQ(reread.type(), TcpChannelProxy::ProxyType::HTTPS);
     EXPECT_EQ(reread.address(), QString("10.0.0.1"));
     EXPECT_EQ(reread.port(), 3128);
     EXPECT_EQ(reread.password().toString(), QString("secret"));

@@ -23,6 +23,7 @@
 #include <asio/write.hpp>
 
 #include "base/location.h"
+#include "base/net/tcp_channel_native.h"
 #include "base/threading/asio_event_dispatcher.h"
 
 namespace {
@@ -190,6 +191,17 @@ TcpChannelProxy::TcpChannelProxy(const ProxySettings& settings, Authenticator* a
 TcpChannelProxy::~TcpChannelProxy()
 {
     closeTransport();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+TcpChannel* TcpChannelProxy::create(const std::optional<ProxySettings>& settings, Authenticator* authenticator,
+                                    QObject* parent)
+{
+    if (!settings.has_value())
+        return new TcpChannelNative(authenticator, parent);
+
+    return new TcpChannelProxy(*settings, authenticator, parent);
 }
 
 //--------------------------------------------------------------------------------------------------
