@@ -26,9 +26,12 @@
 #include <QSaveFile>
 #include <QUrl>
 
+#include <optional>
+
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/net/address.h"
+#include "base/net/curl_util.h"
 #include "base/peer/user.h"
 #include "host/database.h"
 #include "host/system_settings.h"
@@ -55,6 +58,7 @@ const char kUpdatePublicKey[] = "update_public_key";
 
 const char kSeedKey[] = "seed_key";
 const char kTcpPort[] = "tcp_port";
+const char kProxy[] = "proxy";
 const char kRouterEnabled[] = "router_enabled";
 const char kRouterAddress[] = "router_address";
 const char kRouterPublicKey[] = "router_public_key";
@@ -76,6 +80,13 @@ const char kUserVerifier[] = "verifier";
 const char kUserSessions[] = "sessions";
 const char kUserFlags[] = "flags";
 
+const char kProxyEnabled[] = "enabled";
+const char kProxyType[] = "type";
+const char kProxyAddress[] = "address";
+const char kProxyPort[] = "port";
+const char kProxyUser[] = "user";
+const char kProxyPassword[] = "password";
+
 const int kUpdatePublicKeySize = 32;
 
 //--------------------------------------------------------------------------------------------------
@@ -95,6 +106,45 @@ QJsonObject exportSystemSettings()
 }
 
 //--------------------------------------------------------------------------------------------------
+QJsonObject proxyToJson(const ProxySettings& proxy)
+{
+    QJsonObject obj;
+    obj[kProxyEnabled] = proxy.enabled;
+    obj[kProxyType] = static_cast<int>(proxy.type);
+    obj[kProxyAddress] = proxy.address;
+    obj[kProxyPort] = proxy.port;
+    obj[kProxyUser] = proxy.user;
+    obj[kProxyPassword] = proxy.password.toString();
+    return obj;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<ProxySettings> proxyFromJson(const QJsonObject& obj)
+{
+    const int type = obj[kProxyType].toInt();
+    if (type < 0 || type > static_cast<int>(ProxySettings::Type::SOCKS5H))
+        return std::nullopt;
+
+    const int port = obj[kProxyPort].toInt();
+    if (port < 0 || port > 0xFFFF)
+        return std::nullopt;
+
+    ProxySettings proxy;
+    proxy.enabled = obj[kProxyEnabled].toBool();
+    proxy.type = static_cast<ProxySettings::Type>(type);
+    proxy.address = obj[kProxyAddress].toString().trimmed();
+    proxy.port = static_cast<quint16>(port);
+    proxy.user = obj[kProxyUser].toString();
+    proxy.password = SecureString(obj[kProxyPassword].toString());
+
+    // The same check the settings dialog makes before it saves a proxy.
+    if (proxy.enabled && !ScopedCURL::proxyUrl(proxy).isValid())
+        return std::nullopt;
+
+    return proxy;
+}
+
+//--------------------------------------------------------------------------------------------------
 QJsonObject exportDatabase()
 {
     Database& db = Database::instance();
@@ -102,6 +152,7 @@ QJsonObject exportDatabase()
     QJsonObject obj;
     obj[kSeedKey] = QString::fromLatin1(db.seedKey().toHex());
     obj[kTcpPort] = db.tcpPort();
+    obj[kProxy] = proxyToJson(db.proxySettings());
     obj[kRouterEnabled] = db.isRouterEnabled();
     obj[kRouterAddress] = db.routerAddress().toString();
     obj[kRouterPublicKey] = QString::fromLatin1(db.routerPublicKey().toHex());
@@ -189,6 +240,16 @@ bool importDatabase(const QJsonObject& obj)
         db.setSeedKey(QByteArray::fromHex(obj[kSeedKey].toString().toLatin1()));
     if (obj.contains(kTcpPort))
         db.setTcpPort(static_cast<quint16>(obj[kTcpPort].toInt()));
+
+    if (obj.contains(kProxy))
+    {
+        const std::optional<ProxySettings> proxy = proxyFromJson(obj[kProxy].toObject());
+        if (proxy)
+            db.setProxySettings(*proxy);
+        else
+            LOG(WARNING) << "Skipping invalid proxy";
+    }
+
     if (obj.contains(kRouterEnabled))
         db.setRouterEnabled(obj[kRouterEnabled].toBool());
     if (obj.contains(kRouterAddress))
