@@ -212,7 +212,8 @@ void TcpChannelProxy::connectTo(const QString& address, quint16 port, Seconds ti
             onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
     });
 
-    CLOG(TRACE) << "Connecting to" << address << ":" << port << "through proxy";
+    CLOG(INFO) << "Connecting to" << address << ":" << port << "through" << settings_.type << "proxy"
+               << settings_.address << ":" << settings_.port;
 
     // curl resolves names in a thread that wakes the multi through a socket of its own, and nothing
     // here watches that socket. So the names are resolved here and handed to curl in its DNS cache.
@@ -429,7 +430,7 @@ bool TcpChannelProxy::onResolved(const QUrl& url, const std::error_code& error_c
     }
 
     const std::string entry = resolveEntry(url, endpoints);
-    CLOG(TRACE) << "Resolved:" << entry;
+    CLOG(INFO) << "Resolved:" << entry;
 
     if (!resolve_list_.append(entry.c_str()))
     {
@@ -635,7 +636,7 @@ void TcpChannelProxy::onConnectDone(CURLcode result)
     if (!error_code)
         CLOG(TRACE) << "Write buffer size:" << send_option.value();
 
-    CLOG(TRACE) << "Tunnel to" << peer_address_ << "is opened";
+    CLOG(INFO) << "Tunnel to" << peer_address_ << "is opened";
 
     setConnected(peer_address_);
     emit sig_connected();

@@ -309,8 +309,8 @@ class ProxyConfig final
     Q_GADGET
 
 public:
-    // NONE and SYSTEM carry no address of their own, the rest name the protocol of the proxy.
-    enum class Type { NONE = 0, SYSTEM = 1, HTTP = 2, HTTPS = 3, SOCKS4 = 4, SOCKS4A = 5, SOCKS5 = 6, SOCKS5H = 7 };
+    // NONE means a direct connection, the rest name the protocol of the proxy.
+    enum class Type { NONE = 0, HTTP = 1, HTTPS = 2, SOCKS4 = 3, SOCKS4A = 4, SOCKS5 = 5, SOCKS5H = 6 };
     Q_ENUM(Type)
 
     ProxyConfig() = default;

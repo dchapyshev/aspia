@@ -214,7 +214,6 @@ SettingsTab::SettingsTab(QWidget* parent)
 #endif // defined(Q_OS_LINUX)
 
     ui->combo_proxy_type->addItem(tr("No proxy"), static_cast<int>(ProxyConfig::Type::NONE));
-    ui->combo_proxy_type->addItem(tr("System settings"), static_cast<int>(ProxyConfig::Type::SYSTEM));
     ui->combo_proxy_type->addItem("HTTP", static_cast<int>(ProxyConfig::Type::HTTP));
     ui->combo_proxy_type->addItem("HTTPS", static_cast<int>(ProxyConfig::Type::HTTPS));
     ui->combo_proxy_type->addItem("SOCKS4", static_cast<int>(ProxyConfig::Type::SOCKS4));
@@ -732,26 +731,16 @@ void SettingsTab::loadUpdateServer()
 void SettingsTab::updateProxyFields()
 {
     const ProxyConfig::Type type = static_cast<ProxyConfig::Type>(ui->combo_proxy_type->currentData().toInt());
-    const bool manual = type != ProxyConfig::Type::NONE && type != ProxyConfig::Type::SYSTEM;
+    const bool enabled = type != ProxyConfig::Type::NONE;
 
-    // The system gives the address of its proxy, but usually not the credentials for it.
-    const bool credentials = type != ProxyConfig::Type::NONE;
-
-    const QList<QWidget*> address_widgets =
+    const QList<QWidget*> widgets =
     {
-        ui->label_proxy_address, ui->edit_proxy_address, ui->label_proxy_port, ui->spinbox_proxy_port
-    };
-
-    for (QWidget* widget : address_widgets)
-        widget->setEnabled(manual);
-
-    const QList<QWidget*> credential_widgets =
-    {
+        ui->label_proxy_address, ui->edit_proxy_address, ui->label_proxy_port, ui->spinbox_proxy_port,
         ui->label_proxy_username, ui->edit_proxy_username, ui->label_proxy_password, ui->edit_proxy_password
     };
 
-    for (QWidget* widget : credential_widgets)
-        widget->setEnabled(credentials);
+    for (QWidget* widget : widgets)
+        widget->setEnabled(enabled);
 }
 
 //--------------------------------------------------------------------------------------------------

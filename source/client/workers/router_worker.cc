@@ -22,6 +22,7 @@
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/net/tcp_channel_native.h"
+#include "base/net/tcp_channel_proxy.h"
 #include "base/peer/client_authenticator.h"
 #include "client/config.h"
 #include "client/database.h"
@@ -31,6 +32,40 @@ namespace {
 
 // Number of one-second timer ticks to wait before retrying a dropped connection.
 const int kReconnectTicks = 3;
+
+//--------------------------------------------------------------------------------------------------
+TcpChannelProxy::ProxySettings proxySettings(const ProxyConfig& proxy)
+{
+    TcpChannelProxy::ProxySettings settings;
+
+    switch (proxy.type())
+    {
+        case ProxyConfig::Type::HTTPS:
+            settings.type = TcpChannelProxy::ProxyType::HTTPS;
+            break;
+        case ProxyConfig::Type::SOCKS4:
+            settings.type = TcpChannelProxy::ProxyType::SOCKS4;
+            break;
+        case ProxyConfig::Type::SOCKS4A:
+            settings.type = TcpChannelProxy::ProxyType::SOCKS4A;
+            break;
+        case ProxyConfig::Type::SOCKS5:
+            settings.type = TcpChannelProxy::ProxyType::SOCKS5;
+            break;
+        case ProxyConfig::Type::SOCKS5H:
+            settings.type = TcpChannelProxy::ProxyType::SOCKS5H;
+            break;
+        default:
+            settings.type = TcpChannelProxy::ProxyType::HTTP;
+            break;
+    }
+
+    settings.address = proxy.address();
+    settings.port = proxy.port();
+    settings.user = proxy.username();
+    settings.password = proxy.password();
+    return settings;
+}
 
 } // namespace
 
@@ -153,16 +188,27 @@ void RouterWorker::startConnection(qint64 router_id)
     // The worker owns the connection, so it reads the credentials from the database itself (thread-
     // local connection) instead of shuttling them across threads on every connect. A record whose
     // sealed column did not open (a master password change in flight) is not handed out and is
-    // retried, not connected with.
+    // retried, not connected with. The proxy settings are retried the same way, because a direct
+    // connection would go around the proxy the user chose.
+    Database& db = Database::instance();
+
     RouterConfig config;
-    if (Database::instance().findRouter(router_id, &config) != Database::FindResult::FOUND || !config.isValid())
+    if (db.findRouter(router_id, &config) != Database::FindResult::FOUND || !config.isValid())
     {
         LOG(ERROR) << "No readable config for router" << router_id;
         it->reconnect_countdown = kReconnectTicks;
         return;
     }
 
-    LOG(INFO) << "Connecting to router" << router_id << config.address();
+    ProxyConfig proxy;
+    if (db.proxyConfig(&proxy) != Database::ReadResult::OK)
+    {
+        LOG(ERROR) << "No readable proxy config for router" << router_id;
+        it->reconnect_countdown = kReconnectTicks;
+        return;
+    }
+
+    LOG(INFO) << "Connecting to router" << router_id << config.address() << "proxy:" << proxy.type();
 
     const Address addr = Address::fromString(config.address(), kDefaultRouterClientTcpPort);
 
@@ -173,7 +219,12 @@ void RouterWorker::startConnection(qint64 router_id)
     authenticator->setPassword(config.password());
 
     // The channel takes ownership of the authenticator and lives on this worker thread.
-    TcpChannel* channel = new TcpChannelNative(authenticator, this);
+    TcpChannel* channel;
+    if (proxy.type() == ProxyConfig::Type::NONE)
+        channel = new TcpChannelNative(authenticator, this);
+    else
+        channel = new TcpChannelProxy(proxySettings(proxy), authenticator, this);
+
     it->channel = channel;
 
     connect(channel, &TcpChannel::sig_authenticated, this, [this, router_id]()

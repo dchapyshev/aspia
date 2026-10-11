@@ -407,14 +407,14 @@ void TcpChannel::onErrorOccurred(const Location& location, const std::error_code
         error = ErrorCode::SOCKET_TIMEOUT;
 #endif
 
-    CLOG(TRACE) << "Asio error:" << error_code;
+    CLOG(INFO) << "Asio error:" << error_code;
     onErrorOccurred(location, error);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
-    CLOG(TRACE) << "Connection finished:" << error_code << "from" << location;
+    CLOG(INFO) << "Connection finished:" << error_code << "from" << location;
 
     if (!io_->alive)
         return;
