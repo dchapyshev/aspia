@@ -22,6 +22,7 @@
 #include <QDialog>
 
 #include <memory>
+#include <optional>
 
 #include "base/scoped_qpointer.h"
 #include "base/net/proxy_settings.h"
@@ -56,6 +57,10 @@ public:
     UpdateDialog(const QString& server, const QByteArray& public_key, const QString& channel,
                  const QString& package, const ProxySettings& proxy, Action action, QWidget* parent = nullptr);
     ~UpdateDialog() final;
+
+    // The proxy as the value of the argument the process started to install an update gets, and back.
+    static QString proxyArgument(const ProxySettings& proxy);
+    static std::optional<ProxySettings> proxyFromArgument(const QString& value);
 
     // QDialog implementation.
     void done(int result) final;

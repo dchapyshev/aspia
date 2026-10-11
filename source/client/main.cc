@@ -151,7 +151,7 @@ int main(int argc, char* argv[])
 #endif // defined(Q_OS_MACOS)
 
 #if !defined(Q_OS_ANDROID)
-    if (argc == 3)
+    if (argc == 3 || argc == 4)
     {
         auto option_value = [](const char* argument, const char* option)
         {
@@ -180,9 +180,23 @@ int main(int argc, char* argv[])
                 return dialog.exec() == QDialog::Accepted ? 0 : 1;
             }
 
+            ProxySettings proxy;
+            if (argc == 4)
+            {
+                std::optional<ProxySettings> argument = UpdateDialog::proxyFromArgument(
+                    option_value(argv[3], "--proxy="));
+                if (!argument)
+                {
+                    LOG(ERROR) << "Invalid proxy argument";
+                    return 2;
+                }
+
+                proxy = *argument;
+            }
+
             SystemSettings settings;
             UpdateDialog dialog(settings.updateServer(), settings.updatePublicKey(), channel, "client",
-                                ProxySettings(), UpdateDialog::Action::INSTALL);
+                                proxy, UpdateDialog::Action::INSTALL);
 
             return dialog.exec() == QDialog::Accepted ?
                 UpdateDialog::kInstalledExitCode : UpdateDialog::kClosedExitCode;

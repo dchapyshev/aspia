@@ -19,6 +19,7 @@
 #include "common/desktop/update_dialog.h"
 
 #include <QCloseEvent>
+#include <QDataStream>
 #include <QTimer>
 
 #include "base/gui_application.h"
@@ -89,6 +90,46 @@ UpdateDialog::UpdateDialog(const QString& server, const QByteArray& public_key,
 UpdateDialog::~UpdateDialog()
 {
     LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString UpdateDialog::proxyArgument(const ProxySettings& proxy)
+{
+    QByteArray buffer;
+
+    QDataStream stream(&buffer, QIODevice::WriteOnly);
+    stream << proxy.enabled << static_cast<quint32>(proxy.type) << proxy.address << proxy.port << proxy.user
+           << proxy.password.toString();
+
+    return QString::fromLatin1(buffer.toBase64(QByteArray::Base64UrlEncoding));
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+std::optional<ProxySettings> UpdateDialog::proxyFromArgument(const QString& value)
+{
+    QByteArray::FromBase64Result decoded = QByteArray::fromBase64Encoding(
+        value.toLatin1(), QByteArray::Base64UrlEncoding | QByteArray::AbortOnBase64DecodingErrors);
+    if (!decoded)
+        return std::nullopt;
+
+    ProxySettings proxy;
+    quint32 type = 0;
+    QString password;
+
+    QDataStream stream(decoded.decoded);
+    stream >> proxy.enabled >> type >> proxy.address >> proxy.port >> proxy.user >> password;
+
+    if (stream.status() != QDataStream::Ok || !stream.atEnd() ||
+        type > static_cast<quint32>(ProxySettings::Type::SOCKS5H))
+    {
+        return std::nullopt;
+    }
+
+    proxy.type = static_cast<ProxySettings::Type>(type);
+    proxy.password = SecureString(std::move(password));
+    return proxy;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -224,6 +265,9 @@ void UpdateDialog::startPrivilegedInstance()
     QStringList arguments;
     arguments << "--channel=" + channel_;
     arguments << "--locale=" + GuiApplication::instance()->locale();
+
+    if (proxy_.enabled)
+        arguments << "--proxy=" + proxyArgument(proxy_);
 
     // The started instance has its own windows and reports what went wrong itself.
     bool started = elevate_util_->runElevated(arguments, winId(), [this](int exit_code)
