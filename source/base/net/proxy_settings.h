@@ -39,6 +39,8 @@ public:
     quint16 port = 0;
     QString user;
     SecureString password;
+
+    bool operator==(const ProxySettings& other) const = default;
 };
 
 #endif // BASE_NET_PROXY_SETTINGS_H

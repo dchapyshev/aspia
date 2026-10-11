@@ -96,6 +96,12 @@ QByteArray DatabaseConfigProvider::routerPublicKey() const
 }
 
 //--------------------------------------------------------------------------------------------------
+ProxySettings DatabaseConfigProvider::proxySettings() const
+{
+    return database_.proxySettings();
+}
+
+//--------------------------------------------------------------------------------------------------
 bool DatabaseConfigProvider::oneTimePassword() const
 {
     return database_.oneTimePassword();
@@ -176,6 +182,13 @@ Address PortableConfigProvider::routerAddress() const
 QByteArray PortableConfigProvider::routerPublicKey() const
 {
     return settings_.router_public_key;
+}
+
+//--------------------------------------------------------------------------------------------------
+ProxySettings PortableConfigProvider::proxySettings() const
+{
+    // Quick Support carries only the router, so it connects directly.
+    return ProxySettings();
 }
 
 //--------------------------------------------------------------------------------------------------

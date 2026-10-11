@@ -37,6 +37,7 @@ public:
     bool isPortable() const final;
     Address routerAddress() const final;
     QByteArray routerPublicKey() const final;
+    ProxySettings proxySettings() const final;
     bool oneTimePassword() const final;
     quint32 oneTimePasswordCharacters() const final;
     int oneTimePasswordLength() const final;
@@ -64,6 +65,7 @@ public:
     bool isPortable() const final;
     Address routerAddress() const final;
     QByteArray routerPublicKey() const final;
+    ProxySettings proxySettings() const final;
     bool oneTimePassword() const final;
     quint32 oneTimePasswordCharacters() const final;
     int oneTimePasswordLength() const final;

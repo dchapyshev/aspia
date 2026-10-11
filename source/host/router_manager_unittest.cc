@@ -90,6 +90,7 @@ public:
     bool isPortable() const final { return true; }
     Address routerAddress() const final { return inner_.routerAddress(); }
     QByteArray routerPublicKey() const final { return inner_.routerPublicKey(); }
+    ProxySettings proxySettings() const final { return inner_.proxySettings(); }
     bool oneTimePassword() const final { return inner_.oneTimePassword(); }
     quint32 oneTimePasswordCharacters() const final { return inner_.oneTimePasswordCharacters(); }
     int oneTimePasswordLength() const final { return inner_.oneTimePasswordLength(); }

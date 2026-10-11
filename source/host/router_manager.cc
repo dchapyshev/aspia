@@ -25,7 +25,7 @@
 #include "base/serialization.h"
 #include "base/sys_info.h"
 #include "base/crypto/password_generator.h"
-#include "base/net/tcp_channel_native.h"
+#include "base/net/tcp_channel_proxy.h"
 #include "base/peer/client_authenticator.h"
 #include "base/peer/relay_peer_manager.h"
 #include "base/peer/server_authenticator.h"
@@ -94,12 +94,14 @@ void RouterManager::onSettingsChanged()
 {
     Address new_address = config_->routerAddress();
     QByteArray new_public_key = config_->routerPublicKey();
+    ProxySettings new_proxy = config_->proxySettings();
 
     // Check if the connection parameters have changed.
-    if (router_address_ != new_address || public_key_ != new_public_key)
+    if (router_address_ != new_address || public_key_ != new_public_key || proxy_ != new_proxy)
     {
         router_address_ = new_address;
         public_key_ = new_public_key;
+        proxy_ = new_proxy;
 
         if (tcp_channel_)
         {
@@ -403,7 +405,7 @@ void RouterManager::connectToRouter()
     authenticator->setPeerPublicKey(public_key_);
     authenticator->setSessionType(proto::router::SESSION_TYPE_HOST);
 
-    tcp_channel_ = new TcpChannelNative(TcpChannel::Type::DIRECT, authenticator, this);
+    tcp_channel_ = TcpChannelProxy::create(TcpChannel::Type::DIRECT, proxy_, authenticator, this);
 
     connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &RouterManager::onTcpReady);
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &RouterManager::onTcpErrorOccurred);

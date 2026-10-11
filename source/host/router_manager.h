@@ -55,6 +55,7 @@ public:
 
         virtual Address routerAddress() const = 0;
         virtual QByteArray routerPublicKey() const = 0;
+        virtual ProxySettings proxySettings() const = 0;
 
         virtual bool oneTimePassword() const = 0;
         virtual quint32 oneTimePasswordCharacters() const = 0;
@@ -126,6 +127,7 @@ private:
 
     Address router_address_ { kDefaultRouterHostTcpPort };
     QByteArray public_key_;
+    ProxySettings proxy_;
 
     TimePoint password_expire_time_ = TimePoint::max();
     SecureString one_time_password_;
