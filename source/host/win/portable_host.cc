@@ -26,7 +26,9 @@
 #include <ShlObj.h>
 #include <TlHelp32.h>
 
+#include "base/auto_qpointer.h"
 #include "base/core_application.h"
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/process_util.h"
 #include "base/service_controller.h"
@@ -44,6 +46,8 @@
 #include "base/win/security_helpers.h"
 #include "host/host_constants.h"
 #include "host/host_utils.h"
+#include "host/user_settings.h"
+#include "host/ui/proxy_auth_dialog.h"
 #include "host/win/portable_package.h"
 #include "host/workers/audio_worker.h"
 #include "host/workers/input_worker.h"
@@ -57,6 +61,7 @@ namespace {
 
 const char kLaunchOption[] = "--portable";
 const char kSessionOption[] = "--session";
+const char kProxyOption[] = "--proxy=";
 const char kExecutableName[] = "aspia_host.exe";
 const char kBaseDirectoryName[] = "AspiaQS";
 const char kDataDirectoryName[] = "data";
@@ -286,8 +291,12 @@ bool runHost(const QString& run_dir, const QString& run_id)
         return false;
     }
 
-    const QString command_line = '"' + QDir::toNativeSeparators(file_path) + "\" --service " +
+    QString command_line = '"' + QDir::toNativeSeparators(file_path) + "\" --service " +
         kSessionOption + ' ' + QString::number(currentProcessSessionId());
+
+    const ProxySettings proxy = PortableHost::proxy();
+    if (proxy.enabled)
+        command_line += ' ' + QString(kProxyOption) + ProxySettings::proxyArgument(proxy);
 
     ScopedScHandle service(CreateServiceW(manager, qUtf16Printable(serviceName(run_id)),
         qUtf16Printable(serviceDisplayName(run_id)), SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS,
@@ -519,6 +528,42 @@ int launchUserMode(int& argc, char* argv[])
     return application.exec();
 }
 
+//--------------------------------------------------------------------------------------------------
+// The proxy of a "--proxy=" argument. Nothing when |argument| is another one or does not parse.
+std::optional<ProxySettings> proxyFromOption(const QString& argument)
+{
+    if (!argument.startsWith(kProxyOption))
+        return std::nullopt;
+
+    return ProxySettings::proxyFromArgument(argument.mid(qstrlen(kProxyOption)));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The proxy Windows uses, with the credentials the user entered for it. A direct connection when
+// Windows uses no proxy or the user declined to enter them.
+ProxySettings askSystemProxy()
+{
+    const ProxySettings proxy = ProxySettings::systemSettings();
+    if (!proxy.enabled)
+        return ProxySettings();
+
+    GuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+    GuiApplication application(__argc, __argv);
+
+    UserSettings user_settings;
+    application.setTheme(user_settings.theme());
+    application.setLocale(application.resolveLocale(user_settings.locale()));
+
+    AutoQPointer<ProxyAuthDialog> dialog(new ProxyAuthDialog(proxy));
+    if (dialog->exec() != QDialog::Accepted)
+    {
+        LOG(INFO) << "No credentials for the system proxy, the portable host connects directly";
+        return ProxySettings();
+    }
+
+    return dialog->proxy();
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -537,8 +582,8 @@ bool PortableHost::isStartedByLauncher()
 // static
 bool PortableHost::isLauncherInvocation(int argc, char* argv[])
 {
-    // The internal relaunch (asking for elevation) is always the launcher.
-    if (argc == 2 && qstrcmp(argv[1], kLaunchOption) == 0)
+    // The internal relaunch (asking for elevation) is always the launcher. It may carry the proxy.
+    if ((argc == 2 || argc == 3) && qstrcmp(argv[1], kLaunchOption) == 0)
         return true;
 
     // A role invocation (the --agent process and the like) is never the launcher.
@@ -559,12 +604,15 @@ int PortableHost::runLauncher(int argc, char* argv[])
     // before anything (the elevation request included) could create a window.
     HostUtils::setDpiAwareness();
 
-    const bool relaunched = argc == 2 && qstrcmp(argv[1], kLaunchOption) == 0;
+    const bool relaunched = (argc == 2 || argc == 3) && qstrcmp(argv[1], kLaunchOption) == 0;
     if (argc > 1 && !relaunched)
     {
         LOG(ERROR) << "Unsupported command line of the portable host";
         return 1;
     }
+
+    // The launcher the user started asks for the proxy here, before the elevation prompt.
+    const ProxySettings proxy = PortableHost::proxy();
 
     if (ProcessUtil::isProcessElevated())
         return launch();
@@ -575,10 +623,14 @@ int PortableHost::runLauncher(int argc, char* argv[])
         return 1;
     }
 
+    QString arguments = kLaunchOption;
+    if (proxy.enabled)
+        arguments += ' ' + QString(kProxyOption) + ProxySettings::proxyArgument(proxy);
+
     // Ask for elevation (the temporary service needs administrator rights). If the user declines the
     // UAC prompt, fall back to running without it, in user mode.
-    if (ProcessUtil::createProcess(QDir::toNativeSeparators(BasePaths::currentApp()),
-            QString::fromLatin1(kLaunchOption), ProcessUtil::ExecuteMode::ELEVATE))
+    if (ProcessUtil::createProcess(QDir::toNativeSeparators(BasePaths::currentApp()), arguments,
+                                   ProcessUtil::ExecuteMode::ELEVATE))
     {
         return 0;
     }
@@ -608,6 +660,35 @@ SessionId PortableHost::launcherSessionId()
     bool ok = false;
     const SessionId session_id = arguments.at(index + 1).toULong(&ok);
     return ok ? session_id : kInvalidSessionId;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+ProxySettings PortableHost::proxy()
+{
+    static const ProxySettings proxy = []()
+    {
+        if (__argc == 1)
+            return askSystemProxy();
+
+        for (int i = 1; i < __argc; ++i)
+        {
+            const QString argument = QString::fromLocal8Bit(__argv[i]);
+            if (!argument.startsWith(kProxyOption))
+                continue;
+
+            std::optional<ProxySettings> parsed = proxyFromOption(argument);
+            if (parsed)
+                return *parsed;
+
+            LOG(ERROR) << "Invalid proxy argument";
+            break;
+        }
+
+        return ProxySettings();
+    }();
+
+    return proxy;
 }
 
 //--------------------------------------------------------------------------------------------------

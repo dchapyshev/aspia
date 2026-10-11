@@ -24,6 +24,7 @@
 #if defined(Q_OS_WINDOWS)
 #include "base/crypto/password_generator.h"
 #include "base/crypto/random.h"
+#include "host/win/portable_host.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace {
@@ -187,8 +188,7 @@ QByteArray PortableConfigProvider::routerPublicKey() const
 //--------------------------------------------------------------------------------------------------
 ProxySettings PortableConfigProvider::proxySettings() const
 {
-    // Quick Support carries only the router, so it connects directly.
-    return ProxySettings();
+    return PortableHost::proxy();
 }
 
 //--------------------------------------------------------------------------------------------------

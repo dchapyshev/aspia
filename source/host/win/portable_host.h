@@ -22,6 +22,7 @@
 #include <QString>
 
 #include "base/session_id.h"
+#include "base/net/proxy_settings.h"
 
 class PortableHost
 {
@@ -43,6 +44,10 @@ public:
 
     // Session of the launcher that started the temporary service of this process.
     static SessionId launcherSessionId();
+
+    // Proxy of this run. The launcher the user started takes the system one and asks for its
+    // credentials, the relaunch and the temporary service get it on their command line.
+    static ProxySettings proxy();
 
     // Name of the temporary service of the portable host this process belongs to.
     static QString serviceName();

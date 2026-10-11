@@ -21,6 +21,8 @@
 
 #include <QObject>
 
+#include <optional>
+
 #include "base/crypto/secure_string.h"
 
 // A proxy server for outgoing connections. An empty |user| means that the proxy does not require
@@ -32,6 +34,13 @@ struct ProxySettings
 public:
     enum class Type { HTTP, HTTPS, SOCKS4, SOCKS4A, SOCKS5, SOCKS5H };
     Q_ENUM(Type)
+
+    // The proxy the current user set up in the system.
+    static ProxySettings systemSettings();
+
+    // The proxy as the value of a command line argument of another process, and back.
+    static QString proxyArgument(const ProxySettings& proxy);
+    static std::optional<ProxySettings> proxyFromArgument(const QString& value);
 
     bool enabled = false;
     Type type = Type::HTTP;

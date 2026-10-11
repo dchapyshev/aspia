@@ -183,7 +183,7 @@ int main(int argc, char* argv[])
             ProxySettings proxy;
             if (argc == 4)
             {
-                std::optional<ProxySettings> argument = UpdateDialog::proxyFromArgument(
+                std::optional<ProxySettings> argument = ProxySettings::proxyFromArgument(
                     option_value(argv[3], "--proxy="));
                 if (!argument)
                 {

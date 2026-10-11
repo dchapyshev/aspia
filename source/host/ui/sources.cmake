@@ -37,6 +37,9 @@ collect_sources(SOURCE_HOST_UI
     notifier_window.cc
     notifier_window.h
     notifier_window.ui
+    proxy_auth_dialog.cc
+    proxy_auth_dialog.h
+    proxy_auth_dialog.ui
     security_log_dialog.cc
     security_log_dialog.h
     security_log_dialog.ui
