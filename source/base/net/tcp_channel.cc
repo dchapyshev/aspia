@@ -18,18 +18,13 @@
 
 #include "base/net/tcp_channel.h"
 
-#include <asio/connect.hpp>
-#include <asio/ip/address.hpp>
-#include <asio/read.hpp>
-#include <asio/steady_timer.hpp>
-#include <asio/write.hpp>
+#include <asio/error.hpp>
 
 #include "base/location.h"
 #include "base/crypto/large_number_increment.h"
 #include "base/crypto/stream_decryptor.h"
 #include "base/crypto/stream_encryptor.h"
 #include "base/peer/authenticator.h"
-#include "base/threading/asio_event_dispatcher.h"
 
 namespace {
 
@@ -59,21 +54,6 @@ quint32 makeInstanceId()
 }
 
 //--------------------------------------------------------------------------------------------------
-QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
-{
-    if (endpoints.empty())
-        return QStringList();
-
-    QStringList list;
-    list.reserve(endpoints.size());
-
-    for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end; ++it)
-        list.emplace_back(QString::fromLocal8Bit(it->endpoint().address().to_string()));
-
-    return list;
-}
-
-//--------------------------------------------------------------------------------------------------
 void resizeBuffer(QByteArray* buffer, qint64 size)
 {
     if (size < 0)
@@ -95,13 +75,10 @@ const quint32 TcpChannel::kMaxMessageSize = 5 * 1024 * 1024; // 5 MB
 const quint32 TcpChannel::kMaxAuthMessageSize = 16 * 1024; // 16 KB
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel::TcpChannel(Authenticator* authenticator, QObject* parent)
+TcpChannel::TcpChannel(Type type, Authenticator* authenticator, QObject* parent)
     : QObject(parent),
       instance_id_(makeInstanceId()),
-      type_(Type::DIRECT),
-      io_context_(AsioEventDispatcher::ioContext()),
-      socket_(io_context_),
-      resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
+      type_(type),
       authenticator_(authenticator)
 {
     init();
@@ -110,10 +87,9 @@ TcpChannel::TcpChannel(Authenticator* authenticator, QObject* parent)
 //--------------------------------------------------------------------------------------------------
 TcpChannel::~TcpChannel()
 {
-    // Mark guard before releasing resources so that any pending ASIO handlers
-    // (already completed but not yet dispatched) will see the object is gone.
+    // Mark guard so that any pending ASIO handlers (already completed but not yet dispatched)
+    // will see the object is gone.
     io_->alive = false;
-    setConnected(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -189,121 +165,6 @@ QString TcpChannel::errorToString(ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::connectTo(const QString& address, quint16 port, Seconds timeout)
-{
-    if (isConnected() || !resolver_)
-        return;
-
-    std::string host = address.toLocal8Bit().toStdString();
-    std::string service = std::to_string(port);
-
-    // Watchdog for the entire connect phase (resolve + TCP handshake). Without it the channel
-    // would wait for the OS-level SYN-retransmit timeout (~2 minutes on Linux) before reporting
-    // an unreachable peer.
-    SharedPointer<asio::steady_timer> watchdog(new asio::steady_timer(io_context_));
-    watchdog->expires_after(timeout);
-
-    auto io = io_;
-    watchdog->async_wait([this, io, watchdog](const std::error_code& error_code)
-    {
-        if (io->alive && !error_code && !isConnected())
-            onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
-    });
-
-    // Fast path for IP addresses. The ASIO resolver serializes all lookups for the io_context through
-    // a single background thread, so a literal address could otherwise wait behind slow or failing
-    // hostname lookups issued by other channels. Resolving is only needed for host names, so skip it
-    // entirely here.
-    std::error_code address_error;
-    asio::ip::address ip_address = asio::ip::make_address(host, address_error);
-    if (!address_error)
-    {
-        CLOG(TRACE) << "Address is an IP, skipping resolve for" << host << ":" << service;
-
-        asio::ip::tcp::endpoint endpoint(ip_address, port);
-        socket_.async_connect(endpoint, [this, io, watchdog, endpoint](
-            const std::error_code& error_code)
-        {
-            if (!io->alive)
-                return;
-
-            if (error_code)
-            {
-                if (error_code == asio::error::operation_aborted)
-                    return;
-                watchdog->cancel();
-                onErrorOccurred(FROM_HERE, error_code);
-                return;
-            }
-
-            CLOG(TRACE) << "Connected to:" << endpoint.address().to_string() << ":" << endpoint.port();
-            watchdog->cancel();
-
-            setConnected(true);
-            emit sig_connected();
-
-            doAuthentication();
-        });
-        return;
-    }
-
-    CLOG(TRACE) << "Start resolving for" << host << ":" << service;
-
-    resolver_->async_resolve(host, service, [this, io, watchdog](
-        const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
-    {
-        if (!io->alive)
-            return;
-
-        if (error_code)
-        {
-            if (error_code == asio::error::operation_aborted)
-                return;
-            watchdog->cancel();
-            onErrorOccurred(FROM_HERE, error_code);
-            return;
-        }
-
-        CLOG(TRACE) << "Resolved:" << endpointsToString(endpoints);
-
-        asio::async_connect(socket_, endpoints,
-            [](const std::error_code& error_code, const asio::ip::tcp::endpoint& next)
-        {
-            if (error_code == asio::error::operation_aborted)
-            {
-                // If more than one address for a host was resolved, then we return false and cancel
-                // attempts to connect to all addresses.
-                return false;
-            }
-
-            return true;
-        },
-            [this, io, watchdog](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
-        {
-            if (!io->alive)
-                return;
-
-            if (error_code)
-            {
-                if (error_code == asio::error::operation_aborted)
-                    return;
-                watchdog->cancel();
-                onErrorOccurred(FROM_HERE, error_code);
-                return;
-            }
-
-            CLOG(TRACE) << "Connected to:" << endpoint.address().to_string() << ":" << endpoint.port();
-            watchdog->cancel();
-
-            setConnected(true);
-            emit sig_connected();
-
-            doAuthentication();
-        });
-    });
-}
-
-//--------------------------------------------------------------------------------------------------
 void TcpChannel::setPaused(bool enable)
 {
     if (!isConnected() || paused_ == enable)
@@ -347,40 +208,6 @@ void TcpChannel::send(quint8 channel_id, const QByteArray& buffer)
     }
 
     addWriteTask(USER_DATA, channel_id, buffer, true);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool TcpChannel::setReadBufferSize(int size)
-{
-    asio::socket_base::receive_buffer_size option(size);
-
-    asio::error_code error_code;
-    socket_.set_option(option, error_code);
-    if (error_code)
-    {
-        CLOG(ERROR) << "Failed to set read buffer size:" << error_code;
-        return false;
-    }
-
-    CLOG(INFO) << "Read buffer size is changed:" << size;
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool TcpChannel::setWriteBufferSize(int size)
-{
-    asio::socket_base::send_buffer_size option(size);
-
-    asio::error_code error_code;
-    socket_.set_option(option, error_code);
-    if (error_code)
-    {
-        CLOG(ERROR) << "Failed to set write buffer size:" << error_code;
-        return false;
-    }
-
-    CLOG(INFO) << "Write buffer size is changed:" << size;
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -449,21 +276,6 @@ int TcpChannel::speedTx()
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel::TcpChannel(
-    Type type, asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent)
-    : QObject(parent),
-      instance_id_(makeInstanceId()),
-      type_(type),
-      io_context_(AsioEventDispatcher::ioContext()),
-      socket_(std::move(socket)),
-      authenticator_(authenticator)
-{
-    CDCHECK(socket_.is_open());
-    init();
-    setConnected(true);
-}
-
-//--------------------------------------------------------------------------------------------------
 void TcpChannel::doAuthentication()
 {
     if (!authenticator_)
@@ -475,6 +287,140 @@ void TcpChannel::doAuthentication()
     CLOG(TRACE) << "Start authentication";
     authenticator_->start();
     setPaused(false);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::setConnected(const std::string& peer_address)
+{
+    connected_ = true;
+    address_ = peer_address;
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::onReadCompleted(const std::error_code& error_code, size_t bytes_transferred)
+{
+    if (error_code)
+    {
+        if (error_code == asio::error::operation_aborted)
+            return;
+        onErrorOccurred(FROM_HERE, error_code);
+        return;
+    }
+
+    addRxBytes(bytes_transferred); // Update RX statistics.
+
+    if (state_ == ReadState::READ_HEADER)
+    {
+        // Until the handshake completes a peer is anonymous, so an inflated header.length
+        // would let it pin |kMaxMessageSize| of memory per channel before authenticating.
+        // Enforce a much tighter cap for AUTH_DATA - real handshake frames stay well below it.
+        const quint32 max_length = authenticated_ ? kMaxMessageSize : kMaxAuthMessageSize;
+        if (io_->read_header.length > max_length)
+        {
+            CLOG(ERROR) << "Too big incoming message:" << io_->read_header.length
+                        << "(limit:" << max_length << ")";
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+            return;
+        }
+
+        if (io_->read_header.length)
+            doReadData();
+        else
+            doReadHeader();
+        return;
+    }
+
+    CDCHECK(state_ == ReadState::READ_DATA);
+    CDCHECK_EQ(bytes_transferred, io_->read_buffer.size());
+
+    if (paused_)
+    {
+        state_ = ReadState::PENDING;
+        return;
+    }
+
+    onMessageReceived();
+
+    if (paused_)
+    {
+        state_ = ReadState::IDLE;
+        return;
+    }
+
+    doReadHeader();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::onWriteCompleted(const std::error_code& error_code, size_t bytes_transferred)
+{
+    if (error_code)
+    {
+        if (error_code == asio::error::operation_aborted)
+            return;
+        onErrorOccurred(FROM_HERE, error_code);
+        return;
+    }
+
+    addTxBytes(bytes_transferred); // Update TX statistics.
+    CDCHECK(!io_->write_queue.isEmpty());
+
+    if (write_pool_.size() < kWritePoolReservedSize)
+        write_pool_.emplace_back(std::move(io_->write_queue.front()));
+    io_->write_queue.pop_front();
+
+    if (!io_->write_queue.isEmpty())
+        doWrite();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
+{
+    ErrorCode error = ErrorCode::UNKNOWN;
+
+    if (error_code == asio::error::host_not_found)
+        error = ErrorCode::SPECIFIED_HOST_NOT_FOUND;
+    else if (error_code == asio::error::connection_refused)
+        error = ErrorCode::CONNECTION_REFUSED;
+    else if (error_code == asio::error::address_in_use)
+        error = ErrorCode::ADDRESS_IN_USE;
+    else if (error_code == asio::error::timed_out)
+        error = ErrorCode::SOCKET_TIMEOUT;
+    else if (error_code == asio::error::host_unreachable)
+        error = ErrorCode::ADDRESS_NOT_AVAILABLE;
+    else if (error_code == asio::error::connection_reset || error_code == asio::error::eof)
+        error = ErrorCode::REMOTE_HOST_CLOSED;
+    else if (error_code == asio::error::network_down)
+        error = ErrorCode::NETWORK_ERROR;
+#if defined(Q_OS_WINDOWS)
+    // asio puts Win32 system errors (e.g. ERROR_SEM_TIMEOUT - kernel-level TCP keep-alive timeout)
+    // into asio::system_category(), which is distinct from std::system_category(). Match against
+    // the asio category explicitly.
+    else if (error_code.category() == asio::system_category() && error_code.value() == ERROR_SEM_TIMEOUT)
+        error = ErrorCode::SOCKET_TIMEOUT;
+#endif
+
+    CLOG(TRACE) << "Asio error:" << error_code;
+    onErrorOccurred(location, error);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
+{
+    CLOG(TRACE) << "Connection finished:" << error_code << "from" << location;
+
+    if (!io_->alive)
+        return;
+
+    if (authenticator_)
+    {
+        user_name_ = authenticator_->userName();
+        user_id_   = authenticator_->userId();
+    }
+
+    setDisconnected();
+
+    io_->alive = false;
+    emit sig_errorOccurred(error_code);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -559,133 +505,11 @@ void TcpChannel::init()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::setConnected(bool connected)
+void TcpChannel::setDisconnected()
 {
-    connected_ = connected;
-
-    if (!connected_)
-    {
-        if (resolver_)
-        {
-            resolver_->cancel();
-            resolver_.reset();
-        }
-
-        if (socket_.is_open())
-        {
-            std::error_code ignored_code;
-            socket_.cancel(ignored_code);
-            socket_.close(ignored_code);
-        }
-
-        keep_alive_state_ = KeepAliveState::INACTIVE;
-        return;
-    }
-
-    asio::error_code error_code;
-
-    asio::ip::tcp::no_delay no_delay_option(true);
-    socket_.set_option(no_delay_option, error_code);
-    if (!error_code)
-        CLOG(TRACE) << "Nagle's algorithm is disabled";
-
-    asio::socket_base::receive_buffer_size receive_option;
-    socket_.get_option(receive_option, error_code);
-    if (!error_code)
-        CLOG(TRACE) << "Read buffer size:" << receive_option.value();
-
-    asio::socket_base::send_buffer_size send_option;
-    socket_.get_option(send_option, error_code);
-    if (!error_code)
-        CLOG(TRACE) << "Write buffer size:" << send_option.value();
-
-    try
-    {
-        std::error_code error_code;
-        asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
-        if (error_code)
-        {
-            CLOG(ERROR) << "Unable to get peer address:" << error_code;
-        }
-        else
-        {
-            asio::ip::address address = endpoint.address();
-            if (address.is_v4())
-            {
-                asio::ip::address_v4 ipv4_address = address.to_v4();
-                address_ = ipv4_address.to_string();
-            }
-            else
-            {
-                asio::ip::address_v6 ipv6_address = address.to_v6();
-                if (ipv6_address.is_v4_mapped())
-                {
-                    asio::ip::address_v4 ipv4_address =
-                        asio::ip::make_address_v4(asio::ip::v4_mapped, ipv6_address);
-                    address_ =  ipv4_address.to_string();
-                }
-                else
-                {
-                    address_ = ipv6_address.to_string();
-                }
-            }
-        }
-    }
-    catch (const std::error_code& error_code)
-    {
-        CLOG(ERROR) << "Unable to get peer address:" << error_code;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
-{
-    ErrorCode error = ErrorCode::UNKNOWN;
-
-    if (error_code == asio::error::host_not_found)
-        error = ErrorCode::SPECIFIED_HOST_NOT_FOUND;
-    else if (error_code == asio::error::connection_refused)
-        error = ErrorCode::CONNECTION_REFUSED;
-    else if (error_code == asio::error::address_in_use)
-        error = ErrorCode::ADDRESS_IN_USE;
-    else if (error_code == asio::error::timed_out)
-        error = ErrorCode::SOCKET_TIMEOUT;
-    else if (error_code == asio::error::host_unreachable)
-        error = ErrorCode::ADDRESS_NOT_AVAILABLE;
-    else if (error_code == asio::error::connection_reset || error_code == asio::error::eof)
-        error = ErrorCode::REMOTE_HOST_CLOSED;
-    else if (error_code == asio::error::network_down)
-        error = ErrorCode::NETWORK_ERROR;
-#if defined(Q_OS_WINDOWS)
-    // asio puts Win32 system errors (e.g. ERROR_SEM_TIMEOUT - kernel-level TCP keep-alive timeout)
-    // into asio::system_category(), which is distinct from std::system_category(). Match against
-    // the asio category explicitly.
-    else if (error_code.category() == asio::system_category() && error_code.value() == ERROR_SEM_TIMEOUT)
-        error = ErrorCode::SOCKET_TIMEOUT;
-#endif
-
-    CLOG(TRACE) << "Asio error:" << error_code;
-    onErrorOccurred(location, error);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
-{
-    CLOG(TRACE) << "Connection finished:" << error_code << "from" << location;
-
-    if (!io_->alive)
-        return;
-
-    if (authenticator_)
-    {
-        user_name_ = authenticator_->userName();
-        user_id_   = authenticator_->userId();
-    }
-
-    setConnected(false);
-
-    io_->alive = false;
-    emit sig_errorOccurred(error_code);
+    connected_ = false;
+    keep_alive_state_ = KeepAliveState::INACTIVE;
+    closeTransport();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -884,117 +708,22 @@ void TcpChannel::addWriteTask(quint8 type, quint8 param, const QByteArray& data,
 void TcpChannel::doWrite()
 {
     const QByteArray& buffer = io_->write_queue.front();
-
-    auto io = io_;
-    asio::async_write(socket_,
-        asio::buffer(buffer.data(), buffer.size()),
-        [this, io](const std::error_code& error_code, size_t bytes_transferred)
-    {
-        if (!io->alive)
-            return;
-
-        if (error_code)
-        {
-            if (error_code == asio::error::operation_aborted)
-                return;
-            onErrorOccurred(FROM_HERE, error_code);
-            return;
-        }
-
-        addTxBytes(bytes_transferred); // Update TX statistics.
-        CDCHECK(!io_->write_queue.isEmpty());
-
-        if (write_pool_.size() < kWritePoolReservedSize)
-            write_pool_.emplace_back(std::move(io_->write_queue.front()));
-        io_->write_queue.pop_front();
-
-        if (!io_->write_queue.isEmpty())
-            doWrite();
-    });
+    writeTransport(buffer.data(), buffer.size());
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::doReadHeader()
 {
     state_ = ReadState::READ_HEADER;
-
-    auto io = io_;
-    asio::async_read(socket_, asio::mutable_buffer(&io_->read_header, sizeof(Header)),
-        [this, io](const std::error_code& error_code, size_t bytes_transferred)
-    {
-        if (!io->alive)
-            return;
-
-        if (error_code)
-        {
-            if (error_code == asio::error::operation_aborted)
-                return;
-            onErrorOccurred(FROM_HERE, error_code);
-            return;
-        }
-
-        addRxBytes(bytes_transferred); // Update RX statistics.
-
-        // Until the handshake completes a peer is anonymous, so an inflated header.length
-        // would let it pin |kMaxMessageSize| of memory per channel before authenticating.
-        // Enforce a much tighter cap for AUTH_DATA - real handshake frames stay well below it.
-        const quint32 max_length = authenticated_ ? kMaxMessageSize : kMaxAuthMessageSize;
-        if (io_->read_header.length > max_length)
-        {
-            CLOG(ERROR) << "Too big incoming message:" << io_->read_header.length
-                        << "(limit:" << max_length << ")";
-            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-            return;
-        }
-
-        if (io_->read_header.length)
-            doReadData();
-        else
-            doReadHeader();
-    });
+    readTransport(&io_->read_header, sizeof(Header));
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::doReadData()
 {
     resizeBuffer(&io_->read_buffer, io_->read_header.length);
-
     state_ = ReadState::READ_DATA;
-
-    auto io = io_;
-    asio::async_read(socket_, asio::buffer(io_->read_buffer.data(), io_->read_buffer.size()),
-        [this, io](const std::error_code& error_code, size_t bytes_transferred)
-    {
-        if (!io->alive)
-            return;
-
-        if (error_code)
-        {
-            if (error_code == asio::error::operation_aborted)
-                return;
-            onErrorOccurred(FROM_HERE, error_code);
-            return;
-        }
-
-        addRxBytes(bytes_transferred); // Update RX statistics.
-        CDCHECK_EQ(bytes_transferred, io_->read_buffer.size());
-
-        if (paused_)
-        {
-            state_ = ReadState::PENDING;
-            return;
-        }
-
-        onMessageReceived();
-
-        if (paused_)
-        {
-            state_ = ReadState::IDLE;
-            return;
-        }
-
-        doReadHeader();
-    });
+    readTransport(io_->read_buffer.data(), io_->read_buffer.size());
 }
 
 //--------------------------------------------------------------------------------------------------

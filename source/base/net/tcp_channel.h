@@ -23,8 +23,6 @@
 #include <QQueue>
 #include <QVersionNumber>
 
-#include <asio/ip/tcp.hpp>
-
 #include "base/logging.h"
 #include "base/scoped_qpointer.h"
 #include "base/shared_pointer.h"
@@ -37,7 +35,7 @@ class StreamDecryptor;
 class StreamEncryptor;
 class TcpServer;
 
-class TcpChannel final : public QObject
+class TcpChannel : public QObject
 {
     Q_OBJECT
 
@@ -45,9 +43,8 @@ public:
     enum class Type { DIRECT, RELAY };
     Q_ENUM(Type)
 
-    // Constructor available for client.
-    TcpChannel(Authenticator* authenticator, QObject* parent = nullptr);
-    ~TcpChannel() final;
+    TcpChannel(Type type, Authenticator* authenticator, QObject* parent);
+    ~TcpChannel() override;
 
     static const quint32 kMaxMessageSize;
 
@@ -106,7 +103,7 @@ public:
     static QString errorToString(ErrorCode error_code);
 
     // Connects to a host at the specified address and port.
-    void connectTo(const QString& address, quint16 port, Seconds timeout = Seconds(30));
+    virtual void connectTo(const QString& address, quint16 port, Seconds timeout = Seconds(30)) = 0;
 
     // Returns true if the channel is connected and false if not connected.
     bool isConnected() const { return connected_; }
@@ -126,8 +123,8 @@ public:
     // Sending a message. After the call, the message will be added to the queue to be sent.
     void send(quint8 channel_id, const QByteArray& buffer);
 
-    bool setReadBufferSize(int size);
-    bool setWriteBufferSize(int size);
+    virtual bool setReadBufferSize(int size) = 0;
+    virtual bool setWriteBufferSize(int size) = 0;
 
     qint64 pendingBytes() const;
 
@@ -157,15 +154,55 @@ signals:
     void sig_errorOccurred(TcpChannel::ErrorCode error_code);
     void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
 
-private:
+protected:
     LOG_DECLARE_CONTEXT(TcpChannel);
 
     friend class TcpServer;
     friend class RelayPeer;
 
-    // Constructor available for server. An already connected socket is being moved.
-    TcpChannel(Type type, asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent);
+    struct Header
+    {
+        quint8 type;
+        quint8 param1; // Depends on the message type.
+        quint8 param2; // Not used yet.
+        quint8 param3; // Not used yet.
+        quint32 length;
+    };
 
+    struct IoState
+    {
+        bool alive = true;
+        Header read_header;
+        QByteArray read_buffer;
+        QQueue<QByteArray> write_queue;
+    };
+
+    // The transport of the subclass. A read completes once |size| bytes are read and a write once all
+    // |size| bytes are written. The subclass reports the result with onReadCompleted and
+    // onWriteCompleted.
+    virtual void readTransport(void* data, size_t size) = 0;
+    virtual void writeTransport(const void* data, size_t size) = 0;
+    virtual void closeTransport() = 0;
+
+    // Starts authentication. In the client channel, it starts automatically when a connection is
+    // established. In the server channel, it is started by the RelayPeer or TcpServer.
+    void doAuthentication();
+
+    // Called by the subclass once its transport is connected.
+    void setConnected(const std::string& peer_address);
+
+    // Called by the subclass once a transport operation completes.
+    void onReadCompleted(const std::error_code& error_code, size_t bytes_transferred);
+    void onWriteCompleted(const std::error_code& error_code, size_t bytes_transferred);
+
+    void onErrorOccurred(const Location& location, const std::error_code& error_code);
+    void onErrorOccurred(const Location& location, ErrorCode error_code);
+
+    // The subclass captures the result in each transport handler so the buffers stay valid until
+    // the handler runs, and checks |alive| before touching the channel.
+    SharedPointer<IoState> ioState() const { return io_; }
+
+private:
     enum class ReadState
     {
         IDLE,        // No reads are in progress right now.
@@ -195,31 +232,8 @@ private:
         WAIT_PONG      // PING sent; the PONG must arrive before the deadline.
     };
 
-    struct Header
-    {
-        quint8 type;
-        quint8 param1; // Depends on the message type.
-        quint8 param2; // Not used yet.
-        quint8 param3; // Not used yet.
-        quint32 length;
-    };
-
-    struct IoState
-    {
-        bool alive = true;
-        Header read_header;
-        QByteArray read_buffer;
-        QQueue<QByteArray> write_queue;
-    };
-
-    // Starts authentication. In the client channel, it starts automatically when a connection is
-    // established. In the server channel, it is started by the RelayPeer or TcpServer.
-    void doAuthentication();
-
     void init();
-    void setConnected(bool connected);
-    void onErrorOccurred(const Location& location, const std::error_code& error_code);
-    void onErrorOccurred(const Location& location, ErrorCode error_code);
+    void setDisconnected();
     void onMessageReceived();
     void addWriteTask(quint8 type, quint8 param, const QByteArray& data, bool encrypted);
     void doWrite();
@@ -254,9 +268,6 @@ private:
     int speed_rx_ = 0;
 
     SharedPointer<IoState> io_ { new IoState() };
-    asio::io_context& io_context_;
-    asio::ip::tcp::socket socket_;
-    std::unique_ptr<asio::ip::tcp::resolver> resolver_;
 
     KeepAliveState keep_alive_state_ = KeepAliveState::INACTIVE;
     TimePoint keep_alive_deadline_;

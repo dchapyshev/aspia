@@ -32,7 +32,7 @@
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
-#include "base/net/tcp_channel.h"
+#include "base/net/tcp_channel_direct.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/key_exchange.h"
 #include "proto/router.h"
@@ -216,7 +216,7 @@ protected:
             authenticator->setPeerPublicKey(router_keys_.publicKey());
             authenticator->setSessionType(proto::router::SESSION_TYPE_HOST);
 
-            peer->channel = new TcpChannel(authenticator, nullptr);
+            peer->channel = new TcpChannelDirect(authenticator, nullptr);
 
             QObject::connect(peer_worker_, &Worker::sig_tick, peer->channel, &TcpChannel::tick);
 
@@ -280,7 +280,7 @@ protected:
             authenticator->setPeerPublicKey(router_keys_.publicKey());
             authenticator->setSessionType(proto::router::SESSION_TYPE_HOST);
 
-            peer->channel = new TcpChannel(authenticator, nullptr);
+            peer->channel = new TcpChannelDirect(authenticator, nullptr);
 
             QObject::connect(peer_worker_, &Worker::sig_tick, peer->channel, &TcpChannel::tick);
 

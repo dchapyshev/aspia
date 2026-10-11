@@ -34,7 +34,7 @@
 #include "base/crypto/key_pair.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_string.h"
-#include "base/net/tcp_channel.h"
+#include "base/net/tcp_channel_direct.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/client_authenticator.h"
 #include "base/peer/router_user.h"
@@ -178,7 +178,7 @@ private:
 
     void connectTo(TcpServer* server, ClientAuthenticator* authenticator)
     {
-        peer_ = new TcpChannel(authenticator);
+        peer_ = new TcpChannelDirect(authenticator);
 
         const quint16 port = freePort();
         if (!server->start(port, "127.0.0.1"))

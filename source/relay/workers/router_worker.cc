@@ -19,6 +19,7 @@
 #include "relay/workers/router_worker.h"
 
 #include "base/logging.h"
+#include "base/net/tcp_channel_direct.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/key_exchange.h"
 #include "proto/router.h"
@@ -292,7 +293,7 @@ void RouterWorker::onConnectToRouter()
     authenticator->setPeerPublicKey(router_public_key_);
     authenticator->setSessionType(proto::router::SESSION_TYPE_RELAY);
 
-    tcp_channel_ = new TcpChannel(authenticator, this);
+    tcp_channel_ = new TcpChannelDirect(authenticator, this);
 
     connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &RouterWorker::onTcpConnected);
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &RouterWorker::onTcpErrorOccurred);

@@ -25,7 +25,7 @@
 #include "base/logging.h"
 #include "base/time_types.h"
 #include "base/net/address.h"
-#include "base/net/tcp_channel.h"
+#include "base/net/tcp_channel_direct.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/key_exchange.h"
 #include "proto/peer.h"
@@ -98,7 +98,7 @@ void OnlineCheckerDirect::Instance::start()
     authenticator->setSessionType(proto::peer::SESSION_TYPE_DESKTOP);
     authenticator->setProbe(true);
 
-    tcp_channel_ = new TcpChannel(authenticator, this);
+    tcp_channel_ = new TcpChannelDirect(authenticator, this);
 
     connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &Instance::onTcpAuthenticated);
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Instance::onTcpErrorOccurred);

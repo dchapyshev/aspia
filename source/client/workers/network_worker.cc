@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/version_constants.h"
+#include "base/net/tcp_channel_direct.h"
 #include "base/net/udp_channel.h"
 #include "base/peer/client_authenticator.h"
 #include "base/peer/relay_peer.h"
@@ -465,7 +466,7 @@ void NetworkWorker::startConnection()
 
         auto* authenticator = new ClientAuthenticator();
         setupAuthenticator(authenticator);
-        tcp_channel_ = new TcpChannel(authenticator, this);
+        tcp_channel_ = new TcpChannelDirect(authenticator, this);
 
         connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &NetworkWorker::onTcpConnected);
         connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &NetworkWorker::onTcpErrorOccurred);
