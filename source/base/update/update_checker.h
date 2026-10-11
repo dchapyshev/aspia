@@ -23,6 +23,7 @@
 #include <QList>
 #include <QThread>
 
+#include "base/net/proxy_settings.h"
 #include "base/update/update_info.h"
 
 class UpdateChecker final : public QThread
@@ -42,6 +43,9 @@ public:
     // carries, and then another server can only serve what was signed for the default one.
     void setPublicKeys(const QList<QByteArray>& public_keys);
 
+    // The files are read through the proxy of |proxy| if it is enabled.
+    void setProxy(const ProxySettings& proxy);
+
 signals:
     void sig_checkFinished(const UpdateInfo& update_info);
     void sig_checkFailed();
@@ -58,6 +62,7 @@ private:
     const QString channel_;
     const QString package_;
     QList<QByteArray> public_keys_;
+    ProxySettings proxy_;
     std::atomic_bool interrupted_ { false };
 
     Q_DISABLE_COPY_MOVE(UpdateChecker)

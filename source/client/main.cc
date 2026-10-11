@@ -182,7 +182,7 @@ int main(int argc, char* argv[])
 
             SystemSettings settings;
             UpdateDialog dialog(settings.updateServer(), settings.updatePublicKey(), channel, "client",
-                                UpdateDialog::Action::INSTALL);
+                                ProxySettings(), UpdateDialog::Action::INSTALL);
 
             return dialog.exec() == QDialog::Accepted ?
                 UpdateDialog::kInstalledExitCode : UpdateDialog::kClosedExitCode;

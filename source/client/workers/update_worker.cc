@@ -48,11 +48,19 @@ void UpdateWorker::onPrepare()
         return;
     }
 
+    ProxyConfig proxy;
+    if (db.proxyConfig(&proxy) != Database::ReadResult::OK)
+    {
+        LOG(ERROR) << "No readable proxy config, update check is skipped";
+        return;
+    }
+
     SystemSettings settings;
     QByteArray public_key = settings.updatePublicKey();
 
     update_checker_ = new UpdateChecker(db.updateChannel(), kClientUpdatePackage, this);
     update_checker_->setServer(settings.updateServer());
+    update_checker_->setProxy(proxy.settings());
     if (!public_key.isEmpty())
         update_checker_->setPublicKeys({ public_key });
 

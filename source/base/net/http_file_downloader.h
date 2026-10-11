@@ -24,6 +24,8 @@
 
 #include <curl/curl.h>
 
+#include "base/net/proxy_settings.h"
+
 class HttpFileDownloader final : public QThread
 {
     Q_OBJECT
@@ -32,6 +34,9 @@ public:
     // Downloads |url| into |file_path|, replacing whatever is in that file.
     HttpFileDownloader(const QString& url, const QString& file_path, QObject* parent = nullptr);
     ~HttpFileDownloader();
+
+    // The file is downloaded through the proxy of |proxy| if it is enabled.
+    void setProxy(const ProxySettings& proxy);
 
 signals:
     void sig_downloadError(const QString& error);
@@ -50,6 +55,7 @@ private:
     std::atomic_bool interrupted_ { false };
     const QString url_;
     const QString file_path_;
+    ProxySettings proxy_;
     QFile file_;
 
     Q_DISABLE_COPY_MOVE(HttpFileDownloader)

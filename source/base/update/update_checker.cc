@@ -128,6 +128,12 @@ void UpdateChecker::setPublicKeys(const QList<QByteArray>& public_keys)
 }
 
 //--------------------------------------------------------------------------------------------------
+void UpdateChecker::setProxy(const ProxySettings& proxy)
+{
+    proxy_ = proxy;
+}
+
+//--------------------------------------------------------------------------------------------------
 void UpdateChecker::run()
 {
     LOG(TRACE) << "run BEGIN";
@@ -257,12 +263,23 @@ QByteArray UpdateChecker::downloadSigned(const QString& url)
 //--------------------------------------------------------------------------------------------------
 QByteArray UpdateChecker::download(const QString& unicode_url)
 {
-    LOG(INFO) << "Reading" << unicode_url;
+    if (proxy_.enabled)
+    {
+        LOG(INFO) << "Reading" << unicode_url << "through" << proxy_.type << "proxy" << proxy_.address << ":"
+                  << proxy_.port;
+    }
+    else
+    {
+        LOG(INFO) << "Reading" << unicode_url;
+    }
 
     QByteArray url = unicode_url.toUtf8();
     char error_buffer[CURL_ERROR_SIZE] = { 0 };
 
     ScopedCURL curl;
+    if (!curl.setProxy(proxy_))
+        return QByteArray();
+
     curl_easy_setopt(curl.get(), CURLOPT_URL, url.data());
     curl_easy_setopt(curl.get(), CURLOPT_NOPROGRESS, 1);
     curl_easy_setopt(curl.get(), CURLOPT_MAXFILESIZE, kMaxFileSize);

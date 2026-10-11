@@ -180,8 +180,8 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     {
         SystemSettings settings;
         AutoQPointer<UpdateDialog> dialog(
-            new UpdateDialog(settings.updateServer(), settings.updatePublicKey(),
-                             settings.updateChannel(), "host", UpdateDialog::Action::ASK, this));
+            new UpdateDialog(settings.updateServer(), settings.updatePublicKey(), settings.updateChannel(),
+                             "host", ProxySettings(), UpdateDialog::Action::ASK, this));
         dialog->exec();
     });
 

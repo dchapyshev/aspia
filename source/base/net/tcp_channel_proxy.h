@@ -19,8 +19,6 @@
 #ifndef BASE_NET_TCP_CHANNEL_PROXY_H
 #define BASE_NET_TCP_CHANNEL_PROXY_H
 
-#include <QUrl>
-
 #include <asio/ip/tcp.hpp>
 #include <asio/steady_timer.hpp>
 
@@ -28,7 +26,6 @@
 #include <string_view>
 
 #include "base/net/curl_util.h"
-#include "base/net/proxy_settings.h"
 #include "base/net/tcp_channel.h"
 
 class TcpChannelProxy final : public TcpChannel

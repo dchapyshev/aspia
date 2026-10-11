@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "base/scoped_qpointer.h"
+#include "base/net/proxy_settings.h"
 #include "base/update/update_info.h"
 
 namespace Ui {
@@ -53,7 +54,7 @@ public:
     static constexpr int kClosedExitCode = 1;
 
     UpdateDialog(const QString& server, const QByteArray& public_key, const QString& channel,
-                 const QString& package, Action action, QWidget* parent = nullptr);
+                 const QString& package, const ProxySettings& proxy, Action action, QWidget* parent = nullptr);
     ~UpdateDialog() final;
 
     // QDialog implementation.
@@ -83,6 +84,7 @@ private:
 
     std::unique_ptr<Ui::UpdateDialog> ui;
     const QString channel_;
+    const ProxySettings proxy_;
     const Action action_;
     UpdateInfo update_info_;
 

@@ -102,6 +102,22 @@ QByteArray systemCaBundlePath()
 
 #endif // defined(Q_OS_ANDROID)
 
+//--------------------------------------------------------------------------------------------------
+const char* proxyScheme(ProxySettings::Type type)
+{
+    switch (type)
+    {
+        case ProxySettings::Type::HTTP: return "http";
+        case ProxySettings::Type::HTTPS: return "https";
+        case ProxySettings::Type::SOCKS4: return "socks4";
+        case ProxySettings::Type::SOCKS4A: return "socks4a";
+        case ProxySettings::Type::SOCKS5: return "socks5";
+        case ProxySettings::Type::SOCKS5H: return "socks5h";
+    }
+
+    return "http";
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -153,6 +169,47 @@ ScopedCURL::ScopedCURL()
 ScopedCURL::~ScopedCURL()
 {
     curl_easy_cleanup(curl_);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QUrl ScopedCURL::proxyUrl(const ProxySettings& settings)
+{
+    // curl takes the type of the proxy from the scheme of its address.
+    QUrl url;
+    url.setScheme(QString::fromLatin1(proxyScheme(settings.type)));
+    url.setHost(settings.address);
+    url.setPort(settings.port);
+
+    if (!url.isValid() || url.host().isEmpty())
+        return QUrl();
+
+    return url;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ScopedCURL::setProxy(const ProxySettings& settings)
+{
+    if (!settings.enabled)
+        return true;
+
+    const QUrl url = proxyUrl(settings);
+    if (!url.isValid())
+    {
+        LOG(ERROR) << "Invalid address of the proxy:" << settings.address << ":" << settings.port;
+        return false;
+    }
+
+    curl_easy_setopt(curl_, CURLOPT_PROXY, url.toEncoded().constData());
+
+    if (!settings.user.isEmpty())
+    {
+        curl_easy_setopt(curl_, CURLOPT_PROXYAUTH, static_cast<long>(CURLAUTH_ANY));
+        curl_easy_setopt(curl_, CURLOPT_PROXYUSERNAME, settings.user.toUtf8().constData());
+        curl_easy_setopt(curl_, CURLOPT_PROXYPASSWORD, settings.password.toUtf8().constData());
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

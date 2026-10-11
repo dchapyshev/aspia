@@ -49,6 +49,12 @@ HttpFileDownloader::~HttpFileDownloader()
 }
 
 //--------------------------------------------------------------------------------------------------
+void HttpFileDownloader::setProxy(const ProxySettings& proxy)
+{
+    proxy_ = proxy;
+}
+
+//--------------------------------------------------------------------------------------------------
 static int debugFunc(
     CURL* /* handle */, curl_infotype type, char* data, size_t size, void* /* clientp */)
 {
@@ -77,7 +83,22 @@ static int debugFunc(
 //--------------------------------------------------------------------------------------------------
 void HttpFileDownloader::run()
 {
-    LOG(INFO) << "Starting http file downloader:" << url_;
+    if (proxy_.enabled)
+    {
+        LOG(INFO) << "Starting http file downloader:" << url_ << "through" << proxy_.type << "proxy"
+                  << proxy_.address << ":" << proxy_.port;
+    }
+    else
+    {
+        LOG(INFO) << "Starting http file downloader:" << url_;
+    }
+
+    ScopedCURL curl;
+    if (!curl.setProxy(proxy_))
+    {
+        emit sig_downloadError(QString::fromLatin1(curl_easy_strerror(CURLE_COULDNT_RESOLVE_PROXY)));
+        return;
+    }
 
     file_.setFileName(file_path_);
     if (!file_.open(QIODevice::WriteOnly | QIODevice::Truncate))
@@ -86,8 +107,6 @@ void HttpFileDownloader::run()
         emit sig_downloadError(file_.errorString());
         return;
     }
-
-    ScopedCURL curl;
 
     QByteArray url = url_.toUtf8();
 

@@ -71,22 +71,6 @@ std::string resolveEntry(const QUrl& url, const asio::ip::tcp::resolver::results
 }
 
 //--------------------------------------------------------------------------------------------------
-const char* proxyScheme(ProxySettings::Type type)
-{
-    switch (type)
-    {
-        case ProxySettings::Type::HTTP: return "http";
-        case ProxySettings::Type::HTTPS: return "https";
-        case ProxySettings::Type::SOCKS4: return "socks4";
-        case ProxySettings::Type::SOCKS4A: return "socks4a";
-        case ProxySettings::Type::SOCKS5: return "socks5";
-        case ProxySettings::Type::SOCKS5H: return "socks5h";
-    }
-
-    return "http";
-}
-
-//--------------------------------------------------------------------------------------------------
 // The interest of curl that a wait of |type| serves. An error concerns any socket curl watches.
 int pollBits(asio::socket_base::wait_type type)
 {
@@ -212,7 +196,7 @@ void TcpChannelProxy::connectTo(const QString& address, quint16 port, Seconds ti
         return;
 
     peer_url_ = makeUrl("http", address, port);
-    proxy_url_ = makeUrl(proxyScheme(settings_.type), settings_.address, settings_.port);
+    proxy_url_ = ScopedCURL::proxyUrl(settings_);
     if (!peer_url_.isValid() || !proxy_url_.isValid())
     {
         CLOG(ERROR) << "Invalid address of the peer or of the proxy";
@@ -223,7 +207,6 @@ void TcpChannelProxy::connectTo(const QString& address, quint16 port, Seconds ti
     peer_address_ = address.toStdString();
 
     curl_easy_setopt(curl_.get(), CURLOPT_URL, peer_url_.toEncoded().constData());
-    curl_easy_setopt(curl_.get(), CURLOPT_PROXY, proxy_url_.toEncoded().constData());
     curl_easy_setopt(curl_.get(), CURLOPT_HTTPPROXYTUNNEL, 1L);
     curl_easy_setopt(curl_.get(), CURLOPT_CONNECT_ONLY, 1L);
     curl_easy_setopt(curl_.get(), CURLOPT_NOSIGNAL, 1L);
@@ -235,12 +218,7 @@ void TcpChannelProxy::connectTo(const QString& address, quint16 port, Seconds ti
     curl_easy_setopt(curl_.get(), CURLOPT_DEBUGFUNCTION, debugCallback);
     curl_easy_setopt(curl_.get(), CURLOPT_DEBUGDATA, this);
 
-    if (!settings_.user.isEmpty())
-    {
-        curl_easy_setopt(curl_.get(), CURLOPT_PROXYAUTH, static_cast<long>(CURLAUTH_ANY));
-        curl_easy_setopt(curl_.get(), CURLOPT_PROXYUSERNAME, settings_.user.toUtf8().constData());
-        curl_easy_setopt(curl_.get(), CURLOPT_PROXYPASSWORD, settings_.password.toUtf8().constData());
-    }
+    curl_.setProxy(settings_);
 
     // Watchdog for the entire connect phase (resolve, connection to the proxy and the tunnel).
     connect_timer_.expires_after(timeout);

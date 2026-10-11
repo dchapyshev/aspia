@@ -20,7 +20,11 @@
 #define BASE_NET_CURL_UTIL_H
 
 #include <QtClassHelperMacros>
+#include <QUrl>
+
 #include <curl/curl.h>
+
+#include "base/net/proxy_settings.h"
 
 class ScopedCURL
 {
@@ -28,7 +32,10 @@ public:
     ScopedCURL();
     ~ScopedCURL();
 
+    static QUrl proxyUrl(const ProxySettings& settings);
+
     CURL* get() { return curl_; }
+    bool setProxy(const ProxySettings& settings);
 
 private:
     CURL* curl_;

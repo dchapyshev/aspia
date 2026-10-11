@@ -167,10 +167,19 @@ MainWindow::MainWindow(QWidget* parent)
     connect(GuiApplication::findWorker<UpdateWorker>(), &UpdateWorker::sig_updateAvailable,
             this, [this](const UpdateInfo& /* update_info */)
     {
+        Database& db = Database::instance();
+
+        ProxyConfig proxy;
+        if (db.proxyConfig(&proxy) != Database::ReadResult::OK)
+        {
+            LOG(ERROR) << "No readable proxy config";
+            return;
+        }
+
         SystemSettings settings;
         AutoQPointer<UpdateDialog> dialog(new UpdateDialog(
-            settings.updateServer(), settings.updatePublicKey(), Database::instance().updateChannel(),
-            "client", UpdateDialog::Action::ASK, this));
+            settings.updateServer(), settings.updatePublicKey(), db.updateChannel(), "client",
+            proxy.settings(), UpdateDialog::Action::ASK, this));
         dialog->exec();
     }, Qt::QueuedConnection);
 

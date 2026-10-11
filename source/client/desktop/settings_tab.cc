@@ -675,10 +675,19 @@ void SettingsTab::onUpdateChannelChanged()
 void SettingsTab::onCheckForUpdatesClicked()
 {
     LOG(INFO) << "[ACTION] Check for updates";
+
+    ProxyConfig proxy;
+    if (Database::instance().proxyConfig(&proxy) != Database::ReadResult::OK)
+    {
+        LOG(ERROR) << "No readable proxy config";
+        MsgBox::warning(this, tr("Unable to read the proxy settings."));
+        return;
+    }
+
     SystemSettings settings;
     AutoQPointer<UpdateDialog> dialog(new UpdateDialog(
-        settings.updateServer(), settings.updatePublicKey(),
-        ui->combobox_update_channel->currentData().toString(), "client", UpdateDialog::Action::ASK, this));
+        settings.updateServer(), settings.updatePublicKey(), ui->combobox_update_channel->currentData().toString(),
+        "client", proxy.settings(), UpdateDialog::Action::ASK, this));
     dialog->exec();
 }
 

@@ -44,11 +44,12 @@ QString makeUrl(const QUrl& url)
 
 //--------------------------------------------------------------------------------------------------
 UpdateDialog::UpdateDialog(const QString& server, const QByteArray& public_key,
-                           const QString& channel, const QString& package, Action action,
-                           QWidget* parent)
+                           const QString& channel, const QString& package, const ProxySettings& proxy,
+                           Action action, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::UpdateDialog>()),
       channel_(channel),
+      proxy_(proxy),
       action_(action)
 {
     LOG(INFO) << "Ctor";
@@ -72,6 +73,7 @@ UpdateDialog::UpdateDialog(const QString& server, const QByteArray& public_key,
 
     checker_ = std::make_unique<UpdateChecker>(channel, package);
     checker_->setServer(server);
+    checker_->setProxy(proxy_);
     if (!public_key.isEmpty())
         checker_->setPublicKeys({ public_key });
 
@@ -199,6 +201,7 @@ void UpdateDialog::startInstall()
     }
 
     downloader_.reset(new HttpFileDownloader(update_info_.url(), file_path, this));
+    downloader_->setProxy(proxy_);
 
     connect(downloader_, &HttpFileDownloader::sig_downloadProgress, this, &UpdateDialog::onDownloadProgress);
     connect(downloader_, &HttpFileDownloader::sig_downloadError, this, &UpdateDialog::onDownloadError);
