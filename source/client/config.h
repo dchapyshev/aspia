@@ -313,21 +313,8 @@ public:
     bool isEnabled() const { return enabled_; }
     void setEnabled(bool enable) { enabled_ = enable; }
 
-    ProxySettings::Type type() const { return type_; }
-    void setType(ProxySettings::Type value) { type_ = value; }
-
-    const QString& address() const { return address_; }
-    void setAddress(const QString& value) { address_ = value; }
-
-    quint16 port() const { return port_; }
-    void setPort(quint16 value) { port_ = value; }
-
-    // An empty user name means that the proxy does not require authentication.
-    const QString& username() const { return username_; }
-    void setUsername(const QString& value) { username_ = value; }
-
-    const SecureString& password() const { return password_; }
-    void setPassword(const SecureString& value) { password_ = value; }
+    const ProxySettings& settings() const { return settings_; }
+    void setSettings(const ProxySettings& settings) { settings_ = settings; }
 
     // Nothing when the proxy is not enabled.
     std::optional<ProxySettings> channelSettings() const;
@@ -338,11 +325,7 @@ public:
 
 private:
     bool enabled_ = false;
-    ProxySettings::Type type_ = ProxySettings::Type::HTTP;
-    QString address_;
-    quint16 port_ = 0;
-    QString username_;
-    SecureString password_;
+    ProxySettings settings_;
 };
 
 class HostConfig final

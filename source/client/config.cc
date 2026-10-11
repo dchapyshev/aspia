@@ -343,13 +343,7 @@ std::optional<ProxySettings> ProxyConfig::channelSettings() const
     if (!enabled_)
         return std::nullopt;
 
-    ProxySettings settings;
-    settings.type = type_;
-    settings.address = address_;
-    settings.port = port_;
-    settings.user = username_;
-    settings.password = password_;
-    return settings;
+    return settings_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -357,12 +351,12 @@ std::optional<QByteArray> ProxyConfig::encryptedData() const
 {
     proto::storage::ProxyBlob data;
     data.set_enabled(enabled_);
-    data.set_type(static_cast<quint32>(type_));
-    data.set_address(address_.toStdString());
-    data.set_port(port_);
-    data.set_username(username_.toStdString());
+    data.set_type(static_cast<quint32>(settings_.type));
+    data.set_address(settings_.address.toStdString());
+    data.set_port(settings_.port);
+    data.set_username(settings_.user.toStdString());
 
-    const SecureByteArray password = password_.toUtf8();
+    const SecureByteArray password = settings_.password.toUtf8();
     data.set_password(password.constData(), static_cast<size_t>(password.size()));
 
     std::optional<QByteArray> sealed = sealMessage(data, kProxyAad);
@@ -378,11 +372,7 @@ std::optional<QByteArray> ProxyConfig::encryptedData() const
 bool ProxyConfig::setEncryptedData(const QByteArray& blob)
 {
     enabled_ = false;
-    type_ = ProxySettings::Type::HTTP;
-    address_.clear();
-    port_ = 0;
-    username_.clear();
-    password_.clear();
+    settings_ = ProxySettings();
 
     if (blob.isEmpty())
         return true;
@@ -396,11 +386,11 @@ bool ProxyConfig::setEncryptedData(const QByteArray& blob)
     if (valid)
     {
         enabled_ = data.enabled();
-        type_ = static_cast<ProxySettings::Type>(data.type());
-        address_ = QString::fromStdString(data.address());
-        port_ = static_cast<quint16>(data.port());
-        username_ = QString::fromStdString(data.username());
-        password_ = toSecureString(data.password());
+        settings_.type = static_cast<ProxySettings::Type>(data.type());
+        settings_.address = QString::fromStdString(data.address());
+        settings_.port = static_cast<quint16>(data.port());
+        settings_.user = QString::fromStdString(data.username());
+        settings_.password = toSecureString(data.password());
     }
     else
     {

@@ -225,13 +225,14 @@ SettingsTab::SettingsTab(QWidget* parent)
 
     ProxyConfig proxy;
     db.proxyConfig(&proxy);
+    const ProxySettings& proxy_settings = proxy.settings();
     ui->combo_proxy_type->setCurrentIndex(
-        ui->combo_proxy_type->findData(proxy.isEnabled() ? static_cast<int>(proxy.type()) : kNoProxy));
-    ui->edit_proxy_address->setText(proxy.address());
-    if (proxy.port())
-        ui->spinbox_proxy_port->setValue(proxy.port());
-    ui->edit_proxy_username->setText(proxy.username());
-    ui->edit_proxy_password->setPassword(proxy.password());
+        ui->combo_proxy_type->findData(proxy.isEnabled() ? static_cast<int>(proxy_settings.type) : kNoProxy));
+    ui->edit_proxy_address->setText(proxy_settings.address);
+    if (proxy_settings.port)
+        ui->spinbox_proxy_port->setValue(proxy_settings.port);
+    ui->edit_proxy_username->setText(proxy_settings.user);
+    ui->edit_proxy_password->setPassword(proxy_settings.password);
     updateProxyFields();
 
     const quint32 udp_methods = db.udpMethods();
@@ -486,17 +487,20 @@ void SettingsTab::onProxyChanged()
 {
     const int type = ui->combo_proxy_type->currentData().toInt();
 
+    ProxySettings settings;
+    if (type != kNoProxy)
+        settings.type = static_cast<ProxySettings::Type>(type);
+    settings.address = ui->edit_proxy_address->text().trimmed();
+    settings.port = static_cast<quint16>(ui->spinbox_proxy_port->value());
+    settings.user = ui->edit_proxy_username->text();
+    settings.password = ui->edit_proxy_password->password();
+
     ProxyConfig proxy;
     proxy.setEnabled(type != kNoProxy);
-    if (proxy.isEnabled())
-        proxy.setType(static_cast<ProxySettings::Type>(type));
-    proxy.setAddress(ui->edit_proxy_address->text().trimmed());
-    proxy.setPort(static_cast<quint16>(ui->spinbox_proxy_port->value()));
-    proxy.setUsername(ui->edit_proxy_username->text());
-    proxy.setPassword(ui->edit_proxy_password->password());
+    proxy.setSettings(settings);
 
     if (proxy.isEnabled())
-        LOG(INFO) << "[ACTION] Proxy changed:" << proxy.type();
+        LOG(INFO) << "[ACTION] Proxy changed:" << settings.type;
     else
         LOG(INFO) << "[ACTION] Proxy turned off";
 
