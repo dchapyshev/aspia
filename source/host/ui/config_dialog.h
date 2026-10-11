@@ -61,6 +61,7 @@ private:
     void setConfigChanged(const Location& location, bool changed);
     bool isConfigChanged() const;
     void reloadAll();
+    void updateProxyFields();
     void reloadUserList();
 
     std::unique_ptr<Ui::ConfigDialog> ui;

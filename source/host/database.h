@@ -28,6 +28,7 @@
 
 #include "base/time_types.h"
 #include "base/net/address.h"
+#include "base/net/proxy_settings.h"
 #include "base/peer/user.h"
 #include "base/sql/sql_database.h"
 
@@ -84,6 +85,9 @@ public:
 
     quint16 tcpPort() const;
     bool setTcpPort(quint16 port);
+
+    ProxySettings proxySettings() const;
+    bool setProxySettings(const ProxySettings& settings);
 
     bool isRouterEnabled() const;
     bool setRouterEnabled(bool enable);

@@ -33,6 +33,7 @@
 #include "base/crypto/password_generator.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
+#include "base/net/curl_util.h"
 #include "base/peer/user.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/update_dialog.h"
@@ -62,6 +63,7 @@
 namespace {
 
 const int kUpdatePublicKeyLength = 64;
+const int kNoProxy = -1;
 
 //--------------------------------------------------------------------------------------------------
 QString desktopPath(const QString& file_name)
@@ -126,9 +128,6 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     //---------------------------------------------------------------------------------------------
     // General Tab
     //---------------------------------------------------------------------------------------------
-
-    connect(ui->spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, &ConfigDialog::onConfigChanged);
 
     connect(ui->button_import, &QPushButton::clicked, this, &ConfigDialog::onImport);
 
@@ -199,9 +198,8 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     ui->combo_video_capturer->addItem(
         "X11", static_cast<quint32>(ScreenCapturer::Type::LINUX_X11));
 
-    // The capturer is chosen by the session type.
-    ui->label_video_capturer->hide();
-    ui->combo_video_capturer->hide();
+    // The capturer is chosen by the session type, and the group holds nothing else.
+    ui->groupBox->hide();
 #elif defined(Q_OS_MACOS)
     ui->combo_video_capturer->addItem(
         "MACOSX", static_cast<quint32>(ScreenCapturer::Type::MACOSX));
@@ -213,6 +211,33 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     {
         setConfigChanged(FROM_HERE, true);
     });
+
+    //---------------------------------------------------------------------------------------------
+    // Network Tab
+    //---------------------------------------------------------------------------------------------
+
+    connect(ui->spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &ConfigDialog::onConfigChanged);
+
+    ui->combo_proxy_type->addItem(tr("No proxy"), kNoProxy);
+    ui->combo_proxy_type->addItem("HTTP", static_cast<int>(ProxySettings::Type::HTTP));
+    ui->combo_proxy_type->addItem("HTTPS", static_cast<int>(ProxySettings::Type::HTTPS));
+    ui->combo_proxy_type->addItem("SOCKS4", static_cast<int>(ProxySettings::Type::SOCKS4));
+    ui->combo_proxy_type->addItem("SOCKS4A", static_cast<int>(ProxySettings::Type::SOCKS4A));
+    ui->combo_proxy_type->addItem("SOCKS5", static_cast<int>(ProxySettings::Type::SOCKS5));
+    ui->combo_proxy_type->addItem("SOCKS5H", static_cast<int>(ProxySettings::Type::SOCKS5H));
+
+    connect(ui->combo_proxy_type, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this]()
+    {
+        setConfigChanged(FROM_HERE, true);
+        updateProxyFields();
+    });
+
+    connect(ui->edit_proxy_address, &QLineEdit::textEdited, this, &ConfigDialog::onConfigChanged);
+    connect(ui->spinbox_proxy_port, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &ConfigDialog::onConfigChanged);
+    connect(ui->edit_proxy_username, &QLineEdit::textEdited, this, &ConfigDialog::onConfigChanged);
+    connect(ui->edit_proxy_password, &QLineEdit::textEdited, this, &ConfigDialog::onConfigChanged);
 
     //---------------------------------------------------------------------------------------------
     // Security Tab
@@ -711,6 +736,25 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
+        const int proxy_type = ui->combo_proxy_type->currentData().toInt();
+
+        ProxySettings proxy;
+        proxy.enabled = proxy_type != kNoProxy;
+        if (proxy.enabled)
+            proxy.type = static_cast<ProxySettings::Type>(proxy_type);
+        proxy.address = ui->edit_proxy_address->text().trimmed();
+        proxy.port = static_cast<quint16>(ui->spinbox_proxy_port->value());
+        proxy.user = ui->edit_proxy_username->text();
+        proxy.password = ui->edit_proxy_password->password();
+
+        if (proxy.enabled && !ScopedCURL::proxyUrl(proxy).isValid())
+        {
+            MsgBox::warning(this, tr("Incorrect proxy address entered."));
+            ui->edit_proxy_address->setFocus();
+            ui->edit_proxy_address->selectAll();
+            return;
+        }
+
         if (ui->checkbox_enable_router->isChecked())
         {
             Address router_address = Address::fromString(
@@ -745,6 +789,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         // Update the parameters.
         settings.setApplicationShutdownDisabled(ui->checkbox_disable_shutdown->isChecked());
         db.setTcpPort(static_cast<quint16>(ui->spinbox_port->value()));
+        db.setProxySettings(proxy);
         settings.setAutoUpdateEnabled(ui->checkbox_auto_update->isChecked());
         settings.setUpdateCheckFrequency(ui->combobox_update_check_freq->currentData().toInt());
         settings.setUpdateChannel(ui->combobox_update_channel->currentData().toString());
@@ -879,6 +924,16 @@ void ConfigDialog::reloadAll()
 
     ui->spinbox_port->setValue(db.tcpPort());
 
+    const ProxySettings proxy = db.proxySettings();
+    ui->combo_proxy_type->setCurrentIndex(
+        ui->combo_proxy_type->findData(proxy.enabled ? static_cast<int>(proxy.type) : kNoProxy));
+    ui->edit_proxy_address->setText(proxy.address);
+    if (proxy.port)
+        ui->spinbox_proxy_port->setValue(proxy.port);
+    ui->edit_proxy_username->setText(proxy.user);
+    ui->edit_proxy_password->setPassword(proxy.password);
+    updateProxyFields();
+
     int channel_index = ui->combobox_update_channel->findData(settings.updateChannel());
     ui->combobox_update_channel->setCurrentIndex(channel_index >= 0 ? channel_index : 0);
 
@@ -906,6 +961,21 @@ void ConfigDialog::reloadAll()
     ui->checkbox_disable_shutdown->setChecked(settings.isApplicationShutdownDisabled());
 
     setConfigChanged(FROM_HERE, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ConfigDialog::updateProxyFields()
+{
+    const bool enabled = ui->combo_proxy_type->currentData().toInt() != kNoProxy;
+
+    const QList<QWidget*> widgets =
+    {
+        ui->label_proxy_address, ui->edit_proxy_address, ui->label_proxy_port, ui->spinbox_proxy_port,
+        ui->label_proxy_username, ui->edit_proxy_username, ui->label_proxy_password, ui->edit_proxy_password
+    };
+
+    for (QWidget* widget : widgets)
+        widget->setEnabled(enabled);
 }
 
 //--------------------------------------------------------------------------------------------------

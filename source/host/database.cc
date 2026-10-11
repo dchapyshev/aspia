@@ -35,6 +35,12 @@ namespace {
 
 const char kSettingSeedKey[] = "seed_key";
 const char kSettingTcpPort[] = "tcp_port";
+const char kSettingProxyEnabled[] = "proxy_enabled";
+const char kSettingProxyType[] = "proxy_type";
+const char kSettingProxyAddress[] = "proxy_address";
+const char kSettingProxyPort[] = "proxy_port";
+const char kSettingProxyUser[] = "proxy_user";
+const char kSettingProxyPassword[] = "proxy_password";
 const char kSettingRouterEnabled[] = "router_enabled";
 const char kSettingRouterAddress[] = "router_address";
 const char kSettingRouterPublicKey[] = "router_public_key";
@@ -389,6 +395,55 @@ quint16 Database::tcpPort() const
 bool Database::setTcpPort(quint16 port)
 {
     return writeSetting(kSettingTcpPort, QString::number(port));
+}
+
+//--------------------------------------------------------------------------------------------------
+ProxySettings Database::proxySettings() const
+{
+    ProxySettings settings;
+    settings.enabled = readSetting(kSettingProxyEnabled).toInt() != 0;
+
+    bool ok = false;
+    const uint type = readSetting(kSettingProxyType).toUInt(&ok);
+    if (ok && type <= static_cast<uint>(ProxySettings::Type::SOCKS5H))
+    {
+        settings.type = static_cast<ProxySettings::Type>(type);
+    }
+    else if (settings.enabled)
+    {
+        LOG(ERROR) << "Invalid type of the proxy:" << type;
+        settings.enabled = false;
+    }
+
+    const uint port = readSetting(kSettingProxyPort).toUInt(&ok);
+    if (ok && port <= 0xFFFF)
+        settings.port = static_cast<quint16>(port);
+
+    settings.address = readSetting(kSettingProxyAddress);
+    settings.user = readSetting(kSettingProxyUser);
+    settings.password = SecureString(readSetting(kSettingProxyPassword));
+    return settings;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setProxySettings(const ProxySettings& settings)
+{
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return false;
+    }
+
+    if (!writeSetting(kSettingProxyEnabled, QString::number(settings.enabled ? 1 : 0)) ||
+        !writeSetting(kSettingProxyType, QString::number(static_cast<int>(settings.type))) ||
+        !writeSetting(kSettingProxyAddress, settings.address) ||
+        !writeSetting(kSettingProxyPort, QString::number(settings.port)) ||
+        !writeSetting(kSettingProxyUser, settings.user) ||
+        !writeSetting(kSettingProxyPassword, settings.password.toString()))
+        return false;
+
+    return transaction.commit();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -235,6 +235,31 @@ TEST_F(HostDatabaseTest, SettingsSurviveAWriteAndRead)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A fresh database connects directly, and a chosen proxy comes back whole, its password included.
+TEST_F(HostDatabaseTest, ProxyIsOffUntilChosen)
+{
+    EXPECT_FALSE(db_->proxySettings().enabled);
+
+    ProxySettings proxy;
+    proxy.enabled = true;
+    proxy.type = ProxySettings::Type::SOCKS5H;
+    proxy.address = "proxy.example.com";
+    proxy.port = 1080;
+    proxy.user = "john";
+    proxy.password = SecureString(QString("secret"));
+
+    ASSERT_TRUE(db_->setProxySettings(proxy));
+
+    const ProxySettings stored = db_->proxySettings();
+    EXPECT_TRUE(stored.enabled);
+    EXPECT_EQ(stored.type, ProxySettings::Type::SOCKS5H);
+    EXPECT_EQ(stored.address, proxy.address);
+    EXPECT_EQ(stored.port, proxy.port);
+    EXPECT_EQ(stored.user, proxy.user);
+    EXPECT_EQ(stored.password, proxy.password);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The values that drive the one-time password are read back inside the bounds the host works with,
 // whatever ended up in the file.
 TEST_F(HostDatabaseTest, OneTimePasswordSettingsAreKeptInBounds)
