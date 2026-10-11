@@ -25,6 +25,7 @@
 #include <asio/steady_timer.hpp>
 
 #include <map>
+#include <string_view>
 
 #include "base/crypto/secure_string.h"
 #include "base/net/curl_util.h"
@@ -92,6 +93,7 @@ private:
     static int closeSocketCallback(void* clientp, curl_socket_t socket);
     static int socketCallback(CURL* easy, curl_socket_t socket, int what, void* userp, void* socketp);
     static int timerCallback(CURLM* multi, long timeout_ms, void* userp);
+    static int debugCallback(CURL* easy, curl_infotype type, char* data, size_t size, void* clientp);
 
     void resolveProxy();
     void resolvePeer();
@@ -109,6 +111,7 @@ private:
     void continueWrite();
     void onTransportError(CURLcode result);
     void postError(ErrorCode error_code);
+    void onDebugMessage(curl_infotype type, std::string_view message);
 
     asio::io_context& io_context_;
     asio::ip::tcp::resolver resolver_;

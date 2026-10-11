@@ -414,7 +414,8 @@ void TcpChannel::onErrorOccurred(const Location& location, const std::error_code
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
-    CLOG(INFO) << "Connection finished:" << error_code << "from" << location;
+    CLOG(INFO) << "Connection finished:" << error_code << "from" << location << "(received" << total_rx_
+               << "bytes, sent" << total_tx_ << "bytes)";
 
     if (!io_->alive)
         return;

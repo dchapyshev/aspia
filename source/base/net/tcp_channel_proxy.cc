@@ -147,6 +147,28 @@ TcpChannel::ErrorCode tunnelErrorCode(CURLcode result, long proxy_response, long
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+std::string endpointToString(const asio::ip::tcp::endpoint& endpoint)
+{
+    const asio::ip::address address = endpoint.address();
+    const std::string host = address.is_v6() ? '[' + address.to_string() + ']' : address.to_string();
+    return host + ':' + std::to_string(endpoint.port());
+}
+
+//--------------------------------------------------------------------------------------------------
+const char* proxyAuthName(long auth)
+{
+    switch (auth)
+    {
+        case CURLAUTH_NONE: return "none";
+        case CURLAUTH_BASIC: return "Basic";
+        case CURLAUTH_DIGEST: return "Digest";
+        case CURLAUTH_NTLM: return "NTLM";
+        case CURLAUTH_NEGOTIATE: return "Negotiate";
+        default: return "unknown";
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -196,6 +218,9 @@ void TcpChannelProxy::connectTo(const QString& address, quint16 port, Seconds ti
     curl_easy_setopt(curl_.get(), CURLOPT_OPENSOCKETDATA, this);
     curl_easy_setopt(curl_.get(), CURLOPT_CLOSESOCKETFUNCTION, closeSocketCallback);
     curl_easy_setopt(curl_.get(), CURLOPT_CLOSESOCKETDATA, this);
+    curl_easy_setopt(curl_.get(), CURLOPT_VERBOSE, 1L);
+    curl_easy_setopt(curl_.get(), CURLOPT_DEBUGFUNCTION, debugCallback);
+    curl_easy_setopt(curl_.get(), CURLOPT_DEBUGDATA, this);
 
     if (!settings_.user.isEmpty())
     {
@@ -339,6 +364,9 @@ void TcpChannelProxy::closeTransport()
     curl_multi_setopt(multi_.get(), CURLMOPT_TIMERFUNCTION, nullptr);
     curl_multi_remove_handle(multi_.get(), curl_.get());
 
+    // The handle is cleaned up after the members it would log through are gone.
+    curl_easy_setopt(curl_.get(), CURLOPT_VERBOSE, 0L);
+
     for (auto& [socket, curl_socket] : sockets_)
     {
         std::error_code ignored_code;
@@ -377,6 +405,14 @@ int TcpChannelProxy::socketCallback(
 int TcpChannelProxy::timerCallback(CURLM* /* multi */, long timeout_ms, void* userp)
 {
     static_cast<TcpChannelProxy*>(userp)->setMultiTimeout(timeout_ms);
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int TcpChannelProxy::debugCallback(CURL* /* easy */, curl_infotype type, char* data, size_t size, void* clientp)
+{
+    static_cast<TcpChannelProxy*>(clientp)->onDebugMessage(type, std::string_view(data, size));
     return 0;
 }
 
@@ -636,7 +672,27 @@ void TcpChannelProxy::onConnectDone(CURLcode result)
     if (!error_code)
         CLOG(TRACE) << "Write buffer size:" << send_option.value();
 
-    CLOG(INFO) << "Tunnel to" << peer_address_ << "is opened";
+    // The socket the data goes through, so its peer is the proxy.
+    const std::string proxy_endpoint = endpointToString(tunnel_->socket.remote_endpoint(error_code));
+    const std::string local_endpoint = endpointToString(tunnel_->socket.local_endpoint(error_code));
+
+    if (settings_.type == ProxyType::HTTP || settings_.type == ProxyType::HTTPS)
+    {
+        long proxy_response = 0;
+        curl_easy_getinfo(curl_.get(), CURLINFO_HTTP_CONNECTCODE, &proxy_response);
+
+        long proxy_auth = 0;
+        curl_easy_getinfo(curl_.get(), CURLINFO_PROXYAUTH_USED, &proxy_auth);
+
+        CLOG(INFO) << "Tunnel to" << peer_address_ << ":" << peer_url_.port() << "is opened through"
+                   << proxy_endpoint << "from" << local_endpoint << "(proxy response" << proxy_response
+                   << "auth" << proxyAuthName(proxy_auth) << ")";
+    }
+    else
+    {
+        CLOG(INFO) << "Tunnel to" << peer_address_ << ":" << peer_url_.port() << "is opened through"
+                   << proxy_endpoint << "from" << local_endpoint;
+    }
 
     setConnected(peer_address_);
     emit sig_connected();
@@ -751,4 +807,19 @@ void TcpChannelProxy::postError(ErrorCode error_code)
         if (io->alive)
             onErrorOccurred(FROM_HERE, error_code);
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannelProxy::onDebugMessage(curl_infotype type, std::string_view message)
+{
+    // The headers sent to the proxy carry its credentials, and the data is ours, so only the progress
+    // of curl and the answers of the proxy reach the log.
+    if (type != CURLINFO_TEXT && type != CURLINFO_HEADER_IN)
+        return;
+
+    while (message.ends_with('\n') || message.ends_with('\r'))
+        message.remove_suffix(1);
+
+    if (!message.empty())
+        CLOG(INFO) << "curl:" << message;
 }
