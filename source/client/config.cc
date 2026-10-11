@@ -340,6 +340,9 @@ bool CredentialConfig::setEncryptedData(const QByteArray& blob)
 //--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> ProxyConfig::encryptedData() const
 {
+    if (settings_ == ProxySettings())
+        return QByteArray();
+
     proto::storage::ProxyBlob data;
     data.set_enabled(settings_.enabled);
     data.set_type(static_cast<quint32>(settings_.type));
