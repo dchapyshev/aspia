@@ -376,50 +376,50 @@
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="510"/>
-        <location filename="../client/android/main_window.cc" line="1089"/>
+        <location filename="../client/android/main_window.cc" line="1090"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Dataene til verten er skadet. Rediger verten og skriv dem inn på nytt.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="821"/>
-        <location filename="../client/android/main_window.cc" line="1047"/>
+        <location filename="../client/android/main_window.cc" line="1048"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Dataene til ruteren er skadet. Rediger ruteren og skriv dem inn på nytt.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="999"/>
+        <location filename="../client/android/main_window.cc" line="1000"/>
         <source>Invalid link.</source>
         <translation>Ugyldig lenke.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1007"/>
+        <location filename="../client/android/main_window.cc" line="1008"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>En annen økt er aktiv. Lukk den og åpne lenken på nytt.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1017"/>
+        <location filename="../client/android/main_window.cc" line="1018"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>Økttypen fra lenken støttes ikke på denne enheten.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1038"/>
+        <location filename="../client/android/main_window.cc" line="1039"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Ruteren som lenken viser til, er ikke blant de lagrede ruterne.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1090"/>
+        <location filename="../client/android/main_window.cc" line="1091"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Verten som lenken viser til, er ikke blant de lagrede vertene.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="509"/>
         <location filename="../client/android/main_window.cc" line="819"/>
-        <location filename="../client/android/main_window.cc" line="999"/>
-        <location filename="../client/android/main_window.cc" line="1006"/>
-        <location filename="../client/android/main_window.cc" line="1016"/>
-        <location filename="../client/android/main_window.cc" line="1037"/>
-        <location filename="../client/android/main_window.cc" line="1046"/>
-        <location filename="../client/android/main_window.cc" line="1087"/>
+        <location filename="../client/android/main_window.cc" line="1000"/>
+        <location filename="../client/android/main_window.cc" line="1007"/>
+        <location filename="../client/android/main_window.cc" line="1017"/>
+        <location filename="../client/android/main_window.cc" line="1038"/>
+        <location filename="../client/android/main_window.cc" line="1047"/>
+        <location filename="../client/android/main_window.cc" line="1088"/>
         <location filename="../host/android/main_window.cc" line="87"/>
         <location filename="../host/android/main_window.cc" line="103"/>
         <location filename="../host/android/main_window.cc" line="477"/>
@@ -931,17 +931,17 @@
         <translation>Kan ikke opprette en sikkerhetskopi. Enkelte oppføringer i databasen er skadet. Reparer eller slett dem.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="272"/>
+        <location filename="../client/main.cc" line="286"/>
         <source>Set Master Password</source>
         <translation>Angi hovedpassord</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="274"/>
+        <location filename="../client/main.cc" line="288"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Angi et hovedpassord som kreves for å låse opp programmet.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="282"/>
+        <location filename="../client/main.cc" line="296"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
@@ -949,12 +949,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="290"/>
+        <location filename="../client/main.cc" line="304"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Passordet du skrev inn, oppfyller ikke sikkerhetskravene!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="292"/>
+        <location filename="../client/main.cc" line="306"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet må inneholde små og store bokstaver samt tall, og kan ikke være kortere enn %n tegn.</numerusform>
@@ -962,12 +962,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="296"/>
+        <location filename="../client/main.cc" line="310"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vil du skrive inn et annet passord?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="306"/>
+        <location filename="../client/main.cc" line="320"/>
         <source>Unable to set master password.</source>
         <translation>Kan ikke angi hovedpassord.</translation>
     </message>
@@ -987,7 +987,7 @@
         <translation>Kan ikke opprette en sikkerhetskopi.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="217"/>
+        <location filename="../client/main.cc" line="231"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>En aspia://-lenke for å koble til en vert.</translation>
     </message>
@@ -1007,7 +1007,7 @@
         <translation>Ugyldig hovedpassord.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="213"/>
+        <location filename="../client/main.cc" line="227"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -1048,37 +1048,37 @@
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="229"/>
+        <location filename="../client/desktop/client_window.cc" line="270"/>
         <source>Session started.</source>
         <translation>Økten er startet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="542"/>
+        <location filename="../client/desktop/client_window.cc" line="584"/>
         <source>The specified router is unavailable.</source>
         <translation>Den angitte ruteren er utilgjengelig.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="544"/>
+        <location filename="../client/desktop/client_window.cc" line="586"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Dataene til ruteren er skadet. Rediger ruteren og skriv dem inn på nytt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="546"/>
+        <location filename="../client/desktop/client_window.cc" line="588"/>
         <source>The specified router is offline.</source>
         <translation>Den angitte ruteren er ikke tilkoblet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="241"/>
+        <location filename="../client/desktop/client_window.cc" line="282"/>
         <source>Connecting to host %1...</source>
         <translation>Kobler til verten %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="245"/>
+        <location filename="../client/desktop/client_window.cc" line="286"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Kobler til verten %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="281"/>
+        <location filename="../client/desktop/client_window.cc" line="322"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Verten er ikke tilgjengelig ennå. Venter på ny tilkobling...</translation>
     </message>
@@ -1088,22 +1088,22 @@
         <translation>Tidsavbrudd under venting på ny tilkobling til verten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="301"/>
+        <location filename="../client/desktop/client_window.cc" line="342"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Vertsversjonen er nyere enn klientversjonen (%1 &gt; %2). Oppdater programmet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="553"/>
+        <location filename="../client/desktop/client_window.cc" line="595"/>
         <source>Requesting connection to the host...</source>
         <translation>Ber om tilkobling til verten...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="561"/>
+        <location filename="../client/desktop/client_window.cc" line="603"/>
         <source>Connection offer received.</source>
         <translation>Tilkoblingstilbud mottatt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="578"/>
+        <location filename="../client/desktop/client_window.cc" line="620"/>
         <source>Error requesting connection via router.</source>
         <translation>Feil ved forespørsel om tilkobling via ruter.</translation>
     </message>
@@ -1112,8 +1112,8 @@
     <name>ConfigDialog</name>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
-        <location filename="../host/ui/config_dialog.ui" line="218"/>
-        <location filename="../host/ui/config_dialog.cc" line="137"/>
+        <location filename="../host/ui/config_dialog.ui" line="185"/>
+        <location filename="../host/ui/config_dialog.cc" line="136"/>
         <source>Settings</source>
         <translation>Innstillinger</translation>
     </message>
@@ -1123,434 +1123,476 @@
         <translation>Generelt</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="71"/>
+        <location filename="../host/ui/config_dialog.ui" line="38"/>
         <source>Preferred video capturer:</source>
         <translation>Foretrukket videoopptaksmetode:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="90"/>
+        <location filename="../host/ui/config_dialog.ui" line="57"/>
         <source>Updates</source>
         <translation>Oppdateringer</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="123"/>
+        <location filename="../host/ui/config_dialog.ui" line="90"/>
         <source>Update channel:</source>
         <translation>Oppdateringskanal:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="141"/>
+        <location filename="../host/ui/config_dialog.ui" line="108"/>
         <source>Update server:</source>
         <translation>Oppdateringsserver:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="162"/>
+        <location filename="../host/ui/config_dialog.ui" line="129"/>
         <source>Public key:</source>
         <translation>Offentlig nøkkel:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="181"/>
+        <location filename="../host/ui/config_dialog.ui" line="148"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>Hvis oppdateringsserveren ikke er angitt, brukes standardserveren. Hvis den offentlige nøkkelen ikke er angitt, brukes den innebygde nøkkelen.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="521"/>
-        <location filename="../host/ui/config_dialog.ui" line="632"/>
+        <location filename="../host/ui/config_dialog.ui" line="235"/>
+        <source>Network</source>
+        <translation>Nettverk</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="283"/>
+        <source>Proxy</source>
+        <translation>Proxyserver</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="289"/>
+        <source>Type:</source>
+        <translation>Type:</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="313"/>
+        <source>Port:</source>
+        <translation>Port:</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="333"/>
+        <source>User Name:</source>
+        <translation>Brukernavn:</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="343"/>
+        <source>Password:</source>
+        <translation>Passord:</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.ui" line="623"/>
+        <location filename="../host/ui/config_dialog.ui" line="734"/>
         <source>Users</source>
         <translation>Brukere</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="535"/>
+        <location filename="../host/ui/config_dialog.ui" line="637"/>
         <source>Add new user</source>
         <translation>Legg til ny bruker</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="561"/>
+        <location filename="../host/ui/config_dialog.ui" line="663"/>
         <source>Edit user</source>
         <translation>Rediger bruker</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="587"/>
+        <location filename="../host/ui/config_dialog.ui" line="689"/>
         <source>Delete user</source>
         <translation>Slett bruker</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="206"/>
+        <location filename="../host/ui/config_dialog.ui" line="173"/>
         <source>Check for updates</source>
         <translation>Se etter oppdateringer</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="655"/>
+        <location filename="../host/ui/config_dialog.ui" line="757"/>
         <source>Add</source>
         <translation>Legg til</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="664"/>
+        <location filename="../host/ui/config_dialog.ui" line="766"/>
         <source>Modify</source>
         <translation>Endre</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="673"/>
+        <location filename="../host/ui/config_dialog.ui" line="775"/>
         <source>Delete</source>
         <translation>Slett</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="453"/>
+        <location filename="../host/ui/config_dialog.ui" line="555"/>
         <source>Router</source>
         <translation>Ruter</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="459"/>
+        <location filename="../host/ui/config_dialog.ui" line="561"/>
         <source>Enable the use of a router</source>
         <translation>Aktiver bruk av ruter</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="471"/>
+        <location filename="../host/ui/config_dialog.ui" line="303"/>
+        <location filename="../host/ui/config_dialog.ui" line="573"/>
         <source>Address:</source>
         <translation>Adresse:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="490"/>
+        <location filename="../host/ui/config_dialog.ui" line="592"/>
         <source>Public Key:</source>
         <translation>Offentlig nøkkel:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="293"/>
+        <location filename="../host/ui/config_dialog.ui" line="395"/>
         <source>Change password</source>
         <translation>Endre passord</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="268"/>
+        <location filename="../host/ui/config_dialog.ui" line="370"/>
         <source>Security</source>
         <translation>Sikkerhet</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="274"/>
+        <location filename="../host/ui/config_dialog.ui" line="376"/>
         <source>Password Protection of Settings</source>
         <translation>Passordbeskyttelse av innstillinger</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="310"/>
+        <location filename="../host/ui/config_dialog.ui" line="412"/>
         <source>One-time Password</source>
         <translation>Engangspassord</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="316"/>
+        <location filename="../host/ui/config_dialog.ui" line="418"/>
         <source>Enable one-time password</source>
         <translation>Aktiver engangspassord</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="353"/>
+        <location filename="../host/ui/config_dialog.ui" line="455"/>
         <source>Characters count:</source>
         <translation>Antall tegn:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="339"/>
+        <location filename="../host/ui/config_dialog.ui" line="441"/>
         <source>Characters:</source>
         <translation>Tegn:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="375"/>
+        <location filename="../host/ui/config_dialog.ui" line="477"/>
         <source>Connection Confirmation</source>
         <translation>Tilkoblingsbekreftelse</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="381"/>
+        <location filename="../host/ui/config_dialog.ui" line="483"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>Krev bekreftelse ved tilkobling til en datamaskin</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="390"/>
+        <location filename="../host/ui/config_dialog.ui" line="492"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>Automatisk bekreftelse av tilkobling via:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="325"/>
+        <location filename="../host/ui/config_dialog.ui" line="427"/>
         <source>Change password:</source>
         <translation>Bytt passord:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="404"/>
+        <location filename="../host/ui/config_dialog.ui" line="506"/>
         <source>If there is no active user:</source>
         <translation>Hvis ingen bruker er aktiv:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="504"/>
+        <location filename="../host/ui/config_dialog.ui" line="606"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>En ruter kreves for å koble til en datamaskin når det ikke finnes en direkte tilkobling (forbi NAT). Aspia tilbyr ingen offentlig ruter, men du kan installere din egen. Du kan laste ned ruteren på &lt;a href=&quot;https://aspia.org&quot;&gt;det offisielle nettstedet&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="30"/>
+        <location filename="../host/ui/config_dialog.ui" line="241"/>
         <source>Common</source>
         <translation>Generelt</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="36"/>
+        <location filename="../host/ui/config_dialog.ui" line="247"/>
         <source>Incoming port:</source>
         <translation>Innkommende port:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="429"/>
+        <location filename="../host/ui/config_dialog.ui" line="531"/>
         <source>Disable Aspia shutdown</source>
         <translation>Deaktiver avslutning av Aspia</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="423"/>
+        <location filename="../host/ui/config_dialog.ui" line="525"/>
         <source>Other</source>
         <translation>Annet</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="96"/>
+        <location filename="../host/ui/config_dialog.ui" line="63"/>
         <source>Automatic checking and installation of updates</source>
         <translation>Automatisk kontroll og installasjon av oppdateringer</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="105"/>
+        <location filename="../host/ui/config_dialog.ui" line="72"/>
         <source>Check for updates:</source>
         <translation>Se etter oppdateringer:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="139"/>
+        <location filename="../host/ui/config_dialog.cc" line="138"/>
         <source>Installer</source>
         <translation>Installasjonspakke</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="141"/>
+        <location filename="../host/ui/config_dialog.cc" line="140"/>
         <source>Quick Support</source>
         <translation>Quick Support</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="148"/>
+        <location filename="../host/ui/config_dialog.cc" line="147"/>
         <source>Once a day</source>
         <translation>En gang om dagen</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="149"/>
+        <location filename="../host/ui/config_dialog.cc" line="148"/>
         <source>Once a week</source>
         <translation>En gang i uken</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="150"/>
+        <location filename="../host/ui/config_dialog.cc" line="149"/>
         <source>Once a month</source>
         <translation>En gang i måneden</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="152"/>
+        <location filename="../host/ui/config_dialog.cc" line="151"/>
         <source>Stable</source>
         <translation>Stabil</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="153"/>
+        <location filename="../host/ui/config_dialog.cc" line="152"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="154"/>
+        <location filename="../host/ui/config_dialog.cc" line="153"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="189"/>
+        <location filename="../host/ui/config_dialog.cc" line="188"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="234"/>
+        <location filename="../host/ui/config_dialog.cc" line="222"/>
+        <source>No proxy</source>
+        <translation>Ingen proxyserver</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="259"/>
         <source>On reboot</source>
         <translation>Ved omstart</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="235"/>
+        <location filename="../host/ui/config_dialog.cc" line="260"/>
         <source>Every 5 minutes</source>
         <translation>Hvert 5. minutt</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="236"/>
+        <location filename="../host/ui/config_dialog.cc" line="261"/>
         <source>Every 30 minutes</source>
         <translation>Hvert 30. minutt</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="237"/>
+        <location filename="../host/ui/config_dialog.cc" line="262"/>
         <source>Every 1 hour</source>
         <translation>Hver time</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="238"/>
+        <location filename="../host/ui/config_dialog.cc" line="263"/>
         <source>Every 6 hours</source>
         <translation>Hver 6. time</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="239"/>
+        <location filename="../host/ui/config_dialog.cc" line="264"/>
         <source>Every 12 hours</source>
         <translation>Hver 12. time</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="247"/>
+        <location filename="../host/ui/config_dialog.cc" line="272"/>
         <source>Letters and digits</source>
         <translation>Bokstaver og sifre</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="250"/>
+        <location filename="../host/ui/config_dialog.cc" line="275"/>
         <source>Letters</source>
         <translation>Bokstaver</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="252"/>
+        <location filename="../host/ui/config_dialog.cc" line="277"/>
         <source>Digits</source>
         <translation>Sifre</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="269"/>
+        <location filename="../host/ui/config_dialog.cc" line="294"/>
         <source>Never</source>
         <translation>Aldri</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="270"/>
+        <location filename="../host/ui/config_dialog.cc" line="295"/>
         <source>15 seconds</source>
         <translation>15 sekunder</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="271"/>
+        <location filename="../host/ui/config_dialog.cc" line="296"/>
         <source>30 seconds</source>
         <translation>30 sekunder</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="272"/>
+        <location filename="../host/ui/config_dialog.cc" line="297"/>
         <source>45 seconds</source>
         <translation>45 sekunder</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="273"/>
+        <location filename="../host/ui/config_dialog.cc" line="298"/>
         <source>60 seconds</source>
         <translation>60 sekunder</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="281"/>
+        <location filename="../host/ui/config_dialog.cc" line="306"/>
         <source>Accept connection</source>
         <translation>Godta tilkobling</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="282"/>
+        <location filename="../host/ui/config_dialog.cc" line="307"/>
         <source>Reject connection</source>
         <translation>Avvis tilkobling</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="482"/>
+        <location filename="../host/ui/config_dialog.cc" line="507"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Er du sikker på at du vil slette brukeren &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="510"/>
-        <location filename="../host/ui/config_dialog.cc" line="544"/>
+        <location filename="../host/ui/config_dialog.cc" line="535"/>
+        <location filename="../host/ui/config_dialog.cc" line="569"/>
         <source>An error occurred while processing the password.</source>
         <translation>Det oppstod en feil under behandling av passordet.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="527"/>
+        <location filename="../host/ui/config_dialog.cc" line="552"/>
         <source>Settings storage is unavailable.</source>
         <translation>Innstillingslagringen er utilgjengelig.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="237"/>
-        <location filename="../host/ui/config_dialog.cc" line="558"/>
+        <location filename="../host/ui/config_dialog.ui" line="204"/>
+        <location filename="../host/ui/config_dialog.cc" line="583"/>
         <source>Import</source>
         <translation>Importer</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="558"/>
-        <location filename="../host/ui/config_dialog.cc" line="575"/>
+        <location filename="../host/ui/config_dialog.cc" line="583"/>
+        <location filename="../host/ui/config_dialog.cc" line="600"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON-filer (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="244"/>
-        <location filename="../host/ui/config_dialog.cc" line="575"/>
+        <location filename="../host/ui/config_dialog.ui" line="211"/>
         <location filename="../host/ui/config_dialog.cc" line="600"/>
-        <location filename="../host/ui/config_dialog.cc" line="635"/>
+        <location filename="../host/ui/config_dialog.cc" line="625"/>
+        <location filename="../host/ui/config_dialog.cc" line="660"/>
         <source>Export</source>
         <translation>Eksporter</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="600"/>
+        <location filename="../host/ui/config_dialog.cc" line="625"/>
         <source>MSI-files (*.msi)</source>
         <translation>MSI-filer (*.msi)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="610"/>
+        <location filename="../host/ui/config_dialog.cc" line="635"/>
         <source>The installer was successfully exported.</source>
         <translation>Installasjonspakken ble eksportert.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="614"/>
+        <location filename="../host/ui/config_dialog.cc" line="639"/>
         <source>The installed host package was not found.</source>
         <translation>Den installerte vertspakken ble ikke funnet.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="618"/>
+        <location filename="../host/ui/config_dialog.cc" line="643"/>
         <source>The installed version of the host does not support exporting the installer.</source>
         <translation>Den installerte versjonen av verten støtter ikke eksport av installasjonspakken.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="622"/>
+        <location filename="../host/ui/config_dialog.cc" line="647"/>
         <source>Unable to export the installer.</source>
         <translation>Kan ikke eksportere installasjonspakken.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="635"/>
+        <location filename="../host/ui/config_dialog.cc" line="660"/>
         <source>Executable files (*.exe)</source>
         <translation>Kjørbare filer (*.exe)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="645"/>
+        <location filename="../host/ui/config_dialog.cc" line="670"/>
         <source>The portable version was successfully exported.</source>
         <translation>Den portable versjonen ble eksportert.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="649"/>
+        <location filename="../host/ui/config_dialog.cc" line="674"/>
         <source>The portable version works only through a router. Set up the connection to the router and save the settings.</source>
         <translation>Den portable versjonen fungerer bare via en ruter. Konfigurer tilkoblingen til ruteren og lagre innstillingene.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="653"/>
+        <location filename="../host/ui/config_dialog.cc" line="678"/>
         <source>Unable to export the portable version.</source>
         <translation>Kan ikke eksportere den portable versjonen.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="674"/>
+        <location filename="../host/ui/config_dialog.cc" line="699"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Konfigurasjonen kan ikke skrives. Kontroller at du har tilstrekkelige skriverettigheter.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="690"/>
+        <location filename="../host/ui/config_dialog.cc" line="715"/>
         <source>An invalid update server address was entered.</source>
         <translation>Det ble angitt en ugyldig adresse for oppdateringsserveren.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="698"/>
+        <location filename="../host/ui/config_dialog.cc" line="723"/>
         <source>Enter the update server address.</source>
         <translation>Skriv inn adressen til oppdateringsserveren.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="708"/>
+        <location filename="../host/ui/config_dialog.cc" line="733"/>
         <source>An invalid public key was entered.</source>
         <translation>Det ble angitt en ugyldig offentlig nøkkel.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="720"/>
+        <location filename="../host/ui/config_dialog.cc" line="752"/>
+        <source>Incorrect proxy address entered.</source>
+        <translation>Ugyldig proxyserveradresse angitt.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="764"/>
         <source>Incorrect router address entered.</source>
         <translation>Ugyldig ruteradresse angitt.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="730"/>
+        <location filename="../host/ui/config_dialog.cc" line="774"/>
         <source>Incorrect router public key entered.</source>
         <translation>Ugyldig offentlig nøkkel for ruteren angitt.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="891"/>
+        <location filename="../host/ui/config_dialog.cc" line="946"/>
         <source>Install</source>
         <translation>Installer</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="896"/>
+        <location filename="../host/ui/config_dialog.cc" line="951"/>
         <source>Remove</source>
         <translation>Fjern</translation>
     </message>
@@ -2285,6 +2327,24 @@ Påloggingsinformasjon erstattet: %2</translation>
     </message>
 </context>
 <context>
+    <name>CredentialPanel</name>
+    <message>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="52"/>
+        <source>Sign In</source>
+        <translation>Logg på</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="59"/>
+        <source>Close</source>
+        <translation>Lukk</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="109"/>
+        <source>Not Selected</source>
+        <translation>Ikke valgt</translation>
+    </message>
+</context>
+<context>
     <name>CredentialsDialog</name>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="79"/>
@@ -2688,35 +2748,19 @@ Påloggingsinformasjon erstattet: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="963"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="971"/>
         <source>Save File</source>
         <translation>Lagre fil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="964"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="972"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-bilde (*.png);;BMP-bilde (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="995"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1003"/>
         <source>Could not save image</source>
         <translation>Kunne ikke lagre bildet</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1381"/>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1386"/>
-        <source>Credentials</source>
-        <translation>Påloggingsinformasjon</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1381"/>
-        <source>User name:</source>
-        <translation>Brukernavn:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1386"/>
-        <source>Password:</source>
-        <translation>Passord:</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="506"/>
@@ -4305,7 +4349,7 @@ Påloggingsinformasjon erstattet: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="67"/>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="407"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="408"/>
         <source>Address:</source>
         <translation>Adresse:</translation>
     </message>
@@ -4350,12 +4394,12 @@ Påloggingsinformasjon erstattet: %2</translation>
         <translation>Legg til vert</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="378"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="379"/>
         <source>&lt;deleted router&gt;</source>
         <translation>&lt;slettet ruter&gt;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="337"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="338"/>
         <source>Local</source>
         <translation>Lokal</translation>
     </message>
@@ -4426,37 +4470,37 @@ Påloggingsinformasjon erstattet: %2</translation>
         <translation>Kunne ikke lese listen over rutere.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="299"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="300"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Kunne ikke lese listen over påloggingsinformasjon.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="321"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="322"/>
         <source>Failed to read the list of groups.</source>
         <translation>Kunne ikke lese listen over grupper.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="350"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="351"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Kunne ikke hente vertsinformasjon fra den lokale databasen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="398"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="399"/>
         <source>The data of the host is damaged. Enter it again.</source>
         <translation>Dataene til verten er skadet. Skriv dem inn på nytt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="408"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="409"/>
         <source>Host name or IP address</source>
         <translation>Vertsnavn eller IP-adresse</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="412"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="413"/>
         <source>ID:</source>
         <translation>ID:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="413"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="414"/>
         <source>Host ID</source>
         <translation>Verts-ID</translation>
     </message>
@@ -4480,7 +4524,7 @@ Påloggingsinformasjon erstattet: %2</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="64"/>
-        <location filename="../client/android/local_host_editor.cc" line="248"/>
+        <location filename="../client/android/local_host_editor.cc" line="249"/>
         <source>Address</source>
         <translation>Adresse</translation>
     </message>
@@ -4511,7 +4555,7 @@ Påloggingsinformasjon erstattet: %2</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="80"/>
-        <location filename="../client/android/local_host_editor.cc" line="365"/>
+        <location filename="../client/android/local_host_editor.cc" line="366"/>
         <source>Delete</source>
         <translation>Slett</translation>
     </message>
@@ -4527,23 +4571,23 @@ Påloggingsinformasjon erstattet: %2</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="191"/>
-        <location filename="../client/android/local_host_editor.cc" line="216"/>
-        <location filename="../client/android/local_host_editor.cc" line="271"/>
+        <location filename="../client/android/local_host_editor.cc" line="217"/>
+        <location filename="../client/android/local_host_editor.cc" line="272"/>
         <source>Failed to read data from the local database.</source>
         <translation>Kunne ikke lese data fra den lokale databasen.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="248"/>
+        <location filename="../client/android/local_host_editor.cc" line="249"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="278"/>
+        <location filename="../client/android/local_host_editor.cc" line="279"/>
         <source>Name cannot be empty.</source>
         <translation>Navnet kan ikke være tomt.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_host_editor.cc" line="285"/>
+        <location filename="../client/android/local_host_editor.cc" line="286"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Navnet er for langt. Maksimal lengde på navnet er %n tegn.</numerusform>
@@ -4551,7 +4595,7 @@ Påloggingsinformasjon erstattet: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_host_editor.cc" line="294"/>
+        <location filename="../client/android/local_host_editor.cc" line="295"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Kommentaren er for lang. Maksimal lengde på kommentaren er %n tegn.</numerusform>
@@ -4559,42 +4603,42 @@ Påloggingsinformasjon erstattet: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="307"/>
+        <location filename="../client/android/local_host_editor.cc" line="308"/>
         <source>An invalid host address was entered.</source>
         <translation>Det ble angitt en ugyldig vertsadresse.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="315"/>
+        <location filename="../client/android/local_host_editor.cc" line="316"/>
         <source>An invalid host ID was entered.</source>
         <translation>Det ble angitt en ugyldig verts-ID.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="326"/>
+        <location filename="../client/android/local_host_editor.cc" line="327"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Brukernavnet kan ikke være tomt og kan bare inneholde bokstaver, tall og tegnene &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="335"/>
+        <location filename="../client/android/local_host_editor.cc" line="336"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Skriv inn både brukernavn og passord, eller la begge stå tomme.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="354"/>
+        <location filename="../client/android/local_host_editor.cc" line="355"/>
         <source>Failed to save the host.</source>
         <translation>Kunne ikke lagre verten.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="364"/>
+        <location filename="../client/android/local_host_editor.cc" line="365"/>
         <source>Delete Host</source>
         <translation>Slett vert</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="365"/>
+        <location filename="../client/android/local_host_editor.cc" line="366"/>
         <source>Delete the host &quot;%1&quot;?</source>
         <translation>Vil du slette verten &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="372"/>
+        <location filename="../client/android/local_host_editor.cc" line="373"/>
         <source>Failed to delete the host.</source>
         <translation>Kunne ikke slette verten.</translation>
     </message>
@@ -4818,7 +4862,7 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="424"/>
+        <location filename="../client/desktop/main_window.cc" line="433"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4893,63 +4937,63 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Søk...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="187"/>
+        <location filename="../client/desktop/main_window.cc" line="196"/>
         <source>Management</source>
         <translation>Administrasjon</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="233"/>
+        <location filename="../client/desktop/main_window.cc" line="242"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Ugyldig lenke &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="256"/>
+        <location filename="../client/desktop/main_window.cc" line="265"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Ruteren som lenken viser til, er ikke blant de lagrede ruterne.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="305"/>
+        <location filename="../client/desktop/main_window.cc" line="314"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Verten som lenken viser til, er ikke blant de lagrede vertene.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="400"/>
+        <location filename="../client/desktop/main_window.cc" line="409"/>
         <source>Close all sessions to lock the application.</source>
         <translation>Lukk alle økter for å låse programmet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="406"/>
+        <location filename="../client/desktop/main_window.cc" line="415"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>Lukk alle dialoger for å låse programmet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="527"/>
+        <location filename="../client/desktop/main_window.cc" line="536"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Tilkobling via ID er angitt i egenskapene til verten, men ruteren er ikke konfigurert. Kontroller ruterparametrene i egenskapene til verten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="317"/>
+        <location filename="../client/desktop/main_window.cc" line="326"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Ruteren som er knyttet til denne verten, er slettet. Rediger verten for å velge en annen ruter eller bytte til direkte tilkobling.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="264"/>
-        <location filename="../client/desktop/main_window.cc" line="316"/>
+        <location filename="../client/desktop/main_window.cc" line="273"/>
+        <location filename="../client/desktop/main_window.cc" line="325"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Dataene til ruteren er skadet. Rediger ruteren og skriv dem inn på nytt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="304"/>
+        <location filename="../client/desktop/main_window.cc" line="313"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Dataene til verten er skadet. Rediger verten og skriv dem inn på nytt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="359"/>
+        <location filename="../client/desktop/main_window.cc" line="368"/>
         <source>Credentials</source>
         <translation>Påloggingsinformasjon</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="390"/>
+        <location filename="../client/desktop/main_window.cc" line="399"/>
         <source>Settings</source>
         <translation>Innstillinger</translation>
     </message>
@@ -5616,7 +5660,7 @@ Påloggingsinformasjon importert: %5</translation>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="359"/>
+        <location filename="../client/workers/network_worker.cc" line="360"/>
         <source>Failed to connect to the relay server</source>
         <translation>Kunne ikke koble til reléserveren</translation>
     </message>
@@ -5918,6 +5962,29 @@ Påloggingsinformasjon importert: %5</translation>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="92"/>
         <source>Unknown Process</source>
         <translation>Ukjent prosess</translation>
+    </message>
+</context>
+<context>
+    <name>ProxyAuthDialog</name>
+    <message>
+        <location filename="../host/ui/proxy_auth_dialog.ui" line="14"/>
+        <source>Proxy Server</source>
+        <translation>Proxyserver</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/proxy_auth_dialog.ui" line="33"/>
+        <source>User Name:</source>
+        <translation>Brukernavn:</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/proxy_auth_dialog.ui" line="43"/>
+        <source>Password:</source>
+        <translation>Passord:</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/proxy_auth_dialog.cc" line="39"/>
+        <source>The system settings specify the proxy server %1:%2. Enter the user name and password for it, or leave them empty if it does not require them. Cancel to connect without the proxy server.</source>
+        <translation>Systeminnstillingene angir proxyserveren %1:%2. Skriv inn brukernavn og passord for den, eller la feltene stå tomme hvis den ikke krever dem. Hvis du avbryter, opprettes tilkoblingen uten proxyserver.</translation>
     </message>
 </context>
 <context>
@@ -6270,7 +6337,7 @@ Påloggingsinformasjon importert: %5</translation>
 <context>
     <name>RouterConfig</name>
     <message>
-        <location filename="../client/config.cc" line="130"/>
+        <location filename="../client/config.cc" line="131"/>
         <source>&lt;unreadable router&gt;</source>
         <translation>&lt;uleselig ruter&gt;</translation>
     </message>
@@ -6737,17 +6804,17 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Kunne ikke lagre påloggingsinformasjonen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="293"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="294"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Kunne ikke lese listen over påloggingsinformasjon.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="339"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="340"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>Kunne ikke lese påloggingsinformasjonen til verten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="344"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="345"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>Påloggingsinformasjonen til verten er skadet. Skriv den inn på nytt.</translation>
     </message>
@@ -6786,8 +6853,8 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="135"/>
-        <location filename="../client/android/router_host_editor.cc" line="157"/>
-        <location filename="../client/android/router_host_editor.cc" line="204"/>
+        <location filename="../client/android/router_host_editor.cc" line="158"/>
+        <location filename="../client/android/router_host_editor.cc" line="205"/>
         <source>Failed to read data from the local database.</source>
         <translation>Kunne ikke lese data fra den lokale databasen.</translation>
     </message>
@@ -6797,14 +6864,14 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Påloggingsinformasjonen til verten er skadet. Skriv den inn på nytt.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="226"/>
-        <location filename="../client/android/router_host_editor.cc" line="240"/>
-        <location filename="../client/android/router_host_editor.cc" line="264"/>
+        <location filename="../client/android/router_host_editor.cc" line="227"/>
+        <location filename="../client/android/router_host_editor.cc" line="241"/>
+        <location filename="../client/android/router_host_editor.cc" line="265"/>
         <source>Failed to save the credentials.</source>
         <translation>Kunne ikke lagre påloggingsinformasjonen.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="215"/>
+        <location filename="../client/android/router_host_editor.cc" line="216"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Skriv inn både brukernavn og passord, eller la begge stå tomme.</translation>
     </message>
@@ -7736,273 +7803,308 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="227"/>
+        <source>Proxy</source>
+        <translation>Proxyserver</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="233"/>
+        <source>Type:</source>
+        <translation>Type:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="247"/>
+        <source>Address:</source>
+        <translation>Adresse:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="257"/>
+        <source>Port:</source>
+        <translation>Port:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="277"/>
+        <source>User Name:</source>
+        <translation>Brukernavn:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="287"/>
+        <source>Password:</source>
+        <translation>Passord:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="300"/>
         <source>UDP Connections</source>
         <translation>UDP-tilkoblinger</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="233"/>
+        <location filename="../client/desktop/settings_tab.ui" line="306"/>
         <source>Allow direct connections</source>
         <translation>Tillat direkte tilkoblinger</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="240"/>
+        <location filename="../client/desktop/settings_tab.ui" line="313"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Tillat UDP hole punching</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="247"/>
+        <location filename="../client/desktop/settings_tab.ui" line="320"/>
         <source>Allow PCP protocol</source>
         <translation>Tillat PCP-protokoll</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="254"/>
+        <location filename="../client/desktop/settings_tab.ui" line="327"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Tillat NAT-PMP-protokoll</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="261"/>
+        <location filename="../client/desktop/settings_tab.ui" line="334"/>
         <source>Allow UPnP protocol</source>
         <translation>Tillat UPnP-protokoll</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="271"/>
+        <location filename="../client/desktop/settings_tab.ui" line="344"/>
         <source>Security</source>
         <translation>Sikkerhet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="277"/>
+        <location filename="../client/desktop/settings_tab.ui" line="350"/>
         <source>Lock after inactivity:</source>
         <translation>Lås etter inaktivitet:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="291"/>
+        <location filename="../client/desktop/settings_tab.ui" line="364"/>
         <source>Unlock automatically on startup</source>
         <translation>Lås opp automatisk ved oppstart</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="298"/>
+        <location filename="../client/desktop/settings_tab.ui" line="371"/>
         <source>Change Master Password...</source>
         <translation>Endre hovedpassord...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="369"/>
+        <location filename="../client/desktop/settings_tab.ui" line="442"/>
         <source>Features</source>
         <translation>Funksjoner</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="375"/>
+        <location filename="../client/desktop/settings_tab.ui" line="448"/>
         <source>Enable audio</source>
         <translation>Aktiver lyd</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="382"/>
+        <location filename="../client/desktop/settings_tab.ui" line="455"/>
         <source>Enable clipboard</source>
         <translation>Aktiver utklippstavle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="389"/>
+        <location filename="../client/desktop/settings_tab.ui" line="462"/>
         <source>Show shape of remote cursor</source>
         <translation>Vis formen til den eksterne markøren</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="396"/>
+        <location filename="../client/desktop/settings_tab.ui" line="469"/>
         <source>Show position of remote cursor</source>
         <translation>Vis posisjonen til den eksterne markøren</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="403"/>
+        <location filename="../client/desktop/settings_tab.ui" line="476"/>
         <source>Disable desktop effects</source>
         <translation>Deaktiver skrivebordseffekter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="410"/>
+        <location filename="../client/desktop/settings_tab.ui" line="483"/>
         <source>Disable desktop wallpaper</source>
         <translation>Deaktiver skrivebordsbakgrunn</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="417"/>
+        <location filename="../client/desktop/settings_tab.ui" line="490"/>
         <source>Lock computer at disconnect</source>
         <translation>Lås datamaskinen ved frakobling</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="424"/>
+        <location filename="../client/desktop/settings_tab.ui" line="497"/>
         <source>Block remote input</source>
         <translation>Blokker ekstern inndata</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="431"/>
+        <location filename="../client/desktop/settings_tab.ui" line="504"/>
         <source>Send key combinations</source>
         <translation>Send tastekombinasjoner</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="447"/>
+        <location filename="../client/desktop/settings_tab.ui" line="520"/>
         <source>Screen</source>
         <translation>Skjerm</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="455"/>
+        <location filename="../client/desktop/settings_tab.ui" line="528"/>
         <source>Preferred resolution:</source>
         <translation>Foretrukket oppløsning:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="486"/>
+        <location filename="../client/desktop/settings_tab.ui" line="559"/>
         <source>Recording</source>
         <translation>Opptak</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="492"/>
+        <location filename="../client/desktop/settings_tab.ui" line="565"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>Start opptak av økter automatisk ved tilkobling</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="501"/>
+        <location filename="../client/desktop/settings_tab.ui" line="574"/>
         <source>Write path:</source>
         <translation>Skrivebane:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="597"/>
-        <location filename="../client/desktop/settings_tab.cc" line="135"/>
+        <location filename="../client/desktop/settings_tab.ui" line="670"/>
+        <location filename="../client/desktop/settings_tab.cc" line="138"/>
         <source>Update</source>
         <translation>Oppdater</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="603"/>
+        <location filename="../client/desktop/settings_tab.ui" line="676"/>
         <source>Check for updates on startup</source>
         <translation>Se etter oppdateringer ved oppstart</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="612"/>
+        <location filename="../client/desktop/settings_tab.ui" line="685"/>
         <source>Update channel:</source>
         <translation>Oppdateringskanal:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="626"/>
+        <location filename="../client/desktop/settings_tab.ui" line="699"/>
         <source>Update server:</source>
         <translation>Oppdateringsserver:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="640"/>
+        <location filename="../client/desktop/settings_tab.ui" line="713"/>
         <source>Public key:</source>
         <translation>Offentlig nøkkel:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="658"/>
+        <location filename="../client/desktop/settings_tab.ui" line="731"/>
         <source>Change Update Server...</source>
         <translation>Endre oppdateringsserver...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="678"/>
+        <location filename="../client/desktop/settings_tab.ui" line="751"/>
         <source>Check for updates</source>
         <translation>Se etter oppdateringer</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="133"/>
+        <location filename="../client/desktop/settings_tab.cc" line="136"/>
         <source>General</source>
         <translation>Generelt</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="134"/>
+        <location filename="../client/desktop/settings_tab.cc" line="137"/>
         <source>Desktop</source>
         <translation>Skrivebord</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="187"/>
+        <location filename="../client/desktop/settings_tab.cc" line="190"/>
         <source>1 week</source>
         <translation>1 uke</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="188"/>
+        <location filename="../client/desktop/settings_tab.cc" line="191"/>
         <source>2 weeks</source>
         <translation>2 uker</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="189"/>
+        <location filename="../client/desktop/settings_tab.cc" line="192"/>
         <source>1 month</source>
         <translation>1 måned</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="190"/>
+        <location filename="../client/desktop/settings_tab.cc" line="193"/>
         <source>6 months</source>
         <translation>6 måneder</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="191"/>
+        <location filename="../client/desktop/settings_tab.cc" line="194"/>
         <source>1 year</source>
         <translation>1 år</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="195"/>
+        <location filename="../client/desktop/settings_tab.cc" line="198"/>
         <source>Do not lock</source>
         <translation>Ikke lås</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="196"/>
+        <location filename="../client/desktop/settings_tab.cc" line="199"/>
         <source>1 minute</source>
         <translation>1 minutt</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="197"/>
+        <location filename="../client/desktop/settings_tab.cc" line="200"/>
         <source>5 minutes</source>
         <translation>5 minutter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="198"/>
+        <location filename="../client/desktop/settings_tab.cc" line="201"/>
         <source>10 minutes</source>
         <translation>10 minutter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="199"/>
+        <location filename="../client/desktop/settings_tab.cc" line="202"/>
         <source>30 minutes</source>
         <translation>30 minutter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="200"/>
+        <location filename="../client/desktop/settings_tab.cc" line="203"/>
         <source>1 hour</source>
         <translation>1 time</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="234"/>
+        <location filename="../client/desktop/settings_tab.cc" line="218"/>
+        <source>No proxy</source>
+        <translation>Ingen proxyserver</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="257"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="259"/>
+        <location filename="../client/desktop/settings_tab.cc" line="282"/>
         <source>Stable</source>
         <translation>Stabil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="260"/>
+        <location filename="../client/desktop/settings_tab.cc" line="283"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="261"/>
+        <location filename="../client/desktop/settings_tab.cc" line="284"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="385"/>
+        <location filename="../client/desktop/settings_tab.cc" line="414"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Det nye språket tas i bruk etter at programmet er startet på nytt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="434"/>
-        <location filename="../client/desktop/settings_tab.cc" line="533"/>
+        <location filename="../client/desktop/settings_tab.cc" line="463"/>
+        <location filename="../client/desktop/settings_tab.cc" line="588"/>
         <source>Choose path</source>
         <translation>Velg bane</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="553"/>
+        <location filename="../client/desktop/settings_tab.cc" line="608"/>
         <source>Change Master Password</source>
         <translation>Endre hovedpassord</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="555"/>
+        <location filename="../client/desktop/settings_tab.cc" line="610"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Skriv inn gjeldende passord og velg et nytt.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="563"/>
+        <location filename="../client/desktop/settings_tab.cc" line="618"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
@@ -8010,12 +8112,12 @@ Påloggingsinformasjon importert: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="570"/>
+        <location filename="../client/desktop/settings_tab.cc" line="625"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Passordet du skrev inn, oppfyller ikke sikkerhetskravene!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="571"/>
+        <location filename="../client/desktop/settings_tab.cc" line="626"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet må inneholde små og store bokstaver samt tall, og kan ikke være kortere enn %n tegn.</numerusform>
@@ -8023,57 +8125,62 @@ Påloggingsinformasjon importert: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="574"/>
+        <location filename="../client/desktop/settings_tab.cc" line="629"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vil du skrive inn et annet passord?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="587"/>
+        <location filename="../client/desktop/settings_tab.cc" line="642"/>
         <source>Invalid current password.</source>
         <translation>Ugyldig gjeldende passord.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="591"/>
+        <location filename="../client/desktop/settings_tab.cc" line="646"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Enkelte oppføringer i databasen er skadet. Reparer eller slett dem og prøv igjen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="595"/>
+        <location filename="../client/desktop/settings_tab.cc" line="650"/>
         <source>Unable to change the password.</source>
         <translation>Kan ikke endre passordet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="718"/>
+        <location filename="../client/desktop/settings_tab.cc" line="683"/>
+        <source>Unable to read the proxy settings.</source>
+        <translation>Kan ikke lese proxyserverinnstillingene.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="797"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>Nøkkelen til databasen blir lagret på denne datamaskinen. Alle programmer som kjører under kontoen din, vil kunne lese den, selv når programmet ikke kjører.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="721"/>
+        <location filename="../client/desktop/settings_tab.cc" line="800"/>
         <source>Do you want to continue?</source>
         <translation>Vil du fortsette?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="732"/>
+        <location filename="../client/desktop/settings_tab.cc" line="811"/>
         <source>Unlock Automatically</source>
         <translation>Lås opp automatisk</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="734"/>
+        <location filename="../client/desktop/settings_tab.cc" line="813"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>Skriv inn hovedpassordet for å låse opp programmet automatisk ved oppstart.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="744"/>
+        <location filename="../client/desktop/settings_tab.cc" line="823"/>
         <source>Invalid master password.</source>
         <translation>Ugyldig hovedpassord.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="748"/>
+        <location filename="../client/desktop/settings_tab.cc" line="827"/>
         <source>Unable to unlock the database.</source>
         <translation>Kan ikke låse opp databasen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="762"/>
+        <location filename="../client/desktop/settings_tab.cc" line="841"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>Kan ikke slå på automatisk opplåsing.</translation>
     </message>
@@ -8081,73 +8188,73 @@ Påloggingsinformasjon importert: %5</translation>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/settings_util.cc" line="310"/>
+        <location filename="../host/settings_util.cc" line="371"/>
         <source>The configuration was successfully imported.</source>
         <translation>Konfigurasjonen ble importert.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="359"/>
+        <location filename="../host/settings_util.cc" line="420"/>
         <source>The configuration was successfully exported.</source>
         <translation>Konfigurasjonen ble eksportert.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="369"/>
+        <location filename="../host/settings_util.cc" line="430"/>
         <source>Warning</source>
         <translation>Advarsel</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="276"/>
+        <location filename="../host/settings_util.cc" line="337"/>
         <source>Unable to open the source file.</source>
         <translation>Kan ikke åpne kildefilen.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="288"/>
+        <location filename="../host/settings_util.cc" line="349"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Kan ikke lese kildefilen: filen er skadet eller har et ukjent format.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="305"/>
+        <location filename="../host/settings_util.cc" line="366"/>
         <source>Unable to write the secure database.</source>
         <translation>Kan ikke skrive den sikre databasen.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="325"/>
+        <location filename="../host/settings_util.cc" line="386"/>
         <source>Unable to read the secure database.</source>
         <translation>Kan ikke lese den sikre databasen.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="346"/>
+        <location filename="../host/settings_util.cc" line="407"/>
         <source>Unable to open the target file.</source>
         <translation>Kan ikke åpne målfilen.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="354"/>
+        <location filename="../host/settings_util.cc" line="415"/>
         <source>Unable to write the target file.</source>
         <translation>Kan ikke skrive målfilen.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="370"/>
+        <location filename="../host/settings_util.cc" line="431"/>
         <source>Continue</source>
         <translation>Fortsett</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="382"/>
+        <location filename="../host/settings_util.cc" line="443"/>
         <source>Error</source>
         <translation>Feil</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="393"/>
+        <location filename="../host/settings_util.cc" line="454"/>
         <source>Aspia</source>
         <translation>Aspia</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="267"/>
+        <location filename="../host/settings_util.cc" line="328"/>
         <source>Source settings file does not exist.</source>
         <translation>Kildeinnstillingsfilen finnes ikke.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="370"/>
-        <location filename="../host/settings_util.cc" line="372"/>
+        <location filename="../host/settings_util.cc" line="431"/>
+        <location filename="../host/settings_util.cc" line="433"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>De eksisterende innstillingene blir overskrevet. Fortsette?</translation>
     </message>
@@ -12507,67 +12614,77 @@ Påloggingsinformasjon importert: %5</translation>
 <context>
     <name>TcpChannel</name>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="67"/>
+        <location filename="../base/net/tcp_channel.cc" line="104"/>
         <source>Violation of the communication protocol.</source>
         <translation>Brudd på kommunikasjonsprotokollen.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="71"/>
+        <location filename="../base/net/tcp_channel.cc" line="108"/>
         <source>Wrong user name or password.</source>
         <translation>Feil brukernavn eller passord.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="75"/>
+        <location filename="../base/net/tcp_channel.cc" line="112"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Kryptografifeil (kryptering eller dekryptering av melding mislyktes).</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="79"/>
+        <location filename="../base/net/tcp_channel.cc" line="116"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Den angitte økttypen er ikke tillatt for brukeren.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="83"/>
+        <location filename="../base/net/tcp_channel.cc" line="120"/>
         <source>Version of the application you are connecting to is less than the minimum supported version.</source>
         <translation>Versjonen av programmet du kobler til, er lavere enn den laveste støttede versjonen.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="88"/>
+        <location filename="../base/net/tcp_channel.cc" line="125"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Det oppstod en nettverksfeil (f.eks. at nettverkskabelen ble trukket ut ved et uhell).</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="92"/>
+        <location filename="../base/net/tcp_channel.cc" line="129"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Tilkoblingen ble avvist av motparten (eller tidsavbrutt).</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="96"/>
+        <location filename="../base/net/tcp_channel.cc" line="133"/>
         <source>Remote host closed the connection.</source>
         <translation>Den eksterne verten lukket tilkoblingen.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="100"/>
+        <location filename="../base/net/tcp_channel.cc" line="137"/>
         <source>Host address was not found.</source>
         <translation>Vertsadressen ble ikke funnet.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="104"/>
+        <location filename="../base/net/tcp_channel.cc" line="141"/>
         <source>Socket operation timed out.</source>
         <translation>Tidsavbrudd for socket-operasjonen.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="108"/>
+        <location filename="../base/net/tcp_channel.cc" line="145"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Den angitte adressen er allerede i bruk og ble satt til å være eksklusiv.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="112"/>
+        <location filename="../base/net/tcp_channel.cc" line="149"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Den angitte adressen tilhører ikke verten.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="122"/>
+        <location filename="../base/net/tcp_channel.cc" line="153"/>
+        <source>Proxy server requires authentication or the credentials are wrong.</source>
+        <translation>Proxyserveren krever autentisering, eller påloggingsinformasjonen er feil.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="157"/>
+        <source>Proxy server refused the connection or sent an invalid response.</source>
+        <translation>Proxyserveren avviste tilkoblingen eller sendte et ugyldig svar.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="167"/>
         <source>An unknown error occurred.</source>
         <translation>Det oppstod en ukjent feil.</translation>
     </message>
@@ -12871,38 +12988,40 @@ Påloggingsinformasjon importert: %5</translation>
 <context>
     <name>TerminalWidget</name>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="244"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="262"/>
         <source>Authentication failed.</source>
         <translation>Autentisering mislyktes.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="245"/>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1139"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="229"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="263"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1157"/>
         <source>User name</source>
         <translation>Brukernavn</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1083"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1101"/>
         <source>Copy</source>
         <translation>Kopier</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1086"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1104"/>
         <source>Paste</source>
         <translation>Lim inn</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1089"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1107"/>
         <source>Select All</source>
         <translation>Merk alt</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1137"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1155"/>
         <source>Enter your user name and password to authenticate on the remote computer.</source>
         <translation>Skriv inn brukernavn og passord for å autentisere deg på den eksterne datamaskinen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1151"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="234"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1169"/>
         <source>Password</source>
         <translation>Passord</translation>
     </message>
@@ -13004,7 +13123,7 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Oppdater</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="368"/>
+        <location filename="../common/desktop/update_dialog.cc" line="374"/>
         <source>Checking for updates</source>
         <translation>Ser etter oppdateringer</translation>
     </message>
@@ -13039,85 +13158,85 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Oppdater nå!</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="373"/>
+        <location filename="../common/desktop/update_dialog.cc" line="379"/>
         <source>Close</source>
         <translation>Lukk</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="71"/>
+        <location filename="../common/desktop/update_dialog.cc" line="72"/>
         <source>Receiving information...</source>
         <translation>Mottar informasjon...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="156"/>
+        <location filename="../common/desktop/update_dialog.cc" line="158"/>
         <source>Install the update yourself: %1</source>
         <translation>Installer oppdateringen selv: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="162"/>
+        <location filename="../common/desktop/update_dialog.cc" line="164"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>En oppdatering vil bli lastet ned. Når nedlastingen er fullført, lukkes programmet automatisk.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="164"/>
+        <location filename="../common/desktop/update_dialog.cc" line="166"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Alle tilkoblede økter vil bli avsluttet. Du kan ikke opprette en tilkobling før oppdateringen er fullført.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="166"/>
+        <location filename="../common/desktop/update_dialog.cc" line="168"/>
         <source>All unsaved data will be lost.</source>
         <translation>Alle ulagrede data vil gå tapt.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="167"/>
+        <location filename="../common/desktop/update_dialog.cc" line="169"/>
         <source>Continue?</source>
         <translation>Fortsette?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="197"/>
-        <location filename="../common/desktop/update_dialog.cc" line="217"/>
-        <location filename="../common/desktop/update_dialog.cc" line="239"/>
-        <location filename="../common/desktop/update_dialog.cc" line="335"/>
+        <location filename="../common/desktop/update_dialog.cc" line="199"/>
+        <location filename="../common/desktop/update_dialog.cc" line="220"/>
+        <location filename="../common/desktop/update_dialog.cc" line="245"/>
+        <location filename="../common/desktop/update_dialog.cc" line="341"/>
         <source>An error occurred while installing the update.</source>
         <translation>Det oppstod en feil under installasjon av oppdateringen.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="308"/>
+        <location filename="../common/desktop/update_dialog.cc" line="314"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Det oppstod en feil under nedlasting av oppdateringen: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="333"/>
+        <location filename="../common/desktop/update_dialog.cc" line="339"/>
         <source>The downloaded file is damaged.</source>
         <translation>Den nedlastede filen er skadet.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="368"/>
+        <location filename="../common/desktop/update_dialog.cc" line="374"/>
         <source>Downloading the update</source>
         <translation>Laster ned oppdateringen</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="373"/>
+        <location filename="../common/desktop/update_dialog.cc" line="379"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="285"/>
+        <location filename="../common/desktop/update_dialog.cc" line="291"/>
         <source>Unknown</source>
         <translation>Ukjent</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="286"/>
+        <location filename="../common/desktop/update_dialog.cc" line="292"/>
         <source>Error retrieving update information.</source>
         <translation>Feil ved henting av oppdateringsinformasjon.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="343"/>
+        <location filename="../common/desktop/update_dialog.cc" line="349"/>
         <source>Installing the update. Please wait.</source>
         <translation>Installerer oppdateringen. Vent litt.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="261"/>
+        <location filename="../common/desktop/update_dialog.cc" line="267"/>
         <source>No updates available.</source>
         <translation>Ingen oppdateringer tilgjengelig.</translation>
     </message>

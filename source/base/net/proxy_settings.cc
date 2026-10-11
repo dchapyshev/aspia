@@ -19,6 +19,7 @@
 #include "base/net/proxy_settings.h"
 
 #include <QDataStream>
+#include <QIODevice>
 #include <QUrl>
 
 #if defined(Q_OS_WINDOWS)
