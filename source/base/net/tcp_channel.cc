@@ -149,6 +149,14 @@ QString TcpChannel::errorToString(ErrorCode error_code)
             message = QT_TR_NOOP("Address specified does not belong to the host.");
             break;
 
+        case ErrorCode::PROXY_AUTH_REQUIRED:
+            message = QT_TR_NOOP("Proxy server requires authentication or the credentials are wrong.");
+            break;
+
+        case ErrorCode::PROXY_ERROR:
+            message = QT_TR_NOOP("Proxy server refused the connection or sent an invalid response.");
+            break;
+
         default:
         {
             if (error_code != ErrorCode::UNKNOWN)

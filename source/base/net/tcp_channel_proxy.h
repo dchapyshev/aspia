@@ -1,0 +1,144 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#ifndef BASE_NET_TCP_CHANNEL_PROXY_H
+#define BASE_NET_TCP_CHANNEL_PROXY_H
+
+#include <QUrl>
+
+#include <asio/ip/tcp.hpp>
+#include <asio/steady_timer.hpp>
+
+#include <map>
+
+#include "base/crypto/secure_string.h"
+#include "base/net/curl_util.h"
+#include "base/net/tcp_channel.h"
+
+class TcpChannelProxy final : public TcpChannel
+{
+    Q_OBJECT
+
+public:
+    enum class ProxyType { HTTP, HTTPS, SOCKS4, SOCKS4A, SOCKS5, SOCKS5H };
+    Q_ENUM(ProxyType)
+
+    struct ProxySettings
+    {
+        ProxyType type = ProxyType::HTTP;
+        QString address;
+        quint16 port = 0;
+        QString user;
+        SecureString password;
+    };
+
+    // An empty |user| in |settings| means that the proxy does not require authentication.
+    TcpChannelProxy(const ProxySettings& settings, Authenticator* authenticator, QObject* parent = nullptr);
+    ~TcpChannelProxy() final;
+
+    // TcpChannel implementation.
+    void connectTo(const QString& address, quint16 port, Seconds timeout) final;
+    bool setReadBufferSize(int size) final;
+    bool setWriteBufferSize(int size) final;
+
+protected:
+    // TcpChannel implementation.
+    void readTransport(void* data, size_t size) final;
+    void writeTransport(const void* data, size_t size) final;
+    void closeTransport() final;
+
+private:
+    struct CurlSocket
+    {
+        explicit CurlSocket(asio::io_context& io_context)
+            : socket(io_context)
+        {
+            // Nothing
+        }
+
+        bool& waiting(asio::socket_base::wait_type type)
+        {
+            switch (type)
+            {
+                case asio::socket_base::wait_read: return read_waiting;
+                case asio::socket_base::wait_write: return write_waiting;
+                default: return error_waiting;
+            }
+        }
+
+        asio::ip::tcp::socket socket;
+        int what = 0;
+        bool read_waiting = false;
+        bool write_waiting = false;
+        bool error_waiting = false;
+    };
+
+    static curl_socket_t openSocketCallback(void* clientp, curlsocktype purpose, curl_sockaddr* address);
+    static int closeSocketCallback(void* clientp, curl_socket_t socket);
+    static int socketCallback(CURL* easy, curl_socket_t socket, int what, void* userp, void* socketp);
+    static int timerCallback(CURLM* multi, long timeout_ms, void* userp);
+
+    void resolveProxy();
+    void resolvePeer();
+    bool onResolved(
+        const QUrl& url, const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints);
+    void startTransfer();
+    curl_socket_t openSocket(int family);
+    int closeSocket(curl_socket_t socket);
+    void watchSocket(curl_socket_t socket, int what);
+    void waitSocket(const SharedPointer<CurlSocket>& curl_socket, asio::socket_base::wait_type type);
+    void setMultiTimeout(long timeout_ms);
+    void driveMulti(curl_socket_t socket, int action);
+    void onConnectDone(CURLcode result);
+    void continueRead();
+    void continueWrite();
+    void onTransportError(CURLcode result);
+    void postError(ErrorCode error_code);
+
+    asio::io_context& io_context_;
+    asio::ip::tcp::resolver resolver_;
+    asio::steady_timer connect_timer_;
+    asio::steady_timer multi_timer_;
+    ScopedCURLM multi_;
+
+    // Declared before |curl_|, which reads it.
+    ScopedCurlSlist resolve_list_;
+
+    ScopedCURL curl_;
+
+    const ProxySettings settings_;
+    QUrl proxy_url_;
+    QUrl peer_url_;
+    std::string peer_address_;
+
+    // Sockets that curl opened through openSocket and has not closed yet.
+    std::map<curl_socket_t, SharedPointer<CurlSocket>> sockets_;
+    SharedPointer<CurlSocket> tunnel_;
+
+    char* read_data_ = nullptr;
+    size_t read_size_ = 0;
+    size_t read_done_ = 0;
+
+    const char* write_data_ = nullptr;
+    size_t write_size_ = 0;
+    size_t write_done_ = 0;
+
+    Q_DISABLE_COPY_MOVE(TcpChannelProxy)
+};
+
+#endif // BASE_NET_TCP_CHANNEL_PROXY_H

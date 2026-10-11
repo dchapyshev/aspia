@@ -127,7 +127,9 @@ ScopedCURL::ScopedCURL()
     blob.len = static_cast<size_t>(bundle.size());
     blob.flags = CURL_BLOB_COPY;
 
+    // The roots for the host and for an HTTPS proxy are separate options in curl.
     curl_easy_setopt(curl_, CURLOPT_CAINFO_BLOB, &blob);
+    curl_easy_setopt(curl_, CURLOPT_PROXY_CAINFO_BLOB, &blob);
 #elif defined(Q_OS_LINUX)
     static const QByteArray bundle_path = systemCaBundlePath();
 
@@ -138,6 +140,12 @@ ScopedCURL::ScopedCURL()
     }
 
     curl_easy_setopt(curl_, CURLOPT_CAINFO, bundle_path.constData());
+    curl_easy_setopt(curl_, CURLOPT_PROXY_CAINFO, bundle_path.constData());
+#elif defined(Q_OS_WINDOWS)
+    // The OpenSSL backend of curl knows no roots on Windows by itself, this makes it read the ROOT and CA
+    // stores of the system. The Schannel backend reads them anyway and ignores the option.
+    curl_easy_setopt(curl_, CURLOPT_SSL_OPTIONS, static_cast<long>(CURLSSLOPT_NATIVE_CA));
+    curl_easy_setopt(curl_, CURLOPT_PROXY_SSL_OPTIONS, static_cast<long>(CURLSSLOPT_NATIVE_CA));
 #endif // defined(Q_OS_ANDROID)
 }
 
@@ -158,4 +166,21 @@ ScopedCURLM::ScopedCURLM()
 ScopedCURLM::~ScopedCURLM()
 {
     curl_multi_cleanup(curlm_);
+}
+
+//--------------------------------------------------------------------------------------------------
+ScopedCurlSlist::~ScopedCurlSlist()
+{
+    curl_slist_free_all(list_);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ScopedCurlSlist::append(const char* string)
+{
+    curl_slist* list = curl_slist_append(list_, string);
+    if (!list)
+        return false;
+
+    list_ = list;
+    return true;
 }

@@ -37,6 +37,8 @@ collect_sources(SOURCE_BASE_NET
     tcp_channel.h
     tcp_channel_native.cc
     tcp_channel_native.h
+    tcp_channel_proxy.cc
+    tcp_channel_proxy.h
     tcp_server.cc
     tcp_server.h
     udp_channel.cc

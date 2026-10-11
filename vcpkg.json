@@ -3,7 +3,18 @@
   "version-string": "latest",
   "dependencies": [
     "asio",
-    "curl",
+    {
+      "name": "curl",
+      "default-features": false,
+      "features": [
+        "non-http",
+        "openssl",
+        {
+          "name": "sspi",
+          "platform": "windows & !uwp"
+        }
+      ]
+    },
     "enet",
     "gtest",
     {

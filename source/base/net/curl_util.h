@@ -48,4 +48,18 @@ private:
     Q_DISABLE_COPY_MOVE(ScopedCURLM)
 };
 
+class ScopedCurlSlist final
+{
+public:
+    ScopedCurlSlist() = default;
+    ~ScopedCurlSlist();
+
+    bool append(const char* string);
+    curl_slist* get() { return list_; }
+
+private:
+    curl_slist* list_ = nullptr;
+    Q_DISABLE_COPY_MOVE(ScopedCurlSlist)
+};
+
 #endif // BASE_NET_CURL_UTIL_H

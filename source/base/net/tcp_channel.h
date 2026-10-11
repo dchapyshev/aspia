@@ -96,7 +96,13 @@ public:
         ADDRESS_IN_USE,
 
         // The address specified does not belong to the host.
-        ADDRESS_NOT_AVAILABLE
+        ADDRESS_NOT_AVAILABLE,
+
+        // The proxy server requires authentication or rejected the credentials.
+        PROXY_AUTH_REQUIRED,
+
+        // The proxy server refused to open the tunnel or sent an invalid response.
+        PROXY_ERROR
     };
     Q_ENUM(ErrorCode)
 
