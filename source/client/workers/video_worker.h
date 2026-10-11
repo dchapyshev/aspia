@@ -93,6 +93,8 @@ private slots:
     void onEncodeTimer();
 
 private:
+    friend class VideoWorkerTestPeer;
+
     void decodePacket(const proto::video::Packet& packet);
     void sendKeyFrameRequest();
     // Transport adaptation: on a temporary decode failure (packet loss over UDP) ask the host to
@@ -111,6 +113,7 @@ private:
     std::unique_ptr<VideoDecoder> decoder_;
     proto::video::Encoding encoding_ = proto::video::ENCODING_UNKNOWN;
     bool key_frame_received_ = false;
+    int stale_packet_count_ = 0;
 
     // Set from the packet source: NG packets arrive on the video channel (onVideoMessage), legacy
     // packets through the multiplexed channel (onLegacyMessage). Keyframe requests are only sent in

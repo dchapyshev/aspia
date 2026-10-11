@@ -307,11 +307,23 @@ void VideoWorker::decodePacket(const proto::video::Packet& packet)
 
     if (encoding_ != packet.encoding())
     {
+        if (!packet.has_format())
+        {
+            LOG(INFO) << "Stale video packet of" << packet.encoding() << "is dropped";
+
+            static const int kMaxStalePackets = 5;
+            if (encoding_ != proto::video::ENCODING_UNKNOWN && ++stale_packet_count_ == kMaxStalePackets)
+                sendKeyFrameRequest();
+            return;
+        }
+
         LOG(INFO) << "Video encoding changed from" << encoding_ << "to" << packet.encoding();
         decoder_ = VideoDecoder::create(packet.encoding());
         encoding_ = packet.encoding();
         key_frame_received_ = false;
     }
+
+    stale_packet_count_ = 0;
 
     if (!decoder_)
     {

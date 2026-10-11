@@ -111,7 +111,8 @@ list(APPEND SOURCE_CLIENT_TESTS
     router_test_fixture.h
     page_model_unittest.cc
     search_page_model_unittest.cc
-    tests_main.cc)
+    tests_main.cc
+    workers/video_worker_unittest.cc)
 
 if (WIN32)
     list(APPEND SOURCE_CLIENT_CORE

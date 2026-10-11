@@ -160,10 +160,6 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
     {
         last_size_ = frame->size();
 
-        proto::video::Rect* video_rect = packet->mutable_format()->mutable_video_rect();
-        video_rect->set_width(last_size_.width());
-        video_rect->set_height(last_size_.height());
-
         createImage(last_size_, &image_, &image_buffer_);
         createActiveMap(last_size_);
 
@@ -189,6 +185,13 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
         is_key_frame = true;
     }
 
+    if (is_key_frame)
+    {
+        proto::video::Rect* video_rect = packet->mutable_format()->mutable_video_rect();
+        video_rect->set_width(last_size_.width());
+        video_rect->set_height(last_size_.height());
+    }
+
     // Convert the updated capture data ready for encode.
     // Update active map based on updated region.
     prepareImageAndActiveMap(is_key_frame, frame, packet);
@@ -198,6 +201,7 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
     if (ret != VPX_CODEC_OK)
     {
         LOG(ERROR) << "vpx_codec_control(VP8E_SET_ACTIVEMAP) failed:" << ret;
+        last_size_ = QSize();
         return Result::TEMPORARY_ERROR;
     }
 
@@ -213,6 +217,7 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
         if (ret != VPX_CODEC_OK)
         {
             LOG(ERROR) << "vpx_codec_set_cx_data_buf failed:" << ret;
+            last_size_ = QSize();
             return Result::TEMPORARY_ERROR;
         }
     }
@@ -234,6 +239,7 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
     if (ret != VPX_CODEC_OK)
     {
         LOG(ERROR) << "vpx_codec_encode failed:" << ret;
+        last_size_ = QSize();
         return Result::TEMPORARY_ERROR;
     }
 

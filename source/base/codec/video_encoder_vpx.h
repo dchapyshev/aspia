@@ -40,6 +40,8 @@ public:
     void setBandwidth(qint64 bandwidth) final;
 
 private:
+    friend class VideoEncoderVpxTestPeer;
+
     void createActiveMap(const QSize& size);
     bool createVp8Codec(const QSize& size);
     bool createVp9Codec(const QSize& size);
