@@ -1314,7 +1314,7 @@ TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
     EXPECT_FALSE(proxy.channelSettings().has_value());
 
     proxy.setEnabled(true);
-    proxy.setType(TcpChannelProxy::ProxyType::SOCKS5H);
+    proxy.setType(ProxySettings::Type::SOCKS5H);
     proxy.setAddress("proxy.example.com");
     proxy.setPort(1080);
     proxy.setUsername("user");
@@ -1324,7 +1324,7 @@ TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
     ProxyConfig reread;
     ASSERT_EQ(db_.proxyConfig(&reread), Database::ReadResult::OK);
     EXPECT_TRUE(reread.isEnabled());
-    EXPECT_EQ(reread.type(), TcpChannelProxy::ProxyType::SOCKS5H);
+    EXPECT_EQ(reread.type(), ProxySettings::Type::SOCKS5H);
     EXPECT_EQ(reread.address(), QString("proxy.example.com"));
     EXPECT_EQ(reread.port(), 1080);
     EXPECT_EQ(reread.username(), QString("user"));
@@ -1338,7 +1338,7 @@ TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
 {
     ProxyConfig proxy;
     proxy.setEnabled(true);
-    proxy.setType(TcpChannelProxy::ProxyType::HTTPS);
+    proxy.setType(ProxySettings::Type::HTTPS);
     proxy.setAddress("10.0.0.1");
     proxy.setPort(3128);
     proxy.setUsername("user");
@@ -1359,7 +1359,7 @@ TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
     ProxyConfig reread;
     ASSERT_EQ(db_.proxyConfig(&reread), Database::ReadResult::OK);
     EXPECT_TRUE(reread.isEnabled());
-    EXPECT_EQ(reread.type(), TcpChannelProxy::ProxyType::HTTPS);
+    EXPECT_EQ(reread.type(), ProxySettings::Type::HTTPS);
     EXPECT_EQ(reread.address(), QString("10.0.0.1"));
     EXPECT_EQ(reread.port(), 3128);
     EXPECT_EQ(reread.password().toString(), QString("secret"));

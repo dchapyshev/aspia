@@ -216,12 +216,12 @@ SettingsTab::SettingsTab(QWidget* parent)
 #endif // defined(Q_OS_LINUX)
 
     ui->combo_proxy_type->addItem(tr("No proxy"), kNoProxy);
-    ui->combo_proxy_type->addItem("HTTP", static_cast<int>(TcpChannelProxy::ProxyType::HTTP));
-    ui->combo_proxy_type->addItem("HTTPS", static_cast<int>(TcpChannelProxy::ProxyType::HTTPS));
-    ui->combo_proxy_type->addItem("SOCKS4", static_cast<int>(TcpChannelProxy::ProxyType::SOCKS4));
-    ui->combo_proxy_type->addItem("SOCKS4A", static_cast<int>(TcpChannelProxy::ProxyType::SOCKS4A));
-    ui->combo_proxy_type->addItem("SOCKS5", static_cast<int>(TcpChannelProxy::ProxyType::SOCKS5));
-    ui->combo_proxy_type->addItem("SOCKS5H", static_cast<int>(TcpChannelProxy::ProxyType::SOCKS5H));
+    ui->combo_proxy_type->addItem("HTTP", static_cast<int>(ProxySettings::Type::HTTP));
+    ui->combo_proxy_type->addItem("HTTPS", static_cast<int>(ProxySettings::Type::HTTPS));
+    ui->combo_proxy_type->addItem("SOCKS4", static_cast<int>(ProxySettings::Type::SOCKS4));
+    ui->combo_proxy_type->addItem("SOCKS4A", static_cast<int>(ProxySettings::Type::SOCKS4A));
+    ui->combo_proxy_type->addItem("SOCKS5", static_cast<int>(ProxySettings::Type::SOCKS5));
+    ui->combo_proxy_type->addItem("SOCKS5H", static_cast<int>(ProxySettings::Type::SOCKS5H));
 
     ProxyConfig proxy;
     db.proxyConfig(&proxy);
@@ -489,7 +489,7 @@ void SettingsTab::onProxyChanged()
     ProxyConfig proxy;
     proxy.setEnabled(type != kNoProxy);
     if (proxy.isEnabled())
-        proxy.setType(static_cast<TcpChannelProxy::ProxyType>(type));
+        proxy.setType(static_cast<ProxySettings::Type>(type));
     proxy.setAddress(ui->edit_proxy_address->text().trimmed());
     proxy.setPort(static_cast<quint16>(ui->spinbox_proxy_port->value()));
     proxy.setUsername(ui->edit_proxy_username->text());

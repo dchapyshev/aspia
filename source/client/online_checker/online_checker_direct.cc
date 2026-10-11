@@ -25,6 +25,7 @@
 #include "base/logging.h"
 #include "base/time_types.h"
 #include "base/net/address.h"
+#include "base/net/tcp_channel_proxy.h"
 #include "base/peer/client_authenticator.h"
 #include "client/database.h"
 #include "proto/key_exchange.h"

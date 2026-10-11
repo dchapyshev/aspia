@@ -28,8 +28,8 @@
 #include <optional>
 #include <string_view>
 
-#include "base/crypto/secure_string.h"
 #include "base/net/curl_util.h"
+#include "base/net/proxy_settings.h"
 #include "base/net/tcp_channel.h"
 
 class TcpChannelProxy final : public TcpChannel
@@ -37,19 +37,6 @@ class TcpChannelProxy final : public TcpChannel
     Q_OBJECT
 
 public:
-    enum class ProxyType { HTTP, HTTPS, SOCKS4, SOCKS4A, SOCKS5, SOCKS5H };
-    Q_ENUM(ProxyType)
-
-    struct ProxySettings
-    {
-        ProxyType type = ProxyType::HTTP;
-        QString address;
-        quint16 port = 0;
-        QString user;
-        SecureString password;
-    };
-
-    // An empty |user| in |settings| means that the proxy does not require authentication.
     TcpChannelProxy(Type type, const ProxySettings& settings, Authenticator* authenticator,
                     QObject* parent = nullptr);
     ~TcpChannelProxy() final;

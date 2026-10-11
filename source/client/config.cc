@@ -338,12 +338,12 @@ bool CredentialConfig::setEncryptedData(const QByteArray& blob)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<TcpChannelProxy::ProxySettings> ProxyConfig::channelSettings() const
+std::optional<ProxySettings> ProxyConfig::channelSettings() const
 {
     if (!enabled_)
         return std::nullopt;
 
-    TcpChannelProxy::ProxySettings settings;
+    ProxySettings settings;
     settings.type = type_;
     settings.address = address_;
     settings.port = port_;
@@ -378,7 +378,7 @@ std::optional<QByteArray> ProxyConfig::encryptedData() const
 bool ProxyConfig::setEncryptedData(const QByteArray& blob)
 {
     enabled_ = false;
-    type_ = TcpChannelProxy::ProxyType::HTTP;
+    type_ = ProxySettings::Type::HTTP;
     address_.clear();
     port_ = 0;
     username_.clear();
@@ -391,12 +391,12 @@ bool ProxyConfig::setEncryptedData(const QByteArray& blob)
     if (!unsealMessage(blob, kProxyAad, &data))
         return false;
 
-    const bool valid = data.type() <= static_cast<quint32>(TcpChannelProxy::ProxyType::SOCKS5H) &&
+    const bool valid = data.type() <= static_cast<quint32>(ProxySettings::Type::SOCKS5H) &&
                        data.port() <= 0xFFFF;
     if (valid)
     {
         enabled_ = data.enabled();
-        type_ = static_cast<TcpChannelProxy::ProxyType>(data.type());
+        type_ = static_cast<ProxySettings::Type>(data.type());
         address_ = QString::fromStdString(data.address());
         port_ = static_cast<quint16>(data.port());
         username_ = QString::fromStdString(data.username());

@@ -25,6 +25,7 @@
 #include "base/crypto/key_pair.h"
 #include "base/crypto/stream_encryptor.h"
 #include "base/net/net_utils.h"
+#include "base/net/tcp_channel_proxy.h"
 #include "base/peer/authenticator.h"
 #include "proto/relay_peer.h"
 #include "proto/router.h"
@@ -44,8 +45,7 @@ RelayPeer::~RelayPeer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayPeer::start(const proto::router::ConnectionOffer& offer,
-                      const std::optional<TcpChannelProxy::ProxySettings>& proxy)
+void RelayPeer::start(const proto::router::ConnectionOffer& offer, const std::optional<ProxySettings>& proxy)
 {
     connection_offer_ = offer;
 

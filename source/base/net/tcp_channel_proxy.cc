@@ -71,16 +71,16 @@ std::string resolveEntry(const QUrl& url, const asio::ip::tcp::resolver::results
 }
 
 //--------------------------------------------------------------------------------------------------
-const char* proxyScheme(TcpChannelProxy::ProxyType type)
+const char* proxyScheme(ProxySettings::Type type)
 {
     switch (type)
     {
-        case TcpChannelProxy::ProxyType::HTTP: return "http";
-        case TcpChannelProxy::ProxyType::HTTPS: return "https";
-        case TcpChannelProxy::ProxyType::SOCKS4: return "socks4";
-        case TcpChannelProxy::ProxyType::SOCKS4A: return "socks4a";
-        case TcpChannelProxy::ProxyType::SOCKS5: return "socks5";
-        case TcpChannelProxy::ProxyType::SOCKS5H: return "socks5h";
+        case ProxySettings::Type::HTTP: return "http";
+        case ProxySettings::Type::HTTPS: return "https";
+        case ProxySettings::Type::SOCKS4: return "socks4";
+        case ProxySettings::Type::SOCKS4A: return "socks4a";
+        case ProxySettings::Type::SOCKS5: return "socks5";
+        case ProxySettings::Type::SOCKS5H: return "socks5h";
     }
 
     return "http";
@@ -309,7 +309,7 @@ void TcpChannelProxy::readTransport(void* data, size_t size)
 {
     // TLS to an HTTPS proxy lives inside curl, so the data goes through curl. Other proxies leave a
     // plain tunnel in the socket.
-    if (settings_.type == ProxyType::HTTPS)
+    if (settings_.type == ProxySettings::Type::HTTPS)
     {
         read_data_ = static_cast<char*>(data);
         read_size_ = size;
@@ -337,7 +337,7 @@ void TcpChannelProxy::readTransport(void* data, size_t size)
 //--------------------------------------------------------------------------------------------------
 void TcpChannelProxy::writeTransport(const void* data, size_t size)
 {
-    if (settings_.type == ProxyType::HTTPS)
+    if (settings_.type == ProxySettings::Type::HTTPS)
     {
         write_data_ = static_cast<const char*>(data);
         write_size_ = size;
@@ -451,7 +451,7 @@ void TcpChannelProxy::resolveProxy()
 void TcpChannelProxy::resolvePeer()
 {
     // SOCKS4 and SOCKS5 send an address to the proxy, so curl resolves the name of the peer itself.
-    const bool local = settings_.type == ProxyType::SOCKS4 || settings_.type == ProxyType::SOCKS5;
+    const bool local = settings_.type == ProxySettings::Type::SOCKS4 || settings_.type == ProxySettings::Type::SOCKS5;
     if (!local || isIpAddress(peer_url_.host()))
     {
         startTransfer();
@@ -689,7 +689,7 @@ void TcpChannelProxy::onConnectDone(CURLcode result)
     const std::string proxy_endpoint = endpointToString(tunnel_->socket.remote_endpoint(error_code));
     const std::string local_endpoint = endpointToString(tunnel_->socket.local_endpoint(error_code));
 
-    if (settings_.type == ProxyType::HTTP || settings_.type == ProxyType::HTTPS)
+    if (settings_.type == ProxySettings::Type::HTTP || settings_.type == ProxySettings::Type::HTTPS)
     {
         long proxy_response = 0;
         curl_easy_getinfo(curl_.get(), CURLINFO_HTTP_CONNECTCODE, &proxy_response);

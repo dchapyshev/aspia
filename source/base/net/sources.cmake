@@ -33,6 +33,7 @@ collect_sources(SOURCE_BASE_NET
     net_utils.h
     pcp_port_mapper.cc
     pcp_port_mapper.h
+    proxy_settings.h
     tcp_channel.cc
     tcp_channel.h
     tcp_channel_native.cc

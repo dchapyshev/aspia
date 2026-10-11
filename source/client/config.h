@@ -26,7 +26,7 @@
 #include <optional>
 
 #include "base/crypto/secure_string.h"
-#include "base/net/tcp_channel_proxy.h"
+#include "base/net/proxy_settings.h"
 #include "base/peer/host_id.h"
 
 namespace proto::router {
@@ -313,8 +313,8 @@ public:
     bool isEnabled() const { return enabled_; }
     void setEnabled(bool enable) { enabled_ = enable; }
 
-    TcpChannelProxy::ProxyType type() const { return type_; }
-    void setType(TcpChannelProxy::ProxyType value) { type_ = value; }
+    ProxySettings::Type type() const { return type_; }
+    void setType(ProxySettings::Type value) { type_ = value; }
 
     const QString& address() const { return address_; }
     void setAddress(const QString& value) { address_ = value; }
@@ -330,7 +330,7 @@ public:
     void setPassword(const SecureString& value) { password_ = value; }
 
     // Nothing when the proxy is not enabled.
-    std::optional<TcpChannelProxy::ProxySettings> channelSettings() const;
+    std::optional<ProxySettings> channelSettings() const;
 
     // The sealed value for database I/O. See RouterConfig for what the two answer.
     std::optional<QByteArray> encryptedData() const;
@@ -338,7 +338,7 @@ public:
 
 private:
     bool enabled_ = false;
-    TcpChannelProxy::ProxyType type_ = TcpChannelProxy::ProxyType::HTTP;
+    ProxySettings::Type type_ = ProxySettings::Type::HTTP;
     QString address_;
     quint16 port_ = 0;
     QString username_;

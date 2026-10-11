@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/version_constants.h"
+#include "base/net/tcp_channel_proxy.h"
 #include "base/net/udp_channel.h"
 #include "base/peer/client_authenticator.h"
 #include "base/peer/relay_peer.h"

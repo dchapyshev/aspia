@@ -21,6 +21,7 @@
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/net/address.h"
+#include "base/net/tcp_channel_proxy.h"
 #include "base/peer/client_authenticator.h"
 #include "client/config.h"
 #include "client/database.h"
