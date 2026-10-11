@@ -31,7 +31,7 @@
 
 #include "base/shared_pointer.h"
 #include "base/crypto/secure_string.h"
-#include "base/net/tcp_channel_direct.h"
+#include "base/net/tcp_channel_native.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/client_authenticator.h"
 #include "base/peer/user.h"
@@ -267,7 +267,7 @@ protected:
             authenticator->setPassword(SecureString(password));
             authenticator->setSessionType(session_type);
 
-            client_channel_ = new TcpChannelDirect(authenticator);
+            client_channel_ = new TcpChannelNative(authenticator);
 
             QObject::connect(client_channel_, &TcpChannel::sig_authenticated, client_channel_,
                              [this]() { client_authenticated_.signal(); });

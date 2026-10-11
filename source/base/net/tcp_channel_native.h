@@ -16,21 +16,21 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_NET_TCP_CHANNEL_DIRECT_H
-#define BASE_NET_TCP_CHANNEL_DIRECT_H
+#ifndef BASE_NET_TCP_CHANNEL_NATIVE_H
+#define BASE_NET_TCP_CHANNEL_NATIVE_H
 
 #include <asio/ip/tcp.hpp>
 
 #include "base/net/tcp_channel.h"
 
-class TcpChannelDirect final : public TcpChannel
+class TcpChannelNative final : public TcpChannel
 {
     Q_OBJECT
 
 public:
     // Constructor available for client.
-    TcpChannelDirect(Authenticator* authenticator, QObject* parent = nullptr);
-    ~TcpChannelDirect() final;
+    TcpChannelNative(Authenticator* authenticator, QObject* parent = nullptr);
+    ~TcpChannelNative() final;
 
     // TcpChannel implementation.
     void connectTo(const QString& address, quint16 port, Seconds timeout) final;
@@ -42,7 +42,7 @@ protected:
     friend class RelayPeer;
 
     // Constructor available for server. An already connected socket is being moved.
-    TcpChannelDirect(Type type, asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent);
+    TcpChannelNative(Type type, asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent);
 
     // TcpChannel implementation.
     void readTransport(void* data, size_t size) final;
@@ -56,7 +56,7 @@ private:
     asio::ip::tcp::socket socket_;
     std::unique_ptr<asio::ip::tcp::resolver> resolver_;
 
-    Q_DISABLE_COPY_MOVE(TcpChannelDirect)
+    Q_DISABLE_COPY_MOVE(TcpChannelNative)
 };
 
-#endif // BASE_NET_TCP_CHANNEL_DIRECT_H
+#endif // BASE_NET_TCP_CHANNEL_NATIVE_H

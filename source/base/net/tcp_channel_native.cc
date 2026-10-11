@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/net/tcp_channel_direct.h"
+#include "base/net/tcp_channel_native.h"
 
 #include <asio/connect.hpp>
 #include <asio/ip/address.hpp>
@@ -47,7 +47,7 @@ QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-TcpChannelDirect::TcpChannelDirect(Authenticator* authenticator, QObject* parent)
+TcpChannelNative::TcpChannelNative(Authenticator* authenticator, QObject* parent)
     : TcpChannel(Type::DIRECT, authenticator, parent),
       io_context_(AsioEventDispatcher::ioContext()),
       socket_(io_context_),
@@ -57,7 +57,7 @@ TcpChannelDirect::TcpChannelDirect(Authenticator* authenticator, QObject* parent
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpChannelDirect::TcpChannelDirect(
+TcpChannelNative::TcpChannelNative(
     Type type, asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent)
     : TcpChannel(type, authenticator, parent),
       io_context_(AsioEventDispatcher::ioContext()),
@@ -68,13 +68,13 @@ TcpChannelDirect::TcpChannelDirect(
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpChannelDirect::~TcpChannelDirect()
+TcpChannelNative::~TcpChannelNative()
 {
     closeTransport();
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelDirect::connectTo(const QString& address, quint16 port, Seconds timeout)
+void TcpChannelNative::connectTo(const QString& address, quint16 port, Seconds timeout)
 {
     if (isConnected() || !resolver_)
         return;
@@ -189,7 +189,7 @@ void TcpChannelDirect::connectTo(const QString& address, quint16 port, Seconds t
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TcpChannelDirect::setReadBufferSize(int size)
+bool TcpChannelNative::setReadBufferSize(int size)
 {
     asio::socket_base::receive_buffer_size option(size);
 
@@ -206,7 +206,7 @@ bool TcpChannelDirect::setReadBufferSize(int size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TcpChannelDirect::setWriteBufferSize(int size)
+bool TcpChannelNative::setWriteBufferSize(int size)
 {
     asio::socket_base::send_buffer_size option(size);
 
@@ -223,7 +223,7 @@ bool TcpChannelDirect::setWriteBufferSize(int size)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelDirect::readTransport(void* data, size_t size)
+void TcpChannelNative::readTransport(void* data, size_t size)
 {
     asio::async_read(socket_, asio::buffer(data, size),
         [this, io = ioState()](const std::error_code& error_code, size_t bytes_transferred)
@@ -236,7 +236,7 @@ void TcpChannelDirect::readTransport(void* data, size_t size)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelDirect::writeTransport(const void* data, size_t size)
+void TcpChannelNative::writeTransport(const void* data, size_t size)
 {
     asio::async_write(socket_, asio::buffer(data, size),
         [this, io = ioState()](const std::error_code& error_code, size_t bytes_transferred)
@@ -249,7 +249,7 @@ void TcpChannelDirect::writeTransport(const void* data, size_t size)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelDirect::closeTransport()
+void TcpChannelNative::closeTransport()
 {
     ioState()->alive = false;
 
@@ -268,7 +268,7 @@ void TcpChannelDirect::closeTransport()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelDirect::onConnected()
+void TcpChannelNative::onConnected()
 {
     std::string peer_address;
     asio::error_code error_code;

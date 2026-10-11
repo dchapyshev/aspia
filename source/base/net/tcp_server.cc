@@ -26,7 +26,7 @@
 #include "base/scoped_qpointer.h"
 #include "base/net/flood_guard.h"
 #include "base/net/net_utils.h"
-#include "base/net/tcp_channel_direct.h"
+#include "base/net/tcp_channel_native.h"
 #include "base/peer/server_authenticator.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "base/threading/worker.h"
@@ -302,7 +302,7 @@ void TcpServer::doAccept()
             }
 
             QPointer<ServerAuthenticator> weak_authenticator = authenticator.get();
-            QPointer<TcpChannel> channel = new TcpChannelDirect(
+            QPointer<TcpChannel> channel = new TcpChannelNative(
                 TcpChannel::Type::DIRECT, std::move(socket), authenticator.release(), this);
 
             connect(channel, &TcpChannel::sig_authenticated, this, [this, channel, weak_authenticator]()

@@ -25,7 +25,7 @@
 #include "base/serialization.h"
 #include "base/sys_info.h"
 #include "base/crypto/password_generator.h"
-#include "base/net/tcp_channel_direct.h"
+#include "base/net/tcp_channel_native.h"
 #include "base/peer/client_authenticator.h"
 #include "base/peer/relay_peer_manager.h"
 #include "base/peer/server_authenticator.h"
@@ -403,7 +403,7 @@ void RouterManager::connectToRouter()
     authenticator->setPeerPublicKey(public_key_);
     authenticator->setSessionType(proto::router::SESSION_TYPE_HOST);
 
-    tcp_channel_ = new TcpChannelDirect(authenticator, this);
+    tcp_channel_ = new TcpChannelNative(authenticator, this);
 
     connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &RouterManager::onTcpReady);
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &RouterManager::onTcpErrorOccurred);
