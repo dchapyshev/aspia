@@ -25,7 +25,6 @@
 #include <asio/steady_timer.hpp>
 
 #include <map>
-#include <optional>
 #include <string_view>
 
 #include "base/net/curl_util.h"
@@ -37,12 +36,11 @@ class TcpChannelProxy final : public TcpChannel
     Q_OBJECT
 
 public:
-    TcpChannelProxy(Type type, const ProxySettings& settings, Authenticator* authenticator,
-                    QObject* parent = nullptr);
     ~TcpChannelProxy() final;
 
-    static TcpChannel* create(Type type, const std::optional<ProxySettings>& settings,
-                              Authenticator* authenticator, QObject* parent = nullptr);
+    // A channel through the proxy when |settings| is enabled, or a direct one otherwise.
+    static TcpChannel* create(Type type, const ProxySettings& settings, Authenticator* authenticator,
+                              QObject* parent = nullptr);
 
     // TcpChannel implementation.
     void connectTo(const QString& address, quint16 port, Seconds timeout) final;
@@ -56,6 +54,9 @@ protected:
     void closeTransport() final;
 
 private:
+    // Private, so a channel never goes through a proxy the user turned off.
+    TcpChannelProxy(Type type, const ProxySettings& settings, Authenticator* authenticator, QObject* parent);
+
     struct CurlSocket
     {
         explicit CurlSocket(asio::io_context& io_context)

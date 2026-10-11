@@ -1310,23 +1310,22 @@ TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
 {
     ProxyConfig proxy;
     ASSERT_EQ(db_.proxyConfig(&proxy), Database::ReadResult::OK);
-    EXPECT_FALSE(proxy.isEnabled());
-    EXPECT_FALSE(proxy.channelSettings().has_value());
+    EXPECT_FALSE(proxy.settings().enabled);
 
     ProxySettings settings;
+    settings.enabled = true;
     settings.type = ProxySettings::Type::SOCKS5H;
     settings.address = "proxy.example.com";
     settings.port = 1080;
     settings.user = "user";
     settings.password = SecureString("secret");
 
-    proxy.setEnabled(true);
     proxy.setSettings(settings);
     ASSERT_TRUE(db_.setProxyConfig(proxy));
 
     ProxyConfig reread;
     ASSERT_EQ(db_.proxyConfig(&reread), Database::ReadResult::OK);
-    EXPECT_TRUE(reread.isEnabled());
+    EXPECT_TRUE(reread.settings().enabled);
     EXPECT_EQ(reread.settings().type, ProxySettings::Type::SOCKS5H);
     EXPECT_EQ(reread.settings().address, QString("proxy.example.com"));
     EXPECT_EQ(reread.settings().port, 1080);
@@ -1340,6 +1339,7 @@ TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
 TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
 {
     ProxySettings settings;
+    settings.enabled = true;
     settings.type = ProxySettings::Type::HTTPS;
     settings.address = "10.0.0.1";
     settings.port = 3128;
@@ -1347,7 +1347,6 @@ TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
     settings.password = SecureString("secret");
 
     ProxyConfig proxy;
-    proxy.setEnabled(true);
     proxy.setSettings(settings);
     ASSERT_TRUE(db_.setProxyConfig(proxy));
 
@@ -1355,7 +1354,7 @@ TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
 
     ProxyConfig unreadable;
     EXPECT_EQ(db_.proxyConfig(&unreadable), Database::ReadResult::INCOMPLETE);
-    EXPECT_FALSE(unreadable.isEnabled());
+    EXPECT_FALSE(unreadable.settings().enabled);
     EXPECT_TRUE(unreadable.settings().address.isEmpty());
     EXPECT_TRUE(unreadable.settings().password.isEmpty());
 
@@ -1364,7 +1363,7 @@ TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
 
     ProxyConfig reread;
     ASSERT_EQ(db_.proxyConfig(&reread), Database::ReadResult::OK);
-    EXPECT_TRUE(reread.isEnabled());
+    EXPECT_TRUE(reread.settings().enabled);
     EXPECT_EQ(reread.settings().type, ProxySettings::Type::HTTPS);
     EXPECT_EQ(reread.settings().address, QString("10.0.0.1"));
     EXPECT_EQ(reread.settings().port, 3128);

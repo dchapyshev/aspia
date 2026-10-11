@@ -174,7 +174,7 @@ void RouterWorker::startConnection(qint64 router_id)
     }
 
     LOG(INFO) << "Connecting to router" << router_id << config.address()
-              << (proxy.isEnabled() ? "through proxy" : "directly");
+              << (proxy.settings().enabled ? "through proxy" : "directly");
 
     const Address addr = Address::fromString(config.address(), kDefaultRouterClientTcpPort);
 
@@ -186,7 +186,7 @@ void RouterWorker::startConnection(qint64 router_id)
 
     // The channel takes ownership of the authenticator and lives on this worker thread.
     TcpChannel* channel = TcpChannelProxy::create(
-        TcpChannel::Type::DIRECT, proxy.channelSettings(), authenticator, this);
+        TcpChannel::Type::DIRECT, proxy.settings(), authenticator, this);
     it->channel = channel;
 
     connect(channel, &TcpChannel::sig_authenticated, this, [this, router_id]()

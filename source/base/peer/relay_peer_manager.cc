@@ -63,7 +63,7 @@ void RelayPeerManager::addConnectionOffer(
     connect(peer, &RelayPeer::sig_connectionReady, this, &RelayPeerManager::onRelayConnectionReady);
 
     pending_.emplace_back(peer);
-    peer->start(offer, std::nullopt);
+    peer->start(offer, ProxySettings());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -227,7 +227,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     db.proxyConfig(&proxy);
     const ProxySettings& proxy_settings = proxy.settings();
     ui->combo_proxy_type->setCurrentIndex(
-        ui->combo_proxy_type->findData(proxy.isEnabled() ? static_cast<int>(proxy_settings.type) : kNoProxy));
+        ui->combo_proxy_type->findData(proxy_settings.enabled ? static_cast<int>(proxy_settings.type) : kNoProxy));
     ui->edit_proxy_address->setText(proxy_settings.address);
     if (proxy_settings.port)
         ui->spinbox_proxy_port->setValue(proxy_settings.port);
@@ -488,7 +488,8 @@ void SettingsTab::onProxyChanged()
     const int type = ui->combo_proxy_type->currentData().toInt();
 
     ProxySettings settings;
-    if (type != kNoProxy)
+    settings.enabled = type != kNoProxy;
+    if (settings.enabled)
         settings.type = static_cast<ProxySettings::Type>(type);
     settings.address = ui->edit_proxy_address->text().trimmed();
     settings.port = static_cast<quint16>(ui->spinbox_proxy_port->value());
@@ -496,10 +497,9 @@ void SettingsTab::onProxyChanged()
     settings.password = ui->edit_proxy_password->password();
 
     ProxyConfig proxy;
-    proxy.setEnabled(type != kNoProxy);
     proxy.setSettings(settings);
 
-    if (proxy.isEnabled())
+    if (settings.enabled)
         LOG(INFO) << "[ACTION] Proxy changed:" << settings.type;
     else
         LOG(INFO) << "[ACTION] Proxy turned off";

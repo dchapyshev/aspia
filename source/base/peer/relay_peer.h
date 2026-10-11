@@ -21,8 +21,6 @@
 
 #include <QObject>
 
-#include <optional>
-
 #include "base/logging.h"
 #include "base/net/proxy_settings.h"
 #include "base/net/tcp_channel.h"
@@ -43,7 +41,7 @@ public:
     ~RelayPeer();
 
     // Connects to the relay from |offer| through the proxy with |proxy|, or directly without it.
-    void start(const proto::router::ConnectionOffer& offer, const std::optional<ProxySettings>& proxy);
+    void start(const proto::router::ConnectionOffer& offer, const ProxySettings& proxy);
     bool isFinished() const { return is_finished_; }
     const proto::router::ConnectionOffer& connectionOffer() const { return connection_offer_; }
 

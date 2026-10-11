@@ -310,21 +310,14 @@ class ProxyConfig final
 public:
     ProxyConfig() = default;
 
-    bool isEnabled() const { return enabled_; }
-    void setEnabled(bool enable) { enabled_ = enable; }
-
     const ProxySettings& settings() const { return settings_; }
     void setSettings(const ProxySettings& settings) { settings_ = settings; }
-
-    // Nothing when the proxy is not enabled.
-    std::optional<ProxySettings> channelSettings() const;
 
     // The sealed value for database I/O. See RouterConfig for what the two answer.
     std::optional<QByteArray> encryptedData() const;
     bool setEncryptedData(const QByteArray& blob);
 
 private:
-    bool enabled_ = false;
     ProxySettings settings_;
 };
 

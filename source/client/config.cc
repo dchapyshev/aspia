@@ -338,19 +338,10 @@ bool CredentialConfig::setEncryptedData(const QByteArray& blob)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<ProxySettings> ProxyConfig::channelSettings() const
-{
-    if (!enabled_)
-        return std::nullopt;
-
-    return settings_;
-}
-
-//--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> ProxyConfig::encryptedData() const
 {
     proto::storage::ProxyBlob data;
-    data.set_enabled(enabled_);
+    data.set_enabled(settings_.enabled);
     data.set_type(static_cast<quint32>(settings_.type));
     data.set_address(settings_.address.toStdString());
     data.set_port(settings_.port);
@@ -371,7 +362,6 @@ std::optional<QByteArray> ProxyConfig::encryptedData() const
 //--------------------------------------------------------------------------------------------------
 bool ProxyConfig::setEncryptedData(const QByteArray& blob)
 {
-    enabled_ = false;
     settings_ = ProxySettings();
 
     if (blob.isEmpty())
@@ -385,7 +375,7 @@ bool ProxyConfig::setEncryptedData(const QByteArray& blob)
                        data.port() <= 0xFFFF;
     if (valid)
     {
-        enabled_ = data.enabled();
+        settings_.enabled = data.enabled();
         settings_.type = static_cast<ProxySettings::Type>(data.type());
         settings_.address = QString::fromStdString(data.address());
         settings_.port = static_cast<quint16>(data.port());

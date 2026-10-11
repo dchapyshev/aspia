@@ -527,7 +527,7 @@ protected:
             offer.set_error_code(proto::router::kErrorOk);
             fillRelayCredentials(offer.mutable_relay());
 
-            client->peer->start(offer, std::nullopt);
+            client->peer->start(offer, ProxySettings());
         });
     }
 

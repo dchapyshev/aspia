@@ -45,7 +45,7 @@ RelayPeer::~RelayPeer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayPeer::start(const proto::router::ConnectionOffer& offer, const std::optional<ProxySettings>& proxy)
+void RelayPeer::start(const proto::router::ConnectionOffer& offer, const ProxySettings& proxy)
 {
     connection_offer_ = offer;
 
@@ -99,7 +99,7 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer, const std::op
     });
 
     CLOG(INFO) << "Connecting to relay" << host << ":" << credentials.port()
-               << (proxy.has_value() ? "through proxy" : "directly");
+               << (proxy.enabled ? "through proxy" : "directly");
     pending_channel_->connectTo(host, static_cast<quint16>(credentials.port()));
 }
 

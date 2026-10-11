@@ -461,7 +461,7 @@ void NetworkWorker::startConnection()
         connect(relay_peer_, &RelayPeer::sig_connectionReady,
                 this, &NetworkWorker::onRelayConnectionReady);
 
-        relay_peer_->start(offer, proxy.channelSettings());
+        relay_peer_->start(offer, proxy.settings());
     }
     else
     {
@@ -483,7 +483,7 @@ void NetworkWorker::startConnection()
 
         auto* authenticator = new ClientAuthenticator();
         setupAuthenticator(authenticator);
-        tcp_channel_ = TcpChannelProxy::create(TcpChannel::Type::DIRECT, proxy.channelSettings(), authenticator, this);
+        tcp_channel_ = TcpChannelProxy::create(TcpChannel::Type::DIRECT, proxy.settings(), authenticator, this);
 
         connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &NetworkWorker::onTcpConnected);
         connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &NetworkWorker::onTcpErrorOccurred);

@@ -30,10 +30,10 @@ struct ProxySettings
     Q_GADGET
 
 public:
-    // Stored as a number in the client database, so a new type goes to the end.
     enum class Type { HTTP, HTTPS, SOCKS4, SOCKS4A, SOCKS5, SOCKS5H };
     Q_ENUM(Type)
 
+    bool enabled = false;
     Type type = Type::HTTP;
     QString address;
     quint16 port = 0;

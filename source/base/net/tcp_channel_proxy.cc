@@ -196,13 +196,13 @@ TcpChannelProxy::~TcpChannelProxy()
 
 //--------------------------------------------------------------------------------------------------
 // static
-TcpChannel* TcpChannelProxy::create(Type type, const std::optional<ProxySettings>& settings,
-                                    Authenticator* authenticator, QObject* parent)
+TcpChannel* TcpChannelProxy::create(Type type, const ProxySettings& settings, Authenticator* authenticator,
+                                    QObject* parent)
 {
-    if (!settings.has_value())
+    if (!settings.enabled)
         return new TcpChannelNative(type, authenticator, parent);
 
-    return new TcpChannelProxy(type, *settings, authenticator, parent);
+    return new TcpChannelProxy(type, settings, authenticator, parent);
 }
 
 //--------------------------------------------------------------------------------------------------
