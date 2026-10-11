@@ -73,13 +73,15 @@ MasterPassword::Result changeKeyAndReencrypt(
     QList<RouterConfig> routers;
     QList<RouterHostConfig> router_hosts;
     QList<CredentialConfig> credentials;
+    ProxyConfig proxy;
 
     const Database::ReadResult read_results[] =
     {
         db.allLocalHosts(&local_hosts),
         db.routerList(&routers),
         db.allRouterHosts(&router_hosts),
-        db.credentialList(&credentials)
+        db.credentialList(&credentials),
+        db.proxyConfig(&proxy)
     };
 
     bool incomplete = false;
@@ -104,7 +106,7 @@ MasterPassword::Result changeKeyAndReencrypt(
 
     cryptor.setKey(new_key);
 
-    if (!db.reencryptAll(local_hosts, routers, router_hosts, credentials, new_salt, new_verifier,
+    if (!db.reencryptAll(local_hosts, routers, router_hosts, credentials, proxy, new_salt, new_verifier,
                          kCurrentVersion))
     {
         // Nothing was written, so restore the in-memory key to keep it consistent with the database.

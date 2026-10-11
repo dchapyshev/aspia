@@ -565,7 +565,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheMomentARecordWasEdited)
     QThread::msleep(1100);
 
     ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routerList(), allRouterHosts(), {},
-                                 "salt", "verifier", 1));
+                                 ProxyConfig(), "salt", "verifier", 1));
 
     EXPECT_EQ(findLocalHost(db_, entry_id)->modifyTime(), modify_time);
 }
@@ -1200,7 +1200,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsDataReadable)
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
     ASSERT_TRUE(db_.reencryptAll(hosts, routerList(), allRouterHosts(), {},
-                                 "salt", "verifier", 1));
+                                 ProxyConfig(), "salt", "verifier", 1));
 
     std::optional<LocalHostConfig> stored = findLocalHost(db_, host.id());
     ASSERT_TRUE(stored.has_value());
@@ -1226,7 +1226,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheDeviceToken)
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
     ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routers, allRouterHosts(), {},
-                                 "salt", "verifier", 1));
+                                 ProxyConfig(), "salt", "verifier", 1));
 
     const std::optional<RouterConfig> reread = findRouter(db_, router_id);
     ASSERT_TRUE(reread.has_value());
@@ -1302,6 +1302,62 @@ TEST_F(DatabaseTest, SessionOptionsAreOnUntilChosen)
     // No method at all is a choice too, not a missing value.
     ASSERT_TRUE(db_.setUdpMethods(0));
     EXPECT_EQ(db_.udpMethods(), 0u);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Until the user chooses one, no proxy is used; a choice is kept with all its fields.
+TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
+{
+    ProxyConfig proxy;
+    ASSERT_EQ(db_.proxyConfig(&proxy), Database::ReadResult::OK);
+    EXPECT_EQ(proxy.type(), ProxyConfig::Type::NONE);
+
+    proxy.setType(ProxyConfig::Type::SOCKS5H);
+    proxy.setAddress("proxy.example.com");
+    proxy.setPort(1080);
+    proxy.setUsername("user");
+    proxy.setPassword(SecureString("secret"));
+    ASSERT_TRUE(db_.setProxyConfig(proxy));
+
+    ProxyConfig reread;
+    ASSERT_EQ(db_.proxyConfig(&reread), Database::ReadResult::OK);
+    EXPECT_EQ(reread.type(), ProxyConfig::Type::SOCKS5H);
+    EXPECT_EQ(reread.address(), QString("proxy.example.com"));
+    EXPECT_EQ(reread.port(), 1080);
+    EXPECT_EQ(reread.username(), QString("user"));
+    EXPECT_EQ(reread.password().toString(), QString("secret"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The password of the proxy is a secret like the ones of the address book: a change of the master
+// password reseals it, and under a key that does not open it nothing of it is handed out.
+TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
+{
+    ProxyConfig proxy;
+    proxy.setType(ProxyConfig::Type::HTTPS);
+    proxy.setAddress("10.0.0.1");
+    proxy.setPort(3128);
+    proxy.setUsername("user");
+    proxy.setPassword(SecureString("secret"));
+    ASSERT_TRUE(db_.setProxyConfig(proxy));
+
+    DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
+
+    ProxyConfig unreadable;
+    EXPECT_EQ(db_.proxyConfig(&unreadable), Database::ReadResult::INCOMPLETE);
+    EXPECT_EQ(unreadable.type(), ProxyConfig::Type::NONE);
+    EXPECT_TRUE(unreadable.address().isEmpty());
+    EXPECT_TRUE(unreadable.password().isEmpty());
+
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routerList(), allRouterHosts(), {},
+                                 proxy, "salt", "verifier", 1));
+
+    ProxyConfig reread;
+    ASSERT_EQ(db_.proxyConfig(&reread), Database::ReadResult::OK);
+    EXPECT_EQ(reread.type(), ProxyConfig::Type::HTTPS);
+    EXPECT_EQ(reread.address(), QString("10.0.0.1"));
+    EXPECT_EQ(reread.port(), 3128);
+    EXPECT_EQ(reread.password().toString(), QString("secret"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1546,7 +1602,7 @@ TEST_F(DatabaseTest, EditedRouterHostCredentialsKeepTheirCheckTime)
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
     ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), router_hosts, {},
-                                 "salt", "verifier", 1));
+                                 ProxyConfig(), "salt", "verifier", 1));
 
     EXPECT_EQ(outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
 }
@@ -1563,7 +1619,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsRouterHostCredentialsReadable)
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
     ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), router_hosts, {},
-                                 "salt", "verifier", 1));
+                                 ProxyConfig(), "salt", "verifier", 1));
 
     std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
     ASSERT_TRUE(stored.has_value());
@@ -2041,7 +2097,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsCredentialsReadable)
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
     ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), allRouterHosts(),
-                                 credentials, "salt", "verifier", 1));
+                                 credentials, ProxyConfig(), "salt", "verifier", 1));
 
     const std::optional<CredentialConfig> stored = findCredential(db_, credential_id);
     ASSERT_TRUE(stored.has_value());
@@ -2434,7 +2490,7 @@ TEST_F(DatabaseTest, RemovingARecordTakesTheRouterHostsRememberedByItAlone)
     EXPECT_EQ(stored_local->credentialId(), 0);
 
     EXPECT_TRUE(db_.reencryptAll(allLocalHosts(), routerList(), allRouterHosts(), credentialList(),
-                                 QByteArray(32, 's'), QByteArray(32, 'v'), 1));
+                                 ProxyConfig(), QByteArray(32, 's'), QByteArray(32, 'v'), 1));
 }
 
 //--------------------------------------------------------------------------------------------------

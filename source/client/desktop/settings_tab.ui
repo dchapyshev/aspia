@@ -222,6 +222,79 @@
             </widget>
            </item>
            <item>
+            <widget class="QGroupBox" name="groupbox_proxy">
+             <property name="title">
+              <string>Proxy</string>
+             </property>
+             <layout class="QGridLayout" name="layout_proxy">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_proxy_type">
+                <property name="text">
+                 <string>Type:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1" colspan="3">
+               <widget class="QComboBox" name="combo_proxy_type">
+                <property name="sizeAdjustPolicy">
+                 <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_proxy_address">
+                <property name="text">
+                 <string>Address:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="edit_proxy_address"/>
+              </item>
+              <item row="1" column="2">
+               <widget class="QLabel" name="label_proxy_port">
+                <property name="text">
+                 <string>Port:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QSpinBox" name="spinbox_proxy_port">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>65535</number>
+                </property>
+                <property name="value">
+                 <number>8080</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_proxy_username">
+                <property name="text">
+                 <string>User Name:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1" colspan="3">
+               <widget class="QLineEdit" name="edit_proxy_username"/>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_proxy_password">
+                <property name="text">
+                 <string>Password:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1" colspan="3">
+               <widget class="PasswordEdit" name="edit_proxy_password"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <widget class="QGroupBox" name="groupbox_udp">
              <property name="title">
               <string>UDP Connections</string>
@@ -707,6 +780,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PasswordEdit</class>
+   <extends>QLineEdit</extends>
+   <header>common/desktop/password_edit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

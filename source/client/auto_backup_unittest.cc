@@ -48,7 +48,7 @@ protected:
 
         const std::optional<QByteArray> verifier = DataCryptor(key).encrypt(Random::byteArray(32));
         ASSERT_TRUE(verifier.has_value());
-        ASSERT_TRUE(db_.reencryptAll({}, {}, {}, {}, salt, *verifier, 1));
+        ASSERT_TRUE(db_.reencryptAll({}, {}, {}, {}, ProxyConfig(), salt, *verifier, 1));
 
         DataCryptor::instance().setKey(key);
     }

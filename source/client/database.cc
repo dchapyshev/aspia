@@ -57,6 +57,7 @@ constexpr auto kSettingRecordEnabled = "record_sessions";
 constexpr auto kSettingRecordPath    = "recording_path";
 constexpr auto kSettingKeyCombos     = "send_key_combinations";
 constexpr auto kSettingUdpMethods    = "udp_methods";
+constexpr auto kSettingProxy         = "proxy";
 constexpr auto kSettingSalt          = "master_password_salt";
 constexpr auto kSettingVerifier      = "master_password_verifier";
 constexpr auto kSettingVersion       = "master_password_version";
@@ -2065,6 +2066,28 @@ bool Database::setUdpMethods(quint32 methods)
 }
 
 //--------------------------------------------------------------------------------------------------
+Database::ReadResult Database::proxyConfig(ProxyConfig* proxy) const
+{
+    if (!proxy->setEncryptedData(QByteArray::fromBase64(readSetting(kSettingProxy).toLatin1())))
+    {
+        LOG(ERROR) << "Unable to read encrypted data of proxy";
+        return ReadResult::INCOMPLETE;
+    }
+
+    return ReadResult::OK;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setProxyConfig(const ProxyConfig& proxy)
+{
+    std::optional<QByteArray> encrypted_data = proxy.encryptedData();
+    if (!encrypted_data.has_value())
+        return false;
+
+    return writeSetting(kSettingProxy, QString::fromLatin1(encrypted_data->toBase64()));
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Database::isMasterPasswordSet() const
 {
     SqlTransaction transaction(db_);
@@ -2082,6 +2105,7 @@ bool Database::reencryptAll(const QList<LocalHostConfig>& local_hosts,
                             const QList<RouterConfig>& routers,
                             const QList<RouterHostConfig>& router_hosts,
                             const QList<CredentialConfig>& credentials,
+                            const ProxyConfig& proxy,
                             const QByteArray& salt,
                             const QByteArray& verifier,
                             quint32 version)
@@ -2155,6 +2179,12 @@ bool Database::reencryptAll(const QList<LocalHostConfig>& local_hosts,
             LOG(ERROR) << "Unable to re-encrypt credential" << credential.id() << ":" << db_.lastError();
             return false;
         }
+    }
+
+    if (!setProxyConfig(proxy))
+    {
+        LOG(ERROR) << "Unable to re-encrypt proxy";
+        return false;
     }
 
     if (!setMasterPassword(salt, verifier, version))

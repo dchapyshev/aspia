@@ -157,6 +157,11 @@ public:
     quint32 udpMethods() const;
     bool setUdpMethods(quint32 methods);
 
+    // Without a saved value the proxy is not used. A value that did not open leaves |proxy| that
+    // way and answers INCOMPLETE.
+    ReadResult proxyConfig(ProxyConfig* proxy) const;
+    bool setProxyConfig(const ProxyConfig& proxy);
+
     // Master password.
     bool isMasterPasswordSet() const;
 
@@ -167,6 +172,7 @@ public:
                       const QList<RouterConfig>& routers,
                       const QList<RouterHostConfig>& router_hosts,
                       const QList<CredentialConfig>& credentials,
+                      const ProxyConfig& proxy,
                       const QByteArray& salt,
                       const QByteArray& verifier,
                       quint32 version);

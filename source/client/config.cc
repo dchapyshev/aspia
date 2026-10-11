@@ -33,6 +33,7 @@ namespace {
 // without this a router column moved into a host row would parse as a host one and open.
 const char kLocalHostsAad[] = "local_hosts";
 const char kRoutersAad[] = "routers";
+const char kProxyAad[] = "settings/proxy";
 
 // The credentials of a router host are sealed for their row, both halves of its key. Every column
 // of the table opens with the same key, so a blob moved into the row of another host, or of the
@@ -334,6 +335,64 @@ bool CredentialConfig::setEncryptedData(const QByteArray& blob)
     memZero(data.mutable_password());
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<QByteArray> ProxyConfig::encryptedData() const
+{
+    proto::storage::ProxyBlob data;
+    data.set_type(static_cast<quint32>(type_));
+    data.set_address(address_.toStdString());
+    data.set_port(port_);
+    data.set_username(username_.toStdString());
+
+    const SecureByteArray password = password_.toUtf8();
+    data.set_password(password.constData(), static_cast<size_t>(password.size()));
+
+    std::optional<QByteArray> sealed = sealMessage(data, kProxyAad);
+
+    memZero(data.mutable_address());
+    memZero(data.mutable_username());
+    memZero(data.mutable_password());
+
+    return sealed;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ProxyConfig::setEncryptedData(const QByteArray& blob)
+{
+    type_ = Type::NONE;
+    address_.clear();
+    port_ = 0;
+    username_.clear();
+    password_.clear();
+
+    if (blob.isEmpty())
+        return true;
+
+    proto::storage::ProxyBlob data;
+    if (!unsealMessage(blob, kProxyAad, &data))
+        return false;
+
+    const bool valid = data.type() <= static_cast<quint32>(Type::SOCKS5H) && data.port() <= 0xFFFF;
+    if (valid)
+    {
+        type_ = static_cast<Type>(data.type());
+        address_ = QString::fromStdString(data.address());
+        port_ = static_cast<quint16>(data.port());
+        username_ = QString::fromStdString(data.username());
+        password_ = toSecureString(data.password());
+    }
+    else
+    {
+        LOG(ERROR) << "Invalid proxy data";
+    }
+
+    memZero(data.mutable_address());
+    memZero(data.mutable_username());
+    memZero(data.mutable_password());
+
+    return valid;
 }
 
 //--------------------------------------------------------------------------------------------------

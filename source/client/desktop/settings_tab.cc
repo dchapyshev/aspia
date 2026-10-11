@@ -30,6 +30,7 @@
 #include <QScreen>
 #include <QScrollArea>
 #include <QSignalBlocker>
+#include <QSpinBox>
 #include <QToolButton>
 #include <QVBoxLayout>
 
@@ -212,6 +213,25 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->combo_lock_timeout->setEnabled(!auto_unlock);
 #endif // defined(Q_OS_LINUX)
 
+    ui->combo_proxy_type->addItem(tr("No proxy"), static_cast<int>(ProxyConfig::Type::NONE));
+    ui->combo_proxy_type->addItem(tr("System settings"), static_cast<int>(ProxyConfig::Type::SYSTEM));
+    ui->combo_proxy_type->addItem("HTTP", static_cast<int>(ProxyConfig::Type::HTTP));
+    ui->combo_proxy_type->addItem("HTTPS", static_cast<int>(ProxyConfig::Type::HTTPS));
+    ui->combo_proxy_type->addItem("SOCKS4", static_cast<int>(ProxyConfig::Type::SOCKS4));
+    ui->combo_proxy_type->addItem("SOCKS4A", static_cast<int>(ProxyConfig::Type::SOCKS4A));
+    ui->combo_proxy_type->addItem("SOCKS5", static_cast<int>(ProxyConfig::Type::SOCKS5));
+    ui->combo_proxy_type->addItem("SOCKS5H", static_cast<int>(ProxyConfig::Type::SOCKS5H));
+
+    ProxyConfig proxy;
+    db.proxyConfig(&proxy);
+    ui->combo_proxy_type->setCurrentIndex(ui->combo_proxy_type->findData(static_cast<int>(proxy.type())));
+    ui->edit_proxy_address->setText(proxy.address());
+    if (proxy.port())
+        ui->spinbox_proxy_port->setValue(proxy.port());
+    ui->edit_proxy_username->setText(proxy.username());
+    ui->edit_proxy_password->setPassword(proxy.password());
+    updateProxyFields();
+
     const quint32 udp_methods = db.udpMethods();
     ui->checkbox_udp_direct->setChecked(udp_methods & UDP_METHOD_DIRECT);
     ui->checkbox_udp_hole_punching->setChecked(udp_methods & UDP_METHOD_HOLE_PUNCHING);
@@ -279,6 +299,12 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->button_select_backup_dir, &QPushButton::clicked, this, &SettingsTab::onSelectBackupPath);
     connect(ui->combo_backup_retention, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onBackupRetentionChanged);
+    connect(ui->combo_proxy_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &SettingsTab::onProxyChanged);
+    connect(ui->edit_proxy_address, &QLineEdit::editingFinished, this, &SettingsTab::onProxyChanged);
+    connect(ui->spinbox_proxy_port, &QSpinBox::editingFinished, this, &SettingsTab::onProxyChanged);
+    connect(ui->edit_proxy_username, &QLineEdit::editingFinished, this, &SettingsTab::onProxyChanged);
+    connect(ui->edit_proxy_password, &QLineEdit::editingFinished, this, &SettingsTab::onProxyChanged);
     connect(ui->checkbox_udp_direct, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
     connect(ui->checkbox_udp_hole_punching, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
     connect(ui->checkbox_udp_pcp, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
@@ -451,6 +477,22 @@ void SettingsTab::onBackupRetentionChanged()
     LOG(INFO) << "[ACTION] Backup retention changed";
     Database::instance().setBackupRetention(
         static_cast<AutoBackup::Retention>(ui->combo_backup_retention->currentData().toInt()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onProxyChanged()
+{
+    ProxyConfig proxy;
+    proxy.setType(static_cast<ProxyConfig::Type>(ui->combo_proxy_type->currentData().toInt()));
+    proxy.setAddress(ui->edit_proxy_address->text().trimmed());
+    proxy.setPort(static_cast<quint16>(ui->spinbox_proxy_port->value()));
+    proxy.setUsername(ui->edit_proxy_username->text());
+    proxy.setPassword(ui->edit_proxy_password->password());
+
+    LOG(INFO) << "[ACTION] Proxy changed:" << proxy.type();
+
+    updateProxyFields();
+    Database::instance().setProxyConfig(proxy);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -684,6 +726,32 @@ void SettingsTab::loadUpdateServer()
     ui->label_update_server_value->setVisible(!server.isEmpty());
     ui->label_update_public_key->setVisible(!server.isEmpty() && !public_key.isEmpty());
     ui->label_update_public_key_value->setVisible(!server.isEmpty() && !public_key.isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::updateProxyFields()
+{
+    const ProxyConfig::Type type = static_cast<ProxyConfig::Type>(ui->combo_proxy_type->currentData().toInt());
+    const bool manual = type != ProxyConfig::Type::NONE && type != ProxyConfig::Type::SYSTEM;
+
+    // The system gives the address of its proxy, but usually not the credentials for it.
+    const bool credentials = type != ProxyConfig::Type::NONE;
+
+    const QList<QWidget*> address_widgets =
+    {
+        ui->label_proxy_address, ui->edit_proxy_address, ui->label_proxy_port, ui->spinbox_proxy_port
+    };
+
+    for (QWidget* widget : address_widgets)
+        widget->setEnabled(manual);
+
+    const QList<QWidget*> credential_widgets =
+    {
+        ui->label_proxy_username, ui->edit_proxy_username, ui->label_proxy_password, ui->edit_proxy_password
+    };
+
+    for (QWidget* widget : credential_widgets)
+        widget->setEnabled(credentials);
 }
 
 //--------------------------------------------------------------------------------------------------

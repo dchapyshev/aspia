@@ -61,6 +61,7 @@ private slots:
     void onBackupPathChanged();
     void onSelectBackupPath();
     void onBackupRetentionChanged();
+    void onProxyChanged();
     void onUdpMethodsChanged();
     void onLockTimeoutChanged();
     void onAutoUnlockChanged();
@@ -76,6 +77,7 @@ private slots:
 
 private:
     void loadUpdateServer();
+    void updateProxyFields();
     void applyCategoryStyle();
     bool enableAutoUnlock();
     void saveDesktopConfig();

@@ -304,6 +304,45 @@ private:
     SecureString password_;
 };
 
+class ProxyConfig final
+{
+    Q_GADGET
+
+public:
+    // NONE and SYSTEM carry no address of their own, the rest name the protocol of the proxy.
+    enum class Type { NONE = 0, SYSTEM = 1, HTTP = 2, HTTPS = 3, SOCKS4 = 4, SOCKS4A = 5, SOCKS5 = 6, SOCKS5H = 7 };
+    Q_ENUM(Type)
+
+    ProxyConfig() = default;
+
+    Type type() const { return type_; }
+    void setType(Type value) { type_ = value; }
+
+    const QString& address() const { return address_; }
+    void setAddress(const QString& value) { address_ = value; }
+
+    quint16 port() const { return port_; }
+    void setPort(quint16 value) { port_ = value; }
+
+    // An empty user name means that the proxy does not require authentication.
+    const QString& username() const { return username_; }
+    void setUsername(const QString& value) { username_ = value; }
+
+    const SecureString& password() const { return password_; }
+    void setPassword(const SecureString& value) { password_ = value; }
+
+    // The sealed value for database I/O. See RouterConfig for what the two answer.
+    std::optional<QByteArray> encryptedData() const;
+    bool setEncryptedData(const QByteArray& blob);
+
+private:
+    Type type_ = Type::NONE;
+    QString address_;
+    quint16 port_ = 0;
+    QString username_;
+    SecureString password_;
+};
+
 class HostConfig final
 {
 public:

@@ -138,7 +138,7 @@ protected:
             DataCryptor(key).encrypt(Random::byteArray(32));
         ASSERT_TRUE(verifier.has_value());
 
-        ASSERT_TRUE(source_.reencryptAll({}, {}, {}, {}, salt, *verifier, 1));
+        ASSERT_TRUE(source_.reencryptAll({}, {}, {}, {}, ProxyConfig(), salt, *verifier, 1));
 
         DataCryptor::instance().setKey(key);
     }
