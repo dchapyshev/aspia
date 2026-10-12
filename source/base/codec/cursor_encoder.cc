@@ -20,6 +20,7 @@
 
 #include "base/desktop/mouse_cursor.h"
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "proto/desktop_cursor.h"
 
 #include <libyuv/compare.h>
@@ -190,6 +191,8 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::cursor::Shape
         LOG(ERROR) << "Wrong size of cursor:" << size;
         return false;
     }
+
+    cursor_shape->set_timestamp(DurationCast<MicroSeconds>(Clock::now().time_since_epoch()).count());
 
     // Calculate the hash of the cursor to search in the cache.
     quint32 hash = libyuv::HashDjb2(reinterpret_cast<const quint8*>(mouse_cursor.constImage().data()),

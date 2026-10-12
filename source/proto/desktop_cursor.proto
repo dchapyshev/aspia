@@ -75,6 +75,8 @@ message Shape
 
     // Cursor shape type.
     Type type = 9;
+
+    uint64 timestamp = 10;
 }
 
 message Position

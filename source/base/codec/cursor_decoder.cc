@@ -183,6 +183,12 @@ QByteArray CursorDecoder::decompressCursor(const proto::cursor::Shape& cursor_sh
 //--------------------------------------------------------------------------------------------------
 std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::cursor::Shape& cursor_shape)
 {
+    if (cursor_shape.timestamp() && cursor_shape.timestamp() < reset_timestamp_)
+    {
+        LOG(INFO) << "Stale cursor shape is dropped";
+        return nullptr;
+    }
+
     int cache_index;
 
     if (cursor_shape.flags() & proto::cursor::Shape::CACHE)
@@ -238,6 +244,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::cursor::Shape& c
             }
 
             cache_size_.emplace(cache_size);
+            reset_timestamp_ = cursor_shape.timestamp();
             cache_.reserve(cache_size);
             cache_.clear();
         }

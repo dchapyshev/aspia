@@ -48,6 +48,7 @@ private:
 
     QVector<std::shared_ptr<MouseCursor>> cache_;
     std::optional<qsizetype> cache_size_;
+    quint64 reset_timestamp_ = 0;
     ScopedZstdDStream stream_;
     int taken_from_cache_ = 0;
 

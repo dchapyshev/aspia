@@ -93,6 +93,93 @@ TEST(CursorCodecTest, RepeatedCursorUsesCache)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(CursorCodecTest, EncoderSetsTimestamp)
+{
+    CursorEncoder encoder;
+    const MouseCursor cursor = makeCursor(16, 16, 3);
+
+    proto::cursor::Shape first;
+    ASSERT_TRUE(encoder.encode(cursor, &first));
+    EXPECT_NE(first.timestamp(), 0u);
+
+    proto::cursor::Shape second;
+    ASSERT_TRUE(encoder.encode(cursor, &second));
+    EXPECT_GE(second.timestamp(), first.timestamp());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The host recreates the encoder when the network channel is switched, and shapes of the previous
+// encoder sent over the old channel can arrive after the cache reset of the new one.
+TEST(CursorCodecTest, DecoderDropsShapesEncodedBeforeReset)
+{
+    const MouseCursor old_first = makeCursor(16, 16, 4);
+    const MouseCursor old_second = makeCursor(24, 24, 5);
+    const MouseCursor current = makeCursor(32, 32, 6);
+
+    CursorEncoder old_encoder;
+    proto::cursor::Shape old_reset;
+    proto::cursor::Shape old_image;
+    proto::cursor::Shape old_reference;
+    ASSERT_TRUE(old_encoder.encode(old_first, &old_reset));
+    ASSERT_TRUE(old_encoder.encode(old_second, &old_image));
+    ASSERT_TRUE(old_encoder.encode(old_first, &old_reference));
+    ASSERT_TRUE(old_reference.flags() & proto::cursor::Shape::CACHE);
+    old_reset.set_timestamp(100);
+    old_image.set_timestamp(200);
+    old_reference.set_timestamp(300);
+
+    CursorEncoder new_encoder;
+    proto::cursor::Shape new_reset;
+    proto::cursor::Shape new_reference;
+    ASSERT_TRUE(new_encoder.encode(current, &new_reset));
+    ASSERT_TRUE(new_encoder.encode(current, &new_reference));
+    ASSERT_TRUE(new_reference.flags() & proto::cursor::Shape::CACHE);
+    new_reset.set_timestamp(400);
+    new_reference.set_timestamp(500);
+
+    CursorDecoder decoder;
+    ASSERT_NE(decoder.decode(old_reset), nullptr);
+    ASSERT_NE(decoder.decode(new_reset), nullptr);
+
+    EXPECT_EQ(decoder.decode(old_image), nullptr);
+    EXPECT_EQ(decoder.decode(old_reference), nullptr);
+    EXPECT_EQ(decoder.decode(old_reset), nullptr);
+    EXPECT_EQ(decoder.cachedCursors(), 1);
+
+    const std::shared_ptr<MouseCursor> cached = decoder.decode(new_reference);
+    ASSERT_NE(cached, nullptr);
+    EXPECT_EQ(cached->constImage(), current.constImage());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Hosts up to 3.0.33 and 2.x do not send a timestamp.
+TEST(CursorCodecTest, DecoderAcceptsShapesWithoutTimestamp)
+{
+    CursorEncoder encoder;
+    CursorDecoder decoder;
+
+    const MouseCursor first_cursor = makeCursor(16, 16, 7);
+    const MouseCursor second_cursor = makeCursor(24, 24, 8);
+
+    proto::cursor::Shape first;
+    proto::cursor::Shape second;
+    proto::cursor::Shape reference;
+    ASSERT_TRUE(encoder.encode(first_cursor, &first));
+    ASSERT_TRUE(encoder.encode(second_cursor, &second));
+    ASSERT_TRUE(encoder.encode(first_cursor, &reference));
+    first.clear_timestamp();
+    second.clear_timestamp();
+    reference.clear_timestamp();
+
+    ASSERT_NE(decoder.decode(first), nullptr);
+    ASSERT_NE(decoder.decode(second), nullptr);
+
+    const std::shared_ptr<MouseCursor> cached = decoder.decode(reference);
+    ASSERT_NE(cached, nullptr);
+    EXPECT_EQ(cached->constImage(), first_cursor.constImage());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(CursorCodecTest, EncoderRejectsInvalidSize)
 {
     CursorEncoder encoder;
