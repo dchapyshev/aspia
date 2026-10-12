@@ -732,6 +732,12 @@ QPoint ScreenCapturerKms::cursorPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ScreenCapturerKms::resetCursorCache()
+{
+    last_cursor_fb_id_ = 0;
+}
+
+//--------------------------------------------------------------------------------------------------
 const QRect& ScreenCapturerKms::desktopRect() const
 {
     // The full logical desktop (all active CRTCs), so the absolute pointer is scaled to the area the

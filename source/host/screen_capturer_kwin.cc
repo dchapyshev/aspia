@@ -826,6 +826,12 @@ QPoint ScreenCapturerKwin::cursorPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ScreenCapturerKwin::resetCursorCache()
+{
+    last_cursor_fb_id_ = 0;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerKwin::findCursorPlane(quint32* fb_id, QSize* size, QPoint* position,
                                          QPoint* hotspot, int* crtc_width)
 {

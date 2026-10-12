@@ -432,6 +432,13 @@ QPoint ScreenCapturerPipeWire::cursorPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ScreenCapturerPipeWire::resetCursorCache()
+{
+    QMutexLocker locker(&frame_mutex_);
+    cursor_changed_ = true;
+}
+
+//--------------------------------------------------------------------------------------------------
 const QRect& ScreenCapturerPipeWire::desktopRect() const
 {
     return screen_rect_;
