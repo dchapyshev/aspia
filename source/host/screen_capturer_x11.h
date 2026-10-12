@@ -46,6 +46,7 @@ public:
     const Frame* captureFrame(Error* error) final;
     const MouseCursor* captureCursor() final;
     QPoint cursorPosition() final;
+    void resetCursorCache() final;
     const QRect& desktopRect() const final;
     const QRect& currentScreenRect() const final;
 
@@ -101,6 +102,7 @@ private:
     bool has_xfixes_ = false;
     int xfixes_event_base_ = -1;
     int xfixes_error_base_ = -1;
+    bool cursor_changed_ = true;
 
     // XDamage information.
     bool use_damage_ = false;

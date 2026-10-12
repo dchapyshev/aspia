@@ -54,6 +54,9 @@ ScreenCapturerX11::~ScreenCapturerX11()
 
         if (use_randr_)
             display_->removeEventHandler(randr_event_base_ + RRScreenChangeNotify, this);
+
+        if (has_xfixes_)
+            display_->removeEventHandler(xfixes_event_base_ + XFixesCursorNotify, this);
     }
 
     deinitXlib();
@@ -230,7 +233,7 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
 //--------------------------------------------------------------------------------------------------
 const MouseCursor* ScreenCapturerX11::captureCursor()
 {
-    if (!has_xfixes_)
+    if (!has_xfixes_ || !cursor_changed_)
         return nullptr;
 
     XFixesCursorImage* x_image = nullptr;
@@ -244,6 +247,8 @@ const MouseCursor* ScreenCapturerX11::captureCursor()
         }
     }
 
+    cursor_changed_ = false;
+
     QSize size(x_image->width, x_image->height);
     QPoint hotspot(std::min(x_image->xhot, x_image->width),
                    std::min(x_image->yhot, x_image->height));
@@ -251,6 +256,7 @@ const MouseCursor* ScreenCapturerX11::captureCursor()
     if (size.width() <= 0 || size.height() <= 0)
     {
         LOG(ERROR) << "Invalid cursor size:" << size;
+        XFree(x_image);
         return nullptr;
     }
 
@@ -298,6 +304,12 @@ QPoint ScreenCapturerX11::cursorPosition()
     }
 
     return QPoint(root_x, root_y) - selected_monitor_rect_.topLeft();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenCapturerX11::resetCursorCache()
+{
+    cursor_changed_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -368,7 +380,6 @@ bool ScreenCapturerX11::init()
         // Register for changes to the cursor shape.
         XFixesSelectCursorInput(display(), root_window_, XFixesDisplayCursorNotifyMask);
         display_->addEventHandler(xfixes_event_base_ + XFixesCursorNotify, this);
-        captureCursor();
     }
 
     if (!x_server_pixel_buffer_.init(atom_cache_.get(), DefaultRootWindow(display())))
@@ -430,6 +441,11 @@ bool ScreenCapturerX11::handleXEvent(const XEvent& event)
     else if (event.type == ConfigureNotify)
     {
         screenConfigurationChanged();
+        return true;
+    }
+    else if (has_xfixes_ && event.type == xfixes_event_base_ + XFixesCursorNotify)
+    {
+        cursor_changed_ = true;
         return true;
     }
 
