@@ -313,9 +313,14 @@ void NetworkWorker::onUdpMessageReceived(quint8 channel_id, const QByteArray& bu
     }
 
     if (message.has_bandwidth_probe())
+    {
+        udp_ready_ = true;
         readBandwidthProbe(message.bandwidth_probe(), /* via_udp= */ true);
+    }
     else
+    {
         LOG(WARNING) << "Unhandled UDP control message";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -715,6 +720,4 @@ void NetworkWorker::selectAttempt(UdpAttempt* attempt)
     clearAttempts();
     connect(udp_channel_, &UdpChannel::sig_messageReceived, this, &NetworkWorker::onUdpMessageReceived);
     connect(udp_channel_, &UdpChannel::sig_errorOccurred, this, &NetworkWorker::onUdpErrorOccurred);
-
-    udp_ready_ = true;
 }
