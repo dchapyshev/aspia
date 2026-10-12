@@ -27,8 +27,8 @@
 
 namespace {
 
-// Cache size can be in the range from 2 to 30.
-constexpr int kCacheSize = 30;
+// Cache size can be in the range from 2 to 63.
+constexpr int kCacheSize = 63;
 
 // The compression ratio can be in the range of 1 to 22.
 constexpr int kCompressionRatio = 12;
@@ -106,7 +106,7 @@ CursorEncoder::CursorEncoder()
 {
     LOG(INFO) << "Ctor";
 
-    static_assert(kCacheSize >= 2 && kCacheSize <= 30);
+    static_assert(kCacheSize >= 2 && kCacheSize <= 63);
     static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 22);
 
     // Reserve memory for the maximum number of elements in the cache.
@@ -205,7 +205,7 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::cursor::Shape
         if (cache_[index] == hash)
         {
             // Cursor found in cache.
-            cursor_shape->set_flags(proto::cursor::Shape::CACHE | (index & 0x1F));
+            cursor_shape->set_flags(proto::cursor::Shape::CACHE | (index & 0x3F));
             return true;
         }
     }
@@ -236,7 +236,7 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::cursor::Shape
 
         // If the cache is empty, then set the cache reset flag on the client side and pass the
         // maximum cache size.
-        cursor_shape->set_flags(proto::cursor::Shape::RESET_CACHE | (kCacheSize & 0x1F));
+        cursor_shape->set_flags(proto::cursor::Shape::RESET_CACHE | (kCacheSize & 0x3F));
     }
 
     // Add the cursor to the cache.

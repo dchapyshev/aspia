@@ -168,6 +168,7 @@ TEST(CursorCodecTest, DecoderAcceptsShapesWithoutTimestamp)
     ASSERT_TRUE(encoder.encode(second_cursor, &second));
     ASSERT_TRUE(encoder.encode(first_cursor, &reference));
     first.clear_timestamp();
+    first.set_flags(proto::cursor::Shape::RESET_CACHE | 30);
     second.clear_timestamp();
     reference.clear_timestamp();
 
@@ -177,6 +178,50 @@ TEST(CursorCodecTest, DecoderAcceptsShapesWithoutTimestamp)
     const std::shared_ptr<MouseCursor> cached = decoder.decode(reference);
     ASSERT_NE(cached, nullptr);
     EXPECT_EQ(cached->constImage(), first_cursor.constImage());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(CursorCodecTest, CacheIndexAbove31)
+{
+    CursorEncoder encoder;
+    CursorDecoder decoder;
+
+    for (int i = 0; i < 40; ++i)
+    {
+        proto::cursor::Shape shape;
+        ASSERT_TRUE(encoder.encode(makeCursor(8, 8, i), &shape));
+        if (i == 0)
+            EXPECT_EQ(shape.flags(), proto::cursor::Shape::RESET_CACHE | 63u);
+        ASSERT_NE(decoder.decode(shape), nullptr);
+    }
+    EXPECT_EQ(decoder.cachedCursors(), 40);
+
+    const MouseCursor cursor = makeCursor(8, 8, 35);
+    proto::cursor::Shape reference;
+    ASSERT_TRUE(encoder.encode(cursor, &reference));
+    EXPECT_EQ(reference.flags(), proto::cursor::Shape::CACHE | 35u);
+
+    const std::shared_ptr<MouseCursor> cached = decoder.decode(reference);
+    ASSERT_NE(cached, nullptr);
+    EXPECT_EQ(cached->constImage(), cursor.constImage());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Hosts up to 3.0.33 and 2.x use 5 bits for the cache size, so the limit stays 30 for them.
+TEST(CursorCodecTest, DecoderLimitsCacheSizeWithoutTimestamp)
+{
+    CursorEncoder encoder;
+    CursorDecoder decoder;
+
+    proto::cursor::Shape shape;
+    ASSERT_TRUE(encoder.encode(makeCursor(16, 16, 9), &shape));
+    shape.clear_timestamp();
+
+    shape.set_flags(proto::cursor::Shape::RESET_CACHE | 31);
+    EXPECT_EQ(decoder.decode(shape), nullptr);
+
+    shape.set_flags(proto::cursor::Shape::RESET_CACHE | 30);
+    EXPECT_NE(decoder.decode(shape), nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------

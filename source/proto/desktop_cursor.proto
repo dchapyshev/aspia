@@ -51,11 +51,11 @@ message Shape
     }
 
     // We use only the first byte in this field.
-    // If bit 7 is set to 1, then bits 0-4 contain the cursor index in the cache.
+    // If bit 7 is set to 1, then bits 0-5 contain the cursor index in the cache.
     // If bit 7 is not set, then the cursor image is received.
     // If bit 6 is set to 1, then the command to reset the contents of the cache
-    // is received, and bits 0-4 contain a new cache size.
-    // Bit 5 is reserved.
+    // is received, and bits 0-5 contain a new cache size.
+    // Hosts that do not send |timestamp| use only bits 0-4 and the cache size up to 30.
     uint32 flags = 1;
 
     // Width, height (in screen pixels) of the cursor.

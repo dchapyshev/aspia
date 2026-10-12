@@ -25,7 +25,12 @@
 namespace {
 
 constexpr qsizetype kMinCacheSize = 2;
-constexpr qsizetype kMaxCacheSize = 30;
+constexpr qsizetype kMaxCacheSize = 63;
+constexpr quint32 kCacheMask = 0x3F;
+
+// Hosts that do not send a timestamp use 5 bits of the flags for the cache index and size.
+constexpr qsizetype kMaxLegacyCacheSize = 30;
+constexpr quint32 kLegacyCacheMask = 0x1F;
 
 // Must match the limit on the encoder side. Real cursors are far smaller, and the bound keeps a
 // malicious host from requesting huge pixel buffer allocations.
@@ -189,6 +194,9 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::cursor::Shape& c
         return nullptr;
     }
 
+    const bool has_timestamp = cursor_shape.timestamp() != 0;
+    const quint32 cache_mask = has_timestamp ? kCacheMask : kLegacyCacheMask;
+
     int cache_index;
 
     if (cursor_shape.flags() & proto::cursor::Shape::CACHE)
@@ -199,8 +207,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::cursor::Shape& c
             return nullptr;
         }
 
-        // Bits 0-4 contain the cursor position in the cache.
-        cache_index = cursor_shape.flags() & 0x1F;
+        cache_index = cursor_shape.flags() & cache_mask;
         ++taken_from_cache_;
     }
     else
@@ -235,9 +242,10 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::cursor::Shape& c
 
         if (cursor_shape.flags() & proto::cursor::Shape::RESET_CACHE)
         {
-            qsizetype cache_size = cursor_shape.flags() & 0x1F;
+            qsizetype cache_size = cursor_shape.flags() & cache_mask;
+            qsizetype max_cache_size = has_timestamp ? kMaxCacheSize : kMaxLegacyCacheSize;
 
-            if (cache_size < kMinCacheSize || cache_size > kMaxCacheSize)
+            if (cache_size < kMinCacheSize || cache_size > max_cache_size)
             {
                 LOG(ERROR) << "Invalid cache size:" << cache_size;
                 return nullptr;
