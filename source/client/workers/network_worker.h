@@ -21,6 +21,7 @@
 
 #include <QVariant>
 
+#include <deque>
 #include <list>
 #include <memory>
 #include <optional>
@@ -129,6 +130,7 @@ private:
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
     void readStunUdpRequest(const proto::peer::StunUdpRequest& request);
     void readGatewayUdpRequest(const proto::peer::GatewayUdpRequest& request);
+    void readUdpSwitch();
     void addAndStart(UdpAttempt* attempt);
     UdpAttempt* findAttempt(quint32 request_id);
     void eraseAttempt(quint32 request_id);
@@ -145,6 +147,9 @@ private:
 
     bool udp_ready_ = false;
     const quint32 udp_methods_;
+
+    bool udp_switch_pending_ = false;
+    std::deque<std::pair<quint8, QByteArray>> held_udp_messages_;
 
     // Arrival state of the probe train currently being received (see readBandwidthProbe). A train
     // that never completes (UDP loss) is simply superseded by the next one.

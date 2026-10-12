@@ -372,6 +372,8 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
 
     if (message.has_udp_reply())
         readUdpReply(message.udp_reply());
+    else if (message.has_udp_switch())
+        readUdpSwitch();
     else if (message.has_bandwidth_probe_ack())
         onTcpBandwidthProbeAck(message.bandwidth_probe_ack());
     else if (message.has_receive_rate())
@@ -478,6 +480,7 @@ void Client::selectAttempt(UdpAttempt* attempt, qint64 bandwidth)
     connect(udp_channel_, &UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
     connect(udp_channel_, &UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
 
+    udp_switch_pending_ = true;
     udp_channel_->setPaused(false);
 
     // The attempt's round-trip only proves the path works; the bandwidth it implies is RTT-bound and
@@ -509,6 +512,12 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id != proto::peer::CHANNEL_ID_CONTROL)
     {
+        if (udp_switch_pending_)
+        {
+            held_udp_messages_.emplace_back(channel_id, buffer);
+            return;
+        }
+
         onMessage(channel_id, buffer);
         return;
     }
@@ -588,6 +597,19 @@ void Client::readUdpReply(const proto::peer::UdpReply& reply)
     }
 
     attempt->onReply(reply);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::readUdpSwitch()
+{
+    udp_switch_pending_ = false;
+
+    while (!held_udp_messages_.empty())
+    {
+        auto [channel_id, buffer] = std::move(held_udp_messages_.front());
+        held_udp_messages_.pop_front();
+        onMessage(channel_id, buffer);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -772,6 +794,11 @@ void Client::checkBandwidth()
     if (udp_state_ == UdpState::PROBED)
     {
         CLOG(INFO) << "Switching traffic to UDP";
+
+        proto::peer::HostToClient message;
+        message.mutable_udp_switch()->set_dummy(1);
+        tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
+
         setUdpState(FROM_HERE, UdpState::READY);
         clearAttempts();
         emit sig_channelChanged();

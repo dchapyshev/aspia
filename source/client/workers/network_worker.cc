@@ -292,6 +292,8 @@ void NetworkWorker::onTcpMessageReceived(quint8 channel_id, const QByteArray& bu
         readGatewayUdpRequest(message.gateway_udp_request());
     else if (message.has_bandwidth_probe())
         readBandwidthProbe(message.bandwidth_probe(), /* via_udp= */ false);
+    else if (message.has_udp_switch())
+        readUdpSwitch();
     else
         LOG(WARNING) << "Unhandled control message";
 }
@@ -301,6 +303,12 @@ void NetworkWorker::onUdpMessageReceived(quint8 channel_id, const QByteArray& bu
 {
     if (channel_id != proto::peer::CHANNEL_ID_CONTROL)
     {
+        if (udp_switch_pending_)
+        {
+            held_udp_messages_.emplace_back(channel_id, buffer);
+            return;
+        }
+
         routeMessage(channel_id, buffer);
         return;
     }
@@ -314,7 +322,18 @@ void NetworkWorker::onUdpMessageReceived(quint8 channel_id, const QByteArray& bu
 
     if (message.has_bandwidth_probe())
     {
-        udp_ready_ = true;
+        if (!udp_ready_)
+        {
+            if (tcp_channel_)
+            {
+                proto::peer::ClientToHost udp_switch;
+                udp_switch.mutable_udp_switch()->set_dummy(1);
+                tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(udp_switch));
+            }
+
+            udp_ready_ = true;
+        }
+
         readBandwidthProbe(message.bandwidth_probe(), /* via_udp= */ true);
     }
     else
@@ -631,6 +650,19 @@ void NetworkWorker::readGatewayUdpRequest(const proto::peer::GatewayUdpRequest& 
 }
 
 //--------------------------------------------------------------------------------------------------
+void NetworkWorker::readUdpSwitch()
+{
+    udp_switch_pending_ = false;
+
+    while (!held_udp_messages_.empty())
+    {
+        auto [channel_id, buffer] = std::move(held_udp_messages_.front());
+        held_udp_messages_.pop_front();
+        routeMessage(channel_id, buffer);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void NetworkWorker::addAndStart(UdpAttempt* attempt)
 {
     if (!attempt->isValid())
@@ -720,4 +752,6 @@ void NetworkWorker::selectAttempt(UdpAttempt* attempt)
     clearAttempts();
     connect(udp_channel_, &UdpChannel::sig_messageReceived, this, &NetworkWorker::onUdpMessageReceived);
     connect(udp_channel_, &UdpChannel::sig_errorOccurred, this, &NetworkWorker::onUdpErrorOccurred);
+
+    udp_switch_pending_ = (session_state_->hostVersion() >= kVersion_3_0_34);
 }

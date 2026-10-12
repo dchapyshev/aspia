@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QVersionNumber>
 
+#include <deque>
 #include <list>
 
 #include "base/logging.h"
@@ -115,6 +116,7 @@ private:
     UdpAttempt* findAttempt(quint32 request_id);
     void eraseAttempt(quint32 request_id);
     void readUdpReply(const proto::peer::UdpReply& reply);
+    void readUdpSwitch();
     void onAttemptConnected(quint32 request_id, qint64 bandwidth);
     void onAttemptError(quint32 request_id);
     void selectAttempt(UdpAttempt* attempt, qint64 bandwidth);
@@ -136,6 +138,9 @@ private:
     TcpChannel* tcp_channel_ = nullptr;
     UdpState udp_state_ = UdpState::DISCONNECTED;
     ScopedQPointer<UdpChannel> udp_channel_;
+
+    bool udp_switch_pending_ = false;
+    std::deque<std::pair<quint8, QByteArray>> held_udp_messages_;
 
     std::list<ScopedQPointer<UdpAttempt>> attempts_;
 

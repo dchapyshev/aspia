@@ -134,12 +134,21 @@ message ReceiveRate
     uint32 interval_ms = 2;
 }
 
+// Sent over TCP right before the sender starts sending session messages over UDP. The receiver
+// holds the session messages that arrive over UDP until this one, so that nothing sent over TCP
+// before the switch is applied after them.
+message UdpSwitch
+{
+    uint32 dummy = 1; // Always set to 1.
+}
+
 // Use CHANNEL_ID_CONTROL to send.
 message ClientToHost
 {
     UdpReply udp_reply                    = 1;
     BandwidthProbeAck bandwidth_probe_ack = 2;
     ReceiveRate receive_rate              = 3;
+    UdpSwitch udp_switch                  = 4;
 }
 
 // Use CHANNEL_ID_CONTROL to send.
@@ -149,4 +158,5 @@ message HostToClient
     StunUdpRequest stun_udp_request       = 2;
     GatewayUdpRequest gateway_udp_request = 3;
     BandwidthProbe bandwidth_probe        = 4;
+    UdpSwitch udp_switch                  = 5;
 }
