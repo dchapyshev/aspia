@@ -126,6 +126,7 @@ private:
     void startConnection();
     void routeMessage(quint8 channel_id, const QByteArray& buffer);
     void tcpChannelReady();
+    void connectionLost(TcpChannel::ErrorCode error_code);
     void readBandwidthProbe(const proto::peer::BandwidthProbe& probe, bool via_udp);
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
     void readStunUdpRequest(const proto::peer::StunUdpRequest& request);

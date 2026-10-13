@@ -246,26 +246,7 @@ void NetworkWorker::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
         }
     }
 
-    LOG(INFO) << "Connection terminated:" << error_code;
-
-    // Show an error to the user.
-    emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
-
-    if (tcp_channel_)
-    {
-        tcp_channel_->disconnect();
-        tcp_channel_.reset();
-    }
-
-    if (!session_state_->isAutoReconnect() || error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
-        return;
-
-    LOG(INFO) << "Reconnect to host is enabled";
-    session_state_->setReconnecting(true);
-
-    // Both relay and direct paths are handled the same way: the owner (ClientWindow)
-    // observes WAIT_FOR_HOST, destroys this Client, and builds a fresh one when ready.
-    emit sig_statusChanged(Status::WAIT_FOR_HOST);
+    connectionLost(error_code);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -347,7 +328,12 @@ void NetworkWorker::onUdpErrorOccurred()
 {
     LOG(WARNING) << "UDP channel error";
 
-    udp_ready_ = false;
+    if (udp_ready_)
+    {
+        connectionLost(TcpChannel::ErrorCode::NETWORK_ERROR);
+        return;
+    }
+
     if (udp_channel_)
     {
         udp_channel_->disconnect();
@@ -565,6 +551,40 @@ void NetworkWorker::tcpChannelReady()
     // The handshake passed (connection established, authentication done, versions compatible). The
     // session sets itself up on this status and calls onSessionReady() to unpause the channel.
     emit sig_statusChanged(Status::HOST_CONNECTED);
+}
+
+//--------------------------------------------------------------------------------------------------
+void NetworkWorker::connectionLost(TcpChannel::ErrorCode error_code)
+{
+    clearAttempts();
+
+    LOG(INFO) << "Connection terminated:" << error_code;
+
+    // Show an error to the user.
+    emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
+
+    udp_ready_ = false;
+    if (udp_channel_)
+    {
+        udp_channel_->disconnect();
+        udp_channel_.reset();
+    }
+
+    if (tcp_channel_)
+    {
+        tcp_channel_->disconnect();
+        tcp_channel_.reset();
+    }
+
+    if (!session_state_->isAutoReconnect() || error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
+        return;
+
+    LOG(INFO) << "Reconnect to host is enabled";
+    session_state_->setReconnecting(true);
+
+    // Both relay and direct paths are handled the same way. The owner (ClientWindow) observes
+    // WAIT_FOR_HOST, destroys this Client and builds a fresh one when ready.
+    emit sig_statusChanged(Status::WAIT_FOR_HOST);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -42,7 +42,6 @@ const Seconds kProbeInterval{ 10 };
 // trusted only upward (see the ack handlers).
 const Seconds kIdleThreshold{ 5 };
 const Seconds kUdpInitialDelay{ 7 };        // Delay before the first UDP negotiation (let key frames flush).
-const Seconds kUdpReconnectDelay{ 5 };      // 5 seconds before attempting UDP reconnection.
 
 // A probe train: several probes sent back to back. The receiver measures the arrival spacing, which
 // reflects the bottleneck rate of the path independently of the RTT (a single request/response probe
@@ -538,7 +537,13 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpErrorOccurred()
 {
-    const bool was_ready = (udp_state_ == UdpState::READY);
+    if (udp_state_ == UdpState::READY)
+    {
+        CLOG(ERROR) << "UDP channel dropped";
+        udp_channel_->disconnect();
+        finish();
+        return;
+    }
 
     if (udp_channel_)
     {
@@ -552,24 +557,11 @@ void Client::onUdpErrorOccurred()
     udp_probe_.pending = false;
     udp_base_rtt_ = MilliSeconds::zero();
     udp_high_rtt_count_ = 0;
-
-    if (was_ready)
-    {
-        // A working UDP channel dropped: fall back to TCP and schedule a fresh attempt.
-        CLOG(INFO) << "UDP channel dropped, switching to TCP and scheduling reconnect";
-        clearAttempts();
-        emit sig_channelChanged();
-        QTimer::singleShot(kUdpReconnectDelay, this, &Client::connectToUdp);
-        return;
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::connectToUdp()
 {
-    if (!attempts_.empty() || udp_channel_)
-        return;
-
     if (tcp_channel_->type() == TcpChannel::Type::DIRECT)
     {
         addAndStart(new DirectUdpAttempt(nextRequestId(), this));
