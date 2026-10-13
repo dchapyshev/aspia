@@ -595,18 +595,20 @@ void NetworkWorker::connectionLost(TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void NetworkWorker::readBandwidthProbe(const proto::peer::BandwidthProbe& probe, bool via_udp)
 {
+    ProbeTrain& probe_train = via_udp ? udp_probe_train_ : tcp_probe_train_;
+
     // First probe of a new train (an unfinished previous train - lost probes on UDP - is simply
     // superseded).
-    if (!probe_train_.active || probe_train_.id != probe.train_id())
+    if (!probe_train.active || probe_train.id != probe.train_id())
     {
-        probe_train_.id = probe.train_id();
-        probe_train_.active = true;
-        probe_train_.bytes = 0;
-        probe_train_.first_arrival = Clock::now();
+        probe_train.id = probe.train_id();
+        probe_train.active = true;
+        probe_train.bytes = 0;
+        probe_train.first_arrival = Clock::now();
         return;
     }
 
-    probe_train_.bytes += probe.payload().size();
+    probe_train.bytes += probe.payload().size();
 
     // The last probe of the train completes the measurement: report how long the train took to
     // arrive and how much of it arrived after the first probe. The probes are sent back to back, so
@@ -615,12 +617,12 @@ void NetworkWorker::readBandwidthProbe(const proto::peer::BandwidthProbe& probe,
     {
         proto::peer::ClientToHost message;
         proto::peer::BandwidthProbeAck* ack = message.mutable_bandwidth_probe_ack();
-        ack->set_train_id(probe_train_.id);
+        ack->set_train_id(probe_train.id);
         ack->set_delta_us(static_cast<quint64>(
-            DurationCast<MicroSeconds>(Clock::now() - probe_train_.first_arrival).count()));
-        ack->set_bytes(probe_train_.bytes);
+            DurationCast<MicroSeconds>(Clock::now() - probe_train.first_arrival).count()));
+        ack->set_bytes(probe_train.bytes);
 
-        probe_train_.active = false;
+        probe_train.active = false;
 
         if (via_udp)
             udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message), true);
