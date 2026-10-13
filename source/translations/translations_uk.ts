@@ -391,30 +391,30 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="170"/>
-        <location filename="../client/android/main_window.cc" line="270"/>
-        <location filename="../client/android/main_window.cc" line="312"/>
+        <location filename="../client/android/main_window.cc" line="174"/>
+        <location filename="../client/android/main_window.cc" line="346"/>
+        <location filename="../client/android/main_window.cc" line="388"/>
         <source>Local</source>
         <translation>Локальні</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="171"/>
-        <location filename="../client/android/main_window.cc" line="274"/>
-        <location filename="../client/android/main_window.cc" line="332"/>
+        <location filename="../client/android/main_window.cc" line="175"/>
+        <location filename="../client/android/main_window.cc" line="350"/>
+        <location filename="../client/android/main_window.cc" line="408"/>
         <source>Remote</source>
         <translation>Віддалені</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="172"/>
-        <location filename="../client/android/main_window.cc" line="278"/>
-        <location filename="../client/android/main_window.cc" line="322"/>
+        <location filename="../client/android/main_window.cc" line="176"/>
+        <location filename="../client/android/main_window.cc" line="354"/>
+        <location filename="../client/android/main_window.cc" line="398"/>
         <source>Routers</source>
         <translation>Маршрутизатори</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="173"/>
-        <location filename="../client/android/main_window.cc" line="282"/>
-        <location filename="../client/android/main_window.cc" line="342"/>
+        <location filename="../client/android/main_window.cc" line="177"/>
+        <location filename="../client/android/main_window.cc" line="358"/>
+        <location filename="../client/android/main_window.cc" line="418"/>
         <location filename="../host/android/main_window.cc" line="88"/>
         <location filename="../host/android/main_window.cc" line="104"/>
         <location filename="../host/android/main_window.cc" line="479"/>
@@ -422,71 +422,71 @@ Routers added: %4</source>
         <translation>Налаштування</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="696"/>
+        <location filename="../client/android/main_window.cc" line="772"/>
         <source>Update</source>
         <translation>Оновлення</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="697"/>
+        <location filename="../client/android/main_window.cc" line="773"/>
         <source>Version %1 is available.</source>
         <translation>Доступна версія %1.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="746"/>
+        <location filename="../client/android/main_window.cc" line="822"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Маршрутизатор, пов&apos;язаний із цим хостом, було видалено. Змініть хост, щоб вибрати інший маршрутизатор, або перейдіть на пряме підключення.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="556"/>
+        <location filename="../client/android/main_window.cc" line="632"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Двофакторна автентифікація - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="434"/>
-        <location filename="../client/android/main_window.cc" line="1013"/>
+        <location filename="../client/android/main_window.cc" line="510"/>
+        <location filename="../client/android/main_window.cc" line="1089"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Дані хоста пошкоджено. Відредагуйте хост і введіть їх знову.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="745"/>
-        <location filename="../client/android/main_window.cc" line="971"/>
+        <location filename="../client/android/main_window.cc" line="821"/>
+        <location filename="../client/android/main_window.cc" line="1047"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Дані маршрутизатора пошкоджено. Відредагуйте маршрутизатор і введіть їх знову.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="923"/>
+        <location filename="../client/android/main_window.cc" line="999"/>
         <source>Invalid link.</source>
         <translation>Недійсне посилання.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="931"/>
+        <location filename="../client/android/main_window.cc" line="1007"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>Інша сесія вже активна. Закрийте її і відкрийте посилання ще раз.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="941"/>
+        <location filename="../client/android/main_window.cc" line="1017"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>Тип сесії з посилання не підтримується на цьому пристрої.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="962"/>
+        <location filename="../client/android/main_window.cc" line="1038"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Маршрутизатор, вказаний у посиланні, не знайдено серед збережених маршрутизаторів.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1014"/>
+        <location filename="../client/android/main_window.cc" line="1090"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Хост, вказаний у посиланні, не знайдено серед збережених хостів.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="433"/>
-        <location filename="../client/android/main_window.cc" line="743"/>
-        <location filename="../client/android/main_window.cc" line="923"/>
-        <location filename="../client/android/main_window.cc" line="930"/>
-        <location filename="../client/android/main_window.cc" line="940"/>
-        <location filename="../client/android/main_window.cc" line="961"/>
-        <location filename="../client/android/main_window.cc" line="970"/>
-        <location filename="../client/android/main_window.cc" line="1011"/>
+        <location filename="../client/android/main_window.cc" line="509"/>
+        <location filename="../client/android/main_window.cc" line="819"/>
+        <location filename="../client/android/main_window.cc" line="999"/>
+        <location filename="../client/android/main_window.cc" line="1006"/>
+        <location filename="../client/android/main_window.cc" line="1016"/>
+        <location filename="../client/android/main_window.cc" line="1037"/>
+        <location filename="../client/android/main_window.cc" line="1046"/>
+        <location filename="../client/android/main_window.cc" line="1087"/>
         <location filename="../host/android/main_window.cc" line="87"/>
         <location filename="../host/android/main_window.cc" line="103"/>
         <location filename="../host/android/main_window.cc" line="477"/>
@@ -499,7 +499,7 @@ Routers added: %4</source>
         <translation>Дозволи</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="697"/>
+        <location filename="../client/android/main_window.cc" line="773"/>
         <source>Open</source>
         <translation>Відкрити</translation>
     </message>
@@ -1187,7 +1187,7 @@ Routers added: %4</source>
     <name>ConfigDialog</name>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
-        <location filename="../host/ui/config_dialog.ui" line="225"/>
+        <location filename="../host/ui/config_dialog.ui" line="218"/>
         <location filename="../host/ui/config_dialog.cc" line="137"/>
         <source>Settings</source>
         <translation>Налаштування</translation>
@@ -1198,7 +1198,7 @@ Routers added: %4</source>
         <translation>Основні</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="300"/>
+        <location filename="../host/ui/config_dialog.ui" line="293"/>
         <source>Change password</source>
         <translation>Змінити пароль</translation>
     </message>
@@ -1248,238 +1248,238 @@ Routers added: %4</source>
         <translation>За замовчуванням</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="236"/>
+        <location filename="../host/ui/config_dialog.cc" line="234"/>
         <source>On reboot</source>
         <translation>При перезавантаженні</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="237"/>
+        <location filename="../host/ui/config_dialog.cc" line="235"/>
         <source>Every 5 minutes</source>
         <translation>Кожні 5 хвилин</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="238"/>
+        <location filename="../host/ui/config_dialog.cc" line="236"/>
         <source>Every 30 minutes</source>
         <translation>Кожні 30 хвилин</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="239"/>
+        <location filename="../host/ui/config_dialog.cc" line="237"/>
         <source>Every 1 hour</source>
         <translation>Кожну годину</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="240"/>
+        <location filename="../host/ui/config_dialog.cc" line="238"/>
         <source>Every 6 hours</source>
         <translation>Кожні 6 годин</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="241"/>
+        <location filename="../host/ui/config_dialog.cc" line="239"/>
         <source>Every 12 hours</source>
         <translation>Кожні 12 годин</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="249"/>
+        <location filename="../host/ui/config_dialog.cc" line="247"/>
         <source>Letters and digits</source>
         <translation>Літери і цифри</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="252"/>
+        <location filename="../host/ui/config_dialog.cc" line="250"/>
         <source>Letters</source>
         <translation>Літери</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="254"/>
+        <location filename="../host/ui/config_dialog.cc" line="252"/>
         <source>Digits</source>
         <translation>Цифри</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="271"/>
+        <location filename="../host/ui/config_dialog.cc" line="269"/>
         <source>Never</source>
         <translation>Ніколи</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="272"/>
+        <location filename="../host/ui/config_dialog.cc" line="270"/>
         <source>15 seconds</source>
         <translation>15 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="273"/>
+        <location filename="../host/ui/config_dialog.cc" line="271"/>
         <source>30 seconds</source>
         <translation>30 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="274"/>
+        <location filename="../host/ui/config_dialog.cc" line="272"/>
         <source>45 seconds</source>
         <translation>45 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="275"/>
+        <location filename="../host/ui/config_dialog.cc" line="273"/>
         <source>60 seconds</source>
         <translation>60 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="283"/>
+        <location filename="../host/ui/config_dialog.cc" line="281"/>
         <source>Accept connection</source>
         <translation>Приймати підключення</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="284"/>
+        <location filename="../host/ui/config_dialog.cc" line="282"/>
         <source>Reject connection</source>
         <translation>Відхиляти підключення</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="484"/>
+        <location filename="../host/ui/config_dialog.cc" line="482"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Ви дійсно хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="512"/>
-        <location filename="../host/ui/config_dialog.cc" line="546"/>
+        <location filename="../host/ui/config_dialog.cc" line="510"/>
+        <location filename="../host/ui/config_dialog.cc" line="544"/>
         <source>An error occurred while processing the password.</source>
         <translation>Сталася помилка при обробці пароля.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="529"/>
+        <location filename="../host/ui/config_dialog.cc" line="527"/>
         <source>Settings storage is unavailable.</source>
         <translation>Сховище налаштувань недоступне.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="244"/>
-        <location filename="../host/ui/config_dialog.cc" line="560"/>
+        <location filename="../host/ui/config_dialog.ui" line="237"/>
+        <location filename="../host/ui/config_dialog.cc" line="558"/>
         <source>Import</source>
         <translation>Імпорт</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="560"/>
-        <location filename="../host/ui/config_dialog.cc" line="577"/>
+        <location filename="../host/ui/config_dialog.cc" line="558"/>
+        <location filename="../host/ui/config_dialog.cc" line="575"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON-файли (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="251"/>
-        <location filename="../host/ui/config_dialog.cc" line="577"/>
-        <location filename="../host/ui/config_dialog.cc" line="602"/>
-        <location filename="../host/ui/config_dialog.cc" line="637"/>
+        <location filename="../host/ui/config_dialog.ui" line="244"/>
+        <location filename="../host/ui/config_dialog.cc" line="575"/>
+        <location filename="../host/ui/config_dialog.cc" line="600"/>
+        <location filename="../host/ui/config_dialog.cc" line="635"/>
         <source>Export</source>
         <translation>Експорт</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="602"/>
+        <location filename="../host/ui/config_dialog.cc" line="600"/>
         <source>MSI-files (*.msi)</source>
         <translation>MSI-файли (*.msi)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="612"/>
+        <location filename="../host/ui/config_dialog.cc" line="610"/>
         <source>The installer was successfully exported.</source>
         <translation>Інсталятор експортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="616"/>
+        <location filename="../host/ui/config_dialog.cc" line="614"/>
         <source>The installed host package was not found.</source>
         <translation>Встановлений пакет хоста не знайдено.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="620"/>
+        <location filename="../host/ui/config_dialog.cc" line="618"/>
         <source>The installed version of the host does not support exporting the installer.</source>
         <translation>Встановлена версія хоста не підтримує експорт інсталятора.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="624"/>
+        <location filename="../host/ui/config_dialog.cc" line="622"/>
         <source>Unable to export the installer.</source>
         <translation>Не вдалося експортувати інсталятор.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="637"/>
+        <location filename="../host/ui/config_dialog.cc" line="635"/>
         <source>Executable files (*.exe)</source>
         <translation>Виконувані файли (*.exe)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="647"/>
+        <location filename="../host/ui/config_dialog.cc" line="645"/>
         <source>The portable version was successfully exported.</source>
         <translation>Портативну версію експортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="651"/>
+        <location filename="../host/ui/config_dialog.cc" line="649"/>
         <source>The portable version works only through a router. Set up the connection to the router and save the settings.</source>
         <translation>Портативна версія працює тільки через маршрутизатор. Налаштуйте підключення до маршрутизатора та збережіть налаштування.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="655"/>
+        <location filename="../host/ui/config_dialog.cc" line="653"/>
         <source>Unable to export the portable version.</source>
         <translation>Не вдалося експортувати портативну версію.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="676"/>
+        <location filename="../host/ui/config_dialog.cc" line="674"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Конфігурація не може бути записана. Переконайтеся, що у вас достатньо прав для запису.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="692"/>
+        <location filename="../host/ui/config_dialog.cc" line="690"/>
         <source>An invalid update server address was entered.</source>
         <translation>Введено недопустиму адресу сервера оновлень.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="700"/>
+        <location filename="../host/ui/config_dialog.cc" line="698"/>
         <source>Enter the update server address.</source>
         <translation>Введіть адресу сервера оновлень.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="710"/>
+        <location filename="../host/ui/config_dialog.cc" line="708"/>
         <source>An invalid public key was entered.</source>
         <translation>Введено некоректний публічний ключ.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="722"/>
+        <location filename="../host/ui/config_dialog.cc" line="720"/>
         <source>Incorrect router address entered.</source>
         <translation>Введено некоректну адресу маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="732"/>
+        <location filename="../host/ui/config_dialog.cc" line="730"/>
         <source>Incorrect router public key entered.</source>
         <translation>Введено некоректний публічний ключ маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="895"/>
+        <location filename="../host/ui/config_dialog.cc" line="891"/>
         <source>Install</source>
         <translation>Встановити</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="900"/>
+        <location filename="../host/ui/config_dialog.cc" line="896"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="275"/>
+        <location filename="../host/ui/config_dialog.ui" line="268"/>
         <source>Security</source>
         <translation>Безпека</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="281"/>
+        <location filename="../host/ui/config_dialog.ui" line="274"/>
         <source>Password Protection of Settings</source>
         <translation>Захист налаштувань за допомогою пароля</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="317"/>
+        <location filename="../host/ui/config_dialog.ui" line="310"/>
         <source>One-time Password</source>
         <translation>Одноразовий пароль</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="323"/>
+        <location filename="../host/ui/config_dialog.ui" line="316"/>
         <source>Enable one-time password</source>
         <translation>Увімкнути одноразовий пароль</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="332"/>
+        <location filename="../host/ui/config_dialog.ui" line="325"/>
         <source>Change password:</source>
         <translation>Змінювати пароль:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="360"/>
+        <location filename="../host/ui/config_dialog.ui" line="353"/>
         <source>Characters count:</source>
         <translation>Кількість символів:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="346"/>
+        <location filename="../host/ui/config_dialog.ui" line="339"/>
         <source>Characters:</source>
         <translation>Символи:</translation>
     </message>
@@ -1494,12 +1494,12 @@ Routers added: %4</source>
         <translation>Вхідний порт:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="430"/>
+        <location filename="../host/ui/config_dialog.ui" line="423"/>
         <source>Other</source>
         <translation>Інше</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="436"/>
+        <location filename="../host/ui/config_dialog.ui" line="429"/>
         <source>Disable Aspia shutdown</source>
         <translation>Не закривати Aspia</translation>
     </message>
@@ -1509,128 +1509,123 @@ Routers added: %4</source>
         <translation>Захоплювати відео за допомогою:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="87"/>
-        <source>Allow hardware video encoding</source>
-        <translation>Дозволити апаратне кодування відео</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="97"/>
+        <location filename="../host/ui/config_dialog.ui" line="90"/>
         <source>Updates</source>
         <translation>Оновлення</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="103"/>
+        <location filename="../host/ui/config_dialog.ui" line="96"/>
         <source>Automatic checking and installation of updates</source>
         <translation>Автоматична перевірка і встановлення оновлень</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="112"/>
+        <location filename="../host/ui/config_dialog.ui" line="105"/>
         <source>Check for updates:</source>
         <translation>Перевіряти оновлення:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="130"/>
+        <location filename="../host/ui/config_dialog.ui" line="123"/>
         <source>Update channel:</source>
         <translation>Канал оновлень:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="148"/>
+        <location filename="../host/ui/config_dialog.ui" line="141"/>
         <source>Update server:</source>
         <translation>Сервер оновлень:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="169"/>
+        <location filename="../host/ui/config_dialog.ui" line="162"/>
         <source>Public key:</source>
         <translation>Публічний ключ:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="188"/>
+        <location filename="../host/ui/config_dialog.ui" line="181"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>Якщо сервер оновлень не вказано, використовується сервер за замовчуванням. Якщо публічний ключ не вказано, використовується вбудований ключ.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="382"/>
+        <location filename="../host/ui/config_dialog.ui" line="375"/>
         <source>Connection Confirmation</source>
         <translation>Підтвердження підключення</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="388"/>
+        <location filename="../host/ui/config_dialog.ui" line="381"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>Вимагати підтвердження при підключенні до комп&apos;ютера</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="397"/>
+        <location filename="../host/ui/config_dialog.ui" line="390"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>Автоматичне підтвердження підключення через:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="411"/>
+        <location filename="../host/ui/config_dialog.ui" line="404"/>
         <source>If there is no active user:</source>
         <translation>Якщо немає активного користувача:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="460"/>
+        <location filename="../host/ui/config_dialog.ui" line="453"/>
         <source>Router</source>
         <translation>Маршрутизатор</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="466"/>
+        <location filename="../host/ui/config_dialog.ui" line="459"/>
         <source>Enable the use of a router</source>
         <translation>Використовувати маршрутизатор</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="478"/>
+        <location filename="../host/ui/config_dialog.ui" line="471"/>
         <source>Address:</source>
         <translation>Адреса:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="497"/>
+        <location filename="../host/ui/config_dialog.ui" line="490"/>
         <source>Public Key:</source>
         <translation>Публічний ключ:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="511"/>
+        <location filename="../host/ui/config_dialog.ui" line="504"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Потрібен маршрутизатор для підключення до комп&apos;ютера при відсутності прямого підключення (обхід NAT). Aspia не надає публічних маршрутизаторів, але ви можете налаштувати власний. Завантажити маршрутизатор можна на &lt;a href=&quot;https://aspia.org&quot;&gt;офіційному веб-сайті&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="528"/>
-        <location filename="../host/ui/config_dialog.ui" line="639"/>
+        <location filename="../host/ui/config_dialog.ui" line="521"/>
+        <location filename="../host/ui/config_dialog.ui" line="632"/>
         <source>Users</source>
         <translation>Користувачі</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="542"/>
+        <location filename="../host/ui/config_dialog.ui" line="535"/>
         <source>Add new user</source>
         <translation>Додати нового користувача</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="568"/>
+        <location filename="../host/ui/config_dialog.ui" line="561"/>
         <source>Edit user</source>
         <translation>Редагувати користувача</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="594"/>
+        <location filename="../host/ui/config_dialog.ui" line="587"/>
         <source>Delete user</source>
         <translation>Видалити користувача</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="213"/>
+        <location filename="../host/ui/config_dialog.ui" line="206"/>
         <source>Check for updates</source>
         <translation>Перевірити наявність оновлень</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="662"/>
+        <location filename="../host/ui/config_dialog.ui" line="655"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="671"/>
+        <location filename="../host/ui/config_dialog.ui" line="664"/>
         <source>Modify</source>
         <translation>Змінити</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="680"/>
+        <location filename="../host/ui/config_dialog.ui" line="673"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
@@ -2705,48 +2700,48 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="999"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="978"/>
         <source>Save File</source>
         <translation>Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1000"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG зображення (*.png);;BMP зображення (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1031"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1010"/>
         <source>Could not save image</source>
         <translation>Не вдалося зберегти зображення</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1597"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1602"/>
         <source>Credentials</source>
         <translation>Облікові дані</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1597"/>
         <source>User name:</source>
         <translation>Ім&apos;я користувача:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1602"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="513"/>
+        <location filename="../client/android/desktop_window.cc" line="506"/>
         <source>Connecting...</source>
         <translation>Підключення...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="537"/>
+        <location filename="../client/android/desktop_window.cc" line="530"/>
         <source>The specified router is unavailable.</source>
         <translation>Вказаний маршрутизатор недоступний.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="564"/>
+        <location filename="../client/android/desktop_window.cc" line="557"/>
         <source>Requesting connection to the host...</source>
         <translation>Запит на підключення до хоста...</translation>
     </message>
@@ -2761,133 +2756,133 @@ Credentials replaced: %2</source>
         <translation>Сесія %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="536"/>
+        <location filename="../client/android/desktop_window.cc" line="529"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Дані маршрутизатора пошкоджено. Відредагуйте маршрутизатор і введіть їх знову.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="543"/>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
         <source>Connecting to router...</source>
         <translation>Підключення до маршрутизатора...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="774"/>
+        <location filename="../client/android/desktop_window.cc" line="765"/>
         <source>Connecting to host %1...</source>
         <translation>Підключення до хоста %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="780"/>
+        <location filename="../client/android/desktop_window.cc" line="771"/>
         <source>Connection established.</source>
         <translation>З&apos;єднання встановлено.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="793"/>
+        <location filename="../client/android/desktop_window.cc" line="784"/>
         <source>The connection to the host has been lost.</source>
         <translation>З&apos;єднання з хостом втрачено.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="806"/>
+        <location filename="../client/android/desktop_window.cc" line="797"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Версія хоста новіша за клієнта. Оновіть застосунок.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="810"/>
+        <location filename="../client/android/desktop_window.cc" line="801"/>
         <source>Legacy hosts are not supported.</source>
         <translation>Застарілі хости не підтримуються.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="360"/>
+        <location filename="../client/android/desktop_window.cc" line="164"/>
         <source>Monitor %1</source>
         <translation>Монітор %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="368"/>
+        <location filename="../client/android/desktop_window.cc" line="172"/>
         <source>Power</source>
         <translation>Живлення</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="372"/>
+        <location filename="../client/android/desktop_window.cc" line="176"/>
         <source>Keyboard</source>
         <translation>Клавіатура</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="378"/>
+        <location filename="../client/android/desktop_window.cc" line="182"/>
         <source>Ctrl+Alt+Del</source>
         <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="385"/>
+        <location filename="../client/android/desktop_window.cc" line="189"/>
         <source>Users</source>
         <translation>Користувачі</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="390"/>
+        <location filename="../client/android/desktop_window.cc" line="194"/>
         <source>Disconnect</source>
         <translation>Відключити</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="661"/>
-        <location filename="../client/android/desktop_window.cc" line="718"/>
+        <location filename="../client/android/desktop_window.cc" line="652"/>
+        <location filename="../client/android/desktop_window.cc" line="709"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="662"/>
+        <location filename="../client/android/desktop_window.cc" line="653"/>
         <source>Shutdown</source>
         <translation>Вимкнення</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="654"/>
         <source>Reboot</source>
         <translation>Перезавантаження</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="668"/>
+        <location filename="../client/android/desktop_window.cc" line="659"/>
         <source>Safe Mode</source>
         <translation>Безпечний режим</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="669"/>
+        <location filename="../client/android/desktop_window.cc" line="660"/>
         <source>Logoff</source>
         <translation>Завершити сеанс</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="670"/>
+        <location filename="../client/android/desktop_window.cc" line="661"/>
         <source>Lock</source>
         <translation>Блокування</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="686"/>
+        <location filename="../client/android/desktop_window.cc" line="677"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Ви дійсно хочете вимкнути віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="690"/>
+        <location filename="../client/android/desktop_window.cc" line="681"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Ви дійсно хочете перезавантажити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="694"/>
+        <location filename="../client/android/desktop_window.cc" line="685"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Ви дійсно хочете перезавантажити віддалений комп&apos;ютер у безпечному режимі?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="698"/>
+        <location filename="../client/android/desktop_window.cc" line="689"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Ви дійсно хочете завершити сеанс користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="702"/>
+        <location filename="../client/android/desktop_window.cc" line="693"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Ви дійсно хочете заблокувати сеанс користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="757"/>
+        <location filename="../client/android/desktop_window.cc" line="748"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="757"/>
+        <location filename="../client/android/desktop_window.cc" line="748"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
@@ -3772,8 +3767,8 @@ Credentials replaced: %2</source>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="541"/>
-        <location filename="../host/main.cc" line="576"/>
+        <location filename="../host/main.cc" line="556"/>
+        <location filename="../host/main.cc" line="591"/>
         <source>Settings storage is unavailable.</source>
         <translation>Сховище налаштувань недоступне.</translation>
     </message>
@@ -3781,72 +3776,72 @@ Credentials replaced: %2</source>
 <context>
     <name>HostListModel</name>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Host ID</source>
         <translation>ID хоста</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Display Name</source>
         <translation>Відображуване ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Computer Name</source>
         <translation>Ім&apos;я комп&apos;ютера</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Address</source>
         <translation>Адреса</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Comment</source>
         <translation>Коментар</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Workspace</source>
         <translation>Робочий простір</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Operating System</source>
         <translation>Операційна система</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Version</source>
         <translation>Версія</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Architecture</source>
         <translation>Архітектура</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Online</source>
         <translation>Востаннє в мережі</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Last Modify</source>
         <translation>Остання зміна</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="219"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="307"/>
         <source>Online</source>
         <translation>В мережі</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="307"/>
         <source>Offline</source>
         <translation>Не в мережі</translation>
     </message>
@@ -3854,32 +3849,32 @@ Credentials replaced: %2</source>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="478"/>
+        <location filename="../host/main.cc" line="488"/>
         <source>Launch the application hidden.</source>
         <translation>Запустити застосунок прихованим.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="480"/>
+        <location filename="../host/main.cc" line="490"/>
         <source>Export parameters to file.</source>
         <translation>Експорт параметрів у файл.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="482"/>
+        <location filename="../host/main.cc" line="492"/>
         <source>Import parameters from file.</source>
         <translation>Імпорт параметрів із файлу.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="484"/>
+        <location filename="../host/main.cc" line="494"/>
         <source>Do not display any messages during import and export.</source>
         <translation>Не показувати жодних повідомлень під час імпорту та експорту.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="486"/>
+        <location filename="../host/main.cc" line="496"/>
         <source>Calling the settings dialog.</source>
         <translation>Виклик діалогу налаштувань.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="488"/>
+        <location filename="../host/main.cc" line="498"/>
         <source>Calling the security log dialog.</source>
         <translation>Виклик діалогу журналу безпеки.</translation>
     </message>
@@ -5414,83 +5409,58 @@ Credentials imported: %5</source>
 <context>
     <name>MasterPasswordDialog</name>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="51"/>
+        <location filename="../client/android/master_password_dialog.cc" line="49"/>
         <source>Set Master Password</source>
         <translation>Встановлення майстер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="52"/>
+        <location filename="../client/android/master_password_dialog.cc" line="50"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Встановіть майстер-пароль, необхідний для розблокування застосунку.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <location filename="../client/android/master_password_dialog.cc" line="213"/>
+        <location filename="../client/android/master_password_dialog.cc" line="54"/>
+        <location filename="../client/android/master_password_dialog.cc" line="171"/>
         <source>Unlock</source>
         <translation>Розблокування</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="57"/>
+        <location filename="../client/android/master_password_dialog.cc" line="55"/>
         <source>Enter the master password.</source>
         <translation>Введіть майстер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="61"/>
-        <source>Change Master Password</source>
-        <translation>Зміна майстер-пароля</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="62"/>
-        <source>Enter your current password and choose a new one.</source>
-        <translation>Введіть свій поточний пароль і виберіть новий.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="66"/>
-        <source>New Password</source>
-        <translation>Новий пароль</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="66"/>
+        <location filename="../client/android/master_password_dialog.cc" line="59"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="81"/>
-        <source>Current Password</source>
-        <translation>Поточний пароль</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="91"/>
+        <location filename="../client/android/master_password_dialog.cc" line="75"/>
         <source>Confirm Password</source>
         <translation>Підтвердження пароля</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="96"/>
+        <location filename="../client/android/master_password_dialog.cc" line="80"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="97"/>
-        <source>Change</source>
-        <translation>Змінити</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="97"/>
+        <location filename="../client/android/master_password_dialog.cc" line="81"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="133"/>
+        <location filename="../client/android/master_password_dialog.cc" line="117"/>
         <source>Invalid master password.</source>
         <translation>Невірний майстер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="139"/>
+        <location filename="../client/android/master_password_dialog.cc" line="123"/>
         <source>Unable to unlock the database.</source>
         <translation>Не вдалося розблокувати базу даних.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/master_password_dialog.cc" line="150"/>
+        <location filename="../client/android/master_password_dialog.cc" line="134"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не може бути коротшим за %n символ.</numerusform>
@@ -5499,45 +5469,87 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="158"/>
+        <location filename="../client/android/master_password_dialog.cc" line="142"/>
         <source>The entered passwords do not match.</source>
         <translation>Введені паролі не збігаються.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="168"/>
+        <location filename="../client/android/master_password_dialog.cc" line="150"/>
         <source>Unable to set master password.</source>
         <translation>Не вдалося встановити майстер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="181"/>
-        <source>Invalid current password.</source>
-        <translation>Невірний поточний пароль.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="187"/>
-        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
-        <translation>Деякі записи бази даних пошкоджено. Виправте або видаліть їх і повторіть спробу.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="191"/>
-        <source>Unable to change the password.</source>
-        <translation>Не вдалося змінити пароль.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="214"/>
+        <location filename="../client/android/master_password_dialog.cc" line="172"/>
         <source>Use password</source>
         <translation>Використовувати пароль</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="231"/>
-        <location filename="../client/android/master_password_dialog.cc" line="239"/>
+        <location filename="../client/android/master_password_dialog.cc" line="189"/>
+        <location filename="../client/android/master_password_dialog.cc" line="197"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>Не вдалося розблокувати за допомогою біометрії. Введіть майстер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="235"/>
+        <location filename="../client/android/master_password_dialog.cc" line="193"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>Біометричні дані змінилися. Введіть майстер-пароль, щоб продовжити.</translation>
+    </message>
+</context>
+<context>
+    <name>MasterPasswordWidget</name>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="48"/>
+        <source>Enter your current password and choose a new one.</source>
+        <translation>Введіть свій поточний пароль і виберіть новий.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="51"/>
+        <source>Current Password</source>
+        <translation>Поточний пароль</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="53"/>
+        <source>New Password</source>
+        <translation>Новий пароль</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="55"/>
+        <source>Confirm Password</source>
+        <translation>Підтвердження пароля</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="62"/>
+        <source>Change</source>
+        <translation>Змінити</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/android/master_password_widget.cc" line="114"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Пароль не може бути коротшим за %n символ.</numerusform>
+            <numerusform>Пароль не може бути коротшим за %n символи.</numerusform>
+            <numerusform>Пароль не може бути коротшим за %n символів.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="122"/>
+        <source>The entered passwords do not match.</source>
+        <translation>Введені паролі не збігаються.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="133"/>
+        <source>Invalid current password.</source>
+        <translation>Невірний поточний пароль.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="138"/>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>Деякі записи бази даних пошкоджено. Виправте або видаліть їх і повторіть спробу.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="141"/>
+        <source>Unable to change the password.</source>
+        <translation>Не вдалося змінити пароль.</translation>
     </message>
 </context>
 <context>
@@ -5652,7 +5664,7 @@ Credentials imported: %5</source>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="371"/>
+        <location filename="../client/workers/network_worker.cc" line="381"/>
         <source>Failed to connect to the relay server</source>
         <translation>не вдалося підключитися до ретранслятора</translation>
     </message>
@@ -5661,19 +5673,19 @@ Credentials imported: %5</source>
     <name>NotifierWindow</name>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="293"/>
-        <location filename="../host/ui/notifier_window.cc" line="302"/>
+        <location filename="../host/ui/notifier_window.cc" line="307"/>
         <source>Lock mouse</source>
         <translation>Блокувати мишу</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="319"/>
-        <location filename="../host/ui/notifier_window.cc" line="310"/>
+        <location filename="../host/ui/notifier_window.cc" line="315"/>
         <source>Lock keyboard</source>
         <translation>Блокувати клавіатуру</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="345"/>
-        <location filename="../host/ui/notifier_window.cc" line="318"/>
+        <location filename="../host/ui/notifier_window.cc" line="323"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
@@ -5684,27 +5696,27 @@ Credentials imported: %5</source>
         <translation>Відключити всіх</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="269"/>
+        <location filename="../host/ui/notifier_window.cc" line="274"/>
         <source>Disconnect</source>
         <translation>Відключити</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="302"/>
+        <location filename="../host/ui/notifier_window.cc" line="307"/>
         <source>Unlock mouse</source>
         <translation>Розблокувати мишу</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="310"/>
+        <location filename="../host/ui/notifier_window.cc" line="315"/>
         <source>Unlock keyboard</source>
         <translation>Розблокувати клавіатуру</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="318"/>
+        <location filename="../host/ui/notifier_window.cc" line="323"/>
         <source>Resume</source>
         <translation>Відновити</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="543"/>
+        <location filename="../host/ui/notifier_window.cc" line="559"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
@@ -7886,73 +7898,63 @@ Credentials imported: %5</source>
         <translation>Надсилати комбінації клавіш</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="438"/>
-        <source>Allow hardware video encoding</source>
-        <translation>Дозволити апаратне кодування відео</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.ui" line="445"/>
-        <source>Allow hardware video decoding</source>
-        <translation>Дозволити апаратне декодування відео</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.ui" line="461"/>
+        <location filename="../client/desktop/settings_tab.ui" line="447"/>
         <source>Screen</source>
         <translation>Екран</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="469"/>
+        <location filename="../client/desktop/settings_tab.ui" line="455"/>
         <source>Preferred resolution:</source>
         <translation>Бажана роздільна здатність:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="500"/>
+        <location filename="../client/desktop/settings_tab.ui" line="486"/>
         <source>Recording</source>
         <translation>Запис</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="506"/>
+        <location filename="../client/desktop/settings_tab.ui" line="492"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>Автоматично починати запис сесії при підключенні</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="515"/>
+        <location filename="../client/desktop/settings_tab.ui" line="501"/>
         <source>Write path:</source>
         <translation>Шлях для запису:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="611"/>
+        <location filename="../client/desktop/settings_tab.ui" line="597"/>
         <location filename="../client/desktop/settings_tab.cc" line="135"/>
         <source>Update</source>
         <translation>Оновлення</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="617"/>
+        <location filename="../client/desktop/settings_tab.ui" line="603"/>
         <source>Check for updates on startup</source>
         <translation>Перевіряти оновлення при запуску</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="626"/>
+        <location filename="../client/desktop/settings_tab.ui" line="612"/>
         <source>Update channel:</source>
         <translation>Канал оновлень:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="640"/>
+        <location filename="../client/desktop/settings_tab.ui" line="626"/>
         <source>Update server:</source>
         <translation>Сервер оновлень:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="654"/>
+        <location filename="../client/desktop/settings_tab.ui" line="640"/>
         <source>Public key:</source>
         <translation>Публічний ключ:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="672"/>
+        <location filename="../client/desktop/settings_tab.ui" line="658"/>
         <source>Change Update Server...</source>
         <translation>Змінити сервер оновлень...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="692"/>
+        <location filename="../client/desktop/settings_tab.ui" line="678"/>
         <source>Check for updates</source>
         <translation>Перевірити оновлення</translation>
     </message>
@@ -8022,48 +8024,48 @@ Credentials imported: %5</source>
         <translation>1 година</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="236"/>
+        <location filename="../client/desktop/settings_tab.cc" line="234"/>
         <source>None</source>
         <translation>Немає</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="261"/>
+        <location filename="../client/desktop/settings_tab.cc" line="259"/>
         <source>Stable</source>
         <translation>Стабільний</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="262"/>
+        <location filename="../client/desktop/settings_tab.cc" line="260"/>
         <source>Beta</source>
         <translation>Бета</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="263"/>
+        <location filename="../client/desktop/settings_tab.cc" line="261"/>
         <source>Alpha</source>
         <translation>Альфа</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="389"/>
+        <location filename="../client/desktop/settings_tab.cc" line="385"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Нова мова буде застосована після перезапуску застосунку.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="438"/>
-        <location filename="../client/desktop/settings_tab.cc" line="537"/>
+        <location filename="../client/desktop/settings_tab.cc" line="434"/>
+        <location filename="../client/desktop/settings_tab.cc" line="533"/>
         <source>Choose path</source>
         <translation>Вибір шляху</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="557"/>
+        <location filename="../client/desktop/settings_tab.cc" line="553"/>
         <source>Change Master Password</source>
         <translation>Зміна майстер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="559"/>
+        <location filename="../client/desktop/settings_tab.cc" line="555"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Введіть свій поточний пароль і виберіть новий.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="567"/>
+        <location filename="../client/desktop/settings_tab.cc" line="563"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не може бути коротшим за %n символ.</numerusform>
@@ -8072,12 +8074,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="574"/>
+        <location filename="../client/desktop/settings_tab.cc" line="570"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введений пароль не відповідає вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="575"/>
+        <location filename="../client/desktop/settings_tab.cc" line="571"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символ.</numerusform>
@@ -8086,57 +8088,57 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="578"/>
+        <location filename="../client/desktop/settings_tab.cc" line="574"/>
         <source>Do you want to enter a different password?</source>
         <translation>Хочете ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="591"/>
+        <location filename="../client/desktop/settings_tab.cc" line="587"/>
         <source>Invalid current password.</source>
         <translation>Невірний поточний пароль.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="595"/>
+        <location filename="../client/desktop/settings_tab.cc" line="591"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Деякі записи бази даних пошкоджено. Виправте або видаліть їх і повторіть спробу.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="599"/>
+        <location filename="../client/desktop/settings_tab.cc" line="595"/>
         <source>Unable to change the password.</source>
         <translation>Не вдалося змінити пароль.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="722"/>
+        <location filename="../client/desktop/settings_tab.cc" line="718"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>Ключ бази даних буде збережено на цьому комп&apos;ютері. Будь-яка програма, запущена під вашим обліковим записом, зможе прочитати його, навіть коли застосунок не запущено.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="725"/>
+        <location filename="../client/desktop/settings_tab.cc" line="721"/>
         <source>Do you want to continue?</source>
         <translation>Ви хочете продовжити?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="736"/>
+        <location filename="../client/desktop/settings_tab.cc" line="732"/>
         <source>Unlock Automatically</source>
         <translation>Автоматичне розблокування</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="738"/>
+        <location filename="../client/desktop/settings_tab.cc" line="734"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>Введіть майстер-пароль, щоб розблокувати застосунок автоматично при запуску.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="748"/>
+        <location filename="../client/desktop/settings_tab.cc" line="744"/>
         <source>Invalid master password.</source>
         <translation>Невірний майстер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="752"/>
+        <location filename="../client/desktop/settings_tab.cc" line="748"/>
         <source>Unable to unlock the database.</source>
         <translation>Не вдалося розблокувати базу даних.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="766"/>
+        <location filename="../client/desktop/settings_tab.cc" line="762"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>Не вдалося увімкнути автоматичне розблокування.</translation>
     </message>
@@ -8144,73 +8146,73 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/settings_util.cc" line="314"/>
+        <location filename="../host/settings_util.cc" line="310"/>
         <source>The configuration was successfully imported.</source>
         <translation>Конфігурацію імпортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="363"/>
+        <location filename="../host/settings_util.cc" line="359"/>
         <source>The configuration was successfully exported.</source>
         <translation>Конфігурацію експортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="373"/>
+        <location filename="../host/settings_util.cc" line="369"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="271"/>
+        <location filename="../host/settings_util.cc" line="267"/>
         <source>Source settings file does not exist.</source>
         <translation>Вихідний файл налаштувань відсутній.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="280"/>
+        <location filename="../host/settings_util.cc" line="276"/>
         <source>Unable to open the source file.</source>
         <translation>Не вдалося відкрити вихідний файл.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="292"/>
+        <location filename="../host/settings_util.cc" line="288"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="374"/>
-        <location filename="../host/settings_util.cc" line="376"/>
+        <location filename="../host/settings_util.cc" line="370"/>
+        <location filename="../host/settings_util.cc" line="372"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>Поточні налаштування будуть перезаписані. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="374"/>
+        <location filename="../host/settings_util.cc" line="370"/>
         <source>Continue</source>
         <translation>Продовжити</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="386"/>
+        <location filename="../host/settings_util.cc" line="382"/>
         <source>Error</source>
         <translation>Помилка</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="397"/>
+        <location filename="../host/settings_util.cc" line="393"/>
         <source>Aspia</source>
         <translation>Aspia</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="309"/>
+        <location filename="../host/settings_util.cc" line="305"/>
         <source>Unable to write the secure database.</source>
         <translation>Не вдалося записати захищену базу даних.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="329"/>
+        <location filename="../host/settings_util.cc" line="325"/>
         <source>Unable to read the secure database.</source>
         <translation>Не вдалося прочитати захищену базу даних.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="350"/>
+        <location filename="../host/settings_util.cc" line="346"/>
         <source>Unable to open the target file.</source>
         <translation>Не вдалося відкрити цільовий файл.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="358"/>
+        <location filename="../host/settings_util.cc" line="354"/>
         <source>Unable to write the target file.</source>
         <translation>Неможливо записати цільовий файл.</translation>
     </message>
@@ -8218,206 +8220,207 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="166"/>
+        <location filename="../client/android/settings_widget.cc" line="173"/>
         <location filename="../host/android/settings_widget.cc" line="203"/>
         <source>Update</source>
         <translation>Оновлення</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="189"/>
+        <location filename="../client/android/settings_widget.cc" line="202"/>
         <source>Credentials</source>
         <translation>Облікові дані</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="197"/>
+        <location filename="../client/android/settings_widget.cc" line="210"/>
         <location filename="../host/android/settings_widget.cc" line="170"/>
         <source>About</source>
         <translation>Про програму</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../client/android/settings_widget.cc" line="289"/>
         <location filename="../host/android/settings_widget.cc" line="262"/>
         <source>Interface</source>
         <translation>Інтерфейс</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="264"/>
+        <location filename="../client/android/settings_widget.cc" line="292"/>
         <location filename="../host/android/settings_widget.cc" line="267"/>
         <source>Theme</source>
         <translation>Тема</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="277"/>
+        <location filename="../client/android/settings_widget.cc" line="305"/>
         <source>Display name when connected</source>
         <translation>Відображуване ім&apos;я при підключенні</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="289"/>
+        <location filename="../client/android/settings_widget.cc" line="317"/>
         <location filename="../host/android/settings_widget.cc" line="283"/>
         <source>Security</source>
         <translation>Безпека</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="291"/>
+        <location filename="../client/android/settings_widget.cc" line="219"/>
+        <location filename="../client/android/settings_widget.cc" line="319"/>
         <source>Change Master Password</source>
         <translation>Зміна майстер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="303"/>
+        <location filename="../client/android/settings_widget.cc" line="327"/>
         <source>Unlock with biometrics</source>
         <translation>Розблокувати за допомогою біометрії</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="328"/>
+        <location filename="../client/android/settings_widget.cc" line="352"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>Налаштуйте відбиток пальця в параметрах системи, щоб використовувати цю функцію.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="330"/>
+        <location filename="../client/android/settings_widget.cc" line="354"/>
         <source>Biometrics are not available on this device.</source>
         <translation>Біометрична автентифікація недоступна на цьому пристрої.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="341"/>
+        <location filename="../client/android/settings_widget.cc" line="365"/>
         <source>UDP Connections</source>
         <translation>UDP підключення</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="355"/>
+        <location filename="../client/android/settings_widget.cc" line="379"/>
         <source>Allow direct connections</source>
         <translation>Дозволити прямі підключення</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="356"/>
+        <location filename="../client/android/settings_widget.cc" line="380"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Дозволити UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="357"/>
+        <location filename="../client/android/settings_widget.cc" line="381"/>
         <source>Allow PCP protocol</source>
         <translation>Дозволити протокол PCP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="358"/>
+        <location filename="../client/android/settings_widget.cc" line="382"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Дозволити протокол NAT-PMP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="359"/>
+        <location filename="../client/android/settings_widget.cc" line="383"/>
         <source>Allow UPnP protocol</source>
         <translation>Дозволити протокол UPnP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="365"/>
+        <location filename="../client/android/settings_widget.cc" line="389"/>
         <source>Remote Desktop</source>
         <translation>Віддалений робочий стіл</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="367"/>
+        <location filename="../client/android/settings_widget.cc" line="391"/>
         <source>Enable audio</source>
         <translation>Увімкнути звук</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="372"/>
+        <location filename="../client/android/settings_widget.cc" line="396"/>
         <source>Enable clipboard</source>
         <translation>Увімкнути буфер обміну</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="377"/>
+        <location filename="../client/android/settings_widget.cc" line="401"/>
         <source>Show shape of remote cursor</source>
         <translation>Показувати форму віддаленого курсора</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="383"/>
+        <location filename="../client/android/settings_widget.cc" line="407"/>
         <source>Show position of remote cursor</source>
         <translation>Показувати положення віддаленого курсора</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="389"/>
+        <location filename="../client/android/settings_widget.cc" line="413"/>
         <source>Disable desktop effects</source>
         <translation>Вимкнути ефекти робочого столу</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="395"/>
+        <location filename="../client/android/settings_widget.cc" line="419"/>
         <source>Disable desktop wallpaper</source>
         <translation>Вимкнути шпалери робочого столу</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../client/android/settings_widget.cc" line="425"/>
         <source>Lock computer at disconnect</source>
         <translation>Блокувати комп&apos;ютер при відключенні</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="407"/>
+        <location filename="../client/android/settings_widget.cc" line="431"/>
         <source>Block remote input</source>
         <translation>Блокувати віддалене введення</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="418"/>
+        <location filename="../client/android/settings_widget.cc" line="442"/>
         <location filename="../host/android/settings_widget.cc" line="439"/>
         <source>Updates</source>
         <translation>Оновлення</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="422"/>
+        <location filename="../client/android/settings_widget.cc" line="446"/>
         <source>Check for updates on startup</source>
         <translation>Перевіряти оновлення при запуску</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="429"/>
+        <location filename="../client/android/settings_widget.cc" line="453"/>
         <location filename="../host/android/settings_widget.cc" line="442"/>
         <source>Update channel</source>
         <translation>Канал оновлень</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="430"/>
+        <location filename="../client/android/settings_widget.cc" line="454"/>
         <location filename="../host/android/settings_widget.cc" line="443"/>
         <source>Stable</source>
         <translation>Стабільний</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="431"/>
+        <location filename="../client/android/settings_widget.cc" line="455"/>
         <location filename="../host/android/settings_widget.cc" line="444"/>
         <source>Beta</source>
         <translation>Бета</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="432"/>
+        <location filename="../client/android/settings_widget.cc" line="456"/>
         <location filename="../host/android/settings_widget.cc" line="445"/>
         <source>Alpha</source>
         <translation>Альфа</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="443"/>
+        <location filename="../client/android/settings_widget.cc" line="467"/>
         <location filename="../host/android/settings_widget.cc" line="459"/>
         <source>Update server</source>
         <translation>Сервер оновлень</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="448"/>
+        <location filename="../client/android/settings_widget.cc" line="472"/>
         <location filename="../host/android/settings_widget.cc" line="464"/>
         <source>Public key</source>
         <translation>Публічний ключ</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="454"/>
+        <location filename="../client/android/settings_widget.cc" line="478"/>
         <location filename="../host/android/settings_widget.cc" line="470"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>Якщо сервер оновлень не вказано, використовується сервер за замовчуванням. Якщо публічний ключ не вказано, використовується вбудований ключ.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="508"/>
+        <location filename="../client/android/settings_widget.cc" line="532"/>
         <location filename="../host/android/settings_widget.cc" line="524"/>
         <source>Check for updates</source>
         <translation>Перевірити оновлення</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="532"/>
+        <location filename="../client/android/settings_widget.cc" line="556"/>
         <source>Enable biometric unlock</source>
         <translation>Увімкнути розблокування за допомогою біометрії</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="533"/>
+        <location filename="../client/android/settings_widget.cc" line="557"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
@@ -8694,7 +8697,7 @@ Credentials imported: %5</source>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="174"/>
+        <location filename="../client/android/statistics_dialog.cc" line="173"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
@@ -8709,7 +8712,7 @@ Credentials imported: %5</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="207"/>
+        <location filename="../client/android/statistics_dialog.cc" line="206"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>

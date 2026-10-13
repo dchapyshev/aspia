@@ -391,30 +391,30 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="170"/>
-        <location filename="../client/android/main_window.cc" line="270"/>
-        <location filename="../client/android/main_window.cc" line="312"/>
+        <location filename="../client/android/main_window.cc" line="174"/>
+        <location filename="../client/android/main_window.cc" line="346"/>
+        <location filename="../client/android/main_window.cc" line="388"/>
         <source>Local</source>
         <translation>ローカル</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="171"/>
-        <location filename="../client/android/main_window.cc" line="274"/>
-        <location filename="../client/android/main_window.cc" line="332"/>
+        <location filename="../client/android/main_window.cc" line="175"/>
+        <location filename="../client/android/main_window.cc" line="350"/>
+        <location filename="../client/android/main_window.cc" line="408"/>
         <source>Remote</source>
         <translation>リモート</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="172"/>
-        <location filename="../client/android/main_window.cc" line="278"/>
-        <location filename="../client/android/main_window.cc" line="322"/>
+        <location filename="../client/android/main_window.cc" line="176"/>
+        <location filename="../client/android/main_window.cc" line="354"/>
+        <location filename="../client/android/main_window.cc" line="398"/>
         <source>Routers</source>
         <translation>ルーター</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="173"/>
-        <location filename="../client/android/main_window.cc" line="282"/>
-        <location filename="../client/android/main_window.cc" line="342"/>
+        <location filename="../client/android/main_window.cc" line="177"/>
+        <location filename="../client/android/main_window.cc" line="358"/>
+        <location filename="../client/android/main_window.cc" line="418"/>
         <location filename="../host/android/main_window.cc" line="88"/>
         <location filename="../host/android/main_window.cc" line="104"/>
         <location filename="../host/android/main_window.cc" line="479"/>
@@ -422,71 +422,71 @@ Routers added: %4</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="696"/>
+        <location filename="../client/android/main_window.cc" line="772"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="697"/>
+        <location filename="../client/android/main_window.cc" line="773"/>
         <source>Version %1 is available.</source>
         <translation>バージョン %1 が利用可能です。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="746"/>
+        <location filename="../client/android/main_window.cc" line="822"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>このホストに関連付けられたルーターは削除されました。ホストを編集して別のルーターを選択するか、直接接続に切り替えてください。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="556"/>
+        <location filename="../client/android/main_window.cc" line="632"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>2要素認証 - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="434"/>
-        <location filename="../client/android/main_window.cc" line="1013"/>
+        <location filename="../client/android/main_window.cc" line="510"/>
+        <location filename="../client/android/main_window.cc" line="1089"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>ホストのデータが破損しています。ホストを編集してもう一度入力してください。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="745"/>
-        <location filename="../client/android/main_window.cc" line="971"/>
+        <location filename="../client/android/main_window.cc" line="821"/>
+        <location filename="../client/android/main_window.cc" line="1047"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>ルーターのデータが破損しています。ルーターを編集してもう一度入力してください。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="923"/>
+        <location filename="../client/android/main_window.cc" line="999"/>
         <source>Invalid link.</source>
         <translation>無効なリンクです。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="931"/>
+        <location filename="../client/android/main_window.cc" line="1007"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>別のセッションがアクティブです。それを閉じてからもう一度リンクを開いてください。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="941"/>
+        <location filename="../client/android/main_window.cc" line="1017"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>リンクのセッションの種類はこのデバイスではサポートされていません。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="962"/>
+        <location filename="../client/android/main_window.cc" line="1038"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>リンクが参照するルーターは保存済みのルーターに含まれていません。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1014"/>
+        <location filename="../client/android/main_window.cc" line="1090"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>リンクが参照するホストは保存済みのホストに含まれていません。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="433"/>
-        <location filename="../client/android/main_window.cc" line="743"/>
-        <location filename="../client/android/main_window.cc" line="923"/>
-        <location filename="../client/android/main_window.cc" line="930"/>
-        <location filename="../client/android/main_window.cc" line="940"/>
-        <location filename="../client/android/main_window.cc" line="961"/>
-        <location filename="../client/android/main_window.cc" line="970"/>
-        <location filename="../client/android/main_window.cc" line="1011"/>
+        <location filename="../client/android/main_window.cc" line="509"/>
+        <location filename="../client/android/main_window.cc" line="819"/>
+        <location filename="../client/android/main_window.cc" line="999"/>
+        <location filename="../client/android/main_window.cc" line="1006"/>
+        <location filename="../client/android/main_window.cc" line="1016"/>
+        <location filename="../client/android/main_window.cc" line="1037"/>
+        <location filename="../client/android/main_window.cc" line="1046"/>
+        <location filename="../client/android/main_window.cc" line="1087"/>
         <location filename="../host/android/main_window.cc" line="87"/>
         <location filename="../host/android/main_window.cc" line="103"/>
         <location filename="../host/android/main_window.cc" line="477"/>
@@ -499,7 +499,7 @@ Routers added: %4</source>
         <translation>権限</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="697"/>
+        <location filename="../client/android/main_window.cc" line="773"/>
         <source>Open</source>
         <translation>開く</translation>
     </message>
@@ -1181,7 +1181,7 @@ Routers added: %4</source>
     <name>ConfigDialog</name>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
-        <location filename="../host/ui/config_dialog.ui" line="225"/>
+        <location filename="../host/ui/config_dialog.ui" line="218"/>
         <location filename="../host/ui/config_dialog.cc" line="137"/>
         <source>Settings</source>
         <translation>設定</translation>
@@ -1202,17 +1202,17 @@ Routers added: %4</source>
         <translation>受信ポート:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="103"/>
+        <location filename="../host/ui/config_dialog.ui" line="96"/>
         <source>Automatic checking and installation of updates</source>
         <translation>更新の自動確認とインストール</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="112"/>
+        <location filename="../host/ui/config_dialog.ui" line="105"/>
         <source>Check for updates:</source>
         <translation>更新の確認:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="97"/>
+        <location filename="../host/ui/config_dialog.ui" line="90"/>
         <source>Updates</source>
         <translation>更新</translation>
     </message>
@@ -1222,163 +1222,158 @@ Routers added: %4</source>
         <translation>優先ビデオ キャプチャ:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="87"/>
-        <source>Allow hardware video encoding</source>
-        <translation>ハードウェア ビデオ エンコードを許可</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="130"/>
+        <location filename="../host/ui/config_dialog.ui" line="123"/>
         <source>Update channel:</source>
         <translation>更新チャネル:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="148"/>
+        <location filename="../host/ui/config_dialog.ui" line="141"/>
         <source>Update server:</source>
         <translation>更新サーバー:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="169"/>
+        <location filename="../host/ui/config_dialog.ui" line="162"/>
         <source>Public key:</source>
         <translation>公開キー:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="188"/>
+        <location filename="../host/ui/config_dialog.ui" line="181"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>更新サーバーが指定されていない場合は、既定のサーバーが使用されます。公開キーが指定されていない場合は、組み込みのキーが使用されます。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="213"/>
+        <location filename="../host/ui/config_dialog.ui" line="206"/>
         <source>Check for updates</source>
         <translation>更新の確認</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="275"/>
+        <location filename="../host/ui/config_dialog.ui" line="268"/>
         <source>Security</source>
         <translation>セキュリティ</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="281"/>
+        <location filename="../host/ui/config_dialog.ui" line="274"/>
         <source>Password Protection of Settings</source>
         <translation>設定のパスワード保護</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="300"/>
+        <location filename="../host/ui/config_dialog.ui" line="293"/>
         <source>Change password</source>
         <translation>パスワードの変更</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="317"/>
+        <location filename="../host/ui/config_dialog.ui" line="310"/>
         <source>One-time Password</source>
         <translation>ワンタイム パスワード</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="323"/>
+        <location filename="../host/ui/config_dialog.ui" line="316"/>
         <source>Enable one-time password</source>
         <translation>ワンタイム パスワードを有効にする</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="332"/>
+        <location filename="../host/ui/config_dialog.ui" line="325"/>
         <source>Change password:</source>
         <translation>パスワードの変更:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="346"/>
+        <location filename="../host/ui/config_dialog.ui" line="339"/>
         <source>Characters:</source>
         <translation>文字の種類:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="360"/>
+        <location filename="../host/ui/config_dialog.ui" line="353"/>
         <source>Characters count:</source>
         <translation>文字数:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="382"/>
+        <location filename="../host/ui/config_dialog.ui" line="375"/>
         <source>Connection Confirmation</source>
         <translation>接続の確認</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="388"/>
+        <location filename="../host/ui/config_dialog.ui" line="381"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>コンピューターへの接続時に確認を要求する</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="397"/>
+        <location filename="../host/ui/config_dialog.ui" line="390"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>接続の自動確認までの時間:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="411"/>
+        <location filename="../host/ui/config_dialog.ui" line="404"/>
         <source>If there is no active user:</source>
         <translation>アクティブなユーザーがいない場合:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="430"/>
+        <location filename="../host/ui/config_dialog.ui" line="423"/>
         <source>Other</source>
         <translation>その他</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="436"/>
+        <location filename="../host/ui/config_dialog.ui" line="429"/>
         <source>Disable Aspia shutdown</source>
         <translation>Aspia の終了を無効にする</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="460"/>
+        <location filename="../host/ui/config_dialog.ui" line="453"/>
         <source>Router</source>
         <translation>ルーター</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="466"/>
+        <location filename="../host/ui/config_dialog.ui" line="459"/>
         <source>Enable the use of a router</source>
         <translation>ルーターの使用を有効にする</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="478"/>
+        <location filename="../host/ui/config_dialog.ui" line="471"/>
         <source>Address:</source>
         <translation>アドレス:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="497"/>
+        <location filename="../host/ui/config_dialog.ui" line="490"/>
         <source>Public Key:</source>
         <translation>公開キー:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="511"/>
+        <location filename="../host/ui/config_dialog.ui" line="504"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>直接接続ができない場合 (NAT 越え)、コンピューターへの接続にはルーターが必要です。Aspia は公開ルーターを提供していませんが、独自のルーターをインストールできます。ルーターは&lt;a href=&quot;https://aspia.org&quot;&gt;公式サイト&lt;/a&gt;からダウンロードできます。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="528"/>
-        <location filename="../host/ui/config_dialog.ui" line="639"/>
+        <location filename="../host/ui/config_dialog.ui" line="521"/>
+        <location filename="../host/ui/config_dialog.ui" line="632"/>
         <source>Users</source>
         <translation>ユーザー</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="542"/>
+        <location filename="../host/ui/config_dialog.ui" line="535"/>
         <source>Add new user</source>
         <translation>新しいユーザーを追加</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="568"/>
+        <location filename="../host/ui/config_dialog.ui" line="561"/>
         <source>Edit user</source>
         <translation>ユーザーを編集</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="594"/>
+        <location filename="../host/ui/config_dialog.ui" line="587"/>
         <source>Delete user</source>
         <translation>ユーザーを削除</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="662"/>
+        <location filename="../host/ui/config_dialog.ui" line="655"/>
         <source>Add</source>
         <translation>追加</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="671"/>
+        <location filename="../host/ui/config_dialog.ui" line="664"/>
         <source>Modify</source>
         <translation>変更</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="680"/>
+        <location filename="../host/ui/config_dialog.ui" line="673"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
@@ -1428,203 +1423,203 @@ Routers added: %4</source>
         <translation>既定</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="236"/>
+        <location filename="../host/ui/config_dialog.cc" line="234"/>
         <source>On reboot</source>
         <translation>再起動時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="237"/>
+        <location filename="../host/ui/config_dialog.cc" line="235"/>
         <source>Every 5 minutes</source>
         <translation>5 分ごと</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="238"/>
+        <location filename="../host/ui/config_dialog.cc" line="236"/>
         <source>Every 30 minutes</source>
         <translation>30 分ごと</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="239"/>
+        <location filename="../host/ui/config_dialog.cc" line="237"/>
         <source>Every 1 hour</source>
         <translation>1 時間ごと</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="240"/>
+        <location filename="../host/ui/config_dialog.cc" line="238"/>
         <source>Every 6 hours</source>
         <translation>6 時間ごと</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="241"/>
+        <location filename="../host/ui/config_dialog.cc" line="239"/>
         <source>Every 12 hours</source>
         <translation>12 時間ごと</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="249"/>
+        <location filename="../host/ui/config_dialog.cc" line="247"/>
         <source>Letters and digits</source>
         <translation>英字と数字</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="252"/>
+        <location filename="../host/ui/config_dialog.cc" line="250"/>
         <source>Letters</source>
         <translation>英字</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="254"/>
+        <location filename="../host/ui/config_dialog.cc" line="252"/>
         <source>Digits</source>
         <translation>数字</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="271"/>
+        <location filename="../host/ui/config_dialog.cc" line="269"/>
         <source>Never</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="272"/>
+        <location filename="../host/ui/config_dialog.cc" line="270"/>
         <source>15 seconds</source>
         <translation>15 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="273"/>
+        <location filename="../host/ui/config_dialog.cc" line="271"/>
         <source>30 seconds</source>
         <translation>30 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="274"/>
+        <location filename="../host/ui/config_dialog.cc" line="272"/>
         <source>45 seconds</source>
         <translation>45 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="275"/>
+        <location filename="../host/ui/config_dialog.cc" line="273"/>
         <source>60 seconds</source>
         <translation>60 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="283"/>
+        <location filename="../host/ui/config_dialog.cc" line="281"/>
         <source>Accept connection</source>
         <translation>接続を受け入れる</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="284"/>
+        <location filename="../host/ui/config_dialog.cc" line="282"/>
         <source>Reject connection</source>
         <translation>接続を拒否する</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="484"/>
+        <location filename="../host/ui/config_dialog.cc" line="482"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>ユーザー &quot;%1&quot; を削除してもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="512"/>
-        <location filename="../host/ui/config_dialog.cc" line="546"/>
+        <location filename="../host/ui/config_dialog.cc" line="510"/>
+        <location filename="../host/ui/config_dialog.cc" line="544"/>
         <source>An error occurred while processing the password.</source>
         <translation>パスワードの処理中にエラーが発生しました。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="529"/>
+        <location filename="../host/ui/config_dialog.cc" line="527"/>
         <source>Settings storage is unavailable.</source>
         <translation>設定ストレージを利用できません。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="244"/>
-        <location filename="../host/ui/config_dialog.cc" line="560"/>
+        <location filename="../host/ui/config_dialog.ui" line="237"/>
+        <location filename="../host/ui/config_dialog.cc" line="558"/>
         <source>Import</source>
         <translation>インポート</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="560"/>
-        <location filename="../host/ui/config_dialog.cc" line="577"/>
+        <location filename="../host/ui/config_dialog.cc" line="558"/>
+        <location filename="../host/ui/config_dialog.cc" line="575"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON ファイル (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="251"/>
-        <location filename="../host/ui/config_dialog.cc" line="577"/>
-        <location filename="../host/ui/config_dialog.cc" line="602"/>
-        <location filename="../host/ui/config_dialog.cc" line="637"/>
+        <location filename="../host/ui/config_dialog.ui" line="244"/>
+        <location filename="../host/ui/config_dialog.cc" line="575"/>
+        <location filename="../host/ui/config_dialog.cc" line="600"/>
+        <location filename="../host/ui/config_dialog.cc" line="635"/>
         <source>Export</source>
         <translation>エクスポート</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="602"/>
+        <location filename="../host/ui/config_dialog.cc" line="600"/>
         <source>MSI-files (*.msi)</source>
         <translation>MSI ファイル (*.msi)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="612"/>
+        <location filename="../host/ui/config_dialog.cc" line="610"/>
         <source>The installer was successfully exported.</source>
         <translation>インストーラーが正常にエクスポートされました。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="616"/>
+        <location filename="../host/ui/config_dialog.cc" line="614"/>
         <source>The installed host package was not found.</source>
         <translation>インストールされているホスト パッケージが見つかりませんでした。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="620"/>
+        <location filename="../host/ui/config_dialog.cc" line="618"/>
         <source>The installed version of the host does not support exporting the installer.</source>
         <translation>インストールされているホストのバージョンは、インストーラーのエクスポートをサポートしていません。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="624"/>
+        <location filename="../host/ui/config_dialog.cc" line="622"/>
         <source>Unable to export the installer.</source>
         <translation>インストーラーをエクスポートできません。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="637"/>
+        <location filename="../host/ui/config_dialog.cc" line="635"/>
         <source>Executable files (*.exe)</source>
         <translation>実行可能ファイル (*.exe)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="647"/>
+        <location filename="../host/ui/config_dialog.cc" line="645"/>
         <source>The portable version was successfully exported.</source>
         <translation>ポータブル版が正常にエクスポートされました。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="651"/>
+        <location filename="../host/ui/config_dialog.cc" line="649"/>
         <source>The portable version works only through a router. Set up the connection to the router and save the settings.</source>
         <translation>ポータブル版はルーター経由でのみ動作します。ルーターへの接続を設定して、設定を保存してください。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="655"/>
+        <location filename="../host/ui/config_dialog.cc" line="653"/>
         <source>Unable to export the portable version.</source>
         <translation>ポータブル版をエクスポートできません。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="676"/>
+        <location filename="../host/ui/config_dialog.cc" line="674"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>構成を書き込めません。書き込みに十分な権限があることを確認してください。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="692"/>
+        <location filename="../host/ui/config_dialog.cc" line="690"/>
         <source>An invalid update server address was entered.</source>
         <translation>無効な更新サーバー アドレスが入力されました。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="700"/>
+        <location filename="../host/ui/config_dialog.cc" line="698"/>
         <source>Enter the update server address.</source>
         <translation>更新サーバー アドレスを入力してください。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="710"/>
+        <location filename="../host/ui/config_dialog.cc" line="708"/>
         <source>An invalid public key was entered.</source>
         <translation>無効な公開キーが入力されました。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="722"/>
+        <location filename="../host/ui/config_dialog.cc" line="720"/>
         <source>Incorrect router address entered.</source>
         <translation>入力されたルーター アドレスが正しくありません。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="732"/>
+        <location filename="../host/ui/config_dialog.cc" line="730"/>
         <source>Incorrect router public key entered.</source>
         <translation>入力されたルーターの公開キーが正しくありません。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="895"/>
+        <location filename="../host/ui/config_dialog.cc" line="891"/>
         <source>Install</source>
         <translation>インストール</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="900"/>
+        <location filename="../host/ui/config_dialog.cc" line="896"/>
         <source>Remove</source>
         <translation>削除</translation>
     </message>
@@ -2693,179 +2688,179 @@ Credentials replaced: %2</source>
         <translation>セッション %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="513"/>
+        <location filename="../client/android/desktop_window.cc" line="506"/>
         <source>Connecting...</source>
         <translation>接続しています...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="536"/>
+        <location filename="../client/android/desktop_window.cc" line="529"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>ルーターのデータが破損しています。ルーターを編集してもう一度入力してください。</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="537"/>
+        <location filename="../client/android/desktop_window.cc" line="530"/>
         <source>The specified router is unavailable.</source>
         <translation>指定されたルーターは利用できません。</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="543"/>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
         <source>Connecting to router...</source>
         <translation>ルーターに接続しています...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="564"/>
+        <location filename="../client/android/desktop_window.cc" line="557"/>
         <source>Requesting connection to the host...</source>
         <translation>ホストへの接続を要求しています...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="774"/>
+        <location filename="../client/android/desktop_window.cc" line="765"/>
         <source>Connecting to host %1...</source>
         <translation>ホスト %1 に接続しています...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="780"/>
+        <location filename="../client/android/desktop_window.cc" line="771"/>
         <source>Connection established.</source>
         <translation>接続が確立されました。</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="793"/>
+        <location filename="../client/android/desktop_window.cc" line="784"/>
         <source>The connection to the host has been lost.</source>
         <translation>ホストへの接続が失われました。</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="806"/>
+        <location filename="../client/android/desktop_window.cc" line="797"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>ホストのバージョンがクライアントより新しいです。アプリケーションを更新してください。</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="810"/>
+        <location filename="../client/android/desktop_window.cc" line="801"/>
         <source>Legacy hosts are not supported.</source>
         <translation>レガシー ホストはサポートされていません。</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="360"/>
+        <location filename="../client/android/desktop_window.cc" line="164"/>
         <source>Monitor %1</source>
         <translation>モニター %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="368"/>
+        <location filename="../client/android/desktop_window.cc" line="172"/>
         <source>Power</source>
         <translation>電源</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="372"/>
+        <location filename="../client/android/desktop_window.cc" line="176"/>
         <source>Keyboard</source>
         <translation>キーボード</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="378"/>
+        <location filename="../client/android/desktop_window.cc" line="182"/>
         <source>Ctrl+Alt+Del</source>
         <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="385"/>
+        <location filename="../client/android/desktop_window.cc" line="189"/>
         <source>Users</source>
         <translation>ユーザー</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="390"/>
+        <location filename="../client/android/desktop_window.cc" line="194"/>
         <source>Disconnect</source>
         <translation>切断</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="661"/>
-        <location filename="../client/android/desktop_window.cc" line="718"/>
+        <location filename="../client/android/desktop_window.cc" line="652"/>
+        <location filename="../client/android/desktop_window.cc" line="709"/>
         <source>Back</source>
         <translation>戻る</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="662"/>
+        <location filename="../client/android/desktop_window.cc" line="653"/>
         <source>Shutdown</source>
         <translation>シャットダウン</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="654"/>
         <source>Reboot</source>
         <translation>再起動</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="668"/>
+        <location filename="../client/android/desktop_window.cc" line="659"/>
         <source>Safe Mode</source>
         <translation>セーフ モード</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="669"/>
+        <location filename="../client/android/desktop_window.cc" line="660"/>
         <source>Logoff</source>
         <translation>ログオフ</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="670"/>
+        <location filename="../client/android/desktop_window.cc" line="661"/>
         <source>Lock</source>
         <translation>ロック</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="686"/>
+        <location filename="../client/android/desktop_window.cc" line="677"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>リモート コンピューターをシャットダウンしてもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="690"/>
+        <location filename="../client/android/desktop_window.cc" line="681"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>リモート コンピューターを再起動してもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="694"/>
+        <location filename="../client/android/desktop_window.cc" line="685"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>リモート コンピューターをセーフ モードで再起動してもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="698"/>
+        <location filename="../client/android/desktop_window.cc" line="689"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>リモート コンピューター上のユーザー セッションを終了してもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="702"/>
+        <location filename="../client/android/desktop_window.cc" line="693"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>リモート コンピューター上のユーザー セッションをロックしてもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="757"/>
+        <location filename="../client/android/desktop_window.cc" line="748"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="757"/>
+        <location filename="../client/android/desktop_window.cc" line="748"/>
         <source>Yes</source>
         <translation>はい</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="999"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="978"/>
         <source>Save File</source>
         <translation>ファイルの保存</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1000"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 画像 (*.png);;BMP 画像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1031"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1010"/>
         <source>Could not save image</source>
         <translation>画像を保存できませんでした</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1597"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1602"/>
         <source>Credentials</source>
         <translation>資格情報</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1597"/>
         <source>User name:</source>
         <translation>ユーザー名:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1602"/>
         <source>Password:</source>
         <translation>パスワード:</translation>
     </message>
@@ -3742,8 +3737,8 @@ Credentials replaced: %2</source>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="541"/>
-        <location filename="../host/main.cc" line="576"/>
+        <location filename="../host/main.cc" line="556"/>
+        <location filename="../host/main.cc" line="591"/>
         <source>Settings storage is unavailable.</source>
         <translation>設定ストレージを利用できません。</translation>
     </message>
@@ -3751,72 +3746,72 @@ Credentials replaced: %2</source>
 <context>
     <name>HostListModel</name>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Host ID</source>
         <translation>ホスト ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Display Name</source>
         <translation>表示名</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Computer Name</source>
         <translation>コンピューター名</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Address</source>
         <translation>アドレス</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Comment</source>
         <translation>コメント</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Workspace</source>
         <translation>ワークスペース</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Operating System</source>
         <translation>オペレーティング システム</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Version</source>
         <translation>バージョン</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Architecture</source>
         <translation>アーキテクチャ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Online</source>
         <translation>最終オンライン</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Last Modify</source>
         <translation>最終更新</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="219"/>
         <source>Status</source>
         <translation>状態</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="307"/>
         <source>Online</source>
         <translation>オンライン</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="307"/>
         <source>Offline</source>
         <translation>オフライン</translation>
     </message>
@@ -3824,32 +3819,32 @@ Credentials replaced: %2</source>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="478"/>
+        <location filename="../host/main.cc" line="488"/>
         <source>Launch the application hidden.</source>
         <translation>アプリケーションを非表示で起動します。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="480"/>
+        <location filename="../host/main.cc" line="490"/>
         <source>Export parameters to file.</source>
         <translation>パラメーターをファイルにエクスポートします。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="482"/>
+        <location filename="../host/main.cc" line="492"/>
         <source>Import parameters from file.</source>
         <translation>パラメーターをファイルからインポートします。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="484"/>
+        <location filename="../host/main.cc" line="494"/>
         <source>Do not display any messages during import and export.</source>
         <translation>インポートおよびエクスポート中にメッセージを表示しません。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="486"/>
+        <location filename="../host/main.cc" line="496"/>
         <source>Calling the settings dialog.</source>
         <translation>設定ダイアログを呼び出します。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="488"/>
+        <location filename="../host/main.cc" line="498"/>
         <source>Calling the security log dialog.</source>
         <translation>セキュリティ ログ ダイアログを呼び出します。</translation>
     </message>
@@ -5364,128 +5359,143 @@ Credentials imported: %5</source>
 <context>
     <name>MasterPasswordDialog</name>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="51"/>
+        <location filename="../client/android/master_password_dialog.cc" line="49"/>
         <source>Set Master Password</source>
         <translation>マスター パスワードの設定</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="52"/>
+        <location filename="../client/android/master_password_dialog.cc" line="50"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>アプリケーションのロック解除に必要なマスター パスワードを設定してください。</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <location filename="../client/android/master_password_dialog.cc" line="213"/>
+        <location filename="../client/android/master_password_dialog.cc" line="54"/>
+        <location filename="../client/android/master_password_dialog.cc" line="171"/>
         <source>Unlock</source>
         <translation>ロック解除</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="57"/>
+        <location filename="../client/android/master_password_dialog.cc" line="55"/>
         <source>Enter the master password.</source>
         <translation>マスター パスワードを入力してください。</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="61"/>
-        <source>Change Master Password</source>
-        <translation>マスター パスワードの変更</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="62"/>
-        <source>Enter your current password and choose a new one.</source>
-        <translation>現在のパスワードを入力し、新しいパスワードを選択してください。</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="66"/>
-        <source>New Password</source>
-        <translation>新しいパスワード</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="66"/>
+        <location filename="../client/android/master_password_dialog.cc" line="59"/>
         <source>Password</source>
         <translation>パスワード</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="81"/>
-        <source>Current Password</source>
-        <translation>現在のパスワード</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="91"/>
+        <location filename="../client/android/master_password_dialog.cc" line="75"/>
         <source>Confirm Password</source>
         <translation>パスワードの確認</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="96"/>
+        <location filename="../client/android/master_password_dialog.cc" line="80"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="97"/>
-        <source>Change</source>
-        <translation>変更</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="97"/>
+        <location filename="../client/android/master_password_dialog.cc" line="81"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="133"/>
+        <location filename="../client/android/master_password_dialog.cc" line="117"/>
         <source>Invalid master password.</source>
         <translation>マスター パスワードが正しくありません。</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="139"/>
+        <location filename="../client/android/master_password_dialog.cc" line="123"/>
         <source>Unable to unlock the database.</source>
         <translation>データベースのロックを解除できません。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/master_password_dialog.cc" line="150"/>
+        <location filename="../client/android/master_password_dialog.cc" line="134"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>パスワードは %n 文字以上でなければなりません。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="158"/>
+        <location filename="../client/android/master_password_dialog.cc" line="142"/>
         <source>The entered passwords do not match.</source>
         <translation>入力されたパスワードが一致しません。</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="168"/>
+        <location filename="../client/android/master_password_dialog.cc" line="150"/>
         <source>Unable to set master password.</source>
         <translation>マスター パスワードを設定できません。</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="181"/>
-        <source>Invalid current password.</source>
-        <translation>現在のパスワードが無効です。</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="187"/>
-        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
-        <translation>データベースの一部のレコードが破損しています。修正または削除してから、もう一度お試しください。</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="191"/>
-        <source>Unable to change the password.</source>
-        <translation>パスワードを変更できません。</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="214"/>
+        <location filename="../client/android/master_password_dialog.cc" line="172"/>
         <source>Use password</source>
         <translation>パスワードを使用</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="231"/>
-        <location filename="../client/android/master_password_dialog.cc" line="239"/>
+        <location filename="../client/android/master_password_dialog.cc" line="189"/>
+        <location filename="../client/android/master_password_dialog.cc" line="197"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>生体認証によるロック解除に失敗しました。マスター パスワードを入力してください。</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="235"/>
+        <location filename="../client/android/master_password_dialog.cc" line="193"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>生体認証情報が変更されました。続行するにはマスター パスワードを入力してください。</translation>
+    </message>
+</context>
+<context>
+    <name>MasterPasswordWidget</name>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="48"/>
+        <source>Enter your current password and choose a new one.</source>
+        <translation>現在のパスワードを入力し、新しいパスワードを選択してください。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="51"/>
+        <source>Current Password</source>
+        <translation>現在のパスワード</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="53"/>
+        <source>New Password</source>
+        <translation>新しいパスワード</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="55"/>
+        <source>Confirm Password</source>
+        <translation>パスワードの確認</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="62"/>
+        <source>Change</source>
+        <translation>変更</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/android/master_password_widget.cc" line="114"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>パスワードは %n 文字以上でなければなりません。</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="122"/>
+        <source>The entered passwords do not match.</source>
+        <translation>入力されたパスワードが一致しません。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="133"/>
+        <source>Invalid current password.</source>
+        <translation>現在のパスワードが無効です。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="138"/>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>データベースの一部のレコードが破損しています。修正または削除してから、もう一度お試しください。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="141"/>
+        <source>Unable to change the password.</source>
+        <translation>パスワードを変更できません。</translation>
     </message>
 </context>
 <context>
@@ -5600,7 +5610,7 @@ Credentials imported: %5</source>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="371"/>
+        <location filename="../client/workers/network_worker.cc" line="381"/>
         <source>Failed to connect to the relay server</source>
         <translation>リレー サーバーに接続できませんでした</translation>
     </message>
@@ -5609,19 +5619,19 @@ Credentials imported: %5</source>
     <name>NotifierWindow</name>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="293"/>
-        <location filename="../host/ui/notifier_window.cc" line="302"/>
+        <location filename="../host/ui/notifier_window.cc" line="307"/>
         <source>Lock mouse</source>
         <translation>マウスをロック</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="319"/>
-        <location filename="../host/ui/notifier_window.cc" line="310"/>
+        <location filename="../host/ui/notifier_window.cc" line="315"/>
         <source>Lock keyboard</source>
         <translation>キーボードをロック</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="345"/>
-        <location filename="../host/ui/notifier_window.cc" line="318"/>
+        <location filename="../host/ui/notifier_window.cc" line="323"/>
         <source>Pause</source>
         <translation>一時停止</translation>
     </message>
@@ -5631,27 +5641,27 @@ Credentials imported: %5</source>
         <translation>すべて切断</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="269"/>
+        <location filename="../host/ui/notifier_window.cc" line="274"/>
         <source>Disconnect</source>
         <translation>切断</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="302"/>
+        <location filename="../host/ui/notifier_window.cc" line="307"/>
         <source>Unlock mouse</source>
         <translation>マウスのロックを解除</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="310"/>
+        <location filename="../host/ui/notifier_window.cc" line="315"/>
         <source>Unlock keyboard</source>
         <translation>キーボードのロックを解除</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="318"/>
+        <location filename="../host/ui/notifier_window.cc" line="323"/>
         <source>Resume</source>
         <translation>再開</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="543"/>
+        <location filename="../host/ui/notifier_window.cc" line="559"/>
         <source>Aspia Host</source>
         <translation>Aspia ホスト</translation>
     </message>
@@ -7805,73 +7815,63 @@ Credentials imported: %5</source>
         <translation>キーの組み合わせを送信</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="438"/>
-        <source>Allow hardware video encoding</source>
-        <translation>ハードウェア ビデオ エンコードを許可</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.ui" line="445"/>
-        <source>Allow hardware video decoding</source>
-        <translation>ハードウェア ビデオ デコードを許可</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.ui" line="461"/>
+        <location filename="../client/desktop/settings_tab.ui" line="447"/>
         <source>Screen</source>
         <translation>画面</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="469"/>
+        <location filename="../client/desktop/settings_tab.ui" line="455"/>
         <source>Preferred resolution:</source>
         <translation>優先解像度:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="500"/>
+        <location filename="../client/desktop/settings_tab.ui" line="486"/>
         <source>Recording</source>
         <translation>録画</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="506"/>
+        <location filename="../client/desktop/settings_tab.ui" line="492"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>接続時にセッションの録画を自動的に開始</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="515"/>
+        <location filename="../client/desktop/settings_tab.ui" line="501"/>
         <source>Write path:</source>
         <translation>書き込みパス:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="611"/>
+        <location filename="../client/desktop/settings_tab.ui" line="597"/>
         <location filename="../client/desktop/settings_tab.cc" line="135"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="617"/>
+        <location filename="../client/desktop/settings_tab.ui" line="603"/>
         <source>Check for updates on startup</source>
         <translation>起動時に更新を確認</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="626"/>
+        <location filename="../client/desktop/settings_tab.ui" line="612"/>
         <source>Update channel:</source>
         <translation>更新チャネル:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="640"/>
+        <location filename="../client/desktop/settings_tab.ui" line="626"/>
         <source>Update server:</source>
         <translation>更新サーバー:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="654"/>
+        <location filename="../client/desktop/settings_tab.ui" line="640"/>
         <source>Public key:</source>
         <translation>公開キー:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="672"/>
+        <location filename="../client/desktop/settings_tab.ui" line="658"/>
         <source>Change Update Server...</source>
         <translation>更新サーバーの変更...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="692"/>
+        <location filename="../client/desktop/settings_tab.ui" line="678"/>
         <source>Check for updates</source>
         <translation>更新の確認</translation>
     </message>
@@ -7941,117 +7941,117 @@ Credentials imported: %5</source>
         <translation>1 時間</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="236"/>
+        <location filename="../client/desktop/settings_tab.cc" line="234"/>
         <source>None</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="261"/>
+        <location filename="../client/desktop/settings_tab.cc" line="259"/>
         <source>Stable</source>
         <translation>安定版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="262"/>
+        <location filename="../client/desktop/settings_tab.cc" line="260"/>
         <source>Beta</source>
         <translation>ベータ版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="263"/>
+        <location filename="../client/desktop/settings_tab.cc" line="261"/>
         <source>Alpha</source>
         <translation>アルファ版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="389"/>
+        <location filename="../client/desktop/settings_tab.cc" line="385"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>新しい言語はアプリケーションの再起動後に適用されます。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="438"/>
-        <location filename="../client/desktop/settings_tab.cc" line="537"/>
+        <location filename="../client/desktop/settings_tab.cc" line="434"/>
+        <location filename="../client/desktop/settings_tab.cc" line="533"/>
         <source>Choose path</source>
         <translation>パスの選択</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="557"/>
+        <location filename="../client/desktop/settings_tab.cc" line="553"/>
         <source>Change Master Password</source>
         <translation>マスター パスワードの変更</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="559"/>
+        <location filename="../client/desktop/settings_tab.cc" line="555"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>現在のパスワードを入力し、新しいパスワードを選択してください。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="567"/>
+        <location filename="../client/desktop/settings_tab.cc" line="563"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>パスワードは %n 文字以上でなければなりません。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="574"/>
+        <location filename="../client/desktop/settings_tab.cc" line="570"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>入力されたパスワードはセキュリティ要件を満たしていません！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="575"/>
+        <location filename="../client/desktop/settings_tab.cc" line="571"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>パスワードには小文字、大文字、数字を含める必要があり、%n 文字以上でなければなりません。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="578"/>
+        <location filename="../client/desktop/settings_tab.cc" line="574"/>
         <source>Do you want to enter a different password?</source>
         <translation>別のパスワードを入力しますか？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="591"/>
+        <location filename="../client/desktop/settings_tab.cc" line="587"/>
         <source>Invalid current password.</source>
         <translation>現在のパスワードが無効です。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="595"/>
+        <location filename="../client/desktop/settings_tab.cc" line="591"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>データベースの一部のレコードが破損しています。修正または削除してから、もう一度お試しください。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="599"/>
+        <location filename="../client/desktop/settings_tab.cc" line="595"/>
         <source>Unable to change the password.</source>
         <translation>パスワードを変更できません。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="722"/>
+        <location filename="../client/desktop/settings_tab.cc" line="718"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>データベースのキーはこのコンピューターに保存されます。お使いのアカウントで実行されているすべてのプログラムが、アプリケーションが実行されていないときでもこのキーを読み取れるようになります。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="725"/>
+        <location filename="../client/desktop/settings_tab.cc" line="721"/>
         <source>Do you want to continue?</source>
         <translation>続行しますか？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="736"/>
+        <location filename="../client/desktop/settings_tab.cc" line="732"/>
         <source>Unlock Automatically</source>
         <translation>自動ロック解除</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="738"/>
+        <location filename="../client/desktop/settings_tab.cc" line="734"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>起動時にアプリケーションのロックを自動的に解除するには、マスター パスワードを入力してください。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="748"/>
+        <location filename="../client/desktop/settings_tab.cc" line="744"/>
         <source>Invalid master password.</source>
         <translation>マスター パスワードが正しくありません。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="752"/>
+        <location filename="../client/desktop/settings_tab.cc" line="748"/>
         <source>Unable to unlock the database.</source>
         <translation>データベースのロックを解除できません。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="766"/>
+        <location filename="../client/desktop/settings_tab.cc" line="762"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>自動ロック解除を有効にできません。</translation>
     </message>
@@ -8059,73 +8059,73 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/settings_util.cc" line="271"/>
+        <location filename="../host/settings_util.cc" line="267"/>
         <source>Source settings file does not exist.</source>
         <translation>ソース設定ファイルが存在しません。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="280"/>
+        <location filename="../host/settings_util.cc" line="276"/>
         <source>Unable to open the source file.</source>
         <translation>ソース ファイルを開けません。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="292"/>
+        <location filename="../host/settings_util.cc" line="288"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>ソース ファイルを読み取れません: ファイルが破損しているか、不明な形式です。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="309"/>
+        <location filename="../host/settings_util.cc" line="305"/>
         <source>Unable to write the secure database.</source>
         <translation>セキュア データベースに書き込めません。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="314"/>
+        <location filename="../host/settings_util.cc" line="310"/>
         <source>The configuration was successfully imported.</source>
         <translation>構成が正常にインポートされました。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="329"/>
+        <location filename="../host/settings_util.cc" line="325"/>
         <source>Unable to read the secure database.</source>
         <translation>セキュア データベースを読み取れません。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="350"/>
+        <location filename="../host/settings_util.cc" line="346"/>
         <source>Unable to open the target file.</source>
         <translation>ターゲット ファイルを開けません。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="358"/>
+        <location filename="../host/settings_util.cc" line="354"/>
         <source>Unable to write the target file.</source>
         <translation>ターゲット ファイルに書き込めません。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="363"/>
+        <location filename="../host/settings_util.cc" line="359"/>
         <source>The configuration was successfully exported.</source>
         <translation>構成が正常にエクスポートされました。</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="373"/>
+        <location filename="../host/settings_util.cc" line="369"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="374"/>
-        <location filename="../host/settings_util.cc" line="376"/>
+        <location filename="../host/settings_util.cc" line="370"/>
+        <location filename="../host/settings_util.cc" line="372"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>既存の設定は上書きされます。続行しますか？</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="374"/>
+        <location filename="../host/settings_util.cc" line="370"/>
         <source>Continue</source>
         <translation>続行</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="386"/>
+        <location filename="../host/settings_util.cc" line="382"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="397"/>
+        <location filename="../host/settings_util.cc" line="393"/>
         <source>Aspia</source>
         <translation>Aspia</translation>
     </message>
@@ -8133,206 +8133,207 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="166"/>
+        <location filename="../client/android/settings_widget.cc" line="173"/>
         <location filename="../host/android/settings_widget.cc" line="203"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="189"/>
+        <location filename="../client/android/settings_widget.cc" line="202"/>
         <source>Credentials</source>
         <translation>資格情報</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="197"/>
+        <location filename="../client/android/settings_widget.cc" line="210"/>
         <location filename="../host/android/settings_widget.cc" line="170"/>
         <source>About</source>
         <translation>バージョン情報</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../client/android/settings_widget.cc" line="289"/>
         <location filename="../host/android/settings_widget.cc" line="262"/>
         <source>Interface</source>
         <translation>インターフェイス</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="264"/>
+        <location filename="../client/android/settings_widget.cc" line="292"/>
         <location filename="../host/android/settings_widget.cc" line="267"/>
         <source>Theme</source>
         <translation>テーマ</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="277"/>
+        <location filename="../client/android/settings_widget.cc" line="305"/>
         <source>Display name when connected</source>
         <translation>接続時の表示名</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="289"/>
+        <location filename="../client/android/settings_widget.cc" line="317"/>
         <location filename="../host/android/settings_widget.cc" line="283"/>
         <source>Security</source>
         <translation>セキュリティ</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="291"/>
+        <location filename="../client/android/settings_widget.cc" line="219"/>
+        <location filename="../client/android/settings_widget.cc" line="319"/>
         <source>Change Master Password</source>
         <translation>マスター パスワードの変更</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="303"/>
+        <location filename="../client/android/settings_widget.cc" line="327"/>
         <source>Unlock with biometrics</source>
         <translation>生体認証でロック解除</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="328"/>
+        <location filename="../client/android/settings_widget.cc" line="352"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>これを使用するには、システム設定で指紋を登録してください。</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="330"/>
+        <location filename="../client/android/settings_widget.cc" line="354"/>
         <source>Biometrics are not available on this device.</source>
         <translation>このデバイスでは生体認証を利用できません。</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="341"/>
+        <location filename="../client/android/settings_widget.cc" line="365"/>
         <source>UDP Connections</source>
         <translation>UDP 接続</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="355"/>
+        <location filename="../client/android/settings_widget.cc" line="379"/>
         <source>Allow direct connections</source>
         <translation>直接接続を許可</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="356"/>
+        <location filename="../client/android/settings_widget.cc" line="380"/>
         <source>Allow UDP Hole Punching</source>
         <translation>UDP ホール パンチングを許可</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="357"/>
+        <location filename="../client/android/settings_widget.cc" line="381"/>
         <source>Allow PCP protocol</source>
         <translation>PCP プロトコルを許可</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="358"/>
+        <location filename="../client/android/settings_widget.cc" line="382"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>NAT-PMP プロトコルを許可</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="359"/>
+        <location filename="../client/android/settings_widget.cc" line="383"/>
         <source>Allow UPnP protocol</source>
         <translation>UPnP プロトコルを許可</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="365"/>
+        <location filename="../client/android/settings_widget.cc" line="389"/>
         <source>Remote Desktop</source>
         <translation>リモート デスクトップ</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="367"/>
+        <location filename="../client/android/settings_widget.cc" line="391"/>
         <source>Enable audio</source>
         <translation>音声を有効にする</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="372"/>
+        <location filename="../client/android/settings_widget.cc" line="396"/>
         <source>Enable clipboard</source>
         <translation>クリップボードを有効にする</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="377"/>
+        <location filename="../client/android/settings_widget.cc" line="401"/>
         <source>Show shape of remote cursor</source>
         <translation>リモート カーソルの形状を表示</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="383"/>
+        <location filename="../client/android/settings_widget.cc" line="407"/>
         <source>Show position of remote cursor</source>
         <translation>リモート カーソルの位置を表示</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="389"/>
+        <location filename="../client/android/settings_widget.cc" line="413"/>
         <source>Disable desktop effects</source>
         <translation>デスクトップ効果を無効にする</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="395"/>
+        <location filename="../client/android/settings_widget.cc" line="419"/>
         <source>Disable desktop wallpaper</source>
         <translation>デスクトップの壁紙を無効にする</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../client/android/settings_widget.cc" line="425"/>
         <source>Lock computer at disconnect</source>
         <translation>切断時にコンピューターをロック</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="407"/>
+        <location filename="../client/android/settings_widget.cc" line="431"/>
         <source>Block remote input</source>
         <translation>リモート入力をブロック</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="418"/>
+        <location filename="../client/android/settings_widget.cc" line="442"/>
         <location filename="../host/android/settings_widget.cc" line="439"/>
         <source>Updates</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="422"/>
+        <location filename="../client/android/settings_widget.cc" line="446"/>
         <source>Check for updates on startup</source>
         <translation>起動時に更新を確認</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="429"/>
+        <location filename="../client/android/settings_widget.cc" line="453"/>
         <location filename="../host/android/settings_widget.cc" line="442"/>
         <source>Update channel</source>
         <translation>更新チャネル</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="430"/>
+        <location filename="../client/android/settings_widget.cc" line="454"/>
         <location filename="../host/android/settings_widget.cc" line="443"/>
         <source>Stable</source>
         <translation>安定版</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="431"/>
+        <location filename="../client/android/settings_widget.cc" line="455"/>
         <location filename="../host/android/settings_widget.cc" line="444"/>
         <source>Beta</source>
         <translation>ベータ版</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="432"/>
+        <location filename="../client/android/settings_widget.cc" line="456"/>
         <location filename="../host/android/settings_widget.cc" line="445"/>
         <source>Alpha</source>
         <translation>アルファ版</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="443"/>
+        <location filename="../client/android/settings_widget.cc" line="467"/>
         <location filename="../host/android/settings_widget.cc" line="459"/>
         <source>Update server</source>
         <translation>更新サーバー</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="448"/>
+        <location filename="../client/android/settings_widget.cc" line="472"/>
         <location filename="../host/android/settings_widget.cc" line="464"/>
         <source>Public key</source>
         <translation>公開キー</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="454"/>
+        <location filename="../client/android/settings_widget.cc" line="478"/>
         <location filename="../host/android/settings_widget.cc" line="470"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>更新サーバーが指定されていない場合は、既定のサーバーが使用されます。公開キーが指定されていない場合は、組み込みのキーが使用されます。</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="508"/>
+        <location filename="../client/android/settings_widget.cc" line="532"/>
         <location filename="../host/android/settings_widget.cc" line="524"/>
         <source>Check for updates</source>
         <translation>更新の確認</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="532"/>
+        <location filename="../client/android/settings_widget.cc" line="556"/>
         <source>Enable biometric unlock</source>
         <translation>生体認証によるロック解除を有効にする</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="533"/>
+        <location filename="../client/android/settings_widget.cc" line="557"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
@@ -8599,7 +8600,7 @@ Credentials imported: %5</source>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="174"/>
+        <location filename="../client/android/statistics_dialog.cc" line="173"/>
         <source>Statistics</source>
         <translation>統計</translation>
     </message>
@@ -8614,7 +8615,7 @@ Credentials imported: %5</source>
         <translation>値</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="207"/>
+        <location filename="../client/android/statistics_dialog.cc" line="206"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>

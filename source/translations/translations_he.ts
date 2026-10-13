@@ -391,30 +391,30 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="170"/>
-        <location filename="../client/android/main_window.cc" line="270"/>
-        <location filename="../client/android/main_window.cc" line="312"/>
+        <location filename="../client/android/main_window.cc" line="174"/>
+        <location filename="../client/android/main_window.cc" line="346"/>
+        <location filename="../client/android/main_window.cc" line="388"/>
         <source>Local</source>
         <translation>מקומי</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="171"/>
-        <location filename="../client/android/main_window.cc" line="274"/>
-        <location filename="../client/android/main_window.cc" line="332"/>
+        <location filename="../client/android/main_window.cc" line="175"/>
+        <location filename="../client/android/main_window.cc" line="350"/>
+        <location filename="../client/android/main_window.cc" line="408"/>
         <source>Remote</source>
         <translation>מרוחק</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="172"/>
-        <location filename="../client/android/main_window.cc" line="278"/>
-        <location filename="../client/android/main_window.cc" line="322"/>
+        <location filename="../client/android/main_window.cc" line="176"/>
+        <location filename="../client/android/main_window.cc" line="354"/>
+        <location filename="../client/android/main_window.cc" line="398"/>
         <source>Routers</source>
         <translation>נתבים</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="173"/>
-        <location filename="../client/android/main_window.cc" line="282"/>
-        <location filename="../client/android/main_window.cc" line="342"/>
+        <location filename="../client/android/main_window.cc" line="177"/>
+        <location filename="../client/android/main_window.cc" line="358"/>
+        <location filename="../client/android/main_window.cc" line="418"/>
         <location filename="../host/android/main_window.cc" line="88"/>
         <location filename="../host/android/main_window.cc" line="104"/>
         <location filename="../host/android/main_window.cc" line="479"/>
@@ -422,71 +422,71 @@ Routers added: %4</source>
         <translation>הגדרות</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="696"/>
+        <location filename="../client/android/main_window.cc" line="772"/>
         <source>Update</source>
         <translation>עדכון</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="697"/>
+        <location filename="../client/android/main_window.cc" line="773"/>
         <source>Version %1 is available.</source>
         <translation>גרסה %1 זמינה.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="746"/>
+        <location filename="../client/android/main_window.cc" line="822"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>הנתב המשויך למארח זה נמחק. ערוך את המארח כדי לבחור נתב אחר או לעבור לחיבור ישיר.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="556"/>
+        <location filename="../client/android/main_window.cc" line="632"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>אימות דו-שלבי - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="434"/>
-        <location filename="../client/android/main_window.cc" line="1013"/>
+        <location filename="../client/android/main_window.cc" line="510"/>
+        <location filename="../client/android/main_window.cc" line="1089"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>נתוני המארח פגומים. ערוך את המארח והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="745"/>
-        <location filename="../client/android/main_window.cc" line="971"/>
+        <location filename="../client/android/main_window.cc" line="821"/>
+        <location filename="../client/android/main_window.cc" line="1047"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="923"/>
+        <location filename="../client/android/main_window.cc" line="999"/>
         <source>Invalid link.</source>
         <translation>קישור לא חוקי.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="931"/>
+        <location filename="../client/android/main_window.cc" line="1007"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>הפעלה אחרת פעילה כעת. סגור אותה ופתח את הקישור מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="941"/>
+        <location filename="../client/android/main_window.cc" line="1017"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>סוג ההפעלה מהקישור אינו נתמך במכשיר זה.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="962"/>
+        <location filename="../client/android/main_window.cc" line="1038"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>הנתב שאליו מפנה הקישור אינו נמצא בין הנתבים השמורים.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1014"/>
+        <location filename="../client/android/main_window.cc" line="1090"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>המארח שאליו מפנה הקישור אינו נמצא בין המארחים השמורים.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="433"/>
-        <location filename="../client/android/main_window.cc" line="743"/>
-        <location filename="../client/android/main_window.cc" line="923"/>
-        <location filename="../client/android/main_window.cc" line="930"/>
-        <location filename="../client/android/main_window.cc" line="940"/>
-        <location filename="../client/android/main_window.cc" line="961"/>
-        <location filename="../client/android/main_window.cc" line="970"/>
-        <location filename="../client/android/main_window.cc" line="1011"/>
+        <location filename="../client/android/main_window.cc" line="509"/>
+        <location filename="../client/android/main_window.cc" line="819"/>
+        <location filename="../client/android/main_window.cc" line="999"/>
+        <location filename="../client/android/main_window.cc" line="1006"/>
+        <location filename="../client/android/main_window.cc" line="1016"/>
+        <location filename="../client/android/main_window.cc" line="1037"/>
+        <location filename="../client/android/main_window.cc" line="1046"/>
+        <location filename="../client/android/main_window.cc" line="1087"/>
         <location filename="../host/android/main_window.cc" line="87"/>
         <location filename="../host/android/main_window.cc" line="103"/>
         <location filename="../host/android/main_window.cc" line="477"/>
@@ -499,7 +499,7 @@ Routers added: %4</source>
         <translation>הרשאות</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="697"/>
+        <location filename="../client/android/main_window.cc" line="773"/>
         <source>Open</source>
         <translation>פתח</translation>
     </message>
@@ -1184,7 +1184,7 @@ Routers added: %4</source>
     <name>ConfigDialog</name>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
-        <location filename="../host/ui/config_dialog.ui" line="225"/>
+        <location filename="../host/ui/config_dialog.ui" line="218"/>
         <location filename="../host/ui/config_dialog.cc" line="137"/>
         <source>Settings</source>
         <translation>הגדרות</translation>
@@ -1200,158 +1200,153 @@ Routers added: %4</source>
         <translation>לוכד וידאו מועדף:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="87"/>
-        <source>Allow hardware video encoding</source>
-        <translation>אפשר קידוד וידאו בחומרה</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="97"/>
+        <location filename="../host/ui/config_dialog.ui" line="90"/>
         <source>Updates</source>
         <translation>עדכונים</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="130"/>
+        <location filename="../host/ui/config_dialog.ui" line="123"/>
         <source>Update channel:</source>
         <translation>ערוץ עדכונים:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="148"/>
+        <location filename="../host/ui/config_dialog.ui" line="141"/>
         <source>Update server:</source>
         <translation>שרת עדכונים:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="169"/>
+        <location filename="../host/ui/config_dialog.ui" line="162"/>
         <source>Public key:</source>
         <translation>מפתח ציבורי:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="188"/>
+        <location filename="../host/ui/config_dialog.ui" line="181"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>אם שרת העדכונים לא צוין, נעשה שימוש בשרת ברירת המחדל. אם המפתח הציבורי לא צוין, נעשה שימוש במפתח המובנה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="528"/>
-        <location filename="../host/ui/config_dialog.ui" line="639"/>
+        <location filename="../host/ui/config_dialog.ui" line="521"/>
+        <location filename="../host/ui/config_dialog.ui" line="632"/>
         <source>Users</source>
         <translation>משתמשים</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="542"/>
+        <location filename="../host/ui/config_dialog.ui" line="535"/>
         <source>Add new user</source>
         <translation>הוספת משתמש חדש</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="568"/>
+        <location filename="../host/ui/config_dialog.ui" line="561"/>
         <source>Edit user</source>
         <translation>ערוך משתמש</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="594"/>
+        <location filename="../host/ui/config_dialog.ui" line="587"/>
         <source>Delete user</source>
         <translation>מחק משתמש</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="213"/>
+        <location filename="../host/ui/config_dialog.ui" line="206"/>
         <source>Check for updates</source>
         <translation>בדוק עדכונים</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="662"/>
+        <location filename="../host/ui/config_dialog.ui" line="655"/>
         <source>Add</source>
         <translation>הוסף</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="671"/>
+        <location filename="../host/ui/config_dialog.ui" line="664"/>
         <source>Modify</source>
         <translation>שנה</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="680"/>
+        <location filename="../host/ui/config_dialog.ui" line="673"/>
         <source>Delete</source>
         <translation>מחק</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="460"/>
+        <location filename="../host/ui/config_dialog.ui" line="453"/>
         <source>Router</source>
         <translation>נתב</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="466"/>
+        <location filename="../host/ui/config_dialog.ui" line="459"/>
         <source>Enable the use of a router</source>
         <translation>הפעל שימוש בנתב</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="478"/>
+        <location filename="../host/ui/config_dialog.ui" line="471"/>
         <source>Address:</source>
         <translation>כתובת:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="497"/>
+        <location filename="../host/ui/config_dialog.ui" line="490"/>
         <source>Public Key:</source>
         <translation>מפתח ציבורי:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="300"/>
+        <location filename="../host/ui/config_dialog.ui" line="293"/>
         <source>Change password</source>
         <translation>שנה סיסמה</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="275"/>
+        <location filename="../host/ui/config_dialog.ui" line="268"/>
         <source>Security</source>
         <translation>אבטחה</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="281"/>
+        <location filename="../host/ui/config_dialog.ui" line="274"/>
         <source>Password Protection of Settings</source>
         <translation>הגנת סיסמה על ההגדרות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="317"/>
+        <location filename="../host/ui/config_dialog.ui" line="310"/>
         <source>One-time Password</source>
         <translation>סיסמה חד-פעמית</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="323"/>
+        <location filename="../host/ui/config_dialog.ui" line="316"/>
         <source>Enable one-time password</source>
         <translation>הפעל סיסמה חד-פעמית</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="360"/>
+        <location filename="../host/ui/config_dialog.ui" line="353"/>
         <source>Characters count:</source>
         <translation>מספר תווים:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="346"/>
+        <location filename="../host/ui/config_dialog.ui" line="339"/>
         <source>Characters:</source>
         <translation>תווים:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="382"/>
+        <location filename="../host/ui/config_dialog.ui" line="375"/>
         <source>Connection Confirmation</source>
         <translation>אישור חיבור</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="388"/>
+        <location filename="../host/ui/config_dialog.ui" line="381"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>דרוש אישור בעת התחברות למחשב</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="397"/>
+        <location filename="../host/ui/config_dialog.ui" line="390"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>אישור אוטומטי של חיבור באמצעות:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="332"/>
+        <location filename="../host/ui/config_dialog.ui" line="325"/>
         <source>Change password:</source>
         <translation>החלפת סיסמה:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="411"/>
+        <location filename="../host/ui/config_dialog.ui" line="404"/>
         <source>If there is no active user:</source>
         <translation>אם אין משתמש פעיל:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="511"/>
+        <location filename="../host/ui/config_dialog.ui" line="504"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>נתב נדרש לצורך התחברות למחשב כאשר אין חיבור ישיר (מעקף NAT). Aspia אינה מספקת נתב ציבורי, אך ניתן להתקין נתב משלך. ניתן להוריד את הנתב מתוך &lt;a href=&quot;https://aspia.org&quot;&gt;האתר הרשמי&lt;/a&gt;.</translation>
     </message>
@@ -1366,22 +1361,22 @@ Routers added: %4</source>
         <translation>פורט נכנס:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="436"/>
+        <location filename="../host/ui/config_dialog.ui" line="429"/>
         <source>Disable Aspia shutdown</source>
         <translation>מנע כיבוי של Aspia</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="430"/>
+        <location filename="../host/ui/config_dialog.ui" line="423"/>
         <source>Other</source>
         <translation>אחר</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="103"/>
+        <location filename="../host/ui/config_dialog.ui" line="96"/>
         <source>Automatic checking and installation of updates</source>
         <translation>בדיקה והתקנה אוטומטיות של עדכונים</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="112"/>
+        <location filename="../host/ui/config_dialog.ui" line="105"/>
         <source>Check for updates:</source>
         <translation>בדיקת עדכונים:</translation>
     </message>
@@ -1431,203 +1426,203 @@ Routers added: %4</source>
         <translation>ברירת מחדל</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="236"/>
+        <location filename="../host/ui/config_dialog.cc" line="234"/>
         <source>On reboot</source>
         <translation>בהפעלה מחדש</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="237"/>
+        <location filename="../host/ui/config_dialog.cc" line="235"/>
         <source>Every 5 minutes</source>
         <translation>כל 5 דקות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="238"/>
+        <location filename="../host/ui/config_dialog.cc" line="236"/>
         <source>Every 30 minutes</source>
         <translation>כל 30 דקות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="239"/>
+        <location filename="../host/ui/config_dialog.cc" line="237"/>
         <source>Every 1 hour</source>
         <translation>כל שעה</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="240"/>
+        <location filename="../host/ui/config_dialog.cc" line="238"/>
         <source>Every 6 hours</source>
         <translation>כל 6 שעות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="241"/>
+        <location filename="../host/ui/config_dialog.cc" line="239"/>
         <source>Every 12 hours</source>
         <translation>כל 12 שעות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="249"/>
+        <location filename="../host/ui/config_dialog.cc" line="247"/>
         <source>Letters and digits</source>
         <translation>אותיות וספרות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="252"/>
+        <location filename="../host/ui/config_dialog.cc" line="250"/>
         <source>Letters</source>
         <translation>אותיות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="254"/>
+        <location filename="../host/ui/config_dialog.cc" line="252"/>
         <source>Digits</source>
         <translation>ספרות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="271"/>
+        <location filename="../host/ui/config_dialog.cc" line="269"/>
         <source>Never</source>
         <translation>אף פעם</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="272"/>
+        <location filename="../host/ui/config_dialog.cc" line="270"/>
         <source>15 seconds</source>
         <translation>15 שניות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="273"/>
+        <location filename="../host/ui/config_dialog.cc" line="271"/>
         <source>30 seconds</source>
         <translation>30 שניות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="274"/>
+        <location filename="../host/ui/config_dialog.cc" line="272"/>
         <source>45 seconds</source>
         <translation>45 שניות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="275"/>
+        <location filename="../host/ui/config_dialog.cc" line="273"/>
         <source>60 seconds</source>
         <translation>60 שניות</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="283"/>
+        <location filename="../host/ui/config_dialog.cc" line="281"/>
         <source>Accept connection</source>
         <translation>קבלת החיבור</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="284"/>
+        <location filename="../host/ui/config_dialog.cc" line="282"/>
         <source>Reject connection</source>
         <translation>דחיית החיבור</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="484"/>
+        <location filename="../host/ui/config_dialog.cc" line="482"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך למחוק את המשתמש &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="512"/>
-        <location filename="../host/ui/config_dialog.cc" line="546"/>
+        <location filename="../host/ui/config_dialog.cc" line="510"/>
+        <location filename="../host/ui/config_dialog.cc" line="544"/>
         <source>An error occurred while processing the password.</source>
         <translation>אירעה שגיאה בעת עיבוד הסיסמה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="529"/>
+        <location filename="../host/ui/config_dialog.cc" line="527"/>
         <source>Settings storage is unavailable.</source>
         <translation>אחסון ההגדרות אינו זמין.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="244"/>
-        <location filename="../host/ui/config_dialog.cc" line="560"/>
+        <location filename="../host/ui/config_dialog.ui" line="237"/>
+        <location filename="../host/ui/config_dialog.cc" line="558"/>
         <source>Import</source>
         <translation>ייבוא</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="560"/>
-        <location filename="../host/ui/config_dialog.cc" line="577"/>
+        <location filename="../host/ui/config_dialog.cc" line="558"/>
+        <location filename="../host/ui/config_dialog.cc" line="575"/>
         <source>JSON-files (*.json)</source>
         <translation>קובצי JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="251"/>
-        <location filename="../host/ui/config_dialog.cc" line="577"/>
-        <location filename="../host/ui/config_dialog.cc" line="602"/>
-        <location filename="../host/ui/config_dialog.cc" line="637"/>
+        <location filename="../host/ui/config_dialog.ui" line="244"/>
+        <location filename="../host/ui/config_dialog.cc" line="575"/>
+        <location filename="../host/ui/config_dialog.cc" line="600"/>
+        <location filename="../host/ui/config_dialog.cc" line="635"/>
         <source>Export</source>
         <translation>ייצוא</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="602"/>
+        <location filename="../host/ui/config_dialog.cc" line="600"/>
         <source>MSI-files (*.msi)</source>
         <translation>קובצי MSI (*.msi)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="612"/>
+        <location filename="../host/ui/config_dialog.cc" line="610"/>
         <source>The installer was successfully exported.</source>
         <translation>תוכנית ההתקנה יוצאה בהצלחה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="616"/>
+        <location filename="../host/ui/config_dialog.cc" line="614"/>
         <source>The installed host package was not found.</source>
         <translation>חבילת המארח המותקנת לא נמצאה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="620"/>
+        <location filename="../host/ui/config_dialog.cc" line="618"/>
         <source>The installed version of the host does not support exporting the installer.</source>
         <translation>הגרסה המותקנת של המארח אינה תומכת בייצוא תוכנית ההתקנה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="624"/>
+        <location filename="../host/ui/config_dialog.cc" line="622"/>
         <source>Unable to export the installer.</source>
         <translation>לא ניתן לייצא את תוכנית ההתקנה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="637"/>
+        <location filename="../host/ui/config_dialog.cc" line="635"/>
         <source>Executable files (*.exe)</source>
         <translation>קובצי הפעלה (*.exe)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="647"/>
+        <location filename="../host/ui/config_dialog.cc" line="645"/>
         <source>The portable version was successfully exported.</source>
         <translation>הגרסה הניידת יוצאה בהצלחה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="651"/>
+        <location filename="../host/ui/config_dialog.cc" line="649"/>
         <source>The portable version works only through a router. Set up the connection to the router and save the settings.</source>
         <translation>הגרסה הניידת פועלת רק דרך נתב. הגדר את החיבור לנתב ושמור את ההגדרות.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="655"/>
+        <location filename="../host/ui/config_dialog.cc" line="653"/>
         <source>Unable to export the portable version.</source>
         <translation>לא ניתן לייצא את הגרסה הניידת.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="676"/>
+        <location filename="../host/ui/config_dialog.cc" line="674"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>לא ניתן לכתוב את התצורה. ודא שיש לך הרשאות כתיבה מספיקות.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="692"/>
+        <location filename="../host/ui/config_dialog.cc" line="690"/>
         <source>An invalid update server address was entered.</source>
         <translation>הוזנה כתובת שרת עדכונים שגויה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="700"/>
+        <location filename="../host/ui/config_dialog.cc" line="698"/>
         <source>Enter the update server address.</source>
         <translation>הזן את כתובת שרת העדכונים.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="710"/>
+        <location filename="../host/ui/config_dialog.cc" line="708"/>
         <source>An invalid public key was entered.</source>
         <translation>הוזן מפתח ציבורי שגוי.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="722"/>
+        <location filename="../host/ui/config_dialog.cc" line="720"/>
         <source>Incorrect router address entered.</source>
         <translation>הוזנה כתובת נתב שגויה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="732"/>
+        <location filename="../host/ui/config_dialog.cc" line="730"/>
         <source>Incorrect router public key entered.</source>
         <translation>הוזן מפתח ציבורי שגוי של הנתב.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="895"/>
+        <location filename="../host/ui/config_dialog.cc" line="891"/>
         <source>Install</source>
         <translation>התקן</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="900"/>
+        <location filename="../host/ui/config_dialog.cc" line="896"/>
         <source>Remove</source>
         <translation>הסר</translation>
     </message>
@@ -2694,48 +2689,48 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="999"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="978"/>
         <source>Save File</source>
         <translation>שמירת קובץ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1000"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>תמונת PNG (*.png);;תמונת BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1031"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1010"/>
         <source>Could not save image</source>
         <translation>לא ניתן לשמור תמונה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1597"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1602"/>
         <source>Credentials</source>
         <translation>פרטי כניסה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1625"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1597"/>
         <source>User name:</source>
         <translation>שם משתמש:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1630"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1602"/>
         <source>Password:</source>
         <translation>סיסמה:</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="513"/>
+        <location filename="../client/android/desktop_window.cc" line="506"/>
         <source>Connecting...</source>
         <translation>מתחבר...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="537"/>
+        <location filename="../client/android/desktop_window.cc" line="530"/>
         <source>The specified router is unavailable.</source>
         <translation>הנתב שצוין אינו זמין.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="564"/>
+        <location filename="../client/android/desktop_window.cc" line="557"/>
         <source>Requesting connection to the host...</source>
         <translation>מבקש חיבור למארח...</translation>
     </message>
@@ -2750,133 +2745,133 @@ Credentials replaced: %2</source>
         <translation>הפעלה %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="536"/>
+        <location filename="../client/android/desktop_window.cc" line="529"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="543"/>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
         <source>Connecting to router...</source>
         <translation>מתחבר לנתב...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="774"/>
+        <location filename="../client/android/desktop_window.cc" line="765"/>
         <source>Connecting to host %1...</source>
         <translation>מתחבר למארח %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="780"/>
+        <location filename="../client/android/desktop_window.cc" line="771"/>
         <source>Connection established.</source>
         <translation>החיבור נוצר.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="793"/>
+        <location filename="../client/android/desktop_window.cc" line="784"/>
         <source>The connection to the host has been lost.</source>
         <translation>החיבור למארח אבד.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="806"/>
+        <location filename="../client/android/desktop_window.cc" line="797"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>גרסת המארח חדשה מגרסת הלקוח. נא לעדכן את היישום.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="810"/>
+        <location filename="../client/android/desktop_window.cc" line="801"/>
         <source>Legacy hosts are not supported.</source>
         <translation>מארחים מדור קודם אינם נתמכים.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="360"/>
+        <location filename="../client/android/desktop_window.cc" line="164"/>
         <source>Monitor %1</source>
         <translation>צג %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="368"/>
+        <location filename="../client/android/desktop_window.cc" line="172"/>
         <source>Power</source>
         <translation>הפעלה/כיבוי</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="372"/>
+        <location filename="../client/android/desktop_window.cc" line="176"/>
         <source>Keyboard</source>
         <translation>מקלדת</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="378"/>
+        <location filename="../client/android/desktop_window.cc" line="182"/>
         <source>Ctrl+Alt+Del</source>
         <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="385"/>
+        <location filename="../client/android/desktop_window.cc" line="189"/>
         <source>Users</source>
         <translation>משתמשים</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="390"/>
+        <location filename="../client/android/desktop_window.cc" line="194"/>
         <source>Disconnect</source>
         <translation>נתק</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="661"/>
-        <location filename="../client/android/desktop_window.cc" line="718"/>
+        <location filename="../client/android/desktop_window.cc" line="652"/>
+        <location filename="../client/android/desktop_window.cc" line="709"/>
         <source>Back</source>
         <translation>חזרה</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="662"/>
+        <location filename="../client/android/desktop_window.cc" line="653"/>
         <source>Shutdown</source>
         <translation>כיבוי</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="654"/>
         <source>Reboot</source>
         <translation>הפעלה מחדש</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="668"/>
+        <location filename="../client/android/desktop_window.cc" line="659"/>
         <source>Safe Mode</source>
         <translation>מצב בטוח</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="669"/>
+        <location filename="../client/android/desktop_window.cc" line="660"/>
         <source>Logoff</source>
         <translation>התנתקות</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="670"/>
+        <location filename="../client/android/desktop_window.cc" line="661"/>
         <source>Lock</source>
         <translation>נעל</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="686"/>
+        <location filename="../client/android/desktop_window.cc" line="677"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>האם אתה בטוח שברצונך לכבות את המחשב המרוחק?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="690"/>
+        <location filename="../client/android/desktop_window.cc" line="681"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>האם אתה בטוח שברצונך להפעיל מחדש את המחשב המרוחק?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="694"/>
+        <location filename="../client/android/desktop_window.cc" line="685"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>האם אתה בטוח שברצונך להפעיל מחדש את המחשב המרוחק במצב בטוח?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="698"/>
+        <location filename="../client/android/desktop_window.cc" line="689"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>האם אתה בטוח שברצונך לסיים את הפעלת המשתמש במחשב המרוחק?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="702"/>
+        <location filename="../client/android/desktop_window.cc" line="693"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>האם אתה בטוח שברצונך לנעול את הפעלת המשתמש במחשב המרוחק?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="757"/>
+        <location filename="../client/android/desktop_window.cc" line="748"/>
         <source>Confirmation</source>
         <translation>אישור</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="757"/>
+        <location filename="../client/android/desktop_window.cc" line="748"/>
         <source>Yes</source>
         <translation>כן</translation>
     </message>
@@ -3757,8 +3752,8 @@ Credentials replaced: %2</source>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="541"/>
-        <location filename="../host/main.cc" line="576"/>
+        <location filename="../host/main.cc" line="556"/>
+        <location filename="../host/main.cc" line="591"/>
         <source>Settings storage is unavailable.</source>
         <translation>אחסון ההגדרות אינו זמין.</translation>
     </message>
@@ -3766,72 +3761,72 @@ Credentials replaced: %2</source>
 <context>
     <name>HostListModel</name>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Host ID</source>
         <translation>מזהה מארח</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Display Name</source>
         <translation>שם תצוגה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Computer Name</source>
         <translation>שם מחשב</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Address</source>
         <translation>כתובת</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Comment</source>
         <translation>הערה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Workspace</source>
         <translation>סביבת עבודה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Operating System</source>
         <translation>מערכת הפעלה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Version</source>
         <translation>גרסה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Architecture</source>
         <translation>ארכיטקטורה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Online</source>
         <translation>מקוון לאחרונה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Last Modify</source>
         <translation>שינוי אחרון</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="219"/>
         <source>Status</source>
         <translation>סטטוס</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="307"/>
         <source>Online</source>
         <translation>מקוון</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
+        <location filename="../client/desktop/management/host_list_model.cc" line="307"/>
         <source>Offline</source>
         <translation>לא מקוון</translation>
     </message>
@@ -3839,32 +3834,32 @@ Credentials replaced: %2</source>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="478"/>
+        <location filename="../host/main.cc" line="488"/>
         <source>Launch the application hidden.</source>
         <translation>הפעלת היישום במצב מוסתר.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="480"/>
+        <location filename="../host/main.cc" line="490"/>
         <source>Export parameters to file.</source>
         <translation>ייצוא פרמטרים לקובץ.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="482"/>
+        <location filename="../host/main.cc" line="492"/>
         <source>Import parameters from file.</source>
         <translation>ייבוא פרמטרים מקובץ.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="484"/>
+        <location filename="../host/main.cc" line="494"/>
         <source>Do not display any messages during import and export.</source>
         <translation>אל תציג הודעות במהלך ייבוא וייצוא.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="486"/>
+        <location filename="../host/main.cc" line="496"/>
         <source>Calling the settings dialog.</source>
         <translation>פתיחת תיבת הדו-שיח של ההגדרות.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="488"/>
+        <location filename="../host/main.cc" line="498"/>
         <source>Calling the security log dialog.</source>
         <translation>פתיחת תיבת הדו-שיח של יומן האבטחה.</translation>
     </message>
@@ -5389,83 +5384,58 @@ Credentials imported: %5</source>
 <context>
     <name>MasterPasswordDialog</name>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="51"/>
+        <location filename="../client/android/master_password_dialog.cc" line="49"/>
         <source>Set Master Password</source>
         <translation>הגדרת סיסמה ראשית</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="52"/>
+        <location filename="../client/android/master_password_dialog.cc" line="50"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>הגדר סיסמה ראשית הנדרשת לביטול נעילת היישום.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <location filename="../client/android/master_password_dialog.cc" line="213"/>
+        <location filename="../client/android/master_password_dialog.cc" line="54"/>
+        <location filename="../client/android/master_password_dialog.cc" line="171"/>
         <source>Unlock</source>
         <translation>בטל נעילה</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="57"/>
+        <location filename="../client/android/master_password_dialog.cc" line="55"/>
         <source>Enter the master password.</source>
         <translation>הזן את הסיסמה הראשית.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="61"/>
-        <source>Change Master Password</source>
-        <translation>שינוי סיסמה ראשית</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="62"/>
-        <source>Enter your current password and choose a new one.</source>
-        <translation>הזן את הסיסמה הנוכחית שלך ובחר סיסמה חדשה.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="66"/>
-        <source>New Password</source>
-        <translation>סיסמה חדשה</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="66"/>
+        <location filename="../client/android/master_password_dialog.cc" line="59"/>
         <source>Password</source>
         <translation>סיסמה</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="81"/>
-        <source>Current Password</source>
-        <translation>סיסמה נוכחית</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="91"/>
+        <location filename="../client/android/master_password_dialog.cc" line="75"/>
         <source>Confirm Password</source>
         <translation>אימות סיסמה</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="96"/>
+        <location filename="../client/android/master_password_dialog.cc" line="80"/>
         <source>Cancel</source>
         <translation>ביטול</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="97"/>
-        <source>Change</source>
-        <translation>שנה</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="97"/>
+        <location filename="../client/android/master_password_dialog.cc" line="81"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="133"/>
+        <location filename="../client/android/master_password_dialog.cc" line="117"/>
         <source>Invalid master password.</source>
         <translation>הסיסמה הראשית שגויה.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="139"/>
+        <location filename="../client/android/master_password_dialog.cc" line="123"/>
         <source>Unable to unlock the database.</source>
         <translation>לא ניתן לבטל את נעילת מסד הנתונים.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/master_password_dialog.cc" line="150"/>
+        <location filename="../client/android/master_password_dialog.cc" line="134"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יפחת מ-%n תו.</numerusform>
@@ -5473,45 +5443,86 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="158"/>
+        <location filename="../client/android/master_password_dialog.cc" line="142"/>
         <source>The entered passwords do not match.</source>
         <translation>הסיסמאות שהוזנו אינן תואמות.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="168"/>
+        <location filename="../client/android/master_password_dialog.cc" line="150"/>
         <source>Unable to set master password.</source>
         <translation>לא ניתן להגדיר סיסמה ראשית.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="181"/>
-        <source>Invalid current password.</source>
-        <translation>הסיסמה הנוכחית שגויה.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="187"/>
-        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
-        <translation>חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן ונסה שוב.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="191"/>
-        <source>Unable to change the password.</source>
-        <translation>לא ניתן לשנות את הסיסמה.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/master_password_dialog.cc" line="214"/>
+        <location filename="../client/android/master_password_dialog.cc" line="172"/>
         <source>Use password</source>
         <translation>השתמש בסיסמה</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="231"/>
-        <location filename="../client/android/master_password_dialog.cc" line="239"/>
+        <location filename="../client/android/master_password_dialog.cc" line="189"/>
+        <location filename="../client/android/master_password_dialog.cc" line="197"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>שחרור הנעילה הביומטרי נכשל. הזן את הסיסמה הראשית.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="235"/>
+        <location filename="../client/android/master_password_dialog.cc" line="193"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>הנתונים הביומטריים השתנו. הזן את הסיסמה הראשית כדי להמשיך.</translation>
+    </message>
+</context>
+<context>
+    <name>MasterPasswordWidget</name>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="48"/>
+        <source>Enter your current password and choose a new one.</source>
+        <translation>הזן את הסיסמה הנוכחית שלך ובחר סיסמה חדשה.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="51"/>
+        <source>Current Password</source>
+        <translation>סיסמה נוכחית</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="53"/>
+        <source>New Password</source>
+        <translation>סיסמה חדשה</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="55"/>
+        <source>Confirm Password</source>
+        <translation>אימות סיסמה</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="62"/>
+        <source>Change</source>
+        <translation>שנה</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/android/master_password_widget.cc" line="114"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>אורך הסיסמה לא יפחת מ-%n תו.</numerusform>
+            <numerusform>אורך הסיסמה לא יפחת מ-%n תווים.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="122"/>
+        <source>The entered passwords do not match.</source>
+        <translation>הסיסמאות שהוזנו אינן תואמות.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="133"/>
+        <source>Invalid current password.</source>
+        <translation>הסיסמה הנוכחית שגויה.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="138"/>
+        <source>Some records of the database are damaged. Fix or delete them and try again.</source>
+        <translation>חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן ונסה שוב.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_widget.cc" line="141"/>
+        <source>Unable to change the password.</source>
+        <translation>לא ניתן לשנות את הסיסמה.</translation>
     </message>
 </context>
 <context>
@@ -5626,7 +5637,7 @@ Credentials imported: %5</source>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="371"/>
+        <location filename="../client/workers/network_worker.cc" line="381"/>
         <source>Failed to connect to the relay server</source>
         <translation>ההתחברות לשרת הממסר נכשלה</translation>
     </message>
@@ -5635,7 +5646,7 @@ Credentials imported: %5</source>
     <name>NotifierWindow</name>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="345"/>
-        <location filename="../host/ui/notifier_window.cc" line="318"/>
+        <location filename="../host/ui/notifier_window.cc" line="323"/>
         <source>Pause</source>
         <translation>השהה</translation>
     </message>
@@ -5646,38 +5657,38 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="293"/>
-        <location filename="../host/ui/notifier_window.cc" line="302"/>
+        <location filename="../host/ui/notifier_window.cc" line="307"/>
         <source>Lock mouse</source>
         <translation>נעל עכבר</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="319"/>
-        <location filename="../host/ui/notifier_window.cc" line="310"/>
+        <location filename="../host/ui/notifier_window.cc" line="315"/>
         <source>Lock keyboard</source>
         <translation>נעל מקלדת</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="269"/>
+        <location filename="../host/ui/notifier_window.cc" line="274"/>
         <source>Disconnect</source>
         <translation>נתק</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="302"/>
+        <location filename="../host/ui/notifier_window.cc" line="307"/>
         <source>Unlock mouse</source>
         <translation>בטל נעילת עכבר</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="310"/>
+        <location filename="../host/ui/notifier_window.cc" line="315"/>
         <source>Unlock keyboard</source>
         <translation>בטל נעילת מקלדת</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="318"/>
+        <location filename="../host/ui/notifier_window.cc" line="323"/>
         <source>Resume</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="543"/>
+        <location filename="../host/ui/notifier_window.cc" line="559"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
@@ -7845,73 +7856,63 @@ Credentials imported: %5</source>
         <translation>שלח צירופי מקשים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="438"/>
-        <source>Allow hardware video encoding</source>
-        <translation>אפשר קידוד וידאו בחומרה</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.ui" line="445"/>
-        <source>Allow hardware video decoding</source>
-        <translation>אפשר פענוח וידאו בחומרה</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.ui" line="461"/>
+        <location filename="../client/desktop/settings_tab.ui" line="447"/>
         <source>Screen</source>
         <translation>מסך</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="469"/>
+        <location filename="../client/desktop/settings_tab.ui" line="455"/>
         <source>Preferred resolution:</source>
         <translation>רזולוציה מועדפת:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="500"/>
+        <location filename="../client/desktop/settings_tab.ui" line="486"/>
         <source>Recording</source>
         <translation>הקלטה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="506"/>
+        <location filename="../client/desktop/settings_tab.ui" line="492"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>התחל הקלטת הפעלות אוטומטית בעת התחברות</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="515"/>
+        <location filename="../client/desktop/settings_tab.ui" line="501"/>
         <source>Write path:</source>
         <translation>נתיב כתיבה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="611"/>
+        <location filename="../client/desktop/settings_tab.ui" line="597"/>
         <location filename="../client/desktop/settings_tab.cc" line="135"/>
         <source>Update</source>
         <translation>עדכון</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="617"/>
+        <location filename="../client/desktop/settings_tab.ui" line="603"/>
         <source>Check for updates on startup</source>
         <translation>בדוק עדכונים בעת ההפעלה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="626"/>
+        <location filename="../client/desktop/settings_tab.ui" line="612"/>
         <source>Update channel:</source>
         <translation>ערוץ עדכונים:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="640"/>
+        <location filename="../client/desktop/settings_tab.ui" line="626"/>
         <source>Update server:</source>
         <translation>שרת עדכונים:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="654"/>
+        <location filename="../client/desktop/settings_tab.ui" line="640"/>
         <source>Public key:</source>
         <translation>מפתח ציבורי:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="672"/>
+        <location filename="../client/desktop/settings_tab.ui" line="658"/>
         <source>Change Update Server...</source>
         <translation>שנה שרת עדכונים...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="692"/>
+        <location filename="../client/desktop/settings_tab.ui" line="678"/>
         <source>Check for updates</source>
         <translation>בדוק עדכונים</translation>
     </message>
@@ -7981,48 +7982,48 @@ Credentials imported: %5</source>
         <translation>שעה אחת</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="236"/>
+        <location filename="../client/desktop/settings_tab.cc" line="234"/>
         <source>None</source>
         <translation>ללא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="261"/>
+        <location filename="../client/desktop/settings_tab.cc" line="259"/>
         <source>Stable</source>
         <translation>יציב</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="262"/>
+        <location filename="../client/desktop/settings_tab.cc" line="260"/>
         <source>Beta</source>
         <translation>בטא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="263"/>
+        <location filename="../client/desktop/settings_tab.cc" line="261"/>
         <source>Alpha</source>
         <translation>אלפא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="389"/>
+        <location filename="../client/desktop/settings_tab.cc" line="385"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>השפה החדשה תוחל לאחר הפעלה מחדש של היישום.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="438"/>
-        <location filename="../client/desktop/settings_tab.cc" line="537"/>
+        <location filename="../client/desktop/settings_tab.cc" line="434"/>
+        <location filename="../client/desktop/settings_tab.cc" line="533"/>
         <source>Choose path</source>
         <translation>בחירת נתיב</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="557"/>
+        <location filename="../client/desktop/settings_tab.cc" line="553"/>
         <source>Change Master Password</source>
         <translation>שינוי סיסמה ראשית</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="559"/>
+        <location filename="../client/desktop/settings_tab.cc" line="555"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>הזן את הסיסמה הנוכחית שלך ובחר סיסמה חדשה.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="567"/>
+        <location filename="../client/desktop/settings_tab.cc" line="563"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יפחת מ-%n תו.</numerusform>
@@ -8030,12 +8031,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="574"/>
+        <location filename="../client/desktop/settings_tab.cc" line="570"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>הסיסמה שהזנת אינה עומדת בדרישות האבטחה!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="575"/>
+        <location filename="../client/desktop/settings_tab.cc" line="571"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>הסיסמה חייבת להכיל אותיות קטנות וגדולות ומספרים, ואורכה לא יפחת מ-%n תו.</numerusform>
@@ -8043,57 +8044,57 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="578"/>
+        <location filename="../client/desktop/settings_tab.cc" line="574"/>
         <source>Do you want to enter a different password?</source>
         <translation>האם ברצונך להזין סיסמה אחרת?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="591"/>
+        <location filename="../client/desktop/settings_tab.cc" line="587"/>
         <source>Invalid current password.</source>
         <translation>הסיסמה הנוכחית שגויה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="595"/>
+        <location filename="../client/desktop/settings_tab.cc" line="591"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="599"/>
+        <location filename="../client/desktop/settings_tab.cc" line="595"/>
         <source>Unable to change the password.</source>
         <translation>לא ניתן לשנות את הסיסמה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="722"/>
+        <location filename="../client/desktop/settings_tab.cc" line="718"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>מפתח מסד הנתונים יישמר במחשב זה. כל תוכנית הפועלת תחת החשבון שלך תוכל לקרוא אותו, גם כאשר היישום אינו פועל.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="725"/>
+        <location filename="../client/desktop/settings_tab.cc" line="721"/>
         <source>Do you want to continue?</source>
         <translation>האם ברצונך להמשיך?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="736"/>
+        <location filename="../client/desktop/settings_tab.cc" line="732"/>
         <source>Unlock Automatically</source>
         <translation>ביטול נעילה אוטומטי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="738"/>
+        <location filename="../client/desktop/settings_tab.cc" line="734"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>הזן את הסיסמה הראשית כדי לבטל את נעילת היישום אוטומטית בעת ההפעלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="748"/>
+        <location filename="../client/desktop/settings_tab.cc" line="744"/>
         <source>Invalid master password.</source>
         <translation>הסיסמה הראשית שגויה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="752"/>
+        <location filename="../client/desktop/settings_tab.cc" line="748"/>
         <source>Unable to unlock the database.</source>
         <translation>לא ניתן לבטל את נעילת מסד הנתונים.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="766"/>
+        <location filename="../client/desktop/settings_tab.cc" line="762"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>לא ניתן להפעיל את ביטול הנעילה האוטומטי.</translation>
     </message>
@@ -8101,73 +8102,73 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/settings_util.cc" line="314"/>
+        <location filename="../host/settings_util.cc" line="310"/>
         <source>The configuration was successfully imported.</source>
         <translation>התצורה יובאה בהצלחה.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="363"/>
+        <location filename="../host/settings_util.cc" line="359"/>
         <source>The configuration was successfully exported.</source>
         <translation>התצורה יוצאה בהצלחה.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="373"/>
+        <location filename="../host/settings_util.cc" line="369"/>
         <source>Warning</source>
         <translation>אזהרה</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="280"/>
+        <location filename="../host/settings_util.cc" line="276"/>
         <source>Unable to open the source file.</source>
         <translation>לא ניתן לפתוח את קובץ המקור.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="292"/>
+        <location filename="../host/settings_util.cc" line="288"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>לא ניתן לקרוא את קובץ המקור: הקובץ פגום או בתבנית לא מוכרת.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="309"/>
+        <location filename="../host/settings_util.cc" line="305"/>
         <source>Unable to write the secure database.</source>
         <translation>לא ניתן לכתוב את מסד הנתונים המאובטח.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="329"/>
+        <location filename="../host/settings_util.cc" line="325"/>
         <source>Unable to read the secure database.</source>
         <translation>לא ניתן לקרוא את מסד הנתונים המאובטח.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="350"/>
+        <location filename="../host/settings_util.cc" line="346"/>
         <source>Unable to open the target file.</source>
         <translation>לא ניתן לפתוח את קובץ היעד.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="358"/>
+        <location filename="../host/settings_util.cc" line="354"/>
         <source>Unable to write the target file.</source>
         <translation>לא ניתן לכתוב את קובץ היעד.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="374"/>
+        <location filename="../host/settings_util.cc" line="370"/>
         <source>Continue</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="386"/>
+        <location filename="../host/settings_util.cc" line="382"/>
         <source>Error</source>
         <translation>שגיאה</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="397"/>
+        <location filename="../host/settings_util.cc" line="393"/>
         <source>Aspia</source>
         <translation>Aspia</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="271"/>
+        <location filename="../host/settings_util.cc" line="267"/>
         <source>Source settings file does not exist.</source>
         <translation>קובץ הגדרות המקור אינו קיים.</translation>
     </message>
     <message>
-        <location filename="../host/settings_util.cc" line="374"/>
-        <location filename="../host/settings_util.cc" line="376"/>
+        <location filename="../host/settings_util.cc" line="370"/>
+        <location filename="../host/settings_util.cc" line="372"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>ההגדרות הקיימות יוחלפו. להמשיך?</translation>
     </message>
@@ -8175,206 +8176,207 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="166"/>
+        <location filename="../client/android/settings_widget.cc" line="173"/>
         <location filename="../host/android/settings_widget.cc" line="203"/>
         <source>Update</source>
         <translation>עדכון</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="189"/>
+        <location filename="../client/android/settings_widget.cc" line="202"/>
         <source>Credentials</source>
         <translation>פרטי כניסה</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="197"/>
+        <location filename="../client/android/settings_widget.cc" line="210"/>
         <location filename="../host/android/settings_widget.cc" line="170"/>
         <source>About</source>
         <translation>אודות</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../client/android/settings_widget.cc" line="289"/>
         <location filename="../host/android/settings_widget.cc" line="262"/>
         <source>Interface</source>
         <translation>ממשק</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="264"/>
+        <location filename="../client/android/settings_widget.cc" line="292"/>
         <location filename="../host/android/settings_widget.cc" line="267"/>
         <source>Theme</source>
         <translation>ערכת נושא</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="277"/>
+        <location filename="../client/android/settings_widget.cc" line="305"/>
         <source>Display name when connected</source>
         <translation>שם תצוגה בעת חיבור</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="289"/>
+        <location filename="../client/android/settings_widget.cc" line="317"/>
         <location filename="../host/android/settings_widget.cc" line="283"/>
         <source>Security</source>
         <translation>אבטחה</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="291"/>
+        <location filename="../client/android/settings_widget.cc" line="219"/>
+        <location filename="../client/android/settings_widget.cc" line="319"/>
         <source>Change Master Password</source>
         <translation>שינוי סיסמה ראשית</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="303"/>
+        <location filename="../client/android/settings_widget.cc" line="327"/>
         <source>Unlock with biometrics</source>
         <translation>בטל נעילה באמצעות ביומטריה</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="328"/>
+        <location filename="../client/android/settings_widget.cc" line="352"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>הגדר טביעת אצבע בהגדרות המערכת כדי להשתמש באפשרות זו.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="330"/>
+        <location filename="../client/android/settings_widget.cc" line="354"/>
         <source>Biometrics are not available on this device.</source>
         <translation>זיהוי ביומטרי אינו זמין במכשיר זה.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="341"/>
+        <location filename="../client/android/settings_widget.cc" line="365"/>
         <source>UDP Connections</source>
         <translation>חיבורי UDP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="355"/>
+        <location filename="../client/android/settings_widget.cc" line="379"/>
         <source>Allow direct connections</source>
         <translation>אפשר חיבורים ישירים</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="356"/>
+        <location filename="../client/android/settings_widget.cc" line="380"/>
         <source>Allow UDP Hole Punching</source>
         <translation>אפשר UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="357"/>
+        <location filename="../client/android/settings_widget.cc" line="381"/>
         <source>Allow PCP protocol</source>
         <translation>אפשר פרוטוקול PCP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="358"/>
+        <location filename="../client/android/settings_widget.cc" line="382"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>אפשר פרוטוקול NAT-PMP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="359"/>
+        <location filename="../client/android/settings_widget.cc" line="383"/>
         <source>Allow UPnP protocol</source>
         <translation>אפשר פרוטוקול UPnP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="365"/>
+        <location filename="../client/android/settings_widget.cc" line="389"/>
         <source>Remote Desktop</source>
         <translation>שולחן עבודה מרוחק</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="367"/>
+        <location filename="../client/android/settings_widget.cc" line="391"/>
         <source>Enable audio</source>
         <translation>הפעל שמע</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="372"/>
+        <location filename="../client/android/settings_widget.cc" line="396"/>
         <source>Enable clipboard</source>
         <translation>הפעל לוח</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="377"/>
+        <location filename="../client/android/settings_widget.cc" line="401"/>
         <source>Show shape of remote cursor</source>
         <translation>הצג את צורת הסמן המרוחק</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="383"/>
+        <location filename="../client/android/settings_widget.cc" line="407"/>
         <source>Show position of remote cursor</source>
         <translation>הצג את מיקום הסמן המרוחק</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="389"/>
+        <location filename="../client/android/settings_widget.cc" line="413"/>
         <source>Disable desktop effects</source>
         <translation>השבת אפקטים של שולחן העבודה</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="395"/>
+        <location filename="../client/android/settings_widget.cc" line="419"/>
         <source>Disable desktop wallpaper</source>
         <translation>השבת טפט שולחן העבודה</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../client/android/settings_widget.cc" line="425"/>
         <source>Lock computer at disconnect</source>
         <translation>נעל את המחשב בעת ניתוק</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="407"/>
+        <location filename="../client/android/settings_widget.cc" line="431"/>
         <source>Block remote input</source>
         <translation>חסום קלט מרחוק</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="418"/>
+        <location filename="../client/android/settings_widget.cc" line="442"/>
         <location filename="../host/android/settings_widget.cc" line="439"/>
         <source>Updates</source>
         <translation>עדכונים</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="422"/>
+        <location filename="../client/android/settings_widget.cc" line="446"/>
         <source>Check for updates on startup</source>
         <translation>בדוק עדכונים בעת ההפעלה</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="429"/>
+        <location filename="../client/android/settings_widget.cc" line="453"/>
         <location filename="../host/android/settings_widget.cc" line="442"/>
         <source>Update channel</source>
         <translation>ערוץ עדכונים</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="430"/>
+        <location filename="../client/android/settings_widget.cc" line="454"/>
         <location filename="../host/android/settings_widget.cc" line="443"/>
         <source>Stable</source>
         <translation>יציב</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="431"/>
+        <location filename="../client/android/settings_widget.cc" line="455"/>
         <location filename="../host/android/settings_widget.cc" line="444"/>
         <source>Beta</source>
         <translation>בטא</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="432"/>
+        <location filename="../client/android/settings_widget.cc" line="456"/>
         <location filename="../host/android/settings_widget.cc" line="445"/>
         <source>Alpha</source>
         <translation>אלפא</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="443"/>
+        <location filename="../client/android/settings_widget.cc" line="467"/>
         <location filename="../host/android/settings_widget.cc" line="459"/>
         <source>Update server</source>
         <translation>שרת עדכונים</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="448"/>
+        <location filename="../client/android/settings_widget.cc" line="472"/>
         <location filename="../host/android/settings_widget.cc" line="464"/>
         <source>Public key</source>
         <translation>מפתח ציבורי</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="454"/>
+        <location filename="../client/android/settings_widget.cc" line="478"/>
         <location filename="../host/android/settings_widget.cc" line="470"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>אם שרת העדכונים לא צוין, נעשה שימוש בשרת ברירת המחדל. אם המפתח הציבורי לא צוין, נעשה שימוש במפתח המובנה.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="508"/>
+        <location filename="../client/android/settings_widget.cc" line="532"/>
         <location filename="../host/android/settings_widget.cc" line="524"/>
         <source>Check for updates</source>
         <translation>בדוק עדכונים</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="532"/>
+        <location filename="../client/android/settings_widget.cc" line="556"/>
         <source>Enable biometric unlock</source>
         <translation>הפעל שחרור נעילה ביומטרי</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="533"/>
+        <location filename="../client/android/settings_widget.cc" line="557"/>
         <source>Cancel</source>
         <translation>ביטול</translation>
     </message>
@@ -8646,7 +8648,7 @@ Credentials imported: %5</source>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="174"/>
+        <location filename="../client/android/statistics_dialog.cc" line="173"/>
         <source>Statistics</source>
         <translation>סטטיסטיקה</translation>
     </message>
@@ -8661,7 +8663,7 @@ Credentials imported: %5</source>
         <translation>ערך</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="207"/>
+        <location filename="../client/android/statistics_dialog.cc" line="206"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
