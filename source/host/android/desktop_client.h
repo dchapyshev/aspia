@@ -21,6 +21,8 @@
 
 #include <QSize>
 
+#include <unordered_set>
+
 #include "host/client.h"
 
 namespace proto::clipboard {
@@ -48,6 +50,7 @@ public:
     bool isOpusSupported() const { return opus_supported_; }
     bool isAudioEnabled() const { return audio_enabled_; }
     const QSize& preferredSize() const { return preferred_size_; }
+    void releaseKeyboardKeys();
 
     // Forward shared session data (encoded once by the DesktopAgent) to this client's channel.
     void onVideoData(const QByteArray& buffer, bool is_key_frame);
@@ -76,6 +79,7 @@ private:
     void handleVideoControl(const QByteArray& buffer);
     void handleScreenControl(const QByteArray& buffer);
     void handleInput(const QByteArray& buffer);
+    void handleKeyEvent(const proto::input::KeyEvent& event);
     void handleClipboard(const QByteArray& buffer);
     void sendCapabilities();
 
@@ -94,6 +98,8 @@ private:
     bool is_paused_ = false;
 
     QSize preferred_size_;
+
+    std::unordered_set<quint32> pressed_keys_;
 
     Q_DISABLE_COPY_MOVE(DesktopClient)
 };

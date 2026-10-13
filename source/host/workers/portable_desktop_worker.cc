@@ -136,6 +136,7 @@ void PortableDesktopWorker::onClientFinished(quint32 client_id)
 
     LOG(INFO) << "Client finished:" << client_id;
 
+    client->releaseKeyboardKeys();
     client->disconnect();
     client->deleteLater();
 

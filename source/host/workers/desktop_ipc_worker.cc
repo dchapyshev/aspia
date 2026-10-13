@@ -307,6 +307,7 @@ void DesktopIpcWorker::onClientFinished()
     DesktopAgentClient* client = dynamic_cast<DesktopAgentClient*>(sender());
     CHECK(client);
 
+    client->releaseKeyboardKeys();
     client->disconnect();
     client->deleteLater();
     clients_.removeOne(client);

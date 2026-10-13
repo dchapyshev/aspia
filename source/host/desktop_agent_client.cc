@@ -57,6 +57,21 @@ DesktopAgentClient::~DesktopAgentClient()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopAgentClient::releaseKeyboardKeys()
+{
+    proto::input::KeyEvent event;
+    event.set_flags(lock_flags_);
+
+    for (quint32 usb_keycode : pressed_keys_)
+    {
+        event.set_usb_keycode(usb_keycode);
+        emit sig_injectKeyEvent(event);
+    }
+
+    pressed_keys_.clear();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onVideoData(const QByteArray& buffer, bool is_key_frame)
 {
     if (!is_video_paused_)
@@ -165,7 +180,7 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
         else if (message->has_touch())
             emit sig_injectTouchEvent(message->touch());
         else if (message->has_key())
-            emit sig_injectKeyEvent(message->key());
+            readKeyEvent(message->key());
         else if (message->has_text())
             emit sig_injectTextEvent(message->text());
     }
@@ -242,6 +257,18 @@ void DesktopAgentClient::sendSessionMessage(quint8 net_channel_id, const QByteAr
 {
     quint32 channel_id = makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, net_channel_id);
     emit sig_sendMessage(channel_id, buffer, reliable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgentClient::readKeyEvent(const proto::input::KeyEvent& event)
+{
+    if (event.flags() & proto::input::KeyEvent::PRESSED)
+        pressed_keys_.insert(event.usb_keycode());
+    else
+        pressed_keys_.erase(event.usb_keycode());
+
+    lock_flags_ = event.flags() & (proto::input::KeyEvent::CAPSLOCK | proto::input::KeyEvent::NUMLOCK);
+    emit sig_injectKeyEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

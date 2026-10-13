@@ -50,6 +50,20 @@ DesktopClient::~DesktopClient()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopClient::releaseKeyboardKeys()
+{
+    proto::input::KeyEvent event;
+
+    for (quint32 usb_keycode : pressed_keys_)
+    {
+        event.set_usb_keycode(usb_keycode);
+        emit sig_injectKeyEvent(event);
+    }
+
+    pressed_keys_.clear();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopClient::onVideoData(const QByteArray& buffer, bool is_key_frame)
 {
     if (!is_paused_)
@@ -238,15 +252,26 @@ void DesktopClient::handleInput(const QByteArray& buffer)
         return;
     }
 
-    // The shared injector lives in the agent, so the event is only forwarded here.
+    // The shared injector lives in the agent, so the event is forwarded there.
     if (message.has_mouse())
         emit sig_injectMouseEvent(message.mouse());
     else if (message.has_touch())
         emit sig_injectTouchEvent(message.touch());
     else if (message.has_key())
-        emit sig_injectKeyEvent(message.key());
+        handleKeyEvent(message.key());
     else if (message.has_text())
         emit sig_injectTextEvent(message.text());
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::handleKeyEvent(const proto::input::KeyEvent& event)
+{
+    if (event.flags() & proto::input::KeyEvent::PRESSED)
+        pressed_keys_.insert(event.usb_keycode());
+    else
+        pressed_keys_.erase(event.usb_keycode());
+
+    emit sig_injectKeyEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
