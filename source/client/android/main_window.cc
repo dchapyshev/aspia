@@ -53,6 +53,7 @@
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
 #include "common/android/bottom_sheet.h"
+#include "common/android/keyboard_inset.h"
 #include "common/android/menu.h"
 #include "common/android/message_dialog.h"
 #include "proto/peer.h"
@@ -192,6 +193,9 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(stack_root_);
+
+    KeyboardInset* keyboard_inset = new KeyboardInset(this, shell_);
+    connect(keyboard_inset, &KeyboardInset::sig_activeChanged, this, &AndroidMainWindow::onKeyboardActiveChanged);
 
     connect(nav_bar_, &BottomNavigationBar::sig_currentChanged,
             this, &AndroidMainWindow::onSectionChanged);
@@ -361,6 +365,12 @@ void AndroidMainWindow::onSectionChanged(int index)
         default:
             break;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onKeyboardActiveChanged(bool active)
+{
+    nav_bar_->setVisible(!active);
 }
 
 //--------------------------------------------------------------------------------------------------

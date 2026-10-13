@@ -30,7 +30,6 @@ class BottomNavigationBar;
 class ConnectionWidget;
 class PermissionsWidget;
 class QDialog;
-class QScrollArea;
 class QStackedWidget;
 
 // Top-level application window for the Android host: a top app bar, a content area switched by the
@@ -48,9 +47,6 @@ signals:
     void sig_permissionsChanged(bool granted);
 
 protected:
-    // QWidget implementation.
-    void resizeEvent(QResizeEvent* event) final;
-
     // QObject implementation.
     bool eventFilter(QObject* watched, QEvent* event) final;
 
@@ -59,12 +55,7 @@ private slots:
     void onSettingsTitleChanged(const QString& title, bool back_visible);
     void onSettingsActionsChanged();
     void onBackClicked();
-
-    // Lifts the content above the on-screen keyboard by the amount the keyboard overlaps the window.
-    // Android's adjustResize is unreliable here (a key press on the on-screen keyboard can restore the
-    // full window height with the keyboard still up), so the keyboard rectangle reported by Qt is the
-    // source of truth. The bottom navigation is hidden while the keyboard is up.
-    void onUpdateKeyboardInset();
+    void onKeyboardActiveChanged(bool active);
 
     // Forwarded from the host server (queued from the I/O thread) to the connection screen.
     void onCredentialsChanged(const QString& host_id, const QString& password);
@@ -72,11 +63,9 @@ private slots:
     void onConnectedClientsChanged(const QList<ServerWorker::ClientInfo>& clients);
 
 private:
-    void scrollFocusIntoView();
     // Shows the permissions screen in place of the app while a permission is missing.
     void updatePermissions();
     QDialog* visibleDialog() const;
-    QScrollArea* focusedScrollArea() const;
     QString sectionTitle(int index) const;
 
     AppBar* app_bar_ = nullptr;
@@ -86,9 +75,6 @@ private:
     PermissionsWidget* permissions_ = nullptr;
 
     QPointer<ServerWorker> server_;
-
-    // Cached bottom inset applied for the on-screen keyboard; -1 forces the first update to apply.
-    int keyboard_inset_ = -1;
 
     // Set once the settings tab has been unlocked with the protection password (if any); the prompt is
     // then not shown again for the rest of the session.

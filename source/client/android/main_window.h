@@ -58,6 +58,7 @@ protected:
 
 private slots:
     void onSectionChanged(int index);
+    void onKeyboardActiveChanged(bool active);
     void onRouterActionsChanged();
     void onLocalActionsChanged();
     void onLocalTitleChanged(const QString& title, bool back_visible);

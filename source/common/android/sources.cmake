@@ -43,6 +43,8 @@ collect_sources(SOURCE_COMMON_ANDROID
     floating_action_button.h
     icon_button.cc
     icon_button.h
+    keyboard_inset.cc
+    keyboard_inset.h
     label.cc
     label.h
     line_edit.cc
