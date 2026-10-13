@@ -32,6 +32,7 @@ class QStackedWidget;
 class AboutWidget;
 class UpdateWidget;
 class CredentialsWidget;
+class MasterPasswordWidget;
 class IconButton;
 class ScrollArea;
 
@@ -69,13 +70,16 @@ signals:
 private slots:
     void onCredentialsTitleChanged(const QString& title);
     void onCredentialsActionsChanged();
+    void onMasterPasswordChanged();
 
 private:
     void showCredentials();
     void showAbout();
+    void showMasterPassword();
     bool isCredentialsPage() const;
     bool isAboutPage() const;
     bool isUpdatePage() const;
+    bool isMasterPasswordPage() const;
 
     void buildSettings();
     void addSectionHeader(QVBoxLayout* layout, const QString& text);
@@ -96,6 +100,7 @@ private:
     CredentialsWidget* credentials_page_;
     AboutWidget* about_page_;
     UpdateWidget* update_page_;
+    MasterPasswordWidget* master_password_page_;
     IconButton* button_credentials_;
     IconButton* button_about_;
 

@@ -34,14 +34,12 @@
 //--------------------------------------------------------------------------------------------------
 MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
     : Dialog(parent),
-      edit_current_(nullptr),
       edit_password_(new LineEdit(this)),
       edit_confirm_(nullptr),
       label_error_(new Label(QString(), Label::Role::CAPTION, this)),
       mode_(mode)
 {
     const bool create = (mode_ == Mode::CREATE);
-    const bool change = (mode_ == Mode::CHANGE);
 
     setBlurBehind(true);
 
@@ -56,14 +54,9 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
             setTitle(tr("Unlock"));
             setText(tr("Enter the master password."));
             break;
-
-        case Mode::CHANGE:
-            setTitle(tr("Change Master Password"));
-            setText(tr("Enter your current password and choose a new one."));
-            break;
     }
 
-    edit_password_->setLabel(change ? tr("New Password") : tr("Password"));
+    edit_password_->setLabel(tr("Password"));
     edit_password_->setEchoMode(QLineEdit::Password);
 
     // A fixed hex keeps the error color readable on both light and dark cards and survives the
@@ -74,18 +67,9 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
 
     QVBoxLayout* content = contentLayout();
     content->addWidget(label_error_);
-
-    if (change)
-    {
-        edit_current_ = new LineEdit(this);
-        edit_current_->setLabel(tr("Current Password"));
-        edit_current_->setEchoMode(QLineEdit::Password);
-        content->addWidget(edit_current_);
-    }
-
     content->addWidget(edit_password_);
 
-    if (create || change)
+    if (create)
     {
         edit_confirm_ = new LineEdit(this);
         edit_confirm_->setLabel(tr("Confirm Password"));
@@ -94,7 +78,7 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
     }
 
     Button* cancel = addButton(tr("Cancel"), Button::Role::TEXT);
-    Button* accept = addButton(change ? tr("Change") : tr("OK"), Button::Role::FILLED);
+    Button* accept = addButton(tr("OK"), Button::Role::FILLED);
 
     connect(cancel, &Button::clicked, this, &MasterPasswordDialog::reject);
     connect(accept, &Button::clicked, this, &MasterPasswordDialog::onAccept);
@@ -112,7 +96,7 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
     {
         // Typing can start right away. With the biometric prompt the focus stays away so the
         // keyboard does not pop under the system sheet.
-        (change ? edit_current_ : edit_password_)->setFocus();
+        edit_password_->setFocus();
     }
 }
 
@@ -144,7 +128,7 @@ void MasterPasswordDialog::onAccept()
         return;
     }
 
-    // CREATE and CHANGE both set a new password and require a matching confirmation.
+    // CREATE sets a new password and requires a matching confirmation.
     if (edit_password_->text().length() < MasterPassword::kMinPasswordLength)
     {
         showError(tr("The password can not be shorter than %n characters.",
@@ -161,36 +145,10 @@ void MasterPasswordDialog::onAccept()
         return;
     }
 
-    if (mode_ == Mode::CREATE)
+    if (MasterPassword::setNew(SecureString(edit_password_->text())) != MasterPassword::Result::SUCCESS)
     {
-        if (MasterPassword::setNew(SecureString(edit_password_->text())) != MasterPassword::Result::SUCCESS)
-        {
-            showError(tr("Unable to set master password."));
-            return;
-        }
-    }
-    else
-    {
-        switch (MasterPassword::change(SecureString(edit_current_->text()),
-                                       SecureString(edit_password_->text())))
-        {
-            case MasterPassword::Result::SUCCESS:
-                break;
-
-            case MasterPassword::Result::INVALID_PASSWORD:
-                showError(tr("Invalid current password."));
-                edit_current_->setFocus();
-                edit_current_->selectAll();
-                return;
-
-            case MasterPassword::Result::UNREADABLE_RECORD:
-                showError(tr("Some records of the database are damaged. Fix or delete them and try again."));
-                return;
-
-            default:
-                showError(tr("Unable to change the password."));
-                return;
-        }
+        showError(tr("Unable to set master password."));
+        return;
     }
 
     // The master key changed, so any biometric enrollment bound to the old key no longer works.

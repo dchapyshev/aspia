@@ -57,6 +57,8 @@ collect_sources(SOURCE_CLIENT_ANDROID
     main_window.h
     master_password_dialog.cc
     master_password_dialog.h
+    master_password_widget.cc
+    master_password_widget.h
     password_dialog.cc
     password_dialog.h
     remote_widget.cc

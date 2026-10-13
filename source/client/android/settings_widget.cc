@@ -35,6 +35,7 @@
 #include "client/android/biometric_gate.h"
 #include "client/android/credentials_widget.h"
 #include "client/android/master_password_dialog.h"
+#include "client/android/master_password_widget.h"
 #include "common/android/about_widget.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
@@ -79,6 +80,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
       credentials_page_(new CredentialsWidget()),
       about_page_(new AboutWidget()),
       update_page_(new UpdateWidget(kClientUpdatePackage)),
+      master_password_page_(new MasterPasswordWidget()),
       button_credentials_(new IconButton(":/img/material/key.svg", this)),
       button_about_(new IconButton(":/img/material/info.svg", this)),
       desktop_config_(Database::instance().desktopConfig()),
@@ -95,6 +97,8 @@ SettingsWidget::SettingsWidget(QWidget* parent)
             this, &SettingsWidget::onCredentialsTitleChanged);
     connect(credentials_page_, &CredentialsWidget::sig_appBarActionsChanged,
             this, &SettingsWidget::onCredentialsActionsChanged);
+    connect(master_password_page_, &MasterPasswordWidget::sig_finished,
+            this, &SettingsWidget::onMasterPasswordChanged);
 
     buildSettings();
 
@@ -102,6 +106,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     stack_->addWidget(credentials_page_);
     stack_->addWidget(about_page_);
     stack_->addWidget(update_page_);
+    stack_->addWidget(master_password_page_);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -118,7 +123,7 @@ QList<QWidget*> SettingsWidget::appBarActions() const
         return credentials_page_->appBarActions();
     if (isAboutPage())
         return about_page_->appBarActions();
-    if (isUpdatePage())
+    if (isUpdatePage() || isMasterPasswordPage())
         return {};
     return { button_credentials_, button_about_ };
 }
@@ -134,9 +139,10 @@ void SettingsWidget::goBack()
         return;
     }
 
-    if (!isCredentialsPage() && !isAboutPage() && !isUpdatePage())
+    if (!isCredentialsPage() && !isAboutPage() && !isUpdatePage() && !isMasterPasswordPage())
         return;
 
+    master_password_page_->clear();
     stack_->setCurrentWidget(settings_page_);
     emit sig_titleChanged(QString(), false);
     emit sig_appBarActionsChanged();
@@ -148,6 +154,7 @@ void SettingsWidget::resetToSettings()
     if (!credentials_page_->isListPage())
         credentials_page_->goBack();
 
+    master_password_page_->clear();
     stack_->setCurrentWidget(settings_page_);
 }
 
@@ -182,6 +189,12 @@ void SettingsWidget::onCredentialsActionsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void SettingsWidget::onMasterPasswordChanged()
+{
+    goBack();
+}
+
+//--------------------------------------------------------------------------------------------------
 void SettingsWidget::showCredentials()
 {
     credentials_page_->reload();
@@ -195,6 +208,15 @@ void SettingsWidget::showAbout()
 {
     stack_->setCurrentWidget(about_page_);
     emit sig_titleChanged(tr("About"), true);
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::showMasterPassword()
+{
+    master_password_page_->prepare();
+    stack_->setCurrentWidget(master_password_page_);
+    emit sig_titleChanged(tr("Change Master Password"), true);
     emit sig_appBarActionsChanged();
 }
 
@@ -214,6 +236,12 @@ bool SettingsWidget::isAboutPage() const
 bool SettingsWidget::isUpdatePage() const
 {
     return stack_->currentWidget() == update_page_;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SettingsWidget::isMasterPasswordPage() const
+{
+    return stack_->currentWidget() == master_password_page_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -289,11 +317,7 @@ void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
     addSectionHeader(layout, tr("Security"));
 
     Button* change_password = new Button(tr("Change Master Password"), Button::Role::FILLED);
-    connect(change_password, &Button::clicked, this, [this]()
-    {
-        AutoQPointer<MasterPasswordDialog> dialog(new MasterPasswordDialog(MasterPasswordDialog::Mode::CHANGE, this));
-        dialog->exec();
-    });
+    connect(change_password, &Button::clicked, this, [this]() { showMasterPassword(); });
     layout->addWidget(change_password);
 
     const BiometricGate::Status biometric_status = BiometricGate::status();

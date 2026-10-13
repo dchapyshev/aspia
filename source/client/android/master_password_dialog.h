@@ -35,8 +35,7 @@ public:
     enum class Mode
     {
         CREATE,
-        UNLOCK,
-        CHANGE
+        UNLOCK
     };
 
     explicit MasterPasswordDialog(Mode mode, QWidget* parent = nullptr);
@@ -52,7 +51,6 @@ private:
     // Discards a broken or invalidated biometric enrollment and reports the reason to the user.
     void dropBiometric(const QString& message);
 
-    LineEdit* edit_current_ = nullptr;
     LineEdit* edit_password_ = nullptr;
     LineEdit* edit_confirm_ = nullptr;
     Label* label_error_ = nullptr;
