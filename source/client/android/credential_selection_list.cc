@@ -39,13 +39,20 @@ class Row final : public QWidget
 {
 public:
     Row(const CredentialSelectionList::Item& item, Switch* control)
-        : control_(control)
+        : name_(new Label(item.name, Label::Role::BODY)),
+          details_(new Label(item.details, Label::Role::CAPTION)),
+          name_text_(item.name),
+          details_text_(item.details),
+          control_(control)
     {
+        name_->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
+        details_->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
+
         QVBoxLayout* text_layout = new QVBoxLayout();
         text_layout->setContentsMargins(0, 0, 0, 0);
         text_layout->setSpacing(0);
-        text_layout->addWidget(new Label(item.name, Label::Role::BODY));
-        text_layout->addWidget(new Label(item.details, Label::Role::CAPTION));
+        text_layout->addWidget(name_);
+        text_layout->addWidget(details_);
 
         QHBoxLayout* layout = new QHBoxLayout(this);
         layout->setContentsMargins(kHorizontalMargin, kVerticalMargin, kHorizontalMargin, kVerticalMargin);
@@ -68,7 +75,23 @@ protected:
             control_->toggle();
     }
 
+    void resizeEvent(QResizeEvent* event) final
+    {
+        QWidget::resizeEvent(event);
+        elide(name_, name_text_);
+        elide(details_, details_text_);
+    }
+
 private:
+    static void elide(QLabel* label, const QString& text)
+    {
+        label->setText(label->fontMetrics().elidedText(text, Qt::ElideRight, label->width()));
+    }
+
+    Label* name_;
+    Label* details_;
+    const QString name_text_;
+    const QString details_text_;
     Switch* control_;
 };
 
