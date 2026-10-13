@@ -119,7 +119,7 @@ private slots:
     void onUdpErrorOccurred();
     void onRelayConnectionReady();
     void onRelayConnectionError(std::optional<TcpChannel::ErrorCode> error_code);
-    void onAttemptConnected(quint32 request_id);
+    void onAttemptConnected(quint32 request_id, quint8 channel_id, const QByteArray& buffer);
     void onAttemptError(quint32 request_id);
 
 private:

@@ -383,14 +383,19 @@ void NetworkWorker::onRelayConnectionError(std::optional<TcpChannel::ErrorCode> 
 }
 
 //--------------------------------------------------------------------------------------------------
-void NetworkWorker::onAttemptConnected(quint32 request_id)
+void NetworkWorker::onAttemptConnected(quint32 request_id, quint8 channel_id, const QByteArray& buffer)
 {
     if (udp_channel_)
         return;
 
     UdpAttempt* attempt = findAttempt(request_id);
-    if (attempt)
-        selectAttempt(attempt);
+    if (!attempt)
+        return;
+
+    selectAttempt(attempt);
+
+    if (udp_channel_)
+        onUdpMessageReceived(channel_id, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------

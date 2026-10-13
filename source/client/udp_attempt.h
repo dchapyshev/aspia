@@ -39,8 +39,8 @@ class StunPeer;
 class UdpChannel;
 
 // One client-side UDP connection attempt answering a single host request. Several run concurrently;
-// the host probes the channel it picked, and the attempt that receives the probe wins. The base owns
-// the channel and the session crypto; each subclass implements one transport.
+// the host keeps sending on the one channel it picked, so the attempt that receives a message after
+// its probe wins. The base owns the channel and the session crypto; each subclass implements one transport.
 class UdpAttempt : public QObject
 {
     Q_OBJECT
@@ -63,7 +63,7 @@ public:
     virtual void start() = 0;
 
 signals:
-    void sig_connected(quint32 request_id);
+    void sig_connected(quint32 request_id, quint8 channel_id, const QByteArray& buffer);
     void sig_failed(quint32 request_id);
     void sig_message(const QByteArray& buffer);
 
@@ -87,10 +87,16 @@ protected:
     KeyPair key_pair_;
     QByteArray iv_;
     ScopedQPointer<UdpChannel> channel_;
-    bool connected_ = false;
+
+    enum class State
+    {
+        WAITING_PROBE,
+        PROBED,
+        CONNECTED
+    };
+    State state_ = State::WAITING_PROBE;
 
 private:
-    // Detects the host's bandwidth probe, acknowledges it, and reports the win via sig_connected.
     void onChannelMessage(quint8 channel_id, const QByteArray& buffer);
 
     Q_DISABLE_COPY_MOVE(UdpAttempt)

@@ -140,10 +140,16 @@ UdpChannel* UdpAttempt::createChannel()
 //--------------------------------------------------------------------------------------------------
 void UdpAttempt::onChannelMessage(quint8 channel_id, const QByteArray& buffer)
 {
-    if (connected_)
+    if (state_ == State::CONNECTED)
         return;
 
-    // The winner is decided by the host's probe; nothing else is expected before that.
+    if (state_ == State::PROBED)
+    {
+        state_ = State::CONNECTED;
+        emit sig_connected(request_id_, channel_id, buffer);
+        return;
+    }
+
     if (channel_id != proto::peer::CHANNEL_ID_CONTROL)
     {
         CLOG(ERROR) << "Unexpected message from channel" << channel_id;
@@ -163,15 +169,11 @@ void UdpAttempt::onChannelMessage(quint8 channel_id, const QByteArray& buffer)
         return;
     }
 
-    // The host probes the channel it selected: this attempt wins. Acknowledge the probe and report
-    // success; the owner then takes the channel. This ack only confirms the round-trip - no arrival
-    // measurement is made here, real bandwidth comes from the probe trains on the live channel.
     proto::peer::ClientToHost ack;
     ack.mutable_bandwidth_probe_ack()->set_train_id(message.bandwidth_probe().train_id());
     channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(ack), true);
 
-    connected_ = true;
-    emit sig_connected(request_id_);
+    state_ = State::PROBED;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -200,7 +202,7 @@ void UdpAttempt::startTimeout()
     // owner before the deadline, which cancels this timer.
     QTimer::singleShot(kAttemptTimeout, this, [this]()
     {
-        if (connected_)
+        if (state_ == State::CONNECTED)
             return;
 
         CLOG(WARNING) << "UDP attempt" << request_id_ << "timed out";
