@@ -32,6 +32,8 @@ constexpr int kPillWidth = 64;
 constexpr int kPillHeight = 32;
 constexpr int kIconTextSpacing = 4;
 constexpr double kLabelFontScale = 0.85;
+constexpr double kMinLabelFontScale = 0.7;
+constexpr int kLabelPadding = 2;
 constexpr double kInactiveOpacity = 0.6;
 constexpr double kPillOpacity = 0.14;
 
@@ -99,9 +101,21 @@ void BottomNavigationBar::paintEvent(QPaintEvent* /* event */)
     painter.setPen(palette().color(QPalette::Mid));
     painter.drawLine(0, 0, width(), 0);
 
-    const QFont label_font = Controls::scaledFont(font(), kLabelFontScale);
-    const QFontMetricsF label_metrics(label_font);
     const double cell_width = static_cast<double>(width()) / items_.size();
+
+    QFont label_font = Controls::scaledFont(font(), kLabelFontScale);
+    double widest = 0;
+    for (const Item& item : std::as_const(items_))
+        widest = qMax(widest, QFontMetricsF(label_font).horizontalAdvance(item.text));
+
+    const double available = cell_width - 2 * kLabelPadding;
+    if (widest > available)
+    {
+        const double scale = qMax(kMinLabelFontScale, kLabelFontScale * available / widest);
+        label_font = Controls::scaledFont(font(), scale);
+    }
+
+    const QFontMetricsF label_metrics(label_font);
 
     for (int i = 0; i < items_.size(); ++i)
     {
@@ -137,7 +151,8 @@ void BottomNavigationBar::paintEvent(QPaintEvent* /* event */)
                                label_metrics.height());
         painter.setFont(label_font);
         painter.setPen(color);
-        painter.drawText(text_rect, Qt::AlignHCenter | Qt::AlignVCenter, item.text);
+        painter.drawText(text_rect, Qt::AlignHCenter | Qt::AlignVCenter,
+                         label_metrics.elidedText(item.text, Qt::ElideRight, cell.width()));
     }
 }
 
