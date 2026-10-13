@@ -72,7 +72,7 @@ private slots:
     void onKeyFrameRequested();
     void onPreferredSizeChanged();
     void onScreenListRequested();
-    void onClientFinished();
+    void onClientFinished(DesktopClient* client);
     void onCaptureScreen();
 
     void onInjectKeyEvent(const proto::input::KeyEvent& event);

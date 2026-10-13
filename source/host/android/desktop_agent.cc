@@ -86,7 +86,12 @@ void DesktopAgent::addClient(DesktopClient* client)
     connect(client, &DesktopClient::sig_injectTextEvent, this, &DesktopAgent::onInjectTextEvent);
     connect(client, &DesktopClient::sig_injectMouseEvent, this, &DesktopAgent::onInjectMouseEvent);
     connect(client, &DesktopClient::sig_injectTouchEvent, this, &DesktopAgent::onInjectTouchEvent);
-    connect(client, &Client::sig_finished, this, &DesktopAgent::onClientFinished);
+
+    connect(client, &Client::sig_finished, this, [this, client = QPointer<DesktopClient>(client)]()
+    {
+        if (client)
+            onClientFinished(client);
+    }, Qt::QueuedConnection);
 
     connect(client, &DesktopClient::sig_injectClipboardEvent, this, &DesktopAgent::onInjectClipboardEvent);
 }
@@ -194,12 +199,8 @@ void DesktopAgent::onScreenListRequested()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgent::onClientFinished()
+void DesktopAgent::onClientFinished(DesktopClient* client)
 {
-    DesktopClient* client = qobject_cast<DesktopClient*>(sender());
-    if (!client)
-        return;
-
     clients_.removeOne(client);
     client->releaseKeyboardKeys();
     client->deleteLater();
