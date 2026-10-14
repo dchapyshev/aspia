@@ -28,6 +28,7 @@
 #include <optional>
 
 #include "base/logging.h"
+#include "base/version_constants.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
@@ -576,24 +577,33 @@ void ServerWorker::stopWaitingAfterShare()
 //--------------------------------------------------------------------------------------------------
 void ServerWorker::startClient(TcpChannel* tcp_channel, const QString& stun_host, quint16 stun_port)
 {
+    ScopedQPointer<TcpChannel> channel(tcp_channel);
+
     // Direct connections do not go through the router, so they are turned away here.
     if (!permissions_granted_)
     {
         LOG(INFO) << "Connection rejected, the permissions are not granted";
-        tcp_channel->deleteLater();
         return;
     }
 
-    tcp_channel->setParent(this);
-    tcp_channel->setReadBufferSize(kReadBufferSize);
-    tcp_channel->setWriteBufferSize(kWriteBufferSize);
+    const QVersionNumber& host_version = kCurrentVersion;
+    if (host_version > channel->peerVersion())
+    {
+        LOG(ERROR) << "Version mismatch (host:" << host_version << "client:"
+                   << channel->peerVersion() << ")";
+        return;
+    }
 
-    const auto session_type = static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
+    channel->setParent(this);
+    channel->setReadBufferSize(kReadBufferSize);
+    channel->setWriteBufferSize(kWriteBufferSize);
+
+    const auto session_type = static_cast<proto::peer::SessionType>(channel->peerSessionType());
 
     // Desktop clients are owned and tracked by the shared agent; file transfer clients are kept here.
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP)
     {
-        DesktopClient* desktop_client = new DesktopClient(tcp_channel, this);
+        DesktopClient* desktop_client = new DesktopClient(channel.release(), this);
         desktop_client->setFeature(Client::FEATURE_UDP, true);
         desktop_client->setFeature(Client::FEATURE_BANDWIDTH, true);
 
@@ -609,11 +619,10 @@ void ServerWorker::startClient(TcpChannel* tcp_channel, const QString& stun_host
     if (session_type != proto::peer::SESSION_TYPE_FILE_TRANSFER)
     {
         LOG(ERROR) << "Unsupported session type:" << session_type;
-        tcp_channel->deleteLater();
         return;
     }
 
-    FileClient* file_client = new FileClient(tcp_channel, this);
+    FileClient* file_client = new FileClient(channel.release(), this);
     file_client->setFeature(Client::FEATURE_UDP, true);
 
     connect(file_client, &Client::sig_started, this, &ServerWorker::onClientStarted);
