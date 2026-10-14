@@ -142,7 +142,8 @@ ManagementTab::ManagementTab(QWidget* parent)
     local_group_widget_ = new LocalGroupWidget(this);
     router_group_widget_ = new RouterGroupWidget(this);
     router_hosts_widget_ = new RouterHostsWidget(this);
-    router_temp_hosts_widget_ = new RouterTempHostsWidget(this);
+    router_temp_hosts_widget_ = new RouterTempHostsWidget(/* portable */ false, this);
+    router_qs_hosts_widget_ = new RouterTempHostsWidget(/* portable */ true, this);
     router_users_widget_ = new RouterUsersWidget(this);
     router_clients_widget_ = new RouterClientsWidget(this);
     router_relays_widget_ = new RouterRelaysWidget(this);
@@ -153,6 +154,7 @@ ManagementTab::ManagementTab(QWidget* parent)
     ui->content_stack->addWidget(router_group_widget_);
     ui->content_stack->addWidget(router_hosts_widget_);
     ui->content_stack->addWidget(router_temp_hosts_widget_);
+    ui->content_stack->addWidget(router_qs_hosts_widget_);
     ui->content_stack->addWidget(router_users_widget_);
     ui->content_stack->addWidget(router_clients_widget_);
     ui->content_stack->addWidget(router_relays_widget_);
@@ -185,6 +187,13 @@ ManagementTab::ManagementTab(QWidget* parent)
     connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_contextMenu,
             this, &ManagementTab::onTempHostContextMenu);
     connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_activated,
+            this, &ManagementTab::onTempHostConnect);
+
+    connect(router_qs_hosts_widget_, &RouterTempHostsWidget::sig_currentChanged,
+            this, &ManagementTab::updateActionsState);
+    connect(router_qs_hosts_widget_, &RouterTempHostsWidget::sig_contextMenu,
+            this, &ManagementTab::onTempHostContextMenu);
+    connect(router_qs_hosts_widget_, &RouterTempHostsWidget::sig_activated,
             this, &ManagementTab::onTempHostConnect);
 
     connect(router_users_widget_, &RouterUsersWidget::sig_currentChanged,
@@ -344,6 +353,7 @@ QByteArray ManagementTab::saveState()
         stream << router_group_widget_->saveState();
         stream << router_hosts_widget_->saveState();
         stream << router_temp_hosts_widget_->saveState();
+        stream << router_qs_hosts_widget_->saveState();
         stream << router_users_widget_->saveState();
         stream << router_clients_widget_->saveState();
         stream << router_relays_widget_->saveState();
@@ -366,6 +376,7 @@ void ManagementTab::restoreState(const QByteArray& state)
     QByteArray router_group_state;
     QByteArray router_hosts_state;
     QByteArray router_temp_hosts_state;
+    QByteArray router_qs_hosts_state;
     QByteArray router_users_state;
     QByteArray router_clients_state;
     QByteArray router_relays_state;
@@ -378,6 +389,7 @@ void ManagementTab::restoreState(const QByteArray& state)
     stream >> router_group_state;
     stream >> router_hosts_state;
     stream >> router_temp_hosts_state;
+    stream >> router_qs_hosts_state;
     stream >> router_users_state;
     stream >> router_clients_state;
     stream >> router_relays_state;
@@ -397,6 +409,9 @@ void ManagementTab::restoreState(const QByteArray& state)
 
     if (!router_temp_hosts_state.isEmpty())
         router_temp_hosts_widget_->restoreState(router_temp_hosts_state);
+
+    if (!router_qs_hosts_state.isEmpty())
+        router_qs_hosts_widget_->restoreState(router_qs_hosts_state);
 
     if (!router_users_state.isEmpty())
         router_users_widget_->restoreState(router_users_state);
@@ -590,6 +605,18 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
         }
         break;
 
+        case SidebarItem::ROUTER_QS_HOSTS:
+        {
+            SidebarItem* sidebar_item = ui->sidebar->currentItem();
+            if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_QS_HOSTS)
+                break;
+
+            auto* qs_hosts_item = static_cast<SidebarRouterQsHosts*>(sidebar_item);
+            switchContent(router_qs_hosts_widget_);
+            router_qs_hosts_widget_->showRouter(qs_hosts_item->routerId());
+        }
+        break;
+
     }
 
     if (current_content_ != search_widget_)
@@ -780,11 +807,11 @@ void ManagementTab::onConnectAction(QAction* action)
         if (!validateHostForConnect(host))
             return;
     }
-    else if (current_content_ == router_temp_hosts_widget_)
+    else if (RouterTempHostsWidget* temp_hosts_widget = currentTempHostsWidget())
     {
-        if (!router_temp_hosts_widget_->hasSelectedHost())
+        if (!temp_hosts_widget->hasSelectedHost())
             return;
-        host = router_temp_hosts_widget_->selectedHostConfig();
+        host = temp_hosts_widget->selectedHostConfig();
         if (!validateHostForConnect(host))
             return;
     }
@@ -836,7 +863,11 @@ void ManagementTab::onRouterHostConnect()
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onTempHostConnect()
 {
-    const QList<RouterTempHost> hosts = router_temp_hosts_widget_->selectedHosts();
+    RouterTempHostsWidget* temp_hosts_widget = currentTempHostsWidget();
+    if (!temp_hosts_widget)
+        return;
+
+    const QList<RouterTempHost> hosts = temp_hosts_widget->selectedHosts();
     if (hosts.size() != 1)
         return;
 
@@ -851,7 +882,7 @@ void ManagementTab::onTempHostConnect()
         return;
     }
 
-    HostConfig host = router_temp_hosts_widget_->selectedHostConfig();
+    HostConfig host = temp_hosts_widget->selectedHostConfig();
     if (!validateHostForConnect(host))
         return;
     emit sig_connectRequested(host, session_type);
@@ -1204,8 +1235,16 @@ void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onTempHostContextMenu(const QPoint& pos)
 {
-    const QList<RouterTempHost> hosts = router_temp_hosts_widget_->selectedHosts();
+    RouterTempHostsWidget* temp_hosts_widget = currentTempHostsWidget();
+    if (!temp_hosts_widget)
+        return;
+
+    const QList<RouterTempHost> hosts = temp_hosts_widget->selectedHosts();
     if (hosts.isEmpty())
+        return;
+
+    const bool can_approve = temp_hosts_widget == router_temp_hosts_widget_;
+    if (!can_approve && hosts.size() != 1)
         return;
 
     AutoQPointer<QMenu> menu(new QMenu(this));
@@ -1214,13 +1253,15 @@ void ManagementTab::onTempHostContextMenu(const QPoint& pos)
         menu->addAction(action->icon(), action->text(), action, &QAction::triggered);
     };
 
-    menu->addAction(ui->action_host_approve);
+    if (can_approve)
+        menu->addAction(ui->action_host_approve);
 
     if (hosts.size() == 1)
     {
         const bool is_portable = hosts.front().portable;
 
-        menu->addSeparator();
+        if (can_approve)
+            menu->addSeparator();
         addProxy(ui->action_desktop_connect);
         if (!is_portable)
             addProxy(ui->action_terminal_connect);
@@ -2069,7 +2110,8 @@ void ManagementTab::updateActionsState()
             sidebar_item->itemType() == SidebarItem::ROUTER_GROUP ||
             sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE ||
             sidebar_item->itemType() == SidebarItem::ROUTER_HOSTS ||
-            sidebar_item->itemType() == SidebarItem::ROUTER_TEMP_HOSTS;
+            sidebar_item->itemType() == SidebarItem::ROUTER_TEMP_HOSTS ||
+            sidebar_item->itemType() == SidebarItem::ROUTER_QS_HOSTS;
     }
 
     ui->action_desktop->setVisible(show_session_types);
@@ -2088,6 +2130,17 @@ void ManagementTab::updateActionsState()
 
     ui->action_reload->setVisible(current_content_ && current_content_->canReload());
     ui->action_save->setVisible(current_content_ && current_content_->canSave());
+}
+
+//--------------------------------------------------------------------------------------------------
+RouterTempHostsWidget* ManagementTab::currentTempHostsWidget() const
+{
+    if (current_content_ == router_temp_hosts_widget_)
+        return router_temp_hosts_widget_;
+    else if (current_content_ == router_qs_hosts_widget_)
+        return router_qs_hosts_widget_;
+
+    return nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------

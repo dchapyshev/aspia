@@ -34,7 +34,7 @@ class RouterTempHostsWidget final : public ContentWidget
     Q_OBJECT
 
 public:
-    explicit RouterTempHostsWidget(QWidget* parent = nullptr);
+    explicit RouterTempHostsWidget(bool portable, QWidget* parent = nullptr);
     ~RouterTempHostsWidget() final;
 
     void showRouter(qint64 router_id);
@@ -70,6 +70,7 @@ private:
     void fetchTempHosts();
     void updatePagination();
 
+    const bool portable_;
     QTreeView* tree_ = nullptr;
     TempHostListModel* model_ = nullptr;
     IconTextButton* button_prev_ = nullptr;

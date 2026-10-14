@@ -40,7 +40,8 @@ public:
         ROUTER_HOSTS,
         ROUTER_USERS,
         ROUTER_CLIENTS,
-        ROUTER_RELAYS
+        ROUTER_RELAYS,
+        ROUTER_QS_HOSTS
     };
 
     Type itemType() const { return type_; }
@@ -198,6 +199,20 @@ class SidebarRouterTempHosts final : public SidebarItem
 
 public:
     SidebarRouterTempHosts(qint64 router_id, QTreeWidgetItem* parent);
+
+    qint64 routerId() const { return router_id_; }
+
+private:
+    const qint64 router_id_;
+};
+
+//--------------------------------------------------------------------------------------------------
+class SidebarRouterQsHosts final : public SidebarItem
+{
+    Q_DECLARE_TR_FUNCTIONS(SidebarRouterQsHosts)
+
+public:
+    SidebarRouterQsHosts(qint64 router_id, QTreeWidgetItem* parent);
 
     qint64 routerId() const { return router_id_; }
 

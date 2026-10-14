@@ -1019,6 +1019,7 @@ void Sidebar::onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* pr
         case SidebarItem::ROUTER_USERS:
         case SidebarItem::ROUTER_CLIENTS:
         case SidebarItem::ROUTER_RELAYS:
+        case SidebarItem::ROUTER_QS_HOSTS:
             // Nothing
             break;
 
@@ -1135,8 +1136,13 @@ void Sidebar::buildRouterSections(qint64 router_id)
         move_to_top(new SidebarRouterUsers(router_id, router));
         move_to_top(new SidebarRouterRelays(router_id, router));
         move_to_top(new SidebarRouterClients(router_id, router));
+        move_to_top(new SidebarRouterQsHosts(router_id, router));
         move_to_top(new SidebarRouterHosts(router_id, router));
         move_to_top(new SidebarRouterTempHosts(router_id, router));
+    }
+    else
+    {
+        move_to_top(new SidebarRouterQsHosts(router_id, router));
     }
 
     router->setExpanded(true);
@@ -1156,7 +1162,7 @@ void Sidebar::removeRouterSections(qint64 router_id)
         const SidebarItem::Type type = child->itemType();
         if (type == SidebarItem::ROUTER_HOSTS || type == SidebarItem::ROUTER_USERS ||
             type == SidebarItem::ROUTER_CLIENTS || type == SidebarItem::ROUTER_RELAYS ||
-            type == SidebarItem::ROUTER_TEMP_HOSTS)
+            type == SidebarItem::ROUTER_TEMP_HOSTS || type == SidebarItem::ROUTER_QS_HOSTS)
         {
             delete router->takeChild(i);
         }

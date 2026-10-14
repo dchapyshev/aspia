@@ -24,8 +24,9 @@
 
 #include "client/router_types.h"
 
-// The hosts that connected to a router but were not approved by an administrator yet. They live
-// only as long as their session does, so nothing about them is stored anywhere.
+// The hosts connected to a router with a temporary id. These are the hosts not approved by an
+// administrator yet or the Quick Support ones. They live only as long as their session does, so
+// nothing about them is stored anywhere.
 class TempHostListModel final : public QAbstractTableModel
 {
     Q_OBJECT

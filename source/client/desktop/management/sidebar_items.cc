@@ -225,3 +225,12 @@ SidebarRouterTempHosts::SidebarRouterTempHosts(qint64 router_id, QTreeWidgetItem
     setText(0, tr("Unapproved Hosts"));
     setIcon(0, QIcon(":/img/computer.svg"));
 }
+
+//--------------------------------------------------------------------------------------------------
+SidebarRouterQsHosts::SidebarRouterQsHosts(qint64 router_id, QTreeWidgetItem* parent)
+    : SidebarItem(ROUTER_QS_HOSTS, /*group_id=*/-1, parent),
+      router_id_(router_id)
+{
+    setText(0, tr("Quick Support"));
+    setIcon(0, QIcon(":/img/computer-qs.svg"));
+}

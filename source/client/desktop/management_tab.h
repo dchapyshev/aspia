@@ -119,6 +119,7 @@ private:
     void showNextTwoFactorPrompt();
     void switchContent(ContentWidget* new_widget);
     void updateActionsState();
+    RouterTempHostsWidget* currentTempHostsWidget() const;
     proto::peer::SessionType defaultSessionType() const;
     void addCopyLinkMenu(QMenu& menu, const LocalHostConfig& host);
     void addCopyLinkMenu(QMenu& menu, qint64 router_id, HostId host_id);
@@ -143,6 +144,7 @@ private:
     RouterGroupWidget* router_group_widget_ = nullptr;
     RouterHostsWidget* router_hosts_widget_ = nullptr;
     RouterTempHostsWidget* router_temp_hosts_widget_ = nullptr;
+    RouterTempHostsWidget* router_qs_hosts_widget_ = nullptr;
     RouterUsersWidget* router_users_widget_ = nullptr;
     RouterClientsWidget* router_clients_widget_ = nullptr;
     RouterRelaysWidget* router_relays_widget_ = nullptr;

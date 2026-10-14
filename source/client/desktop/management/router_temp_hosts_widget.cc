@@ -46,8 +46,9 @@ const qint64 kMaxTempHostCount = 500000;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RouterTempHostsWidget::RouterTempHostsWidget(QWidget* parent)
-    : ContentWidget(Type::ROUTER_TEMP_HOSTS, parent),
+RouterTempHostsWidget::RouterTempHostsWidget(bool portable, QWidget* parent)
+    : ContentWidget(portable ? Type::ROUTER_QS_HOSTS : Type::ROUTER_TEMP_HOSTS, parent),
+      portable_(portable),
       tree_(new QTreeView(this)),
       model_(new TempHostListModel(this))
 {
@@ -398,7 +399,7 @@ void RouterTempHostsWidget::fetchTempHosts()
     if (!session)
         return;
 
-    session->listTempHosts(/* portable */ false, page_.offset(), page_.pageSize(),
+    session->listTempHosts(portable_, page_.offset(), page_.pageSize(),
                            { this, &RouterTempHostsWidget::onTempHostListReceived });
 }
 
