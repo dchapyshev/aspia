@@ -48,12 +48,12 @@ constexpr int kPageSearch = 2;
 constexpr int kPageTempHosts = 3;
 constexpr int kPageCredentials = 4;
 
-// Item data roles. A router row is marked by a workspace id of -1, the unapproved-hosts row by -2.
+// Item data roles. A router row is marked by a workspace id of -1, the Quick Support row by -2.
 constexpr int kRouterIdRole = Qt::UserRole;
 constexpr int kWorkspaceIdRole = Qt::UserRole + 1;
 constexpr int kGroupIdRole = Qt::UserRole + 2;
 constexpr qint64 kRouterMarker = -1;
-constexpr qint64 kTempHostsMarker = -2;
+constexpr qint64 kQsHostsMarker = -2;
 
 // Item data role for the host rows on the host page.
 constexpr int kHostIdRole = Qt::UserRole;
@@ -599,7 +599,7 @@ void RemoteWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
         return;
     }
 
-    if (workspace_id == kTempHostsMarker)
+    if (workspace_id == kQsHostsMarker)
     {
         host_router_id_ = item->data(0, kRouterIdRole).toLongLong();
 
@@ -691,11 +691,11 @@ void RemoteWidget::fetchRouter(qint64 router_id, RouterSession::CachePolicy poli
         // rebuild for a corner case that self-heals within one refresh cycle.
         qDeleteAll(router_item->takeChildren());
 
-        // The unapproved-hosts entry sits above the workspaces; a tap opens the temporary host list.
-        QTreeWidgetItem* temp_item = new QTreeWidgetItem(router_item, { tr("Unapproved Hosts") });
-        temp_item->setIcon(0, GuiApplication::svgIcon(":/img/computer.svg"));
-        temp_item->setData(0, kRouterIdRole, router_id);
-        temp_item->setData(0, kWorkspaceIdRole, kTempHostsMarker);
+        // The Quick Support entry sits above the workspaces. A tap opens the list of its hosts.
+        QTreeWidgetItem* qs_item = new QTreeWidgetItem(router_item, { tr("Quick Support") });
+        qs_item->setIcon(0, GuiApplication::svgIcon(":/img/computer-qs.svg"));
+        qs_item->setData(0, kRouterIdRole, router_id);
+        qs_item->setData(0, kWorkspaceIdRole, kQsHostsMarker);
 
         const QIcon icon = GuiApplication::svgIcon(":/img/workspace.svg");
         RouterSession* session = RouterController::session(router_id);
@@ -784,7 +784,7 @@ void RemoteWidget::fetchTempHosts(bool append)
     const qint64 router_id = host_router_id_;
     const qint64 offset = append ? temp_hosts_.size() : 0;
 
-    session->listTempHosts(/* portable */ false, offset, kTempHostPageSize,
+    session->listTempHosts(/* portable */ true, offset, kTempHostPageSize,
         { this, [this, router_id, append](const RouterTempHostList& list)
     {
         // Ignore the result if the selection changed while the request was in flight.
