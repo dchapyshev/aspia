@@ -193,13 +193,14 @@ message TempHostListRequest
     int64 request_id = 1;
     int64 offset     = 2; // Index of the first item, zero based.
     int64 count      = 3; // Items to return. A zero count is refused, as is one over the cap.
+    bool portable    = 4;
 }
 
 message TempHostList
 {
     int64 request_id       = 1;
-    string error_code      = 2; // "ok" | "invalid_request"
-    int64 total_count      = 3; // Total temporary hosts. Unset on an error reply.
+    string error_code      = 2; // "ok" | "invalid_request" | "access_denied"
+    int64 total_count      = 3; // Total temporary hosts of the requested kind. Unset on an error reply.
     repeated TempHost host = 4;
 }
 

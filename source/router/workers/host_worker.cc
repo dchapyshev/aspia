@@ -59,12 +59,12 @@ HostWorker::~HostWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostWorker::requestTempHostList(bool with_address, qint64 offset, qint64 count, QObject* context,
+void HostWorker::requestTempHostList(bool portable, qint64 offset, qint64 count, QObject* context,
                                      TempHostListCallback callback)
 {
-    request(context, [this, with_address, offset, count]()
+    request(context, [this, portable, offset, count]()
     {
-        return doTempHostList(with_address, offset, count);
+        return doTempHostList(portable, offset, count);
     }, std::move(callback));
 }
 
@@ -316,7 +316,7 @@ void HostWorker::publishHostState(HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::router::TempHostList HostWorker::doTempHostList(bool with_address, qint64 offset, qint64 count) const
+proto::router::TempHostList HostWorker::doTempHostList(bool portable, qint64 offset, qint64 count) const
 {
     proto::router::TempHostList temp_host_list;
 
@@ -330,7 +330,7 @@ proto::router::TempHostList HostWorker::doTempHostList(bool with_address, qint64
     std::vector<Host*> temp_hosts;
     for (Host* host : std::as_const(hosts_))
     {
-        if (isTempHostId(host->hostId()))
+        if (isTempHostId(host->hostId()) && host->isPortable() == portable)
             temp_hosts.emplace_back(host);
     }
 
@@ -357,12 +357,10 @@ proto::router::TempHostList HostWorker::doTempHostList(bool with_address, qint64
         temp_host->set_computer_name(host->computerName());
         temp_host->set_version(host->version().toString().toStdString());
         temp_host->set_os_name(host->osName());
+        temp_host->set_address(host->address());
         temp_host->set_portable(host->isPortable());
         temp_host->set_connect_time(
             wall_now - DurationCast<Seconds>(monotonic_now - host->startTime()).count());
-
-        if (with_address)
-            temp_host->set_address(host->address());
     }
 
     return temp_host_list;

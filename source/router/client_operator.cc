@@ -465,13 +465,25 @@ void ClientOperator::readHostSearchRequest(const proto::router::HostSearchReques
 //--------------------------------------------------------------------------------------------------
 void ClientOperator::readTempHostListRequest(const proto::router::TempHostListRequest& request)
 {
-    HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
-    CHECK(host_worker);
-
     const bool is_admin = sessionType() == proto::router::SESSION_TYPE_ADMIN;
     const auto request_id = request.request_id();
 
-    host_worker->requestTempHostList(is_admin, request.offset(), request.count(), this,
+    if (!request.portable() && !is_admin)
+    {
+        CLOG(ERROR) << "User" << userName() << "is not allowed to list unapproved hosts";
+
+        proto::router::RouterToClient message;
+        proto::router::TempHostList* temp_host_list = message.mutable_temp_host_list();
+        temp_host_list->set_request_id(request_id);
+        temp_host_list->set_error_code(proto::router::kErrorAccessDenied);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
+    HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
+    CHECK(host_worker);
+
+    host_worker->requestTempHostList(request.portable(), request.offset(), request.count(), this,
         [this, request_id](proto::router::TempHostList&& temp_host_list)
     {
         temp_host_list.set_request_id(request_id);

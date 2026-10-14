@@ -326,15 +326,15 @@ protected:
     }
 
     // Asks the worker for a page of the temporary host list from another worker thread, the way
-    // an operator does.
-    proto::router::TempHostList tempHostList(qint64 offset, qint64 count)
+    // an operator does. |portable| picks the Quick Support hosts instead of the unapproved ones.
+    proto::router::TempHostList tempHostList(qint64 offset, qint64 count, bool portable = false)
     {
         proto::router::TempHostList list;
         std::atomic<bool> done { false };
 
         peer_worker_->invoke([&]()
         {
-            host_worker_->requestTempHostList(true, offset, count, peer_worker_,
+            host_worker_->requestTempHostList(portable, offset, count, peer_worker_,
                                               [&](proto::router::TempHostList&& result)
             {
                 list = std::move(result);
@@ -573,6 +573,31 @@ TEST_F(HostWorkerTest, TempHostListWithoutAPageIsRefused)
     EXPECT_EQ(oversized.error_code(), proto::router::kErrorInvalidRequest);
 }
 
+//--------------------------------------------------------------------------------------------------
+// The Quick Support hosts and the unapproved hosts are two separate lists: each one names and counts
+// only the hosts of its own kind, so the pages of one are not thinned out by the other.
+TEST_F(HostWorkerTest, QuickSupportHostsAreListedApart)
+{
+    Peer* portable_host = connectTempHost(true);
+    ASSERT_TRUE(portable_host);
+    Peer* unapproved_host = connectTempHost();
+    ASSERT_TRUE(unapproved_host);
+
+    const proto::router::TempHostList unapproved = tempHostList(0, 2);
+    ASSERT_EQ(unapproved.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(unapproved.total_count(), 1);
+    ASSERT_EQ(unapproved.host_size(), 1);
+    EXPECT_EQ(unapproved.host(0).temp_id(), unapproved_host->assigned_host_id.load());
+    EXPECT_FALSE(unapproved.host(0).portable());
+
+    const proto::router::TempHostList quick_support = tempHostList(0, 2, true);
+    ASSERT_EQ(quick_support.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(quick_support.total_count(), 1);
+    ASSERT_EQ(quick_support.host_size(), 1);
+    EXPECT_EQ(quick_support.host(0).temp_id(), portable_host->assigned_host_id.load());
+    EXPECT_TRUE(quick_support.host(0).portable());
+}
+
 
 //--------------------------------------------------------------------------------------------------
 // Approval turns a temporary host into a permanent one, so a permanent id has nothing to approve.
@@ -587,18 +612,11 @@ TEST_F(HostWorkerTest, PermanentHostIsNotApproved)
 
 //--------------------------------------------------------------------------------------------------
 // A portable host forgets its key when it quits, so an approved record of it would never be used.
-// The list of temporary hosts tells the operator so, and the approval is refused.
+// The approval is refused.
 TEST_F(HostWorkerTest, PortableHostIsNotApproved)
 {
     Peer* portable_host = connectTempHost(true);
     ASSERT_TRUE(portable_host);
-    ASSERT_TRUE(connectTempHost());
-
-    const proto::router::TempHostList list = tempHostList(0, 2);
-    ASSERT_EQ(list.host_size(), 2);
-
-    for (const proto::router::TempHost& host : list.host())
-        EXPECT_EQ(host.portable(), host.temp_id() == portable_host->assigned_host_id.load());
 
     HostWorkerTestPeer peer(host_worker_);
     EXPECT_EQ(peer.approveHost(portable_host->assigned_host_id.load()),

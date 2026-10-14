@@ -150,6 +150,16 @@ protected:
         return serialize(message);
     }
 
+    static QByteArray tempHostListRequest(qint64 request_id, bool portable)
+    {
+        proto::router::ClientToRouter message;
+        proto::router::TempHostListRequest* request = message.mutable_temp_host_list_request();
+        request->set_request_id(request_id);
+        request->set_count(proto::router::kMaxTempHostPageSize);
+        request->set_portable(portable);
+        return serialize(message);
+    }
+
     static QByteArray userListRequest(qint64 request_id)
     {
         proto::router::AdminToRouter message;
@@ -994,6 +1004,43 @@ TEST_F(ClientOperatorTest, HostStatusTellsAMissingHostFromAnOfflineOne)
         ASSERT_TRUE(message->has_host_status());
         EXPECT_EQ(message->host_status().request_id(), 12);
         EXPECT_EQ(message->host_status().error_code(), proto::router::kErrorNotFound);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// Only an administrator approves hosts, so the list of the unapproved ones is not given to anyone
+// else. The refusal is an answer, not silence: the client waits for its request to complete.
+TEST_F(ClientOperatorTest, UnapprovedHostsAreListedToAdministratorsOnly)
+{
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                               [this](ClientOperator& client, LoopbackChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        channel->receive(proto::router::CHANNEL_ID_CLIENT, tempHostListRequest(21, false));
+
+        const std::optional<proto::router::RouterToClient> message =
+            lastMessage<proto::router::RouterToClient>(channel, proto::router::CHANNEL_ID_CLIENT);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_temp_host_list());
+        EXPECT_EQ(message->temp_host_list().request_id(), 21);
+        EXPECT_EQ(message->temp_host_list().error_code(), proto::router::kErrorAccessDenied);
+        EXPECT_EQ(message->temp_host_list().host_size(), 0);
+    });
+
+    withClient<ClientManager>(proto::router::SESSION_TYPE_MANAGER,
+                              [this](ClientManager& client, LoopbackChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        channel->receive(proto::router::CHANNEL_ID_CLIENT, tempHostListRequest(22, false));
+
+        const std::optional<proto::router::RouterToClient> message =
+            lastMessage<proto::router::RouterToClient>(channel, proto::router::CHANNEL_ID_CLIENT);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_temp_host_list());
+        EXPECT_EQ(message->temp_host_list().request_id(), 22);
+        EXPECT_EQ(message->temp_host_list().error_code(), proto::router::kErrorAccessDenied);
     });
 }
 
