@@ -114,7 +114,6 @@ void RouterManager::onSettingsChanged()
     {
         LOG(INFO) << "One-time password is disabled";
         password_expire_time_ = TimePoint::max();
-        one_time_sessions_ = 0;
         one_time_password_.clear();
         user_list_->setOneTimeUser(User());
     }

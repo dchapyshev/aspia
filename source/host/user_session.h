@@ -61,6 +61,7 @@ public:
 
     State state() const { return state_; }
     SessionId sessionId() const { return session_id_; }
+    quint32 oneTimeSessions() const { return one_time_sessions_; }
 
     void sendConnectEvent(quint32 client_id, proto::peer::SessionType session_type,
         const QString& computer_name, const QString& display_name);
@@ -118,6 +119,8 @@ private:
     // Bounded retry counter for waiting on the session's graphical environment; reset whenever a new
     // attach sequence begins (service start or an active-session change).
     int startup_attempts_ = 0;
+
+    quint32 one_time_sessions_ = 0;
 
     Parser<proto::user::UserToService> incoming_message_;
     Serializer<proto::user::ServiceToUser> outgoing_message_;

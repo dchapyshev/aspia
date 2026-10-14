@@ -592,8 +592,8 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
     }
     else if (message->has_one_time_sessions())
     {
-        quint32 sessions = message->one_time_sessions().sessions();
-        emit sig_changeOneTimeSessions(sessions);
+        one_time_sessions_ = message->one_time_sessions().sessions();
+        emit sig_changeOneTimeSessions(one_time_sessions_);
     }
     else if (message->has_confirmation_reply())
     {

@@ -807,6 +807,7 @@ void ServiceWorker::connectToRouter(const Location& location)
     connect(user_session_, &UserSession::sig_attached, router_manager_, &RouterManager::onUserSessionAttached);
 
     router_manager_->start();
+    router_manager_->onOneTimeSessionsChanged(user_session_->oneTimeSessions());
 }
 
 //--------------------------------------------------------------------------------------------------
