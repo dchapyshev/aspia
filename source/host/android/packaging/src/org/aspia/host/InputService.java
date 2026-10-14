@@ -37,8 +37,6 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
 
-import java.util.List;
-
 // Accessibility service backing InputInjectorAndroid. It is bound by the system once the user enables it
 // in the accessibility settings; the native side calls the static entry points to dispatch gestures and
 // global actions. Gestures must be dispatched from the service instance, so all calls are posted to the
@@ -82,79 +80,10 @@ public final class InputService extends AccessibilityService
         super.onDestroy();
     }
 
-    // Number of attempts and the delay between them while the consent dialog lays out.
-    private static final int CONSENT_CLICK_ATTEMPTS = 5;
-    private static final long CONSENT_CLICK_RETRY_MS = 200;
-
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event)
     {
-        // Only used to confirm the screen capture consent dialog when the user enabled auto-confirm;
-        // see confirmScreenShareConsent().
-        if (event.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED)
-            return;
-
-        CharSequence pkg = event.getPackageName();
-        if (pkg == null || !"com.android.systemui".contentEquals(pkg))
-            return;
-
-        if (MediaProjection.shouldAutoConfirm())
-            confirmScreenShareConsent(CONSENT_CLICK_ATTEMPTS);
-    }
-
-    // Confirms the system screen capture consent dialog on behalf of the user. Only called while this
-    // host is the one waiting for consent (MediaProjection.shouldAutoConfirm()), so no other
-    // application's capture dialog is ever confirmed. Retries a few times because the dialog content
-    // may still be laying out when the window event arrives.
-    private void confirmScreenShareConsent(int attempts_left)
-    {
-        if (!MediaProjection.shouldAutoConfirm())
-            return;
-
-        AccessibilityNodeInfo root = getRootInActiveWindow();
-        if (root != null && isScreenShareConsent(root))
-        {
-            List<AccessibilityNodeInfo> buttons = root.findAccessibilityNodeInfosByViewId("android:id/button1");
-            if (buttons != null)
-            {
-                for (AccessibilityNodeInfo button : buttons)
-                {
-                    if (button.isClickable() && button.isEnabled())
-                    {
-                        button.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                        return;
-                    }
-                }
-            }
-        }
-
-        if (attempts_left > 1)
-            sHandler.postDelayed(() -> confirmScreenShareConsent(attempts_left - 1), CONSENT_CLICK_RETRY_MS);
-    }
-
-    // Recognises the stock screen capture consent dialog whose positive button is android:id/button1.
-    // The layout differs by version: Android 14+ wraps it in a dedicated container
-    // (screen_share_permission_dialog), Android 12 gives it a custom title view (dialog_title), and
-    // Android 13 is a plain AlertDialog with no SystemUI-specific id, recognised only by its owning
-    // package. onAccessibilityEvent already gated this on a com.android.systemui window that appeared
-    // while this host waits for consent, so the active SystemUI window is that dialog. Vendor-customised
-    // dialogs are not handled; there the user confirms manually.
-    private static boolean isScreenShareConsent(AccessibilityNodeInfo root)
-    {
-        if (hasViewId(root, "com.android.systemui:id/screen_share_permission_dialog")
-            || hasViewId(root, "com.android.systemui:id/dialog_title"))
-        {
-            return true;
-        }
-
-        CharSequence pkg = root.getPackageName();
-        return pkg != null && "com.android.systemui".contentEquals(pkg);
-    }
-
-    private static boolean hasViewId(AccessibilityNodeInfo root, String view_id)
-    {
-        List<AccessibilityNodeInfo> nodes = root.findAccessibilityNodeInfosByViewId(view_id);
-        return nodes != null && !nodes.isEmpty();
+        // Nothing.
     }
 
     @Override

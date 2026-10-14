@@ -300,22 +300,6 @@ void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
     background_hint->setWordWrap(true);
     layout->addWidget(background_hint);
 
-    Switch* auto_confirm = new Switch(tr("Confirm screen capture automatically"));
-    auto_confirm->setChecked(SystemSettings().isCaptureAutoConfirmEnabled());
-    connect(auto_confirm, &QCheckBox::toggled, this, [](bool checked)
-    {
-        SystemSettings settings;
-        settings.setCaptureAutoConfirmEnabled(checked);
-        settings.sync();
-    });
-    layout->addWidget(auto_confirm);
-
-    Label* auto_confirm_hint = new Label(
-        tr("The screen capture request is confirmed automatically. It may not work on some devices."),
-        Label::Role::CAPTION);
-    auto_confirm_hint->setWordWrap(true);
-    layout->addWidget(auto_confirm_hint);
-
     Button* manage = new Button(tr("Manage users"), Button::Role::FILLED);
     connect(manage, &Button::clicked, this, &SettingsWidget::showUsers);
     layout->addWidget(manage);

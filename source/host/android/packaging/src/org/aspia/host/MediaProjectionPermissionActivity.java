@@ -38,8 +38,8 @@ public final class MediaProjectionPermissionActivity extends Activity
     {
         super.onCreate(savedInstanceState);
 
-        // Wake the screen and show over the keyguard, so the consent dialog renders (and can be
-        // auto-confirmed) even when the screen was off or the device is locked.
+        // Wake the screen and show over the keyguard, so the consent dialog renders even when the screen
+        // was off or the device is locked.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
         {
             setShowWhenLocked(true);
