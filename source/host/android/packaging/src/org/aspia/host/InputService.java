@@ -19,10 +19,12 @@
 package org.aspia.host;
 
 import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.AccessibilityServiceInfo;
 import android.accessibilityservice.GestureDescription;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.graphics.Path;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
 
@@ -121,6 +124,28 @@ public final class InputService extends AccessibilityService
         {
             ComponentName parsed = ComponentName.unflattenFromString(entry);
             if (parsed != null && parsed.equals(expected))
+                return true;
+        }
+
+        return false;
+    }
+
+    // True if the system has the service bound. After its process is killed the system marks an enabled
+    // service as crashed and does not bind it again until the user turns it off and on.
+    public static boolean isBound(Context context)
+    {
+        AccessibilityManager manager =
+            (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        if (manager == null)
+            return false;
+
+        ComponentName expected = new ComponentName(context, InputService.class);
+
+        for (AccessibilityServiceInfo info :
+             manager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK))
+        {
+            ServiceInfo service = info.getResolveInfo().serviceInfo;
+            if (expected.equals(new ComponentName(service.packageName, service.name)))
                 return true;
         }
 

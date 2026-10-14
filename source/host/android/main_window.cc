@@ -24,6 +24,7 @@
 #include <QJniObject>
 #include <QKeyEvent>
 #include <QStackedWidget>
+#include <QTimer>
 #include <QVariant>
 #include <QVBoxLayout>
 #include <QWindow>
@@ -134,6 +135,12 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
         if (state == Qt::ApplicationActive)
             updatePermissions();
     }, Qt::QueuedConnection);
+
+    // The system binds the accessibility service on its own a moment after the start of the app, and
+    // nothing reports that, so the permissions are also read again while their screen is shown.
+    permissions_timer_ = new QTimer(this);
+    permissions_timer_->setInterval(Seconds(1));
+    connect(permissions_timer_, &QTimer::timeout, this, &AndroidMainWindow::updatePermissions);
 
     updatePermissions();
 
@@ -327,6 +334,12 @@ void AndroidMainWindow::onConnectedClientsChanged(const QList<ServerWorker::Clie
 void AndroidMainWindow::updatePermissions()
 {
     const bool granted = permissions_->refresh();
+
+    if (granted)
+        permissions_timer_->stop();
+    else if (!permissions_timer_->isActive())
+        permissions_timer_->start();
+
     if (granted != permissions_granted_)
     {
         LOG(INFO) << "Permissions granted:" << granted;

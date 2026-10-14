@@ -31,6 +31,7 @@ class ConnectionWidget;
 class PermissionsWidget;
 class QDialog;
 class QStackedWidget;
+class QTimer;
 
 // Top-level application window for the Android host: a top app bar, a content area switched by the
 // bottom navigation bar between the Connection and Settings sections.
@@ -82,6 +83,7 @@ private:
 
     // The server starts without the permissions and learns when they are granted.
     bool permissions_granted_ = false;
+    QTimer* permissions_timer_ = nullptr;
 
     // The last press of the system Back that came to this window, see eventFilter().
     enum class BackPress { NONE, TAKEN };

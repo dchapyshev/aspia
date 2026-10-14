@@ -52,9 +52,11 @@ private:
         Permission permission = Permission::ACCESSIBILITY;
         Button* open_button = nullptr;
         Label* granted_label = nullptr;
+        Label* restart_label = nullptr;
     };
 
     static bool isGranted(Permission permission);
+    static bool isAccessibilityEnabled();
     static void openSettings(Permission permission);
 
     QList<Row> rows_;

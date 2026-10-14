@@ -118,6 +118,16 @@ PermissionsWidget::PermissionsWidget(QWidget* parent)
         card_row->addWidget(row.granted_label);
 
         card->contentLayout()->addLayout(card_row);
+
+        if (item.permission == Permission::ACCESSIBILITY)
+        {
+            row.restart_label = new Label(
+                tr("The service is turned on, but Android has stopped it. Turn it off and on again."),
+                Label::Role::CAPTION, card);
+            row.restart_label->setWordWrap(true);
+            row.restart_label->hide();
+            card->contentLayout()->addWidget(row.restart_label);
+        }
         layout->addWidget(card);
 
         rows_.append(row);
@@ -149,6 +159,9 @@ bool PermissionsWidget::refresh()
         row.open_button->setVisible(!granted);
         row.granted_label->setVisible(granted);
 
+        if (row.restart_label)
+            row.restart_label->setVisible(!granted && isAccessibilityEnabled());
+
         if (!granted)
             all_granted = false;
     }
@@ -168,8 +181,9 @@ bool PermissionsWidget::isGranted(Permission permission)
     switch (permission)
     {
         case Permission::ACCESSIBILITY:
+            // Enabled in the settings is not enough, the system may have stopped the service.
             return QJniObject::callStaticMethod<jboolean>(
-                kInputServiceClass, "isEnabled", "(Landroid/content/Context;)Z", context.object());
+                kInputServiceClass, "isBound", "(Landroid/content/Context;)Z", context.object());
 
         case Permission::OVERLAY:
             return QJniObject::callStaticMethod<jboolean>(
@@ -186,6 +200,18 @@ bool PermissionsWidget::isGranted(Permission permission)
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool PermissionsWidget::isAccessibilityEnabled()
+{
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (!context.isValid())
+        return false;
+
+    return QJniObject::callStaticMethod<jboolean>(
+        kInputServiceClass, "isEnabled", "(Landroid/content/Context;)Z", context.object());
 }
 
 //--------------------------------------------------------------------------------------------------
