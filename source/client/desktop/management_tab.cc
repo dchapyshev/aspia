@@ -2035,18 +2035,7 @@ void ManagementTab::updateActionsState()
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_TEMP_HOSTS)
     {
-        proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
-        RouterSession* session = RouterController::session(router_temp_hosts_widget_->routerId());
-        if (session)
-            session_type = session->config().sessionType();
-
-        // A portable host lives only while it is connected and cannot be approved.
-        const QList<RouterTempHost> selected_hosts = router_temp_hosts_widget_->selectedHosts();
-        const bool has_portable_host = std::any_of(selected_hosts.cbegin(), selected_hosts.cend(),
-            [](const RouterTempHost& host) { return host.portable; });
-
-        ui->action_host_approve->setVisible(!selected_hosts.isEmpty() && !has_portable_host &&
-                                            session_type == proto::router::SESSION_TYPE_ADMIN);
+        ui->action_host_approve->setVisible(!router_temp_hosts_widget_->selectedHosts().isEmpty());
     }
 
     // The address book is saved and restored as a whole, routers included, so its actions go with

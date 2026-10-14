@@ -26,7 +26,7 @@
 
 namespace {
 
-constexpr int kColumnCount = 7;
+constexpr int kColumnCount = 6;
 
 } // namespace
 
@@ -146,9 +146,6 @@ QVariant TempHostListModel::headerData(int section, Qt::Orientation orientation,
 
         case Column::CONNECT_TIME:
             return tr("Connect Time");
-
-        case Column::TYPE:
-            return tr("Type");
     }
 
     return QVariant();
@@ -220,9 +217,6 @@ QString TempHostListModel::textAt(const RouterTempHost& host, Column column) con
 
             return QLocale::system().toString(
                 QDateTime::fromSecsSinceEpoch(host.connect_time), QLocale::ShortFormat);
-
-        case Column::TYPE:
-            return host.portable ? tr("Quick Support") : tr("Installed");
     }
 
     return QString();

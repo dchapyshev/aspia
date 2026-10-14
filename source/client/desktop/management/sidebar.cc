@@ -1136,11 +1136,8 @@ void Sidebar::buildRouterSections(qint64 router_id)
         move_to_top(new SidebarRouterRelays(router_id, router));
         move_to_top(new SidebarRouterClients(router_id, router));
         move_to_top(new SidebarRouterHosts(router_id, router));
+        move_to_top(new SidebarRouterTempHosts(router_id, router));
     }
-
-    // The unapproved (temporary) hosts section is shown to every session type; it sits just above
-    // the hosts section.
-    move_to_top(new SidebarRouterTempHosts(router_id, router));
 
     router->setExpanded(true);
     selectPendingItem();

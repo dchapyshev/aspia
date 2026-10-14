@@ -38,8 +38,7 @@ public:
         OS,
         VERSION,
         ADDRESS,
-        CONNECT_TIME,
-        TYPE
+        CONNECT_TIME
     };
 
     explicit TempHostListModel(QObject* parent = nullptr);
