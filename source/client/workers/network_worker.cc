@@ -140,6 +140,7 @@ void NetworkWorker::onStop()
     clearAttempts();
 
     udp_ready_ = false;
+    held_udp_messages_.clear();
 
     if (relay_peer_)
     {
@@ -569,6 +570,7 @@ void NetworkWorker::connectionLost(TcpChannel::ErrorCode error_code)
     emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
 
     udp_ready_ = false;
+    held_udp_messages_.clear();
     if (udp_channel_)
     {
         udp_channel_->disconnect();
@@ -715,6 +717,8 @@ void NetworkWorker::addAndStart(UdpAttempt* attempt)
             tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, buffer);
     });
 
+    udp_switch_pending_ = (session_state_->hostVersion() >= kVersion_3_0_34);
+
     attempts_.emplace_back(attempt);
     attempt->start();
 }
@@ -779,6 +783,4 @@ void NetworkWorker::selectAttempt(UdpAttempt* attempt)
     clearAttempts();
     connect(udp_channel_, &UdpChannel::sig_messageReceived, this, &NetworkWorker::onUdpMessageReceived);
     connect(udp_channel_, &UdpChannel::sig_errorOccurred, this, &NetworkWorker::onUdpErrorOccurred);
-
-    udp_switch_pending_ = (session_state_->hostVersion() >= kVersion_3_0_34);
 }
