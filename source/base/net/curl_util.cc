@@ -202,6 +202,12 @@ bool ScopedCURL::setProxy(const ProxySettings& settings)
 
     curl_easy_setopt(curl_, CURLOPT_PROXY, url.toEncoded().constData());
 
+    if (settings.type == ProxySettings::Type::HTTPS && qEnvironmentVariableIsSet("ASPIA_NO_VERIFY_TLS_PEER"))
+    {
+        LOG(INFO) << "ASPIA_NO_VERIFY_TLS_PEER defined, the certificate of the proxy is not verified";
+        curl_easy_setopt(curl_, CURLOPT_PROXY_SSL_VERIFYPEER, 0L);
+    }
+
     if (!settings.user.isEmpty())
     {
         curl_easy_setopt(curl_, CURLOPT_PROXYAUTH, static_cast<long>(CURLAUTH_ANY));
