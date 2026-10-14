@@ -238,7 +238,7 @@ void RouterSession::listUserTokens(qint64 user_id,
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::addUser(const proto::router::User& user,
-                     RouterCallback<proto::router::UserResult> callback)
+                            RouterCallback<proto::router::UserResult> callback)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_user_request();
@@ -251,7 +251,7 @@ void RouterSession::addUser(const proto::router::User& user,
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::modifyUser(const proto::router::User& user,
-                        RouterCallback<proto::router::UserResult> callback)
+                               RouterCallback<proto::router::UserResult> callback)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_user_request();
@@ -288,7 +288,7 @@ void RouterSession::resetUserOtp(qint64 user_id, RouterCallback<proto::router::U
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::revokeUserTokens(qint64 user_id, const QList<qint64>& token_ids,
-                              RouterCallback<proto::router::UserTokenResult> callback)
+                                     RouterCallback<proto::router::UserTokenResult> callback)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_user_token_request();
@@ -315,7 +315,7 @@ void RouterSession::disconnectRelay(qint64 session_id, RouterCallback<proto::rou
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::disconnectClient(qint64 session_id,
-                              RouterCallback<proto::router::ClientResult> callback)
+                                     RouterCallback<proto::router::ClientResult> callback)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_client_request();
@@ -328,7 +328,7 @@ void RouterSession::disconnectClient(qint64 session_id,
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::disconnectPeer(qint64 relay_id, qint64 peer_id,
-                            RouterCallback<proto::router::PeerResult> callback)
+                                   RouterCallback<proto::router::PeerResult> callback)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_peer_request();
@@ -436,7 +436,7 @@ void RouterSession::editHost(const RouterHost& host, RouterCallback<proto::route
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::addWorkspace(const RouterWorkspace& workspace,
-                          RouterCallback<proto::router::WorkspaceResult> callback)
+                                 RouterCallback<proto::router::WorkspaceResult> callback)
 {
     proto::router::Workspace serialized;
     const std::string_view error_code = serializeWorkspace(workspace, &serialized);
@@ -459,7 +459,7 @@ void RouterSession::addWorkspace(const RouterWorkspace& workspace,
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::modifyWorkspace(const RouterWorkspace& workspace,
-                             RouterCallback<proto::router::WorkspaceResult> callback)
+                                    RouterCallback<proto::router::WorkspaceResult> callback)
 {
     proto::router::Workspace serialized;
     const std::string_view error_code = serializeWorkspace(workspace, &serialized);
@@ -482,7 +482,7 @@ void RouterSession::modifyWorkspace(const RouterWorkspace& workspace,
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::deleteWorkspace(qint64 entry_id,
-                             RouterCallback<proto::router::WorkspaceResult> callback)
+                                    RouterCallback<proto::router::WorkspaceResult> callback)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_workspace_request();
@@ -495,7 +495,7 @@ void RouterSession::deleteWorkspace(qint64 entry_id,
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::addGroup(qint64 workspace_id, const RouterGroup& group,
-                      RouterCallback<proto::router::GroupResult> callback)
+                             RouterCallback<proto::router::GroupResult> callback)
 {
     proto::router::Group serialized;
     const std::string_view error_code = serializeGroup(group, &serialized);
@@ -519,7 +519,7 @@ void RouterSession::addGroup(qint64 workspace_id, const RouterGroup& group,
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::modifyGroup(qint64 workspace_id, const RouterGroup& group,
-                         RouterCallback<proto::router::GroupResult> callback)
+                                RouterCallback<proto::router::GroupResult> callback)
 {
     proto::router::Group serialized;
     const std::string_view error_code = serializeGroup(group, &serialized);
@@ -543,7 +543,7 @@ void RouterSession::modifyGroup(qint64 workspace_id, const RouterGroup& group,
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::deleteGroup(qint64 workspace_id, qint64 entry_id,
-                         RouterCallback<proto::router::GroupResult> callback)
+                                RouterCallback<proto::router::GroupResult> callback)
 {
     proto::router::ManagerToRouter message;
     auto* request = message.mutable_group_request();
@@ -557,7 +557,7 @@ void RouterSession::deleteGroup(qint64 workspace_id, qint64 entry_id,
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::listWorkspaces(CachePolicy policy, qint64 workspace_id,
-                            RouterCallback<RouterWorkspaceList> callback)
+                                   RouterCallback<RouterWorkspaceList> callback)
 {
     if (policy == CachePolicy::USE_CACHE && workspace_id == 0 && cache_.workspacesLoaded())
     {
@@ -579,7 +579,7 @@ void RouterSession::listWorkspaces(CachePolicy policy, qint64 workspace_id,
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::listGroups(CachePolicy policy, qint64 workspace_id,
-                        RouterCallback<RouterGroupList> callback)
+                               RouterCallback<RouterGroupList> callback)
 {
     if (policy == CachePolicy::USE_CACHE)
     {
@@ -605,7 +605,7 @@ void RouterSession::listGroups(CachePolicy policy, qint64 workspace_id,
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::listHosts(CachePolicy policy, proto::router::HostListRequest request,
-                       RouterCallback<RouterHostList> callback)
+                              RouterCallback<RouterHostList> callback)
 {
     // Only filtered (per workspace/group) queries are cached. The page is part of the key: two
     // pages of the same selection are different answers.
@@ -637,7 +637,7 @@ void RouterSession::listHosts(CachePolicy policy, proto::router::HostListRequest
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::searchHosts(const QString& query, qint64 offset, qint64 count,
-                         RouterCallback<RouterHostList> callback)
+                                RouterCallback<RouterHostList> callback)
 {
     proto::router::ClientToRouter message;
     auto* request = message.mutable_host_search_request();
@@ -663,13 +663,15 @@ void RouterSession::searchHosts(const QString& query, qint64 offset, qint64 coun
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterSession::listTempHosts(qint64 offset, qint64 count, RouterCallback<RouterTempHostList> callback)
+void RouterSession::listTempHosts(bool portable, qint64 offset, qint64 count,
+                                  RouterCallback<RouterTempHostList> callback)
 {
     proto::router::ClientToRouter message;
     auto* request = message.mutable_temp_host_list_request();
     request->set_request_id(rpc_.nextRequestId());
     request->set_offset(offset);
     request->set_count(count);
+    request->set_portable(portable);
     rpc_.registerPending<proto::router::TempHostList>(request, std::move(callback),
         [](const proto::router::TempHostList& raw)
     {
@@ -721,7 +723,7 @@ void RouterSession::requestConnection(HostId host_id, RouterCallback<proto::rout
 
 //--------------------------------------------------------------------------------------------------
 void RouterSession::changePassword(const SecureString& new_password,
-                            RouterCallback<proto::router::ChangePasswordResult> callback)
+                                   RouterCallback<proto::router::ChangePasswordResult> callback)
 {
     RouterUser new_user = RouterUser::create(config_->username(), new_password);
 
@@ -883,7 +885,7 @@ void RouterSession::send(quint8 channel_id, const google::protobuf::MessageLite&
 
 //--------------------------------------------------------------------------------------------------
 RouterWorkspaceList RouterSession::applyWorkspaceList(const proto::router::WorkspaceList& list,
-                                               qint64 requested_workspace_id)
+                                                      qint64 requested_workspace_id)
 {
     RouterWorkspaceList result;
     result.error_code = QString::fromStdString(list.error_code());
@@ -919,7 +921,7 @@ RouterWorkspaceList RouterSession::applyWorkspaceList(const proto::router::Works
 
 //--------------------------------------------------------------------------------------------------
 RouterHostList RouterSession::applyHostList(const proto::router::HostList& list,
-                                     const RouterCache::HostKey& key, bool cacheable)
+                                            const RouterCache::HostKey& key, bool cacheable)
 {
     RouterHostList result;
     result.error_code   = QString::fromStdString(list.error_code());

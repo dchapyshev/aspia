@@ -406,7 +406,7 @@ TEST_F(RouterSessionTest, HostListIsParsedAndCached)
 TEST_F(RouterSessionTest, TempHostListIsParsed)
 {
     RouterTempHostList delivered;
-    router_.listTempHosts(0, proto::router::kMaxTempHostPageSize,
+    router_.listTempHosts(false, 0, proto::router::kMaxTempHostPageSize,
                           { &receiver_, [&delivered](const RouterTempHostList& value)
     {
         delivered = value;

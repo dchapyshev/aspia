@@ -398,7 +398,7 @@ void RouterTempHostsWidget::fetchTempHosts()
     if (!session)
         return;
 
-    session->listTempHosts(page_.offset(), page_.pageSize(),
+    session->listTempHosts(/* portable */ false, page_.offset(), page_.pageSize(),
                            { this, &RouterTempHostsWidget::onTempHostListReceived });
 }
 

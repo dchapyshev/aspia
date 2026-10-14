@@ -169,9 +169,10 @@ public:
     void searchHosts(const QString& query, qint64 offset, qint64 count,
                      RouterCallback<RouterHostList> callback);
 
-    // The temporary (unapproved) hosts currently online. |address| is filled for admins only.
-    // The page is mandatory as for listHosts; total_count counts every temporary host.
-    void listTempHosts(qint64 offset, qint64 count, RouterCallback<RouterTempHostList> callback);
+    // The temporary hosts currently online. If |portable| is set, these are the Quick Support hosts,
+    // otherwise the unapproved ones, which the router lists to admins only. The page is mandatory as
+    // for listHosts. The total_count counts every temporary host of the requested kind.
+    void listTempHosts(bool portable, qint64 offset, qint64 count, RouterCallback<RouterTempHostList> callback);
 
     void checkHostStatus(HostId host_id, RouterCallback<proto::router::HostStatus> callback);
 

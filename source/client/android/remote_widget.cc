@@ -784,7 +784,7 @@ void RemoteWidget::fetchTempHosts(bool append)
     const qint64 router_id = host_router_id_;
     const qint64 offset = append ? temp_hosts_.size() : 0;
 
-    session->listTempHosts(offset, kTempHostPageSize,
+    session->listTempHosts(/* portable */ false, offset, kTempHostPageSize,
         { this, [this, router_id, append](const RouterTempHostList& list)
     {
         // Ignore the result if the selection changed while the request was in flight.
