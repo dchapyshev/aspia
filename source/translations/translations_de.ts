@@ -324,115 +324,115 @@
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="174"/>
-        <location filename="../client/android/main_window.cc" line="346"/>
-        <location filename="../client/android/main_window.cc" line="388"/>
+        <location filename="../client/android/main_window.cc" line="175"/>
+        <location filename="../client/android/main_window.cc" line="350"/>
+        <location filename="../client/android/main_window.cc" line="398"/>
         <source>Local</source>
         <translation>Lokal</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="175"/>
-        <location filename="../client/android/main_window.cc" line="350"/>
-        <location filename="../client/android/main_window.cc" line="408"/>
+        <location filename="../client/android/main_window.cc" line="176"/>
+        <location filename="../client/android/main_window.cc" line="354"/>
+        <location filename="../client/android/main_window.cc" line="418"/>
         <source>Remote</source>
         <translation>Remote</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="176"/>
-        <location filename="../client/android/main_window.cc" line="354"/>
-        <location filename="../client/android/main_window.cc" line="398"/>
+        <location filename="../client/android/main_window.cc" line="177"/>
+        <location filename="../client/android/main_window.cc" line="358"/>
+        <location filename="../client/android/main_window.cc" line="408"/>
         <source>Routers</source>
         <translation>Router</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="177"/>
-        <location filename="../client/android/main_window.cc" line="358"/>
-        <location filename="../client/android/main_window.cc" line="418"/>
-        <location filename="../host/android/main_window.cc" line="88"/>
-        <location filename="../host/android/main_window.cc" line="104"/>
-        <location filename="../host/android/main_window.cc" line="479"/>
+        <location filename="../client/android/main_window.cc" line="178"/>
+        <location filename="../client/android/main_window.cc" line="362"/>
+        <location filename="../client/android/main_window.cc" line="428"/>
+        <location filename="../host/android/main_window.cc" line="84"/>
+        <location filename="../host/android/main_window.cc" line="100"/>
+        <location filename="../host/android/main_window.cc" line="391"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="772"/>
+        <location filename="../client/android/main_window.cc" line="782"/>
         <source>Update</source>
         <translation>Aktualisieren</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="773"/>
+        <location filename="../client/android/main_window.cc" line="783"/>
         <source>Version %1 is available.</source>
         <translation>Version %1 ist verfügbar.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="822"/>
+        <location filename="../client/android/main_window.cc" line="832"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Der mit diesem Host verknüpfte Router wurde gelöscht. Bearbeiten Sie den Host, um einen anderen Router auszuwählen, oder wechseln Sie zur direkten Verbindung.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="632"/>
+        <location filename="../client/android/main_window.cc" line="642"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Zwei-Faktor-Authentifizierung - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="510"/>
-        <location filename="../client/android/main_window.cc" line="1090"/>
+        <location filename="../client/android/main_window.cc" line="520"/>
+        <location filename="../client/android/main_window.cc" line="1100"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Die Daten des Hosts sind beschädigt. Bearbeiten Sie den Host und geben Sie sie erneut ein.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="821"/>
-        <location filename="../client/android/main_window.cc" line="1048"/>
+        <location filename="../client/android/main_window.cc" line="831"/>
+        <location filename="../client/android/main_window.cc" line="1058"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Die Daten des Routers sind beschädigt. Bearbeiten Sie den Router und geben Sie sie erneut ein.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1000"/>
+        <location filename="../client/android/main_window.cc" line="1010"/>
         <source>Invalid link.</source>
         <translation>Ungültiger Link.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1008"/>
+        <location filename="../client/android/main_window.cc" line="1018"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>Eine andere Sitzung ist aktiv. Schließen Sie sie und öffnen Sie den Link erneut.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1018"/>
+        <location filename="../client/android/main_window.cc" line="1028"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>Die Sitzungsart aus dem Link wird auf diesem Gerät nicht unterstützt.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1039"/>
+        <location filename="../client/android/main_window.cc" line="1049"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Der im Link angegebene Router wurde nicht unter den gespeicherten Routern gefunden.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1091"/>
+        <location filename="../client/android/main_window.cc" line="1101"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Der im Link angegebene Host wurde nicht unter den gespeicherten Hosts gefunden.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="509"/>
-        <location filename="../client/android/main_window.cc" line="819"/>
-        <location filename="../client/android/main_window.cc" line="1000"/>
-        <location filename="../client/android/main_window.cc" line="1007"/>
+        <location filename="../client/android/main_window.cc" line="519"/>
+        <location filename="../client/android/main_window.cc" line="829"/>
+        <location filename="../client/android/main_window.cc" line="1010"/>
         <location filename="../client/android/main_window.cc" line="1017"/>
-        <location filename="../client/android/main_window.cc" line="1038"/>
-        <location filename="../client/android/main_window.cc" line="1047"/>
-        <location filename="../client/android/main_window.cc" line="1088"/>
-        <location filename="../host/android/main_window.cc" line="87"/>
-        <location filename="../host/android/main_window.cc" line="103"/>
-        <location filename="../host/android/main_window.cc" line="477"/>
+        <location filename="../client/android/main_window.cc" line="1027"/>
+        <location filename="../client/android/main_window.cc" line="1048"/>
+        <location filename="../client/android/main_window.cc" line="1057"/>
+        <location filename="../client/android/main_window.cc" line="1098"/>
+        <location filename="../host/android/main_window.cc" line="83"/>
+        <location filename="../host/android/main_window.cc" line="99"/>
+        <location filename="../host/android/main_window.cc" line="389"/>
         <source>Connection</source>
         <translation>Verbindung</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="428"/>
+        <location filename="../host/android/main_window.cc" line="358"/>
         <source>Permissions</source>
         <translation>Berechtigungen</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="773"/>
+        <location filename="../client/android/main_window.cc" line="783"/>
         <source>Open</source>
         <translation>Öffnen</translation>
     </message>
@@ -5188,151 +5188,151 @@ Importierte Anmeldedaten: %5</translation>
         <translation>Status automatisch aktualisieren</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1071"/>
+        <location filename="../client/desktop/management_tab.cc" line="1102"/>
         <source>(copy)</source>
         <translation>(Kopie)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1039"/>
-        <location filename="../client/desktop/management_tab.cc" line="1113"/>
-        <location filename="../client/desktop/management_tab.cc" line="2201"/>
+        <location filename="../client/desktop/management_tab.cc" line="1070"/>
+        <location filename="../client/desktop/management_tab.cc" line="1144"/>
+        <location filename="../client/desktop/management_tab.cc" line="2243"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Host-Informationen konnten nicht aus der lokalen Datenbank abgerufen werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="849"/>
+        <location filename="../client/desktop/management_tab.cc" line="880"/>
         <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
         <translation>Die Sitzungsart &quot;%1&quot; ist für Quick Support nicht verfügbar.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1076"/>
+        <location filename="../client/desktop/management_tab.cc" line="1107"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Der Host konnte nicht zur lokalen Datenbank hinzugefügt werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1117"/>
+        <location filename="../client/desktop/management_tab.cc" line="1148"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Möchten Sie den Host &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1127"/>
+        <location filename="../client/desktop/management_tab.cc" line="1158"/>
         <source>Unable to remove host</source>
         <translation>Host kann nicht entfernt werden</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1190"/>
-        <location filename="../client/desktop/management_tab.cc" line="1250"/>
-        <location filename="../client/desktop/management_tab.cc" line="1276"/>
+        <location filename="../client/desktop/management_tab.cc" line="1221"/>
+        <location filename="../client/desktop/management_tab.cc" line="1291"/>
+        <location filename="../client/desktop/management_tab.cc" line="1317"/>
         <source>Copy Row</source>
         <translation>Zeile kopieren</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1191"/>
-        <location filename="../client/desktop/management_tab.cc" line="1251"/>
-        <location filename="../client/desktop/management_tab.cc" line="1277"/>
+        <location filename="../client/desktop/management_tab.cc" line="1222"/>
+        <location filename="../client/desktop/management_tab.cc" line="1292"/>
+        <location filename="../client/desktop/management_tab.cc" line="1318"/>
         <source>Copy Value</source>
         <translation>Wert kopieren</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1378"/>
+        <location filename="../client/desktop/management_tab.cc" line="1419"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Möchten Sie den Arbeitsbereich &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1398"/>
+        <location filename="../client/desktop/management_tab.cc" line="1439"/>
         <source>Failed to delete the workspace.</source>
         <translation>Der Arbeitsbereich konnte nicht gelöscht werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1500"/>
+        <location filename="../client/desktop/management_tab.cc" line="1541"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Möchten Sie die Gruppe &quot;%1&quot; wirklich löschen? Hosts, die dieser Gruppe oder ihren Untergruppen zugeordnet sind, werden in die Wurzel des Arbeitsbereichs verschoben.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1518"/>
+        <location filename="../client/desktop/management_tab.cc" line="1559"/>
         <source>Failed to delete the group.</source>
         <translation>Die Gruppe konnte nicht gelöscht werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1557"/>
-        <location filename="../client/desktop/management_tab.cc" line="1614"/>
+        <location filename="../client/desktop/management_tab.cc" line="1598"/>
+        <location filename="../client/desktop/management_tab.cc" line="1655"/>
         <source>The database is not available.</source>
         <translation>Die Datenbank ist nicht verfügbar.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1563"/>
+        <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>Create Backup</source>
         <translation>Sicherung erstellen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1580"/>
+        <location filename="../client/desktop/management_tab.cc" line="1621"/>
         <source>There is nothing to save.</source>
         <translation>Es gibt nichts zu speichern.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2196"/>
+        <location filename="../client/desktop/management_tab.cc" line="2238"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Die Daten des Hosts sind beschädigt. Bearbeiten Sie den Host und geben Sie sie erneut ein.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2217"/>
+        <location filename="../client/desktop/management_tab.cc" line="2259"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Die Daten des Routers sind beschädigt. Bearbeiten Sie den Router und geben Sie sie erneut ein.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1592"/>
+        <location filename="../client/desktop/management_tab.cc" line="1633"/>
         <source>Failed to create the backup.</source>
         <translation>Die Sicherung konnte nicht erstellt werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1620"/>
-        <location filename="../client/desktop/management_tab.cc" line="1646"/>
+        <location filename="../client/desktop/management_tab.cc" line="1661"/>
+        <location filename="../client/desktop/management_tab.cc" line="1687"/>
         <source>Restore from Backup</source>
         <translation>Aus Sicherung wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1629"/>
+        <location filename="../client/desktop/management_tab.cc" line="1670"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Alles, was derzeit gespeichert ist, wird gelöscht und durch den Inhalt der Sicherung ersetzt. Fortfahren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1648"/>
+        <location filename="../client/desktop/management_tab.cc" line="1689"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Die Sicherung wurde auf einer anderen Installation erstellt. Geben Sie das dort verwendete Master-Kennwort ein.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1673"/>
+        <location filename="../client/desktop/management_tab.cc" line="1714"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Die Sicherung enthält keine Daten, daher wurde nichts geändert.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1681"/>
+        <location filename="../client/desktop/management_tab.cc" line="1722"/>
         <source>The file is not a valid backup.</source>
         <translation>Die Datei ist keine gültige Sicherung.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1685"/>
+        <location filename="../client/desktop/management_tab.cc" line="1726"/>
         <source>Failed to restore from the backup.</source>
         <translation>Aus der Sicherung konnte nicht wiederhergestellt werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1564"/>
-        <location filename="../client/desktop/management_tab.cc" line="1621"/>
+        <location filename="../client/desktop/management_tab.cc" line="1605"/>
+        <location filename="../client/desktop/management_tab.cc" line="1662"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia-Sicherung (*.aspia-backup);;Alle Dateien (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1584"/>
+        <location filename="../client/desktop/management_tab.cc" line="1625"/>
         <source>Unable to write the file.</source>
         <translation>Die Datei kann nicht geschrieben werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1677"/>
+        <location filename="../client/desktop/management_tab.cc" line="1718"/>
         <source>Unable to read the file.</source>
         <translation>Die Datei kann nicht gelesen werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1597"/>
+        <location filename="../client/desktop/management_tab.cc" line="1638"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5347,22 +5347,22 @@ Exportierte gespeicherte Kennwörter: %4
 Exportierte Anmeldedaten: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1588"/>
+        <location filename="../client/desktop/management_tab.cc" line="1629"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Einige Datensätze der Datenbank sind beschädigt. Korrigieren oder löschen Sie sie und versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1665"/>
+        <location filename="../client/desktop/management_tab.cc" line="1706"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Die Datei kann mit dem angegebenen Kennwort nicht entschlüsselt werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1669"/>
+        <location filename="../client/desktop/management_tab.cc" line="1710"/>
         <source>Unsupported file format version.</source>
         <translation>Nicht unterstützte Dateiformatversion.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1690"/>
+        <location filename="../client/desktop/management_tab.cc" line="1731"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5377,29 +5377,29 @@ Importierte gespeicherte Kennwörter: %4
 Importierte Anmeldedaten: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2124"/>
-        <location filename="../client/desktop/management_tab.cc" line="2155"/>
+        <location filename="../client/desktop/management_tab.cc" line="2166"/>
+        <location filename="../client/desktop/management_tab.cc" line="2197"/>
         <source>Copy Link</source>
         <translation>Link kopieren</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2143"/>
-        <location filename="../client/desktop/management_tab.cc" line="2177"/>
+        <location filename="../client/desktop/management_tab.cc" line="2185"/>
+        <location filename="../client/desktop/management_tab.cc" line="2219"/>
         <source>Unable to create a link for this host.</source>
         <translation>Für diesen Host kann kein Link erstellt werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2218"/>
+        <location filename="../client/desktop/management_tab.cc" line="2260"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Der mit diesem Host verknüpfte Router wurde gelöscht. Bearbeiten Sie den Host, um einen anderen Router auszuwählen, oder wechseln Sie zur direkten Verbindung.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2225"/>
+        <location filename="../client/desktop/management_tab.cc" line="2267"/>
         <source>The host has an invalid host ID.</source>
         <translation>Der Host hat eine ungültige Host-ID.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2234"/>
+        <location filename="../client/desktop/management_tab.cc" line="2276"/>
         <source>The host has an incorrect address.</source>
         <translation>Der Host hat eine ungültige Adresse.</translation>
     </message>
@@ -5660,7 +5660,7 @@ Importierte Anmeldedaten: %5</translation>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="360"/>
+        <location filename="../client/workers/network_worker.cc" line="361"/>
         <source>Failed to connect to the relay server</source>
         <translation>Verbindung mit dem Relay-Server fehlgeschlagen</translation>
     </message>
@@ -6218,8 +6218,8 @@ Importierte Anmeldedaten: %5</translation>
     <name>RemoteWidget</name>
     <message>
         <location filename="../client/android/remote_widget.cc" line="695"/>
-        <source>Unapproved Hosts</source>
-        <translation>Nicht genehmigte Hosts</translation>
+        <source>Quick Support</source>
+        <translation>Quick Support</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="831"/>
@@ -7067,37 +7067,37 @@ Importierte Anmeldedaten: %5</translation>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="67"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="68"/>
         <source>Previous</source>
         <translation>Vorherige</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="68"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="69"/>
         <source>Previous page</source>
         <translation>Vorherige Seite</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="72"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="73"/>
         <source>Next</source>
         <translation>Nächste</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="73"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="74"/>
         <source>Next page</source>
         <translation>Nächste Seite</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="93"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="94"/>
         <source>Items per page:</source>
         <translation>Elemente pro Seite:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="219"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="220"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
         <translation>Durch das Genehmigen eines Hosts erhält dieser dauerhaften Zugriff auf den Router. Möchten Sie den Host &quot;%1&quot; wirklich genehmigen?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="226"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="227"/>
         <source>Approving hosts will give them permanent access to the router. Are you sure you want to approve %n hosts?</source>
         <translation>
             <numerusform>Durch das Genehmigen von Hosts erhalten diese dauerhaften Zugriff auf den Router. Möchten Sie %n Host wirklich genehmigen?</numerusform>
@@ -7105,12 +7105,12 @@ Importierte Anmeldedaten: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="266"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="267"/>
         <source>Failed to approve the host.</source>
         <translation>Der Host konnte nicht genehmigt werden.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="268"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="269"/>
         <source>Failed to approve %n of the selected hosts.</source>
         <translation>
             <numerusform>%n der ausgewählten Hosts konnte nicht genehmigt werden.</numerusform>
@@ -7647,7 +7647,7 @@ Importierte Anmeldedaten: %5</translation>
 <context>
     <name>ServerWorker</name>
     <message>
-        <location filename="../host/android/server_worker.cc" line="552"/>
+        <location filename="../host/android/server_worker.cc" line="553"/>
         <source>Waiting for connections</source>
         <translation>Warten auf Verbindungen</translation>
     </message>
@@ -8644,12 +8644,12 @@ Importierte Anmeldedaten: %5</translation>
         <translation>Möchten Sie den Router &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1496"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1499"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Eine Gruppe mit diesem Namen existiert bereits in der ausgewählten übergeordneten Gruppe.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1603"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1606"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>%n der ausgewählten Hosts wurde nicht verschoben, da ein Host mit demselben Namen bereits in der ausgewählten Gruppe existiert.</numerusform>
@@ -8657,8 +8657,8 @@ Importierte Anmeldedaten: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1611"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1811"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1614"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1814"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>%n der ausgewählten Hosts konnte nicht verschoben werden.</numerusform>
@@ -8666,26 +8666,26 @@ Importierte Anmeldedaten: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1486"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1708"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1489"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1508"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1711"/>
         <source>Failed to move the group.</source>
         <translation>Die Gruppe konnte nicht verschoben werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1565"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1568"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>Die Hosts konnten nicht in die ausgewählte Gruppe verschoben werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1602"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1605"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Ein Host mit diesem Namen existiert bereits in der ausgewählten Gruppe.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1564"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1810"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1567"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1613"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1813"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Der Host konnte nicht in die ausgewählte Gruppe verschoben werden.</translation>
     </message>
@@ -8704,6 +8704,14 @@ Importierte Anmeldedaten: %5</translation>
         <location filename="../client/desktop/management/sidebar_items.cc" line="189"/>
         <source>Approved Hosts</source>
         <translation>Genehmigte Hosts</translation>
+    </message>
+</context>
+<context>
+    <name>SidebarRouterQsHosts</name>
+    <message>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="234"/>
+        <source>Quick Support</source>
+        <translation>Quick Support</translation>
     </message>
 </context>
 <context>
@@ -12968,21 +12976,6 @@ Importierte Anmeldedaten: %5</translation>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="148"/>
         <source>Connect Time</source>
         <translation>Verbindungszeit</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="151"/>
-        <source>Type</source>
-        <translation>Typ</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="225"/>
-        <source>Quick Support</source>
-        <translation>Quick Support</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/temp_host_list_model.cc" line="225"/>
-        <source>Installed</source>
-        <translation>Installiert</translation>
     </message>
 </context>
 <context>
