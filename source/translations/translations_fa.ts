@@ -391,115 +391,115 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="174"/>
-        <location filename="../client/android/main_window.cc" line="346"/>
-        <location filename="../client/android/main_window.cc" line="388"/>
+        <location filename="../client/android/main_window.cc" line="175"/>
+        <location filename="../client/android/main_window.cc" line="350"/>
+        <location filename="../client/android/main_window.cc" line="398"/>
         <source>Local</source>
         <translation>محلی</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="175"/>
-        <location filename="../client/android/main_window.cc" line="350"/>
-        <location filename="../client/android/main_window.cc" line="408"/>
+        <location filename="../client/android/main_window.cc" line="176"/>
+        <location filename="../client/android/main_window.cc" line="354"/>
+        <location filename="../client/android/main_window.cc" line="418"/>
         <source>Remote</source>
         <translation>راه دور</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="176"/>
-        <location filename="../client/android/main_window.cc" line="354"/>
-        <location filename="../client/android/main_window.cc" line="398"/>
+        <location filename="../client/android/main_window.cc" line="177"/>
+        <location filename="../client/android/main_window.cc" line="358"/>
+        <location filename="../client/android/main_window.cc" line="408"/>
         <source>Routers</source>
         <translation>روترها</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="177"/>
-        <location filename="../client/android/main_window.cc" line="358"/>
-        <location filename="../client/android/main_window.cc" line="418"/>
-        <location filename="../host/android/main_window.cc" line="88"/>
-        <location filename="../host/android/main_window.cc" line="104"/>
-        <location filename="../host/android/main_window.cc" line="479"/>
+        <location filename="../client/android/main_window.cc" line="178"/>
+        <location filename="../client/android/main_window.cc" line="362"/>
+        <location filename="../client/android/main_window.cc" line="428"/>
+        <location filename="../host/android/main_window.cc" line="84"/>
+        <location filename="../host/android/main_window.cc" line="100"/>
+        <location filename="../host/android/main_window.cc" line="390"/>
         <source>Settings</source>
         <translation>تنظیمات</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="772"/>
+        <location filename="../client/android/main_window.cc" line="782"/>
         <source>Update</source>
         <translation>به‌روزرسانی</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="773"/>
+        <location filename="../client/android/main_window.cc" line="783"/>
         <source>Version %1 is available.</source>
         <translation>نسخه %1 موجود است.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="822"/>
+        <location filename="../client/android/main_window.cc" line="832"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>روتر مرتبط با این میزبان حذف شده است. میزبان را ویرایش کنید تا روتر دیگری انتخاب کنید یا به اتصال مستقیم تغییر دهید.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="632"/>
+        <location filename="../client/android/main_window.cc" line="642"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>احراز هویت دومرحله‌ای - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="510"/>
-        <location filename="../client/android/main_window.cc" line="1089"/>
+        <location filename="../client/android/main_window.cc" line="520"/>
+        <location filename="../client/android/main_window.cc" line="1099"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>داده‌های میزبان آسیب دیده است. میزبان را ویرایش کنید و دوباره آن را وارد کنید.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="821"/>
-        <location filename="../client/android/main_window.cc" line="1047"/>
+        <location filename="../client/android/main_window.cc" line="831"/>
+        <location filename="../client/android/main_window.cc" line="1057"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>داده‌های روتر آسیب دیده است. روتر را ویرایش کنید و دوباره آن را وارد کنید.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="999"/>
+        <location filename="../client/android/main_window.cc" line="1009"/>
         <source>Invalid link.</source>
         <translation>پیوند نامعتبر است.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1007"/>
+        <location filename="../client/android/main_window.cc" line="1017"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>نشست دیگری فعال است. آن را ببندید و پیوند را دوباره باز کنید.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1017"/>
+        <location filename="../client/android/main_window.cc" line="1027"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>نوع نشست موجود در پیوند در این دستگاه پشتیبانی نمی‌شود.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1038"/>
+        <location filename="../client/android/main_window.cc" line="1048"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>روتری که پیوند به آن اشاره می‌کند جزو روترهای ذخیره‌شده نیست.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1090"/>
+        <location filename="../client/android/main_window.cc" line="1100"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>میزبانی که پیوند به آن اشاره می‌کند جزو میزبان‌های ذخیره‌شده نیست.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="509"/>
-        <location filename="../client/android/main_window.cc" line="819"/>
-        <location filename="../client/android/main_window.cc" line="999"/>
-        <location filename="../client/android/main_window.cc" line="1006"/>
+        <location filename="../client/android/main_window.cc" line="519"/>
+        <location filename="../client/android/main_window.cc" line="829"/>
+        <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../client/android/main_window.cc" line="1016"/>
-        <location filename="../client/android/main_window.cc" line="1037"/>
-        <location filename="../client/android/main_window.cc" line="1046"/>
-        <location filename="../client/android/main_window.cc" line="1087"/>
-        <location filename="../host/android/main_window.cc" line="87"/>
-        <location filename="../host/android/main_window.cc" line="103"/>
-        <location filename="../host/android/main_window.cc" line="477"/>
+        <location filename="../client/android/main_window.cc" line="1026"/>
+        <location filename="../client/android/main_window.cc" line="1047"/>
+        <location filename="../client/android/main_window.cc" line="1056"/>
+        <location filename="../client/android/main_window.cc" line="1097"/>
+        <location filename="../host/android/main_window.cc" line="83"/>
+        <location filename="../host/android/main_window.cc" line="99"/>
+        <location filename="../host/android/main_window.cc" line="388"/>
         <source>Connection</source>
         <translation>اتصال</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="428"/>
+        <location filename="../host/android/main_window.cc" line="357"/>
         <source>Permissions</source>
         <translation>مجوزهای دسترسی</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="773"/>
+        <location filename="../client/android/main_window.cc" line="783"/>
         <source>Open</source>
         <translation>باز کردن</translation>
     </message>
@@ -1659,64 +1659,64 @@ Routers added: %4</source>
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="245"/>
+        <location filename="../host/android/connection_widget.cc" line="244"/>
         <source>Your ID</source>
         <translation>ID شما</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="246"/>
+        <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>One-time password</source>
         <translation>گذرواژه یک‌بارمصرف</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="247"/>
+        <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>Access</source>
         <translation>دسترسی</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="248"/>
+        <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Desktop</source>
         <translation>دسکتاپ</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="249"/>
+        <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>File Transfer</source>
         <translation>انتقال فایل</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Waiting for a connection</source>
         <translation>در انتظار اتصال</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Stop</source>
         <translation>توقف</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="376"/>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>Aspia ID: %1
 گذرواژه: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="419"/>
+        <location filename="../host/android/connection_widget.cc" line="415"/>
         <source>Router is disabled</source>
         <translation>روتر غیرفعال است</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="422"/>
+        <location filename="../host/android/connection_widget.cc" line="418"/>
         <source>Connecting to router...</source>
         <translation>در حال اتصال به روتر...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="425"/>
+        <location filename="../host/android/connection_widget.cc" line="421"/>
         <source>Connected to router</source>
         <translation>متصل به روتر</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="428"/>
+        <location filename="../host/android/connection_widget.cc" line="424"/>
         <source>Failed to connect to router</source>
         <translation>اتصال به روتر ناموفق بود</translation>
     </message>
@@ -5610,7 +5610,7 @@ Credentials imported: %5</source>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="381"/>
+        <location filename="../client/workers/network_worker.cc" line="382"/>
         <source>Failed to connect to the relay server</source>
         <translation>اتصال به سرور رله ناموفق بود</translation>
     </message>
@@ -5899,6 +5899,11 @@ Credentials imported: %5</source>
         <location filename="../host/android/permissions_widget.cc" line="109"/>
         <source>Granted</source>
         <translation>اعطا شده</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="125"/>
+        <source>The service is turned on, but Android has stopped it. Turn it off and on again.</source>
+        <translation>سرویس فعال است، اما Android آن را متوقف کرده است. آن را غیرفعال و دوباره فعال کنید.</translation>
     </message>
 </context>
 <context>
@@ -7558,14 +7563,6 @@ Credentials imported: %5</source>
     </message>
 </context>
 <context>
-    <name>ServerWorker</name>
-    <message>
-        <location filename="../host/android/server_worker.cc" line="552"/>
-        <source>Waiting for connections</source>
-        <translation>در انتظار اتصال‌ها</translation>
-    </message>
-</context>
-<context>
     <name>ServiceItem</name>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="192"/>
@@ -8270,7 +8267,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="442"/>
-        <location filename="../host/android/settings_widget.cc" line="439"/>
+        <location filename="../host/android/settings_widget.cc" line="405"/>
         <source>Updates</source>
         <translation>به‌روزرسانی‌ها</translation>
     </message>
@@ -8281,49 +8278,49 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="453"/>
-        <location filename="../host/android/settings_widget.cc" line="442"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
         <source>Update channel</source>
         <translation>کانال به‌روزرسانی</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="454"/>
-        <location filename="../host/android/settings_widget.cc" line="443"/>
+        <location filename="../host/android/settings_widget.cc" line="409"/>
         <source>Stable</source>
         <translation>پایدار</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="455"/>
-        <location filename="../host/android/settings_widget.cc" line="444"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
         <source>Beta</source>
         <translation>بتا</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="456"/>
-        <location filename="../host/android/settings_widget.cc" line="445"/>
+        <location filename="../host/android/settings_widget.cc" line="411"/>
         <source>Alpha</source>
         <translation>آلفا</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="467"/>
-        <location filename="../host/android/settings_widget.cc" line="459"/>
+        <location filename="../host/android/settings_widget.cc" line="425"/>
         <source>Update server</source>
         <translation>سرور به‌روزرسانی</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="472"/>
-        <location filename="../host/android/settings_widget.cc" line="464"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Public key</source>
         <translation>کلید عمومی</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="478"/>
-        <location filename="../host/android/settings_widget.cc" line="470"/>
+        <location filename="../host/android/settings_widget.cc" line="436"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>اگر سرور به‌روزرسانی مشخص نشود، سرور پیش‌فرض استفاده می‌شود. اگر کلید عمومی مشخص نشود، کلید داخلی استفاده می‌شود.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="532"/>
-        <location filename="../host/android/settings_widget.cc" line="524"/>
+        <location filename="../host/android/settings_widget.cc" line="490"/>
         <source>Check for updates</source>
         <translation>بررسی به‌روزرسانی‌ها</translation>
     </message>
@@ -8354,88 +8351,68 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="285"/>
-        <source>Background mode</source>
-        <translation>حالت پس‌زمینه</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="297"/>
-        <source>The host accepts connections in the local network and stays connected to the router while the application is not on the screen, so it can be reached at any time.</source>
-        <translation>وقتی برنامه روی صفحه نیست، میزبان اتصال‌ها را در شبکه محلی می‌پذیرد و همچنان به روتر متصل می‌ماند، بنابراین در هر زمانی می‌توان به آن متصل شد.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="303"/>
-        <source>Confirm screen capture automatically</source>
-        <translation>تأیید خودکار تصویربرداری از صفحه</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="314"/>
-        <source>The screen capture request is confirmed automatically. It may not work on some devices.</source>
-        <translation>درخواست تصویربرداری از صفحه به‌طور خودکار تأیید می‌شود. ممکن است در برخی دستگاه‌ها کار نکند.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="319"/>
         <source>Manage users</source>
         <translation>مدیریت کاربران</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="327"/>
+        <location filename="../host/android/settings_widget.cc" line="293"/>
         <source>Change password</source>
         <translation>تغییر گذرواژه</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="331"/>
+        <location filename="../host/android/settings_widget.cc" line="297"/>
         <source>Disable password protection</source>
         <translation>غیرفعال کردن محافظت با گذرواژه</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="340"/>
+        <location filename="../host/android/settings_widget.cc" line="306"/>
         <source>Enable password protection</source>
         <translation>فعال‌سازی محافظت با گذرواژه</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="355"/>
+        <location filename="../host/android/settings_widget.cc" line="321"/>
         <source>Router</source>
         <translation>روتر</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
+        <location filename="../host/android/settings_widget.cc" line="326"/>
         <source>Enable the use of a router</source>
         <translation>فعال‌سازی استفاده از روتر</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="365"/>
+        <location filename="../host/android/settings_widget.cc" line="331"/>
         <source>Address</source>
         <translation>آدرس</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="371"/>
+        <location filename="../host/android/settings_widget.cc" line="337"/>
         <source>Public Key</source>
         <translation>کلید عمومی</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="376"/>
+        <location filename="../host/android/settings_widget.cc" line="342"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>در صورت نبود اتصال مستقیم (دور زدن NAT)، برای اتصال به رایانه به روتر نیاز است. Aspia روتر عمومی ارائه نمی‌دهد، اما می‌توانید روتر خود را نصب کنید. می‌توانید روتر را از &lt;a href=&quot;https://aspia.org&quot;&gt;وب‌سایت رسمی&lt;/a&gt; دانلود کنید.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>Error</source>
         <translation>خطا</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>An error occurred while processing the password.</source>
         <translation>هنگام پردازش گذرواژه خطایی رخ داد.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>Import</source>
         <translation>وارد کردن</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>JSON files (*.json)</source>
         <translation>فایل‌های JSON (*.json)</translation>
     </message>

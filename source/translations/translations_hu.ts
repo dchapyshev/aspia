@@ -391,115 +391,115 @@ Hozzáadott útválasztók: %4</translation>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="174"/>
-        <location filename="../client/android/main_window.cc" line="346"/>
-        <location filename="../client/android/main_window.cc" line="388"/>
+        <location filename="../client/android/main_window.cc" line="175"/>
+        <location filename="../client/android/main_window.cc" line="350"/>
+        <location filename="../client/android/main_window.cc" line="398"/>
         <source>Local</source>
         <translation>Helyi</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="175"/>
-        <location filename="../client/android/main_window.cc" line="350"/>
-        <location filename="../client/android/main_window.cc" line="408"/>
+        <location filename="../client/android/main_window.cc" line="176"/>
+        <location filename="../client/android/main_window.cc" line="354"/>
+        <location filename="../client/android/main_window.cc" line="418"/>
         <source>Remote</source>
         <translation>Távoli</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="176"/>
-        <location filename="../client/android/main_window.cc" line="354"/>
-        <location filename="../client/android/main_window.cc" line="398"/>
+        <location filename="../client/android/main_window.cc" line="177"/>
+        <location filename="../client/android/main_window.cc" line="358"/>
+        <location filename="../client/android/main_window.cc" line="408"/>
         <source>Routers</source>
         <translation>Útválasztók</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="177"/>
-        <location filename="../client/android/main_window.cc" line="358"/>
-        <location filename="../client/android/main_window.cc" line="418"/>
-        <location filename="../host/android/main_window.cc" line="88"/>
-        <location filename="../host/android/main_window.cc" line="104"/>
-        <location filename="../host/android/main_window.cc" line="479"/>
+        <location filename="../client/android/main_window.cc" line="178"/>
+        <location filename="../client/android/main_window.cc" line="362"/>
+        <location filename="../client/android/main_window.cc" line="428"/>
+        <location filename="../host/android/main_window.cc" line="84"/>
+        <location filename="../host/android/main_window.cc" line="100"/>
+        <location filename="../host/android/main_window.cc" line="390"/>
         <source>Settings</source>
         <translation>Beállítások</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="772"/>
+        <location filename="../client/android/main_window.cc" line="782"/>
         <source>Update</source>
         <translation>Frissítés</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="773"/>
+        <location filename="../client/android/main_window.cc" line="783"/>
         <source>Version %1 is available.</source>
         <translation>A(z) %1 verzió elérhető.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="822"/>
+        <location filename="../client/android/main_window.cc" line="832"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>A gazdagéphez tartozó útválasztó törölve lett. Szerkessze a gazdagépet másik útválasztó kiválasztásához, vagy váltson közvetlen kapcsolatra.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="632"/>
+        <location filename="../client/android/main_window.cc" line="642"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Kétfaktoros hitelesítés - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="510"/>
-        <location filename="../client/android/main_window.cc" line="1089"/>
+        <location filename="../client/android/main_window.cc" line="520"/>
+        <location filename="../client/android/main_window.cc" line="1099"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>A gazdagép adatai sérültek. Szerkessze a gazdagépet, és adja meg újra az adatokat.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="821"/>
-        <location filename="../client/android/main_window.cc" line="1047"/>
+        <location filename="../client/android/main_window.cc" line="831"/>
+        <location filename="../client/android/main_window.cc" line="1057"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Az útválasztó adatai sérültek. Szerkessze az útválasztót, és adja meg újra az adatokat.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="999"/>
+        <location filename="../client/android/main_window.cc" line="1009"/>
         <source>Invalid link.</source>
         <translation>Érvénytelen hivatkozás.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1007"/>
+        <location filename="../client/android/main_window.cc" line="1017"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>Egy másik munkamenet aktív. Zárja be, majd nyissa meg újra a hivatkozást.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1017"/>
+        <location filename="../client/android/main_window.cc" line="1027"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>A hivatkozásban szereplő munkamenet-típus nem támogatott ezen az eszközön.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1038"/>
+        <location filename="../client/android/main_window.cc" line="1048"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>A hivatkozásban szereplő útválasztó nincs a mentett útválasztók között.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1090"/>
+        <location filename="../client/android/main_window.cc" line="1100"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>A hivatkozásban szereplő gazdagép nincs a mentett gazdagépek között.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="509"/>
-        <location filename="../client/android/main_window.cc" line="819"/>
-        <location filename="../client/android/main_window.cc" line="999"/>
-        <location filename="../client/android/main_window.cc" line="1006"/>
+        <location filename="../client/android/main_window.cc" line="519"/>
+        <location filename="../client/android/main_window.cc" line="829"/>
+        <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../client/android/main_window.cc" line="1016"/>
-        <location filename="../client/android/main_window.cc" line="1037"/>
-        <location filename="../client/android/main_window.cc" line="1046"/>
-        <location filename="../client/android/main_window.cc" line="1087"/>
-        <location filename="../host/android/main_window.cc" line="87"/>
-        <location filename="../host/android/main_window.cc" line="103"/>
-        <location filename="../host/android/main_window.cc" line="477"/>
+        <location filename="../client/android/main_window.cc" line="1026"/>
+        <location filename="../client/android/main_window.cc" line="1047"/>
+        <location filename="../client/android/main_window.cc" line="1056"/>
+        <location filename="../client/android/main_window.cc" line="1097"/>
+        <location filename="../host/android/main_window.cc" line="83"/>
+        <location filename="../host/android/main_window.cc" line="99"/>
+        <location filename="../host/android/main_window.cc" line="388"/>
         <source>Connection</source>
         <translation>Kapcsolat</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="428"/>
+        <location filename="../host/android/main_window.cc" line="357"/>
         <source>Permissions</source>
         <translation>Engedélyek</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="773"/>
+        <location filename="../client/android/main_window.cc" line="783"/>
         <source>Open</source>
         <translation>Megnyitás</translation>
     </message>
@@ -1659,64 +1659,64 @@ Hozzáadott útválasztók: %4</translation>
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="245"/>
+        <location filename="../host/android/connection_widget.cc" line="244"/>
         <source>Your ID</source>
         <translation>Az Ön ID-ja</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="246"/>
+        <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>One-time password</source>
         <translation>Egyszer használatos jelszó</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="247"/>
+        <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>Access</source>
         <translation>Hozzáférés</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="248"/>
+        <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Desktop</source>
         <translation>Asztal</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="249"/>
+        <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>File Transfer</source>
         <translation>Fájlátvitel</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Waiting for a connection</source>
         <translation>Várakozás csatlakozásra</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Stop</source>
         <translation>Leállítás</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="376"/>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>Aspia ID: %1
 Jelszó: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="419"/>
+        <location filename="../host/android/connection_widget.cc" line="415"/>
         <source>Router is disabled</source>
         <translation>Az útválasztó le van tiltva</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="422"/>
+        <location filename="../host/android/connection_widget.cc" line="418"/>
         <source>Connecting to router...</source>
         <translation>Csatlakozás az útválasztóhoz...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="425"/>
+        <location filename="../host/android/connection_widget.cc" line="421"/>
         <source>Connected to router</source>
         <translation>Csatlakoztatva az útválasztóhoz</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="428"/>
+        <location filename="../host/android/connection_widget.cc" line="424"/>
         <source>Failed to connect to router</source>
         <translation>Nem sikerült csatlakozni az útválasztóhoz</translation>
     </message>
@@ -5610,7 +5610,7 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="381"/>
+        <location filename="../client/workers/network_worker.cc" line="382"/>
         <source>Failed to connect to the relay server</source>
         <translation>Nem sikerült csatlakozni a közvetítő kiszolgálóhoz</translation>
     </message>
@@ -5899,6 +5899,11 @@ Importált hitelesítő adatok: %5</translation>
         <location filename="../host/android/permissions_widget.cc" line="109"/>
         <source>Granted</source>
         <translation>Megadva</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="125"/>
+        <source>The service is turned on, but Android has stopped it. Turn it off and on again.</source>
+        <translation>A szolgáltatás be van kapcsolva, de az Android leállította. Kapcsolja ki, majd kapcsolja be újra.</translation>
     </message>
 </context>
 <context>
@@ -7558,14 +7563,6 @@ Importált hitelesítő adatok: %5</translation>
     </message>
 </context>
 <context>
-    <name>ServerWorker</name>
-    <message>
-        <location filename="../host/android/server_worker.cc" line="552"/>
-        <source>Waiting for connections</source>
-        <translation>Várakozás csatlakozásokra</translation>
-    </message>
-</context>
-<context>
     <name>ServiceItem</name>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="192"/>
@@ -8270,7 +8267,7 @@ Importált hitelesítő adatok: %5</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="442"/>
-        <location filename="../host/android/settings_widget.cc" line="439"/>
+        <location filename="../host/android/settings_widget.cc" line="405"/>
         <source>Updates</source>
         <translation>Frissítések</translation>
     </message>
@@ -8281,49 +8278,49 @@ Importált hitelesítő adatok: %5</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="453"/>
-        <location filename="../host/android/settings_widget.cc" line="442"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
         <source>Update channel</source>
         <translation>Frissítési csatorna</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="454"/>
-        <location filename="../host/android/settings_widget.cc" line="443"/>
+        <location filename="../host/android/settings_widget.cc" line="409"/>
         <source>Stable</source>
         <translation>Stabil</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="455"/>
-        <location filename="../host/android/settings_widget.cc" line="444"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
         <source>Beta</source>
         <translation>Béta</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="456"/>
-        <location filename="../host/android/settings_widget.cc" line="445"/>
+        <location filename="../host/android/settings_widget.cc" line="411"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="467"/>
-        <location filename="../host/android/settings_widget.cc" line="459"/>
+        <location filename="../host/android/settings_widget.cc" line="425"/>
         <source>Update server</source>
         <translation>Frissítési kiszolgáló</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="472"/>
-        <location filename="../host/android/settings_widget.cc" line="464"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Public key</source>
         <translation>Nyilvános kulcs</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="478"/>
-        <location filename="../host/android/settings_widget.cc" line="470"/>
+        <location filename="../host/android/settings_widget.cc" line="436"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>Ha nincs megadva frissítési kiszolgáló, az alkalmazás az alapértelmezett kiszolgálót használja. Ha nincs megadva nyilvános kulcs, az alkalmazás a beépített kulcsot használja.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="532"/>
-        <location filename="../host/android/settings_widget.cc" line="524"/>
+        <location filename="../host/android/settings_widget.cc" line="490"/>
         <source>Check for updates</source>
         <translation>Frissítések keresése</translation>
     </message>
@@ -8354,88 +8351,68 @@ Importált hitelesítő adatok: %5</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="285"/>
-        <source>Background mode</source>
-        <translation>Háttérmód</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="297"/>
-        <source>The host accepts connections in the local network and stays connected to the router while the application is not on the screen, so it can be reached at any time.</source>
-        <translation>A gazdagép fogadja a helyi hálózatról érkező kapcsolatokat, és akkor is csatlakozva marad az útválasztóhoz, amikor az alkalmazás nincs a képernyőn, így bármikor lehet hozzá csatlakozni.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="303"/>
-        <source>Confirm screen capture automatically</source>
-        <translation>Képernyőrögzítés automatikus megerősítése</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="314"/>
-        <source>The screen capture request is confirmed automatically. It may not work on some devices.</source>
-        <translation>A képernyőrögzítési kérés megerősítése automatikus. Előfordulhat, hogy egyes eszközökön nem működik.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="319"/>
         <source>Manage users</source>
         <translation>Felhasználók kezelése</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="327"/>
+        <location filename="../host/android/settings_widget.cc" line="293"/>
         <source>Change password</source>
         <translation>Jelszó módosítása</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="331"/>
+        <location filename="../host/android/settings_widget.cc" line="297"/>
         <source>Disable password protection</source>
         <translation>Jelszavas védelem kikapcsolása</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="340"/>
+        <location filename="../host/android/settings_widget.cc" line="306"/>
         <source>Enable password protection</source>
         <translation>Jelszavas védelem bekapcsolása</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="355"/>
+        <location filename="../host/android/settings_widget.cc" line="321"/>
         <source>Router</source>
         <translation>Útválasztó</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
+        <location filename="../host/android/settings_widget.cc" line="326"/>
         <source>Enable the use of a router</source>
         <translation>Útválasztó használatának engedélyezése</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="365"/>
+        <location filename="../host/android/settings_widget.cc" line="331"/>
         <source>Address</source>
         <translation>Cím</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="371"/>
+        <location filename="../host/android/settings_widget.cc" line="337"/>
         <source>Public Key</source>
         <translation>Nyilvános kulcs</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="376"/>
+        <location filename="../host/android/settings_widget.cc" line="342"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Útválasztó szükséges a számítógéphez való csatlakozáshoz, ha nincs közvetlen kapcsolat (NAT megkerülése). Az Aspia nem biztosít nyilvános útválasztót, de telepíthet sajátot. Az útválasztó letölthető a &lt;a href=&quot;https://aspia.org&quot;&gt;hivatalos webhelyről&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>An error occurred while processing the password.</source>
         <translation>Hiba történt a jelszó feldolgozása közben.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>Import</source>
         <translation>Importálás</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-fájlok (*.json)</translation>
     </message>

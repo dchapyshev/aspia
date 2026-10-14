@@ -391,115 +391,115 @@ Routeurs ajoutés: %4</translation>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="174"/>
-        <location filename="../client/android/main_window.cc" line="346"/>
-        <location filename="../client/android/main_window.cc" line="388"/>
+        <location filename="../client/android/main_window.cc" line="175"/>
+        <location filename="../client/android/main_window.cc" line="350"/>
+        <location filename="../client/android/main_window.cc" line="398"/>
         <source>Local</source>
         <translation>Local</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="175"/>
-        <location filename="../client/android/main_window.cc" line="350"/>
-        <location filename="../client/android/main_window.cc" line="408"/>
+        <location filename="../client/android/main_window.cc" line="176"/>
+        <location filename="../client/android/main_window.cc" line="354"/>
+        <location filename="../client/android/main_window.cc" line="418"/>
         <source>Remote</source>
         <translation>Distant</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="176"/>
-        <location filename="../client/android/main_window.cc" line="354"/>
-        <location filename="../client/android/main_window.cc" line="398"/>
+        <location filename="../client/android/main_window.cc" line="177"/>
+        <location filename="../client/android/main_window.cc" line="358"/>
+        <location filename="../client/android/main_window.cc" line="408"/>
         <source>Routers</source>
         <translation>Routeurs</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="177"/>
-        <location filename="../client/android/main_window.cc" line="358"/>
-        <location filename="../client/android/main_window.cc" line="418"/>
-        <location filename="../host/android/main_window.cc" line="88"/>
-        <location filename="../host/android/main_window.cc" line="104"/>
-        <location filename="../host/android/main_window.cc" line="479"/>
+        <location filename="../client/android/main_window.cc" line="178"/>
+        <location filename="../client/android/main_window.cc" line="362"/>
+        <location filename="../client/android/main_window.cc" line="428"/>
+        <location filename="../host/android/main_window.cc" line="84"/>
+        <location filename="../host/android/main_window.cc" line="100"/>
+        <location filename="../host/android/main_window.cc" line="390"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="772"/>
+        <location filename="../client/android/main_window.cc" line="782"/>
         <source>Update</source>
         <translation>Mise à jour</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="773"/>
+        <location filename="../client/android/main_window.cc" line="783"/>
         <source>Version %1 is available.</source>
         <translation>La version %1 est disponible.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="822"/>
+        <location filename="../client/android/main_window.cc" line="832"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Le routeur associé à cet hôte a été supprimé. Modifiez l&apos;hôte pour sélectionner un autre routeur ou passez à la connexion directe.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="632"/>
+        <location filename="../client/android/main_window.cc" line="642"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Authentification à deux facteurs - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="510"/>
-        <location filename="../client/android/main_window.cc" line="1089"/>
+        <location filename="../client/android/main_window.cc" line="520"/>
+        <location filename="../client/android/main_window.cc" line="1099"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Les données de l&apos;hôte sont endommagées. Modifiez l&apos;hôte et saisissez-les à nouveau.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="821"/>
-        <location filename="../client/android/main_window.cc" line="1047"/>
+        <location filename="../client/android/main_window.cc" line="831"/>
+        <location filename="../client/android/main_window.cc" line="1057"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Les données du routeur sont endommagées. Modifiez le routeur et saisissez-les à nouveau.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="999"/>
+        <location filename="../client/android/main_window.cc" line="1009"/>
         <source>Invalid link.</source>
         <translation>Lien non valide.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1007"/>
+        <location filename="../client/android/main_window.cc" line="1017"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>Une autre session est active. Fermez-la et ouvrez à nouveau le lien.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1017"/>
+        <location filename="../client/android/main_window.cc" line="1027"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>Le type de session du lien n&apos;est pas pris en charge sur cet appareil.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1038"/>
+        <location filename="../client/android/main_window.cc" line="1048"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Le routeur référencé par le lien ne fait pas partie des routeurs enregistrés.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="1090"/>
+        <location filename="../client/android/main_window.cc" line="1100"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>L&apos;hôte référencé par le lien ne fait pas partie des hôtes enregistrés.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="509"/>
-        <location filename="../client/android/main_window.cc" line="819"/>
-        <location filename="../client/android/main_window.cc" line="999"/>
-        <location filename="../client/android/main_window.cc" line="1006"/>
+        <location filename="../client/android/main_window.cc" line="519"/>
+        <location filename="../client/android/main_window.cc" line="829"/>
+        <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../client/android/main_window.cc" line="1016"/>
-        <location filename="../client/android/main_window.cc" line="1037"/>
-        <location filename="../client/android/main_window.cc" line="1046"/>
-        <location filename="../client/android/main_window.cc" line="1087"/>
-        <location filename="../host/android/main_window.cc" line="87"/>
-        <location filename="../host/android/main_window.cc" line="103"/>
-        <location filename="../host/android/main_window.cc" line="477"/>
+        <location filename="../client/android/main_window.cc" line="1026"/>
+        <location filename="../client/android/main_window.cc" line="1047"/>
+        <location filename="../client/android/main_window.cc" line="1056"/>
+        <location filename="../client/android/main_window.cc" line="1097"/>
+        <location filename="../host/android/main_window.cc" line="83"/>
+        <location filename="../host/android/main_window.cc" line="99"/>
+        <location filename="../host/android/main_window.cc" line="388"/>
         <source>Connection</source>
         <translation>Connexion</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="428"/>
+        <location filename="../host/android/main_window.cc" line="357"/>
         <source>Permissions</source>
         <translation>Autorisations</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="773"/>
+        <location filename="../client/android/main_window.cc" line="783"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
     </message>
@@ -1664,64 +1664,64 @@ Routeurs ajoutés: %4</translation>
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="245"/>
+        <location filename="../host/android/connection_widget.cc" line="244"/>
         <source>Your ID</source>
         <translation>Votre ID</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="246"/>
+        <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>One-time password</source>
         <translation>Mot de passe à usage unique</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="247"/>
+        <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>Access</source>
         <translation>Accès</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="248"/>
+        <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Desktop</source>
         <translation>Bureau</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="249"/>
+        <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>File Transfer</source>
         <translation>Transfert de fichiers</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Waiting for a connection</source>
         <translation>En attente de connexion</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="376"/>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>ID Aspia: %1
 Mot de passe: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="419"/>
+        <location filename="../host/android/connection_widget.cc" line="415"/>
         <source>Router is disabled</source>
         <translation>Le routeur est désactivé</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="422"/>
+        <location filename="../host/android/connection_widget.cc" line="418"/>
         <source>Connecting to router...</source>
         <translation>Connexion au routeur...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="425"/>
+        <location filename="../host/android/connection_widget.cc" line="421"/>
         <source>Connected to router</source>
         <translation>Connecté au routeur</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="428"/>
+        <location filename="../host/android/connection_widget.cc" line="424"/>
         <source>Failed to connect to router</source>
         <translation>Impossible de se connecter au routeur</translation>
     </message>
@@ -5637,7 +5637,7 @@ Identifiants importés: %5</translation>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="381"/>
+        <location filename="../client/workers/network_worker.cc" line="382"/>
         <source>Failed to connect to the relay server</source>
         <translation>Impossible de se connecter au serveur relais</translation>
     </message>
@@ -5926,6 +5926,11 @@ Identifiants importés: %5</translation>
         <location filename="../host/android/permissions_widget.cc" line="109"/>
         <source>Granted</source>
         <translation>Accordé</translation>
+    </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="125"/>
+        <source>The service is turned on, but Android has stopped it. Turn it off and on again.</source>
+        <translation>Le service est activé, mais Android l&apos;a arrêté. Désactivez-le puis réactivez-le.</translation>
     </message>
 </context>
 <context>
@@ -7599,14 +7604,6 @@ Identifiants importés: %5</translation>
     </message>
 </context>
 <context>
-    <name>ServerWorker</name>
-    <message>
-        <location filename="../host/android/server_worker.cc" line="552"/>
-        <source>Waiting for connections</source>
-        <translation>En attente de connexions</translation>
-    </message>
-</context>
-<context>
     <name>ServiceItem</name>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="192"/>
@@ -8313,7 +8310,7 @@ Identifiants importés: %5</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="442"/>
-        <location filename="../host/android/settings_widget.cc" line="439"/>
+        <location filename="../host/android/settings_widget.cc" line="405"/>
         <source>Updates</source>
         <translation>Mises à jour</translation>
     </message>
@@ -8324,49 +8321,49 @@ Identifiants importés: %5</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="453"/>
-        <location filename="../host/android/settings_widget.cc" line="442"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
         <source>Update channel</source>
         <translation>Canal de mise à jour</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="454"/>
-        <location filename="../host/android/settings_widget.cc" line="443"/>
+        <location filename="../host/android/settings_widget.cc" line="409"/>
         <source>Stable</source>
         <translation>Stable</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="455"/>
-        <location filename="../host/android/settings_widget.cc" line="444"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
         <source>Beta</source>
         <translation>Bêta</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="456"/>
-        <location filename="../host/android/settings_widget.cc" line="445"/>
+        <location filename="../host/android/settings_widget.cc" line="411"/>
         <source>Alpha</source>
         <translation>Alpha</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="467"/>
-        <location filename="../host/android/settings_widget.cc" line="459"/>
+        <location filename="../host/android/settings_widget.cc" line="425"/>
         <source>Update server</source>
         <translation>Serveur de mise à jour</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="472"/>
-        <location filename="../host/android/settings_widget.cc" line="464"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Public key</source>
         <translation>Clé publique</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="478"/>
-        <location filename="../host/android/settings_widget.cc" line="470"/>
+        <location filename="../host/android/settings_widget.cc" line="436"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>Si le serveur de mise à jour n&apos;est pas spécifié, le serveur par défaut est utilisé. Si la clé publique n&apos;est pas spécifiée, la clé intégrée est utilisée.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="532"/>
-        <location filename="../host/android/settings_widget.cc" line="524"/>
+        <location filename="../host/android/settings_widget.cc" line="490"/>
         <source>Check for updates</source>
         <translation>Vérifier les mises à jour</translation>
     </message>
@@ -8397,88 +8394,68 @@ Identifiants importés: %5</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="285"/>
-        <source>Background mode</source>
-        <translation>Mode arrière-plan</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="297"/>
-        <source>The host accepts connections in the local network and stays connected to the router while the application is not on the screen, so it can be reached at any time.</source>
-        <translation>L&apos;hôte accepte les connexions sur le réseau local et reste connecté au routeur lorsque l&apos;application n&apos;est pas à l&apos;écran, afin qu&apos;il soit accessible à tout moment.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="303"/>
-        <source>Confirm screen capture automatically</source>
-        <translation>Confirmer automatiquement la capture d&apos;écran</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="314"/>
-        <source>The screen capture request is confirmed automatically. It may not work on some devices.</source>
-        <translation>La demande de capture d&apos;écran est confirmée automatiquement. Cela peut ne pas fonctionner sur certains appareils.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="319"/>
         <source>Manage users</source>
         <translation>Gérer les utilisateurs</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="327"/>
+        <location filename="../host/android/settings_widget.cc" line="293"/>
         <source>Change password</source>
         <translation>Changer le mot de passe</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="331"/>
+        <location filename="../host/android/settings_widget.cc" line="297"/>
         <source>Disable password protection</source>
         <translation>Désactiver la protection par mot de passe</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="340"/>
+        <location filename="../host/android/settings_widget.cc" line="306"/>
         <source>Enable password protection</source>
         <translation>Activer la protection par mot de passe</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="355"/>
+        <location filename="../host/android/settings_widget.cc" line="321"/>
         <source>Router</source>
         <translation>Routeur</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
+        <location filename="../host/android/settings_widget.cc" line="326"/>
         <source>Enable the use of a router</source>
         <translation>Permettre l&apos;utilisation d&apos;un routeur</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="365"/>
+        <location filename="../host/android/settings_widget.cc" line="331"/>
         <source>Address</source>
         <translation>Adresse</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="371"/>
+        <location filename="../host/android/settings_widget.cc" line="337"/>
         <source>Public Key</source>
         <translation>Clé publique</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="376"/>
+        <location filename="../host/android/settings_widget.cc" line="342"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Un routeur est nécessaire pour se connecter à un ordinateur s&apos;il n&apos;y a pas de connexion directe (contournement du NAT). Aspia ne fournit pas de routeur public, mais vous pouvez installer le vôtre. Vous pouvez télécharger le routeur sur le &lt;a href=&quot;https://aspia.org&quot;&gt;site officiel&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>An error occurred while processing the password.</source>
         <translation>Une erreur s&apos;est produite lors du traitement du mot de passe.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>Import</source>
         <translation>Importer</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>JSON files (*.json)</source>
         <translation>Fichiers JSON (*.json)</translation>
     </message>
