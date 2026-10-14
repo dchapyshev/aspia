@@ -1008,9 +1008,9 @@ TEST_F(ClientOperatorTest, HostStatusTellsAMissingHostFromAnOfflineOne)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Only an administrator approves hosts, so the list of the unapproved ones is not given to anyone
-// else. The refusal is an answer, not silence: the client waits for its request to complete.
-TEST_F(ClientOperatorTest, UnapprovedHostsAreListedToAdministratorsOnly)
+// Only an administrator approves hosts, so the list of the unapproved ones is not given to an
+// operator. The refusal is still an answer, because the client waits for its request to complete.
+TEST_F(ClientOperatorTest, UnapprovedHostsAreNotListedToOperators)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
                                [this](ClientOperator& client, LoopbackChannel* channel)
@@ -1027,7 +1027,12 @@ TEST_F(ClientOperatorTest, UnapprovedHostsAreListedToAdministratorsOnly)
         EXPECT_EQ(message->temp_host_list().error_code(), proto::router::kErrorAccessDenied);
         EXPECT_EQ(message->temp_host_list().host_size(), 0);
     });
+}
 
+//--------------------------------------------------------------------------------------------------
+// A manager does not approve hosts either, so the list of the unapproved ones is refused to it too.
+TEST_F(ClientOperatorTest, UnapprovedHostsAreNotListedToManagers)
+{
     withClient<ClientManager>(proto::router::SESSION_TYPE_MANAGER,
                               [this](ClientManager& client, LoopbackChannel* channel)
     {
@@ -1041,6 +1046,7 @@ TEST_F(ClientOperatorTest, UnapprovedHostsAreListedToAdministratorsOnly)
         ASSERT_TRUE(message->has_temp_host_list());
         EXPECT_EQ(message->temp_host_list().request_id(), 22);
         EXPECT_EQ(message->temp_host_list().error_code(), proto::router::kErrorAccessDenied);
+        EXPECT_EQ(message->temp_host_list().host_size(), 0);
     });
 }
 
