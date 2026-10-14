@@ -282,24 +282,6 @@ void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
 {
     addSectionHeader(layout, tr("Security"));
 
-    Switch* background = new Switch(tr("Background mode"));
-    background->setChecked(SystemSettings().isBackgroundModeEnabled());
-    connect(background, &QCheckBox::toggled, this, [this](bool checked)
-    {
-        SystemSettings settings;
-        settings.setBackgroundModeEnabled(checked);
-        settings.sync();
-        emit sig_backgroundModeChanged();
-    });
-    layout->addWidget(background);
-
-    Label* background_hint = new Label(
-        tr("The host accepts connections in the local network and stays connected to the router while "
-           "the application is not on the screen, so it can be reached at any time."),
-        Label::Role::CAPTION);
-    background_hint->setWordWrap(true);
-    layout->addWidget(background_hint);
-
     Button* manage = new Button(tr("Manage users"), Button::Role::FILLED);
     connect(manage, &Button::clicked, this, &SettingsWidget::showUsers);
     layout->addWidget(manage);

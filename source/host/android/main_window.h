@@ -84,7 +84,7 @@ private:
     bool permissions_granted_ = false;
 
     // The last press of the system Back that came to this window, see eventFilter().
-    enum class BackPress { NONE, TAKEN, PASSED };
+    enum class BackPress { NONE, TAKEN };
     BackPress back_press_ = BackPress::NONE;
 
     Q_DISABLE_COPY_MOVE(AndroidMainWindow)

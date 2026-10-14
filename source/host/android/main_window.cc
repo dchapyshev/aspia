@@ -34,7 +34,6 @@
 #include "common/android/bottom_navigation_bar.h"
 #include "common/android/keyboard_inset.h"
 #include "host/database.h"
-#include "host/system_settings.h"
 #include "host/android/connection_widget.h"
 #include "host/android/password_dialog.h"
 #include "host/android/permissions_widget.h"
@@ -115,8 +114,6 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
             server_, &ServerWorker::onRouterSettingsChanged, Qt::QueuedConnection);
     connect(settings, &SettingsWidget::sig_updateSettingsChanged,
             server_, &ServerWorker::onUpdateSettingsChanged, Qt::QueuedConnection);
-    connect(settings, &SettingsWidget::sig_backgroundModeChanged,
-            server_, &ServerWorker::onBackgroundModeChanged, Qt::QueuedConnection);
     connect(settings, &SettingsWidget::sig_usersChanged,
             server_, &ServerWorker::onUsersChanged, Qt::QueuedConnection);
     connect(settings, &SettingsWidget::sig_passwordProtectionChanged,
@@ -173,13 +170,6 @@ bool AndroidMainWindow::eventFilter(QObject* watched, QEvent* event)
     {
         // The system Back nobody handles closes the window on the release, and with it the application
         // and the host. Taking the press keeps Qt from doing that.
-        if (!visibleDialog() && !app_bar_->isBackVisible() &&
-            !SystemSettings().isBackgroundModeEnabled())
-        {
-            back_press_ = BackPress::PASSED;
-            return QWidget::eventFilter(watched, event);
-        }
-
         back_press_ = BackPress::TAKEN;
         return true;
     }
@@ -191,9 +181,6 @@ bool AndroidMainWindow::eventFilter(QObject* watched, QEvent* event)
     // the release may come here. It is dropped, otherwise the line edit shows the keyboard again.
     if (back_press == BackPress::NONE)
         return true;
-
-    if (back_press == BackPress::PASSED)
-        return QWidget::eventFilter(watched, event);
 
     // The action follows on the release, so the whole press is over before the app may leave the
     // screen: a release that comes to another app leaves Android waiting for it. A dialog is closed as
@@ -211,8 +198,7 @@ bool AndroidMainWindow::eventFilter(QObject* watched, QEvent* event)
         return true;
     }
 
-    // In the background mode the host has to stay reachable, so the app goes to the background
-    // instead, as with Home.
+    // On the root screen the app goes to the background, as Android does with the root activity.
     QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
     {
         QJniObject context = QNativeInterface::QAndroidApplication::context();

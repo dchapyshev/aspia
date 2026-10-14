@@ -40,7 +40,6 @@
 #include "host/host_user_list.h"
 #include "host/router_config_provider.h"
 #include "host/router_manager.h"
-#include "host/system_settings.h"
 #include "host/user_settings.h"
 #include "host/android/desktop_agent.h"
 #include "host/android/desktop_client.h"
@@ -52,7 +51,6 @@ namespace {
 
 const char kScreenMonitorClass[] = "org/aspia/host/ScreenMonitor";
 const char kConnectionWaitServiceClass[] = "org/aspia/host/ConnectionWaitService";
-const char kBackgroundModeServiceClass[] = "org/aspia/host/BackgroundModeService";
 
 // How long the host waits for a connection in the background after the share.
 constexpr Minutes kShareWaitTime{ 5 };
@@ -196,7 +194,6 @@ void ServerWorker::onStart()
     });
 
     updateRouterConnection();
-    updateBackgroundModeService();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -211,13 +208,6 @@ void ServerWorker::onStop()
         delete client;
 
     stopWaitingAfterShare();
-
-    QJniObject context = QNativeInterface::QAndroidApplication::context();
-    if (context.isValid())
-    {
-        QJniObject::callStaticMethod<void>(
-            kBackgroundModeServiceClass, "stop", "(Landroid/content/Context;)V", context.object());
-    }
 
     desktop_agent_.reset();
     router_manager_.reset();
@@ -372,13 +362,6 @@ void ServerWorker::onUpdateSettingsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServerWorker::onBackgroundModeChanged()
-{
-    updateRouterConnection();
-    updateBackgroundModeService();
-}
-
-//--------------------------------------------------------------------------------------------------
 void ServerWorker::onUsersChanged()
 {
     if (router_manager_)
@@ -408,7 +391,6 @@ void ServerWorker::onPermissionsChanged(bool granted)
 {
     permissions_granted_ = granted;
     updateRouterConnection();
-    updateBackgroundModeService();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -430,10 +412,6 @@ void ServerWorker::onApplicationStateChanged()
         stopWaitingAfterShare();
 
     updateRouterConnection();
-
-    // The service may have failed to start or been stopped by the system meanwhile.
-    if (app_active_)
-        updateBackgroundModeService();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -509,15 +487,12 @@ void ServerWorker::updateRouterConnection()
     // password stays on the screen. An active session keeps the connection regardless: it holds the app
     // alive through its foreground service, and its relay leg must not be torn down. Otherwise Android
     // would freeze the process in the background anyway and the router would drop the host by timeout,
-    // so the connection is closed now for a clean, immediate offline state. The background mode is
-    // chosen by the user and keeps the host online all the time, its foreground service keeping the
-    // app alive.
+    // so the connection is closed now for a clean, immediate offline state.
     // Without the permissions a session would not work, so the host stays offline. A session that has
     // already started keeps going.
     const bool waiting_after_share = (share_wait_end_ != TimePoint::min());
-    const bool in_foreground = screen_on_ && (app_active_ || waiting_after_share);
     const bool should_be_online =
-        (permissions_granted_ && (in_foreground || SystemSettings().isBackgroundModeEnabled())) ||
+        (permissions_granted_ && screen_on_ && (app_active_ || waiting_after_share)) ||
         !connected_clients_.isEmpty();
 
     if (should_be_online)
@@ -529,31 +504,6 @@ void ServerWorker::updateRouterConnection()
     {
         disconnectFromRouter();
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ServerWorker::updateBackgroundModeService()
-{
-    // Called directly on this thread, because the main thread of Android is blocked while the app is
-    // in the background.
-    QJniObject context = QNativeInterface::QAndroidApplication::context();
-    if (!context.isValid())
-        return;
-
-    // Without the permissions the host takes no connections, so there is nothing to wait for.
-    if (!permissions_granted_ || !SystemSettings().isBackgroundModeEnabled())
-    {
-        QJniObject::callStaticMethod<void>(
-            kBackgroundModeServiceClass, "stop", "(Landroid/content/Context;)V", context.object());
-        return;
-    }
-
-    // Android does not allow starting the service from the background. The service catches the refusal
-    // itself and is started again on the next return to the app.
-    QJniObject text = QJniObject::fromString(tr("Waiting for connections"));
-    QJniObject::callStaticMethod<void>(
-        kBackgroundModeServiceClass, "start", "(Landroid/content/Context;Ljava/lang/String;)V",
-        context.object(), text.object<jstring>());
 }
 
 //--------------------------------------------------------------------------------------------------
