@@ -16,35 +16,45 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_MCP_MCP_CONNECTOR_H
-#define CLIENT_MCP_MCP_CONNECTOR_H
+#ifndef CLIENT_MCP_MCP_WORKER_H
+#define CLIENT_MCP_MCP_WORKER_H
 
 #include <QByteArray>
 #include <QHash>
-#include <QObject>
 
-#include <memory>
 #include <vector>
+
+#include "base/scoped_qpointer.h"
+#include "base/threading/worker.h"
 
 class McpTool;
 class QLocalServer;
 class QLocalSocket;
 
-// MCP server of the running client. An AI application launches the client with --mcp, and that
-// process passes the messages between its standard streams and the running client.
-class McpConnector final : public QObject
+class McpWorker final : public Worker
 {
     Q_OBJECT
 
 public:
-    explicit McpConnector(QObject* parent = nullptr);
-    ~McpConnector() final;
+    McpWorker();
+    ~McpWorker() final;
 
-    // Runs the process launched by the AI application. Returns the exit code of the process.
+    // Runs the process that an AI application launches with --mcp. The process passes the messages
+    // between its standard streams and the running client. Returns the exit code of the process.
     static int runBridge();
 
-    bool start();
-    void stop();
+public slots:
+    void onEnable();
+    void onDisable();
+
+signals:
+    void sig_enableFailed();
+
+protected:
+    // Worker implementation.
+    void onPrepare() final;
+    void onStart() final;
+    void onStop() final;
 
 private slots:
     void onNewConnection();
@@ -58,12 +68,12 @@ private:
 
     void readMessages(QLocalSocket* socket);
 
-    QLocalServer* server_ = nullptr;
+    ScopedQPointer<QLocalServer> server_;
     QHash<QLocalSocket*, Connection> connections_;
 
     std::vector<std::unique_ptr<McpTool>> tools_;
 
-    Q_DISABLE_COPY_MOVE(McpConnector)
+    Q_DISABLE_COPY_MOVE(McpWorker)
 };
 
-#endif // CLIENT_MCP_MCP_CONNECTOR_H
+#endif // CLIENT_MCP_MCP_WORKER_H

@@ -57,7 +57,7 @@
 #include "client/desktop/management/search_dialog.h"
 #include "client/desktop/sys_info/system_info_window.h"
 #include "client/desktop/terminal/terminal_window.h"
-#include "client/mcp/mcp_connector.h"
+#include "client/mcp/mcp_worker.h"
 #include "client/workers/update_worker.h"
 #include "common/desktop/about_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -84,8 +84,7 @@ QString escapeTabTitle(const QString& title)
 //--------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
-      ui(std::make_unique<Ui::MainWindow>()),
-      mcp_connector_(new McpConnector(this))
+      ui(std::make_unique<Ui::MainWindow>())
 {
     LOG(INFO) << "Ctor";
 
@@ -186,6 +185,15 @@ MainWindow::MainWindow(QWidget* parent)
         dialog->exec();
     }, Qt::QueuedConnection);
 
+    mcp_worker_ = GuiApplication::findWorker<McpWorker>();
+    connect(mcp_worker_, &McpWorker::sig_enableFailed, this, [this]()
+    {
+        MsgBox::warning(this, tr("Unable to turn on the MCP connector."));
+
+        QSignalBlocker blocker(ui->action_mcp_connector);
+        ui->action_mcp_connector->setChecked(false);
+    }, Qt::QueuedConnection);
+
     connect(GuiApplication::instance(), &GuiApplication::sig_themeChanged,
             this, &MainWindow::onAfterThemeChanged);
     onAfterThemeChanged();
@@ -207,6 +215,7 @@ MainWindow::MainWindow(QWidget* parent)
 MainWindow::~MainWindow()
 {
     LOG(INFO) << "Dtor";
+    QMetaObject::invokeMethod(mcp_worker_, &McpWorker::onDisable, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -803,19 +812,8 @@ void MainWindow::onAlwaysOnTop(bool checked)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onMcpConnector(bool enable)
 {
-    if (!enable)
-    {
-        mcp_connector_->stop();
-        return;
-    }
-
-    if (!mcp_connector_->start())
-    {
-        MsgBox::warning(this, tr("Unable to turn on the MCP connector."));
-
-        QSignalBlocker blocker(ui->action_mcp_connector);
-        ui->action_mcp_connector->setChecked(false);
-    }
+    QMetaObject::invokeMethod(mcp_worker_, enable ? &McpWorker::onEnable : &McpWorker::onDisable,
+                              Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -17,6 +17,6 @@
 #
 
 collect_sources(SOURCE_CLIENT_CORE_MCP
-    mcp_connector.cc
-    mcp_connector.h
-    mcp_tool.h)
+    mcp_tool.h
+    mcp_worker.cc
+    mcp_worker.h)

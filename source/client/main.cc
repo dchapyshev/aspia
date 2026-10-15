@@ -47,7 +47,7 @@
 #include "client/desktop/app_lock.h"
 #include "client/desktop/main_window.h"
 #include "client/desktop/update_server_dialog.h"
-#include "client/mcp/mcp_connector.h"
+#include "client/mcp/mcp_worker.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/update_dialog.h"
@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
     if (argc == 2 && qstrcmp(argv[1], "--mcp") == 0)
     {
         QCoreApplication application(argc, argv);
-        return McpConnector::runBridge();
+        return McpWorker::runBridge();
     }
 
     if (argc == 3 || argc == 4)

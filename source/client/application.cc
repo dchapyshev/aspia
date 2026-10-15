@@ -26,6 +26,10 @@
 #include "client/workers/router_worker.h"
 #include "client/workers/update_worker.h"
 
+#if !defined(Q_OS_ANDROID)
+#include "client/mcp/mcp_worker.h"
+#endif // !defined(Q_OS_ANDROID)
+
 #include <QIcon>
 
 #if defined(Q_OS_WINDOWS)
@@ -104,6 +108,10 @@ Application::Application(int& argc, char* argv[])
 
     addWorker(std::make_unique<RouterWorker>());
     addWorker(std::make_unique<UpdateWorker>());
+
+#if !defined(Q_OS_ANDROID)
+    addWorker(std::make_unique<McpWorker>());
+#endif // !defined(Q_OS_ANDROID)
 
 #if defined(Q_OS_WINDOWS)
     registerUrlHandler();

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/mcp/mcp_connector.h"
+#include "client/mcp/mcp_worker.h"
 
 #include <QCoreApplication>
 #include <QJsonArray>
@@ -34,12 +34,8 @@
 #include <algorithm>
 #include <cerrno>
 #include <cstdio>
-#include <mutex>
-#include <thread>
 
 #include "version.h"
-#include "base/logging.h"
-#include "base/time_types.h"
 #include "client/mcp/tools/find_computers_tool.h"
 
 namespace {
@@ -275,27 +271,20 @@ QJsonObject processMessage(const QByteArray& message, bool* initialized,
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-McpConnector::McpConnector(QObject* parent)
-    : QObject(parent),
-      server_(new QLocalServer(this))
+McpWorker::McpWorker()
 {
     LOG(TRACE) << "Ctor";
-
-    server_->setSocketOptions(QLocalServer::UserAccessOption);
-    connect(server_, &QLocalServer::newConnection, this, &McpConnector::onNewConnection);
-
-    tools_.push_back(std::make_unique<FindComputersTool>());
 }
 
 //--------------------------------------------------------------------------------------------------
-McpConnector::~McpConnector()
+McpWorker::~McpWorker()
 {
     LOG(TRACE) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-int McpConnector::runBridge()
+int McpWorker::runBridge()
 {
     LOG(INFO) << "Starting MCP bridge";
 
@@ -367,7 +356,7 @@ int McpConnector::runBridge()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool McpConnector::start()
+void McpWorker::onEnable()
 {
     QString channel_name = channelName();
 
@@ -377,16 +366,19 @@ bool McpConnector::start()
     if (!server_->listen(channel_name))
     {
         LOG(ERROR) << "Unable to listen on channel" << channel_name << ":" << server_->errorString();
-        return false;
+        emit sig_enableFailed();
+        return;
     }
 
     LOG(INFO) << "MCP connector started";
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void McpConnector::stop()
+void McpWorker::onDisable()
 {
+    if (!server_->isListening())
+        return;
+
     server_->close();
 
     const QList<QLocalSocket*> sockets = connections_.keys();
@@ -403,7 +395,32 @@ void McpConnector::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void McpConnector::onNewConnection()
+void McpWorker::onPrepare()
+{
+    server_.reset(new QLocalServer(this));
+    server_->setSocketOptions(QLocalServer::UserAccessOption);
+    connect(server_, &QLocalServer::newConnection, this, &McpWorker::onNewConnection);
+
+    tools_.push_back(std::make_unique<FindComputersTool>());
+}
+
+//--------------------------------------------------------------------------------------------------
+void McpWorker::onStart()
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+void McpWorker::onStop()
+{
+    onDisable();
+
+    server_.reset();
+    tools_.clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+void McpWorker::onNewConnection()
 {
     while (QLocalSocket* socket = server_->nextPendingConnection())
     {
@@ -421,7 +438,7 @@ void McpConnector::onNewConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-void McpConnector::readMessages(QLocalSocket* socket)
+void McpWorker::readMessages(QLocalSocket* socket)
 {
     Connection& connection = connections_[socket];
     connection.buffer.append(socket->readAll());

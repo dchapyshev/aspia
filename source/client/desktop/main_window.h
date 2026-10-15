@@ -38,7 +38,7 @@ enum SessionType : int;
 class AppLock;
 class Tab;
 class ManagementTab;
-class McpConnector;
+class McpWorker;
 class SearchDialog;
 class QLineEdit;
 class HostConfig;
@@ -114,7 +114,7 @@ private:
     QList<QPointer<QAction>> tab_toolbar_actions_;
     QList<QPair<QMenu*, QList<QPointer<QAction>>>> tab_menu_actions_;
 
-    McpConnector* mcp_connector_ = nullptr;
+    QPointer<McpWorker> mcp_worker_;
 
     Q_DISABLE_COPY_MOVE(MainWindow)
 };
