@@ -17,6 +17,10 @@
 #
 
 collect_sources(SOURCE_CLIENT_CORE_MCP_TOOLS
+    check_local_hosts_tool.cc
+    check_local_hosts_tool.h
+    check_router_hosts_tool.cc
+    check_router_hosts_tool.h
     find_local_hosts_tool.cc
     find_local_hosts_tool.h
     find_router_hosts_tool.cc
