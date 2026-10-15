@@ -22,10 +22,15 @@
 #include <QJsonObject>
 #include <QString>
 
+#include <functional>
+
 // A tool of the MCP connector that an AI application can call.
 class McpTool
 {
 public:
+    // |success| is false when |text| holds an error for the model.
+    using Reply = std::function<void(bool success, const QString& text)>;
+
     McpTool() = default;
     virtual ~McpTool() = default;
 
@@ -34,8 +39,8 @@ public:
     // The entry of the tool in the tools/list result.
     virtual QJsonObject definition() const = 0;
 
-    // Returns false when |text| holds an error for the model.
-    virtual bool call(const QJsonObject& arguments, QString* text) = 0;
+    // Calls |reply| exactly once in the thread of the call, right away or later.
+    virtual void call(const QJsonObject& arguments, Reply reply) = 0;
 
 private:
     Q_DISABLE_COPY_MOVE(McpTool)

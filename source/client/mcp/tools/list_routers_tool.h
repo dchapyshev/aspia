@@ -16,26 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_MCP_TOOLS_FIND_COMPUTERS_TOOL_H
-#define CLIENT_MCP_TOOLS_FIND_COMPUTERS_TOOL_H
+#ifndef CLIENT_MCP_TOOLS_LIST_ROUTERS_TOOL_H
+#define CLIENT_MCP_TOOLS_LIST_ROUTERS_TOOL_H
+
+#include <QPointer>
 
 #include "client/mcp/mcp_tool.h"
 
-// Lists the computers of the local database or searches them by the name and the address. The
-// credentials and the comments are never returned.
-class FindComputersTool final : public McpTool
+class RouterController;
+
+// Lists the routers of the database with the status of their connections. The credentials are never
+// returned.
+class ListRoutersTool final : public McpTool
 {
 public:
-    FindComputersTool() = default;
-    ~FindComputersTool() final = default;
+    explicit ListRoutersTool(const QPointer<RouterController>& router_controller);
+    ~ListRoutersTool() final = default;
 
     // McpTool implementation.
     QString name() const final;
     QJsonObject definition() const final;
-    bool call(const QJsonObject& arguments, QString* text) final;
+    void call(const QJsonObject& arguments, Reply reply) final;
 
 private:
-    Q_DISABLE_COPY_MOVE(FindComputersTool)
+    const QPointer<RouterController>& router_controller_;
+
+    Q_DISABLE_COPY_MOVE(ListRoutersTool)
 };
 
-#endif // CLIENT_MCP_TOOLS_FIND_COMPUTERS_TOOL_H
+#endif // CLIENT_MCP_TOOLS_LIST_ROUTERS_TOOL_H

@@ -30,6 +30,7 @@
 class McpTool;
 class QLocalServer;
 class QLocalSocket;
+class RouterController;
 
 class McpWorker final : public Worker
 {
@@ -44,7 +45,7 @@ public:
     static int runBridge();
 
 public slots:
-    void onEnable();
+    void onEnable(const QPointer<RouterController>& router_controller);
     void onDisable();
 
 signals:
@@ -71,6 +72,7 @@ private:
     ScopedQPointer<QLocalServer> server_;
     QHash<QLocalSocket*, Connection> connections_;
 
+    QPointer<RouterController> router_controller_;
     std::vector<std::unique_ptr<McpTool>> tools_;
 
     Q_DISABLE_COPY_MOVE(McpWorker)

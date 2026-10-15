@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/mcp/tools/find_computers_tool.h"
+#include "client/mcp/tools/find_local_computers_tool.h"
 
 #include <QHash>
 #include <QJsonArray>
@@ -45,39 +45,74 @@ QString groupPath(qint64 group_id, const QHash<qint64, LocalGroupConfig>& groups
     return names.join('/');
 }
 
+//--------------------------------------------------------------------------------------------------
+bool isInGroup(qint64 group_id, qint64 ancestor_id, const QHash<qint64, LocalGroupConfig>& groups)
+{
+    // Bounded by the count of groups in case the records hold a cycle.
+    for (qsizetype depth = 0; group_id != 0 && depth <= groups.size(); ++depth)
+    {
+        if (group_id == ancestor_id)
+            return true;
+
+        auto it = groups.find(group_id);
+        if (it == groups.end())
+            return false;
+
+        group_id = it->parentId();
+    }
+
+    return false;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-QString FindComputersTool::name() const
+QString FindLocalComputersTool::name() const
 {
-    return "find_computers";
+    return "find_local_computers";
 }
 
 //--------------------------------------------------------------------------------------------------
-QJsonObject FindComputersTool::definition() const
+QJsonObject FindLocalComputersTool::definition() const
 {
     QJsonObject query{ { "type", "string" },
                        { "description", "Text to look for in the name or address of a computer. Without it all "
                                         "computers are listed." } };
 
+    QJsonObject group_id{ { "type", "integer" },
+                          { "description", "Id of a group from list_local_groups. Only the computers of this group and "
+                                           "of its subgroups are listed." } };
+
     return QJsonObject{
         { "name", name() },
-        { "description", "Lists the computers saved in the Aspia Client database, or only those whose name or "
-                         "address contains the query, ignoring case. Passwords, user names and comments are never "
+        { "description", "Lists the computers saved in the local database of Aspia Client, or only those whose name "
+                         "or address contains the query, ignoring case, and that are in the given group. The "
+                         "computers of routers are not listed here. Passwords, user names and comments are never "
                          "returned." },
-        { "inputSchema", QJsonObject{ { "type", "object" }, { "properties", QJsonObject{ { "query", query } } },
+        { "inputSchema", QJsonObject{ { "type", "object" },
+                                      { "properties", QJsonObject{ { "query", query }, { "group_id", group_id } } },
                                       { "additionalProperties", false } } } };
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FindComputersTool::call(const QJsonObject& arguments, QString* text)
+void FindLocalComputersTool::call(const QJsonObject& arguments, Reply reply)
 {
     QJsonValue query = arguments.value("query");
     if (!query.isUndefined() && !query.isString())
     {
-        *text = "The query must be a string.";
-        return false;
+        reply(false, "The query must be a string.");
+        return;
     }
+
+    QJsonValue group_value = arguments.value("group_id");
+    if (!group_value.isUndefined() &&
+        (!group_value.isDouble() || group_value.toDouble() != static_cast<double>(group_value.toInteger())))
+    {
+        reply(false, "The group_id must be an integer.");
+        return;
+    }
+
+    const qint64 group_id = group_value.toInteger();
 
     Database& db = Database::instance();
 
@@ -85,32 +120,41 @@ bool FindComputersTool::call(const QJsonObject& arguments, QString* text)
     Database::ReadResult result = db.searchLocalHosts(query.toString(), &hosts);
     if (result == Database::ReadResult::FAILED)
     {
-        *text = "Unable to read the database.";
-        return false;
+        reply(false, "Unable to read the database.");
+        return;
     }
 
     QList<LocalGroupConfig> group_list;
     if (!db.allLocalGroups(&group_list))
     {
-        *text = "Unable to read the database.";
-        return false;
+        reply(false, "Unable to read the database.");
+        return;
     }
 
     QHash<qint64, LocalGroupConfig> groups;
     for (const LocalGroupConfig& group : std::as_const(group_list))
         groups.insert(group.id(), group);
 
+    if (group_id != 0 && !groups.contains(group_id))
+    {
+        reply(false, QString("There is no group with id %1. Use list_local_groups to get the ids.").arg(group_id));
+        return;
+    }
+
     QJsonArray computers;
     for (const LocalHostConfig& host : std::as_const(hosts))
     {
-        computers.append(QJsonObject{ { "id", host.id() }, { "name", host.name() }, { "address", host.address() },
-                                      { "group", groupPath(host.groupId(), groups) } });
+        if (group_id == 0 || isInGroup(host.groupId(), group_id, groups))
+        {
+            computers.append(QJsonObject{ { "id", host.id() }, { "name", host.name() },
+                                          { "address", host.address() },
+                                          { "group", groupPath(host.groupId(), groups) } });
+        }
     }
 
     QJsonObject content{ { "computers", computers } };
     if (result == Database::ReadResult::INCOMPLETE)
         content.insert("warning", "Some records of the database are damaged, their data may be missing.");
 
-    *text = QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact));
-    return true;
+    reply(true, QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact)));
 }

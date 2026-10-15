@@ -17,5 +17,9 @@
 #
 
 collect_sources(SOURCE_CLIENT_CORE_MCP_TOOLS
-    find_computers_tool.cc
-    find_computers_tool.h)
+    find_local_computers_tool.cc
+    find_local_computers_tool.h
+    list_local_groups_tool.cc
+    list_local_groups_tool.h
+    list_routers_tool.cc
+    list_routers_tool.h)

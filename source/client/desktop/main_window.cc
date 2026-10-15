@@ -812,8 +812,15 @@ void MainWindow::onAlwaysOnTop(bool checked)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onMcpConnector(bool enable)
 {
-    QMetaObject::invokeMethod(mcp_worker_, enable ? &McpWorker::onEnable : &McpWorker::onDisable,
-                              Qt::QueuedConnection);
+    if (enable)
+    {
+        QMetaObject::invokeMethod(mcp_worker_, &McpWorker::onEnable, Qt::QueuedConnection,
+                                  QPointer<RouterController>(&RouterController::instance()));
+    }
+    else
+    {
+        QMetaObject::invokeMethod(mcp_worker_, &McpWorker::onDisable, Qt::QueuedConnection);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
