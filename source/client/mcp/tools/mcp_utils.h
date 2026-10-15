@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_MCP_TOOLS_SESSION_TYPE_ARGUMENT_H
-#define CLIENT_MCP_TOOLS_SESSION_TYPE_ARGUMENT_H
+#ifndef CLIENT_MCP_TOOLS_MCP_UTILS_H
+#define CLIENT_MCP_TOOLS_MCP_UTILS_H
 
 #include <QJsonObject>
 #include <QJsonValue>
@@ -29,5 +29,6 @@
 // The session_type argument of the tools that connect to hosts.
 QJsonObject sessionTypeSchema();
 std::optional<proto::peer::SessionType> sessionTypeFromArgument(const QJsonValue& value);
+QString sessionTypeName(proto::peer::SessionType session_type);
 
-#endif // CLIENT_MCP_TOOLS_SESSION_TYPE_ARGUMENT_H
+#endif // CLIENT_MCP_TOOLS_MCP_UTILS_H

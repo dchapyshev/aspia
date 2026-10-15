@@ -26,6 +26,7 @@
 #include <memory>
 
 #include "client/desktop/tab.h"
+#include "client/mcp/mcp_controller.h"
 
 namespace Ui {
 class MainWindow;
@@ -38,12 +39,13 @@ enum SessionType : int;
 class AppLock;
 class Tab;
 class ManagementTab;
-class McpController;
 class SearchDialog;
 class QLineEdit;
 class HostConfig;
 
-class MainWindow final : public QMainWindow
+class MainWindow final
+    : public QMainWindow,
+      public McpController::Delegate
 {
     Q_OBJECT
 
@@ -64,6 +66,11 @@ signals:
 protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) final;
+
+    // McpController::Delegate implementation.
+    QList<McpController::SessionInfo> sessions() const final;
+    void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) final;
+    void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) final;
 
 private slots:
     void onAfterThemeChanged();

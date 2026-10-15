@@ -57,7 +57,6 @@
 #include "client/desktop/management/router_users_widget.h"
 #include "client/desktop/management/router_workspace_dialog.h"
 #include "client/desktop/management/search_widget.h"
-#include "client/mcp/mcp_controller.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/session_type.h"
@@ -171,12 +170,6 @@ ManagementTab::ManagementTab(QWidget* parent)
             this, &ManagementTab::onTwoFactorRequired);
     connect(&controller, &RouterController::sig_statusChanged,
             this, &ManagementTab::updateActionsState);
-
-    McpController& mcp_controller = McpController::instance();
-    connect(&mcp_controller, &McpController::sig_localConnectRequested,
-            this, &ManagementTab::onLocalConnectRequested);
-    connect(&mcp_controller, &McpController::sig_routerConnectRequested,
-            this, &ManagementTab::onRouterConnectRequested);
 
     // The button of the status widget asks the question of its record again.
     connect(router_status_widget_, &RouterStatusWidget::sig_twoFactorClicked,
@@ -510,6 +503,28 @@ void ManagementTab::reloadRouters()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ManagementTab::connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type)
+{
+    LocalHostConfig entry;
+    if (!readLocalHost(entry_id, &entry))
+        return;
+
+    HostConfig host = HostConfig::forLocalHost(entry);
+    if (!validateHostForConnect(host))
+        return;
+
+    setHostConnectTime(entry_id);
+    emit sig_connectRequested(host, session_type);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ManagementTab::connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type)
+{
+    if (validateHostForConnect(host))
+        emit sig_connectRequested(host, session_type);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ManagementTab::onSwitchContent(SidebarItem::Type type)
 {
     switch (type)
@@ -833,29 +848,7 @@ void ManagementTab::onConnectAction(QAction* action)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onLocalConnect(qint64 entry_id)
 {
-    onLocalConnectRequested(entry_id, defaultSessionType());
-}
-
-//--------------------------------------------------------------------------------------------------
-void ManagementTab::onLocalConnectRequested(qint64 entry_id, proto::peer::SessionType session_type)
-{
-    LocalHostConfig entry;
-    if (!readLocalHost(entry_id, &entry))
-        return;
-
-    HostConfig host = HostConfig::forLocalHost(entry);
-    if (!validateHostForConnect(host))
-        return;
-
-    setHostConnectTime(entry_id);
-    emit sig_connectRequested(host, session_type);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ManagementTab::onRouterConnectRequested(const HostConfig& host, proto::peer::SessionType session_type)
-{
-    if (validateHostForConnect(host))
-        emit sig_connectRequested(host, session_type);
+    connectLocalHost(entry_id, defaultSessionType());
 }
 
 //--------------------------------------------------------------------------------------------------

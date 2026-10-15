@@ -20,6 +20,7 @@
 #define CLIENT_MCP_MCP_CONTROLLER_H
 
 #include <QJsonObject>
+#include <QList>
 #include <QObject>
 #include <QPointer>
 
@@ -41,8 +42,29 @@ class McpController final : public QObject
     Q_OBJECT
 
 public:
-    // Only one lives at a time.
-    explicit McpController(QObject* parent = nullptr);
+    struct SessionInfo
+    {
+        proto::peer::SessionType session_type;
+        QString name;
+        qint64 entry_id = 0;
+        qint64 router_id = 0;
+        QString address;
+        bool portable = false;
+        bool detached = false;
+    };
+
+    class Delegate
+    {
+    public:
+        virtual ~Delegate() = default;
+
+        virtual QList<SessionInfo> sessions() const = 0;
+        virtual void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) = 0;
+        virtual void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) = 0;
+    };
+
+    // Only one lives at a time. |delegate| must outlive the controller.
+    McpController(Delegate* delegate, QObject* parent = nullptr);
     ~McpController() final;
 
     static McpController& instance();
@@ -50,17 +72,22 @@ public:
     // A failure to turn the connector on comes as sig_enableFailed().
     void setEnabled(bool enable);
 
+    QList<SessionInfo> sessions() const;
+
+    // The session starts when the event loop gets control, so a modal dialog of the session does not
+    // hold the reply of the tool.
+    void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type);
+    void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type);
+
 signals:
     void sig_enableFailed();
-
-    void sig_localConnectRequested(qint64 entry_id, proto::peer::SessionType session_type);
-    void sig_routerConnectRequested(const HostConfig& host, proto::peer::SessionType session_type);
 
 private slots:
     void onToolsListRequested(qint64 request_id);
     void onToolCallRequested(qint64 request_id, const QString& name, const QJsonObject& arguments);
 
 private:
+    Delegate* delegate_;
     QPointer<McpWorker> mcp_worker_;
     std::vector<std::unique_ptr<McpTool>> tools_;
 

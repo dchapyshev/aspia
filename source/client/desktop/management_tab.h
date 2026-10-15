@@ -68,6 +68,8 @@ public:
     void searchTextChanged(const QString& text) final;
 
     void reloadRouters();
+    void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type);
+    void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type);
 
 private slots:
     void onSwitchContent(SidebarItem::Type type);
@@ -75,8 +77,6 @@ private slots:
     void onCurrentHostChanged(qint64 entry_id);
     void onConnectAction(QAction* action);
     void onLocalConnect(qint64 entry_id);
-    void onLocalConnectRequested(qint64 entry_id, proto::peer::SessionType session_type);
-    void onRouterConnectRequested(const HostConfig& host, proto::peer::SessionType session_type);
     void onRouterGroupConnect();
     void onRouterHostConnect();
     void onTempHostConnect();

@@ -37,5 +37,7 @@ collect_sources(SOURCE_CLIENT_CORE_MCP_TOOLS
     list_router_groups_tool.h
     list_routers_tool.cc
     list_routers_tool.h
-    session_type_argument.cc
-    session_type_argument.h)
+    list_sessions_tool.cc
+    list_sessions_tool.h
+    mcp_utils.cc
+    mcp_utils.h)

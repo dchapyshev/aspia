@@ -27,7 +27,7 @@
 #include "client/database.h"
 #include "client/router_controller.h"
 #include "client/mcp/mcp_controller.h"
-#include "client/mcp/tools/session_type_argument.h"
+#include "client/mcp/tools/mcp_utils.h"
 #include "proto/router_constants.h"
 
 namespace {
@@ -222,12 +222,7 @@ void ConnectRouterHostTool::call(const QJsonObject& arguments, Reply reply)
         HostConfig host = HostConfig::forRouterHost(router_id, host_id, lookup.name);
         host.setPortable(quick_support);
 
-        // A modal dialog of the session would hold the reply until the user closes it.
-        McpController* controller = &McpController::instance();
-        QMetaObject::invokeMethod(controller, [controller, host, type = *session_type]()
-        {
-            emit controller->sig_routerConnectRequested(host, type);
-        }, Qt::QueuedConnection);
+        McpController::instance().connectRouterHost(host, *session_type);
 
         reply(true, QString("Aspia Client opens the %1 session to \"%2\" on the screen of the user.")
             .arg(session_name, lookup.name));

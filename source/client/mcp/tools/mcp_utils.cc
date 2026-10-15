@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/mcp/tools/session_type_argument.h"
+#include "client/mcp/tools/mcp_utils.h"
 
 #include <QJsonArray>
 
@@ -63,4 +63,16 @@ std::optional<proto::peer::SessionType> sessionTypeFromArgument(const QJsonValue
     }
 
     return std::nullopt;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString sessionTypeName(proto::peer::SessionType session_type)
+{
+    for (const SessionTypeName& entry : kSessionTypes)
+    {
+        if (entry.type == session_type)
+            return entry.name;
+    }
+
+    return "unknown";
 }

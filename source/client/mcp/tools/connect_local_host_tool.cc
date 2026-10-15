@@ -22,7 +22,7 @@
 
 #include "client/database.h"
 #include "client/mcp/mcp_controller.h"
-#include "client/mcp/tools/session_type_argument.h"
+#include "client/mcp/tools/mcp_utils.h"
 
 //--------------------------------------------------------------------------------------------------
 QString ConnectLocalHostTool::name() const
@@ -83,12 +83,7 @@ void ConnectLocalHostTool::call(const QJsonObject& arguments, Reply reply)
             return;
     }
 
-    // A modal dialog of the session would hold the reply until the user closes it.
-    McpController* controller = &McpController::instance();
-    QMetaObject::invokeMethod(controller, [controller, id, type = *session_type]()
-    {
-        emit controller->sig_localConnectRequested(id, type);
-    }, Qt::QueuedConnection);
+    McpController::instance().connectLocalHost(id, *session_type);
 
     reply(true, QString("Aspia Client opens the %1 session to \"%2\" on the screen of the user.")
         .arg(arguments.value("session_type").toString(), host.name()));

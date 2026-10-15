@@ -57,7 +57,6 @@
 #include "client/desktop/management/search_dialog.h"
 #include "client/desktop/sys_info/system_info_window.h"
 #include "client/desktop/terminal/terminal_window.h"
-#include "client/mcp/mcp_controller.h"
 #include "client/workers/update_worker.h"
 #include "common/desktop/about_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -85,7 +84,7 @@ QString escapeTabTitle(const QString& title)
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
       ui(std::make_unique<Ui::MainWindow>()),
-      mcp_controller_(new McpController(this))
+      mcp_controller_(new McpController(this, this))
 {
     LOG(INFO) << "Ctor";
 
@@ -357,6 +356,47 @@ void MainWindow::closeEvent(QCloseEvent* /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
+QList<McpController::SessionInfo> MainWindow::sessions() const
+{
+    QList<McpController::SessionInfo> list;
+
+    for (int i = 0; i < ui->tabs->count(); ++i)
+    {
+        ClientTab* client_tab = dynamic_cast<ClientTab*>(ui->tabs->widget(i));
+        ClientWindow* client_window = client_tab ? client_tab->clientWindow() : nullptr;
+        if (client_window && client_window->sessionState())
+        {
+            const HostConfig& host = client_window->sessionState()->host();
+            list.append(McpController::SessionInfo{ client_window->sessionType(), host.name(), host.entryId(),
+                                                    host.routerId(), host.address(), host.isPortable(),
+                                                    client_tab->isDetached() });
+        }
+    }
+
+    return list;
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type)
+{
+    if (ManagementTab* management_tab = managementTab())
+        management_tab->connectLocalHost(entry_id, session_type);
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type)
+{
+    if (ManagementTab* management_tab = managementTab())
+        management_tab->connectRouterHost(host, session_type);
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onAfterThemeChanged()
+{
+
+}
+
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onQuickConnect()
 {
     LOG(INFO) << "[ACTION] Quick connect clicked";
@@ -443,12 +483,6 @@ void MainWindow::onAbout()
     LOG(INFO) << "[ACTION] About clicked";
     AutoQPointer<AboutDialog> dialog(new AboutDialog(tr("Aspia Client"), this));
     dialog->exec();
-}
-
-//--------------------------------------------------------------------------------------------------
-void MainWindow::onAfterThemeChanged()
-{
-
 }
 
 //--------------------------------------------------------------------------------------------------

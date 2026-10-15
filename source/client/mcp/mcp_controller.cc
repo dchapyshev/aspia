@@ -24,6 +24,7 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "client/config.h"
 #include "client/mcp/mcp_worker.h"
 #include "client/mcp/tools/check_local_hosts_tool.h"
 #include "client/mcp/tools/check_router_hosts_tool.h"
@@ -35,6 +36,7 @@
 #include "client/mcp/tools/list_quick_support_hosts_tool.h"
 #include "client/mcp/tools/list_router_groups_tool.h"
 #include "client/mcp/tools/list_routers_tool.h"
+#include "client/mcp/tools/list_sessions_tool.h"
 
 namespace {
 
@@ -43,8 +45,9 @@ McpController* g_instance = nullptr;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-McpController::McpController(QObject* parent)
-    : QObject(parent)
+McpController::McpController(Delegate* delegate, QObject* parent)
+    : QObject(parent),
+      delegate_(delegate)
 {
     LOG(TRACE) << "Ctor";
 
@@ -61,6 +64,7 @@ McpController::McpController(QObject* parent)
     tools_.push_back(std::make_unique<CheckRouterHostsTool>());
     tools_.push_back(std::make_unique<ListQuickSupportHostsTool>());
     tools_.push_back(std::make_unique<ConnectRouterHostTool>());
+    tools_.push_back(std::make_unique<ListSessionsTool>());
 
     mcp_worker_ = GuiApplication::findWorker<McpWorker>();
     if (!mcp_worker_)
@@ -109,6 +113,30 @@ void McpController::setEnabled(bool enable)
 
     QMetaObject::invokeMethod(mcp_worker_, enable ? &McpWorker::onEnable : &McpWorker::onDisable,
                               Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<McpController::SessionInfo> McpController::sessions() const
+{
+    return delegate_->sessions();
+}
+
+//--------------------------------------------------------------------------------------------------
+void McpController::connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type)
+{
+    QMetaObject::invokeMethod(this, [this, entry_id, session_type]()
+    {
+        delegate_->connectLocalHost(entry_id, session_type);
+    }, Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
+void McpController::connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type)
+{
+    QMetaObject::invokeMethod(this, [this, host, session_type]()
+    {
+        delegate_->connectRouterHost(host, session_type);
+    }, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
