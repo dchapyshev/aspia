@@ -1129,6 +1129,8 @@ void Sidebar::buildRouterSections(qint64 router_id)
         router->insertChild(0, router->takeChild(router->indexOfChild(item)));
     };
 
+    move_to_top(new SidebarRouterQsHosts(router_id, router));
+
     // Administrative sections are only meaningful for an administrator session.
     RouterSession* session = RouterController::session(router_id);
     if (session && session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
@@ -1136,13 +1138,8 @@ void Sidebar::buildRouterSections(qint64 router_id)
         move_to_top(new SidebarRouterUsers(router_id, router));
         move_to_top(new SidebarRouterRelays(router_id, router));
         move_to_top(new SidebarRouterClients(router_id, router));
-        move_to_top(new SidebarRouterQsHosts(router_id, router));
         move_to_top(new SidebarRouterHosts(router_id, router));
         move_to_top(new SidebarRouterTempHosts(router_id, router));
-    }
-    else
-    {
-        move_to_top(new SidebarRouterQsHosts(router_id, router));
     }
 
     router->setExpanded(true);
