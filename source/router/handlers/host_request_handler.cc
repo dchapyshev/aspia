@@ -172,6 +172,13 @@ void handleHostList(Database& database, const RequestCaller& caller,
 
     if (mode == proto::router::HostListRequest::MODE_FILTERED)
     {
+        if (request.has_filter())
+        {
+            LOG(ERROR) << "Host filter in MODE_FILTERED host list";
+            out->set_error_code(proto::router::kErrorInvalidRequest);
+            return;
+        }
+
         // "Any group" narrows nothing without a workspace. Such a request would list every host
         // of the router, which only MODE_ALL does and only for an administrator.
         if (group_id < 0 && workspace_id <= 0)
@@ -193,7 +200,7 @@ void handleHostList(Database& database, const RequestCaller& caller,
     // list itself arrives non-empty - so a count failure fails the whole request.
     qint64 total_count = 0;
     const std::string_view count_code = mode == proto::router::HostListRequest::MODE_ALL
-        ? database.hostCount(&total_count)
+        ? database.hostCount(request.filter(), &total_count)
         : database.hostCount(workspace_id, group_id, &total_count);
     if (count_code != proto::router::kErrorOk)
     {
@@ -204,7 +211,7 @@ void handleHostList(Database& database, const RequestCaller& caller,
     out->set_total_count(total_count);
 
     if (mode == proto::router::HostListRequest::MODE_ALL)
-        database.hosts(request.offset(), request.count(), out);
+        database.hosts(request.filter(), request.offset(), request.count(), out);
     else
         database.hosts(workspace_id, group_id, request.offset(), request.count(), out);
 

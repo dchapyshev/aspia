@@ -63,6 +63,95 @@ bool isPageValid(qint64 offset, qint64 count, int max_count)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool isHostFilterValid(const proto::router::HostFilter& filter)
+{
+    if (filter.workspace_id_size() > proto::router::kMaxHostFilterWorkspaces)
+        return false;
+
+    for (qint64 workspace_id : filter.workspace_id())
+    {
+        if (workspace_id < 0)
+            return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string placeholders(int count)
+{
+    std::string result;
+    result.reserve(static_cast<size_t>(count) * 2);
+
+    for (int i = 0; i < count; ++i)
+        result += i ? ",?" : "?";
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// A LIKE pattern that finds |text| anywhere in the value. The wildcards in |text| are escaped, so it
+// is matched literally.
+std::string substringPattern(std::string_view text)
+{
+    std::string pattern;
+    pattern.reserve(text.size() + 2);
+    pattern += '%';
+
+    for (char symbol : text)
+    {
+        if (symbol == '\\' || symbol == '%' || symbol == '_')
+            pattern += '\\';
+        pattern += symbol;
+    }
+
+    pattern += '%';
+    return pattern;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The WHERE clause of |filter|, empty when the filter narrows nothing. bindHostFilter() binds the
+// values in the order of the placeholders.
+std::string hostFilterClause(const proto::router::HostFilter& filter)
+{
+    std::vector<std::string> conditions;
+
+    if (filter.workspace_id_size() > 0)
+        conditions.push_back(strCat({"workspace_id IN (", placeholders(filter.workspace_id_size()), ")"}));
+    if (!filter.address().empty())
+        conditions.push_back("address LIKE ? ESCAPE '\\'");
+    if (!filter.os_name().empty())
+        conditions.push_back("os_name LIKE ? ESCAPE '\\'");
+    if (!filter.version().empty())
+        conditions.push_back("version LIKE ? ESCAPE '\\'");
+    if (!filter.cpu_arch().empty())
+        conditions.push_back("cpu_arch LIKE ? ESCAPE '\\'");
+
+    if (conditions.empty())
+        return std::string();
+
+    return " WHERE " + strJoin(conditions, " AND ");
+}
+
+//--------------------------------------------------------------------------------------------------
+void bindHostFilter(const proto::router::HostFilter& filter, SqlQuery* query)
+{
+    CHECK(query);
+
+    for (qint64 workspace_id : filter.workspace_id())
+        query->addInt64(workspace_id);
+
+    if (!filter.address().empty())
+        query->addText(substringPattern(filter.address()));
+    if (!filter.os_name().empty())
+        query->addText(substringPattern(filter.os_name()));
+    if (!filter.version().empty())
+        query->addText(substringPattern(filter.version()));
+    if (!filter.cpu_arch().empty())
+        query->addText(substringPattern(filter.cpu_arch()));
+}
+
+//--------------------------------------------------------------------------------------------------
 QString databaseDirectory()
 {
     return BasePaths::appDataDir();
@@ -1702,7 +1791,8 @@ std::string_view Database::modifyHost(HostId host_id, qint64 base_revision, qint
 }
 
 //--------------------------------------------------------------------------------------------------
-void Database::hosts(qint64 offset, qint64 count, proto::router::HostList* out) const
+void Database::hosts(const proto::router::HostFilter& filter, qint64 offset, qint64 count,
+    proto::router::HostList* out) const
 {
     if (!isValid())
     {
@@ -1718,12 +1808,20 @@ void Database::hosts(qint64 offset, qint64 count, proto::router::HostList* out) 
         return;
     }
 
-    const char kSql[] =
-        "SELECT id, revision, workspace_id, group_id, display_name, computer_name, cpu_arch, "
-        "version, os_name, address, comment, last_connect, last_modify FROM hosts "
-        "ORDER BY id LIMIT ? OFFSET ?";
+    if (!isHostFilterValid(filter))
+    {
+        LOG(ERROR) << "Invalid host filter";
+        out->set_error_code(proto::router::kErrorInvalidRequest);
+        return;
+    }
 
-    SqlQuery query(db_, kSql);
+    const std::string sql = strCat({
+        "SELECT id, revision, workspace_id, group_id, display_name, computer_name, cpu_arch, "
+        "version, os_name, address, comment, last_connect, last_modify FROM hosts",
+        hostFilterClause(filter),
+        " ORDER BY id LIMIT ? OFFSET ?"});
+
+    SqlQuery query(db_, sql);
     if (!query.isValid())
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
@@ -1731,6 +1829,7 @@ void Database::hosts(qint64 offset, qint64 count, proto::router::HostList* out) 
         return;
     }
 
+    bindHostFilter(filter, &query);
     query.addInt64(count);
     query.addInt64(offset);
 
@@ -1843,7 +1942,7 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 offset,
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::hostCount(qint64* count) const
+std::string_view Database::hostCount(const proto::router::HostFilter& filter, qint64* count) const
 {
     CHECK(count);
 
@@ -1855,9 +1954,23 @@ std::string_view Database::hostCount(qint64* count) const
         return proto::router::kErrorInternalError;
     }
 
+    if (!isHostFilterValid(filter))
+    {
+        LOG(ERROR) << "Invalid host filter";
+        return proto::router::kErrorInvalidRequest;
+    }
+
+    SqlQuery query(db_, "SELECT COUNT(*) FROM hosts" + hostFilterClause(filter));
+    if (!query.isValid())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    bindHostFilter(filter, &query);
+
     // COUNT(*) always yields exactly one row, so anything but ROW is a database error - it must
     // not pass for an empty table.
-    SqlQuery query(db_, "SELECT COUNT(*) FROM hosts");
     if (query.next() != SqlQuery::StepResult::ROW)
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();

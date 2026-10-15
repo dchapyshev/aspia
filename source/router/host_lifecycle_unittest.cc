@@ -44,7 +44,7 @@ protected:
     qint64 hostCount()
     {
         qint64 count = 0;
-        if (db_.hostCount(&count) != proto::router::kErrorOk)
+        if (db_.hostCount(proto::router::HostFilter(), &count) != proto::router::kErrorOk)
             return -1;
         return count;
     }

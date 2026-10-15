@@ -31,6 +31,9 @@ namespace proto::router {
 [[maybe_unused]] constexpr int kMaxTempHostPageSize = 100;
 [[maybe_unused]] constexpr int kMaxUserPageSize = 100;
 
+// Bound on the workspaces of a HostFilter. Every one of them becomes a parameter of the query.
+[[maybe_unused]] constexpr int kMaxHostFilterWorkspaces = 100;
+
 // Device tokens one user holds at a time. Issuing a token over the cap drops the least recently
 // used ones, so a client that never comes back cannot grow the list without bound.
 [[maybe_unused]] constexpr int kMaxDeviceTokensPerUser = 50;

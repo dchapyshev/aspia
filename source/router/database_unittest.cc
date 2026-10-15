@@ -119,6 +119,12 @@ protected:
                               host.display_name(), host.comment());
     }
 
+    // The fields a host reports about itself when it connects.
+    bool setHostInfo(HostId host_id, std::string_view version, std::string_view address)
+    {
+        return db_.updateHostInfo(host_id, "hwid", "computer", "x86_64", version, "Windows 11", address);
+    }
+
     qint64 workspaceRevision(qint64 workspace_id)
     {
         proto::router::WorkspaceList list;
@@ -131,7 +137,7 @@ protected:
     proto::router::Host findHost(HostId host_id)
     {
         proto::router::HostList list;
-        db_.hosts(0, proto::router::kMaxHostPageSize, &list);
+        db_.hosts(proto::router::HostFilter(), 0, proto::router::kMaxHostPageSize, &list);
         for (int i = 0; i < list.host_size(); ++i)
         {
             if (list.host(i).host_id() == host_id)
@@ -403,7 +409,7 @@ TEST_F(RouterDatabaseTest, HostPagesTileTheTable)
     for (qint64 offset = 0; offset < ids.size(); offset += 2)
     {
         proto::router::HostList page;
-        db_.hosts(offset, 2, &page);
+        db_.hosts(proto::router::HostFilter(), offset, 2, &page);
         ASSERT_EQ(page.error_code(), proto::router::kErrorOk);
         glued.append(collect(page));
     }
@@ -418,6 +424,121 @@ TEST_F(RouterDatabaseTest, HostPagesTileTheTable)
         glued.append(collect(page));
     }
     EXPECT_EQ(glued, ids);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The values of the filter are bound ahead of the page, so a page past the first one is where a
+// wrong order of the parameters shows. The count covers the matches only.
+TEST_F(RouterDatabaseTest, FilteredHostPagesTileTheMatches)
+{
+    QList<HostId> matches;
+    for (int i = 0; i < 7; ++i)
+    {
+        const HostId host_id = addHost("hash-" + std::to_string(i));
+        ASSERT_NE(host_id, kInvalidHostId);
+
+        const bool matching = i % 2 == 0;
+        ASSERT_TRUE(setHostInfo(host_id, matching ? "3.0.4" : "3.0.3", "10.0.0." + std::to_string(i)));
+
+        if (matching)
+            matches.append(host_id);
+    }
+
+    proto::router::HostFilter filter;
+    filter.set_version("3.0.4");
+
+    qint64 count = 0;
+    ASSERT_EQ(db_.hostCount(filter, &count), proto::router::kErrorOk);
+    EXPECT_EQ(count, matches.size());
+
+    QList<HostId> glued;
+    for (qint64 offset = 0; offset < matches.size(); offset += 3)
+    {
+        proto::router::HostList page;
+        db_.hosts(filter, offset, 3, &page);
+        ASSERT_EQ(page.error_code(), proto::router::kErrorOk);
+
+        for (const proto::router::Host& host : page.host())
+            glued.append(host.host_id());
+    }
+    EXPECT_EQ(glued, matches);
+}
+
+//--------------------------------------------------------------------------------------------------
+// hosts() and hostCount() refuse a bad filter on their own, whatever the caller checked before.
+TEST_F(RouterDatabaseTest, HostsRefusesAnInvalidFilter)
+{
+    ASSERT_NE(addHost("hash-1"), kInvalidHostId);
+
+    proto::router::HostFilter at_limit;
+    for (int i = 0; i < proto::router::kMaxHostFilterWorkspaces; ++i)
+        at_limit.add_workspace_id(i);
+
+    proto::router::HostList accepted;
+    db_.hosts(at_limit, 0, proto::router::kMaxHostPageSize, &accepted);
+    EXPECT_EQ(accepted.error_code(), proto::router::kErrorOk);
+
+    proto::router::HostFilter over_limit = at_limit;
+    over_limit.add_workspace_id(proto::router::kMaxHostFilterWorkspaces);
+
+    proto::router::HostFilter negative_workspace;
+    negative_workspace.add_workspace_id(-1);
+
+    for (const proto::router::HostFilter& filter : { over_limit, negative_workspace })
+    {
+        proto::router::HostList list;
+        db_.hosts(filter, 0, proto::router::kMaxHostPageSize, &list);
+        EXPECT_EQ(list.error_code(), proto::router::kErrorInvalidRequest);
+        EXPECT_EQ(list.host_size(), 0);
+
+        qint64 count = 42;
+        EXPECT_EQ(db_.hostCount(filter, &count), proto::router::kErrorInvalidRequest);
+        EXPECT_EQ(count, 0);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// The address is a substring typed by the user. A LIKE wildcard or the escape character in it
+// matches only itself.
+TEST_F(RouterDatabaseTest, HostFilterMatchesTheAddressLiterally)
+{
+    const HostId plain = addHost("hash-1");
+    const HostId special = addHost("hash-2");
+    ASSERT_NE(plain, kInvalidHostId);
+    ASSERT_NE(special, kInvalidHostId);
+
+    ASSERT_TRUE(setHostInfo(plain, "3.0.4", "192.168.1.10"));
+    ASSERT_TRUE(setHostInfo(special, "3.0.4", "a\\b%c_d"));
+
+    const struct { const char* address; qint64 count; } kCases[] = {
+        { "\\", 1 },
+        { "%", 1 },
+        { "_", 1 },
+        { "b%c", 1 },
+        { "192_168", 0 },
+        { "192.168", 1 }
+    };
+
+    for (const auto& test_case : kCases)
+    {
+        proto::router::HostFilter filter;
+        filter.set_address(test_case.address);
+
+        qint64 count = 0;
+        ASSERT_EQ(db_.hostCount(filter, &count), proto::router::kErrorOk) << test_case.address;
+        EXPECT_EQ(count, test_case.count) << test_case.address;
+
+        proto::router::HostList list;
+        db_.hosts(filter, 0, proto::router::kMaxHostPageSize, &list);
+        ASSERT_EQ(list.error_code(), proto::router::kErrorOk) << test_case.address;
+        ASSERT_EQ(list.host_size(), test_case.count) << test_case.address;
+
+        if (test_case.count == 1)
+        {
+            const HostId expected = std::string_view(test_case.address).starts_with("192") ? plain : special;
+            EXPECT_EQ(list.host(0).host_id(), expected) << test_case.address;
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

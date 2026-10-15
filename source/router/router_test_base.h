@@ -146,7 +146,7 @@ protected:
     proto::router::Host findHost(HostId host_id)
     {
         proto::router::HostList list;
-        db_.hosts(0, proto::router::kMaxHostPageSize, &list);
+        db_.hosts(proto::router::HostFilter(), 0, proto::router::kMaxHostPageSize, &list);
 
         for (int i = 0; i < list.host_size(); ++i)
         {

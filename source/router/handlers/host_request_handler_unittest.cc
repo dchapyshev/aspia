@@ -467,6 +467,29 @@ protected:
         return out;
     }
 
+    // The fields a host reports about itself when it connects.
+    bool setHostInfo(HostId host_id, std::string_view cpu_arch, std::string_view version,
+                     std::string_view os_name, std::string_view address)
+    {
+        return db_.updateHostInfo(host_id, "hwid", "computer", cpu_arch, version, os_name, address);
+    }
+
+    proto::router::HostList filteredHostList(const proto::router::HostFilter& filter)
+    {
+        proto::router::HostListRequest request =
+            hostListRequest(proto::router::HostListRequest::MODE_ALL, 0, 0);
+        *request.mutable_filter() = filter;
+        return hostList(request);
+    }
+
+    static std::set<quint64> hostIds(const proto::router::HostList& list)
+    {
+        std::set<quint64> host_ids;
+        for (const proto::router::Host& host : list.host())
+            host_ids.insert(host.host_id());
+        return host_ids;
+    }
+
     proto::router::HostSearchResult searchHosts(const QString& query)
     {
         proto::router::HostSearchRequest request;
@@ -697,6 +720,145 @@ TEST_F(HostListTest, ListWithoutAPageIsRejected)
         EXPECT_EQ(list.host_size(), 0) << mode;
         EXPECT_EQ(list.total_count(), 0) << mode;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Every field of the filter narrows the list on its own, and the count follows the filter so the
+// pagination of the client covers only the matching hosts.
+TEST_F(HostListTest, EachFilterFieldNarrowsModeAll)
+{
+    const qint64 other_id = addWorkspace("beta");
+    ASSERT_GT(other_id, 0);
+
+    const HostId first = addHostTo("hash-1", workspace_id_, 0, "first");
+    const HostId second = addHost("hash-2"); // Unassigned.
+    const HostId third = addHostTo("hash-3", other_id, 0, "third");
+    ASSERT_NE(first, kInvalidHostId);
+    ASSERT_NE(second, kInvalidHostId);
+    ASSERT_NE(third, kInvalidHostId);
+
+    ASSERT_TRUE(setHostInfo(first, "x86_64", "3.0.3", "Windows 11", "192.168.1.10"));
+    ASSERT_TRUE(setHostInfo(second, "arm64", "3.0.4", "Ubuntu 24.04", "10.0.0.5"));
+    ASSERT_TRUE(setHostInfo(third, "x86_64", "3.0.4", "Windows 11", "192.168.2.20"));
+
+    struct TestCase
+    {
+        const char* what;
+        proto::router::HostFilter filter;
+        std::set<quint64> expected;
+    };
+
+    std::vector<TestCase> cases(6);
+
+    cases[0].what = "workspace";
+    cases[0].filter.add_workspace_id(workspace_id_);
+    cases[0].expected = { first };
+
+    cases[1].what = "no workspace";
+    cases[1].filter.add_workspace_id(0);
+    cases[1].expected = { second };
+
+    cases[2].what = "address";
+    cases[2].filter.set_address("192.168.");
+    cases[2].expected = { first, third };
+
+    cases[3].what = "os_name";
+    cases[3].filter.set_os_name("ubuntu");
+    cases[3].expected = { second };
+
+    cases[4].what = "version";
+    cases[4].filter.set_version("3.0.4");
+    cases[4].expected = { second, third };
+
+    cases[5].what = "cpu_arch";
+    cases[5].filter.set_cpu_arch("x86");
+    cases[5].expected = { first, third };
+
+    for (const TestCase& test_case : cases)
+    {
+        const proto::router::HostList list = filteredHostList(test_case.filter);
+
+        ASSERT_EQ(list.error_code(), proto::router::kErrorOk) << test_case.what;
+        EXPECT_EQ(hostIds(list), test_case.expected) << test_case.what;
+        EXPECT_EQ(list.total_count(), qint64(test_case.expected.size())) << test_case.what;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(HostListTest, FilterFieldsAreCombinedWithAndWorkspacesWithOr)
+{
+    const qint64 other_id = addWorkspace("beta");
+    ASSERT_GT(other_id, 0);
+
+    const HostId first = addHostTo("hash-1", workspace_id_, 0, "first");
+    const HostId second = addHostTo("hash-2", other_id, 0, "second");
+    const HostId third = addHost("hash-3"); // Unassigned.
+    ASSERT_NE(first, kInvalidHostId);
+    ASSERT_NE(second, kInvalidHostId);
+    ASSERT_NE(third, kInvalidHostId);
+
+    ASSERT_TRUE(setHostInfo(first, "x86_64", "3.0.3", "Windows 11", "192.168.1.10"));
+    ASSERT_TRUE(setHostInfo(second, "arm64", "3.0.4", "Ubuntu 24.04", "10.0.0.5"));
+    ASSERT_TRUE(setHostInfo(third, "x86_64", "3.0.4", "Windows 11", "192.168.2.20"));
+
+    proto::router::HostFilter filter;
+    filter.add_workspace_id(workspace_id_);
+    filter.add_workspace_id(other_id);
+
+    const proto::router::HostList both = filteredHostList(filter);
+    ASSERT_EQ(both.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(hostIds(both), std::set<quint64>({ first, second }));
+    EXPECT_EQ(both.total_count(), 2);
+
+    filter.set_os_name("Windows");
+
+    const proto::router::HostList narrowed = filteredHostList(filter);
+    ASSERT_EQ(narrowed.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(hostIds(narrowed), std::set<quint64>({ first }));
+    EXPECT_EQ(narrowed.total_count(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(HostListTest, InvalidFilterIsRejectedWithoutCount)
+{
+    ASSERT_NE(addHostTo("hash-1", workspace_id_, 0, "first"), kInvalidHostId);
+
+    proto::router::HostFilter at_limit;
+    for (int i = 0; i < proto::router::kMaxHostFilterWorkspaces; ++i)
+        at_limit.add_workspace_id(i);
+
+    EXPECT_EQ(filteredHostList(at_limit).error_code(), proto::router::kErrorOk);
+
+    proto::router::HostFilter over_limit = at_limit;
+    over_limit.add_workspace_id(proto::router::kMaxHostFilterWorkspaces);
+
+    proto::router::HostFilter negative_workspace;
+    negative_workspace.add_workspace_id(-1);
+
+    for (const proto::router::HostFilter& filter : { over_limit, negative_workspace })
+    {
+        const proto::router::HostList list = filteredHostList(filter);
+
+        EXPECT_EQ(list.error_code(), proto::router::kErrorInvalidRequest);
+        EXPECT_EQ(list.host_size(), 0);
+        EXPECT_EQ(list.total_count(), 0);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(HostListTest, FilterIsRejectedInFilteredMode)
+{
+    ASSERT_NE(addHostTo("hash-1", workspace_id_, 0, "first"), kInvalidHostId);
+
+    proto::router::HostListRequest request =
+        hostListRequest(proto::router::HostListRequest::MODE_FILTERED, workspace_id_, 0);
+    request.mutable_filter()->set_version("3.0.3");
+
+    const proto::router::HostList list = hostList(request);
+
+    EXPECT_EQ(list.error_code(), proto::router::kErrorInvalidRequest);
+    EXPECT_EQ(list.host_size(), 0);
+    EXPECT_EQ(list.total_count(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------

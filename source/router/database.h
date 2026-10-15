@@ -34,6 +34,7 @@
 namespace proto::router {
 class GroupList;
 class Host;
+class HostFilter;
 class HostList;
 class HostSearchResult;
 class WorkspaceList;
@@ -241,12 +242,14 @@ public:
     std::string_view modifyHost(HostId host_id, qint64 base_revision, qint64 workspace_id,
         qint64 group_id, std::string_view display_name, std::string_view comment);
 
-    // Appends every host in the database (admin-only call site) to |out| and sets its error_code,
-    // reading rows straight into the protobuf message. |offset| and |count| give the requested
-    // page; it is mandatory, so a zero count is refused along with a negative offset or a count
-    // over the cap. The Host.online field is left unset - it reflects runtime session state the
-    // database does not track and is filled by the caller.
-    void hosts(qint64 offset, qint64 count, proto::router::HostList* out) const;
+    // Appends every host in the database (admin-only call site) that passes |filter| to |out| and
+    // sets its error_code, reading rows straight into the protobuf message. A filter with more
+    // workspaces than kMaxHostFilterWorkspaces or with a negative one is refused.
+    // |offset| and |count| give the requested page; it is mandatory, so a zero count is refused
+    // along with a negative offset or a count over the cap. The Host.online field is left unset,
+    // because it reflects runtime session state the database does not track. The caller fills it.
+    void hosts(const proto::router::HostFilter& filter, qint64 offset, qint64 count,
+        proto::router::HostList* out) const;
 
     // Appends hosts in the given workspace and group to |out| and sets its error_code. A negative
     // group_id takes every group of the workspace; otherwise the match on the column is exact.
@@ -259,7 +262,7 @@ public:
     // by the client to drive pagination UI without fetching the full list. Returns
     // kErrorInternalError when the answer could not be read - a zero count from a failed query
     // would truncate the pagination.
-    std::string_view hostCount(qint64* count) const;
+    std::string_view hostCount(const proto::router::HostFilter& filter, qint64* count) const;
     std::string_view hostCount(qint64 workspace_id, qint64 group_id, qint64* count) const;
 
     // Substring search over |display_name| (case-insensitive) and the decimal host_id, restricted

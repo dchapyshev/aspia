@@ -127,6 +127,15 @@ message Host
     bool online          = 14; // Live host session currently exists for this host_id.
 }
 
+message HostFilter
+{
+    repeated int64 workspace_id = 1;
+    string address              = 2;
+    string os_name              = 3;
+    string version              = 4;
+    string cpu_arch             = 5;
+}
+
 // A page of hosts. The page is mandatory in both modes: a reply carrying every host of the scope
 // grows past the message limit, and such a reply ends the session instead of being sent.
 message HostListRequest
@@ -134,12 +143,13 @@ message HostListRequest
     enum Mode
     {
         MODE_UNKNOWN  = 0;
-        // Every host of the router, whatever workspace and group it belongs to. Admin only;
-        // |workspace_id| and |group_id| are ignored.
+        // Every host of the router, whatever workspace and group it belongs to, narrowed by
+        // |filter|. Admin only; |workspace_id| and |group_id| are ignored.
         MODE_ALL      = 1;
         // The hosts of |workspace_id| (0 - the hosts no workspace claimed) narrowed to
         // |group_id| (0 - the workspace root, -1 - any group of the workspace, allowed only
         // with |workspace_id| > 0). The caller must have access to the requested workspace.
+        // A request carrying |filter| is refused.
         MODE_FILTERED = 2;
     }
 
@@ -149,6 +159,7 @@ message HostListRequest
     int64 count        = 4; // Items to return. A zero count is refused, as is one over the cap.
     int64 workspace_id = 5;
     int64 group_id     = 6;
+    HostFilter filter  = 7;
 }
 
 message HostList
