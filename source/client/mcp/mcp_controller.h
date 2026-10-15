@@ -27,6 +27,10 @@
 #include <memory>
 #include <vector>
 
+namespace proto::input {
+class MouseEvent;
+} // namespace proto::input
+
 namespace proto::peer {
 enum SessionType : int;
 } // namespace proto::peer
@@ -35,6 +39,7 @@ class HostConfig;
 class McpTool;
 class McpWorker;
 class QImage;
+class QSize;
 
 // The tools of the MCP connector. They run in the GUI thread, and the worker keeps only the
 // connections and the protocol. The connector is turned off when the controller dies.
@@ -60,7 +65,9 @@ public:
     public:
         virtual ~DesktopWindow() = default;
 
+        virtual QSize frameSize() const = 0;
         virtual QImage screenshot() const = 0;
+        virtual void sendMouseEvent(const proto::input::MouseEvent& event) = 0;
     };
 
     class MainWindow

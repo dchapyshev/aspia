@@ -95,7 +95,9 @@ protected:
     bool eventFilter(QObject* object, QEvent* event) final;
 
     // McpController::DesktopWindow implementation.
+    QSize frameSize() const final;
     QImage screenshot() const final;
+    void sendMouseEvent(const proto::input::MouseEvent& event) final;
 
 private slots:
     // Incoming session channels (video/audio/cursor are parsed by the workers).
@@ -135,7 +137,6 @@ private slots:
     void onShowHidePanel();
 
 private:
-    void sendMouseEvent(const proto::input::MouseEvent& event);
     void sendConfig(const proto::control::Config& config);
     void sendCapabilities();
     void sendSessionListRequest();

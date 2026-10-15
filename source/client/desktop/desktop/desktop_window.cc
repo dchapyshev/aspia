@@ -611,9 +611,30 @@ bool DesktopWindow::eventFilter(QObject* object, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
+QSize DesktopWindow::frameSize() const
+{
+    return desktop_->frameSize();
+}
+
+//--------------------------------------------------------------------------------------------------
 QImage DesktopWindow::screenshot() const
 {
     return desktop_->frameImage();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::sendMouseEvent(const proto::input::MouseEvent& event)
+{
+    last_pos_x_ = event.x();
+    last_pos_y_ = event.y();
+    last_mask_ = event.mask() & ~kWheelMask;
+
+    ++send_mouse_count_;
+
+    proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
+    message.mutable_mouse()->CopyFrom(event);
+    sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                outgoing_message_.serialize<proto::input::ClientToHost>());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1261,21 +1282,6 @@ void DesktopWindow::onShowHidePanel()
     animation->setEndValue(QRect(QPoint(end_x, 0), end_panel_size));
     animation->setDuration(150);
     animation->start(QPropertyAnimation::DeleteWhenStopped);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::sendMouseEvent(const proto::input::MouseEvent& event)
-{
-    last_pos_x_ = event.x();
-    last_pos_y_ = event.y();
-    last_mask_ = event.mask() & ~kWheelMask;
-
-    ++send_mouse_count_;
-
-    proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
-    message.mutable_mouse()->CopyFrom(event);
-    sendMessage(proto::desktop::CHANNEL_ID_INPUT,
-                outgoing_message_.serialize<proto::input::ClientToHost>());
 }
 
 //--------------------------------------------------------------------------------------------------
