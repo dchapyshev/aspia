@@ -31,15 +31,21 @@
 #include <QJsonObject>
 #include <QKeyEvent>
 #include <QLabel>
+#include <QLineEdit>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QPushButton>
 #include <QSaveFile>
 #include <QSignalBlocker>
 #include <QStatusBar>
+#include <QTimer>
 #include <QToolButton>
+
+#include <algorithm>
 
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/peer/host_id.h"
 #include "client/router_controller.h"
 #include "client/desktop/file_dialog.h"
@@ -57,6 +63,9 @@ namespace {
 
 // Upper sanity bound on the router-reported host count, used only for pagination.
 const qint64 kMaxHostCount = 500000;
+
+// The workspace filter item that narrows nothing. The item of the hosts without a workspace is 0.
+const qint64 kAllWorkspaces = -1;
 
 } // namespace
 
@@ -135,6 +144,21 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
 
     updateHostsPagination();
 
+    ui->combo_filter_workspace->addItem(tr("All workspaces"), QVariant::fromValue<qint64>(kAllWorkspaces));
+    ui->combo_filter_workspace->addItem(tr("Without workspace"), QVariant::fromValue<qint64>(0));
+
+    filter_timer_ = new QTimer(this);
+    filter_timer_->setSingleShot(true);
+    filter_timer_->setInterval(MilliSeconds(300));
+    connect(filter_timer_, &QTimer::timeout, this, &RouterHostsWidget::onFilterChanged);
+
+    for (QLineEdit* edit : { ui->edit_filter_address, ui->edit_filter_os, ui->edit_filter_version, ui->edit_filter_arch })
+        connect(edit, &QLineEdit::textChanged, filter_timer_, qOverload<>(&QTimer::start));
+
+    connect(ui->combo_filter_workspace, &QComboBox::currentIndexChanged,
+            this, &RouterHostsWidget::onFilterChanged);
+    connect(ui->button_filter_reset, &QPushButton::clicked, this, &RouterHostsWidget::onFilterReset);
+
     RouterController& controller = RouterController::instance();
     connect(&controller, &RouterController::sig_hostsChanged, this, [this](qint64 router_id)
     {
@@ -172,6 +196,10 @@ void RouterHostsWidget::showRouter(qint64 router_id)
 
     model_->setHosts({});
     updateStatusLabel();
+
+    clearFilter();
+    workspace_names_.clear();
+    updateWorkspaceFilter();
 
     // Workspaces are fetched first so the id -> name map is ready when the host list arrives.
     fetchWorkspaces();
@@ -587,6 +615,7 @@ void RouterHostsWidget::onWorkspaceListReceived(const RouterWorkspaceList& list)
         workspace_names_.insert(workspace.entry_id, workspace.name);
 
     model_->setWorkspaceNames(workspace_names_);
+    updateWorkspaceFilter();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -663,6 +692,21 @@ void RouterHostsWidget::onHostsNextClicked()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterHostsWidget::onFilterChanged()
+{
+    filter_timer_->stop();
+    hosts_page_.setCurrentPage(0);
+    fetchHosts();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterHostsWidget::onFilterReset()
+{
+    clearFilter();
+    onFilterChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::fetchHosts()
 {
     RouterSession* session = RouterController::session(router_id_);
@@ -676,6 +720,7 @@ void RouterHostsWidget::fetchHosts()
     request.set_mode(proto::router::HostListRequest::MODE_ALL);
     request.set_offset(hosts_page_.offset());
     request.set_count(hosts_page_.pageSize());
+    *request.mutable_filter() = hostFilter();
     session->listHosts(RouterSession::CachePolicy::RELOAD, std::move(request),
                        { this, &RouterHostsWidget::onHostListReceived });
 }
@@ -692,6 +737,66 @@ void RouterHostsWidget::fetchWorkspaces()
 
     session->listWorkspaces(RouterSession::CachePolicy::RELOAD, 0,
                             { this, &RouterHostsWidget::onWorkspaceListReceived });
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterHostsWidget::updateWorkspaceFilter()
+{
+    QComboBox* combo = ui->combo_filter_workspace;
+    const qint64 current_id = combo->currentData().toLongLong();
+
+    QList<qint64> workspace_ids = workspace_names_.keys();
+    std::sort(workspace_ids.begin(), workspace_ids.end(), [this](qint64 first, qint64 second)
+    {
+        return workspace_names_.value(first).localeAwareCompare(workspace_names_.value(second)) < 0;
+    });
+
+    {
+        QSignalBlocker blocker(combo);
+
+        // The first two items are "all workspaces" and "without workspace".
+        while (combo->count() > 2)
+            combo->removeItem(2);
+
+        for (qint64 workspace_id : std::as_const(workspace_ids))
+            combo->addItem(workspace_names_.value(workspace_id), QVariant::fromValue<qint64>(workspace_id));
+
+        const int index = combo->findData(QVariant::fromValue<qint64>(current_id));
+        combo->setCurrentIndex(index >= 0 ? index : 0);
+    }
+
+    // The hosts shown were fetched for a workspace that is gone.
+    if (combo->currentData().toLongLong() != current_id)
+        onFilterChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::router::HostFilter RouterHostsWidget::hostFilter() const
+{
+    proto::router::HostFilter filter;
+
+    const qint64 workspace_id = ui->combo_filter_workspace->currentData().toLongLong();
+    if (workspace_id != kAllWorkspaces)
+        filter.add_workspace_id(workspace_id);
+
+    filter.set_address(ui->edit_filter_address->text().trimmed().toStdString());
+    filter.set_os_name(ui->edit_filter_os->text().trimmed().toStdString());
+    filter.set_version(ui->edit_filter_version->text().trimmed().toStdString());
+    filter.set_cpu_arch(ui->edit_filter_arch->text().trimmed().toStdString());
+    return filter;
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterHostsWidget::clearFilter()
+{
+    ui->edit_filter_address->clear();
+    ui->edit_filter_os->clear();
+    ui->edit_filter_version->clear();
+    ui->edit_filter_arch->clear();
+    filter_timer_->stop();
+
+    QSignalBlocker blocker(ui->combo_filter_workspace);
+    ui->combo_filter_workspace->setCurrentIndex(0);
 }
 
 //--------------------------------------------------------------------------------------------------

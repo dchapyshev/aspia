@@ -36,8 +36,10 @@ class RouterHostsWidget;
 
 class QLabel;
 class QStatusBar;
+class QTimer;
 
 namespace proto::router {
+class HostFilter;
 class HostResult;
 } // namespace proto::router
 
@@ -98,10 +100,15 @@ private slots:
     void onHostsPageChanged(int index);
     void onHostsPrevClicked();
     void onHostsNextClicked();
+    void onFilterChanged();
+    void onFilterReset();
 
 private:
     void fetchHosts();
     void fetchWorkspaces();
+    void updateWorkspaceFilter();
+    proto::router::HostFilter hostFilter() const;
+    void clearFilter();
     void updateHostsPagination();
     void updateStatusLabel();
     void startDrag();
@@ -114,6 +121,7 @@ private:
     QString mime_type_;
     QPoint start_pos_;
     QLabel* status_hosts_label_ = nullptr;
+    QTimer* filter_timer_ = nullptr;
 
     // Maps workspace entry_id -> name, kept in sync via onWorkspaceListReceived. Used to populate
     // the workspace column without a dedicated workspaces view.
