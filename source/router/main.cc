@@ -27,6 +27,7 @@
 #include "base/logging.h"
 #include "base/service_controller.h"
 #include "base/crypto/key_pair.h"
+#include "base/crypto/password_generator.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_string.h"
@@ -304,9 +305,9 @@ int createConfig(QTextStream& out)
     out << "Creating a user..." << Qt::endl;
 
     const char kUserName[] = "admin";
-    const char kPassword[] = "admin";
+    const SecureString password = PasswordGenerator().result();
 
-    RouterUser user = RouterUser::create(kUserName, SecureString(kPassword));
+    RouterUser user = RouterUser::create(kUserName, password);
     if (!user.isValid())
     {
         out << "Failed to create user." << Qt::endl;
@@ -376,11 +377,15 @@ int createConfig(QTextStream& out)
         return 1;
     }
 
-    out << "Configuration successfully created. Don't forget to change your password!" << Qt::endl;
-    out << "User name: " << kUserName << Qt::endl;
-    out << "Password: " << kPassword << Qt::endl;
+    out << "Configuration successfully created." << Qt::endl;
     out << "Host public key file: " << host_public_key_file << Qt::endl;
     out << "Relay public key file: " << relay_public_key_file << Qt::endl;
+    out << Qt::endl;
+    out << "==================== LOGIN CREDENTIALS ====================" << Qt::endl;
+    out << "User name: " << kUserName << Qt::endl;
+    out << "Password: " << password.toString() << Qt::endl;
+    out << "Save the password. It is not shown again." << Qt::endl;
+    out << "===========================================================" << Qt::endl;
 
     return 0;
 }
