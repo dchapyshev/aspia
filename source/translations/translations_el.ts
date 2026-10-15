@@ -350,7 +350,7 @@
         <location filename="../client/android/main_window.cc" line="428"/>
         <location filename="../host/android/main_window.cc" line="84"/>
         <location filename="../host/android/main_window.cc" line="100"/>
-        <location filename="../host/android/main_window.cc" line="391"/>
+        <location filename="../host/android/main_window.cc" line="390"/>
         <source>Settings</source>
         <translation>Ρυθμίσεις</translation>
     </message>
@@ -422,12 +422,12 @@
         <location filename="../client/android/main_window.cc" line="1098"/>
         <location filename="../host/android/main_window.cc" line="83"/>
         <location filename="../host/android/main_window.cc" line="99"/>
-        <location filename="../host/android/main_window.cc" line="389"/>
+        <location filename="../host/android/main_window.cc" line="388"/>
         <source>Connection</source>
         <translation>Σύνδεση</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="358"/>
+        <location filename="../host/android/main_window.cc" line="357"/>
         <source>Permissions</source>
         <translation>Δικαιώματα</translation>
     </message>
@@ -1634,64 +1634,64 @@
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="245"/>
+        <location filename="../host/android/connection_widget.cc" line="244"/>
         <source>Your ID</source>
         <translation>Το ID σας</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="246"/>
+        <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>One-time password</source>
         <translation>Κωδικός μίας χρήσης</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="247"/>
+        <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>Access</source>
         <translation>Πρόσβαση</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="248"/>
+        <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Desktop</source>
         <translation>Επιφάνεια εργασίας</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="249"/>
+        <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>File Transfer</source>
         <translation>Μεταφορά αρχείων</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Waiting for a connection</source>
         <translation>Αναμονή για σύνδεση</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Stop</source>
         <translation>Διακοπή</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="376"/>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>Aspia ID: %1
 Κωδικός πρόσβασης: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="419"/>
+        <location filename="../host/android/connection_widget.cc" line="415"/>
         <source>Router is disabled</source>
         <translation>Ο δρομολογητής είναι απενεργοποιημένος</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="422"/>
+        <location filename="../host/android/connection_widget.cc" line="418"/>
         <source>Connecting to router...</source>
         <translation>Σύνδεση με τον δρομολογητή...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="425"/>
+        <location filename="../host/android/connection_widget.cc" line="421"/>
         <source>Connected to router</source>
         <translation>Συνδέθηκε με τον δρομολογητή</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="428"/>
+        <location filename="../host/android/connection_widget.cc" line="424"/>
         <source>Failed to connect to router</source>
         <translation>Δεν ήταν δυνατή η σύνδεση με τον δρομολογητή</translation>
     </message>
@@ -5950,6 +5950,11 @@ Credentials imported: %5</source>
         <source>Granted</source>
         <translation>Παραχωρήθηκε</translation>
     </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="125"/>
+        <source>The service is turned on, but Android has stopped it. Turn it off and on again.</source>
+        <translation>Η υπηρεσία είναι ενεργοποιημένη, αλλά το Android τη διέκοψε. Απενεργοποιήστε την και ενεργοποιήστε την ξανά.</translation>
+    </message>
 </context>
 <context>
     <name>ProcessItem</name>
@@ -6879,47 +6884,82 @@ Credentials imported: %5</source>
 <context>
     <name>RouterHostsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="56"/>
+        <source>Address</source>
+        <translation>Διεύθυνση</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="72"/>
+        <source>Operating System</source>
+        <translation>Λειτουργικό σύστημα</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
+        <source>Version</source>
+        <translation>Έκδοση</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="104"/>
+        <source>Architecture</source>
+        <translation>Αρχιτεκτονική</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="120"/>
+        <source>Reset filter</source>
+        <translation>Επαναφορά φίλτρου</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="157"/>
         <source>Previous page</source>
         <translation>Προηγούμενη σελίδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="56"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="160"/>
         <source>Previous</source>
         <translation>Προηγούμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="74"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="178"/>
         <source>Next page</source>
         <translation>Επόμενη σελίδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="77"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="181"/>
         <source>Next</source>
         <translation>Επόμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="192"/>
         <source>Items per page:</source>
         <translation>Στοιχεία ανά σελίδα:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="364"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <source>All workspaces</source>
+        <translation>Όλοι οι χώροι εργασίας</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <source>Without workspace</source>
+        <translation>Χωρίς χώρο εργασίας</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="392"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε τον κεντρικό υπολογιστή &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="389"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="417"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε όλους τους κεντρικούς υπολογιστές;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="417"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="445"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Η διαγραφή ενός κεντρικού υπολογιστή θα έχει ως αποτέλεσμα τη διαγραφή όλων των ρυθμίσεών του για τη σύνδεση με τον δρομολογητή, ενώ η εφαρμογή θα απεγκατασταθεί από τον κεντρικό υπολογιστή. Αυτή η ενέργεια είναι μη αναστρέψιμη. Είστε βέβαιοι ότι θέλετε να συνεχίσετε;</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="716"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="821"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n κεντρικός υπολογιστής</numerusform>
@@ -6927,22 +6967,22 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="772"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
         <source>Save File</source>
         <translation>Αποθήκευση αρχείου</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="772"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
         <source>JSON files (*.json)</source>
         <translation>Αρχεία JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="783"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="888"/>
         <source>Could not open file for writing.</source>
         <translation>Δεν ήταν δυνατό το άνοιγμα του αρχείου για εγγραφή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="830"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="935"/>
         <source>Unable to write file.</source>
         <translation>Δεν είναι δυνατή η εγγραφή του αρχείου.</translation>
     </message>
@@ -7642,14 +7682,6 @@ Credentials imported: %5</source>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
         <source>Monitor %1</source>
         <translation>Οθόνη %1</translation>
-    </message>
-</context>
-<context>
-    <name>ServerWorker</name>
-    <message>
-        <location filename="../host/android/server_worker.cc" line="553"/>
-        <source>Waiting for connections</source>
-        <translation>Αναμονή για συνδέσεις</translation>
     </message>
 </context>
 <context>
@@ -8399,7 +8431,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="442"/>
-        <location filename="../host/android/settings_widget.cc" line="439"/>
+        <location filename="../host/android/settings_widget.cc" line="405"/>
         <source>Updates</source>
         <translation>Ενημερώσεις</translation>
     </message>
@@ -8410,49 +8442,49 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="453"/>
-        <location filename="../host/android/settings_widget.cc" line="442"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
         <source>Update channel</source>
         <translation>Κανάλι ενημερώσεων</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="454"/>
-        <location filename="../host/android/settings_widget.cc" line="443"/>
+        <location filename="../host/android/settings_widget.cc" line="409"/>
         <source>Stable</source>
         <translation>Σταθερό</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="455"/>
-        <location filename="../host/android/settings_widget.cc" line="444"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
         <source>Beta</source>
         <translation>Βήτα</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="456"/>
-        <location filename="../host/android/settings_widget.cc" line="445"/>
+        <location filename="../host/android/settings_widget.cc" line="411"/>
         <source>Alpha</source>
         <translation>Άλφα</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="467"/>
-        <location filename="../host/android/settings_widget.cc" line="459"/>
+        <location filename="../host/android/settings_widget.cc" line="425"/>
         <source>Update server</source>
         <translation>Διακομιστής ενημερώσεων</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="472"/>
-        <location filename="../host/android/settings_widget.cc" line="464"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Public key</source>
         <translation>Δημόσιο κλειδί</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="478"/>
-        <location filename="../host/android/settings_widget.cc" line="470"/>
+        <location filename="../host/android/settings_widget.cc" line="436"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>Αν δεν καθοριστεί διακομιστής ενημερώσεων, χρησιμοποιείται ο προεπιλεγμένος. Αν δεν καθοριστεί δημόσιο κλειδί, χρησιμοποιείται το ενσωματωμένο.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="532"/>
-        <location filename="../host/android/settings_widget.cc" line="524"/>
+        <location filename="../host/android/settings_widget.cc" line="490"/>
         <source>Check for updates</source>
         <translation>Έλεγχος για ενημερώσεις</translation>
     </message>
@@ -8483,88 +8515,68 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="285"/>
-        <source>Background mode</source>
-        <translation>Λειτουργία παρασκηνίου</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="297"/>
-        <source>The host accepts connections in the local network and stays connected to the router while the application is not on the screen, so it can be reached at any time.</source>
-        <translation>Ο κεντρικός υπολογιστής δέχεται συνδέσεις στο τοπικό δίκτυο και παραμένει συνδεδεμένος με τον δρομολογητή όσο η εφαρμογή δεν εμφανίζεται στην οθόνη, ώστε να είναι δυνατή η σύνδεση σε αυτόν ανά πάσα στιγμή.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="303"/>
-        <source>Confirm screen capture automatically</source>
-        <translation>Αυτόματη επιβεβαίωση καταγραφής οθόνης</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="314"/>
-        <source>The screen capture request is confirmed automatically. It may not work on some devices.</source>
-        <translation>Το αίτημα καταγραφής οθόνης επιβεβαιώνεται αυτόματα. Ενδέχεται να μη λειτουργεί σε ορισμένες συσκευές.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="319"/>
         <source>Manage users</source>
         <translation>Διαχείριση χρηστών</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="327"/>
+        <location filename="../host/android/settings_widget.cc" line="293"/>
         <source>Change password</source>
         <translation>Αλλαγή κωδικού πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="331"/>
+        <location filename="../host/android/settings_widget.cc" line="297"/>
         <source>Disable password protection</source>
         <translation>Απενεργοποίηση προστασίας με κωδικό πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="340"/>
+        <location filename="../host/android/settings_widget.cc" line="306"/>
         <source>Enable password protection</source>
         <translation>Ενεργοποίηση προστασίας με κωδικό πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="355"/>
+        <location filename="../host/android/settings_widget.cc" line="321"/>
         <source>Router</source>
         <translation>Δρομολογητής</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
+        <location filename="../host/android/settings_widget.cc" line="326"/>
         <source>Enable the use of a router</source>
         <translation>Ενεργοποίηση χρήσης δρομολογητή</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="365"/>
+        <location filename="../host/android/settings_widget.cc" line="331"/>
         <source>Address</source>
         <translation>Διεύθυνση</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="371"/>
+        <location filename="../host/android/settings_widget.cc" line="337"/>
         <source>Public Key</source>
         <translation>Δημόσιο κλειδί</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="376"/>
+        <location filename="../host/android/settings_widget.cc" line="342"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Απαιτείται δρομολογητής για τη σύνδεση με έναν υπολογιστή όταν δεν υπάρχει απευθείας σύνδεση (παράκαμψη NAT). Η Aspia δεν παρέχει δημόσιο δρομολογητή, αλλά μπορείτε να εγκαταστήσετε τον δικό σας. Μπορείτε να κάνετε λήψη του δρομολογητή από τον &lt;a href=&quot;https://aspia.org&quot;&gt;επίσημο ιστότοπο&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>Error</source>
         <translation>Σφάλμα</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>An error occurred while processing the password.</source>
         <translation>Παρουσιάστηκε σφάλμα κατά την επεξεργασία του κωδικού πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>Import</source>
         <translation>Εισαγωγή</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>JSON files (*.json)</source>
         <translation>Αρχεία JSON (*.json)</translation>
     </message>
@@ -8644,12 +8656,12 @@ Credentials imported: %5</source>
         <translation>Είστε βέβαιοι ότι θέλετε να διαγράψετε τον δρομολογητή &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1499"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1496"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Υπάρχει ήδη ομάδα με αυτό το όνομα στην επιλεγμένη γονική ομάδα.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1606"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1603"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>%n από τους επιλεγμένους κεντρικούς υπολογιστές δεν μετακινήθηκε, επειδή υπάρχουν ήδη κεντρικοί υπολογιστές με τα ίδια ονόματα στην επιλεγμένη ομάδα.</numerusform>
@@ -8657,8 +8669,8 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1614"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1814"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1611"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1811"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>Δεν ήταν δυνατή η μετακίνηση %n από τους επιλεγμένους κεντρικούς υπολογιστές.</numerusform>
@@ -8666,26 +8678,26 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1489"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1508"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1711"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1486"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1708"/>
         <source>Failed to move the group.</source>
         <translation>Δεν ήταν δυνατή η μετακίνηση της ομάδας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1568"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1565"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>Δεν ήταν δυνατή η μετακίνηση των κεντρικών υπολογιστών στην επιλεγμένη ομάδα.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1605"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1602"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Υπάρχει ήδη κεντρικός υπολογιστής με αυτό το όνομα στην επιλεγμένη ομάδα.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1567"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1613"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1813"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1564"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1810"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Δεν ήταν δυνατή η μετακίνηση του κεντρικού υπολογιστή στην επιλεγμένη ομάδα.</translation>
     </message>

@@ -350,7 +350,7 @@
         <location filename="../client/android/main_window.cc" line="428"/>
         <location filename="../host/android/main_window.cc" line="84"/>
         <location filename="../host/android/main_window.cc" line="100"/>
-        <location filename="../host/android/main_window.cc" line="391"/>
+        <location filename="../host/android/main_window.cc" line="390"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
@@ -422,12 +422,12 @@
         <location filename="../client/android/main_window.cc" line="1098"/>
         <location filename="../host/android/main_window.cc" line="83"/>
         <location filename="../host/android/main_window.cc" line="99"/>
-        <location filename="../host/android/main_window.cc" line="389"/>
+        <location filename="../host/android/main_window.cc" line="388"/>
         <source>Connection</source>
         <translation>Bağlantı</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="358"/>
+        <location filename="../host/android/main_window.cc" line="357"/>
         <source>Permissions</source>
         <translation>İzinler</translation>
     </message>
@@ -1629,64 +1629,64 @@
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="245"/>
+        <location filename="../host/android/connection_widget.cc" line="244"/>
         <source>Your ID</source>
         <translation>ID&apos;niz</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="246"/>
+        <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>One-time password</source>
         <translation>Tek kullanımlık parola</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="247"/>
+        <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>Access</source>
         <translation>Erişim</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="248"/>
+        <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Desktop</source>
         <translation>Masaüstü</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="249"/>
+        <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>File Transfer</source>
         <translation>Dosya Aktarımı</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Waiting for a connection</source>
         <translation>Bağlantı bekleniyor</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Stop</source>
         <translation>Durdur</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="376"/>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>Aspia ID: %1
 Parola: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="419"/>
+        <location filename="../host/android/connection_widget.cc" line="415"/>
         <source>Router is disabled</source>
         <translation>Yönlendirici devre dışı</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="422"/>
+        <location filename="../host/android/connection_widget.cc" line="418"/>
         <source>Connecting to router...</source>
         <translation>Yönlendiriciye bağlanılıyor...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="425"/>
+        <location filename="../host/android/connection_widget.cc" line="421"/>
         <source>Connected to router</source>
         <translation>Yönlendiriciye bağlanıldı</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="428"/>
+        <location filename="../host/android/connection_widget.cc" line="424"/>
         <source>Failed to connect to router</source>
         <translation>Yönlendiriciye bağlanılamadı</translation>
     </message>
@@ -5923,6 +5923,11 @@ Credentials imported: %5</source>
         <source>Granted</source>
         <translation>Verildi</translation>
     </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="125"/>
+        <source>The service is turned on, but Android has stopped it. Turn it off and on again.</source>
+        <translation>Hizmet açık, ancak Android onu durdurdu. Hizmeti kapatıp yeniden açın.</translation>
+    </message>
 </context>
 <context>
     <name>ProcessItem</name>
@@ -6848,69 +6853,104 @@ Credentials imported: %5</source>
 <context>
     <name>RouterHostsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="56"/>
+        <source>Address</source>
+        <translation>Adres</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="72"/>
+        <source>Operating System</source>
+        <translation>İşletim Sistemi</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
+        <source>Version</source>
+        <translation>Sürüm</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="104"/>
+        <source>Architecture</source>
+        <translation>Mimari</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="120"/>
+        <source>Reset filter</source>
+        <translation>Filtreyi sıfırla</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="157"/>
         <source>Previous page</source>
         <translation>Önceki sayfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="56"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="160"/>
         <source>Previous</source>
         <translation>Önceki</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="74"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="178"/>
         <source>Next page</source>
         <translation>Sonraki sayfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="77"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="181"/>
         <source>Next</source>
         <translation>Sonraki</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="192"/>
         <source>Items per page:</source>
         <translation>Sayfa başına öğe:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="364"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <source>All workspaces</source>
+        <translation>Tüm çalışma alanları</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <source>Without workspace</source>
+        <translation>Çalışma alanı olmadan</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="392"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; ana bilgisayarının bağlantısını kesmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="389"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="417"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Tüm ana bilgisayarların bağlantısını kesmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="417"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="445"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Bir ana bilgisayarın silinmesi, yönlendiriciye bağlanmak için yapılmış tüm yapılandırmasının silinmesine ve uygulamanın ana bilgisayardan kaldırılmasına neden olur. Bu işlem geri alınamaz. Bunu yapmak istediğinizden emin misiniz?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="716"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="821"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n ana bilgisayar</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="772"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
         <source>Save File</source>
         <translation>Dosyayı Kaydet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="772"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
         <source>JSON files (*.json)</source>
         <translation>JSON dosyaları (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="783"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="888"/>
         <source>Could not open file for writing.</source>
         <translation>Dosya yazma için açılamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="830"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="935"/>
         <source>Unable to write file.</source>
         <translation>Dosya yazılamıyor.</translation>
     </message>
@@ -7601,14 +7641,6 @@ Credentials imported: %5</source>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
         <source>Monitor %1</source>
         <translation>Monitör %1</translation>
-    </message>
-</context>
-<context>
-    <name>ServerWorker</name>
-    <message>
-        <location filename="../host/android/server_worker.cc" line="553"/>
-        <source>Waiting for connections</source>
-        <translation>Bağlantılar bekleniyor</translation>
     </message>
 </context>
 <context>
@@ -8356,7 +8388,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="442"/>
-        <location filename="../host/android/settings_widget.cc" line="439"/>
+        <location filename="../host/android/settings_widget.cc" line="405"/>
         <source>Updates</source>
         <translation>Güncellemeler</translation>
     </message>
@@ -8367,49 +8399,49 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="453"/>
-        <location filename="../host/android/settings_widget.cc" line="442"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
         <source>Update channel</source>
         <translation>Güncelleme kanalı</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="454"/>
-        <location filename="../host/android/settings_widget.cc" line="443"/>
+        <location filename="../host/android/settings_widget.cc" line="409"/>
         <source>Stable</source>
         <translation>Kararlı</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="455"/>
-        <location filename="../host/android/settings_widget.cc" line="444"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="456"/>
-        <location filename="../host/android/settings_widget.cc" line="445"/>
+        <location filename="../host/android/settings_widget.cc" line="411"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="467"/>
-        <location filename="../host/android/settings_widget.cc" line="459"/>
+        <location filename="../host/android/settings_widget.cc" line="425"/>
         <source>Update server</source>
         <translation>Güncelleme sunucusu</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="472"/>
-        <location filename="../host/android/settings_widget.cc" line="464"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Public key</source>
         <translation>Ortak anahtar</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="478"/>
-        <location filename="../host/android/settings_widget.cc" line="470"/>
+        <location filename="../host/android/settings_widget.cc" line="436"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>Güncelleme sunucusu belirtilmezse varsayılan sunucu kullanılır. Ortak anahtar belirtilmezse yerleşik anahtar kullanılır.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="532"/>
-        <location filename="../host/android/settings_widget.cc" line="524"/>
+        <location filename="../host/android/settings_widget.cc" line="490"/>
         <source>Check for updates</source>
         <translation>Güncellemeleri denetle</translation>
     </message>
@@ -8440,88 +8472,68 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="285"/>
-        <source>Background mode</source>
-        <translation>Arka plan modu</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="297"/>
-        <source>The host accepts connections in the local network and stays connected to the router while the application is not on the screen, so it can be reached at any time.</source>
-        <translation>Ana bilgisayar yerel ağdaki bağlantıları kabul eder ve uygulama ekranda değilken yönlendiriciye bağlı kalır, böylece ona her zaman bağlanılabilir.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="303"/>
-        <source>Confirm screen capture automatically</source>
-        <translation>Ekran yakalamayı otomatik olarak onayla</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="314"/>
-        <source>The screen capture request is confirmed automatically. It may not work on some devices.</source>
-        <translation>Ekran yakalama isteği otomatik olarak onaylanır. Bazı cihazlarda çalışmayabilir.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="319"/>
         <source>Manage users</source>
         <translation>Kullanıcıları yönet</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="327"/>
+        <location filename="../host/android/settings_widget.cc" line="293"/>
         <source>Change password</source>
         <translation>Parolayı değiştir</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="331"/>
+        <location filename="../host/android/settings_widget.cc" line="297"/>
         <source>Disable password protection</source>
         <translation>Parola korumasını devre dışı bırak</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="340"/>
+        <location filename="../host/android/settings_widget.cc" line="306"/>
         <source>Enable password protection</source>
         <translation>Parola korumasını etkinleştir</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="355"/>
+        <location filename="../host/android/settings_widget.cc" line="321"/>
         <source>Router</source>
         <translation>Yönlendirici</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
+        <location filename="../host/android/settings_widget.cc" line="326"/>
         <source>Enable the use of a router</source>
         <translation>Yönlendirici kullanımını etkinleştir</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="365"/>
+        <location filename="../host/android/settings_widget.cc" line="331"/>
         <source>Address</source>
         <translation>Adres</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="371"/>
+        <location filename="../host/android/settings_widget.cc" line="337"/>
         <source>Public Key</source>
         <translation>Ortak Anahtar</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="376"/>
+        <location filename="../host/android/settings_widget.cc" line="342"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Doğrudan bağlantı olmadığında (NAT arkasında) bir bilgisayara bağlanmak için yönlendirici gereklidir. Aspia genel bir yönlendirici sağlamaz, ancak kendi yönlendiricinizi kurabilirsiniz. Yönlendiriciyi &lt;a href=&quot;https://aspia.org&quot;&gt;resmi web sitesinden&lt;/a&gt; indirebilirsiniz.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>An error occurred while processing the password.</source>
         <translation>Parola işlenirken bir hata oluştu.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>Import</source>
         <translation>İçe Aktar</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>JSON files (*.json)</source>
         <translation>JSON dosyaları (*.json)</translation>
     </message>
@@ -8598,46 +8610,46 @@ Credentials imported: %5</source>
         <translation>&quot;%1&quot; yönlendiricisini silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1499"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1496"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Seçilen üst grupta bu ada sahip bir grup zaten var.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1606"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1603"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>Seçilen grupta aynı adlara sahip ana bilgisayarlar zaten bulunduğundan, seçilen ana bilgisayarlardan %n tanesi taşınmadı.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1614"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1814"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1611"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1811"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>Seçilen ana bilgisayarlardan %n tanesi taşınamadı.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1489"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1508"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1711"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1486"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1708"/>
         <source>Failed to move the group.</source>
         <translation>Grup taşınamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1568"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1565"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>Ana bilgisayarlar seçilen gruba taşınamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1605"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1602"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Seçilen grupta bu ada sahip bir ana bilgisayar zaten var.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1567"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1613"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1813"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1564"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1810"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Ana bilgisayar seçilen gruba taşınamadı.</translation>
     </message>

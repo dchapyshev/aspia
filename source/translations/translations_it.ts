@@ -350,7 +350,7 @@
         <location filename="../client/android/main_window.cc" line="428"/>
         <location filename="../host/android/main_window.cc" line="84"/>
         <location filename="../host/android/main_window.cc" line="100"/>
-        <location filename="../host/android/main_window.cc" line="391"/>
+        <location filename="../host/android/main_window.cc" line="390"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
     </message>
@@ -422,12 +422,12 @@
         <location filename="../client/android/main_window.cc" line="1098"/>
         <location filename="../host/android/main_window.cc" line="83"/>
         <location filename="../host/android/main_window.cc" line="99"/>
-        <location filename="../host/android/main_window.cc" line="389"/>
+        <location filename="../host/android/main_window.cc" line="388"/>
         <source>Connection</source>
         <translation>Connessione</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="358"/>
+        <location filename="../host/android/main_window.cc" line="357"/>
         <source>Permissions</source>
         <translation>Autorizzazioni</translation>
     </message>
@@ -1634,64 +1634,64 @@
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="245"/>
+        <location filename="../host/android/connection_widget.cc" line="244"/>
         <source>Your ID</source>
         <translation>Il tuo ID</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="246"/>
+        <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>One-time password</source>
         <translation>Password usa e getta</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="247"/>
+        <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>Access</source>
         <translation>Accesso</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="248"/>
+        <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Desktop</source>
         <translation>Desktop</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="249"/>
+        <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>File Transfer</source>
         <translation>Trasferimento File</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Waiting for a connection</source>
         <translation>In attesa di connessione</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Stop</source>
         <translation>Arresta</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="376"/>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>ID Aspia: %1
 Password: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="419"/>
+        <location filename="../host/android/connection_widget.cc" line="415"/>
         <source>Router is disabled</source>
         <translation>Il router è disabilitato</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="422"/>
+        <location filename="../host/android/connection_widget.cc" line="418"/>
         <source>Connecting to router...</source>
         <translation>Connessione al router...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="425"/>
+        <location filename="../host/android/connection_widget.cc" line="421"/>
         <source>Connected to router</source>
         <translation>Connesso al router</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="428"/>
+        <location filename="../host/android/connection_widget.cc" line="424"/>
         <source>Failed to connect to router</source>
         <translation>Impossibile connettersi al router</translation>
     </message>
@@ -5950,6 +5950,11 @@ Credenziali importate: %5</translation>
         <source>Granted</source>
         <translation>Concesso</translation>
     </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="125"/>
+        <source>The service is turned on, but Android has stopped it. Turn it off and on again.</source>
+        <translation>Il servizio è attivato, ma Android lo ha arrestato. Disattivalo e riattivalo.</translation>
+    </message>
 </context>
 <context>
     <name>ProcessItem</name>
@@ -6879,47 +6884,82 @@ Credenziali importate: %5</translation>
 <context>
     <name>RouterHostsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="56"/>
+        <source>Address</source>
+        <translation>Indirizzo</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="72"/>
+        <source>Operating System</source>
+        <translation>Sistema operativo</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
+        <source>Version</source>
+        <translation>Versione</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="104"/>
+        <source>Architecture</source>
+        <translation>Architettura</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="120"/>
+        <source>Reset filter</source>
+        <translation>Reimposta filtro</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="157"/>
         <source>Previous page</source>
         <translation>Pagina precedente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="56"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="160"/>
         <source>Previous</source>
         <translation>Precedente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="74"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="178"/>
         <source>Next page</source>
         <translation>Pagina successiva</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="77"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="181"/>
         <source>Next</source>
         <translation>Successivo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="192"/>
         <source>Items per page:</source>
         <translation>Elementi per pagina:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="364"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <source>All workspaces</source>
+        <translation>Tutte le aree di lavoro</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <source>Without workspace</source>
+        <translation>Senza area di lavoro</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="392"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Disconnettere l&apos;host &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="389"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="417"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Disconnettere tutti gli host?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="417"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="445"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>L&apos;eliminazione di un host comporterà l&apos;eliminazione di tutta la sua configurazione di connessione al router e la disinstallazione dell&apos;applicazione sull&apos;host. Questa operazione è irreversibile. Procedere?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="716"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="821"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n host</numerusform>
@@ -6927,22 +6967,22 @@ Credenziali importate: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="772"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
         <source>Save File</source>
         <translation>Salva file</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="772"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
         <source>JSON files (*.json)</source>
         <translation>File JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="783"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="888"/>
         <source>Could not open file for writing.</source>
         <translation>Impossibile aprire il file in scrittura.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="830"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="935"/>
         <source>Unable to write file.</source>
         <translation>Impossibile scrivere il file.</translation>
     </message>
@@ -7642,14 +7682,6 @@ Credenziali importate: %5</translation>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
         <source>Monitor %1</source>
         <translation>Monitor %1</translation>
-    </message>
-</context>
-<context>
-    <name>ServerWorker</name>
-    <message>
-        <location filename="../host/android/server_worker.cc" line="553"/>
-        <source>Waiting for connections</source>
-        <translation>In attesa di connessioni</translation>
     </message>
 </context>
 <context>
@@ -8399,7 +8431,7 @@ Credenziali importate: %5</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="442"/>
-        <location filename="../host/android/settings_widget.cc" line="439"/>
+        <location filename="../host/android/settings_widget.cc" line="405"/>
         <source>Updates</source>
         <translation>Aggiornamenti</translation>
     </message>
@@ -8410,49 +8442,49 @@ Credenziali importate: %5</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="453"/>
-        <location filename="../host/android/settings_widget.cc" line="442"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
         <source>Update channel</source>
         <translation>Canale di aggiornamento</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="454"/>
-        <location filename="../host/android/settings_widget.cc" line="443"/>
+        <location filename="../host/android/settings_widget.cc" line="409"/>
         <source>Stable</source>
         <translation>Stabile</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="455"/>
-        <location filename="../host/android/settings_widget.cc" line="444"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="456"/>
-        <location filename="../host/android/settings_widget.cc" line="445"/>
+        <location filename="../host/android/settings_widget.cc" line="411"/>
         <source>Alpha</source>
         <translation>Alpha</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="467"/>
-        <location filename="../host/android/settings_widget.cc" line="459"/>
+        <location filename="../host/android/settings_widget.cc" line="425"/>
         <source>Update server</source>
         <translation>Server di aggiornamento</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="472"/>
-        <location filename="../host/android/settings_widget.cc" line="464"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Public key</source>
         <translation>Chiave pubblica</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="478"/>
-        <location filename="../host/android/settings_widget.cc" line="470"/>
+        <location filename="../host/android/settings_widget.cc" line="436"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>Se il server di aggiornamento non è specificato, viene utilizzato quello predefinito. Se la chiave pubblica non è specificata, viene utilizzata quella integrata.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="532"/>
-        <location filename="../host/android/settings_widget.cc" line="524"/>
+        <location filename="../host/android/settings_widget.cc" line="490"/>
         <source>Check for updates</source>
         <translation>Controlla aggiornamenti</translation>
     </message>
@@ -8483,88 +8515,68 @@ Credenziali importate: %5</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="285"/>
-        <source>Background mode</source>
-        <translation>Modalità in background</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="297"/>
-        <source>The host accepts connections in the local network and stays connected to the router while the application is not on the screen, so it can be reached at any time.</source>
-        <translation>L&apos;host accetta connessioni nella rete locale e resta connesso al router quando l&apos;applicazione non è sullo schermo, quindi è possibile connettersi in qualsiasi momento.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="303"/>
-        <source>Confirm screen capture automatically</source>
-        <translation>Conferma automaticamente l&apos;acquisizione dello schermo</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="314"/>
-        <source>The screen capture request is confirmed automatically. It may not work on some devices.</source>
-        <translation>La richiesta di acquisizione dello schermo viene confermata automaticamente. Potrebbe non funzionare su alcuni dispositivi.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="319"/>
         <source>Manage users</source>
         <translation>Gestisci utenti</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="327"/>
+        <location filename="../host/android/settings_widget.cc" line="293"/>
         <source>Change password</source>
         <translation>Cambia password</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="331"/>
+        <location filename="../host/android/settings_widget.cc" line="297"/>
         <source>Disable password protection</source>
         <translation>Disabilita protezione con password</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="340"/>
+        <location filename="../host/android/settings_widget.cc" line="306"/>
         <source>Enable password protection</source>
         <translation>Abilita protezione con password</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="355"/>
+        <location filename="../host/android/settings_widget.cc" line="321"/>
         <source>Router</source>
         <translation>Router</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
+        <location filename="../host/android/settings_widget.cc" line="326"/>
         <source>Enable the use of a router</source>
         <translation>Abilita l&apos;utilizzo di un router</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="365"/>
+        <location filename="../host/android/settings_widget.cc" line="331"/>
         <source>Address</source>
         <translation>Indirizzo</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="371"/>
+        <location filename="../host/android/settings_widget.cc" line="337"/>
         <source>Public Key</source>
         <translation>Chiave pubblica</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="376"/>
+        <location filename="../host/android/settings_widget.cc" line="342"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>E&apos; necessario un router per connettersi ad un computer in assenza di connessione diretta (NAT). Aspia non fornisce un router pubblico, ma è possibile installarne uno proprio. Potete scaricare il router presso il &lt;a href=&quot;https://aspia.org&quot;&gt;sito ufficiale&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>An error occurred while processing the password.</source>
         <translation>Si è verificato un errore durante l&apos;elaborazione della password.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>Import</source>
         <translation>Importa</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>JSON files (*.json)</source>
         <translation>File JSON (*.json)</translation>
     </message>
@@ -8644,12 +8656,12 @@ Credenziali importate: %5</translation>
         <translation>Eliminare il router &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1499"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1496"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Un gruppo con questo nome esiste già nel gruppo padre selezionato.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1606"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1603"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>%n degli host selezionati non è stato spostato perché nel gruppo selezionato esiste già un host con lo stesso nome.</numerusform>
@@ -8657,8 +8669,8 @@ Credenziali importate: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1614"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1814"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1611"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1811"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>Impossibile spostare %n degli host selezionati.</numerusform>
@@ -8666,26 +8678,26 @@ Credenziali importate: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1489"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1508"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1711"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1486"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1708"/>
         <source>Failed to move the group.</source>
         <translation>Impossibile spostare il gruppo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1568"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1565"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>Impossibile spostare gli host nel gruppo selezionato.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1605"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1602"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Un host con questo nome esiste già nel gruppo selezionato.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1567"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1613"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1813"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1564"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1810"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Impossibile spostare l&apos;host nel gruppo selezionato.</translation>
     </message>

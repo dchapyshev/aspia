@@ -350,7 +350,7 @@
         <location filename="../client/android/main_window.cc" line="428"/>
         <location filename="../host/android/main_window.cc" line="84"/>
         <location filename="../host/android/main_window.cc" line="100"/>
-        <location filename="../host/android/main_window.cc" line="391"/>
+        <location filename="../host/android/main_window.cc" line="390"/>
         <source>Settings</source>
         <translation>הגדרות</translation>
     </message>
@@ -422,12 +422,12 @@
         <location filename="../client/android/main_window.cc" line="1098"/>
         <location filename="../host/android/main_window.cc" line="83"/>
         <location filename="../host/android/main_window.cc" line="99"/>
-        <location filename="../host/android/main_window.cc" line="389"/>
+        <location filename="../host/android/main_window.cc" line="388"/>
         <source>Connection</source>
         <translation>חיבור</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="358"/>
+        <location filename="../host/android/main_window.cc" line="357"/>
         <source>Permissions</source>
         <translation>הרשאות</translation>
     </message>
@@ -1634,64 +1634,64 @@
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="245"/>
+        <location filename="../host/android/connection_widget.cc" line="244"/>
         <source>Your ID</source>
         <translation>המזהה שלך</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="246"/>
+        <location filename="../host/android/connection_widget.cc" line="245"/>
         <source>One-time password</source>
         <translation>סיסמה חד-פעמית</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="247"/>
+        <location filename="../host/android/connection_widget.cc" line="246"/>
         <source>Access</source>
         <translation>גישה</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="248"/>
+        <location filename="../host/android/connection_widget.cc" line="247"/>
         <source>Desktop</source>
         <translation>שולחן עבודה</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="249"/>
+        <location filename="../host/android/connection_widget.cc" line="248"/>
         <source>File Transfer</source>
         <translation>העברת קבצים</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Waiting for a connection</source>
         <translation>ממתין לחיבור</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="369"/>
         <source>Stop</source>
         <translation>עצור</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="376"/>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>Aspia ID: %1
 סיסמה: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="419"/>
+        <location filename="../host/android/connection_widget.cc" line="415"/>
         <source>Router is disabled</source>
         <translation>הנתב מושבת</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="422"/>
+        <location filename="../host/android/connection_widget.cc" line="418"/>
         <source>Connecting to router...</source>
         <translation>מתחבר לנתב...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="425"/>
+        <location filename="../host/android/connection_widget.cc" line="421"/>
         <source>Connected to router</source>
         <translation>מחובר לנתב</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="428"/>
+        <location filename="../host/android/connection_widget.cc" line="424"/>
         <source>Failed to connect to router</source>
         <translation>ההתחברות לנתב נכשלה</translation>
     </message>
@@ -5950,6 +5950,11 @@ Credentials imported: %5</source>
         <source>Granted</source>
         <translation>הוענק</translation>
     </message>
+    <message>
+        <location filename="../host/android/permissions_widget.cc" line="125"/>
+        <source>The service is turned on, but Android has stopped it. Turn it off and on again.</source>
+        <translation>השירות מופעל, אך Android עצר אותו. כבה אותו והפעל אותו שוב.</translation>
+    </message>
 </context>
 <context>
     <name>ProcessItem</name>
@@ -6879,47 +6884,82 @@ Credentials imported: %5</source>
 <context>
     <name>RouterHostsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="56"/>
+        <source>Address</source>
+        <translation>כתובת</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="72"/>
+        <source>Operating System</source>
+        <translation>מערכת הפעלה</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
+        <source>Version</source>
+        <translation>גרסה</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="104"/>
+        <source>Architecture</source>
+        <translation>ארכיטקטורה</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="120"/>
+        <source>Reset filter</source>
+        <translation>איפוס מסנן</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="157"/>
         <source>Previous page</source>
         <translation>העמוד הקודם</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="56"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="160"/>
         <source>Previous</source>
         <translation>הקודם</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="74"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="178"/>
         <source>Next page</source>
         <translation>העמוד הבא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="77"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="181"/>
         <source>Next</source>
         <translation>הבא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="192"/>
         <source>Items per page:</source>
         <translation>פריטים בעמוד:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="364"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <source>All workspaces</source>
+        <translation>כל סביבות העבודה</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <source>Without workspace</source>
+        <translation>ללא סביבת עבודה</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="392"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך לנתק את המארח &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="389"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="417"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>האם אתה בטוח שברצונך לנתק את כל המארחים?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="417"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="445"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>מחיקת המארח תמחק את כל הגדרות החיבור שלו לנתב, והיישום יוסר מהמארח. פעולה זו אינה הפיכה. האם אתה בטוח שברצונך להמשיך?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="716"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="821"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n מארח</numerusform>
@@ -6927,22 +6967,22 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="772"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
         <source>Save File</source>
         <translation>שמירת קובץ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="772"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
         <source>JSON files (*.json)</source>
         <translation>קובצי JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="783"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="888"/>
         <source>Could not open file for writing.</source>
         <translation>לא ניתן לפתוח קובץ לכתיבה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="830"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="935"/>
         <source>Unable to write file.</source>
         <translation>לא ניתן לכתוב את הקובץ.</translation>
     </message>
@@ -7642,14 +7682,6 @@ Credentials imported: %5</source>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
         <source>Monitor %1</source>
         <translation>צג %1</translation>
-    </message>
-</context>
-<context>
-    <name>ServerWorker</name>
-    <message>
-        <location filename="../host/android/server_worker.cc" line="553"/>
-        <source>Waiting for connections</source>
-        <translation>ממתין לחיבורים</translation>
     </message>
 </context>
 <context>
@@ -8399,7 +8431,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="442"/>
-        <location filename="../host/android/settings_widget.cc" line="439"/>
+        <location filename="../host/android/settings_widget.cc" line="405"/>
         <source>Updates</source>
         <translation>עדכונים</translation>
     </message>
@@ -8410,49 +8442,49 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="453"/>
-        <location filename="../host/android/settings_widget.cc" line="442"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
         <source>Update channel</source>
         <translation>ערוץ עדכונים</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="454"/>
-        <location filename="../host/android/settings_widget.cc" line="443"/>
+        <location filename="../host/android/settings_widget.cc" line="409"/>
         <source>Stable</source>
         <translation>יציב</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="455"/>
-        <location filename="../host/android/settings_widget.cc" line="444"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
         <source>Beta</source>
         <translation>בטא</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="456"/>
-        <location filename="../host/android/settings_widget.cc" line="445"/>
+        <location filename="../host/android/settings_widget.cc" line="411"/>
         <source>Alpha</source>
         <translation>אלפא</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="467"/>
-        <location filename="../host/android/settings_widget.cc" line="459"/>
+        <location filename="../host/android/settings_widget.cc" line="425"/>
         <source>Update server</source>
         <translation>שרת עדכונים</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="472"/>
-        <location filename="../host/android/settings_widget.cc" line="464"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Public key</source>
         <translation>מפתח ציבורי</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="478"/>
-        <location filename="../host/android/settings_widget.cc" line="470"/>
+        <location filename="../host/android/settings_widget.cc" line="436"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>אם שרת העדכונים לא צוין, נעשה שימוש בשרת ברירת המחדל. אם המפתח הציבורי לא צוין, נעשה שימוש במפתח המובנה.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="532"/>
-        <location filename="../host/android/settings_widget.cc" line="524"/>
+        <location filename="../host/android/settings_widget.cc" line="490"/>
         <source>Check for updates</source>
         <translation>בדוק עדכונים</translation>
     </message>
@@ -8483,88 +8515,68 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="285"/>
-        <source>Background mode</source>
-        <translation>מצב רקע</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="297"/>
-        <source>The host accepts connections in the local network and stays connected to the router while the application is not on the screen, so it can be reached at any time.</source>
-        <translation>המארח מקבל חיבורים ברשת המקומית ונשאר מחובר לנתב כאשר היישום אינו מוצג על המסך, כך שניתן להתחבר אליו בכל עת.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="303"/>
-        <source>Confirm screen capture automatically</source>
-        <translation>אשר לכידת מסך באופן אוטומטי</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="314"/>
-        <source>The screen capture request is confirmed automatically. It may not work on some devices.</source>
-        <translation>בקשת לכידת המסך מאושרת אוטומטית. ייתכן שזה לא יעבוד בחלק מהמכשירים.</translation>
-    </message>
-    <message>
-        <location filename="../host/android/settings_widget.cc" line="319"/>
         <source>Manage users</source>
         <translation>ניהול משתמשים</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="327"/>
+        <location filename="../host/android/settings_widget.cc" line="293"/>
         <source>Change password</source>
         <translation>שנה סיסמה</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="331"/>
+        <location filename="../host/android/settings_widget.cc" line="297"/>
         <source>Disable password protection</source>
         <translation>השבת הגנת סיסמה</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="340"/>
+        <location filename="../host/android/settings_widget.cc" line="306"/>
         <source>Enable password protection</source>
         <translation>הפעל הגנת סיסמה</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="355"/>
+        <location filename="../host/android/settings_widget.cc" line="321"/>
         <source>Router</source>
         <translation>נתב</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
+        <location filename="../host/android/settings_widget.cc" line="326"/>
         <source>Enable the use of a router</source>
         <translation>הפעל שימוש בנתב</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="365"/>
+        <location filename="../host/android/settings_widget.cc" line="331"/>
         <source>Address</source>
         <translation>כתובת</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="371"/>
+        <location filename="../host/android/settings_widget.cc" line="337"/>
         <source>Public Key</source>
         <translation>מפתח ציבורי</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="376"/>
+        <location filename="../host/android/settings_widget.cc" line="342"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>נתב נדרש לצורך התחברות למחשב כאשר אין חיבור ישיר (מעקף NAT). Aspia אינה מספקת נתב ציבורי, אך ניתן להתקין נתב משלך. ניתן להוריד את הנתב מתוך &lt;a href=&quot;https://aspia.org&quot;&gt;האתר הרשמי&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>Error</source>
         <translation>שגיאה</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="538"/>
-        <location filename="../host/android/settings_widget.cc" line="559"/>
+        <location filename="../host/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>An error occurred while processing the password.</source>
         <translation>אירעה שגיאה בעת עיבוד הסיסמה.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>Import</source>
         <translation>ייבוא</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="581"/>
+        <location filename="../host/android/settings_widget.cc" line="547"/>
         <source>JSON files (*.json)</source>
         <translation>קובצי JSON (*.json)</translation>
     </message>
@@ -8644,12 +8656,12 @@ Credentials imported: %5</source>
         <translation>האם אתה בטוח שברצונך למחוק את הנתב &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1499"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1496"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>קבוצה בשם זה כבר קיימת בקבוצת האב שנבחרה.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1606"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1603"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>%n מהמארחים שנבחרו לא הועבר מכיוון שמארח בשם זהה כבר קיים בקבוצה שנבחרה.</numerusform>
@@ -8657,8 +8669,8 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1614"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1814"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1611"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1811"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>העברת %n מהמארחים שנבחרו נכשלה.</numerusform>
@@ -8666,26 +8678,26 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1489"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1508"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1711"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1486"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1708"/>
         <source>Failed to move the group.</source>
         <translation>העברת הקבוצה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1568"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1565"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>העברת המארחים לקבוצה שנבחרה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1605"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1602"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>מארח בשם זה כבר קיים בקבוצה שנבחרה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1567"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1613"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1813"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1564"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1810"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>העברת המארח לקבוצה שנבחרה נכשלה.</translation>
     </message>
