@@ -27,6 +27,8 @@
 #include "client/mcp/mcp_worker.h"
 #include "client/mcp/tools/check_local_hosts_tool.h"
 #include "client/mcp/tools/check_router_hosts_tool.h"
+#include "client/mcp/tools/connect_local_host_tool.h"
+#include "client/mcp/tools/connect_router_host_tool.h"
 #include "client/mcp/tools/find_local_hosts_tool.h"
 #include "client/mcp/tools/find_router_hosts_tool.h"
 #include "client/mcp/tools/list_local_groups_tool.h"
@@ -52,11 +54,13 @@ McpController::McpController(QObject* parent)
     tools_.push_back(std::make_unique<FindLocalHostsTool>());
     tools_.push_back(std::make_unique<ListLocalGroupsTool>());
     tools_.push_back(std::make_unique<CheckLocalHostsTool>());
+    tools_.push_back(std::make_unique<ConnectLocalHostTool>());
     tools_.push_back(std::make_unique<ListRoutersTool>());
     tools_.push_back(std::make_unique<FindRouterHostsTool>());
     tools_.push_back(std::make_unique<ListRouterGroupsTool>());
     tools_.push_back(std::make_unique<CheckRouterHostsTool>());
     tools_.push_back(std::make_unique<ListQuickSupportHostsTool>());
+    tools_.push_back(std::make_unique<ConnectRouterHostTool>());
 
     mcp_worker_ = GuiApplication::findWorker<McpWorker>();
     if (!mcp_worker_)

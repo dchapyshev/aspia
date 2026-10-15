@@ -26,6 +26,11 @@
 #include <memory>
 #include <vector>
 
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
+
+class HostConfig;
 class McpTool;
 class McpWorker;
 
@@ -47,6 +52,9 @@ public:
 
 signals:
     void sig_enableFailed();
+
+    void sig_localConnectRequested(qint64 entry_id, proto::peer::SessionType session_type);
+    void sig_routerConnectRequested(const HostConfig& host, proto::peer::SessionType session_type);
 
 private slots:
     void onToolsListRequested(qint64 request_id);

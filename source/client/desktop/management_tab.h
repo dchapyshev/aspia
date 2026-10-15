@@ -75,6 +75,8 @@ private slots:
     void onCurrentHostChanged(qint64 entry_id);
     void onConnectAction(QAction* action);
     void onLocalConnect(qint64 entry_id);
+    void onLocalConnectRequested(qint64 entry_id, proto::peer::SessionType session_type);
+    void onRouterConnectRequested(const HostConfig& host, proto::peer::SessionType session_type);
     void onRouterGroupConnect();
     void onRouterHostConnect();
     void onTempHostConnect();
