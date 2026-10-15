@@ -241,7 +241,7 @@ void ServiceThread::run()
     }
     else
     {
-        PLOG(ERROR) << "StartServiceCtrlDispatcherW failed";
+        LOG(INFO) << "Service control dispatcher finished";
     }
 }
 
