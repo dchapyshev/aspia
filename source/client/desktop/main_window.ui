@@ -126,6 +126,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="action_quick_connect"/>
+   <addaction name="action_mcp_connector"/>
    <addaction name="action_credentials"/>
    <addaction name="action_settings"/>
    <addaction name="separator"/>
@@ -181,6 +182,18 @@
    </property>
    <property name="text">
     <string>Settings...</string>
+   </property>
+  </action>
+  <action name="action_mcp_connector">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/ai.svg</normaloff>:/img/ai.svg</iconset>
+   </property>
+   <property name="text">
+    <string>MCP Connector</string>
    </property>
   </action>
   <action name="action_lock">

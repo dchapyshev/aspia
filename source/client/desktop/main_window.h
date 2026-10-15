@@ -38,6 +38,7 @@ enum SessionType : int;
 class AppLock;
 class Tab;
 class ManagementTab;
+class McpConnector;
 class SearchDialog;
 class QLineEdit;
 class HostConfig;
@@ -84,6 +85,7 @@ private slots:
     void onTabMinimizeRequested();
     void onTabShowRequested();
     void onAlwaysOnTop(bool checked);
+    void onMcpConnector(bool enable);
     void onLockRequested();
 
 private:
@@ -111,6 +113,8 @@ private:
     Tab* active_tab_ = nullptr;
     QList<QPointer<QAction>> tab_toolbar_actions_;
     QList<QPair<QMenu*, QList<QPointer<QAction>>>> tab_menu_actions_;
+
+    McpConnector* mcp_connector_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(MainWindow)
 };

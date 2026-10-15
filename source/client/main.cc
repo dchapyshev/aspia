@@ -46,6 +46,7 @@
 #include "client/system_settings.h"
 #include "client/desktop/app_lock.h"
 #include "client/desktop/main_window.h"
+#include "client/desktop/mcp_connector.h"
 #include "client/desktop/update_server_dialog.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -151,6 +152,12 @@ int main(int argc, char* argv[])
 #endif // defined(Q_OS_MACOS)
 
 #if !defined(Q_OS_ANDROID)
+    if (argc == 2 && qstrcmp(argv[1], "--mcp") == 0)
+    {
+        QCoreApplication application(argc, argv);
+        return McpConnector::runBridge();
+    }
+
     if (argc == 3 || argc == 4)
     {
         auto option_value = [](const char* argument, const char* option)

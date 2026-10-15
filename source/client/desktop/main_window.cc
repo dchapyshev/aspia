@@ -46,6 +46,7 @@
 #include "client/desktop/credentials_tab.h"
 #include "client/desktop/client_window.h"
 #include "client/desktop/management_tab.h"
+#include "client/desktop/mcp_connector.h"
 #include "client/desktop/quick_connect_dialog.h"
 #include "client/desktop/settings_tab.h"
 #include "client/desktop/tab_bar.h"
@@ -83,7 +84,8 @@ QString escapeTabTitle(const QString& title)
 //--------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
-      ui(std::make_unique<Ui::MainWindow>())
+      ui(std::make_unique<Ui::MainWindow>()),
+      mcp_connector_(new McpConnector(this))
 {
     LOG(INFO) << "Ctor";
 
@@ -133,6 +135,7 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui->action_quick_connect, &QAction::triggered, this, &MainWindow::onQuickConnect);
     connect(ui->action_credentials, &QAction::triggered, this, &MainWindow::onCredentials);
     connect(ui->action_settings, &QAction::triggered, this, &MainWindow::onSettings);
+    connect(ui->action_mcp_connector, &QAction::toggled, this, &MainWindow::onMcpConnector);
     connect(ui->action_help, &QAction::triggered, this, &MainWindow::onHelp);
     connect(ui->action_about, &QAction::triggered, this, &MainWindow::onAbout);
     connect(ui->action_lock, &QAction::triggered, this, &MainWindow::onLock);
@@ -794,6 +797,24 @@ void MainWindow::onAlwaysOnTop(bool checked)
     {
         if (widget != this && qobject_cast<ClientWindow*>(widget))
             apply(widget);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onMcpConnector(bool enable)
+{
+    if (!enable)
+    {
+        mcp_connector_->stop();
+        return;
+    }
+
+    if (!mcp_connector_->start())
+    {
+        MsgBox::warning(this, tr("Unable to turn on the MCP connector."));
+
+        QSignalBlocker blocker(ui->action_mcp_connector);
+        ui->action_mcp_connector->setChecked(false);
     }
 }
 
