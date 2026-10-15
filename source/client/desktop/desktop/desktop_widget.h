@@ -66,6 +66,7 @@ public:
                       const QPoint& pos,
                       const QPoint& delta = QPoint());
     void doKeyEvent(QKeyEvent* event);
+    void doKeyEvent(quint32 usb_keycode, bool pressed);
 
     bool keyCombinationsEnabled() const { return enable_key_sequenses_; }
 

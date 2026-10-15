@@ -638,6 +638,23 @@ void DesktopWindow::sendMouseEvent(const proto::input::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopWindow::sendKeyEvent(quint32 usb_keycode, bool pressed)
+{
+    desktop_->doKeyEvent(usb_keycode, pressed);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::sendText(const QString& text)
+{
+    ++send_text_count_;
+
+    proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
+    message.mutable_text()->set_text(text.toStdString());
+    sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                outgoing_message_.serialize<proto::input::ClientToHost>());
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopWindow::onScreenMessage(const QByteArray& buffer)
 {
     proto::screen::HostToClient message;
@@ -1255,12 +1272,7 @@ void DesktopWindow::onPasteKeystrokes()
             return;
         }
 
-        ++send_text_count_;
-
-        proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
-        message.mutable_text()->set_text(text.toStdString());
-        sendMessage(proto::desktop::CHANNEL_ID_INPUT,
-                    outgoing_message_.serialize<proto::input::ClientToHost>());
+        sendText(text);
     }
     else
     {

@@ -422,6 +422,17 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopWidget::doKeyEvent(quint32 usb_keycode, bool pressed)
+{
+    quint32 flags = (pressed ? proto::input::KeyEvent::PRESSED : 0);
+
+    flags |= (isCapsLockActivated() ? proto::input::KeyEvent::CAPSLOCK : 0);
+    flags |= (isNumLockActivated() ? proto::input::KeyEvent::NUMLOCK : 0);
+
+    executeKeyEvent(usb_keycode, flags);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::executeKeyCombination(QKeyCombination key_sequence)
 {
     const quint32 kUsbCodeLeftAlt = 0x0700e2;

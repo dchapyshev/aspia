@@ -68,6 +68,8 @@ public:
         virtual QSize frameSize() const = 0;
         virtual QImage screenshot() const = 0;
         virtual void sendMouseEvent(const proto::input::MouseEvent& event) = 0;
+        virtual void sendKeyEvent(quint32 usb_keycode, bool pressed) = 0;
+        virtual void sendText(const QString& text) = 0;
     };
 
     class MainWindow

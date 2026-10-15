@@ -98,6 +98,8 @@ protected:
     QSize frameSize() const final;
     QImage screenshot() const final;
     void sendMouseEvent(const proto::input::MouseEvent& event) final;
+    void sendKeyEvent(quint32 usb_keycode, bool pressed) final;
+    void sendText(const QString& text) final;
 
 private slots:
     // Incoming session channels (video/audio/cursor are parsed by the workers).

@@ -21,18 +21,62 @@
 #include <QBuffer>
 #include <QImage>
 #include <QJsonArray>
+#include <QTimer>
 
 #include <optional>
 
+#include "base/time_types.h"
 #include "client/mcp/mcp_controller.h"
+#include "common/keycode_converter.h"
 #include "proto/desktop_input.h"
 
 namespace {
 
 const int kMaxPictureSize = 1280;
 const int kDragSteps = 10;
+const MilliSeconds kDoubleClickDelay{ 150 };
 const int kDefaultScrollAmount = 3;
 const int kMaxScrollAmount = 20;
+
+const struct
+{
+    const char* name;
+    quint32 usb_keycode;
+} kModifiers[] =
+{
+    { "ctrl", 0x0700e0 },
+    { "shift", 0x0700e1 },
+    { "alt", 0x0700e2 },
+    { "win", 0x0700e3 },
+    { "meta", 0x0700e3 },
+    { "super", 0x0700e3 },
+    { "cmd", 0x0700e3 }
+};
+
+const struct
+{
+    const char* name;
+    int qt_keycode;
+} kKeys[] =
+{
+    { "escape", Qt::Key_Escape },
+    { "tab", Qt::Key_Tab },
+    { "backspace", Qt::Key_Backspace },
+    { "enter", Qt::Key_Return },
+    { "insert", Qt::Key_Insert },
+    { "delete", Qt::Key_Delete },
+    { "home", Qt::Key_Home },
+    { "end", Qt::Key_End },
+    { "left", Qt::Key_Left },
+    { "up", Qt::Key_Up },
+    { "right", Qt::Key_Right },
+    { "down", Qt::Key_Down },
+    { "pageup", Qt::Key_PageUp },
+    { "pagedown", Qt::Key_PageDown },
+    { "space", Qt::Key_Space },
+    { "printscreen", Qt::Key_Print },
+    { "pause", Qt::Key_Pause }
+};
 
 //--------------------------------------------------------------------------------------------------
 bool hasClient(qint64 client_id)
@@ -109,6 +153,75 @@ std::optional<quint32> wheelArgument(const QJsonValue& value)
     return std::nullopt;
 }
 
+//--------------------------------------------------------------------------------------------------
+void sendMouse(McpController::DesktopWindow* window, const QPoint& point, const QSize& picture_size,
+               const QSize& frame_size, quint32 mask)
+{
+    proto::input::MouseEvent event;
+    event.set_x(point.x() * frame_size.width() / picture_size.width());
+    event.set_y(point.y() * frame_size.height() / picture_size.height());
+    event.set_mask(mask);
+    window->sendMouseEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 keyUsbKeycode(const QString& name)
+{
+    for (const auto& modifier : kModifiers)
+    {
+        if (name == QLatin1String(modifier.name))
+            return modifier.usb_keycode;
+    }
+
+    if (name.size() == 1)
+        return KeycodeConverter::qtKeycodeToUsbKeycode(name.at(0).toUpper().unicode());
+
+    const int function_number = name.startsWith('f') ? name.mid(1).toInt() : 0;
+    if (function_number >= 1 && function_number <= 24)
+        return KeycodeConverter::qtKeycodeToUsbKeycode(Qt::Key_F1 + function_number - 1);
+
+    for (const auto& key : kKeys)
+    {
+        if (name == QLatin1String(key.name))
+            return KeycodeConverter::qtKeycodeToUsbKeycode(key.qt_keycode);
+    }
+
+    return KeycodeConverter::invalidUsbKeycode();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool isModifier(quint32 usb_keycode)
+{
+    for (const auto& modifier : kModifiers)
+    {
+        if (usb_keycode == modifier.usb_keycode)
+            return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<QList<quint32>> keysArgument(const QJsonValue& value)
+{
+    const QStringList names = value.toString().toLower().split('+');
+    QList<quint32> usb_keycodes;
+
+    for (qsizetype i = 0; i < names.size(); ++i)
+    {
+        const quint32 usb_keycode = keyUsbKeycode(names[i].trimmed());
+        if (usb_keycode == KeycodeConverter::invalidUsbKeycode())
+            return std::nullopt;
+
+        if (i != names.size() - 1 && !isModifier(usb_keycode))
+            return std::nullopt;
+
+        usb_keycodes.append(usb_keycode);
+    }
+
+    return usb_keycodes;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -124,11 +237,12 @@ QJsonObject DesktopClientTool::definition() const
                            { "description", "Id of a desktop client window from list_clients." } };
 
     QJsonObject action{ { "type", "string" },
-                        { "enum", QJsonArray{ "screenshot", "move", "click", "double_click", "drag", "scroll" } },
+                        { "enum", QJsonArray{ "screenshot", "move", "click", "double_click", "drag", "scroll",
+                                              "key", "type" } },
                         { "description", "screenshot returns the picture of the remote desktop that the user "
                                          "sees in the window. move, click, double_click and scroll act at x, y. "
                                          "drag presses the button at x, y, moves to to_x, to_y and releases the "
-                                         "button there." } };
+                                         "button there. key presses keys, type enters text." } };
 
     QJsonObject x{ { "type", "integer" },
                    { "minimum", 0 },
@@ -159,14 +273,27 @@ QJsonObject DesktopClientTool::definition() const
                         { "maximum", kMaxScrollAmount },
                         { "description", "Number of wheel steps of scroll. 3 by default." } };
 
+    QJsonObject keys{ { "type", "string" },
+                      { "description", "Key of key with its modifiers joined by +, for example ctrl+c, alt+f4, "
+                                       "ctrl+shift+escape, win+e or enter. The modifiers are ctrl, shift, alt and "
+                                       "win (also meta, super or cmd). The keys are a character of the US layout, "
+                                       "f1 to f24, escape, tab, backspace, enter, insert, delete, home, end, left, "
+                                       "up, right, down, pageup, pagedown, space, printscreen and pause. A modifier "
+                                       "alone, for example win, is pressed as a key." } };
+
+    QJsonObject text{ { "type", "string" },
+                      { "description", "Text of type. It is entered as characters, so the keyboard layout of the "
+                                       "host does not matter. New lines and tabs are not entered on every host, "
+                                       "press them by key." } };
+
     return QJsonObject{
         { "name", name() },
         { "description", "Works with a client window of Aspia Client that is connected to the desktop of a host. "
                          "The window must be opened before, for example by connect_local_host or "
                          "connect_router_host with the desktop session_type, and its client_id comes from "
                          "list_clients. A picture larger than 1280 pixels on a side is scaled down. The mouse "
-                         "actions take the position in the pixels of that picture and return no picture, so take "
-                         "a screenshot to see the result. The user sees every action in the window." },
+                         "actions take the position in the pixels of that picture. The actions return no picture, "
+                         "so take a screenshot to see the result. The user sees every action in the window." },
         { "inputSchema", QJsonObject{ { "type", "object" },
                                       { "properties", QJsonObject{ { "client_id", client_id },
                                                                    { "action", action },
@@ -176,7 +303,9 @@ QJsonObject DesktopClientTool::definition() const
                                                                    { "to_y", to_y },
                                                                    { "button", button },
                                                                    { "direction", direction },
-                                                                   { "amount", amount } } },
+                                                                   { "amount", amount },
+                                                                   { "keys", keys },
+                                                                   { "text", text } } },
                                       { "required", QJsonArray{ "client_id", "action" } },
                                       { "additionalProperties", false } } } };
 }
@@ -193,9 +322,9 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
 
     const QString action = arguments.value("action").toString();
     if (action != "screenshot" && action != "move" && action != "click" && action != "double_click" &&
-        action != "drag" && action != "scroll")
+        action != "drag" && action != "scroll" && action != "key" && action != "type")
     {
-        reply(false, "The action must be one of screenshot, move, click, double_click, drag, scroll.");
+        reply(false, "The action must be one of screenshot, move, click, double_click, drag, scroll, key, type.");
         return;
     }
 
@@ -244,6 +373,42 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
+    const QString done = QString("The client %1 got %2. Take a screenshot to see the result.")
+        .arg(*client_id).arg(action);
+
+    if (action == "key")
+    {
+        std::optional<QList<quint32>> usb_keycodes = keysArgument(arguments.value("keys"));
+        if (!usb_keycodes.has_value())
+        {
+            reply(false, "The keys must be one key with its modifiers, for example ctrl+c. The description of keys "
+                         "lists the names.");
+            return;
+        }
+
+        for (quint32 usb_keycode : std::as_const(*usb_keycodes))
+            window->sendKeyEvent(usb_keycode, true);
+        for (auto it = usb_keycodes->crbegin(); it != usb_keycodes->crend(); ++it)
+            window->sendKeyEvent(*it, false);
+
+        reply(true, done);
+        return;
+    }
+
+    if (action == "type")
+    {
+        const QString text = arguments.value("text").toString();
+        if (text.isEmpty())
+        {
+            reply(false, "The text of type must be a non-empty string.");
+            return;
+        }
+
+        window->sendText(text);
+        reply(true, done);
+        return;
+    }
+
     std::optional<QPoint> pos = pointArgument(arguments, "x", "y", picture_size);
     if (!pos.has_value())
     {
@@ -254,11 +419,7 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
 
     auto send = [window, picture_size, frame_size](const QPoint& point, quint32 mask)
     {
-        proto::input::MouseEvent event;
-        event.set_x(point.x() * frame_size.width() / picture_size.width());
-        event.set_y(point.y() * frame_size.height() / picture_size.height());
-        event.set_mask(mask);
-        window->sendMouseEvent(event);
+        sendMouse(window, point, picture_size, frame_size, mask);
     };
 
     if (action == "move")
@@ -315,16 +476,32 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
         }
         else
         {
-            const int clicks = (action == "double_click") ? 2 : 1;
-
             send(*pos, proto::input::MouseEvent::EMPTY);
-            for (int i = 0; i < clicks; ++i)
+            send(*pos, *button);
+            send(*pos, proto::input::MouseEvent::EMPTY);
+
+            if (action == "double_click")
             {
-                send(*pos, *button);
-                send(*pos, proto::input::MouseEvent::EMPTY);
+                // The desktop of the host takes two clicks sent at once for a single click.
+                QTimer::singleShot(kDoubleClickDelay, &McpController::instance(),
+                    [client_id = *client_id, point = *pos, button = *button, picture_size, frame_size, done,
+                     reply]()
+                {
+                    McpController::DesktopWindow* window = McpController::instance().desktopWindow(client_id);
+                    if (!window)
+                    {
+                        reply(false, QString("The client %1 was closed before the second click.").arg(client_id));
+                        return;
+                    }
+
+                    sendMouse(window, point, picture_size, frame_size, button);
+                    sendMouse(window, point, picture_size, frame_size, proto::input::MouseEvent::EMPTY);
+                    reply(true, done);
+                });
+                return;
             }
         }
     }
 
-    reply(true, QString("The client %1 got %2. Take a screenshot to see the result.").arg(*client_id).arg(action));
+    reply(true, done);
 }
