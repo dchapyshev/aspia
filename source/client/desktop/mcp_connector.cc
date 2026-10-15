@@ -182,6 +182,12 @@ QJsonObject processMethod(const QJsonValue& id, const QString& method, const QJs
     {
         result.insert("resultType", "complete");
         result.insert("_meta", QJsonObject{ { kServerInfoKey, serverInfo() } });
+
+        if (method == "server/discover" || method == "tools/list")
+        {
+            result.insert("ttlMs", 0);
+            result.insert("cacheScope", "public");
+        }
     }
 
     return resultResponse(id, result);
