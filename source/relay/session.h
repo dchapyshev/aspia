@@ -58,7 +58,7 @@ signals:
 
 private:
     static void doReadSome(Session* session, int source);
-    void onErrorOccurred(const Location& location, const std::error_code& error_code);
+    void onErrorOccurred(const Location& location, int side, const std::error_code& error_code);
 
     qint64 session_id_ = 0;
     std::string client_address_;
@@ -82,6 +82,7 @@ private:
     SharedPointer<IoState> io_ { new IoState() };
 
     asio::ip::tcp::socket socket_[kNumberOfSides];
+    std::string peer_address_[kNumberOfSides];
 
     LOG_DECLARE_CONTEXT(Session);
     Q_DISABLE_COPY_MOVE(Session)

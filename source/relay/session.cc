@@ -34,6 +34,19 @@ std::string identityField(const std::string& value)
     return value.substr(0, kMaxIdentityFieldLength);
 }
 
+//--------------------------------------------------------------------------------------------------
+std::string peerAddress(const asio::ip::tcp::socket& socket)
+{
+    std::error_code error_code;
+    const asio::ip::tcp::endpoint endpoint = socket.remote_endpoint(error_code);
+    if (error_code)
+        return std::string();
+
+    const asio::ip::address address = endpoint.address();
+    const std::string host = address.is_v6() ? '[' + address.to_string() + ']' : address.to_string();
+    return host + ':' + std::to_string(endpoint.port());
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -56,7 +69,10 @@ Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& socke
     }
 
     for (size_t i = 0; i < kNumberOfSides; ++i)
+    {
         std::fill(io_->buffer[i].begin(), io_->buffer[i].end(), 0);
+        peer_address_[i] = peerAddress(socket_[i]);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -80,7 +96,7 @@ Session::~Session()
 //--------------------------------------------------------------------------------------------------
 void Session::start()
 {
-    CLOG(INFO) << "Starting peers session";
+    CLOG(INFO) << "Starting peers session" << peer_address_[0] << peer_address_[1];
 
     start_time_ = Clock::now();
     start_idle_time_ = start_time_;
@@ -116,7 +132,7 @@ void Session::doReadSome(Session* session, int source)
         if (error_code)
         {
             if (error_code != asio::error::operation_aborted)
-                session->onErrorOccurred(FROM_HERE, error_code);
+                session->onErrorOccurred(FROM_HERE, source, error_code);
             return;
         }
 
@@ -134,7 +150,7 @@ void Session::doReadSome(Session* session, int source)
             if (error_code)
             {
                 if (error_code != asio::error::operation_aborted)
-                    session->onErrorOccurred(FROM_HERE, error_code);
+                    session->onErrorOccurred(FROM_HERE, (source + kNumberOfSides - 1) % kNumberOfSides, error_code);
                 return;
             }
 
@@ -144,8 +160,8 @@ void Session::doReadSome(Session* session, int source)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::onErrorOccurred(const Location& location, const std::error_code& error_code)
+void Session::onErrorOccurred(const Location& location, int side, const std::error_code& error_code)
 {
-    CLOG(INFO) << "Connection finished:" << error_code << "from" << location;
+    CLOG(INFO) << "Connection with" << peer_address_[side] << "finished:" << error_code << "from" << location;
     emit sig_finished();
 }
