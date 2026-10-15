@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/desktop/mcp_connector.h"
+#include "client/mcp/mcp_connector.h"
 
 #include <QCoreApplication>
 #include <QJsonArray>
@@ -31,15 +31,16 @@
 #include <unistd.h>
 #endif
 
+#include <algorithm>
 #include <cerrno>
 #include <cstdio>
-#include <memory>
 #include <mutex>
 #include <thread>
 
 #include "version.h"
 #include "base/logging.h"
 #include "base/time_types.h"
+#include "client/mcp/tools/find_computers_tool.h"
 
 namespace {
 
@@ -156,7 +157,8 @@ QJsonObject errorResponse(const QJsonValue& id, int code, const QString& message
 }
 
 //--------------------------------------------------------------------------------------------------
-QJsonObject processMethod(const QJsonValue& id, const QString& method, const QJsonObject& params, bool modern)
+QJsonObject processMethod(const QJsonValue& id, const QString& method, const QJsonObject& params, bool modern,
+                          const std::vector<std::unique_ptr<McpTool>>& tools)
 {
     QJsonObject result;
 
@@ -167,11 +169,26 @@ QJsonObject processMethod(const QJsonValue& id, const QString& method, const QJs
     }
     else if (method == "tools/list")
     {
-        result.insert("tools", QJsonArray());
+        QJsonArray list;
+        for (const std::unique_ptr<McpTool>& tool : tools)
+            list.append(tool->definition());
+
+        result.insert("tools", list);
     }
     else if (method == "tools/call")
     {
-        return errorResponse(id, kInvalidParams, "Unknown tool: " + params.value("name").toString());
+        QString name = params.value("name").toString();
+
+        auto tool = std::find_if(tools.begin(), tools.end(),
+                                 [&name](const std::unique_ptr<McpTool>& entry) { return entry->name() == name; });
+        if (tool == tools.end())
+            return errorResponse(id, kInvalidParams, "Unknown tool: " + name);
+
+        QString text;
+        bool success = (*tool)->call(params.value("arguments").toObject(), &text);
+
+        result.insert("content", QJsonArray{ QJsonObject{ { "type", "text" }, { "text", text } } });
+        result.insert("isError", !success);
     }
     else if (method != "ping")
     {
@@ -195,7 +212,8 @@ QJsonObject processMethod(const QJsonValue& id, const QString& method, const QJs
 
 //--------------------------------------------------------------------------------------------------
 // Returns an empty object when the message is not answered.
-QJsonObject processMessage(const QByteArray& message, bool* initialized)
+QJsonObject processMessage(const QByteArray& message, bool* initialized,
+                           const std::vector<std::unique_ptr<McpTool>>& tools)
 {
     if (message.trimmed().isEmpty())
         return QJsonObject();
@@ -238,7 +256,7 @@ QJsonObject processMessage(const QByteArray& message, bool* initialized)
         // Requests of the revisions with the initialize handshake carry no version.
         if (!*initialized)
             return errorResponse(id, kInvalidParams, "Missing protocol version");
-        return processMethod(id, method, params, false);
+        return processMethod(id, method, params, false, tools);
     }
 
     QString version = meta.value(kVersionKey).toString();
@@ -251,7 +269,7 @@ QJsonObject processMessage(const QByteArray& message, bool* initialized)
     if (!meta.contains(kCapabilitiesKey))
         return errorResponse(id, kInvalidParams, "Missing client capabilities");
 
-    return processMethod(id, method, params, true);
+    return processMethod(id, method, params, true, tools);
 }
 
 } // namespace
@@ -265,6 +283,8 @@ McpConnector::McpConnector(QObject* parent)
 
     server_->setSocketOptions(QLocalServer::UserAccessOption);
     connect(server_, &QLocalServer::newConnection, this, &McpConnector::onNewConnection);
+
+    tools_.push_back(std::make_unique<FindComputersTool>());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -409,7 +429,7 @@ void McpConnector::readMessages(QLocalSocket* socket)
     qsizetype end = connection.buffer.indexOf('\n');
     while (end != -1)
     {
-        QJsonObject response = processMessage(connection.buffer.left(end), &connection.initialized);
+        QJsonObject response = processMessage(connection.buffer.left(end), &connection.initialized, tools_);
         connection.buffer.remove(0, end + 1);
 
         if (!response.isEmpty())

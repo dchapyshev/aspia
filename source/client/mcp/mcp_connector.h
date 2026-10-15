@@ -16,13 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_DESKTOP_MCP_CONNECTOR_H
-#define CLIENT_DESKTOP_MCP_CONNECTOR_H
+#ifndef CLIENT_MCP_MCP_CONNECTOR_H
+#define CLIENT_MCP_MCP_CONNECTOR_H
 
 #include <QByteArray>
 #include <QHash>
 #include <QObject>
 
+#include <memory>
+#include <vector>
+
+class McpTool;
 class QLocalServer;
 class QLocalSocket;
 
@@ -57,7 +61,9 @@ private:
     QLocalServer* server_ = nullptr;
     QHash<QLocalSocket*, Connection> connections_;
 
+    std::vector<std::unique_ptr<McpTool>> tools_;
+
     Q_DISABLE_COPY_MOVE(McpConnector)
 };
 
-#endif // CLIENT_DESKTOP_MCP_CONNECTOR_H
+#endif // CLIENT_MCP_MCP_CONNECTOR_H

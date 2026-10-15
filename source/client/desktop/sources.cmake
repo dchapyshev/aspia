@@ -37,8 +37,6 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP
     main_window.cc
     main_window.h
     main_window.ui
-    mcp_connector.cc
-    mcp_connector.h
     tab.cc
     tab.h
     tab_bar.cc

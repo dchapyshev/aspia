@@ -140,6 +140,8 @@ if (ANDROID)
 endif()
 
 include(android/sources.cmake)
+include(mcp/sources.cmake)
+include(mcp/tools/sources.cmake)
 include(online_checker/sources.cmake)
 include(desktop/sources.cmake)
 include(desktop/desktop/sources.cmake)
@@ -158,6 +160,8 @@ endif()
 source_group("" FILES ${SOURCE_CLIENT_CORE} ${SOURCE_CLIENT})
 source_group(tests FILES ${SOURCE_CLIENT_TESTS})
 source_group(android FILES ${SOURCE_CLIENT_ANDROID})
+source_group(mcp FILES ${SOURCE_CLIENT_CORE_MCP})
+source_group(mcp\\tools FILES ${SOURCE_CLIENT_CORE_MCP_TOOLS})
 source_group(online_checker FILES ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})
 source_group(desktop FILES ${SOURCE_CLIENT_CORE_DESKTOP})
 source_group(desktop\\desktop FILES ${SOURCE_CLIENT_CORE_DESKTOP_DESKTOP})
@@ -208,6 +212,8 @@ else()
         ${SOURCE_CLIENT_CORE_DESKTOP_CREDENTIALS}
         ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL}
         ${SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB}
+        ${SOURCE_CLIENT_CORE_MCP}
+        ${SOURCE_CLIENT_CORE_MCP_TOOLS}
         ${SOURCE_CLIENT_WIN}
         ${SOURCE_CLIENT_WORKERS})
 endif()
