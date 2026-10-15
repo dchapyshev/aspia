@@ -58,10 +58,10 @@ QJsonObject ListLocalGroupsTool::definition() const
 {
     return QJsonObject{
         { "name", name() },
-        { "description", "Lists the groups of computers saved in the local database of Aspia Client. The groups of "
+        { "description", "Lists the groups of hosts saved in the local database of Aspia Client. The groups of "
                          "routers are not listed here. A group with parent_id 0 is at the top level, and the path "
                          "holds the names of the group and its parents. The id can be passed to "
-                         "find_local_computers to list the computers of the group." },
+                         "find_local_hosts to list the hosts of the group." },
         { "inputSchema", QJsonObject{ { "type", "object" }, { "additionalProperties", false } } } };
 }
 

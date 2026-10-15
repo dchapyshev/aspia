@@ -16,18 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_MCP_TOOLS_FIND_LOCAL_COMPUTERS_TOOL_H
-#define CLIENT_MCP_TOOLS_FIND_LOCAL_COMPUTERS_TOOL_H
+#ifndef CLIENT_MCP_TOOLS_FIND_ROUTER_HOSTS_TOOL_H
+#define CLIENT_MCP_TOOLS_FIND_ROUTER_HOSTS_TOOL_H
+
+#include <QPointer>
 
 #include "client/mcp/mcp_tool.h"
 
-// Lists the computers of the local database or searches them by the name, the address and the group.
-// The credentials and the comments are never returned.
-class FindLocalComputersTool final : public McpTool
+class RouterController;
+
+// Searches the hosts of the connected routers by the name and the host ID. The credentials and
+// the comments are never returned.
+class FindRouterHostsTool final : public McpTool
 {
 public:
-    FindLocalComputersTool() = default;
-    ~FindLocalComputersTool() final = default;
+    explicit FindRouterHostsTool(const QPointer<RouterController>& router_controller);
+    ~FindRouterHostsTool() final = default;
 
     // McpTool implementation.
     QString name() const final;
@@ -35,7 +39,9 @@ public:
     void call(const QJsonObject& arguments, Reply reply) final;
 
 private:
-    Q_DISABLE_COPY_MOVE(FindLocalComputersTool)
+    const QPointer<RouterController>& router_controller_;
+
+    Q_DISABLE_COPY_MOVE(FindRouterHostsTool)
 };
 
-#endif // CLIENT_MCP_TOOLS_FIND_LOCAL_COMPUTERS_TOOL_H
+#endif // CLIENT_MCP_TOOLS_FIND_ROUTER_HOSTS_TOOL_H

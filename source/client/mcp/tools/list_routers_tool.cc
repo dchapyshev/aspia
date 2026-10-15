@@ -70,8 +70,8 @@ QJsonObject ListRoutersTool::definition() const
         { "name", name() },
         { "description", "Lists the routers saved in Aspia Client with the status of their connections: online, "
                          "connecting, two_factor (waits for the user to enter a two-factor code), offline or "
-                         "unreadable (the record is damaged). The computers of a router are available only while "
-                         "it is online. Credentials are never returned." },
+                         "unreadable (the record is damaged). The hosts of a router are searched by "
+                         "find_router_hosts while it is online. Credentials are never returned." },
         { "inputSchema", QJsonObject{ { "type", "object" }, { "additionalProperties", false } } } };
 }
 

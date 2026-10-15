@@ -36,7 +36,8 @@
 #include <cstdio>
 
 #include "version.h"
-#include "client/mcp/tools/find_local_computers_tool.h"
+#include "client/mcp/tools/find_local_hosts_tool.h"
+#include "client/mcp/tools/find_router_hosts_tool.h"
 #include "client/mcp/tools/list_local_groups_tool.h"
 #include "client/mcp/tools/list_routers_tool.h"
 
@@ -436,9 +437,10 @@ void McpWorker::onPrepare()
     server_->setSocketOptions(QLocalServer::UserAccessOption);
     connect(server_, &QLocalServer::newConnection, this, &McpWorker::onNewConnection);
 
-    tools_.push_back(std::make_unique<FindLocalComputersTool>());
+    tools_.push_back(std::make_unique<FindLocalHostsTool>());
     tools_.push_back(std::make_unique<ListLocalGroupsTool>());
     tools_.push_back(std::make_unique<ListRoutersTool>(router_controller_));
+    tools_.push_back(std::make_unique<FindRouterHostsTool>(router_controller_));
 }
 
 //--------------------------------------------------------------------------------------------------

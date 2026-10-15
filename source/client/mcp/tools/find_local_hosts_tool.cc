@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/mcp/tools/find_local_computers_tool.h"
+#include "client/mcp/tools/find_local_hosts_tool.h"
 
 #include <QHash>
 #include <QJsonArray>
@@ -67,35 +67,35 @@ bool isInGroup(qint64 group_id, qint64 ancestor_id, const QHash<qint64, LocalGro
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-QString FindLocalComputersTool::name() const
+QString FindLocalHostsTool::name() const
 {
-    return "find_local_computers";
+    return "find_local_hosts";
 }
 
 //--------------------------------------------------------------------------------------------------
-QJsonObject FindLocalComputersTool::definition() const
+QJsonObject FindLocalHostsTool::definition() const
 {
     QJsonObject query{ { "type", "string" },
-                       { "description", "Text to look for in the name or address of a computer. Without it all "
-                                        "computers are listed." } };
+                       { "description", "Text to look for in the name or address of a host. Without it all "
+                                        "hosts are listed." } };
 
     QJsonObject group_id{ { "type", "integer" },
-                          { "description", "Id of a group from list_local_groups. Only the computers of this group and "
+                          { "description", "Id of a group from list_local_groups. Only the hosts of this group and "
                                            "of its subgroups are listed." } };
 
     return QJsonObject{
         { "name", name() },
-        { "description", "Lists the computers saved in the local database of Aspia Client, or only those whose name "
+        { "description", "Lists the hosts saved in the local database of Aspia Client, or only those whose name "
                          "or address contains the query, ignoring case, and that are in the given group. The "
-                         "computers of routers are not listed here. Passwords, user names and comments are never "
-                         "returned." },
+                         "hosts of routers are found by find_router_hosts. Passwords, user names and comments are "
+                         "never returned." },
         { "inputSchema", QJsonObject{ { "type", "object" },
                                       { "properties", QJsonObject{ { "query", query }, { "group_id", group_id } } },
                                       { "additionalProperties", false } } } };
 }
 
 //--------------------------------------------------------------------------------------------------
-void FindLocalComputersTool::call(const QJsonObject& arguments, Reply reply)
+void FindLocalHostsTool::call(const QJsonObject& arguments, Reply reply)
 {
     QJsonValue query = arguments.value("query");
     if (!query.isUndefined() && !query.isString())
@@ -141,18 +141,18 @@ void FindLocalComputersTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    QJsonArray computers;
+    QJsonArray list;
     for (const LocalHostConfig& host : std::as_const(hosts))
     {
         if (group_id == 0 || isInGroup(host.groupId(), group_id, groups))
         {
-            computers.append(QJsonObject{ { "id", host.id() }, { "name", host.name() },
+            list.append(QJsonObject{ { "id", host.id() }, { "name", host.name() },
                                           { "address", host.address() },
                                           { "group", groupPath(host.groupId(), groups) } });
         }
     }
 
-    QJsonObject content{ { "computers", computers } };
+    QJsonObject content{ { "hosts", list } };
     if (result == Database::ReadResult::INCOMPLETE)
         content.insert("warning", "Some records of the database are damaged, their data may be missing.");
 
