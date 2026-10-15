@@ -36,6 +36,7 @@ public:
     ~CredentialPanel() final;
 
     void popup(qint64 credential_id);
+    bool signIn();
 
 public slots:
     void onDismiss();

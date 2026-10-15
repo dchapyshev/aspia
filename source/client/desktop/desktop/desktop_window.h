@@ -102,6 +102,7 @@ protected:
     void sendText(const QString& text) final;
     proto::screen::ScreenList screenList() const final;
     void selectScreen(const proto::screen::Screen& screen) final;
+    SignInResult signIn() final;
 
 private slots:
     // Incoming session channels (video/audio/cursor are parsed by the workers).

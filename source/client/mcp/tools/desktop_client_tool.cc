@@ -240,13 +240,15 @@ QJsonObject DesktopClientTool::definition() const
 
     QJsonObject action{ { "type", "string" },
                         { "enum", QJsonArray{ "screenshot", "move", "click", "double_click", "drag", "scroll",
-                                              "key", "type", "list_screens", "select_screen" } },
+                                              "key", "type", "list_screens", "select_screen", "sign_in" } },
                         { "description", "screenshot returns the picture of the remote desktop that the user "
                                          "sees in the window. move, click, double_click and scroll act at x, y. "
                                          "drag presses the button at x, y, moves to to_x, to_y and releases the "
                                          "button there. key presses keys, type enters text. list_screens returns "
                                          "the monitors of the host, select_screen shows the monitor screen_id in "
-                                         "the window." } };
+                                         "the window. sign_in signs in to the login or lock screen of the host "
+                                         "with the saved credentials that are chosen for it in Aspia Client, the "
+                                         "credentials are not shown to you." } };
 
     QJsonObject x{ { "type", "integer" },
                    { "minimum", 0 },
@@ -333,10 +335,10 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
     const QString action = arguments.value("action").toString();
     if (action != "screenshot" && action != "move" && action != "click" && action != "double_click" &&
         action != "drag" && action != "scroll" && action != "key" && action != "type" && action != "list_screens" &&
-        action != "select_screen")
+        action != "select_screen" && action != "sign_in")
     {
         reply(false, "The action must be one of screenshot, move, click, double_click, drag, scroll, key, type, "
-                     "list_screens, select_screen.");
+                     "list_screens, select_screen, sign_in.");
         return;
     }
 
@@ -391,6 +393,25 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
         }
 
         reply(false, "The screen_id must be an id from list_screens.");
+        return;
+    }
+
+    if (action == "sign_in")
+    {
+        switch (window->signIn())
+        {
+            case McpController::DesktopWindow::SignInResult::STARTED:
+                reply(true, QString("The client %1 signs in to the host with the saved credentials. Take a "
+                                    "screenshot to see the result.").arg(*client_id));
+                break;
+            case McpController::DesktopWindow::SignInResult::NOT_REQUESTED:
+                reply(false, QString("The host of the client %1 does not ask for credentials now.").arg(*client_id));
+                break;
+            case McpController::DesktopWindow::SignInResult::NOT_SELECTED:
+                reply(false, QString("No saved credentials are chosen for the host of the client %1, the user "
+                                     "signs in.").arg(*client_id));
+                break;
+        }
         return;
     }
 

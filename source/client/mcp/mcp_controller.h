@@ -68,6 +68,8 @@ public:
     class DesktopWindow
     {
     public:
+        enum class SignInResult { STARTED, NOT_REQUESTED, NOT_SELECTED };
+
         virtual ~DesktopWindow() = default;
 
         virtual QSize frameSize() const = 0;
@@ -77,6 +79,7 @@ public:
         virtual void sendText(const QString& text) = 0;
         virtual proto::screen::ScreenList screenList() const = 0;
         virtual void selectScreen(const proto::screen::Screen& screen) = 0;
+        virtual SignInResult signIn() = 0;
     };
 
     class MainWindow

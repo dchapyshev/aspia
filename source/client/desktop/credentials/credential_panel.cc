@@ -124,6 +124,26 @@ void CredentialPanel::popup(qint64 credential_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool CredentialPanel::signIn()
+{
+    const QVariant data = combo_credential_->currentData();
+    if (!data.isValid())
+        return false;
+
+    const int index = data.toInt();
+    if (index < 0 || index >= credentials_.size())
+        return false;
+
+    const CredentialConfig credential = credentials_[index];
+
+    LOG(INFO) << "[ACTION] Sign in with saved credentials";
+    onDismiss();
+
+    emit sig_credentialSelected(credential.id(), credential.username(), credential.password());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 void CredentialPanel::onDismiss()
 {
     const bool had_focus = isAncestorOf(QApplication::focusWidget());
@@ -158,20 +178,7 @@ void CredentialPanel::paintEvent(QPaintEvent* /* event */)
 //--------------------------------------------------------------------------------------------------
 void CredentialPanel::onSignIn()
 {
-    const QVariant data = combo_credential_->currentData();
-    if (!data.isValid())
-        return;
-
-    const int index = data.toInt();
-    if (index < 0 || index >= credentials_.size())
-        return;
-
-    const CredentialConfig credential = credentials_[index];
-
-    LOG(INFO) << "[ACTION] Sign in with saved credentials";
-    onDismiss();
-
-    emit sig_credentialSelected(credential.id(), credential.username(), credential.password());
+    signIn();
 }
 
 //--------------------------------------------------------------------------------------------------
