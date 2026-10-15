@@ -25,10 +25,14 @@ collect_sources(SOURCE_CLIENT_CORE_MCP_TOOLS
     connect_local_host_tool.h
     connect_router_host_tool.cc
     connect_router_host_tool.h
+    desktop_client_tool.cc
+    desktop_client_tool.h
     find_local_hosts_tool.cc
     find_local_hosts_tool.h
     find_router_hosts_tool.cc
     find_router_hosts_tool.h
+    list_clients_tool.cc
+    list_clients_tool.h
     list_local_groups_tool.cc
     list_local_groups_tool.h
     list_quick_support_hosts_tool.cc
@@ -37,7 +41,5 @@ collect_sources(SOURCE_CLIENT_CORE_MCP_TOOLS
     list_router_groups_tool.h
     list_routers_tool.cc
     list_routers_tool.h
-    list_sessions_tool.cc
-    list_sessions_tool.h
     mcp_utils.cc
     mcp_utils.h)

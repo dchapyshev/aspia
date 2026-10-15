@@ -30,13 +30,14 @@
 #include "client/mcp/tools/check_router_hosts_tool.h"
 #include "client/mcp/tools/connect_local_host_tool.h"
 #include "client/mcp/tools/connect_router_host_tool.h"
+#include "client/mcp/tools/desktop_client_tool.h"
 #include "client/mcp/tools/find_local_hosts_tool.h"
 #include "client/mcp/tools/find_router_hosts_tool.h"
+#include "client/mcp/tools/list_clients_tool.h"
 #include "client/mcp/tools/list_local_groups_tool.h"
 #include "client/mcp/tools/list_quick_support_hosts_tool.h"
 #include "client/mcp/tools/list_router_groups_tool.h"
 #include "client/mcp/tools/list_routers_tool.h"
-#include "client/mcp/tools/list_sessions_tool.h"
 
 namespace {
 
@@ -45,9 +46,9 @@ McpController* g_instance = nullptr;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-McpController::McpController(Delegate* delegate, QObject* parent)
+McpController::McpController(MainWindow* main_window, QObject* parent)
     : QObject(parent),
-      delegate_(delegate)
+      main_window_(main_window)
 {
     LOG(TRACE) << "Ctor";
 
@@ -64,7 +65,8 @@ McpController::McpController(Delegate* delegate, QObject* parent)
     tools_.push_back(std::make_unique<CheckRouterHostsTool>());
     tools_.push_back(std::make_unique<ListQuickSupportHostsTool>());
     tools_.push_back(std::make_unique<ConnectRouterHostTool>());
-    tools_.push_back(std::make_unique<ListSessionsTool>());
+    tools_.push_back(std::make_unique<ListClientsTool>());
+    tools_.push_back(std::make_unique<DesktopClientTool>());
 
     mcp_worker_ = GuiApplication::findWorker<McpWorker>();
     if (!mcp_worker_)
@@ -116,9 +118,15 @@ void McpController::setEnabled(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<McpController::SessionInfo> McpController::sessions() const
+QList<McpController::ClientInfo> McpController::clients() const
 {
-    return delegate_->sessions();
+    return main_window_->clients();
+}
+
+//--------------------------------------------------------------------------------------------------
+McpController::DesktopWindow* McpController::desktopWindow(qint64 client_id) const
+{
+    return main_window_->desktopWindow(client_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -126,7 +134,7 @@ void McpController::connectLocalHost(qint64 entry_id, proto::peer::SessionType s
 {
     QMetaObject::invokeMethod(this, [this, entry_id, session_type]()
     {
-        delegate_->connectLocalHost(entry_id, session_type);
+        main_window_->connectLocalHost(entry_id, session_type);
     }, Qt::QueuedConnection);
 }
 
@@ -135,7 +143,7 @@ void McpController::connectRouterHost(const HostConfig& host, proto::peer::Sessi
 {
     QMetaObject::invokeMethod(this, [this, host, session_type]()
     {
-        delegate_->connectRouterHost(host, session_type);
+        main_window_->connectRouterHost(host, session_type);
     }, Qt::QueuedConnection);
 }
 
@@ -160,12 +168,13 @@ void McpController::onToolCallRequested(qint64 request_id, const QString& name, 
         return;
     }
 
-    (*tool)->call(arguments, [mcp_worker = mcp_worker_, request_id](bool success, const QString& text)
+    (*tool)->call(arguments, McpTool::Reply(
+        [mcp_worker = mcp_worker_, request_id](bool success, const QString& text, const QByteArray& png)
     {
         if (mcp_worker)
         {
             QMetaObject::invokeMethod(mcp_worker, &McpWorker::onToolFinished, Qt::QueuedConnection,
-                                      request_id, success, text);
+                                      request_id, success, text, png);
         }
-    });
+    }));
 }

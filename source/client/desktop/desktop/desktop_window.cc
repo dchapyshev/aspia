@@ -238,6 +238,91 @@ DesktopWindow::~DesktopWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopWindow::setTabbedMode(bool tabbed)
+{
+    LOG(INFO) << "Set tabbed mode:" << tabbed;
+    toolbar_->setTabbedMode(tabbed);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QPair<Tab::ActionRole, QList<QAction*>>> DesktopWindow::tabActionGroups() const
+{
+    return toolbar_->tabActionGroups();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::applySettings()
+{
+    LOG(INFO) << "Apply client settings";
+
+    Database& db = Database::instance();
+
+    desktop_config_ = db.desktopConfig();
+    onDesktopConfigChanged(desktop_config_);
+
+    desktop_->enableRemoteCursorPosition(desktop_config_.cursor_position());
+    if (!desktop_config_.cursor_shape())
+        desktop_->setCursorShape(QPixmap(), QPoint());
+
+    desktop_->enableKeyCombinations(db.isSendKeyCombinationsEnabled());
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray DesktopWindow::saveState() const
+{
+    return toolbar_->saveState();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::restoreState(const QByteArray& state)
+{
+    toolbar_->restoreState(state);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onInternalReset()
+{
+    LOG(INFO) << "Internal reset";
+
+    toolbar_->setToolList(proto::tools::ToolList());
+    credential_panel_->onDismiss();
+
+    if (task_manager_)
+    {
+        LOG(INFO) << "Close Task Manager window";
+        task_manager_->close();
+    }
+
+    if (statistics_dialog_)
+    {
+        LOG(INFO) << "Close Statistics window";
+        statistics_dialog_->close();
+    }
+
+    if (resize_timer_)
+        resize_timer_->stop();
+    screen_size_ = QSize();
+    if (scroll_timer_)
+        scroll_timer_->stop();
+    scroll_delta_ = QPoint();
+
+    if (mouse_timer_)
+        mouse_timer_->stop();
+    pending_mouse_event_.reset();
+    last_pos_x_ = 0;
+    last_pos_y_ = 0;
+    last_mask_ = 0;
+    send_mouse_count_ = 0;
+    drop_mouse_count_ = 0;
+    send_key_count_ = 0;
+    send_text_count_ = 0;
+
+    wheel_angle_ = QPoint();
+
+    desktop_->setDesktopFrame(SharedFrame());
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopWindow::onRegisterWorkers()
 {
     LOG(INFO) << "Register workers";
@@ -332,267 +417,6 @@ void DesktopWindow::onSessionStarted()
     toolbar_->enableSystemInfo(true);
 
     sendCapabilities();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::setTabbedMode(bool tabbed)
-{
-    LOG(INFO) << "Set tabbed mode:" << tabbed;
-    toolbar_->setTabbedMode(tabbed);
-}
-
-//--------------------------------------------------------------------------------------------------
-QList<QPair<Tab::ActionRole, QList<QAction*>>> DesktopWindow::tabActionGroups() const
-{
-    return toolbar_->tabActionGroups();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::applySettings()
-{
-    LOG(INFO) << "Apply client settings";
-
-    Database& db = Database::instance();
-
-    desktop_config_ = db.desktopConfig();
-    onDesktopConfigChanged(desktop_config_);
-
-    desktop_->enableRemoteCursorPosition(desktop_config_.cursor_position());
-    if (!desktop_config_.cursor_shape())
-        desktop_->setCursorShape(QPixmap(), QPoint());
-
-    desktop_->enableKeyCombinations(db.isSendKeyCombinationsEnabled());
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray DesktopWindow::saveState() const
-{
-    return toolbar_->saveState();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::restoreState(const QByteArray& state)
-{
-    toolbar_->restoreState(state);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& capabilities)
-{
-    bool portable = false;
-    bool elevated = false;
-
-    for (int i = 0; i < capabilities.flag_size(); ++i)
-    {
-        const proto::control::Capabilities::Flag& flag = capabilities.flag(i);
-        const std::string& name = flag.name();
-        bool value = flag.value();
-
-        if (name == kFlagOSWindows)
-        {
-            toolbar_->enableCtrlAltDelFeature(true);
-            toolbar_->enableRebootInSafeMode(true);
-        }
-        else if (name == kFlagPasteAsKeystrokes)
-            toolbar_->enablePasteAsKeystrokesFeature(value);
-        else if (name == kFlagPowerControl)
-            toolbar_->enablePowerControl(value);
-        else if (name == kFlagSelectScreen)
-            toolbar_->enableScreenSelect(value);
-        else if (name == kFlagTaskManager)
-            toolbar_->enableTaskManager(value);
-        else if (name == kFlagPortable)
-            portable = value;
-        else if (name == kFlagElevated)
-            elevated = value;
-    }
-
-    toolbar_->enableWaitForHost(!portable);
-
-    if (portable)
-    {
-        toolbar_->enableTextChat(false);
-        toolbar_->enableTerminal(false);
-        toolbar_->enableSystemInfo(false);
-        toolbar_->enableRebootInSafeMode(false);
-
-        if (!elevated)
-        {
-            toolbar_->enableCtrlAltDelFeature(false);
-            toolbar_->enablePowerControl(false);
-        }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onScreenListChanged(const proto::screen::ScreenList& screen_list)
-{
-    toolbar_->setScreenList(screen_list);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onCursorPositionChanged(const proto::cursor::Position& position)
-{
-    if (!desktop_->hasFrame())
-        return;
-
-    const QSize frame_size = desktop_->frameSize();
-
-    int pos_x = int(double(desktop_->width()) * double(position.x()) / double(frame_size.width()));
-    int pos_y = int(double(desktop_->height()) * double(position.y()) / double(frame_size.height()));
-
-    desktop_->setCursorPosition(QPoint(pos_x, pos_y));
-    desktop_->update();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onMetricsRequest()
-{
-    if (!statistics_dialog_)
-    {
-        LOG(INFO) << "Statistics dialog not created yet";
-
-        statistics_dialog_ = new StatisticsDialog(this);
-        statistics_dialog_->setAttribute(Qt::WA_DeleteOnClose);
-
-        QString computer_name = sessionState()->computerName();
-        if (computer_name.isEmpty())
-            computer_name = sessionState()->hostAddress();
-
-        statistics_dialog_->setWindowTitle(
-            statistics_dialog_->windowTitle() + " - " + computer_name);
-
-        connect(statistics_dialog_, &StatisticsDialog::sig_metricsRequired,
-                this, &DesktopWindow::onMetricsRequest);
-
-        // Each worker is the source of its own metrics; feed them straight to the dialog slots.
-        connect(networkWorker(), &NetworkWorker::sig_metrics,
-                statistics_dialog_, &StatisticsDialog::onNetworkMetrics);
-        connect(video_worker_, &VideoWorker::sig_metrics,
-                statistics_dialog_, &StatisticsDialog::onVideoMetrics);
-        connect(audio_worker_, &AudioWorker::sig_metrics,
-                statistics_dialog_, &StatisticsDialog::onAudioMetrics);
-
-        statistics_dialog_->show();
-        statistics_dialog_->activateWindow();
-    }
-
-    // The network, video and audio rows are fed to the dialog directly by the workers; here we push
-    // only the session-level counters that no worker owns.
-    const Seconds duration = DurationCast<Seconds>(Clock::now() - start_time_);
-
-    statistics_dialog_->setDuration(duration);
-    statistics_dialog_->setClipboardMetrics(read_clipboard_count_, send_clipboard_count_);
-    statistics_dialog_->setMouseMetrics(send_mouse_count_, drop_mouse_count_);
-    statistics_dialog_->setKeyMetrics(send_key_count_);
-    statistics_dialog_->setTextMetrics(send_text_count_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onFrameError(proto::video::ErrorCode error_code)
-{
-    if (!desktop_->hasFrame())
-        desktop_->resize(scroll_area_->viewport()->size());
-
-    desktop_->setDesktopFrameError(error_code);
-    desktop_->update();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onFrameChanged(const QSize& screen_size, SharedFrame frame)
-{
-    screen_size_ = screen_size;
-    LOG(INFO) << "Screen size changed:" << screen_size_;
-
-    bool has_old_frame = desktop_->hasFrame();
-
-    desktop_->setDesktopFrame(std::move(frame));
-    onScaleDesktop();
-
-    if (!has_old_frame)
-    {
-        LOG(INFO) << "Resize window (first frame)";
-        onAutosizeWindow();
-
-        // If the parameters indicate that it is necessary to record the connection session, then we
-        // start recording.
-        if (Database::instance().isRecordSessionsEnabled())
-        {
-            LOG(INFO) << "Auto-recording enabled";
-            toolbar_->startRecording(true);
-        }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onDrawFrame(const QList<QRect>& dirty_rects)
-{
-    desktop_->drawDesktopFrame(dirty_rects);
-    toolbar_->update();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onMouseCursorChanged(std::shared_ptr<MouseCursor> mouse_cursor)
-{
-    int width = mouse_cursor->width();
-    int height = mouse_cursor->height();
-
-    QImage image(reinterpret_cast<const uchar*>(mouse_cursor->constImage().data()), width, height,
-                 mouse_cursor->stride(), QImage::Format::Format_ARGB32);
-
-    // The cursor is scaled to the current desktop scale inside the widget. The device pixel ratio
-    // of the client screen is applied on top of that by Qt itself.
-    desktop_->setCursorShape(QPixmap::fromImage(image),
-                             QPoint(mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onSessionListChanged(const proto::control::SessionList& sessions)
-{
-    toolbar_->setSessionList(sessions);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onInternalReset()
-{
-    LOG(INFO) << "Internal reset";
-
-    toolbar_->setToolList(proto::tools::ToolList());
-    credential_panel_->onDismiss();
-
-    if (task_manager_)
-    {
-        LOG(INFO) << "Close Task Manager window";
-        task_manager_->close();
-    }
-
-    if (statistics_dialog_)
-    {
-        LOG(INFO) << "Close Statistics window";
-        statistics_dialog_->close();
-    }
-
-    if (resize_timer_)
-        resize_timer_->stop();
-    screen_size_ = QSize();
-    if (scroll_timer_)
-        scroll_timer_->stop();
-    scroll_delta_ = QPoint();
-
-    if (mouse_timer_)
-        mouse_timer_->stop();
-    pending_mouse_event_.reset();
-    last_pos_x_ = 0;
-    last_pos_y_ = 0;
-    last_mask_ = 0;
-    send_mouse_count_ = 0;
-    drop_mouse_count_ = 0;
-    send_key_count_ = 0;
-    send_text_count_ = 0;
-
-    wheel_angle_ = QPoint();
-
-    desktop_->setDesktopFrame(SharedFrame());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -784,6 +608,315 @@ bool DesktopWindow::eventFilter(QObject* object, QEvent* event)
     }
 
     return QWidget::eventFilter(object, event);
+}
+
+//--------------------------------------------------------------------------------------------------
+QImage DesktopWindow::screenshot() const
+{
+    return desktop_->frameImage();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onScreenMessage(const QByteArray& buffer)
+{
+    proto::screen::HostToClient message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse screen message";
+        return;
+    }
+
+    if (message.has_screen_list())
+        onScreenListChanged(message.screen_list());
+    else
+        LOG(WARNING) << "Unhandled screen message";
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onControlMessage(const QByteArray& buffer)
+{
+    proto::control::HostToClient message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse control message";
+        return;
+    }
+
+    if (message.has_capabilities())
+    {
+        readCapabilities(message.capabilities());
+    }
+    else if (message.has_session_list())
+    {
+        LOG(INFO) << "Received:" << message.session_list();
+        onSessionListChanged(message.session_list());
+    }
+    else if (message.has_credentials_request())
+    {
+        readCredentialsRequest(message.credentials_request());
+    }
+    else
+    {
+        LOG(ERROR) << "Unhandled service message from host";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onClipboardMessage(const QByteArray& buffer)
+{
+    proto::clipboard::HostToClient message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse clipboard message";
+        return;
+    }
+
+    if (message.has_event())
+        readClipboardEvent(message.event());
+    else
+        LOG(ERROR) << "Unhandled clipboard message from host";
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onFileMessage(const QByteArray& buffer)
+{
+    if (clipboard_file_transfer_)
+        clipboard_file_transfer_->onIncomingMessage(buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onToolsMessage(const QByteArray& buffer)
+{
+    proto::tools::HostToClient message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse tools message";
+        return;
+    }
+
+    if (message.has_tool_list())
+        toolbar_->setToolList(message.tool_list());
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onFrameError(proto::video::ErrorCode error_code)
+{
+    if (!desktop_->hasFrame())
+        desktop_->resize(scroll_area_->viewport()->size());
+
+    desktop_->setDesktopFrameError(error_code);
+    desktop_->update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onFrameChanged(const QSize& screen_size, SharedFrame frame)
+{
+    screen_size_ = screen_size;
+    LOG(INFO) << "Screen size changed:" << screen_size_;
+
+    bool has_old_frame = desktop_->hasFrame();
+
+    desktop_->setDesktopFrame(std::move(frame));
+    onScaleDesktop();
+
+    if (!has_old_frame)
+    {
+        LOG(INFO) << "Resize window (first frame)";
+        onAutosizeWindow();
+
+        // If the parameters indicate that it is necessary to record the connection session, then we
+        // start recording.
+        if (Database::instance().isRecordSessionsEnabled())
+        {
+            LOG(INFO) << "Auto-recording enabled";
+            toolbar_->startRecording(true);
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onDrawFrame(const QList<QRect>& dirty_rects)
+{
+    desktop_->drawDesktopFrame(dirty_rects);
+    toolbar_->update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onMouseCursorChanged(std::shared_ptr<MouseCursor> mouse_cursor)
+{
+    int width = mouse_cursor->width();
+    int height = mouse_cursor->height();
+
+    QImage image(reinterpret_cast<const uchar*>(mouse_cursor->constImage().data()), width, height,
+                 mouse_cursor->stride(), QImage::Format::Format_ARGB32);
+
+    // The cursor is scaled to the current desktop scale inside the widget. The device pixel ratio
+    // of the client screen is applied on top of that by Qt itself.
+    desktop_->setCursorShape(QPixmap::fromImage(image),
+                             QPoint(mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onCursorPositionChanged(const proto::cursor::Position& position)
+{
+    if (!desktop_->hasFrame())
+        return;
+
+    const QSize frame_size = desktop_->frameSize();
+
+    int pos_x = int(double(desktop_->width()) * double(position.x()) / double(frame_size.width()));
+    int pos_y = int(double(desktop_->height()) * double(position.y()) / double(frame_size.height()));
+
+    desktop_->setCursorPosition(QPoint(pos_x, pos_y));
+    desktop_->update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onCurrentScreenChanged(const proto::screen::Screen& screen)
+{
+    LOG(INFO) << "Current screen changed:" << screen.id();
+
+    proto::screen::ClientToHost message;
+    message.mutable_screen()->CopyFrom(screen);
+    sendMessage(proto::desktop::CHANNEL_ID_SCREEN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onRecordingChanged(bool enable, const QString& file_path)
+{
+    proto::user::ClientToHost message;
+    proto::user::VideoRecording* video_recording = message.mutable_video_recording();
+
+    if (enable)
+    {
+        LOG(INFO) << "Video recording is enabled:" << file_path;
+        video_recording->set_action(proto::user::VideoRecording::ACTION_STARTED);
+    }
+    else
+    {
+        LOG(INFO) << "Video recording is disabled";
+        video_recording->set_action(proto::user::VideoRecording::ACTION_STOPPED);
+    }
+
+    // The video worker owns the output file and re-encodes decoded frames straight from their YUV
+    // form while recording is on.
+    const QString computer_name = sessionState()->computerName();
+    QMetaObject::invokeMethod(video_worker_,
+        [worker = video_worker_, enable, file_path, computer_name]()
+    {
+        worker->onSetRecording(enable, file_path, computer_name);
+    }, Qt::QueuedConnection);
+
+    sendMessage(proto::desktop::CHANNEL_ID_USER, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onPowerControl(proto::power::Control::Action action)
+{
+    proto::power::ClientToHost message;
+    message.mutable_power_control()->set_action(action);
+    sendMessage(proto::desktop::CHANNEL_ID_POWER, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onSwitchSession(quint32 session_id)
+{
+    proto::control::ClientToHost message;
+    proto::control::SwitchSession* switch_session = message.mutable_switch_session();
+    switch_session->set_session_id(session_id);
+
+    LOG(INFO) << "Send:" << *switch_session;
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onSendCredentials(const SecureString& username, const SecureString& password)
+{
+    proto::control::ClientToHost message;
+    proto::control::Credentials* credentials = message.mutable_credentials();
+    credentials->set_username(username.toString().toStdString());
+    credentials->set_password(password.toString().toStdString());
+
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+
+    memZero(credentials->mutable_username());
+    memZero(credentials->mutable_password());
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onClipboardEvent(const proto::clipboard::Event& event)
+{
+    if (!desktop_config_.clipboard())
+        return;
+
+    ++send_clipboard_count_;
+
+    if (Clipboard::findFormat(event, Clipboard::kMimeTypeFileList) && !file_clipboard_supported_)
+    {
+        LOG(WARNING) << "File clipboard is not supported by remote side, skipping file list";
+        return;
+    }
+
+    proto::clipboard::ClientToHost message;
+    message.mutable_event()->CopyFrom(event);
+    sendMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onClipboardLocalFileListChanged(const QVector<LocalFileEntry>& files)
+{
+    if (clipboard_file_transfer_)
+        clipboard_file_transfer_->setLocalFileList(files);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onClipboardFileDataRequest(int file_index)
+{
+    if (clipboard_file_transfer_)
+        clipboard_file_transfer_->requestFileData(file_index);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onMetricsRequest()
+{
+    if (!statistics_dialog_)
+    {
+        LOG(INFO) << "Statistics dialog not created yet";
+
+        statistics_dialog_ = new StatisticsDialog(this);
+        statistics_dialog_->setAttribute(Qt::WA_DeleteOnClose);
+
+        QString computer_name = sessionState()->computerName();
+        if (computer_name.isEmpty())
+            computer_name = sessionState()->hostAddress();
+
+        statistics_dialog_->setWindowTitle(
+            statistics_dialog_->windowTitle() + " - " + computer_name);
+
+        connect(statistics_dialog_, &StatisticsDialog::sig_metricsRequired,
+                this, &DesktopWindow::onMetricsRequest);
+
+        // Each worker is the source of its own metrics; feed them straight to the dialog slots.
+        connect(networkWorker(), &NetworkWorker::sig_metrics,
+                statistics_dialog_, &StatisticsDialog::onNetworkMetrics);
+        connect(video_worker_, &VideoWorker::sig_metrics,
+                statistics_dialog_, &StatisticsDialog::onVideoMetrics);
+        connect(audio_worker_, &AudioWorker::sig_metrics,
+                statistics_dialog_, &StatisticsDialog::onAudioMetrics);
+
+        statistics_dialog_->show();
+        statistics_dialog_->activateWindow();
+    }
+
+    // The network, video and audio rows are fed to the dialog directly by the workers; here we push
+    // only the session-level counters that no worker owns.
+    const Seconds duration = DurationCast<Seconds>(Clock::now() - start_time_);
+
+    statistics_dialog_->setDuration(duration);
+    statistics_dialog_->setClipboardMetrics(read_clipboard_count_, send_clipboard_count_);
+    statistics_dialog_->setMouseMetrics(send_mouse_count_, drop_mouse_count_);
+    statistics_dialog_->setKeyMetrics(send_key_count_);
+    statistics_dialog_->setTextMetrics(send_text_count_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1146,85 +1279,47 @@ void DesktopWindow::sendMouseEvent(const proto::input::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::onScreenMessage(const QByteArray& buffer)
+void DesktopWindow::sendConfig(const proto::control::Config& config)
 {
-    proto::screen::HostToClient message;
-    if (!parse(buffer, &message))
-    {
-        LOG(ERROR) << "Unable to parse screen message";
-        return;
-    }
+    LOG(INFO) << "Send:" << config;
 
-    if (message.has_screen_list())
-        onScreenListChanged(message.screen_list());
-    else
-        LOG(WARNING) << "Unhandled screen message";
+    proto::control::ClientToHost message;
+    message.mutable_config()->CopyFrom(desktop_config_);
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+    sendSessionListRequest();
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::onControlMessage(const QByteArray& buffer)
+void DesktopWindow::sendCapabilities()
 {
-    proto::control::HostToClient message;
-    if (!parse(buffer, &message))
-    {
-        LOG(ERROR) << "Unable to parse control message";
-        return;
-    }
+    proto::control::ClientToHost message;
+    proto::control::Capabilities* capabilities = message.mutable_capabilities();
 
-    if (message.has_capabilities())
+    auto add_flag = [capabilities](const char* name, bool value)
     {
-        readCapabilities(message.capabilities());
-    }
-    else if (message.has_session_list())
-    {
-        LOG(INFO) << "Received:" << message.session_list();
-        onSessionListChanged(message.session_list());
-    }
-    else if (message.has_credentials_request())
-    {
-        readCredentialsRequest(message.credentials_request());
-    }
-    else
-    {
-        LOG(ERROR) << "Unhandled service message from host";
-    }
+        proto::control::Capabilities::Flag* flag = capabilities->add_flag();
+        flag->set_name(name);
+        flag->set_value(value);
+    };
+
+    add_flag(kFlagVideoVP8, true);
+    add_flag(kFlagVideoVP9, true);
+    add_flag(kFlagAudioOpus, true);
+
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_MACOS)
+    add_flag(kFlagFileClipboard, true);
+#endif
+
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::onClipboardMessage(const QByteArray& buffer)
+void DesktopWindow::sendSessionListRequest()
 {
-    proto::clipboard::HostToClient message;
-    if (!parse(buffer, &message))
-    {
-        LOG(ERROR) << "Unable to parse clipboard message";
-        return;
-    }
-
-    if (message.has_event())
-        readClipboardEvent(message.event());
-    else
-        LOG(ERROR) << "Unhandled clipboard message from host";
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onFileMessage(const QByteArray& buffer)
-{
-    if (clipboard_file_transfer_)
-        clipboard_file_transfer_->onIncomingMessage(buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onToolsMessage(const QByteArray& buffer)
-{
-    proto::tools::HostToClient message;
-    if (!parse(buffer, &message))
-    {
-        LOG(ERROR) << "Unable to parse tools message";
-        return;
-    }
-
-    if (message.has_tool_list())
-        toolbar_->setToolList(message.tool_list());
+    proto::control::ClientToHost message;
+    proto::control::SessionsRequest* request = message.mutable_sessions_request();
+    request->set_dummy(1);
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1233,112 +1328,6 @@ void DesktopWindow::onDesktopConfigChanged(const proto::control::Config& config)
     desktop_config_ = config;
     emit sig_cursorConfig(desktop_config_.cursor_shape(), desktop_config_.cursor_position());
     sendConfig(desktop_config_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onCurrentScreenChanged(const proto::screen::Screen& screen)
-{
-    LOG(INFO) << "Current screen changed:" << screen.id();
-
-    proto::screen::ClientToHost message;
-    message.mutable_screen()->CopyFrom(screen);
-    sendMessage(proto::desktop::CHANNEL_ID_SCREEN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onRecordingChanged(bool enable, const QString& file_path)
-{
-    proto::user::ClientToHost message;
-    proto::user::VideoRecording* video_recording = message.mutable_video_recording();
-
-    if (enable)
-    {
-        LOG(INFO) << "Video recording is enabled:" << file_path;
-        video_recording->set_action(proto::user::VideoRecording::ACTION_STARTED);
-    }
-    else
-    {
-        LOG(INFO) << "Video recording is disabled";
-        video_recording->set_action(proto::user::VideoRecording::ACTION_STOPPED);
-    }
-
-    // The video worker owns the output file and re-encodes decoded frames straight from their YUV
-    // form while recording is on.
-    const QString computer_name = sessionState()->computerName();
-    QMetaObject::invokeMethod(video_worker_,
-        [worker = video_worker_, enable, file_path, computer_name]()
-    {
-        worker->onSetRecording(enable, file_path, computer_name);
-    }, Qt::QueuedConnection);
-
-    sendMessage(proto::desktop::CHANNEL_ID_USER, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onPowerControl(proto::power::Control::Action action)
-{
-    proto::power::ClientToHost message;
-    message.mutable_power_control()->set_action(action);
-    sendMessage(proto::desktop::CHANNEL_ID_POWER, serialize(message));
-}
-
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onSwitchSession(quint32 session_id)
-{
-    proto::control::ClientToHost message;
-    proto::control::SwitchSession* switch_session = message.mutable_switch_session();
-    switch_session->set_session_id(session_id);
-
-    LOG(INFO) << "Send:" << *switch_session;
-    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onSendCredentials(const SecureString& username, const SecureString& password)
-{
-    proto::control::ClientToHost message;
-    proto::control::Credentials* credentials = message.mutable_credentials();
-    credentials->set_username(username.toString().toStdString());
-    credentials->set_password(password.toString().toStdString());
-
-    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
-
-    memZero(credentials->mutable_username());
-    memZero(credentials->mutable_password());
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onClipboardEvent(const proto::clipboard::Event& event)
-{
-    if (!desktop_config_.clipboard())
-        return;
-
-    ++send_clipboard_count_;
-
-    if (Clipboard::findFormat(event, Clipboard::kMimeTypeFileList) && !file_clipboard_supported_)
-    {
-        LOG(WARNING) << "File clipboard is not supported by remote side, skipping file list";
-        return;
-    }
-
-    proto::clipboard::ClientToHost message;
-    message.mutable_event()->CopyFrom(event);
-    sendMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onClipboardLocalFileListChanged(const QVector<LocalFileEntry>& files)
-{
-    if (clipboard_file_transfer_)
-        clipboard_file_transfer_->setLocalFileList(files);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onClipboardFileDataRequest(int file_index)
-{
-    if (clipboard_file_transfer_)
-        clipboard_file_transfer_->requestFileData(file_index);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1386,46 +1375,62 @@ void DesktopWindow::readCredentialsRequest(const proto::control::CredentialsRequ
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::sendSessionListRequest()
+void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& capabilities)
 {
-    proto::control::ClientToHost message;
-    proto::control::SessionsRequest* request = message.mutable_sessions_request();
-    request->set_dummy(1);
-    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
-}
+    bool portable = false;
+    bool elevated = false;
 
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::sendConfig(const proto::control::Config& config)
-{
-    LOG(INFO) << "Send:" << config;
-
-    proto::control::ClientToHost message;
-    message.mutable_config()->CopyFrom(desktop_config_);
-    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
-    sendSessionListRequest();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::sendCapabilities()
-{
-    proto::control::ClientToHost message;
-    proto::control::Capabilities* capabilities = message.mutable_capabilities();
-
-    auto add_flag = [capabilities](const char* name, bool value)
+    for (int i = 0; i < capabilities.flag_size(); ++i)
     {
-        proto::control::Capabilities::Flag* flag = capabilities->add_flag();
-        flag->set_name(name);
-        flag->set_value(value);
-    };
+        const proto::control::Capabilities::Flag& flag = capabilities.flag(i);
+        const std::string& name = flag.name();
+        bool value = flag.value();
 
-    add_flag(kFlagVideoVP8, true);
-    add_flag(kFlagVideoVP9, true);
-    add_flag(kFlagAudioOpus, true);
+        if (name == kFlagOSWindows)
+        {
+            toolbar_->enableCtrlAltDelFeature(true);
+            toolbar_->enableRebootInSafeMode(true);
+        }
+        else if (name == kFlagPasteAsKeystrokes)
+            toolbar_->enablePasteAsKeystrokesFeature(value);
+        else if (name == kFlagPowerControl)
+            toolbar_->enablePowerControl(value);
+        else if (name == kFlagSelectScreen)
+            toolbar_->enableScreenSelect(value);
+        else if (name == kFlagTaskManager)
+            toolbar_->enableTaskManager(value);
+        else if (name == kFlagPortable)
+            portable = value;
+        else if (name == kFlagElevated)
+            elevated = value;
+    }
 
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_MACOS)
-    add_flag(kFlagFileClipboard, true);
-#endif
+    toolbar_->enableWaitForHost(!portable);
 
-    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+    if (portable)
+    {
+        toolbar_->enableTextChat(false);
+        toolbar_->enableTerminal(false);
+        toolbar_->enableSystemInfo(false);
+        toolbar_->enableRebootInSafeMode(false);
+
+        if (!elevated)
+        {
+            toolbar_->enableCtrlAltDelFeature(false);
+            toolbar_->enablePowerControl(false);
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onScreenListChanged(const proto::screen::ScreenList& screen_list)
+{
+    toolbar_->setScreenList(screen_list);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onSessionListChanged(const proto::control::SessionList& sessions)
+{
+    toolbar_->setSessionList(sessions);
 }
 

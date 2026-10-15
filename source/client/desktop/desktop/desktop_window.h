@@ -28,6 +28,7 @@
 #include "base/time_types.h"
 #include "base/desktop/shared_frame.h"
 #include "client/desktop/client_window.h"
+#include "client/mcp/mcp_controller.h"
 #include "client/workers/audio_worker.h"
 #include "client/workers/video_worker.h"
 #include "common/clipboard.h"
@@ -58,7 +59,9 @@ class DesktopWidget;
 class StatisticsDialog;
 class TaskManagerWindow;
 
-class DesktopWindow final : public ClientWindow
+class DesktopWindow final
+    : public ClientWindow,
+      public McpController::DesktopWindow
 {
     Q_OBJECT
 
@@ -90,6 +93,9 @@ protected:
     void focusOutEvent(QFocusEvent* event) final;
     void closeEvent(QCloseEvent* event) final;
     bool eventFilter(QObject* object, QEvent* event) final;
+
+    // McpController::DesktopWindow implementation.
+    QImage screenshot() const final;
 
 private slots:
     // Incoming session channels (video/audio/cursor are parsed by the workers).

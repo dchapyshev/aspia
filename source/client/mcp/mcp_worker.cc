@@ -305,14 +305,21 @@ void McpWorker::onToolsListed(qint64 request_id, const QJsonArray& tools)
 }
 
 //--------------------------------------------------------------------------------------------------
-void McpWorker::onToolFinished(qint64 request_id, bool success, const QString& text)
+void McpWorker::onToolFinished(qint64 request_id, bool success, const QString& text, const QByteArray& png)
 {
     Pending pending = pending_.take(request_id);
     if (!pending.respond)
         return;
 
-    QJsonObject result{ { "content", QJsonArray{ QJsonObject{ { "type", "text" }, { "text", text } } } },
-                        { "isError", !success } };
+    QJsonArray content{ QJsonObject{ { "type", "text" }, { "text", text } } };
+    if (!png.isEmpty())
+    {
+        content.append(QJsonObject{ { "type", "image" },
+                                    { "data", QString::fromLatin1(png.toBase64()) },
+                                    { "mimeType", "image/png" } });
+    }
+
+    QJsonObject result{ { "content", content }, { "isError", !success } };
     pending.respond(resultResponse(pending.id, completeResult(result, pending.modern)));
 }
 

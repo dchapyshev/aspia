@@ -50,6 +50,7 @@ public:
     // the host refuses credentials that are not stored for it.
     bool connectToHost(HostConfig host, const QString& display_name);
 
+    qint64 clientId() const { return client_id_; }
     std::shared_ptr<SessionState> sessionState() { return session_state_; }
     proto::peer::SessionType sessionType() const { return session_type_; }
 
@@ -166,6 +167,7 @@ private:
     // Builds session_connect_actions_ for every session type except session_type_.
     void createSessionConnectActions();
 
+    const qint64 client_id_;
     const proto::peer::SessionType session_type_;
     std::shared_ptr<SessionState> session_state_;
     StatusOverlay* status_overlay_ = nullptr;

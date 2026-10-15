@@ -49,6 +49,13 @@ const Seconds kReconnectRetryDelay { 5 };
 const Minutes kReconnectBudget { 5 };
 
 //--------------------------------------------------------------------------------------------------
+qint64 nextClientId()
+{
+    static qint64 last_client_id = 0;
+    return ++last_client_id;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool canSaveCredentials(const HostConfig& host)
 {
     if (host.entryId() > 0)
@@ -74,6 +81,7 @@ std::optional<std::pair<QString, SecureString>> storedCredentials(const HostConf
 //--------------------------------------------------------------------------------------------------
 ClientWindow::ClientWindow(proto::peer::SessionType session_type, QWidget* parent)
     : QWidget(parent),
+      client_id_(nextClientId()),
       session_type_(session_type),
       drag_poll_timer_(new QTimer(this)),
       reconnect_timeout_timer_(new QTimer(this))

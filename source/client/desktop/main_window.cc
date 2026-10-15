@@ -356,9 +356,9 @@ void MainWindow::closeEvent(QCloseEvent* /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<McpController::SessionInfo> MainWindow::sessions() const
+QList<McpController::ClientInfo> MainWindow::clients() const
 {
-    QList<McpController::SessionInfo> list;
+    QList<McpController::ClientInfo> list;
 
     for (int i = 0; i < ui->tabs->count(); ++i)
     {
@@ -367,13 +367,28 @@ QList<McpController::SessionInfo> MainWindow::sessions() const
         if (client_window && client_window->sessionState())
         {
             const HostConfig& host = client_window->sessionState()->host();
-            list.append(McpController::SessionInfo{ client_window->sessionType(), host.name(), host.entryId(),
-                                                    host.routerId(), host.address(), host.isPortable(),
-                                                    client_tab->isDetached() });
+            list.append(McpController::ClientInfo{ client_window->clientId(), client_window->sessionType(),
+                                                   host.name(), host.entryId(), host.routerId(),
+                                                   host.address(), host.isPortable(),
+                                                   client_tab->isDetached() });
         }
     }
 
     return list;
+}
+
+//--------------------------------------------------------------------------------------------------
+McpController::DesktopWindow* MainWindow::desktopWindow(qint64 client_id) const
+{
+    for (int i = 0; i < ui->tabs->count(); ++i)
+    {
+        ClientTab* client_tab = dynamic_cast<ClientTab*>(ui->tabs->widget(i));
+        ClientWindow* client_window = client_tab ? client_tab->clientWindow() : nullptr;
+        if (client_window && client_window->clientId() == client_id)
+            return dynamic_cast<McpController::DesktopWindow*>(client_window);
+    }
+
+    return nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -19,17 +19,34 @@
 #ifndef CLIENT_MCP_MCP_TOOL_H
 #define CLIENT_MCP_MCP_TOOL_H
 
+#include <QByteArray>
 #include <QJsonObject>
 #include <QString>
 
 #include <functional>
+#include <utility>
 
 // A tool of the MCP connector that an AI application can call.
 class McpTool
 {
 public:
-    // |success| is false when |text| holds an error for the model.
-    using Reply = std::function<void(bool success, const QString& text)>;
+    class Reply
+    {
+    public:
+        using Callback = std::function<void(bool success, const QString& text, const QByteArray& png)>;
+
+        explicit Reply(Callback callback) : callback_(std::move(callback)) {}
+
+        // |success| is false when |text| holds an error for the model. |png| is an image that the model
+        // gets after |text|.
+        void operator()(bool success, const QString& text, const QByteArray& png = QByteArray()) const
+        {
+            callback_(success, text, png);
+        }
+
+    private:
+        Callback callback_;
+    };
 
     McpTool() = default;
     virtual ~McpTool() = default;

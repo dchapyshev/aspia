@@ -47,7 +47,7 @@ public slots:
     void onEnable();
     void onDisable();
     void onToolsListed(qint64 request_id, const QJsonArray& tools);
-    void onToolFinished(qint64 request_id, bool success, const QString& text);
+    void onToolFinished(qint64 request_id, bool success, const QString& text, const QByteArray& png);
     void onToolNotFound(qint64 request_id, const QString& name);
 
 signals:

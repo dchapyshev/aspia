@@ -16,17 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_MCP_TOOLS_LIST_SESSIONS_TOOL_H
-#define CLIENT_MCP_TOOLS_LIST_SESSIONS_TOOL_H
+#ifndef CLIENT_MCP_TOOLS_DESKTOP_CLIENT_TOOL_H
+#define CLIENT_MCP_TOOLS_DESKTOP_CLIENT_TOOL_H
 
 #include "client/mcp/mcp_tool.h"
 
-// Lists the session windows open in the client.
-class ListSessionsTool final : public McpTool
+// Works with a window that is connected to the desktop of a host.
+class DesktopClientTool final : public McpTool
 {
 public:
-    ListSessionsTool() = default;
-    ~ListSessionsTool() final = default;
+    DesktopClientTool() = default;
+    ~DesktopClientTool() final = default;
 
     // McpTool implementation.
     QString name() const final;
@@ -34,7 +34,7 @@ public:
     void call(const QJsonObject& arguments, Reply reply) final;
 
 private:
-    Q_DISABLE_COPY_MOVE(ListSessionsTool)
+    Q_DISABLE_COPY_MOVE(DesktopClientTool)
 };
 
-#endif // CLIENT_MCP_TOOLS_LIST_SESSIONS_TOOL_H
+#endif // CLIENT_MCP_TOOLS_DESKTOP_CLIENT_TOOL_H

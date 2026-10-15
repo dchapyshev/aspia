@@ -34,6 +34,7 @@ enum SessionType : int;
 class HostConfig;
 class McpTool;
 class McpWorker;
+class QImage;
 
 // The tools of the MCP connector. They run in the GUI thread, and the worker keeps only the
 // connections and the protocol. The connector is turned off when the controller dies.
@@ -42,8 +43,9 @@ class McpController final : public QObject
     Q_OBJECT
 
 public:
-    struct SessionInfo
+    struct ClientInfo
     {
+        qint64 client_id = 0;
         proto::peer::SessionType session_type;
         QString name;
         qint64 entry_id = 0;
@@ -53,18 +55,27 @@ public:
         bool detached = false;
     };
 
-    class Delegate
+    class DesktopWindow
     {
     public:
-        virtual ~Delegate() = default;
+        virtual ~DesktopWindow() = default;
 
-        virtual QList<SessionInfo> sessions() const = 0;
+        virtual QImage screenshot() const = 0;
+    };
+
+    class MainWindow
+    {
+    public:
+        virtual ~MainWindow() = default;
+
+        virtual QList<ClientInfo> clients() const = 0;
+        virtual DesktopWindow* desktopWindow(qint64 client_id) const = 0;
         virtual void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) = 0;
         virtual void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) = 0;
     };
 
-    // Only one lives at a time. |delegate| must outlive the controller.
-    McpController(Delegate* delegate, QObject* parent = nullptr);
+    // Only one lives at a time. |main_window| must outlive the controller.
+    McpController(MainWindow* main_window, QObject* parent = nullptr);
     ~McpController() final;
 
     static McpController& instance();
@@ -72,7 +83,8 @@ public:
     // A failure to turn the connector on comes as sig_enableFailed().
     void setEnabled(bool enable);
 
-    QList<SessionInfo> sessions() const;
+    QList<ClientInfo> clients() const;
+    DesktopWindow* desktopWindow(qint64 client_id) const;
 
     // The session starts when the event loop gets control, so a modal dialog of the session does not
     // hold the reply of the tool.
@@ -87,7 +99,7 @@ private slots:
     void onToolCallRequested(qint64 request_id, const QString& name, const QJsonObject& arguments);
 
 private:
-    Delegate* delegate_;
+    MainWindow* main_window_;
     QPointer<McpWorker> mcp_worker_;
     std::vector<std::unique_ptr<McpTool>> tools_;
 
