@@ -544,9 +544,10 @@ void ServerAuthenticatorLegacy::onSessionResponse(const QByteArray& buffer)
         return;
     }
 
+    // Peers older than 2.6.2 do not send the architecture.
     if (!setPeerOsName(response.os_name()) ||
         !setPeerComputerName(response.computer_name()) ||
-        !setPeerArch(response.arch()) ||
+        (!response.arch().empty() && !setPeerArch(response.arch())) ||
         !setPeerDisplayName(response.display_name()) ||
         !setPeerVersion(response.version()))
     {

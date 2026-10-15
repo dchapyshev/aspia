@@ -424,9 +424,10 @@ bool ClientAuthenticatorLegacy::readSessionChallenge(const QByteArray& buffer)
         return false;
     }
 
+    // Peers older than 2.6.2 do not send the architecture.
     if (!setPeerOsName(challenge.os_name()) ||
         !setPeerComputerName(challenge.computer_name()) ||
-        !setPeerArch(challenge.arch()) ||
+        (!challenge.arch().empty() && !setPeerArch(challenge.arch())) ||
         !setPeerDisplayName(challenge.display_name()) ||
         !setPeerVersion(challenge.version()))
     {
