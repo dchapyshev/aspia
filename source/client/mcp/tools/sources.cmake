@@ -23,5 +23,7 @@ collect_sources(SOURCE_CLIENT_CORE_MCP_TOOLS
     find_router_hosts_tool.h
     list_local_groups_tool.cc
     list_local_groups_tool.h
+    list_router_groups_tool.cc
+    list_router_groups_tool.h
     list_routers_tool.cc
     list_routers_tool.h)

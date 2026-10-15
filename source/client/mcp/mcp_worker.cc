@@ -19,9 +19,7 @@
 #include "client/mcp/mcp_worker.h"
 
 #include <QCoreApplication>
-#include <QJsonArray>
 #include <QJsonDocument>
-#include <QJsonObject>
 #include <QLocalServer>
 #include <QLocalSocket>
 
@@ -31,15 +29,10 @@
 #include <unistd.h>
 #endif
 
-#include <algorithm>
 #include <cerrno>
 #include <cstdio>
 
 #include "version.h"
-#include "client/mcp/tools/find_local_hosts_tool.h"
-#include "client/mcp/tools/find_router_hosts_tool.h"
-#include "client/mcp/tools/list_local_groups_tool.h"
-#include "client/mcp/tools/list_routers_tool.h"
 
 namespace {
 
@@ -56,8 +49,6 @@ constexpr int kInvalidRequest = -32600;
 constexpr int kMethodNotFound = -32601;
 constexpr int kInvalidParams = -32602;
 constexpr int kUnsupportedProtocolVersion = -32022;
-
-using Respond = std::function<void(const QJsonObject& response)>;
 
 //--------------------------------------------------------------------------------------------------
 QString channelName()
@@ -169,139 +160,6 @@ QJsonObject completeResult(QJsonObject result, bool modern)
     return result;
 }
 
-//--------------------------------------------------------------------------------------------------
-void processMethod(const QJsonValue& id, const QString& method, const QJsonObject& params, bool modern,
-                   const std::vector<std::unique_ptr<McpTool>>& tools, const Respond& respond)
-{
-    if (method == "tools/call")
-    {
-        QString name = params.value("name").toString();
-
-        auto tool = std::find_if(tools.begin(), tools.end(),
-                                 [&name](const std::unique_ptr<McpTool>& entry) { return entry->name() == name; });
-        if (tool == tools.end())
-        {
-            respond(errorResponse(id, kInvalidParams, "Unknown tool: " + name));
-            return;
-        }
-
-        (*tool)->call(params.value("arguments").toObject(), [id, modern, respond](bool success, const QString& text)
-        {
-            QJsonObject result{ { "content", QJsonArray{ QJsonObject{ { "type", "text" }, { "text", text } } } },
-                                { "isError", !success } };
-            respond(resultResponse(id, completeResult(result, modern)));
-        });
-        return;
-    }
-
-    QJsonObject result;
-
-    if (method == "server/discover")
-    {
-        result.insert("supportedVersions", supportedVersions());
-        result.insert("capabilities", capabilities());
-    }
-    else if (method == "tools/list")
-    {
-        QJsonArray list;
-        for (const std::unique_ptr<McpTool>& tool : tools)
-            list.append(tool->definition());
-
-        result.insert("tools", list);
-    }
-    else if (method != "ping")
-    {
-        respond(errorResponse(id, kMethodNotFound, "Method not found: " + method));
-        return;
-    }
-
-    if (modern && method != "ping")
-    {
-        result.insert("ttlMs", 0);
-        result.insert("cacheScope", "public");
-    }
-
-    respond(resultResponse(id, completeResult(result, modern)));
-}
-
-//--------------------------------------------------------------------------------------------------
-// Messages that are not answered do not call |respond|.
-void processMessage(const QByteArray& message, bool* initialized, const std::vector<std::unique_ptr<McpTool>>& tools,
-                    const Respond& respond)
-{
-    if (message.trimmed().isEmpty())
-        return;
-
-    QJsonParseError parse_error;
-    QJsonDocument document = QJsonDocument::fromJson(message, &parse_error);
-    if (parse_error.error != QJsonParseError::NoError)
-    {
-        respond(errorResponse(QJsonValue::Null, kParseError, "Parse error"));
-        return;
-    }
-
-    if (!document.isObject())
-    {
-        respond(errorResponse(QJsonValue::Null, kInvalidRequest, "Invalid request"));
-        return;
-    }
-
-    QJsonObject request = document.object();
-
-    // Notifications and responses are not answered.
-    if (!request.contains("id") || request.contains("result") || request.contains("error"))
-        return;
-
-    QJsonValue id = request.value("id");
-    QString method = request.value("method").toString();
-    if (method.isEmpty())
-    {
-        respond(errorResponse(id, kInvalidRequest, "Invalid request"));
-        return;
-    }
-
-    QJsonObject params = request.value("params").toObject();
-
-    if (method == "initialize")
-    {
-        QString version = params.value("protocolVersion").toString();
-        if (!kLegacyVersions.contains(version))
-            version = kLegacyVersions.front();
-
-        *initialized = true;
-        respond(resultResponse(id, QJsonObject{
-            { "protocolVersion", version }, { "capabilities", capabilities() }, { "serverInfo", serverInfo() } }));
-        return;
-    }
-
-    QJsonObject meta = params.value("_meta").toObject();
-    if (!meta.contains(kVersionKey))
-    {
-        // Requests of the revisions with the initialize handshake carry no version.
-        if (!*initialized)
-            respond(errorResponse(id, kInvalidParams, "Missing protocol version"));
-        else
-            processMethod(id, method, params, false, tools, respond);
-        return;
-    }
-
-    QString version = meta.value(kVersionKey).toString();
-    if (version != kModernVersion)
-    {
-        respond(errorResponse(id, kUnsupportedProtocolVersion, "Unsupported protocol version",
-                              QJsonObject{ { "supported", supportedVersions() }, { "requested", version } }));
-        return;
-    }
-
-    if (!meta.contains(kCapabilitiesKey))
-    {
-        respond(errorResponse(id, kInvalidParams, "Missing client capabilities"));
-        return;
-    }
-
-    processMethod(id, method, params, true, tools, respond);
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -390,10 +248,8 @@ int McpWorker::runBridge()
 }
 
 //--------------------------------------------------------------------------------------------------
-void McpWorker::onEnable(const QPointer<RouterController>& router_controller)
+void McpWorker::onEnable()
 {
-    router_controller_ = router_controller;
-
     QString channel_name = channelName();
 
     // A socket file left by a crashed client prevents listening on UNIX.
@@ -419,6 +275,7 @@ void McpWorker::onDisable()
 
     const QList<QLocalSocket*> sockets = connections_.keys();
     connections_.clear();
+    pending_.clear();
 
     for (QLocalSocket* socket : sockets)
     {
@@ -431,16 +288,50 @@ void McpWorker::onDisable()
 }
 
 //--------------------------------------------------------------------------------------------------
+void McpWorker::onToolsListed(qint64 request_id, const QJsonArray& tools)
+{
+    Pending pending = pending_.take(request_id);
+    if (!pending.respond)
+        return;
+
+    QJsonObject result{ { "tools", tools } };
+    if (pending.modern)
+    {
+        result.insert("ttlMs", 0);
+        result.insert("cacheScope", "public");
+    }
+
+    pending.respond(resultResponse(pending.id, completeResult(result, pending.modern)));
+}
+
+//--------------------------------------------------------------------------------------------------
+void McpWorker::onToolFinished(qint64 request_id, bool success, const QString& text)
+{
+    Pending pending = pending_.take(request_id);
+    if (!pending.respond)
+        return;
+
+    QJsonObject result{ { "content", QJsonArray{ QJsonObject{ { "type", "text" }, { "text", text } } } },
+                        { "isError", !success } };
+    pending.respond(resultResponse(pending.id, completeResult(result, pending.modern)));
+}
+
+//--------------------------------------------------------------------------------------------------
+void McpWorker::onToolNotFound(qint64 request_id, const QString& name)
+{
+    Pending pending = pending_.take(request_id);
+    if (!pending.respond)
+        return;
+
+    pending.respond(errorResponse(pending.id, kInvalidParams, "Unknown tool: " + name));
+}
+
+//--------------------------------------------------------------------------------------------------
 void McpWorker::onPrepare()
 {
     server_.reset(new QLocalServer(this));
     server_->setSocketOptions(QLocalServer::UserAccessOption);
     connect(server_, &QLocalServer::newConnection, this, &McpWorker::onNewConnection);
-
-    tools_.push_back(std::make_unique<FindLocalHostsTool>());
-    tools_.push_back(std::make_unique<ListLocalGroupsTool>());
-    tools_.push_back(std::make_unique<ListRoutersTool>(router_controller_));
-    tools_.push_back(std::make_unique<FindRouterHostsTool>(router_controller_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -455,7 +346,6 @@ void McpWorker::onStop()
     onDisable();
 
     server_.reset();
-    tools_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -492,7 +382,7 @@ void McpWorker::readMessages(QLocalSocket* socket)
     qsizetype end = connection.buffer.indexOf('\n');
     while (end != -1)
     {
-        processMessage(connection.buffer.left(end), &connection.initialized, tools_, respond);
+        processMessage(connection.buffer.left(end), &connection, respond);
         connection.buffer.remove(0, end + 1);
 
         end = connection.buffer.indexOf('\n');
@@ -504,4 +394,120 @@ void McpWorker::readMessages(QLocalSocket* socket)
         LOG(ERROR) << "MCP message is too large";
         socket->abort();
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Messages that are not answered do not call |respond|.
+void McpWorker::processMessage(const QByteArray& message, Connection* connection, const Respond& respond)
+{
+    if (message.trimmed().isEmpty())
+        return;
+
+    QJsonParseError parse_error;
+    QJsonDocument document = QJsonDocument::fromJson(message, &parse_error);
+    if (parse_error.error != QJsonParseError::NoError)
+    {
+        respond(errorResponse(QJsonValue::Null, kParseError, "Parse error"));
+        return;
+    }
+
+    if (!document.isObject())
+    {
+        respond(errorResponse(QJsonValue::Null, kInvalidRequest, "Invalid request"));
+        return;
+    }
+
+    QJsonObject request = document.object();
+
+    // Notifications and responses are not answered.
+    if (!request.contains("id") || request.contains("result") || request.contains("error"))
+        return;
+
+    QJsonValue id = request.value("id");
+    QString method = request.value("method").toString();
+    if (method.isEmpty())
+    {
+        respond(errorResponse(id, kInvalidRequest, "Invalid request"));
+        return;
+    }
+
+    QJsonObject params = request.value("params").toObject();
+
+    if (method == "initialize")
+    {
+        QString version = params.value("protocolVersion").toString();
+        if (!kLegacyVersions.contains(version))
+            version = kLegacyVersions.front();
+
+        connection->initialized = true;
+        respond(resultResponse(id, QJsonObject{
+            { "protocolVersion", version }, { "capabilities", capabilities() }, { "serverInfo", serverInfo() } }));
+        return;
+    }
+
+    QJsonObject meta = params.value("_meta").toObject();
+    if (!meta.contains(kVersionKey))
+    {
+        // Requests of the revisions with the initialize handshake carry no version.
+        if (!connection->initialized)
+            respond(errorResponse(id, kInvalidParams, "Missing protocol version"));
+        else
+            processMethod(id, method, params, false, respond);
+        return;
+    }
+
+    QString version = meta.value(kVersionKey).toString();
+    if (version != kModernVersion)
+    {
+        respond(errorResponse(id, kUnsupportedProtocolVersion, "Unsupported protocol version",
+                              QJsonObject{ { "supported", supportedVersions() }, { "requested", version } }));
+        return;
+    }
+
+    if (!meta.contains(kCapabilitiesKey))
+    {
+        respond(errorResponse(id, kInvalidParams, "Missing client capabilities"));
+        return;
+    }
+
+    processMethod(id, method, params, true, respond);
+}
+
+//--------------------------------------------------------------------------------------------------
+void McpWorker::processMethod(const QJsonValue& id, const QString& method, const QJsonObject& params, bool modern,
+                              const Respond& respond)
+{
+    if (method == "tools/list" || method == "tools/call")
+    {
+        const qint64 request_id = ++last_request_id_;
+        pending_.insert(request_id, Pending{ id, modern, respond });
+
+        QString name = params.value("name").toString();
+        if (method == "tools/list")
+            emit sig_toolsListRequested(request_id);
+        else
+            emit sig_toolCallRequested(request_id, name, params.value("arguments").toObject());
+        return;
+    }
+
+    QJsonObject result;
+
+    if (method == "server/discover")
+    {
+        result.insert("supportedVersions", supportedVersions());
+        result.insert("capabilities", capabilities());
+
+        if (modern)
+        {
+            result.insert("ttlMs", 0);
+            result.insert("cacheScope", "public");
+        }
+    }
+    else if (method != "ping")
+    {
+        respond(errorResponse(id, kMethodNotFound, "Method not found: " + method));
+        return;
+    }
+
+    respond(resultResponse(id, completeResult(result, modern)));
 }

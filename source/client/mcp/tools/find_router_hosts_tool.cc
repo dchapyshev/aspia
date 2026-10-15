@@ -18,21 +18,14 @@
 
 #include "client/mcp/tools/find_router_hosts_tool.h"
 
-#include <QCoreApplication>
 #include <QJsonArray>
 #include <QJsonDocument>
 
-#include "base/threading/worker.h"
+#include <memory>
+
 #include "client/database.h"
 #include "client/router_controller.h"
 #include "proto/router_constants.h"
-
-//--------------------------------------------------------------------------------------------------
-FindRouterHostsTool::FindRouterHostsTool(const QPointer<RouterController>& router_controller)
-    : router_controller_(router_controller)
-{
-    // Nothing
-}
 
 //--------------------------------------------------------------------------------------------------
 QString FindRouterHostsTool::name() const
@@ -108,81 +101,72 @@ void FindRouterHostsTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    Worker* worker = Worker::current();
-    QPointer<RouterController> controller = router_controller_;
     QString query = query_value.toString();
 
-    // The sessions of the routers live in the GUI thread. The work goes to the application rather than
-    // to the controller, so the reply comes even when the controller is gone.
-    QMetaObject::invokeMethod(QCoreApplication::instance(), [worker, controller, routers, query, reply]()
+    struct Search
     {
-        struct Search
+        QJsonArray hosts;
+        QJsonArray warnings;
+        int pending = 1;
+    };
+
+    std::shared_ptr<Search> search = std::make_shared<Search>();
+
+    auto finish = [search, reply]()
+    {
+        QJsonObject content{ { "hosts", search->hosts } };
+        if (!search->warnings.isEmpty())
+            content.insert("warnings", search->warnings);
+
+        reply(true, QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact)));
+    };
+
+    for (const Router& router : std::as_const(routers))
+    {
+        RouterSession* session = RouterController::session(router.id);
+        if (!session)
         {
-            QJsonArray hosts;
-            QJsonArray warnings;
-            int pending = 1;
-        };
-
-        std::shared_ptr<Search> search = std::make_shared<Search>();
-
-        auto finish = [worker, search, reply]()
-        {
-            QJsonObject content{ { "hosts", search->hosts } };
-            if (!search->warnings.isEmpty())
-                content.insert("warnings", search->warnings);
-
-            QString text = QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact));
-            worker->post([reply, text]() { reply(true, text); });
-        };
-
-        for (const Router& router : routers)
-        {
-            RouterSession* session = controller ? RouterController::session(router.id) : nullptr;
-            if (!session)
-            {
-                search->warnings.append(QString("The router \"%1\" (id %2) is not connected, its hosts are "
-                                                "not searched.").arg(router.name).arg(router.id));
-                continue;
-            }
-
-            ++search->pending;
-
-            // The application outlives the session, so the session answers even when it dies first.
-            session->searchHosts(query, 0, proto::router::kMaxHostPageSize, { QCoreApplication::instance(),
-                [search, finish, router](const RouterHostList& list)
-            {
-                if (list.error_code != proto::router::kErrorOk)
-                {
-                    search->warnings.append(QString("Unable to search the hosts of the router \"%1\" (id %2): "
-                                                    "%3.").arg(router.name).arg(router.id).arg(list.error_code));
-                }
-                else
-                {
-                    for (const RouterHost& host : list.hosts)
-                    {
-                        search->hosts.append(QJsonObject{
-                            { "router_id", router.id }, { "router", router.name },
-                            { "host_id", static_cast<qint64>(host.host_id) }, { "name", host.display_name },
-                            { "computer_name", host.computer_name }, { "os_name", host.os_name },
-                            { "version", host.version }, { "address", host.address },
-                            { "online", host.online } });
-                    }
-
-                    if (list.total_count > list.hosts.size())
-                    {
-                        search->warnings.append(QString("The router \"%1\" (id %2) has %3 matches, only the first "
-                                                        "%4 are listed. Refine the query.")
-                            .arg(router.name).arg(router.id).arg(list.total_count).arg(list.hosts.size()));
-                    }
-                }
-
-                if (--search->pending == 0)
-                    finish();
-            } });
+            search->warnings.append(QString("The router \"%1\" (id %2) is not connected, its hosts are "
+                                            "not searched.").arg(router.name).arg(router.id));
+            continue;
         }
 
-        // The count starts at one, so a reply that comes during the loop does not finish early.
-        if (--search->pending == 0)
-            finish();
-    }, Qt::QueuedConnection);
+        ++search->pending;
+
+        session->searchHosts(query, 0, proto::router::kMaxHostPageSize, { &RouterController::instance(),
+            [search, finish, router](const RouterHostList& list)
+        {
+            if (list.error_code != proto::router::kErrorOk)
+            {
+                search->warnings.append(QString("Unable to search the hosts of the router \"%1\" (id %2): "
+                                                "%3.").arg(router.name).arg(router.id).arg(list.error_code));
+            }
+            else
+            {
+                for (const RouterHost& host : list.hosts)
+                {
+                    search->hosts.append(QJsonObject{
+                        { "router_id", router.id }, { "router", router.name },
+                        { "host_id", static_cast<qint64>(host.host_id) }, { "name", host.display_name },
+                        { "computer_name", host.computer_name }, { "os_name", host.os_name },
+                        { "version", host.version }, { "address", host.address },
+                        { "online", host.online } });
+                }
+
+                if (list.total_count > list.hosts.size())
+                {
+                    search->warnings.append(QString("The router \"%1\" (id %2) has %3 matches, only the first "
+                                                    "%4 are listed. Refine the query.")
+                        .arg(router.name).arg(router.id).arg(list.total_count).arg(list.hosts.size()));
+                }
+            }
+
+            if (--search->pending == 0)
+                finish();
+        } });
+    }
+
+    // The count starts at one, so a reply that comes during the loop does not finish early.
+    if (--search->pending == 0)
+        finish();
 }

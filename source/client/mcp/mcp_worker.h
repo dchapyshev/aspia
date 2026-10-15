@@ -21,16 +21,15 @@
 
 #include <QByteArray>
 #include <QHash>
-
-#include <vector>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonValue>
 
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
 
-class McpTool;
 class QLocalServer;
 class QLocalSocket;
-class RouterController;
 
 class McpWorker final : public Worker
 {
@@ -45,11 +44,16 @@ public:
     static int runBridge();
 
 public slots:
-    void onEnable(const QPointer<RouterController>& router_controller);
+    void onEnable();
     void onDisable();
+    void onToolsListed(qint64 request_id, const QJsonArray& tools);
+    void onToolFinished(qint64 request_id, bool success, const QString& text);
+    void onToolNotFound(qint64 request_id, const QString& name);
 
 signals:
     void sig_enableFailed();
+    void sig_toolsListRequested(qint64 request_id);
+    void sig_toolCallRequested(qint64 request_id, const QString& name, const QJsonObject& arguments);
 
 protected:
     // Worker implementation.
@@ -61,19 +65,32 @@ private slots:
     void onNewConnection();
 
 private:
+    using Respond = std::function<void(const QJsonObject& response)>;
+
     struct Connection
     {
         QByteArray buffer;
         bool initialized = false;
     };
 
+    // A request that waits for the answer of the tools.
+    struct Pending
+    {
+        QJsonValue id;
+        bool modern = false;
+        Respond respond;
+    };
+
     void readMessages(QLocalSocket* socket);
+    void processMessage(const QByteArray& message, Connection* connection, const Respond& respond);
+    void processMethod(const QJsonValue& id, const QString& method, const QJsonObject& params, bool modern,
+                       const Respond& respond);
 
     ScopedQPointer<QLocalServer> server_;
     QHash<QLocalSocket*, Connection> connections_;
 
-    QPointer<RouterController> router_controller_;
-    std::vector<std::unique_ptr<McpTool>> tools_;
+    QHash<qint64, Pending> pending_;
+    qint64 last_request_id_ = 0;
 
     Q_DISABLE_COPY_MOVE(McpWorker)
 };

@@ -19,18 +19,14 @@
 #ifndef CLIENT_MCP_TOOLS_FIND_ROUTER_HOSTS_TOOL_H
 #define CLIENT_MCP_TOOLS_FIND_ROUTER_HOSTS_TOOL_H
 
-#include <QPointer>
-
 #include "client/mcp/mcp_tool.h"
-
-class RouterController;
 
 // Searches the hosts of the connected routers by the name and the host ID. The credentials and
 // the comments are never returned.
 class FindRouterHostsTool final : public McpTool
 {
 public:
-    explicit FindRouterHostsTool(const QPointer<RouterController>& router_controller);
+    FindRouterHostsTool() = default;
     ~FindRouterHostsTool() final = default;
 
     // McpTool implementation.
@@ -39,8 +35,6 @@ public:
     void call(const QJsonObject& arguments, Reply reply) final;
 
 private:
-    const QPointer<RouterController>& router_controller_;
-
     Q_DISABLE_COPY_MOVE(FindRouterHostsTool)
 };
 

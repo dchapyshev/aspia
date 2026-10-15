@@ -19,18 +19,14 @@
 #ifndef CLIENT_MCP_TOOLS_LIST_ROUTERS_TOOL_H
 #define CLIENT_MCP_TOOLS_LIST_ROUTERS_TOOL_H
 
-#include <QPointer>
-
 #include "client/mcp/mcp_tool.h"
-
-class RouterController;
 
 // Lists the routers of the database with the status of their connections. The credentials are never
 // returned.
 class ListRoutersTool final : public McpTool
 {
 public:
-    explicit ListRoutersTool(const QPointer<RouterController>& router_controller);
+    ListRoutersTool() = default;
     ~ListRoutersTool() final = default;
 
     // McpTool implementation.
@@ -39,8 +35,6 @@ public:
     void call(const QJsonObject& arguments, Reply reply) final;
 
 private:
-    const QPointer<RouterController>& router_controller_;
-
     Q_DISABLE_COPY_MOVE(ListRoutersTool)
 };
 

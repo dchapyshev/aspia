@@ -18,11 +18,9 @@
 
 #include "client/mcp/tools/list_routers_tool.h"
 
-#include <QCoreApplication>
 #include <QJsonArray>
 #include <QJsonDocument>
 
-#include "base/threading/worker.h"
 #include "client/database.h"
 #include "client/router_controller.h"
 
@@ -51,13 +49,6 @@ QString statusName(RouterStatus status)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ListRoutersTool::ListRoutersTool(const QPointer<RouterController>& router_controller)
-    : router_controller_(router_controller)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 QString ListRoutersTool::name() const
 {
     return "list_routers";
@@ -71,7 +62,8 @@ QJsonObject ListRoutersTool::definition() const
         { "description", "Lists the routers saved in Aspia Client with the status of their connections: online, "
                          "connecting, two_factor (waits for the user to enter a two-factor code), offline or "
                          "unreadable (the record is damaged). The hosts of a router are searched by "
-                         "find_router_hosts while it is online. Credentials are never returned." },
+                         "find_router_hosts and its groups are listed by list_router_groups while it is "
+                         "online. Credentials are never returned." },
         { "inputSchema", QJsonObject{ { "type", "object" }, { "additionalProperties", false } } } };
 }
 
@@ -88,31 +80,14 @@ void ListRoutersTool::call(const QJsonObject& /* arguments */, Reply reply)
 
     QJsonArray list;
     for (const RouterConfig& router : std::as_const(routers))
-        list.append(QJsonObject{ { "id", router.routerId() }, { "name", router.displayLabel() } });
-
-    const bool damaged = result == Database::ReadResult::INCOMPLETE;
-    Worker* worker = Worker::current();
-    QPointer<RouterController> controller = router_controller_;
-
-    // The statuses are known only to the controller in the GUI thread. The work goes to the
-    // application rather than to the controller, so the reply comes even when the controller is gone.
-    QMetaObject::invokeMethod(QCoreApplication::instance(), [worker, controller, list, damaged, reply]() mutable
     {
-        for (qsizetype i = 0; i < list.size(); ++i)
-        {
-            QJsonObject entry = list.at(i).toObject();
-            qint64 router_id = entry.value("id").toInteger();
-            RouterStatus status = controller ? RouterController::status(router_id) : RouterStatus::OFFLINE;
+        list.append(QJsonObject{ { "id", router.routerId() }, { "name", router.displayLabel() },
+                                 { "status", statusName(RouterController::status(router.routerId())) } });
+    }
 
-            entry.insert("status", statusName(status));
-            list.replace(i, entry);
-        }
+    QJsonObject content{ { "routers", list } };
+    if (result == Database::ReadResult::INCOMPLETE)
+        content.insert("warning", "Some records of the database are damaged, their data may be missing.");
 
-        QJsonObject content{ { "routers", list } };
-        if (damaged)
-            content.insert("warning", "Some records of the database are damaged, their data may be missing.");
-
-        QString text = QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact));
-        worker->post([reply, text]() { reply(true, text); });
-    }, Qt::QueuedConnection);
+    reply(true, QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact)));
 }
