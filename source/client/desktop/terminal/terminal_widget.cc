@@ -236,6 +236,53 @@ void TerminalWidget::login(const QString& user_name, const QString& password)
 }
 
 //--------------------------------------------------------------------------------------------------
+void TerminalWidget::sendText(const QString& text)
+{
+    if (mode_ != Mode::CONNECTED)
+        return;
+
+    QString input = text;
+    input.replace("\r\n", "\r");
+    input.replace('\n', '\r');
+
+    setScrollOffset(0);
+    pending_input_.append(input.toUtf8());
+    flushInput();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::sendKey(int key, Qt::KeyboardModifiers modifiers)
+{
+    if (mode_ != Mode::CONNECTED)
+        return;
+
+    // The keys without text start at Qt::Key_Escape.
+    if (key >= Qt::Key_Escape)
+    {
+        QKeyEvent event(QEvent::KeyPress, key, modifiers);
+        keyPressEvent(&event);
+        return;
+    }
+
+    setScrollOffset(0);
+    vterm_keyboard_unichar(vterm_, static_cast<uint32_t>(key), vtermModifiers(modifiers));
+    flushInput();
+}
+
+//--------------------------------------------------------------------------------------------------
+QStringList TerminalWidget::lines(int history) const
+{
+    const int scrollback_size = static_cast<int>(scrollback_.size());
+    const int first_line = scrollback_size - std::clamp(history, 0, scrollback_size);
+
+    QStringList result;
+    for (int line = first_line; line < scrollback_size + rows_; ++line)
+        result.append(lineText(line, 0, columns_));
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 void TerminalWidget::writeOutput(const QByteArray& data)
 {
     vterm_input_write(vterm_, data.constData(), data.size());
@@ -961,6 +1008,39 @@ bool TerminalWidget::isSelected(int line, int column) const
 }
 
 //--------------------------------------------------------------------------------------------------
+QString TerminalWidget::lineText(int line, int from, int to) const
+{
+    QString text;
+    for (int column = from; column < to && column < columns_; ++column)
+    {
+        VTermScreenCell cell;
+        if (!cellAtLine(line, column, &cell))
+            continue;
+        if (cell.width == 0)
+            continue; // Second half of a double-width character.
+
+        if (cell.chars[0] == 0)
+        {
+            text += QChar(' ');
+        }
+        else
+        {
+            for (int i = 0; i < VTERM_MAX_CHARS_PER_CELL && cell.chars[i] != 0; ++i)
+            {
+                const char32_t glyph = static_cast<char32_t>(cell.chars[i]);
+                text += QString::fromUcs4(&glyph, 1);
+            }
+        }
+    }
+
+    // Trailing whitespace is not part of the text.
+    while (!text.isEmpty() && text.back() == QChar(' '))
+        text.chop(1);
+
+    return text;
+}
+
+//--------------------------------------------------------------------------------------------------
 QString TerminalWidget::selectedText() const
 {
     if (!has_selection_)
@@ -978,34 +1058,7 @@ QString TerminalWidget::selectedText() const
         const int from = (line == start.line) ? start.column : 0;
         const int to = (line == end.line) ? end.column : columns_;
 
-        QString text;
-        for (int column = from; column < to && column < columns_; ++column)
-        {
-            VTermScreenCell cell;
-            if (!cellAtLine(line, column, &cell))
-                continue;
-            if (cell.width == 0)
-                continue; // Second half of a double-width character.
-
-            if (cell.chars[0] == 0)
-            {
-                text += QChar(' ');
-            }
-            else
-            {
-                for (int i = 0; i < VTERM_MAX_CHARS_PER_CELL && cell.chars[i] != 0; ++i)
-                {
-                    const char32_t glyph = static_cast<char32_t>(cell.chars[i]);
-                    text += QString::fromUcs4(&glyph, 1);
-                }
-            }
-        }
-
-        // Trailing whitespace is not part of the copied text.
-        while (!text.isEmpty() && text.back() == QChar(' '))
-            text.chop(1);
-
-        result += text;
+        result += lineText(line, from, to);
         if (line != end.line)
             result += QChar('\n');
     }

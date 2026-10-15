@@ -38,6 +38,7 @@
 #include "client/mcp/tools/list_quick_support_hosts_tool.h"
 #include "client/mcp/tools/list_router_groups_tool.h"
 #include "client/mcp/tools/list_routers_tool.h"
+#include "client/mcp/tools/terminal_client_tool.h"
 
 namespace {
 
@@ -67,6 +68,7 @@ McpController::McpController(MainWindow* main_window, QObject* parent)
     tools_.push_back(std::make_unique<ConnectRouterHostTool>());
     tools_.push_back(std::make_unique<ListClientsTool>());
     tools_.push_back(std::make_unique<DesktopClientTool>());
+    tools_.push_back(std::make_unique<TerminalClientTool>());
 
     mcp_worker_ = GuiApplication::findWorker<McpWorker>();
     if (!mcp_worker_)
@@ -127,6 +129,12 @@ QList<McpController::ClientInfo> McpController::clients() const
 McpController::DesktopWindow* McpController::desktopWindow(qint64 client_id) const
 {
     return main_window_->desktopWindow(client_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+McpController::TerminalWindow* McpController::terminalWindow(qint64 client_id) const
+{
+    return main_window_->terminalWindow(client_id);
 }
 
 //--------------------------------------------------------------------------------------------------

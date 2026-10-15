@@ -20,6 +20,8 @@
 
 #include <QJsonArray>
 
+#include "client/mcp/mcp_controller.h"
+
 namespace {
 
 struct SessionTypeName
@@ -75,4 +77,26 @@ QString sessionTypeName(proto::peer::SessionType session_type)
     }
 
     return "unknown";
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<qint64> integerArgument(const QJsonValue& value)
+{
+    if (!value.isDouble() || value.toDouble() != static_cast<double>(value.toInteger()))
+        return std::nullopt;
+
+    return value.toInteger();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool hasClient(qint64 client_id)
+{
+    const QList<McpController::ClientInfo> clients = McpController::instance().clients();
+    for (const McpController::ClientInfo& client : clients)
+    {
+        if (client.client_id == client_id)
+            return true;
+    }
+
+    return false;
 }

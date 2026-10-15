@@ -392,6 +392,20 @@ McpController::DesktopWindow* MainWindow::desktopWindow(qint64 client_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
+McpController::TerminalWindow* MainWindow::terminalWindow(qint64 client_id) const
+{
+    for (int i = 0; i < ui->tabs->count(); ++i)
+    {
+        ClientTab* client_tab = dynamic_cast<ClientTab*>(ui->tabs->widget(i));
+        ClientWindow* client_window = client_tab ? client_tab->clientWindow() : nullptr;
+        if (client_window && client_window->clientId() == client_id)
+            return dynamic_cast<McpController::TerminalWindow*>(client_window);
+    }
+
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
 void MainWindow::connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type)
 {
     if (ManagementTab* management_tab = managementTab())

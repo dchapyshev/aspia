@@ -70,6 +70,7 @@ protected:
     // McpController::MainWindow implementation.
     QList<McpController::ClientInfo> clients() const final;
     McpController::DesktopWindow* desktopWindow(qint64 client_id) const final;
+    McpController::TerminalWindow* terminalWindow(qint64 client_id) const final;
     void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) final;
     void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) final;
 

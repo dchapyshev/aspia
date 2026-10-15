@@ -23,9 +23,12 @@
 #include <QList>
 #include <QObject>
 #include <QPointer>
+#include <QStringList>
 
 #include <memory>
 #include <vector>
+
+#include "base/time_types.h"
 
 namespace proto::input {
 class MouseEvent;
@@ -44,6 +47,7 @@ class HostConfig;
 class McpTool;
 class McpWorker;
 class QImage;
+class QPoint;
 class QSize;
 
 // The tools of the MCP connector. They run in the GUI thread, and the worker keeps only the
@@ -53,6 +57,9 @@ class McpController final : public QObject
     Q_OBJECT
 
 public:
+    enum class SignInResult { STARTED, NOT_REQUESTED, NOT_SELECTED };
+    Q_ENUM(SignInResult)
+
     struct ClientInfo
     {
         qint64 client_id = 0;
@@ -68,8 +75,6 @@ public:
     class DesktopWindow
     {
     public:
-        enum class SignInResult { STARTED, NOT_REQUESTED, NOT_SELECTED };
-
         virtual ~DesktopWindow() = default;
 
         virtual QSize frameSize() const = 0;
@@ -82,6 +87,22 @@ public:
         virtual SignInResult signIn() = 0;
     };
 
+    class TerminalWindow
+    {
+    public:
+        virtual ~TerminalWindow() = default;
+
+        virtual SignInResult signIn() = 0;
+        virtual bool hasLoginPrompt() const = 0;
+        virtual void sendText(const QString& text) = 0;
+        virtual void sendKey(int key, Qt::KeyboardModifiers modifiers) = 0;
+        virtual QSize gridSize() const = 0;
+        virtual QPoint cursorPosition() const = 0;
+        virtual QStringList lines(int history) const = 0;
+        virtual TimePoint lastInputTime() const = 0;
+        virtual TimePoint lastOutputTime() const = 0;
+    };
+
     class MainWindow
     {
     public:
@@ -89,6 +110,7 @@ public:
 
         virtual QList<ClientInfo> clients() const = 0;
         virtual DesktopWindow* desktopWindow(qint64 client_id) const = 0;
+        virtual TerminalWindow* terminalWindow(qint64 client_id) const = 0;
         virtual void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) = 0;
         virtual void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) = 0;
     };
@@ -104,6 +126,7 @@ public:
 
     QList<ClientInfo> clients() const;
     DesktopWindow* desktopWindow(qint64 client_id) const;
+    TerminalWindow* terminalWindow(qint64 client_id) const;
 
     // The session starts when the event loop gets control, so a modal dialog of the session does not
     // hold the reply of the tool.

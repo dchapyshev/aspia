@@ -21,13 +21,17 @@
 
 #include <memory>
 
+#include "base/time_types.h"
 #include "client/desktop/client_window.h"
+#include "client/mcp/mcp_controller.h"
 
 class CredentialPanel;
 class TerminalWidget;
 class ZstdStreamDecompressor;
 
-class TerminalWindow final : public ClientWindow
+class TerminalWindow final
+    : public ClientWindow,
+      public McpController::TerminalWindow
 {
     Q_OBJECT
 
@@ -44,6 +48,17 @@ protected:
     void onRegisterWorkers() final;
     void onSessionStarted() final;
 
+    // McpController::TerminalWindow implementation.
+    McpController::SignInResult signIn() final;
+    bool hasLoginPrompt() const final;
+    void sendText(const QString& text) final;
+    void sendKey(int key, Qt::KeyboardModifiers modifiers) final;
+    QSize gridSize() const final;
+    QPoint cursorPosition() const final;
+    QStringList lines(int history) const final;
+    TimePoint lastInputTime() const final;
+    TimePoint lastOutputTime() const final;
+
 private slots:
     void onChannelMessage(const QByteArray& buffer);
     void onCredentials(const QString& user_name, const QString& password);
@@ -55,6 +70,8 @@ private:
     CredentialPanel* credential_panel_ = nullptr;
 
     std::unique_ptr<ZstdStreamDecompressor> output_decompressor_;
+    TimePoint last_input_time_;
+    TimePoint last_output_time_;
 
     Q_DISABLE_COPY_MOVE(TerminalWindow)
 };

@@ -104,6 +104,66 @@ void TerminalWindow::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
+McpController::SignInResult TerminalWindow::signIn()
+{
+    if (!terminal_widget_->hasLoginPrompt())
+        return McpController::SignInResult::NOT_REQUESTED;
+
+    return credential_panel_->signIn() ? McpController::SignInResult::STARTED :
+                                         McpController::SignInResult::NOT_SELECTED;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool TerminalWindow::hasLoginPrompt() const
+{
+    return terminal_widget_->hasLoginPrompt();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWindow::sendText(const QString& text)
+{
+    last_input_time_ = Clock::now();
+    terminal_widget_->sendText(text);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWindow::sendKey(int key, Qt::KeyboardModifiers modifiers)
+{
+    last_input_time_ = Clock::now();
+    terminal_widget_->sendKey(key, modifiers);
+}
+
+//--------------------------------------------------------------------------------------------------
+QSize TerminalWindow::gridSize() const
+{
+    return terminal_widget_->gridSize();
+}
+
+//--------------------------------------------------------------------------------------------------
+QPoint TerminalWindow::cursorPosition() const
+{
+    return terminal_widget_->cursorPosition();
+}
+
+//--------------------------------------------------------------------------------------------------
+QStringList TerminalWindow::lines(int history) const
+{
+    return terminal_widget_->lines(history);
+}
+
+//--------------------------------------------------------------------------------------------------
+TimePoint TerminalWindow::lastInputTime() const
+{
+    return last_input_time_;
+}
+
+//--------------------------------------------------------------------------------------------------
+TimePoint TerminalWindow::lastOutputTime() const
+{
+    return last_output_time_;
+}
+
+//--------------------------------------------------------------------------------------------------
 void TerminalWindow::onChannelMessage(const QByteArray& buffer)
 {
     proto::terminal::HostToClient message;
@@ -115,6 +175,7 @@ void TerminalWindow::onChannelMessage(const QByteArray& buffer)
 
     if (message.has_data())
     {
+        last_output_time_ = Clock::now();
         terminal_widget_->writeOutput(
             output_decompressor_->decompress(message.data().data(), kMaxTerminalOutputSize));
     }

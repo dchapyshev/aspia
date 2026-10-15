@@ -66,6 +66,20 @@ public:
     // Completes the login prompt with the given credentials as if they were typed in it.
     void login(const QString& user_name, const QString& password);
 
+    bool hasLoginPrompt() const { return mode_ != Mode::CONNECTED; }
+
+    // New lines of |text| are sent as Enter.
+    void sendText(const QString& text);
+
+    // |key| is a Qt::Key of a key without text or a character.
+    void sendKey(int key, Qt::KeyboardModifiers modifiers);
+
+    QSize gridSize() const { return QSize(columns_, rows_); }
+    QPoint cursorPosition() const { return QPoint(cursor_col_, cursor_row_); }
+
+    // The last |history| lines of the scrollback followed by the lines of the screen.
+    QStringList lines(int history) const;
+
 public slots:
     void writeOutput(const QByteArray& data);
     void onResult(int result_code);
@@ -122,6 +136,7 @@ private:
     Position positionAt(const QPoint& position) const;
     bool cellAtLine(int line, int column, VTermScreenCell* cell) const;
     bool isSelected(int line, int column) const;
+    QString lineText(int line, int from, int to) const;
     QString selectedText() const;
     void selectWordAt(const Position& position);
     void selectLineAt(int line);

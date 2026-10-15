@@ -28,6 +28,7 @@
 
 #include "base/time_types.h"
 #include "client/mcp/mcp_controller.h"
+#include "client/mcp/tools/mcp_utils.h"
 #include "common/keycode_converter.h"
 #include "proto/desktop_input.h"
 #include "proto/desktop_screen.h"
@@ -81,34 +82,12 @@ const struct
 };
 
 //--------------------------------------------------------------------------------------------------
-bool hasClient(qint64 client_id)
-{
-    const QList<McpController::ClientInfo> clients = McpController::instance().clients();
-    for (const McpController::ClientInfo& client : clients)
-    {
-        if (client.client_id == client_id)
-            return true;
-    }
-
-    return false;
-}
-
-//--------------------------------------------------------------------------------------------------
 QSize pictureSize(const QSize& frame_size)
 {
     if (frame_size.width() <= kMaxPictureSize && frame_size.height() <= kMaxPictureSize)
         return frame_size;
 
     return frame_size.scaled(kMaxPictureSize, kMaxPictureSize, Qt::KeepAspectRatio);
-}
-
-//--------------------------------------------------------------------------------------------------
-std::optional<qint64> integerArgument(const QJsonValue& value)
-{
-    if (!value.isDouble() || value.toDouble() != static_cast<double>(value.toInteger()))
-        return std::nullopt;
-
-    return value.toInteger();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -400,14 +379,14 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
     {
         switch (window->signIn())
         {
-            case McpController::DesktopWindow::SignInResult::STARTED:
+            case McpController::SignInResult::STARTED:
                 reply(true, QString("The client %1 signs in to the host with the saved credentials. Take a "
                                     "screenshot to see the result.").arg(*client_id));
                 break;
-            case McpController::DesktopWindow::SignInResult::NOT_REQUESTED:
+            case McpController::SignInResult::NOT_REQUESTED:
                 reply(false, QString("The host of the client %1 does not ask for credentials now.").arg(*client_id));
                 break;
-            case McpController::DesktopWindow::SignInResult::NOT_SELECTED:
+            case McpController::SignInResult::NOT_SELECTED:
                 reply(false, QString("No saved credentials are chosen for the host of the client %1, the user "
                                      "signs in.").arg(*client_id));
                 break;

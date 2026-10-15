@@ -667,12 +667,13 @@ void DesktopWindow::selectScreen(const proto::screen::Screen& screen)
 }
 
 //--------------------------------------------------------------------------------------------------
-McpController::DesktopWindow::SignInResult DesktopWindow::signIn()
+McpController::SignInResult DesktopWindow::signIn()
 {
     if (credential_panel_->isHidden())
-        return SignInResult::NOT_REQUESTED;
+        return McpController::SignInResult::NOT_REQUESTED;
 
-    return credential_panel_->signIn() ? SignInResult::STARTED : SignInResult::NOT_SELECTED;
+    return credential_panel_->signIn() ? McpController::SignInResult::STARTED :
+                                         McpController::SignInResult::NOT_SELECTED;
 }
 
 //--------------------------------------------------------------------------------------------------
