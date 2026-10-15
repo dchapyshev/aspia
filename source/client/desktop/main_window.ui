@@ -71,6 +71,8 @@
     <addaction name="action_credentials"/>
     <addaction name="action_settings"/>
     <addaction name="separator"/>
+    <addaction name="action_mcp_connector"/>
+    <addaction name="separator"/>
     <addaction name="action_lock"/>
     <addaction name="action_exit"/>
    </widget>
@@ -126,11 +128,11 @@
     <bool>false</bool>
    </attribute>
    <addaction name="action_quick_connect"/>
-   <addaction name="action_mcp_connector"/>
    <addaction name="action_credentials"/>
    <addaction name="action_settings"/>
    <addaction name="separator"/>
    <addaction name="action_help"/>
+   <addaction name="action_mcp_connector"/>
    <addaction name="action_lock"/>
    <addaction name="action_exit"/>
   </widget>
