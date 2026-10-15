@@ -56,6 +56,7 @@ protected:
     QSize gridSize() const final;
     QPoint cursorPosition() const final;
     QStringList lines(int history) const final;
+    QImage screenshot() const final;
     TimePoint lastInputTime() const final;
     TimePoint lastOutputTime() const final;
 

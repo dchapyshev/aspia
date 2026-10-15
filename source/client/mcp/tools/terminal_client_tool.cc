@@ -18,6 +18,8 @@
 
 #include "client/mcp/tools/terminal_client_tool.h"
 
+#include <QBuffer>
+#include <QImage>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QKeyCombination>
@@ -36,6 +38,7 @@
 
 namespace {
 
+const int kMaxPictureSize = 1280;
 const int kMaxWait = 60;
 const Seconds kSettleTime{ 1 };
 const MilliSeconds kWaitInterval{ 100 };
@@ -170,10 +173,13 @@ QJsonObject TerminalClientTool::definition() const
                            { "description", "Id of a terminal client window from list_clients." } };
 
     QJsonObject action{ { "type", "string" },
-                        { "enum", QJsonArray{ "sign_in", "read", "type", "key" } },
+                        { "enum", QJsonArray{ "sign_in", "read", "screenshot", "type", "key" } },
                         { "description", "sign_in signs in to the host with the saved credentials that are chosen "
                                          "for it in Aspia Client, the credentials are not shown to you. read returns "
-                                         "the text of the terminal. type enters text, key presses a key." } };
+                                         "the text of the terminal. screenshot returns the picture of the terminal "
+                                         "that the user sees in the window, with the colors that full-screen "
+                                         "programs like Far or mc use to show the selection. type enters text, key "
+                                         "presses a key." } };
 
     QJsonObject history{ { "type", "integer" },
                          { "minimum", 0 },
@@ -213,8 +219,8 @@ QJsonObject TerminalClientTool::definition() const
                          "list_clients. The window asks for the user name and password of the host first, and "
                          "type and key work only after sign_in or after the user signed in. read returns the "
                          "lines of the terminal with the position of the cursor, login_prompt is true while the "
-                         "window asks for credentials. The other actions return no text, so read to see the "
-                         "result. The user sees every action in the window." },
+                         "window asks for credentials. sign_in, type and key return no text, so read or take a "
+                         "screenshot to see the result. The user sees every action in the window." },
         { "inputSchema", QJsonObject{ { "type", "object" },
                                       { "properties", QJsonObject{ { "client_id", client_id },
                                                                    { "action", action },
@@ -238,9 +244,9 @@ void TerminalClientTool::call(const QJsonObject& arguments, Reply reply)
     }
 
     const QString action = arguments.value("action").toString();
-    if (action != "sign_in" && action != "read" && action != "type" && action != "key")
+    if (action != "sign_in" && action != "read" && action != "screenshot" && action != "type" && action != "key")
     {
-        reply(false, "The action must be one of sign_in, read, type, key.");
+        reply(false, "The action must be one of sign_in, read, screenshot, type, key.");
         return;
     }
 
@@ -350,6 +356,31 @@ void TerminalClientTool::call(const QJsonObject& arguments, Reply reply)
             reply(true, screenText(*window, history_lines, until));
         });
         timer->start(kWaitInterval);
+        return;
+    }
+
+    if (action == "screenshot")
+    {
+        QImage image = window->screenshot();
+        if (image.isNull())
+        {
+            reply(false, QString("Unable to take the picture of the client %1.").arg(*client_id));
+            return;
+        }
+
+        if (image.width() > kMaxPictureSize || image.height() > kMaxPictureSize)
+            image = image.scaled(kMaxPictureSize, kMaxPictureSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+        QByteArray png;
+        QBuffer buffer(&png);
+        if (!buffer.open(QIODevice::WriteOnly) || !image.save(&buffer, "PNG"))
+        {
+            reply(false, "Unable to encode the picture.");
+            return;
+        }
+
+        reply(true, QString("The picture of the terminal of the client %1 is %2x%3 pixels.")
+            .arg(*client_id).arg(image.width()).arg(image.height()), png);
         return;
     }
 

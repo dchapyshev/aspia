@@ -18,7 +18,9 @@
 
 #include "client/desktop/terminal/terminal_window.h"
 
+#include <QImage>
 #include <QKeyEvent>
+#include <QPixmap>
 #include <QVBoxLayout>
 
 #include "base/logging.h"
@@ -149,6 +151,12 @@ QPoint TerminalWindow::cursorPosition() const
 QStringList TerminalWindow::lines(int history) const
 {
     return terminal_widget_->lines(history);
+}
+
+//--------------------------------------------------------------------------------------------------
+QImage TerminalWindow::screenshot() const
+{
+    return terminal_widget_->grab().toImage();
 }
 
 //--------------------------------------------------------------------------------------------------

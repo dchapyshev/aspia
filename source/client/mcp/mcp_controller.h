@@ -99,6 +99,7 @@ public:
         virtual QSize gridSize() const = 0;
         virtual QPoint cursorPosition() const = 0;
         virtual QStringList lines(int history) const = 0;
+        virtual QImage screenshot() const = 0;
         virtual TimePoint lastInputTime() const = 0;
         virtual TimePoint lastOutputTime() const = 0;
     };
