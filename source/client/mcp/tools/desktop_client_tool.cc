@@ -21,6 +21,7 @@
 #include <QBuffer>
 #include <QImage>
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QTimer>
 
 #include <optional>
@@ -29,6 +30,7 @@
 #include "client/mcp/mcp_controller.h"
 #include "common/keycode_converter.h"
 #include "proto/desktop_input.h"
+#include "proto/desktop_screen.h"
 
 namespace {
 
@@ -238,11 +240,13 @@ QJsonObject DesktopClientTool::definition() const
 
     QJsonObject action{ { "type", "string" },
                         { "enum", QJsonArray{ "screenshot", "move", "click", "double_click", "drag", "scroll",
-                                              "key", "type" } },
+                                              "key", "type", "list_screens", "select_screen" } },
                         { "description", "screenshot returns the picture of the remote desktop that the user "
                                          "sees in the window. move, click, double_click and scroll act at x, y. "
                                          "drag presses the button at x, y, moves to to_x, to_y and releases the "
-                                         "button there. key presses keys, type enters text." } };
+                                         "button there. key presses keys, type enters text. list_screens returns "
+                                         "the monitors of the host, select_screen shows the monitor screen_id in "
+                                         "the window." } };
 
     QJsonObject x{ { "type", "integer" },
                    { "minimum", 0 },
@@ -281,6 +285,9 @@ QJsonObject DesktopClientTool::definition() const
                                        "up, right, down, pageup, pagedown, space, printscreen and pause. A modifier "
                                        "alone, for example win, is pressed as a key." } };
 
+    QJsonObject screen_id{ { "type", "integer" },
+                           { "description", "Id of a monitor from list_screens for select_screen." } };
+
     QJsonObject text{ { "type", "string" },
                       { "description", "Text of type. It is entered as characters, so the keyboard layout of the "
                                        "host does not matter. New lines and tabs are not entered on every host, "
@@ -293,7 +300,9 @@ QJsonObject DesktopClientTool::definition() const
                          "connect_router_host with the desktop session_type, and its client_id comes from "
                          "list_clients. A picture larger than 1280 pixels on a side is scaled down. The mouse "
                          "actions take the position in the pixels of that picture. The actions return no picture, "
-                         "so take a screenshot to see the result. The user sees every action in the window." },
+                         "so take a screenshot to see the result. select_screen changes the picture and its size, "
+                         "so the positions of an older screenshot do not fit any more. The user sees every action "
+                         "in the window." },
         { "inputSchema", QJsonObject{ { "type", "object" },
                                       { "properties", QJsonObject{ { "client_id", client_id },
                                                                    { "action", action },
@@ -305,7 +314,8 @@ QJsonObject DesktopClientTool::definition() const
                                                                    { "direction", direction },
                                                                    { "amount", amount },
                                                                    { "keys", keys },
-                                                                   { "text", text } } },
+                                                                   { "text", text },
+                                                                   { "screen_id", screen_id } } },
                                       { "required", QJsonArray{ "client_id", "action" } },
                                       { "additionalProperties", false } } } };
 }
@@ -322,9 +332,11 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
 
     const QString action = arguments.value("action").toString();
     if (action != "screenshot" && action != "move" && action != "click" && action != "double_click" &&
-        action != "drag" && action != "scroll" && action != "key" && action != "type")
+        action != "drag" && action != "scroll" && action != "key" && action != "type" && action != "list_screens" &&
+        action != "select_screen")
     {
-        reply(false, "The action must be one of screenshot, move, click, double_click, drag, scroll, key, type.");
+        reply(false, "The action must be one of screenshot, move, click, double_click, drag, scroll, key, type, "
+                     "list_screens, select_screen.");
         return;
     }
 
@@ -335,6 +347,50 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
             reply(false, QString("The client %1 is not a desktop client.").arg(*client_id));
         else
             reply(false, QString("There is no client %1. Use list_clients to get the ids.").arg(*client_id));
+        return;
+    }
+
+    if (action == "list_screens")
+    {
+        const proto::screen::ScreenList screen_list = window->screenList();
+        QJsonArray screens;
+
+        for (int i = 0; i < screen_list.screen_size(); ++i)
+        {
+            const proto::screen::Screen& screen = screen_list.screen(i);
+            screens.append(QJsonObject{ { "screen_id", static_cast<qint64>(screen.id()) },
+                                        { "title", QString::fromStdString(screen.title()) },
+                                        { "x", screen.position().x() },
+                                        { "y", screen.position().y() },
+                                        { "width", screen.resolution().width() },
+                                        { "height", screen.resolution().height() },
+                                        { "primary", screen.id() == screen_list.primary_screen() },
+                                        { "current", screen.id() == screen_list.current_screen() } });
+        }
+
+        QJsonObject content{ { "screens", screens } };
+        reply(true, QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact)));
+        return;
+    }
+
+    if (action == "select_screen")
+    {
+        std::optional<qint64> screen_id = integerArgument(arguments.value("screen_id"));
+        const proto::screen::ScreenList screen_list = window->screenList();
+
+        for (int i = 0; screen_id.has_value() && i < screen_list.screen_size(); ++i)
+        {
+            const proto::screen::Screen& screen = screen_list.screen(i);
+            if (screen.id() == *screen_id)
+            {
+                window->selectScreen(screen);
+                reply(true, QString("The client %1 switches to the screen %2. Take a screenshot to see it.")
+                    .arg(*client_id).arg(*screen_id));
+                return;
+            }
+        }
+
+        reply(false, "The screen_id must be an id from list_screens.");
         return;
     }
 

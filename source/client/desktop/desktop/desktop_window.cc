@@ -655,6 +655,18 @@ void DesktopWindow::sendText(const QString& text)
 }
 
 //--------------------------------------------------------------------------------------------------
+proto::screen::ScreenList DesktopWindow::screenList() const
+{
+    return screen_list_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::selectScreen(const proto::screen::Screen& screen)
+{
+    onCurrentScreenChanged(screen);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopWindow::onScreenMessage(const QByteArray& buffer)
 {
     proto::screen::HostToClient message;
@@ -1443,6 +1455,7 @@ void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& ca
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::onScreenListChanged(const proto::screen::ScreenList& screen_list)
 {
+    screen_list_ = screen_list;
     toolbar_->setScreenList(screen_list);
 }
 

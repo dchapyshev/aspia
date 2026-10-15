@@ -35,6 +35,11 @@ namespace proto::peer {
 enum SessionType : int;
 } // namespace proto::peer
 
+namespace proto::screen {
+class Screen;
+class ScreenList;
+} // namespace proto::screen
+
 class HostConfig;
 class McpTool;
 class McpWorker;
@@ -70,6 +75,8 @@ public:
         virtual void sendMouseEvent(const proto::input::MouseEvent& event) = 0;
         virtual void sendKeyEvent(quint32 usb_keycode, bool pressed) = 0;
         virtual void sendText(const QString& text) = 0;
+        virtual proto::screen::ScreenList screenList() const = 0;
+        virtual void selectScreen(const proto::screen::Screen& screen) = 0;
     };
 
     class MainWindow
