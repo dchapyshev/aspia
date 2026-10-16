@@ -669,11 +669,35 @@
              <property name="title">
               <string>MCP Connector</string>
              </property>
-             <layout class="QVBoxLayout" name="layout_mcp_group">
-              <item>
+             <layout class="QGridLayout" name="layout_mcp_group">
+              <item row="0" column="0" colspan="2">
                <widget class="QCheckBox" name="checkbox_mcp_enabled">
                 <property name="text">
                  <string>Allow the use of MCP</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" colspan="2">
+               <widget class="QLabel" name="label_mcp_command">
+                <property name="text">
+                 <string>Add this command to the MCP servers of the AI application:</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLineEdit" name="edit_mcp_command">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QPushButton" name="button_copy_mcp_command">
+                <property name="text">
+                 <string>Copy</string>
                 </property>
                </widget>
               </item>

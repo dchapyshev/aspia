@@ -73,6 +73,7 @@ private slots:
     void onMcpAutoConfirmChanged();
     void onMcpSignInChanged();
     void onMcpSessionTypesChanged();
+    void onCopyMcpCommand();
     void onChangeMasterPassword();
     void onCheckUpdatesChanged();
     void onUpdateChannelChanged();

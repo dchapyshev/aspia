@@ -20,8 +20,10 @@
 
 #include <QButtonGroup>
 #include <QCheckBox>
+#include <QClipboard>
 #include <QColor>
 #include <QComboBox>
+#include <QDir>
 #include <QEvent>
 #include <QFileDialog>
 #include <QGuiApplication>
@@ -302,6 +304,12 @@ SettingsTab::SettingsTab(QWidget* parent)
         mcp_session_types_->addButton(checkbox, session_type);
     }
 
+    ui->edit_mcp_command->setText(
+        QString("\"%1\" --mcp").arg(QDir::toNativeSeparators(QCoreApplication::applicationFilePath())));
+
+    ui->label_mcp_command->setEnabled(ui->checkbox_mcp_enabled->isChecked());
+    ui->edit_mcp_command->setEnabled(ui->checkbox_mcp_enabled->isChecked());
+    ui->button_copy_mcp_command->setEnabled(ui->checkbox_mcp_enabled->isChecked());
     ui->groupbox_mcp_session_types->setEnabled(ui->checkbox_mcp_enabled->isChecked());
     ui->groupbox_mcp_actions->setEnabled(ui->checkbox_mcp_enabled->isChecked());
 
@@ -368,6 +376,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->checkbox_mcp_auto_confirm, &QCheckBox::toggled, this, &SettingsTab::onMcpAutoConfirmChanged);
     connect(ui->checkbox_mcp_sign_in, &QCheckBox::toggled, this, &SettingsTab::onMcpSignInChanged);
     connect(mcp_session_types_, &QButtonGroup::idToggled, this, &SettingsTab::onMcpSessionTypesChanged);
+    connect(ui->button_copy_mcp_command, &QPushButton::clicked, this, &SettingsTab::onCopyMcpCommand);
 
     connect(ui->checkbox_check_updates, &QCheckBox::toggled, this, &SettingsTab::onCheckUpdatesChanged);
     connect(ui->combobox_update_channel, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -640,6 +649,9 @@ void SettingsTab::onMcpEnabledChanged()
     LOG(INFO) << "[ACTION] MCP enabled changed:" << enable;
 
     Database::instance().setMcpEnabled(enable);
+    ui->label_mcp_command->setEnabled(enable);
+    ui->edit_mcp_command->setEnabled(enable);
+    ui->button_copy_mcp_command->setEnabled(enable);
     ui->groupbox_mcp_session_types->setEnabled(enable);
     ui->groupbox_mcp_actions->setEnabled(enable);
 
@@ -676,6 +688,13 @@ void SettingsTab::onMcpSessionTypesChanged()
     }
 
     Database::instance().setMcpSessionTypes(session_types);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onCopyMcpCommand()
+{
+    LOG(INFO) << "[ACTION] Copy MCP command";
+    QGuiApplication::clipboard()->setText(ui->edit_mcp_command->text());
 }
 
 //--------------------------------------------------------------------------------------------------
