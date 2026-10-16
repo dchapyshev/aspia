@@ -36,6 +36,7 @@
 #include "client/master_password.h"
 #include "client/router_test_fixture.h"
 #include "proto/desktop_control.h"
+#include "proto/peer.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 
@@ -1357,6 +1358,20 @@ TEST_F(DatabaseTest, McpAutoConfirmIsOffUntilChosen)
 
     ASSERT_TRUE(db_.setMcpAutoConfirmEnabled(false));
     EXPECT_FALSE(db_.isMcpAutoConfirmEnabled());
+}
+
+//--------------------------------------------------------------------------------------------------
+// MCP works with every type of session until the user chooses the types. No type is a choice too.
+TEST_F(DatabaseTest, McpSessionTypesAreAllUntilChosen)
+{
+    EXPECT_EQ(db_.mcpSessionTypes(), static_cast<quint32>(proto::peer::SESSION_TYPE_ALL));
+
+    ASSERT_TRUE(db_.setMcpSessionTypes(proto::peer::SESSION_TYPE_DESKTOP | proto::peer::SESSION_TYPE_TERMINAL));
+    EXPECT_EQ(db_.mcpSessionTypes(),
+              static_cast<quint32>(proto::peer::SESSION_TYPE_DESKTOP | proto::peer::SESSION_TYPE_TERMINAL));
+
+    ASSERT_TRUE(db_.setMcpSessionTypes(0));
+    EXPECT_EQ(db_.mcpSessionTypes(), 0u);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -19,6 +19,7 @@
 #include "client/desktop/settings_tab.h"
 
 #include <QButtonGroup>
+#include <QCheckBox>
 #include <QColor>
 #include <QComboBox>
 #include <QEvent>
@@ -53,8 +54,10 @@
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/elevate_util.h"
 #include "common/desktop/msg_box.h"
+#include "common/desktop/session_type.h"
 #include "common/desktop/update_dialog.h"
 #include "proto/desktop_control.h"
+#include "proto/peer.h"
 
 namespace {
 
@@ -281,6 +284,24 @@ SettingsTab::SettingsTab(QWidget* parent)
     // MCP page.
     ui->checkbox_mcp_enabled->setChecked(db.isMcpEnabled());
     ui->checkbox_mcp_auto_confirm->setChecked(db.isMcpAutoConfirmEnabled());
+
+    mcp_session_types_ = new QButtonGroup(this);
+    mcp_session_types_->setExclusive(false);
+
+    const quint32 mcp_session_types = db.mcpSessionTypes();
+    for (proto::peer::SessionType session_type : { proto::peer::SESSION_TYPE_DESKTOP,
+                                                   proto::peer::SESSION_TYPE_FILE_TRANSFER,
+                                                   proto::peer::SESSION_TYPE_SYSTEM_INFO,
+                                                   proto::peer::SESSION_TYPE_CHAT,
+                                                   proto::peer::SESSION_TYPE_TERMINAL })
+    {
+        QCheckBox* checkbox = new QCheckBox(sessionName(session_type), ui->groupbox_mcp_session_types);
+        checkbox->setChecked(mcp_session_types & session_type);
+        ui->layout_mcp_session_types->addWidget(checkbox);
+        mcp_session_types_->addButton(checkbox, session_type);
+    }
+
+    ui->groupbox_mcp_session_types->setEnabled(ui->checkbox_mcp_enabled->isChecked());
     ui->groupbox_mcp_actions->setEnabled(ui->checkbox_mcp_enabled->isChecked());
 
     // Update page.
@@ -344,6 +365,7 @@ SettingsTab::SettingsTab(QWidget* parent)
 
     connect(ui->checkbox_mcp_enabled, &QCheckBox::toggled, this, &SettingsTab::onMcpEnabledChanged);
     connect(ui->checkbox_mcp_auto_confirm, &QCheckBox::toggled, this, &SettingsTab::onMcpAutoConfirmChanged);
+    connect(mcp_session_types_, &QButtonGroup::idToggled, this, &SettingsTab::onMcpSessionTypesChanged);
 
     connect(ui->checkbox_check_updates, &QCheckBox::toggled, this, &SettingsTab::onCheckUpdatesChanged);
     connect(ui->combobox_update_channel, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -616,6 +638,7 @@ void SettingsTab::onMcpEnabledChanged()
     LOG(INFO) << "[ACTION] MCP enabled changed:" << enable;
 
     Database::instance().setMcpEnabled(enable);
+    ui->groupbox_mcp_session_types->setEnabled(enable);
     ui->groupbox_mcp_actions->setEnabled(enable);
 
     if (enable)
@@ -627,6 +650,23 @@ void SettingsTab::onMcpAutoConfirmChanged()
 {
     LOG(INFO) << "[ACTION] MCP auto confirm changed";
     Database::instance().setMcpAutoConfirmEnabled(ui->checkbox_mcp_auto_confirm->isChecked());
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onMcpSessionTypesChanged()
+{
+    LOG(INFO) << "[ACTION] MCP session types changed";
+
+    quint32 session_types = 0;
+
+    const QList<QAbstractButton*> buttons = mcp_session_types_->buttons();
+    for (QAbstractButton* button : buttons)
+    {
+        if (button->isChecked())
+            session_types |= static_cast<quint32>(mcp_session_types_->id(button));
+    }
+
+    Database::instance().setMcpSessionTypes(session_types);
 }
 
 //--------------------------------------------------------------------------------------------------

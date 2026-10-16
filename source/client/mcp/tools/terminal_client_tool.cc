@@ -243,6 +243,13 @@ void TerminalClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
+    const QString session_type_error = sessionTypeError(proto::peer::SESSION_TYPE_TERMINAL);
+    if (!session_type_error.isEmpty())
+    {
+        reply(false, session_type_error);
+        return;
+    }
+
     const QString action = arguments.value("action").toString();
     if (action != "sign_in" && action != "read" && action != "screenshot" && action != "type" && action != "key")
     {

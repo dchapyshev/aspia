@@ -71,6 +71,7 @@ private slots:
     void onSelectRecordingPath();
     void onMcpEnabledChanged();
     void onMcpAutoConfirmChanged();
+    void onMcpSessionTypesChanged();
     void onChangeMasterPassword();
     void onCheckUpdatesChanged();
     void onUpdateChannelChanged();
@@ -86,6 +87,7 @@ private:
 
     std::unique_ptr<Ui::SettingsTab> ui;
     QButtonGroup* category_group_ = nullptr;
+    QButtonGroup* mcp_session_types_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(SettingsTab)
 };

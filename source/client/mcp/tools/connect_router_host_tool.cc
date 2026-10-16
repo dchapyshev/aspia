@@ -173,6 +173,13 @@ void ConnectRouterHostTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
+    const QString session_type_error = sessionTypeError(*session_type);
+    if (!session_type_error.isEmpty())
+    {
+        reply(false, session_type_error);
+        return;
+    }
+
     const qint64 router_id = router_value.toInteger();
     const HostId host_id = static_cast<HostId>(host_value.toInteger());
     const bool quick_support = isTempHostId(host_id);

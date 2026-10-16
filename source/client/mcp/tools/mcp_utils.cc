@@ -20,6 +20,7 @@
 
 #include <QJsonArray>
 
+#include "client/database.h"
 #include "client/mcp/mcp_controller.h"
 
 namespace {
@@ -77,6 +78,16 @@ QString sessionTypeName(proto::peer::SessionType session_type)
     }
 
     return "unknown";
+}
+
+//--------------------------------------------------------------------------------------------------
+QString sessionTypeError(proto::peer::SessionType session_type)
+{
+    if (Database::instance().mcpSessionTypes() & session_type)
+        return QString();
+
+    return QString("The user does not allow MCP to work with %1 sessions. The types of sessions are chosen in the "
+                   "MCP settings of Aspia Client.").arg(sessionTypeName(session_type));
 }
 
 //--------------------------------------------------------------------------------------------------

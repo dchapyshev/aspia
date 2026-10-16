@@ -67,6 +67,13 @@ void ConnectLocalHostTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
+    const QString session_type_error = sessionTypeError(*session_type);
+    if (!session_type_error.isEmpty())
+    {
+        reply(false, session_type_error);
+        return;
+    }
+
     const qint64 id = id_value.toInteger();
 
     LocalHostConfig host;

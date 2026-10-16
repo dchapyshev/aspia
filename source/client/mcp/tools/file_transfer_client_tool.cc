@@ -299,6 +299,13 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
+    const QString session_type_error = sessionTypeError(proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    if (!session_type_error.isEmpty())
+    {
+        reply(false, session_type_error);
+        return;
+    }
+
     const QString action = arguments.value("action").toString();
     if (action != "open" && action != "list" && action != "select" && action != "send" && action != "mkdir" &&
         action != "rename" && action != "remove" && action != "status" && action != "close_dialog" &&

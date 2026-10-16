@@ -33,6 +33,7 @@
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
 #include "proto/desktop_control.h"
+#include "proto/peer.h"
 #include "proto/router.h"
 
 namespace {
@@ -60,6 +61,7 @@ constexpr auto kSettingUdpMethods    = "udp_methods";
 constexpr auto kSettingProxy         = "proxy";
 constexpr auto kSettingMcpEnabled    = "mcp_enabled";
 constexpr auto kSettingMcpConfirm    = "mcp_auto_confirm";
+constexpr auto kSettingMcpSessions   = "mcp_session_types";
 constexpr auto kSettingSalt          = "master_password_salt";
 constexpr auto kSettingVerifier      = "master_password_verifier";
 constexpr auto kSettingVersion       = "master_password_version";
@@ -2111,6 +2113,23 @@ bool Database::isMcpAutoConfirmEnabled() const
 bool Database::setMcpAutoConfirmEnabled(bool enable)
 {
     return writeSetting(kSettingMcpConfirm, enable ? "1" : "0");
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 Database::mcpSessionTypes() const
+{
+    bool ok = false;
+    const quint32 value = readSetting(kSettingMcpSessions).toUInt(&ok);
+    if (!ok)
+        return proto::peer::SESSION_TYPE_ALL;
+
+    return value;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setMcpSessionTypes(quint32 session_types)
+{
+    return writeSetting(kSettingMcpSessions, QString::number(session_types));
 }
 
 //--------------------------------------------------------------------------------------------------

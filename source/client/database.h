@@ -168,6 +168,9 @@ public:
     bool isMcpAutoConfirmEnabled() const;
     bool setMcpAutoConfirmEnabled(bool enable);
 
+    quint32 mcpSessionTypes() const;
+    bool setMcpSessionTypes(quint32 session_types);
+
     // Master password.
     bool isMasterPasswordSet() const;
 

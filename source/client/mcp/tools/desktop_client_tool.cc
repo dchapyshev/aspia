@@ -311,6 +311,13 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
+    const QString session_type_error = sessionTypeError(proto::peer::SESSION_TYPE_DESKTOP);
+    if (!session_type_error.isEmpty())
+    {
+        reply(false, session_type_error);
+        return;
+    }
+
     const QString action = arguments.value("action").toString();
     if (action != "screenshot" && action != "move" && action != "click" && action != "double_click" &&
         action != "drag" && action != "scroll" && action != "key" && action != "type" && action != "list_screens" &&
