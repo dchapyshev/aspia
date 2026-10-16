@@ -69,6 +69,7 @@ private slots:
     void onRecordAutostartChanged();
     void onRecordingPathChanged();
     void onSelectRecordingPath();
+    void onMcpAutoConfirmChanged();
     void onChangeMasterPassword();
     void onCheckUpdatesChanged();
     void onUpdateChannelChanged();

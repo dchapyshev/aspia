@@ -58,6 +58,7 @@ constexpr auto kSettingRecordPath    = "recording_path";
 constexpr auto kSettingKeyCombos     = "send_key_combinations";
 constexpr auto kSettingUdpMethods    = "udp_methods";
 constexpr auto kSettingProxy         = "proxy";
+constexpr auto kSettingMcpConfirm    = "mcp_auto_confirm";
 constexpr auto kSettingSalt          = "master_password_salt";
 constexpr auto kSettingVerifier      = "master_password_verifier";
 constexpr auto kSettingVersion       = "master_password_version";
@@ -2085,6 +2086,18 @@ bool Database::setProxyConfig(const ProxyConfig& proxy)
         return false;
 
     return writeSetting(kSettingProxy, QString::fromLatin1(encrypted_data->toBase64()));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::isMcpAutoConfirmEnabled() const
+{
+    return readSetting(kSettingMcpConfirm) == "1";
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setMcpAutoConfirmEnabled(bool enable)
+{
+    return writeSetting(kSettingMcpConfirm, enable ? "1" : "0");
 }
 
 //--------------------------------------------------------------------------------------------------

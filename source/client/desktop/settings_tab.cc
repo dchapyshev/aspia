@@ -135,6 +135,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     int button_id = 0;
     add_button(button_id++, ":/img/gear.svg", tr("General"));
     add_button(button_id++, ":/img/workstation.svg", tr("Desktop"));
+    add_button(button_id++, ":/img/ai.svg", "MCP");
     add_button(button_id++, ":/img/restart.svg", tr("Update"));
 
     // Limit content width and center horizontally.
@@ -154,10 +155,11 @@ SettingsTab::SettingsTab(QWidget* parent)
     };
     center(ui->layout_general_outer, ui->page_general_content, kMaxContentWidth);
     center(ui->layout_desktop_outer, ui->page_desktop_content, kMaxContentWidth);
+    center(ui->layout_mcp_outer, ui->page_mcp_content, kMaxContentWidth);
     center(ui->layout_update_outer, ui->page_update_content, kMaxContentWidth);
 
     // A scroll area fills the page with the window color, the pane of the tab has the base one.
-    for (QScrollArea* page : { ui->page_general, ui->page_desktop, ui->page_update })
+    for (QScrollArea* page : { ui->page_general, ui->page_desktop, ui->page_mcp, ui->page_update })
     {
         page->viewport()->setAutoFillBackground(false);
         page->widget()->setAutoFillBackground(false);
@@ -276,6 +278,9 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->checkbox_record_autostart->setChecked(db.isRecordSessionsEnabled());
     ui->edit_record_dir->setText(db.recordingPath());
 
+    // MCP page.
+    ui->checkbox_mcp_auto_confirm->setChecked(db.isMcpAutoConfirmEnabled());
+
     // Update page.
     ui->checkbox_check_updates->setChecked(db.isCheckUpdatesEnabled());
 
@@ -334,6 +339,8 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->checkbox_record_autostart, &QCheckBox::toggled, this, &SettingsTab::onRecordAutostartChanged);
     connect(ui->edit_record_dir, &QLineEdit::editingFinished, this, &SettingsTab::onRecordingPathChanged);
     connect(ui->button_select_record_dir, &QPushButton::clicked, this, &SettingsTab::onSelectRecordingPath);
+
+    connect(ui->checkbox_mcp_auto_confirm, &QCheckBox::toggled, this, &SettingsTab::onMcpAutoConfirmChanged);
 
     connect(ui->checkbox_check_updates, &QCheckBox::toggled, this, &SettingsTab::onCheckUpdatesChanged);
     connect(ui->combobox_update_channel, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -597,6 +604,13 @@ void SettingsTab::onSelectRecordingPath()
     LOG(INFO) << "[ACTION] Recording path selected:" << path;
     ui->edit_record_dir->setText(path);
     Database::instance().setRecordingPath(path);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onMcpAutoConfirmChanged()
+{
+    LOG(INFO) << "[ACTION] MCP auto confirm changed";
+    Database::instance().setMcpAutoConfirmEnabled(ui->checkbox_mcp_auto_confirm->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------

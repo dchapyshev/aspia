@@ -162,6 +162,9 @@ public:
     ReadResult proxyConfig(ProxyConfig* proxy) const;
     bool setProxyConfig(const ProxyConfig& proxy);
 
+    bool isMcpAutoConfirmEnabled() const;
+    bool setMcpAutoConfirmEnabled(bool enable);
+
     // Master password.
     bool isMasterPasswordSet() const;
 

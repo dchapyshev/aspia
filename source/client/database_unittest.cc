@@ -1334,6 +1334,19 @@ TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The user confirms the actions of the MCP connector until automatic confirmation is turned on.
+TEST_F(DatabaseTest, McpAutoConfirmIsOffUntilChosen)
+{
+    EXPECT_FALSE(db_.isMcpAutoConfirmEnabled());
+
+    ASSERT_TRUE(db_.setMcpAutoConfirmEnabled(true));
+    EXPECT_TRUE(db_.isMcpAutoConfirmEnabled());
+
+    ASSERT_TRUE(db_.setMcpAutoConfirmEnabled(false));
+    EXPECT_FALSE(db_.isMcpAutoConfirmEnabled());
+}
+
+//--------------------------------------------------------------------------------------------------
 // The password of the proxy is a secret like the ones of the address book. A change of the master
 // password reseals it, and a key that does not open it gets nothing of it.
 TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
