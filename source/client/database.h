@@ -162,6 +162,9 @@ public:
     ReadResult proxyConfig(ProxyConfig* proxy) const;
     bool setProxyConfig(const ProxyConfig& proxy);
 
+    bool isMcpEnabled() const;
+    bool setMcpEnabled(bool enable);
+
     bool isMcpAutoConfirmEnabled() const;
     bool setMcpAutoConfirmEnabled(bool enable);
 

@@ -21,6 +21,7 @@
 #include "version.h"
 #include "base/build_config.h"
 #include "base/logging.h"
+#include "client/database.h"
 #include "client/host_url.h"
 #include "client/settings.h"
 #include "client/workers/router_worker.h"
@@ -110,7 +111,8 @@ Application::Application(int& argc, char* argv[])
     addWorker(std::make_unique<UpdateWorker>());
 
 #if !defined(Q_OS_ANDROID)
-    addWorker(std::make_unique<McpWorker>());
+    if (Database::instance().isMcpEnabled())
+        addWorker(std::make_unique<McpWorker>());
 #endif // !defined(Q_OS_ANDROID)
 
 #if defined(Q_OS_WINDOWS)

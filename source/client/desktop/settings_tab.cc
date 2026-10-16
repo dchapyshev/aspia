@@ -279,7 +279,9 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->edit_record_dir->setText(db.recordingPath());
 
     // MCP page.
+    ui->checkbox_mcp_enabled->setChecked(db.isMcpEnabled());
     ui->checkbox_mcp_auto_confirm->setChecked(db.isMcpAutoConfirmEnabled());
+    ui->groupbox_mcp_actions->setEnabled(ui->checkbox_mcp_enabled->isChecked());
 
     // Update page.
     ui->checkbox_check_updates->setChecked(db.isCheckUpdatesEnabled());
@@ -340,6 +342,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->edit_record_dir, &QLineEdit::editingFinished, this, &SettingsTab::onRecordingPathChanged);
     connect(ui->button_select_record_dir, &QPushButton::clicked, this, &SettingsTab::onSelectRecordingPath);
 
+    connect(ui->checkbox_mcp_enabled, &QCheckBox::toggled, this, &SettingsTab::onMcpEnabledChanged);
     connect(ui->checkbox_mcp_auto_confirm, &QCheckBox::toggled, this, &SettingsTab::onMcpAutoConfirmChanged);
 
     connect(ui->checkbox_check_updates, &QCheckBox::toggled, this, &SettingsTab::onCheckUpdatesChanged);
@@ -604,6 +607,19 @@ void SettingsTab::onSelectRecordingPath()
     LOG(INFO) << "[ACTION] Recording path selected:" << path;
     ui->edit_record_dir->setText(path);
     Database::instance().setRecordingPath(path);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onMcpEnabledChanged()
+{
+    const bool enable = ui->checkbox_mcp_enabled->isChecked();
+    LOG(INFO) << "[ACTION] MCP enabled changed:" << enable;
+
+    Database::instance().setMcpEnabled(enable);
+    ui->groupbox_mcp_actions->setEnabled(enable);
+
+    if (enable)
+        MsgBox::information(this, tr("MCP will work after the application is restarted."));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -57,6 +57,7 @@
 #include "client/desktop/management/search_dialog.h"
 #include "client/desktop/sys_info/system_info_window.h"
 #include "client/desktop/terminal/terminal_window.h"
+#include "client/mcp/mcp_worker.h"
 #include "client/workers/update_worker.h"
 #include "common/desktop/about_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -84,7 +85,7 @@ QString escapeTabTitle(const QString& title)
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
       ui(std::make_unique<Ui::MainWindow>()),
-      mcp_controller_(new McpController(this, this))
+      mcp_controller_(GuiApplication::findWorker<McpWorker>() ? new McpController(this, this) : nullptr)
 {
     LOG(INFO) << "Ctor";
 
@@ -185,13 +186,17 @@ MainWindow::MainWindow(QWidget* parent)
         dialog->exec();
     }, Qt::QueuedConnection);
 
-    connect(mcp_controller_, &McpController::sig_enableFailed, this, [this]()
+    ui->action_mcp_connector->setVisible(mcp_controller_ != nullptr);
+    if (mcp_controller_)
     {
-        MsgBox::warning(this, tr("Unable to turn on the MCP connector."));
+        connect(mcp_controller_, &McpController::sig_enableFailed, this, [this]()
+        {
+            MsgBox::warning(this, tr("Unable to turn on the MCP connector."));
 
-        QSignalBlocker blocker(ui->action_mcp_connector);
-        ui->action_mcp_connector->setChecked(false);
-    });
+            QSignalBlocker blocker(ui->action_mcp_connector);
+            ui->action_mcp_connector->setChecked(false);
+        });
+    }
 
     connect(GuiApplication::instance(), &GuiApplication::sig_themeChanged,
             this, &MainWindow::onAfterThemeChanged);

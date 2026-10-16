@@ -1334,6 +1334,19 @@ TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The MCP connector is not available until the user allows it.
+TEST_F(DatabaseTest, McpIsOffUntilChosen)
+{
+    EXPECT_FALSE(db_.isMcpEnabled());
+
+    ASSERT_TRUE(db_.setMcpEnabled(true));
+    EXPECT_TRUE(db_.isMcpEnabled());
+
+    ASSERT_TRUE(db_.setMcpEnabled(false));
+    EXPECT_FALSE(db_.isMcpEnabled());
+}
+
+//--------------------------------------------------------------------------------------------------
 // The user confirms the actions of the MCP connector until automatic confirmation is turned on.
 TEST_F(DatabaseTest, McpAutoConfirmIsOffUntilChosen)
 {
