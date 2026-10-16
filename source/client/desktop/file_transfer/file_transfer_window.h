@@ -82,6 +82,7 @@ protected:
     bool renameItem(FileTask::Target target, const QString& old_name, const QString& new_name) final;
     TaskState taskState() const final;
     bool closeDialog(bool abort) final;
+    bool cancelTask() final;
 
 private slots:
     void onErrorOccurred(proto::file_transfer::ErrorCode error_code);

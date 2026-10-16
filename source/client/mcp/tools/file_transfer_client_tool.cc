@@ -68,6 +68,13 @@ QString panelText(const McpController::FileTransferWindow& window, FileTask::Tar
 }
 
 //--------------------------------------------------------------------------------------------------
+QString dialogMessage(qint64 client_id, const QString& dialog)
+{
+    return QString("The client %1 shows the dialog \"%2\". Close it with close_dialog or let the user answer, then "
+                   "use list.").arg(QString::number(client_id), dialog);
+}
+
+//--------------------------------------------------------------------------------------------------
 void waitPanelList(qint64 client_id, FileTask::Target side, McpTool::Reply reply)
 {
     const TimePoint deadline = Clock::now() + kListTimeout;
@@ -92,8 +99,7 @@ void waitPanelList(qint64 client_id, FileTask::Target side, McpTool::Reply reply
 
         if (!dialog.isEmpty())
         {
-            reply(false, QString("The client %1 shows the dialog \"%2\". Close it with close_dialog or let the user "
-                                 "answer, then use list.").arg(QString::number(client_id), dialog));
+            reply(false, dialogMessage(client_id, dialog));
             return;
         }
 
@@ -209,7 +215,7 @@ QJsonObject FileTransferClientTool::definition() const
 
     QJsonObject action{ { "type", "string" },
                         { "enum", QJsonArray{ "open", "list", "select", "send", "mkdir", "rename", "remove",
-                                              "status", "close_dialog" } },
+                                              "status", "close_dialog", "cancel" } },
                         { "description", "open opens path in the panel of the side, list returns the folder that "
                                          "the panel of the side shows now. select selects names in the panel of the "
                                          "side, send sends the selected items to the folder that the other panel "
@@ -220,7 +226,8 @@ QJsonObject FileTransferClientTool::definition() const
                                          "transfer with its progress in percent or a removal, and dialog_shown with "
                                          "the text of dialog when the window waits for the user to answer, for "
                                          "example about an error. close_dialog closes that dialog, an error of a "
-                                         "transfer or a removal skips the item or aborts with abort. When the user "
+                                         "transfer or a removal skips the item or aborts with abort. cancel stops "
+                                         "the transfer or the removal, as the button Cancel does. When the user "
                                          "turned on the automatic confirmation in Aspia Client, remove does not ask "
                                          "the user, send replaces the files that already exist, and close_dialog "
                                          "works. Otherwise the user answers the dialogs." } };
@@ -265,9 +272,9 @@ QJsonObject FileTransferClientTool::definition() const
                          "so the user sees them. open and list return the path of the panel and its items. The path "
                          "is empty while the panel shows the drives, and then the names of the items are the paths "
                          "of the drives. The size is in bytes. When the window shows a dialog, for example an error "
-                         "about a folder that can not be opened, created or renamed, these actions return its text "
-                         "instead. A transfer or a removal turns off the panels until it ends, and the panels show "
-                         "the new items then." },
+                         "about a folder that can not be opened, created or renamed, the actions with the panels "
+                         "return its text instead. A transfer or a removal turns off the panels until it ends, and "
+                         "the panels show the new items then." },
         { "inputSchema", QJsonObject{ { "type", "object" },
                                       { "properties", QJsonObject{ { "client_id", client_id },
                                                                    { "action", action },
@@ -294,10 +301,11 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
 
     const QString action = arguments.value("action").toString();
     if (action != "open" && action != "list" && action != "select" && action != "send" && action != "mkdir" &&
-        action != "rename" && action != "remove" && action != "status" && action != "close_dialog")
+        action != "rename" && action != "remove" && action != "status" && action != "close_dialog" &&
+        action != "cancel")
     {
         reply(false, "The action must be one of open, list, select, send, mkdir, rename, remove, status, "
-                     "close_dialog.");
+                     "close_dialog, cancel.");
         return;
     }
 
@@ -332,6 +340,18 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
+    if (action == "cancel")
+    {
+        if (!window->cancelTask())
+        {
+            reply(false, QString("The client %1 has no transfer or removal.").arg(*client_id));
+            return;
+        }
+
+        reply(true, QString("The client %1 stops the task. Use status to follow it.").arg(*client_id));
+        return;
+    }
+
     if (action == "status")
     {
         std::optional<qint64> wait = 0;
@@ -361,6 +381,13 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
     if (action == "list")
     {
         waitPanelList(*client_id, *side, reply);
+        return;
+    }
+
+    const QString dialog = window->taskState().dialog;
+    if (!dialog.isEmpty())
+    {
+        reply(false, dialogMessage(*client_id, dialog));
         return;
     }
 

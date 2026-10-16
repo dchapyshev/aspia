@@ -116,6 +116,7 @@ public:
         virtual bool renameItem(FileTask::Target target, const QString& old_name, const QString& new_name) = 0;
         virtual TaskState taskState() const = 0;
         virtual bool closeDialog(bool abort) = 0;
+        virtual bool cancelTask() = 0;
     };
 
     class TerminalWindow

@@ -323,6 +323,24 @@ bool FileTransferWindow::closeDialog(bool abort)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool FileTransferWindow::cancelTask()
+{
+    if (!ui->transfer_widget->isHidden())
+    {
+        ui->transfer_widget->requestStop();
+        return true;
+    }
+
+    if (!ui->remove_widget->isHidden())
+    {
+        ui->remove_widget->requestStop();
+        return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileTransferWindow::onErrorOccurred(proto::file_transfer::ErrorCode error_code)
 {
     LOG(ERROR) << "Session error:" << error_code;
