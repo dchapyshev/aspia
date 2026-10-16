@@ -121,3 +121,58 @@ bool hasClient(qint64 client_id)
 
     return false;
 }
+
+//--------------------------------------------------------------------------------------------------
+bool routersFromArgument(const QJsonValue& value, QList<RouterInfo>* routers, QString* error)
+{
+    std::optional<qint64> router_id;
+    if (!value.isUndefined())
+    {
+        router_id = integerArgument(value);
+        if (!router_id)
+        {
+            *error = "The router_id must be an integer.";
+            return false;
+        }
+    }
+
+    QList<RouterConfig> configs;
+    if (Database::instance().routerList(&configs) == Database::ReadResult::FAILED)
+    {
+        *error = "Unable to read the database.";
+        return false;
+    }
+
+    for (const RouterConfig& config : std::as_const(configs))
+    {
+        if (!router_id || config.routerId() == *router_id)
+            routers->append(RouterInfo{ config.routerId(), config.displayLabel() });
+    }
+
+    if (router_id && routers->isEmpty())
+    {
+        *error = QString("There is no router with id %1. Use list_routers to get the ids.").arg(*router_id);
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString localGroupPath(qint64 group_id, const QHash<qint64, LocalGroupConfig>& groups)
+{
+    QStringList names;
+
+    // Bounded by the count of groups in case the records hold a cycle.
+    while (group_id != 0 && names.size() < groups.size())
+    {
+        auto it = groups.find(group_id);
+        if (it == groups.end())
+            break;
+
+        names.prepend(it->name());
+        group_id = it->parentId();
+    }
+
+    return names.join('/');
+}

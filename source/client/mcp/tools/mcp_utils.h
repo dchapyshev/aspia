@@ -19,12 +19,22 @@
 #ifndef CLIENT_MCP_TOOLS_MCP_UTILS_H
 #define CLIENT_MCP_TOOLS_MCP_UTILS_H
 
+#include <QHash>
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QList>
 
 #include <optional>
 
 #include "proto/peer.h"
+
+class LocalGroupConfig;
+
+struct RouterInfo
+{
+    qint64 id = 0;
+    QString name;
+};
 
 // The session_type argument of the tools that connect to hosts.
 QJsonObject sessionTypeSchema();
@@ -39,5 +49,11 @@ QString signInError();
 
 std::optional<qint64> integerArgument(const QJsonValue& value);
 bool hasClient(qint64 client_id);
+
+// Every saved router, or only the one with the id in |value| when it is given. Returns false with the error
+// for the model in |error|.
+bool routersFromArgument(const QJsonValue& value, QList<RouterInfo>* routers, QString* error);
+
+QString localGroupPath(qint64 group_id, const QHash<qint64, LocalGroupConfig>& groups);
 
 #endif // CLIENT_MCP_TOOLS_MCP_UTILS_H

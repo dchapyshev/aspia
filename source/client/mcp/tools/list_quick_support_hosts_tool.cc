@@ -25,8 +25,8 @@
 
 #include <memory>
 
-#include "client/database.h"
 #include "client/router_controller.h"
+#include "client/mcp/tools/mcp_utils.h"
 #include "proto/router_constants.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -57,38 +57,11 @@ QJsonObject ListQuickSupportHostsTool::definition() const
 //--------------------------------------------------------------------------------------------------
 void ListQuickSupportHostsTool::call(const QJsonObject& arguments, Reply reply)
 {
-    QJsonValue router_value = arguments.value("router_id");
-    if (!router_value.isUndefined() &&
-        (!router_value.isDouble() || router_value.toDouble() != static_cast<double>(router_value.toInteger())))
+    QList<RouterInfo> routers;
+    QString error;
+    if (!routersFromArgument(arguments.value("router_id"), &routers, &error))
     {
-        reply(false, "The router_id must be an integer.");
-        return;
-    }
-
-    QList<RouterConfig> configs;
-    if (Database::instance().routerList(&configs) == Database::ReadResult::FAILED)
-    {
-        reply(false, "Unable to read the database.");
-        return;
-    }
-
-    struct Router
-    {
-        qint64 id = 0;
-        QString name;
-    };
-
-    QList<Router> routers;
-    for (const RouterConfig& config : std::as_const(configs))
-    {
-        if (router_value.isUndefined() || config.routerId() == router_value.toInteger())
-            routers.append(Router{ config.routerId(), config.displayLabel() });
-    }
-
-    if (!router_value.isUndefined() && routers.isEmpty())
-    {
-        reply(false, QString("There is no router with id %1. Use list_routers to get the ids.")
-            .arg(router_value.toInteger()));
+        reply(false, error);
         return;
     }
 
@@ -110,7 +83,7 @@ void ListQuickSupportHostsTool::call(const QJsonObject& arguments, Reply reply)
         reply(true, QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact)));
     };
 
-    for (const Router& router : std::as_const(routers))
+    for (const RouterInfo& router : std::as_const(routers))
     {
         RouterSession* session = RouterController::session(router.id);
         if (!session)

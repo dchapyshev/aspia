@@ -23,27 +23,9 @@
 #include <QJsonDocument>
 
 #include "client/database.h"
+#include "client/mcp/tools/mcp_utils.h"
 
 namespace {
-
-//--------------------------------------------------------------------------------------------------
-QString groupPath(qint64 group_id, const QHash<qint64, LocalGroupConfig>& groups)
-{
-    QStringList names;
-
-    // Bounded by the count of groups in case the records hold a cycle.
-    while (group_id != 0 && names.size() < groups.size())
-    {
-        auto it = groups.find(group_id);
-        if (it == groups.end())
-            break;
-
-        names.prepend(it->name());
-        group_id = it->parentId();
-    }
-
-    return names.join('/');
-}
 
 //--------------------------------------------------------------------------------------------------
 bool isInGroup(qint64 group_id, qint64 ancestor_id, const QHash<qint64, LocalGroupConfig>& groups)
@@ -148,7 +130,7 @@ void FindLocalHostsTool::call(const QJsonObject& arguments, Reply reply)
         {
             list.append(QJsonObject{ { "id", host.id() }, { "name", host.name() },
                                           { "address", host.address() },
-                                          { "group", groupPath(host.groupId(), groups) } });
+                                          { "group", localGroupPath(host.groupId(), groups) } });
         }
     }
 

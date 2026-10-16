@@ -23,29 +23,7 @@
 #include <QJsonDocument>
 
 #include "client/database.h"
-
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-QString groupPath(qint64 group_id, const QHash<qint64, LocalGroupConfig>& groups)
-{
-    QStringList names;
-
-    // Bounded by the count of groups in case the records hold a cycle.
-    while (group_id != 0 && names.size() < groups.size())
-    {
-        auto it = groups.find(group_id);
-        if (it == groups.end())
-            break;
-
-        names.prepend(it->name());
-        group_id = it->parentId();
-    }
-
-    return names.join('/');
-}
-
-} // namespace
+#include "client/mcp/tools/mcp_utils.h"
 
 //--------------------------------------------------------------------------------------------------
 QString ListLocalGroupsTool::name() const
@@ -84,7 +62,7 @@ void ListLocalGroupsTool::call(const QJsonObject& /* arguments */, Reply reply)
     {
         result.append(QJsonObject{ { "id", group.id() }, { "name", group.name() },
                                    { "parent_id", group.parentId() },
-                                   { "path", groupPath(group.id(), groups) } });
+                                   { "path", localGroupPath(group.id(), groups) } });
     }
 
     reply(true, QString::fromUtf8(QJsonDocument(QJsonObject{ { "groups", result } }).toJson(QJsonDocument::Compact)));
