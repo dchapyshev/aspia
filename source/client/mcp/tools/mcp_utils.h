@@ -34,6 +34,9 @@ QString sessionTypeName(proto::peer::SessionType session_type);
 // Empty when the user allows MCP to work with |session_type|, otherwise the error for the model.
 QString sessionTypeError(proto::peer::SessionType session_type);
 
+// Empty when the user allows MCP to sign in with the saved credentials, otherwise the error for the model.
+QString signInError();
+
 std::optional<qint64> integerArgument(const QJsonValue& value);
 bool hasClient(qint64 client_id);
 

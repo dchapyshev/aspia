@@ -62,6 +62,7 @@ constexpr auto kSettingProxy         = "proxy";
 constexpr auto kSettingMcpEnabled    = "mcp_enabled";
 constexpr auto kSettingMcpConfirm    = "mcp_auto_confirm";
 constexpr auto kSettingMcpSessions   = "mcp_session_types";
+constexpr auto kSettingMcpSignIn     = "mcp_sign_in";
 constexpr auto kSettingSalt          = "master_password_salt";
 constexpr auto kSettingVerifier      = "master_password_verifier";
 constexpr auto kSettingVersion       = "master_password_version";
@@ -2113,6 +2114,18 @@ bool Database::isMcpAutoConfirmEnabled() const
 bool Database::setMcpAutoConfirmEnabled(bool enable)
 {
     return writeSetting(kSettingMcpConfirm, enable ? "1" : "0");
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::isMcpSignInEnabled() const
+{
+    return readSetting(kSettingMcpSignIn) != "0";
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setMcpSignInEnabled(bool enable)
+{
+    return writeSetting(kSettingMcpSignIn, enable ? "1" : "0");
 }
 
 //--------------------------------------------------------------------------------------------------

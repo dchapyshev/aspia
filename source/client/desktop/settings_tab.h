@@ -71,6 +71,7 @@ private slots:
     void onSelectRecordingPath();
     void onMcpEnabledChanged();
     void onMcpAutoConfirmChanged();
+    void onMcpSignInChanged();
     void onMcpSessionTypesChanged();
     void onChangeMasterPassword();
     void onCheckUpdatesChanged();

@@ -1361,6 +1361,19 @@ TEST_F(DatabaseTest, McpAutoConfirmIsOffUntilChosen)
 }
 
 //--------------------------------------------------------------------------------------------------
+// MCP signs in with the saved credentials until the user turns it off.
+TEST_F(DatabaseTest, McpSignInIsOnUntilChosen)
+{
+    EXPECT_TRUE(db_.isMcpSignInEnabled());
+
+    ASSERT_TRUE(db_.setMcpSignInEnabled(false));
+    EXPECT_FALSE(db_.isMcpSignInEnabled());
+
+    ASSERT_TRUE(db_.setMcpSignInEnabled(true));
+    EXPECT_TRUE(db_.isMcpSignInEnabled());
+}
+
+//--------------------------------------------------------------------------------------------------
 // MCP works with every type of session until the user chooses the types. No type is a choice too.
 TEST_F(DatabaseTest, McpSessionTypesAreAllUntilChosen)
 {

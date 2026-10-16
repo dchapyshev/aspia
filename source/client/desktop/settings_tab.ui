@@ -713,6 +713,13 @@
                 </property>
                </widget>
               </item>
+              <item>
+               <widget class="QCheckBox" name="checkbox_mcp_sign_in">
+                <property name="text">
+                 <string>Allow signing in with saved credentials</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>

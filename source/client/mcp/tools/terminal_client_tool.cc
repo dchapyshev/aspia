@@ -269,6 +269,13 @@ void TerminalClientTool::call(const QJsonObject& arguments, Reply reply)
 
     if (action == "sign_in")
     {
+        const QString sign_in_error = signInError();
+        if (!sign_in_error.isEmpty())
+        {
+            reply(false, sign_in_error);
+            return;
+        }
+
         switch (window->signIn())
         {
             case McpController::SignInResult::STARTED:

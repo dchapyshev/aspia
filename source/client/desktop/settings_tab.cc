@@ -284,6 +284,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     // MCP page.
     ui->checkbox_mcp_enabled->setChecked(db.isMcpEnabled());
     ui->checkbox_mcp_auto_confirm->setChecked(db.isMcpAutoConfirmEnabled());
+    ui->checkbox_mcp_sign_in->setChecked(db.isMcpSignInEnabled());
 
     mcp_session_types_ = new QButtonGroup(this);
     mcp_session_types_->setExclusive(false);
@@ -365,6 +366,7 @@ SettingsTab::SettingsTab(QWidget* parent)
 
     connect(ui->checkbox_mcp_enabled, &QCheckBox::toggled, this, &SettingsTab::onMcpEnabledChanged);
     connect(ui->checkbox_mcp_auto_confirm, &QCheckBox::toggled, this, &SettingsTab::onMcpAutoConfirmChanged);
+    connect(ui->checkbox_mcp_sign_in, &QCheckBox::toggled, this, &SettingsTab::onMcpSignInChanged);
     connect(mcp_session_types_, &QButtonGroup::idToggled, this, &SettingsTab::onMcpSessionTypesChanged);
 
     connect(ui->checkbox_check_updates, &QCheckBox::toggled, this, &SettingsTab::onCheckUpdatesChanged);
@@ -650,6 +652,13 @@ void SettingsTab::onMcpAutoConfirmChanged()
 {
     LOG(INFO) << "[ACTION] MCP auto confirm changed";
     Database::instance().setMcpAutoConfirmEnabled(ui->checkbox_mcp_auto_confirm->isChecked());
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onMcpSignInChanged()
+{
+    LOG(INFO) << "[ACTION] MCP sign in changed";
+    Database::instance().setMcpSignInEnabled(ui->checkbox_mcp_sign_in->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------

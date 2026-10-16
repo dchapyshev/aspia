@@ -91,6 +91,16 @@ QString sessionTypeError(proto::peer::SessionType session_type)
 }
 
 //--------------------------------------------------------------------------------------------------
+QString signInError()
+{
+    if (Database::instance().isMcpSignInEnabled())
+        return QString();
+
+    return "The user does not allow MCP to sign in with the saved credentials. It is changed in the MCP settings of "
+           "Aspia Client.";
+}
+
+//--------------------------------------------------------------------------------------------------
 std::optional<qint64> integerArgument(const QJsonValue& value)
 {
     if (!value.isDouble() || value.toDouble() != static_cast<double>(value.toInteger()))
