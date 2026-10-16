@@ -24,12 +24,15 @@
 #include <memory>
 
 #include "client/desktop/client_window.h"
+#include "client/mcp/mcp_controller.h"
 
 namespace Ui {
 class ChatWindow;
 } // namespace Ui
 
-class ChatWindow final : public ClientWindow
+class ChatWindow final
+    : public ClientWindow,
+      public McpController::ChatWindow
 {
     Q_OBJECT
 
@@ -40,6 +43,11 @@ public:
     // ClientWindow implementation.
     void setTabbedMode(bool tabbed) final;
     QList<QPair<Tab::ActionRole, QList<QAction*>>> tabActionGroups() const final;
+
+    // McpController::ChatWindow implementation.
+    QList<ChatWidget::Message> messages() const final;
+    QString chatStatus() const final;
+    bool sendText(const QString& text) final;
 
 protected:
     // ClientWindow implementation.

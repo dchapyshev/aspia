@@ -26,6 +26,7 @@
 #include "base/logging.h"
 #include "client/config.h"
 #include "client/mcp/mcp_worker.h"
+#include "client/mcp/tools/chat_client_tool.h"
 #include "client/mcp/tools/check_local_hosts_tool.h"
 #include "client/mcp/tools/check_router_hosts_tool.h"
 #include "client/mcp/tools/close_client_tool.h"
@@ -75,6 +76,7 @@ McpController::McpController(MainWindow* main_window, QObject* parent)
     tools_.push_back(std::make_unique<FileTransferClientTool>());
     tools_.push_back(std::make_unique<TerminalClientTool>());
     tools_.push_back(std::make_unique<SystemInfoClientTool>());
+    tools_.push_back(std::make_unique<ChatClientTool>());
 
     mcp_worker_ = GuiApplication::findWorker<McpWorker>();
     if (!mcp_worker_)
@@ -153,6 +155,12 @@ McpController::TerminalWindow* McpController::terminalWindow(qint64 client_id) c
 McpController::SystemInfoWindow* McpController::systemInfoWindow(qint64 client_id) const
 {
     return main_window_->systemInfoWindow(client_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+McpController::ChatWindow* McpController::chatWindow(qint64 client_id) const
+{
+    return main_window_->chatWindow(client_id);
 }
 
 //--------------------------------------------------------------------------------------------------

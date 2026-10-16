@@ -48,7 +48,6 @@
 
 namespace {
 
-const int kMaxMessageLength = 2048;
 const int kMaxStoredMessages = 30;
 const int kEditMessageMinHeight = 32;
 const int kEditMessageMaxHeight = 120;
@@ -269,6 +268,45 @@ void ChatWidget::setToolsButtonVisible(bool visible)
 QList<QAction*> ChatWidget::tabActions() const
 {
     return { action_save_chat_, action_clear_chat_ };
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<ChatWidget::Message> ChatWidget::messages() const
+{
+    QList<Message> list;
+
+    for (int i = 0; i < ui->list_messages->count(); ++i)
+    {
+        const ChatMessage* message_widget =
+            static_cast<const ChatMessage*>(ui->list_messages->itemWidget(ui->list_messages->item(i)));
+
+        Message message{ message_widget->direction(), message_widget->messageTime(), QString(),
+                         message_widget->messageText() };
+
+        if (message_widget->direction() == ChatMessage::Direction::INCOMING)
+            message.source = static_cast<const ChatIncomingMessage*>(message_widget)->source();
+
+        list.append(message);
+    }
+
+    return list;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString ChatWidget::statusText() const
+{
+    return ui->label_status->text();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ChatWidget::sendText(const QString& text)
+{
+    if (!ui->button_send->isEnabled() || !ui->edit_message->toPlainText().isEmpty())
+        return false;
+
+    ui->edit_message->setPlainText(text);
+    onSendMessage();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

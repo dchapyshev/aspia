@@ -17,6 +17,8 @@
 #
 
 collect_sources(SOURCE_CLIENT_CORE_MCP_TOOLS
+    chat_client_tool.cc
+    chat_client_tool.h
     check_local_hosts_tool.cc
     check_local_hosts_tool.h
     check_router_hosts_tool.cc

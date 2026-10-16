@@ -51,6 +51,9 @@ QString signInError();
 std::optional<qint64> integerArgument(const QJsonValue& value);
 bool hasClient(qint64 client_id);
 
+// True while the client is connected to the host, even when it shows a dialog.
+bool isClientConnected(qint64 client_id);
+
 // Every saved router, or only the one with the id in |value| when it is given. Returns false with the error
 // for the model in |error|.
 bool routersFromArgument(const QJsonValue& value, QList<RouterInfo>* routers, QString* error);

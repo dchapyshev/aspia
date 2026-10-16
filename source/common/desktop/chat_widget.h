@@ -25,6 +25,7 @@
 
 #include <memory>
 
+#include "common/desktop/chat_message.h"
 #include "proto/chat.h"
 
 namespace Ui {
@@ -38,6 +39,16 @@ class ChatWidget final : public QWidget
     Q_OBJECT
 
 public:
+    struct Message
+    {
+        ChatMessage::Direction direction;
+        QString time;
+        QString source;
+        QString text;
+    };
+
+    static constexpr int kMaxMessageLength = 2048;
+
     explicit ChatWidget(QWidget* parent = nullptr);
     ~ChatWidget() final;
 
@@ -50,6 +61,14 @@ public:
     void setToolsButtonVisible(bool visible);
 
     QList<QAction*> tabActions() const;
+
+    // The messages that the list shows and the line under it, for example that the other side is typing.
+    QList<Message> messages() const;
+    QString statusText() const;
+
+    // Enters |text| in the message field and sends it as the user does. False when the field is turned off or
+    // holds the text that the user types.
+    bool sendText(const QString& text);
 
 signals:
     void sig_sendMessage(const proto::chat::Message& message);

@@ -74,6 +74,7 @@ protected:
     McpController::FileTransferWindow* fileTransferWindow(qint64 client_id) const final;
     McpController::TerminalWindow* terminalWindow(qint64 client_id) const final;
     McpController::SystemInfoWindow* systemInfoWindow(qint64 client_id) const final;
+    McpController::ChatWindow* chatWindow(qint64 client_id) const final;
     QString clientDialog(qint64 client_id) const final;
     void closeClient(qint64 client_id) final;
     bool asksCredentials() const final;

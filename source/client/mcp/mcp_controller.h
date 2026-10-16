@@ -31,6 +31,7 @@
 #include "base/time_types.h"
 #include "client/file_transfer.h"
 #include "common/file_task.h"
+#include "common/desktop/chat_widget.h"
 #include "common/sys_info/sys_info_view.h"
 #include "common/sys_info/sys_info_widget_event_logs.h"
 
@@ -144,6 +145,16 @@ public:
         virtual TimePoint lastOutputTime() const = 0;
     };
 
+    class ChatWindow
+    {
+    public:
+        virtual ~ChatWindow() = default;
+
+        virtual QList<ChatWidget::Message> messages() const = 0;
+        virtual QString chatStatus() const = 0;
+        virtual bool sendText(const QString& text) = 0;
+    };
+
     class SystemInfoWindow
     {
     public:
@@ -169,6 +180,7 @@ public:
         virtual FileTransferWindow* fileTransferWindow(qint64 client_id) const = 0;
         virtual TerminalWindow* terminalWindow(qint64 client_id) const = 0;
         virtual SystemInfoWindow* systemInfoWindow(qint64 client_id) const = 0;
+        virtual ChatWindow* chatWindow(qint64 client_id) const = 0;
         virtual QString clientDialog(qint64 client_id) const = 0;
         virtual void closeClient(qint64 client_id) = 0;
         virtual bool asksCredentials() const = 0;
@@ -190,6 +202,7 @@ public:
     FileTransferWindow* fileTransferWindow(qint64 client_id) const;
     TerminalWindow* terminalWindow(qint64 client_id) const;
     SystemInfoWindow* systemInfoWindow(qint64 client_id) const;
+    ChatWindow* chatWindow(qint64 client_id) const;
     QString clientDialog(qint64 client_id) const;
     void closeClient(qint64 client_id);
 

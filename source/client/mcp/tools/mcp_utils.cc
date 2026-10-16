@@ -123,6 +123,22 @@ bool hasClient(qint64 client_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool isClientConnected(qint64 client_id)
+{
+    const QList<McpController::ClientInfo> clients = McpController::instance().clients();
+    for (const McpController::ClientInfo& client : clients)
+    {
+        if (client.client_id == client_id)
+        {
+            return client.state == McpController::ClientState::CONNECTED ||
+                   client.state == McpController::ClientState::DIALOG;
+        }
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool routersFromArgument(const QJsonValue& value, QList<RouterInfo>* routers, QString* error)
 {
     std::optional<qint64> router_id;

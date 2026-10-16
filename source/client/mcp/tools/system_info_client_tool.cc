@@ -245,22 +245,6 @@ void waitRefresh(qint64 client_id, qint64 wait, McpTool::Reply reply)
     timer->start(kWaitInterval);
 }
 
-//--------------------------------------------------------------------------------------------------
-bool isConnected(qint64 client_id)
-{
-    const QList<McpController::ClientInfo> clients = McpController::instance().clients();
-    for (const McpController::ClientInfo& client : clients)
-    {
-        if (client.client_id == client_id)
-        {
-            return client.state == McpController::ClientState::CONNECTED ||
-                   client.state == McpController::ClientState::DIALOG;
-        }
-    }
-
-    return false;
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -379,7 +363,7 @@ void SystemInfoClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    if (!isConnected(*client_id))
+    if (!isClientConnected(*client_id))
     {
         reply(false, QString("The client %1 is not connected to the host. Its state is in list_clients.")
             .arg(*client_id));

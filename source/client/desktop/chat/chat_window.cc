@@ -125,6 +125,24 @@ QList<QPair<Tab::ActionRole, QList<QAction*>>> ChatWindow::tabActionGroups() con
 }
 
 //--------------------------------------------------------------------------------------------------
+QList<ChatWidget::Message> ChatWindow::messages() const
+{
+    return ui->text_chat_widget->messages();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString ChatWindow::chatStatus() const
+{
+    return ui->text_chat_widget->statusText();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ChatWindow::sendText(const QString& text)
+{
+    return ui->text_chat_widget->sendText(text);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ChatWindow::onInternalReset()
 {
     // Nothing
