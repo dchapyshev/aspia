@@ -7983,253 +7983,263 @@ Importált hitelesítő adatok: %5</translation>
         <translation>MCP használatának engedélyezése</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="692"/>
+        <location filename="../client/desktop/settings_tab.ui" line="683"/>
+        <source>Add this command to the MCP servers of the AI application:</source>
+        <translation>Adja hozzá ezt a parancsot az MI-alkalmazás MCP-kiszolgálóihoz:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="700"/>
+        <source>Copy</source>
+        <translation>Másolás</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="716"/>
         <source>Allowed Session Types</source>
         <translation>Engedélyezett munkamenet-típusok</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="706"/>
+        <location filename="../client/desktop/settings_tab.ui" line="730"/>
         <source>Actions</source>
         <translation>Műveletek</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="712"/>
+        <location filename="../client/desktop/settings_tab.ui" line="736"/>
         <source>Confirm actions automatically</source>
         <translation>Műveletek automatikus megerősítése</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="719"/>
+        <location filename="../client/desktop/settings_tab.ui" line="743"/>
         <source>Allow signing in with saved credentials</source>
         <translation>Bejelentkezés engedélyezése mentett hitelesítő adatokkal</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="790"/>
-        <location filename="../client/desktop/settings_tab.cc" line="142"/>
+        <location filename="../client/desktop/settings_tab.ui" line="814"/>
+        <location filename="../client/desktop/settings_tab.cc" line="144"/>
         <source>Update</source>
         <translation>Frissítés</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="796"/>
+        <location filename="../client/desktop/settings_tab.ui" line="820"/>
         <source>Check for updates on startup</source>
         <translation>Frissítések keresése indításkor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="805"/>
+        <location filename="../client/desktop/settings_tab.ui" line="829"/>
         <source>Update channel:</source>
         <translation>Frissítési csatorna:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="819"/>
+        <location filename="../client/desktop/settings_tab.ui" line="843"/>
         <source>Update server:</source>
         <translation>Frissítési kiszolgáló:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="833"/>
+        <location filename="../client/desktop/settings_tab.ui" line="857"/>
         <source>Public key:</source>
         <translation>Nyilvános kulcs:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="851"/>
+        <location filename="../client/desktop/settings_tab.ui" line="875"/>
         <source>Change Update Server...</source>
         <translation>Frissítési kiszolgáló módosítása...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="871"/>
+        <location filename="../client/desktop/settings_tab.ui" line="895"/>
         <source>Check for updates</source>
         <translation>Frissítések keresése</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="139"/>
+        <location filename="../client/desktop/settings_tab.cc" line="141"/>
         <source>General</source>
         <translation>Általános</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="140"/>
+        <location filename="../client/desktop/settings_tab.cc" line="142"/>
         <source>Desktop</source>
         <translation>Asztal</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="195"/>
+        <location filename="../client/desktop/settings_tab.cc" line="197"/>
         <source>1 week</source>
         <translation>1 hét</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="196"/>
+        <location filename="../client/desktop/settings_tab.cc" line="198"/>
         <source>2 weeks</source>
         <translation>2 hét</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="197"/>
+        <location filename="../client/desktop/settings_tab.cc" line="199"/>
         <source>1 month</source>
         <translation>1 hónap</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="198"/>
+        <location filename="../client/desktop/settings_tab.cc" line="200"/>
         <source>6 months</source>
         <translation>6 hónap</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="199"/>
+        <location filename="../client/desktop/settings_tab.cc" line="201"/>
         <source>1 year</source>
         <translation>1 év</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="203"/>
+        <location filename="../client/desktop/settings_tab.cc" line="205"/>
         <source>Do not lock</source>
         <translation>Soha</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="204"/>
+        <location filename="../client/desktop/settings_tab.cc" line="206"/>
         <source>1 minute</source>
         <translation>1 perc</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="205"/>
+        <location filename="../client/desktop/settings_tab.cc" line="207"/>
         <source>5 minutes</source>
         <translation>5 perc</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="206"/>
+        <location filename="../client/desktop/settings_tab.cc" line="208"/>
         <source>10 minutes</source>
         <translation>10 perc</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="207"/>
+        <location filename="../client/desktop/settings_tab.cc" line="209"/>
         <source>30 minutes</source>
         <translation>30 perc</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="208"/>
+        <location filename="../client/desktop/settings_tab.cc" line="210"/>
         <source>1 hour</source>
         <translation>1 óra</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="223"/>
+        <location filename="../client/desktop/settings_tab.cc" line="225"/>
         <source>No proxy</source>
         <translation>Nincs proxykiszolgáló</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="262"/>
+        <location filename="../client/desktop/settings_tab.cc" line="264"/>
         <source>None</source>
         <translation>Nincs</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="311"/>
+        <location filename="../client/desktop/settings_tab.cc" line="319"/>
         <source>Stable</source>
         <translation>Stabil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="312"/>
+        <location filename="../client/desktop/settings_tab.cc" line="320"/>
         <source>Beta</source>
         <translation>Béta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="313"/>
+        <location filename="../client/desktop/settings_tab.cc" line="321"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="448"/>
+        <location filename="../client/desktop/settings_tab.cc" line="457"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Az új nyelv az alkalmazás újraindítása után lép érvénybe.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="497"/>
-        <location filename="../client/desktop/settings_tab.cc" line="622"/>
+        <location filename="../client/desktop/settings_tab.cc" line="506"/>
+        <location filename="../client/desktop/settings_tab.cc" line="631"/>
         <source>Choose path</source>
         <translation>Útvonal kiválasztása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="647"/>
+        <location filename="../client/desktop/settings_tab.cc" line="659"/>
         <source>MCP will work after the application is restarted.</source>
         <translation>Az MCP az alkalmazás újraindítása után fog működni.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="687"/>
+        <location filename="../client/desktop/settings_tab.cc" line="706"/>
         <source>Change Master Password</source>
         <translation>Mesterjelszó módosítása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="689"/>
+        <location filename="../client/desktop/settings_tab.cc" line="708"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Adja meg jelenlegi jelszavát, és válasszon egy újat.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="697"/>
+        <location filename="../client/desktop/settings_tab.cc" line="716"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>A jelszó nem lehet rövidebb %n karakternél.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="704"/>
+        <location filename="../client/desktop/settings_tab.cc" line="723"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>A megadott jelszó nem felel meg a biztonsági követelményeknek!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="705"/>
+        <location filename="../client/desktop/settings_tab.cc" line="724"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>A jelszónak tartalmaznia kell kisbetűket és nagybetűket, számokat, és nem lehet rövidebb %n karakternél.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="708"/>
+        <location filename="../client/desktop/settings_tab.cc" line="727"/>
         <source>Do you want to enter a different password?</source>
         <translation>Szeretne másik jelszót megadni?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="721"/>
+        <location filename="../client/desktop/settings_tab.cc" line="740"/>
         <source>Invalid current password.</source>
         <translation>Érvénytelen a jelenlegi jelszó.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="725"/>
+        <location filename="../client/desktop/settings_tab.cc" line="744"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Az adatbázis néhány rekordja sérült. Javítsa vagy törölje őket, majd próbálja újra.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="729"/>
+        <location filename="../client/desktop/settings_tab.cc" line="748"/>
         <source>Unable to change the password.</source>
         <translation>Nem lehet módosítani a jelszót.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="762"/>
+        <location filename="../client/desktop/settings_tab.cc" line="781"/>
         <source>Unable to read the proxy settings.</source>
         <translation>Nem lehet olvasni a proxykiszolgáló beállításait.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="876"/>
+        <location filename="../client/desktop/settings_tab.cc" line="895"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>Az adatbázis kulcsa ezen a számítógépen lesz tárolva. Az Ön fiókja alatt futó bármely program elolvashatja, még akkor is, amikor az alkalmazás nem fut.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="879"/>
+        <location filename="../client/desktop/settings_tab.cc" line="898"/>
         <source>Do you want to continue?</source>
         <translation>Folytatja?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="890"/>
+        <location filename="../client/desktop/settings_tab.cc" line="909"/>
         <source>Unlock Automatically</source>
         <translation>Automatikus feloldás</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="892"/>
+        <location filename="../client/desktop/settings_tab.cc" line="911"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>Adja meg a mesterjelszót az alkalmazás indításkori automatikus feloldásához.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="902"/>
+        <location filename="../client/desktop/settings_tab.cc" line="921"/>
         <source>Invalid master password.</source>
         <translation>Érvénytelen mesterjelszó.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="906"/>
+        <location filename="../client/desktop/settings_tab.cc" line="925"/>
         <source>Unable to unlock the database.</source>
         <translation>Nem lehet feloldani az adatbázist.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="920"/>
+        <location filename="../client/desktop/settings_tab.cc" line="939"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>Nem lehet bekapcsolni az automatikus feloldást.</translation>
     </message>

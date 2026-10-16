@@ -7983,253 +7983,263 @@ Credentials imported: %5</source>
         <translation>MCP kullanımına izin ver</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="692"/>
+        <location filename="../client/desktop/settings_tab.ui" line="683"/>
+        <source>Add this command to the MCP servers of the AI application:</source>
+        <translation>Bu komutu YZ uygulamasının MCP sunucularına ekleyin:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="700"/>
+        <source>Copy</source>
+        <translation>Kopyala</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="716"/>
         <source>Allowed Session Types</source>
         <translation>İzin Verilen Oturum Türleri</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="706"/>
+        <location filename="../client/desktop/settings_tab.ui" line="730"/>
         <source>Actions</source>
         <translation>Eylemler</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="712"/>
+        <location filename="../client/desktop/settings_tab.ui" line="736"/>
         <source>Confirm actions automatically</source>
         <translation>Eylemleri otomatik olarak onayla</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="719"/>
+        <location filename="../client/desktop/settings_tab.ui" line="743"/>
         <source>Allow signing in with saved credentials</source>
         <translation>Kayıtlı kimlik bilgileriyle oturum açmaya izin ver</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="790"/>
-        <location filename="../client/desktop/settings_tab.cc" line="142"/>
+        <location filename="../client/desktop/settings_tab.ui" line="814"/>
+        <location filename="../client/desktop/settings_tab.cc" line="144"/>
         <source>Update</source>
         <translation>Güncelle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="796"/>
+        <location filename="../client/desktop/settings_tab.ui" line="820"/>
         <source>Check for updates on startup</source>
         <translation>Başlangıçta güncellemeleri denetle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="805"/>
+        <location filename="../client/desktop/settings_tab.ui" line="829"/>
         <source>Update channel:</source>
         <translation>Güncelleme kanalı:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="819"/>
+        <location filename="../client/desktop/settings_tab.ui" line="843"/>
         <source>Update server:</source>
         <translation>Güncelleme sunucusu:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="833"/>
+        <location filename="../client/desktop/settings_tab.ui" line="857"/>
         <source>Public key:</source>
         <translation>Ortak anahtar:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="851"/>
+        <location filename="../client/desktop/settings_tab.ui" line="875"/>
         <source>Change Update Server...</source>
         <translation>Güncelleme Sunucusunu Değiştir...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="871"/>
+        <location filename="../client/desktop/settings_tab.ui" line="895"/>
         <source>Check for updates</source>
         <translation>Güncellemeleri denetle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="139"/>
+        <location filename="../client/desktop/settings_tab.cc" line="141"/>
         <source>General</source>
         <translation>Genel</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="140"/>
+        <location filename="../client/desktop/settings_tab.cc" line="142"/>
         <source>Desktop</source>
         <translation>Masaüstü</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="195"/>
+        <location filename="../client/desktop/settings_tab.cc" line="197"/>
         <source>1 week</source>
         <translation>1 hafta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="196"/>
+        <location filename="../client/desktop/settings_tab.cc" line="198"/>
         <source>2 weeks</source>
         <translation>2 hafta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="197"/>
+        <location filename="../client/desktop/settings_tab.cc" line="199"/>
         <source>1 month</source>
         <translation>1 ay</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="198"/>
+        <location filename="../client/desktop/settings_tab.cc" line="200"/>
         <source>6 months</source>
         <translation>6 ay</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="199"/>
+        <location filename="../client/desktop/settings_tab.cc" line="201"/>
         <source>1 year</source>
         <translation>1 yıl</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="203"/>
+        <location filename="../client/desktop/settings_tab.cc" line="205"/>
         <source>Do not lock</source>
         <translation>Kilitlenmez</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="204"/>
+        <location filename="../client/desktop/settings_tab.cc" line="206"/>
         <source>1 minute</source>
         <translation>1 dakika</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="205"/>
+        <location filename="../client/desktop/settings_tab.cc" line="207"/>
         <source>5 minutes</source>
         <translation>5 dakika</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="206"/>
+        <location filename="../client/desktop/settings_tab.cc" line="208"/>
         <source>10 minutes</source>
         <translation>10 dakika</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="207"/>
+        <location filename="../client/desktop/settings_tab.cc" line="209"/>
         <source>30 minutes</source>
         <translation>30 dakika</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="208"/>
+        <location filename="../client/desktop/settings_tab.cc" line="210"/>
         <source>1 hour</source>
         <translation>1 saat</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="223"/>
+        <location filename="../client/desktop/settings_tab.cc" line="225"/>
         <source>No proxy</source>
         <translation>Ara sunucu yok</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="262"/>
+        <location filename="../client/desktop/settings_tab.cc" line="264"/>
         <source>None</source>
         <translation>Yok</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="311"/>
+        <location filename="../client/desktop/settings_tab.cc" line="319"/>
         <source>Stable</source>
         <translation>Kararlı</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="312"/>
+        <location filename="../client/desktop/settings_tab.cc" line="320"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="313"/>
+        <location filename="../client/desktop/settings_tab.cc" line="321"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="448"/>
+        <location filename="../client/desktop/settings_tab.cc" line="457"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Yeni dil, uygulama yeniden başlatıldıktan sonra uygulanacak.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="497"/>
-        <location filename="../client/desktop/settings_tab.cc" line="622"/>
+        <location filename="../client/desktop/settings_tab.cc" line="506"/>
+        <location filename="../client/desktop/settings_tab.cc" line="631"/>
         <source>Choose path</source>
         <translation>Yol seçin</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="647"/>
+        <location filename="../client/desktop/settings_tab.cc" line="659"/>
         <source>MCP will work after the application is restarted.</source>
         <translation>MCP, uygulama yeniden başlatıldıktan sonra çalışacak.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="687"/>
+        <location filename="../client/desktop/settings_tab.cc" line="706"/>
         <source>Change Master Password</source>
         <translation>Ana Parolayı Değiştir</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="689"/>
+        <location filename="../client/desktop/settings_tab.cc" line="708"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Geçerli parolanızı girin ve yeni bir parola seçin.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="697"/>
+        <location filename="../client/desktop/settings_tab.cc" line="716"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Parola %n karakterden kısa olmamalıdır.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="704"/>
+        <location filename="../client/desktop/settings_tab.cc" line="723"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Girdiğiniz parola güvenlik gereksinimlerini karşılamıyor!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="705"/>
+        <location filename="../client/desktop/settings_tab.cc" line="724"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Parola küçük ve büyük harfler ile rakamlar içermeli ve %n karakterden kısa olmamalıdır.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="708"/>
+        <location filename="../client/desktop/settings_tab.cc" line="727"/>
         <source>Do you want to enter a different password?</source>
         <translation>Farklı bir parola girmek ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="721"/>
+        <location filename="../client/desktop/settings_tab.cc" line="740"/>
         <source>Invalid current password.</source>
         <translation>Geçerli parola yanlış.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="725"/>
+        <location filename="../client/desktop/settings_tab.cc" line="744"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Veritabanındaki bazı kayıtlar hasarlı. Bunları düzeltin veya silin, ardından yeniden deneyin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="729"/>
+        <location filename="../client/desktop/settings_tab.cc" line="748"/>
         <source>Unable to change the password.</source>
         <translation>Parola değiştirilemiyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="762"/>
+        <location filename="../client/desktop/settings_tab.cc" line="781"/>
         <source>Unable to read the proxy settings.</source>
         <translation>Ara sunucu ayarları okunamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="876"/>
+        <location filename="../client/desktop/settings_tab.cc" line="895"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>Veritabanının anahtarı bu bilgisayarda saklanacak. Hesabınız altında çalışan her program, uygulama çalışmıyorken bile bu anahtarı okuyabilecek.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="879"/>
+        <location filename="../client/desktop/settings_tab.cc" line="898"/>
         <source>Do you want to continue?</source>
         <translation>Devam etmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="890"/>
+        <location filename="../client/desktop/settings_tab.cc" line="909"/>
         <source>Unlock Automatically</source>
         <translation>Otomatik Kilit Açma</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="892"/>
+        <location filename="../client/desktop/settings_tab.cc" line="911"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>Uygulamanın kilidini başlangıçta otomatik olarak açmak için ana parolayı girin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="902"/>
+        <location filename="../client/desktop/settings_tab.cc" line="921"/>
         <source>Invalid master password.</source>
         <translation>Geçersiz ana parola.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="906"/>
+        <location filename="../client/desktop/settings_tab.cc" line="925"/>
         <source>Unable to unlock the database.</source>
         <translation>Veritabanının kilidi açılamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="920"/>
+        <location filename="../client/desktop/settings_tab.cc" line="939"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>Otomatik kilit açma etkinleştirilemiyor.</translation>
     </message>

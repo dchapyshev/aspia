@@ -8024,179 +8024,189 @@ Importerede legitimationsoplysninger: %5</translation>
         <translation>Tillad brug af MCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="692"/>
+        <location filename="../client/desktop/settings_tab.ui" line="683"/>
+        <source>Add this command to the MCP servers of the AI application:</source>
+        <translation>Tilføj denne kommando til MCP-serverne i AI-programmet:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="700"/>
+        <source>Copy</source>
+        <translation>Kopier</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="716"/>
         <source>Allowed Session Types</source>
         <translation>Tilladte sessionstyper</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="706"/>
+        <location filename="../client/desktop/settings_tab.ui" line="730"/>
         <source>Actions</source>
         <translation>Handlinger</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="712"/>
+        <location filename="../client/desktop/settings_tab.ui" line="736"/>
         <source>Confirm actions automatically</source>
         <translation>Bekræft handlinger automatisk</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="719"/>
+        <location filename="../client/desktop/settings_tab.ui" line="743"/>
         <source>Allow signing in with saved credentials</source>
         <translation>Tillad login med gemte legitimationsoplysninger</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="790"/>
-        <location filename="../client/desktop/settings_tab.cc" line="142"/>
+        <location filename="../client/desktop/settings_tab.ui" line="814"/>
+        <location filename="../client/desktop/settings_tab.cc" line="144"/>
         <source>Update</source>
         <translation>Opdater</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="796"/>
+        <location filename="../client/desktop/settings_tab.ui" line="820"/>
         <source>Check for updates on startup</source>
         <translation>Søg efter opdateringer ved opstart</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="805"/>
+        <location filename="../client/desktop/settings_tab.ui" line="829"/>
         <source>Update channel:</source>
         <translation>Opdateringskanal:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="819"/>
+        <location filename="../client/desktop/settings_tab.ui" line="843"/>
         <source>Update server:</source>
         <translation>Opdateringsserver:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="833"/>
+        <location filename="../client/desktop/settings_tab.ui" line="857"/>
         <source>Public key:</source>
         <translation>Offentlig nøgle:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="851"/>
+        <location filename="../client/desktop/settings_tab.ui" line="875"/>
         <source>Change Update Server...</source>
         <translation>Skift opdateringsserver...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="871"/>
+        <location filename="../client/desktop/settings_tab.ui" line="895"/>
         <source>Check for updates</source>
         <translation>Søg efter opdateringer</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="139"/>
+        <location filename="../client/desktop/settings_tab.cc" line="141"/>
         <source>General</source>
         <translation>Generelt</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="140"/>
+        <location filename="../client/desktop/settings_tab.cc" line="142"/>
         <source>Desktop</source>
         <translation>Skrivebord</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="195"/>
+        <location filename="../client/desktop/settings_tab.cc" line="197"/>
         <source>1 week</source>
         <translation>1 uge</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="196"/>
+        <location filename="../client/desktop/settings_tab.cc" line="198"/>
         <source>2 weeks</source>
         <translation>2 uger</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="197"/>
+        <location filename="../client/desktop/settings_tab.cc" line="199"/>
         <source>1 month</source>
         <translation>1 måned</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="198"/>
+        <location filename="../client/desktop/settings_tab.cc" line="200"/>
         <source>6 months</source>
         <translation>6 måneder</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="199"/>
+        <location filename="../client/desktop/settings_tab.cc" line="201"/>
         <source>1 year</source>
         <translation>1 år</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="203"/>
+        <location filename="../client/desktop/settings_tab.cc" line="205"/>
         <source>Do not lock</source>
         <translation>Lås ikke</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="204"/>
+        <location filename="../client/desktop/settings_tab.cc" line="206"/>
         <source>1 minute</source>
         <translation>1 minut</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="205"/>
+        <location filename="../client/desktop/settings_tab.cc" line="207"/>
         <source>5 minutes</source>
         <translation>5 minutter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="206"/>
+        <location filename="../client/desktop/settings_tab.cc" line="208"/>
         <source>10 minutes</source>
         <translation>10 minutter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="207"/>
+        <location filename="../client/desktop/settings_tab.cc" line="209"/>
         <source>30 minutes</source>
         <translation>30 minutter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="208"/>
+        <location filename="../client/desktop/settings_tab.cc" line="210"/>
         <source>1 hour</source>
         <translation>1 time</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="223"/>
+        <location filename="../client/desktop/settings_tab.cc" line="225"/>
         <source>No proxy</source>
         <translation>Ingen proxyserver</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="262"/>
+        <location filename="../client/desktop/settings_tab.cc" line="264"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="311"/>
+        <location filename="../client/desktop/settings_tab.cc" line="319"/>
         <source>Stable</source>
         <translation>Stabil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="312"/>
+        <location filename="../client/desktop/settings_tab.cc" line="320"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="313"/>
+        <location filename="../client/desktop/settings_tab.cc" line="321"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="448"/>
+        <location filename="../client/desktop/settings_tab.cc" line="457"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Det nye sprog anvendes, når programmet er genstartet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="497"/>
-        <location filename="../client/desktop/settings_tab.cc" line="622"/>
+        <location filename="../client/desktop/settings_tab.cc" line="506"/>
+        <location filename="../client/desktop/settings_tab.cc" line="631"/>
         <source>Choose path</source>
         <translation>Vælg sti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="647"/>
+        <location filename="../client/desktop/settings_tab.cc" line="659"/>
         <source>MCP will work after the application is restarted.</source>
         <translation>MCP fungerer, når programmet er genstartet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="687"/>
+        <location filename="../client/desktop/settings_tab.cc" line="706"/>
         <source>Change Master Password</source>
         <translation>Skift hovedadgangskode</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="689"/>
+        <location filename="../client/desktop/settings_tab.cc" line="708"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Indtast din nuværende adgangskode, og vælg en ny.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="697"/>
+        <location filename="../client/desktop/settings_tab.cc" line="716"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Adgangskoden må ikke være kortere end %n tegn.</numerusform>
@@ -8204,12 +8214,12 @@ Importerede legitimationsoplysninger: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="704"/>
+        <location filename="../client/desktop/settings_tab.cc" line="723"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Den indtastede adgangskode opfylder ikke sikkerhedskravene!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="705"/>
+        <location filename="../client/desktop/settings_tab.cc" line="724"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Adgangskoden skal indeholde små og store bogstaver samt tal og må ikke være kortere end %n tegn.</numerusform>
@@ -8217,62 +8227,62 @@ Importerede legitimationsoplysninger: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="708"/>
+        <location filename="../client/desktop/settings_tab.cc" line="727"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vil du indtaste en anden adgangskode?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="721"/>
+        <location filename="../client/desktop/settings_tab.cc" line="740"/>
         <source>Invalid current password.</source>
         <translation>Den nuværende adgangskode er ugyldig.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="725"/>
+        <location filename="../client/desktop/settings_tab.cc" line="744"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Nogle poster i databasen er beskadigede. Ret eller slet dem, og prøv igen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="729"/>
+        <location filename="../client/desktop/settings_tab.cc" line="748"/>
         <source>Unable to change the password.</source>
         <translation>Kan ikke ændre adgangskoden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="762"/>
+        <location filename="../client/desktop/settings_tab.cc" line="781"/>
         <source>Unable to read the proxy settings.</source>
         <translation>Kan ikke læse indstillingerne for proxyserveren.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="876"/>
+        <location filename="../client/desktop/settings_tab.cc" line="895"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>Databasens nøgle gemmes på denne computer. Ethvert program, der kører under din konto, vil kunne læse den, også når programmet ikke kører.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="879"/>
+        <location filename="../client/desktop/settings_tab.cc" line="898"/>
         <source>Do you want to continue?</source>
         <translation>Vil du fortsætte?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="890"/>
+        <location filename="../client/desktop/settings_tab.cc" line="909"/>
         <source>Unlock Automatically</source>
         <translation>Automatisk oplåsning</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="892"/>
+        <location filename="../client/desktop/settings_tab.cc" line="911"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>Indtast hovedadgangskoden for at låse programmet op automatisk ved opstart.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="902"/>
+        <location filename="../client/desktop/settings_tab.cc" line="921"/>
         <source>Invalid master password.</source>
         <translation>Ugyldig hovedadgangskode.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="906"/>
+        <location filename="../client/desktop/settings_tab.cc" line="925"/>
         <source>Unable to unlock the database.</source>
         <translation>Kan ikke låse databasen op.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="920"/>
+        <location filename="../client/desktop/settings_tab.cc" line="939"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>Kan ikke aktivere automatisk oplåsning.</translation>
     </message>

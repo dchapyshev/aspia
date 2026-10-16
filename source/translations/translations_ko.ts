@@ -7983,253 +7983,263 @@ Credentials imported: %5</source>
         <translation>MCP 사용 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="692"/>
+        <location filename="../client/desktop/settings_tab.ui" line="683"/>
+        <source>Add this command to the MCP servers of the AI application:</source>
+        <translation>이 명령을 AI 응용 프로그램의 MCP 서버에 추가하십시오:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="700"/>
+        <source>Copy</source>
+        <translation>복사</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="716"/>
         <source>Allowed Session Types</source>
         <translation>허용된 세션 유형</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="706"/>
+        <location filename="../client/desktop/settings_tab.ui" line="730"/>
         <source>Actions</source>
         <translation>동작</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="712"/>
+        <location filename="../client/desktop/settings_tab.ui" line="736"/>
         <source>Confirm actions automatically</source>
         <translation>자동으로 동작 승인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="719"/>
+        <location filename="../client/desktop/settings_tab.ui" line="743"/>
         <source>Allow signing in with saved credentials</source>
         <translation>저장된 자격 증명으로 로그인 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="790"/>
-        <location filename="../client/desktop/settings_tab.cc" line="142"/>
+        <location filename="../client/desktop/settings_tab.ui" line="814"/>
+        <location filename="../client/desktop/settings_tab.cc" line="144"/>
         <source>Update</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="796"/>
+        <location filename="../client/desktop/settings_tab.ui" line="820"/>
         <source>Check for updates on startup</source>
         <translation>시작할 때 업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="805"/>
+        <location filename="../client/desktop/settings_tab.ui" line="829"/>
         <source>Update channel:</source>
         <translation>업데이트 채널:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="819"/>
+        <location filename="../client/desktop/settings_tab.ui" line="843"/>
         <source>Update server:</source>
         <translation>업데이트 서버:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="833"/>
+        <location filename="../client/desktop/settings_tab.ui" line="857"/>
         <source>Public key:</source>
         <translation>공개 키:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="851"/>
+        <location filename="../client/desktop/settings_tab.ui" line="875"/>
         <source>Change Update Server...</source>
         <translation>업데이트 서버 변경...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="871"/>
+        <location filename="../client/desktop/settings_tab.ui" line="895"/>
         <source>Check for updates</source>
         <translation>업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="139"/>
+        <location filename="../client/desktop/settings_tab.cc" line="141"/>
         <source>General</source>
         <translation>일반</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="140"/>
+        <location filename="../client/desktop/settings_tab.cc" line="142"/>
         <source>Desktop</source>
         <translation>데스크톱</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="195"/>
+        <location filename="../client/desktop/settings_tab.cc" line="197"/>
         <source>1 week</source>
         <translation>1주</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="196"/>
+        <location filename="../client/desktop/settings_tab.cc" line="198"/>
         <source>2 weeks</source>
         <translation>2주</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="197"/>
+        <location filename="../client/desktop/settings_tab.cc" line="199"/>
         <source>1 month</source>
         <translation>1개월</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="198"/>
+        <location filename="../client/desktop/settings_tab.cc" line="200"/>
         <source>6 months</source>
         <translation>6개월</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="199"/>
+        <location filename="../client/desktop/settings_tab.cc" line="201"/>
         <source>1 year</source>
         <translation>1년</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="203"/>
+        <location filename="../client/desktop/settings_tab.cc" line="205"/>
         <source>Do not lock</source>
         <translation>잠그지 않음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="204"/>
+        <location filename="../client/desktop/settings_tab.cc" line="206"/>
         <source>1 minute</source>
         <translation>1분</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="205"/>
+        <location filename="../client/desktop/settings_tab.cc" line="207"/>
         <source>5 minutes</source>
         <translation>5분</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="206"/>
+        <location filename="../client/desktop/settings_tab.cc" line="208"/>
         <source>10 minutes</source>
         <translation>10분</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="207"/>
+        <location filename="../client/desktop/settings_tab.cc" line="209"/>
         <source>30 minutes</source>
         <translation>30분</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="208"/>
+        <location filename="../client/desktop/settings_tab.cc" line="210"/>
         <source>1 hour</source>
         <translation>1시간</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="223"/>
+        <location filename="../client/desktop/settings_tab.cc" line="225"/>
         <source>No proxy</source>
         <translation>프록시 서버 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="262"/>
+        <location filename="../client/desktop/settings_tab.cc" line="264"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="311"/>
+        <location filename="../client/desktop/settings_tab.cc" line="319"/>
         <source>Stable</source>
         <translation>안정 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="312"/>
+        <location filename="../client/desktop/settings_tab.cc" line="320"/>
         <source>Beta</source>
         <translation>베타 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="313"/>
+        <location filename="../client/desktop/settings_tab.cc" line="321"/>
         <source>Alpha</source>
         <translation>알파 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="448"/>
+        <location filename="../client/desktop/settings_tab.cc" line="457"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>새 언어는 응용 프로그램을 다시 시작한 후에 적용됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="497"/>
-        <location filename="../client/desktop/settings_tab.cc" line="622"/>
+        <location filename="../client/desktop/settings_tab.cc" line="506"/>
+        <location filename="../client/desktop/settings_tab.cc" line="631"/>
         <source>Choose path</source>
         <translation>경로 선택</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="647"/>
+        <location filename="../client/desktop/settings_tab.cc" line="659"/>
         <source>MCP will work after the application is restarted.</source>
         <translation>MCP는 응용 프로그램을 다시 시작한 후에 작동합니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="687"/>
+        <location filename="../client/desktop/settings_tab.cc" line="706"/>
         <source>Change Master Password</source>
         <translation>마스터 암호 변경</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="689"/>
+        <location filename="../client/desktop/settings_tab.cc" line="708"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>현재 암호를 입력하고 새 암호를 선택하십시오.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="697"/>
+        <location filename="../client/desktop/settings_tab.cc" line="716"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="704"/>
+        <location filename="../client/desktop/settings_tab.cc" line="723"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="705"/>
+        <location filename="../client/desktop/settings_tab.cc" line="724"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="708"/>
+        <location filename="../client/desktop/settings_tab.cc" line="727"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="721"/>
+        <location filename="../client/desktop/settings_tab.cc" line="740"/>
         <source>Invalid current password.</source>
         <translation>현재 암호가 잘못되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="725"/>
+        <location filename="../client/desktop/settings_tab.cc" line="744"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>데이터베이스의 일부 레코드가 손상되었습니다. 해당 레코드를 수정하거나 삭제한 후 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="729"/>
+        <location filename="../client/desktop/settings_tab.cc" line="748"/>
         <source>Unable to change the password.</source>
         <translation>암호를 변경할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="762"/>
+        <location filename="../client/desktop/settings_tab.cc" line="781"/>
         <source>Unable to read the proxy settings.</source>
         <translation>프록시 서버 설정을 읽을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="876"/>
+        <location filename="../client/desktop/settings_tab.cc" line="895"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>데이터베이스의 키가 이 컴퓨터에 저장됩니다. 사용자 계정으로 실행되는 모든 프로그램이 응용 프로그램이 실행되고 있지 않을 때에도 이 키를 읽을 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="879"/>
+        <location filename="../client/desktop/settings_tab.cc" line="898"/>
         <source>Do you want to continue?</source>
         <translation>계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="890"/>
+        <location filename="../client/desktop/settings_tab.cc" line="909"/>
         <source>Unlock Automatically</source>
         <translation>자동 잠금 해제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="892"/>
+        <location filename="../client/desktop/settings_tab.cc" line="911"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>시작할 때 응용 프로그램의 잠금을 자동으로 해제하려면 마스터 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="902"/>
+        <location filename="../client/desktop/settings_tab.cc" line="921"/>
         <source>Invalid master password.</source>
         <translation>잘못된 마스터 암호입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="906"/>
+        <location filename="../client/desktop/settings_tab.cc" line="925"/>
         <source>Unable to unlock the database.</source>
         <translation>데이터베이스를 잠금 해제할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="920"/>
+        <location filename="../client/desktop/settings_tab.cc" line="939"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>자동 잠금 해제를 켤 수 없습니다.</translation>
     </message>
