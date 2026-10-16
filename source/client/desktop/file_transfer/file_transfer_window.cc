@@ -176,6 +176,41 @@ void FileTransferWindow::closeEvent(QCloseEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
+QString FileTransferWindow::currentPath(FileTask::Target target) const
+{
+    const QString path = filePanel(target)->currentPath();
+    return path == AddressBarModel::computerPath() ? QString() : path;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FileTransferWindow::openPath(FileTask::Target target, const QString& path)
+{
+    FilePanel* panel = filePanel(target);
+    if (!panel->isEnabled())
+        return false;
+
+    // A wrong path brings up a warning that must not hold the reply of the tool.
+    QMetaObject::invokeMethod(panel, [panel, path]()
+    {
+        panel->openPath(path.isEmpty() ? AddressBarModel::computerPath() : path);
+    }, Qt::QueuedConnection);
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FileTransferWindow::isCurrentPathListed(FileTask::Target target) const
+{
+    return filePanel(target)->isCurrentPathListed();
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<FileTransfer::Item> FileTransferWindow::currentItems(FileTask::Target target) const
+{
+    return filePanel(target)->items();
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileTransferWindow::onErrorOccurred(proto::file_transfer::ErrorCode error_code)
 {
     LOG(ERROR) << "Session error:" << error_code;
@@ -442,4 +477,10 @@ void FileTransferWindow::setFilePanelsEnabled(bool enabled)
 {
     ui->local_panel->setEnabled(enabled);
     ui->remote_panel->setEnabled(enabled);
+}
+
+//--------------------------------------------------------------------------------------------------
+FilePanel* FileTransferWindow::filePanel(FileTask::Target target) const
+{
+    return target == FileTask::Target::LOCAL ? ui->local_panel : ui->remote_panel;
 }

@@ -27,6 +27,8 @@ collect_sources(SOURCE_CLIENT_CORE_MCP_TOOLS
     connect_router_host_tool.h
     desktop_client_tool.cc
     desktop_client_tool.h
+    file_transfer_client_tool.cc
+    file_transfer_client_tool.h
     find_local_hosts_tool.cc
     find_local_hosts_tool.h
     find_router_hosts_tool.cc

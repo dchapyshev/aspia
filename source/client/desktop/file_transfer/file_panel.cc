@@ -110,6 +110,45 @@ QString FilePanel::currentPath() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void FilePanel::openPath(const QString& path)
+{
+    ui->address_bar->setCurrentPath(path);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FilePanel::isCurrentPathListed() const
+{
+    // The action of a new folder turns on when the list of the folder comes.
+    return !ui->address_bar->hasCurrentPath() || ui->action_add_folder->isEnabled();
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<FileTransfer::Item> FilePanel::items() const
+{
+    QList<FileTransfer::Item> items;
+
+    if (ui->list->isFileListShown())
+    {
+        FileListModel* model = static_cast<FileListModel*>(ui->list->model());
+        for (int row = 0; row < model->rowCount(QModelIndex()); ++row)
+        {
+            const QModelIndex index = model->index(row, 0, QModelIndex());
+            items.emplace_back(model->nameAt(index), model->sizeAt(index), model->isFolder(index));
+        }
+    }
+    else
+    {
+        AddressBarModel* model = static_cast<AddressBarModel*>(ui->address_bar->model());
+        const QModelIndex computer_index = model->computerIndex();
+
+        for (int row = 0; row < model->rowCount(computer_index); ++row)
+            items.emplace_back(model->pathAt(model->index(row, 0, computer_index)), 0, true);
+    }
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
 void FilePanel::onDriveList(
     proto::file_transfer::ErrorCode error_code, const proto::file_transfer::DriveList& drive_list)
 {

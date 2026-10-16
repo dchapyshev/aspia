@@ -29,6 +29,8 @@
 #include <vector>
 
 #include "base/time_types.h"
+#include "client/file_transfer.h"
+#include "common/file_task.h"
 
 namespace proto::input {
 class MouseEvent;
@@ -87,6 +89,17 @@ public:
         virtual SignInResult signIn() = 0;
     };
 
+    class FileTransferWindow
+    {
+    public:
+        virtual ~FileTransferWindow() = default;
+
+        virtual QString currentPath(FileTask::Target target) const = 0;
+        virtual bool openPath(FileTask::Target target, const QString& path) = 0;
+        virtual bool isCurrentPathListed(FileTask::Target target) const = 0;
+        virtual QList<FileTransfer::Item> currentItems(FileTask::Target target) const = 0;
+    };
+
     class TerminalWindow
     {
     public:
@@ -111,6 +124,7 @@ public:
 
         virtual QList<ClientInfo> clients() const = 0;
         virtual DesktopWindow* desktopWindow(qint64 client_id) const = 0;
+        virtual FileTransferWindow* fileTransferWindow(qint64 client_id) const = 0;
         virtual TerminalWindow* terminalWindow(qint64 client_id) const = 0;
         virtual void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) = 0;
         virtual void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) = 0;
@@ -127,6 +141,7 @@ public:
 
     QList<ClientInfo> clients() const;
     DesktopWindow* desktopWindow(qint64 client_id) const;
+    FileTransferWindow* fileTransferWindow(qint64 client_id) const;
     TerminalWindow* terminalWindow(qint64 client_id) const;
 
     // The session starts when the event loop gets control, so a modal dialog of the session does not

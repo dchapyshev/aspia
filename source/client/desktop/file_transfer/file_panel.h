@@ -58,6 +58,9 @@ public:
     void setMirrored(bool mirrored);
 
     QString currentPath() const;
+    void openPath(const QString& path);
+    bool isCurrentPathListed() const;
+    QList<FileTransfer::Item> items() const;
 
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);

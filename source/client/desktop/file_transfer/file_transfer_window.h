@@ -26,6 +26,7 @@
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
 #include "client/desktop/client_window.h"
+#include "client/mcp/mcp_controller.h"
 
 namespace Ui {
 class FileTransferWindow;
@@ -34,7 +35,9 @@ class FileTransferWindow;
 class FilePanel;
 class FileWorker;
 
-class FileTransferWindow final : public ClientWindow
+class FileTransferWindow final
+    : public ClientWindow,
+      public McpController::FileTransferWindow
 {
     Q_OBJECT
 
@@ -64,6 +67,12 @@ protected:
 
     // QWidget implementation.
     void closeEvent(QCloseEvent* event) final;
+
+    // McpController::FileTransferWindow implementation.
+    QString currentPath(FileTask::Target target) const final;
+    bool openPath(FileTask::Target target, const QString& path) final;
+    bool isCurrentPathListed(FileTask::Target target) const final;
+    QList<FileTransfer::Item> currentItems(FileTask::Target target) const final;
 
 private slots:
     void onErrorOccurred(proto::file_transfer::ErrorCode error_code);
@@ -96,6 +105,7 @@ private:
                    FilePanel* panel);
 
     void setFilePanelsEnabled(bool enabled);
+    FilePanel* filePanel(FileTask::Target target) const;
 
     std::unique_ptr<Ui::FileTransferWindow> ui;
     QPointer<FileWorker> file_worker_;

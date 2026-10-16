@@ -31,6 +31,7 @@
 #include "client/mcp/tools/connect_local_host_tool.h"
 #include "client/mcp/tools/connect_router_host_tool.h"
 #include "client/mcp/tools/desktop_client_tool.h"
+#include "client/mcp/tools/file_transfer_client_tool.h"
 #include "client/mcp/tools/find_local_hosts_tool.h"
 #include "client/mcp/tools/find_router_hosts_tool.h"
 #include "client/mcp/tools/list_clients_tool.h"
@@ -68,6 +69,7 @@ McpController::McpController(MainWindow* main_window, QObject* parent)
     tools_.push_back(std::make_unique<ConnectRouterHostTool>());
     tools_.push_back(std::make_unique<ListClientsTool>());
     tools_.push_back(std::make_unique<DesktopClientTool>());
+    tools_.push_back(std::make_unique<FileTransferClientTool>());
     tools_.push_back(std::make_unique<TerminalClientTool>());
 
     mcp_worker_ = GuiApplication::findWorker<McpWorker>();
@@ -129,6 +131,12 @@ QList<McpController::ClientInfo> McpController::clients() const
 McpController::DesktopWindow* McpController::desktopWindow(qint64 client_id) const
 {
     return main_window_->desktopWindow(client_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+McpController::FileTransferWindow* McpController::fileTransferWindow(qint64 client_id) const
+{
+    return main_window_->fileTransferWindow(client_id);
 }
 
 //--------------------------------------------------------------------------------------------------
