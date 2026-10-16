@@ -20,6 +20,7 @@
 #define CLIENT_DESKTOP_SYS_INFO_SYSTEM_INFO_WINDOW_H
 
 #include "client/desktop/client_window.h"
+#include "client/mcp/mcp_controller.h"
 
 namespace proto::system_info {
 class SystemInfoRequest;
@@ -27,7 +28,9 @@ class SystemInfoRequest;
 
 class SysInfoView;
 
-class SystemInfoWindow final : public ClientWindow
+class SystemInfoWindow final
+    : public ClientWindow,
+      public McpController::SystemInfoWindow
 {
     Q_OBJECT
 
@@ -41,6 +44,16 @@ public:
     QByteArray saveState() const final;
     void restoreState(const QByteArray& state) final;
 
+    // McpController::SystemInfoWindow implementation.
+    QList<SysInfoView::Page> pages() const final;
+    bool showPage(const QString& key) final;
+    void buildReport(SysInfoReport* report) final;
+    void refresh() final;
+    proto::system_info::EventLogs::Event::Type currentEventLog() const final;
+    bool canMoveEventLog(SysInfoWidgetEventLogs::Move to) const final;
+    bool selectEventLog(proto::system_info::EventLogs::Event::Type type) final;
+    bool moveEventLog(SysInfoWidgetEventLogs::Move to) final;
+
 protected:
     // ClientWindow implementation.
     void onInternalReset() final;
@@ -53,6 +66,7 @@ private slots:
 
 private:
     SysInfoView* view_ = nullptr;
+    SysInfoWidgetEventLogs* event_logs_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(SystemInfoWindow)
 };

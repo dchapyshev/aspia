@@ -30,13 +30,25 @@ namespace Ui {
 class SysInfoEventLogs;
 } // namespace Ui
 
+class QPushButton;
+
 class SysInfoWidgetEventLogs final : public SysInfoWidget
 {
     Q_OBJECT
 
 public:
+    enum class Move { NEWEST, NEWER, OLDER, OLDEST };
+
     explicit SysInfoWidgetEventLogs(QWidget* parent = nullptr);
     ~SysInfoWidgetEventLogs() final;
+
+    proto::system_info::EventLogs::Event::Type currentLog() const;
+    bool canMove(Move to) const;
+
+    // Choose the log in the list and move through it with the buttons as the user does. False when the list or
+    // the button is turned off while a page is loading or at the end of the log.
+    bool selectLog(proto::system_info::EventLogs::Event::Type type);
+    bool move(Move to);
 
     // SysInfo implementation.
     std::string category() const final;
@@ -44,13 +56,18 @@ public:
     void setSystemInfo(const proto::system_info::SystemInfo& system_info) final;
     QTreeWidget* treeWidget() final;
 
+    // The tree shows the beginning of a description, the report holds all of it.
+    void buildReport(SysInfoReport* report) final;
+
 private slots:
     void onContextMenu(const QPoint& point);
+    void onLogActivated(int index);
 
 private:
     proto::system_info::SystemInfoRequest createRequest(
         proto::system_info::EventLogs::Event::Type type, const QByteArray& cursor,
         proto::system_info::EventLogsData::Direction direction) const;
+    QPushButton* moveButton(Move to) const;
     static QString levelToString(proto::system_info::EventLogs::Event::Level value);
 
     std::unique_ptr<Ui::SysInfoEventLogs> ui;

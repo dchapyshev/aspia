@@ -31,6 +31,8 @@
 #include "base/time_types.h"
 #include "client/file_transfer.h"
 #include "common/file_task.h"
+#include "common/sys_info/sys_info_view.h"
+#include "common/sys_info/sys_info_widget_event_logs.h"
 
 namespace proto::input {
 class MouseEvent;
@@ -51,6 +53,7 @@ class McpWorker;
 class QImage;
 class QPoint;
 class QSize;
+class SysInfoReport;
 
 // The tools of the MCP connector. They run in the GUI thread, and the worker keeps only the
 // connections and the protocol. The connector is turned off when the controller dies.
@@ -141,6 +144,21 @@ public:
         virtual TimePoint lastOutputTime() const = 0;
     };
 
+    class SystemInfoWindow
+    {
+    public:
+        virtual ~SystemInfoWindow() = default;
+
+        virtual QList<SysInfoView::Page> pages() const = 0;
+        virtual bool showPage(const QString& key) = 0;
+        virtual void buildReport(SysInfoReport* report) = 0;
+        virtual void refresh() = 0;
+        virtual proto::system_info::EventLogs::Event::Type currentEventLog() const = 0;
+        virtual bool canMoveEventLog(SysInfoWidgetEventLogs::Move to) const = 0;
+        virtual bool selectEventLog(proto::system_info::EventLogs::Event::Type type) = 0;
+        virtual bool moveEventLog(SysInfoWidgetEventLogs::Move to) = 0;
+    };
+
     class MainWindow
     {
     public:
@@ -150,6 +168,7 @@ public:
         virtual DesktopWindow* desktopWindow(qint64 client_id) const = 0;
         virtual FileTransferWindow* fileTransferWindow(qint64 client_id) const = 0;
         virtual TerminalWindow* terminalWindow(qint64 client_id) const = 0;
+        virtual SystemInfoWindow* systemInfoWindow(qint64 client_id) const = 0;
         virtual QString clientDialog(qint64 client_id) const = 0;
         virtual void closeClient(qint64 client_id) = 0;
         virtual bool asksCredentials() const = 0;
@@ -170,6 +189,7 @@ public:
     DesktopWindow* desktopWindow(qint64 client_id) const;
     FileTransferWindow* fileTransferWindow(qint64 client_id) const;
     TerminalWindow* terminalWindow(qint64 client_id) const;
+    SystemInfoWindow* systemInfoWindow(qint64 client_id) const;
     QString clientDialog(qint64 client_id) const;
     void closeClient(qint64 client_id);
 

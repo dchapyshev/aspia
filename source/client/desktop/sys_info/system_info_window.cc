@@ -33,9 +33,11 @@
 //--------------------------------------------------------------------------------------------------
 SystemInfoWindow::SystemInfoWindow(QWidget* parent)
     : ClientWindow(proto::peer::SESSION_TYPE_SYSTEM_INFO, parent),
-      view_(new SysInfoView(this))
+      view_(new SysInfoView(this)),
+      event_logs_(view_->findChild<SysInfoWidgetEventLogs*>())
 {
     LOG(INFO) << "Ctor";
+    CHECK(event_logs_);
 
     setWindowTitle(tr("System Information"));
 
@@ -100,6 +102,54 @@ void SystemInfoWindow::restoreState(const QByteArray& state)
     stream >> value;
     if (!value.isEmpty())
         view_->restoreState(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<SysInfoView::Page> SystemInfoWindow::pages() const
+{
+    return view_->pages();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SystemInfoWindow::showPage(const QString& key)
+{
+    return view_->showPage(key);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemInfoWindow::buildReport(SysInfoReport* report)
+{
+    view_->buildReport(report);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemInfoWindow::refresh()
+{
+    view_->onRefresh();
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::system_info::EventLogs::Event::Type SystemInfoWindow::currentEventLog() const
+{
+    return event_logs_->currentLog();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SystemInfoWindow::canMoveEventLog(SysInfoWidgetEventLogs::Move to) const
+{
+    return event_logs_->canMove(to);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SystemInfoWindow::selectEventLog(proto::system_info::EventLogs::Event::Type type)
+{
+    return event_logs_->selectLog(type);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SystemInfoWindow::moveEventLog(SysInfoWidgetEventLogs::Move to)
+{
+    return event_logs_->move(to);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -47,5 +47,7 @@ collect_sources(SOURCE_CLIENT_CORE_MCP_TOOLS
     list_routers_tool.h
     mcp_utils.cc
     mcp_utils.h
+    system_info_client_tool.cc
+    system_info_client_tool.h
     terminal_client_tool.cc
     terminal_client_tool.h)

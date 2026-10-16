@@ -32,27 +32,6 @@ class QXmlStreamWriter;
 class SysInfoReport
 {
 public:
-    SysInfoReport() = default;
-    ~SysInfoReport() = default;
-
-    // Adds a table with the header and the contents of |tree|.
-    void addTree(const QString& title, const QTreeWidget* tree);
-
-    // Adds a table of |items| with |header| as its header row. The children of an item are rows of
-    // the same table, indented the way they are nested. The items are only read, they stay with
-    // the caller.
-    void addItems(const QString& title, const QStringList& header,
-                  const QList<QTreeWidgetItem*>& items);
-
-    bool isEmpty() const { return tables_.isEmpty(); }
-
-    // The report as an HTML document.
-    QString toString() const;
-
-    // Writes the report to an HTML file.
-    bool save(const QString& file_path, QString* error_string = nullptr) const;
-
-private:
     // Row of a table. |level| is the depth the row is nested at.
     struct Row
     {
@@ -67,6 +46,28 @@ private:
         QList<Row> rows;
     };
 
+    SysInfoReport() = default;
+    ~SysInfoReport() = default;
+
+    // Adds a table with the header and the contents of |tree|.
+    void addTree(const QString& title, const QTreeWidget* tree);
+
+    // Adds a table of |items| with |header| as its header row. The children of an item are rows of
+    // the same table, indented the way they are nested. The items are only read, they stay with
+    // the caller.
+    void addItems(const QString& title, const QStringList& header,
+                  const QList<QTreeWidgetItem*>& items);
+
+    bool isEmpty() const { return tables_.isEmpty(); }
+    const QList<Table>& tables() const { return tables_; }
+
+    // The report as an HTML document.
+    QString toString() const;
+
+    // Writes the report to an HTML file.
+    bool save(const QString& file_path, QString* error_string = nullptr) const;
+
+private:
     // Adds |item| and everything under it to the rows of |table|.
     static void addRow(Table* table, const QTreeWidgetItem* item, int column_count, int level);
 

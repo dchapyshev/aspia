@@ -467,6 +467,12 @@ McpController::TerminalWindow* MainWindow::terminalWindow(qint64 client_id) cons
 }
 
 //--------------------------------------------------------------------------------------------------
+McpController::SystemInfoWindow* MainWindow::systemInfoWindow(qint64 client_id) const
+{
+    return dynamic_cast<McpController::SystemInfoWindow*>(clientWindow(client_id));
+}
+
+//--------------------------------------------------------------------------------------------------
 QString MainWindow::clientDialog(qint64 client_id) const
 {
     ClientWindow* client_window = clientWindow(client_id);

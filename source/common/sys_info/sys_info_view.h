@@ -22,6 +22,8 @@
 #include <QWidget>
 
 #include <memory>
+#include <set>
+#include <string>
 
 namespace Ui {
 class SysInfoView;
@@ -36,6 +38,7 @@ class QAction;
 class QHBoxLayout;
 class QTreeWidgetItem;
 class QVersionNumber;
+class SysInfoReport;
 class SysInfoWidget;
 class SysInfoWidgetSummary;
 
@@ -47,6 +50,15 @@ class SysInfoView final : public QWidget
     Q_OBJECT
 
 public:
+    struct Page
+    {
+        QString key;
+        QString name;
+        QString group;
+        bool has_data = false;
+        bool refreshing = false;
+    };
+
     explicit SysInfoView(QWidget* parent = nullptr);
     ~SysInfoView() final;
 
@@ -67,6 +79,14 @@ public:
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);
 
+    // The pages in the order of the category tree. The key of a page does not depend on the language. A page is
+    // refreshing from a request until the report it asked for arrives.
+    QList<Page> pages() const;
+
+    // Shows the page with |key| as the user does by choosing it in the tree.
+    bool showPage(const QString& key);
+    void buildReport(SysInfoReport* report);
+
     // QWidget implementation.
     QSize sizeHint() const final;
 
@@ -86,6 +106,8 @@ private slots:
 
 private:
     void buildCategoryTree();
+    void requestSystemInfo(const proto::system_info::SystemInfoRequest& request);
+    bool isRefreshing(SysInfoWidget* page) const;
 
     // Saving and printing an empty page makes no sense.
     void updateExportActions();
@@ -95,6 +117,7 @@ private:
     QList<SysInfoWidget*> sys_info_widgets_;
     SysInfoWidgetSummary* summary_widget_ = nullptr;
     int current_widget_ = 0;
+    std::set<std::string> pending_categories_;
 
     Q_DISABLE_COPY_MOVE(SysInfoView)
 };

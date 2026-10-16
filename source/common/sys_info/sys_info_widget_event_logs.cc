@@ -24,6 +24,7 @@
 #include "base/logging.h"
 #include "common/system_info_constants.h"
 #include "common/desktop/formatter.h"
+#include "common/sys_info/sys_info_report.h"
 #include "common/sys_info/ui_sys_info_widget_event_logs.h"
 
 namespace {
@@ -142,14 +143,8 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
         emit sig_systemInfoRequest(requests().front());
     });
 
-    connect(ui->combobox_type, QOverload<int>::of(&QComboBox::activated), this, [this](int index)
-    {
-        proto::system_info::EventLogs::Event::Type type =
-            static_cast<proto::system_info::EventLogs::Event::Type>(
-                ui->combobox_type->itemData(index).toInt());
-        emit sig_systemInfoRequest(createRequest(
-            type, QByteArray(), proto::system_info::EventLogsData::DIRECTION_OLDER));
-    });
+    connect(ui->combobox_type, QOverload<int>::of(&QComboBox::activated),
+            this, &SysInfoWidgetEventLogs::onLogActivated);
 
     ui->tree->setColumnWidth(0, 150);
     ui->tree->setColumnWidth(1, 120);
@@ -159,6 +154,41 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
 
 //--------------------------------------------------------------------------------------------------
 SysInfoWidgetEventLogs::~SysInfoWidgetEventLogs() = default;
+
+//--------------------------------------------------------------------------------------------------
+proto::system_info::EventLogs::Event::Type SysInfoWidgetEventLogs::currentLog() const
+{
+    return static_cast<proto::system_info::EventLogs::Event::Type>(ui->combobox_type->currentData().toInt());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SysInfoWidgetEventLogs::canMove(Move to) const
+{
+    return moveButton(to)->isEnabled();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SysInfoWidgetEventLogs::selectLog(proto::system_info::EventLogs::Event::Type type)
+{
+    const int index = ui->combobox_type->findData(static_cast<quint32>(type));
+    if (index < 0 || !ui->combobox_type->isEnabled())
+        return false;
+
+    ui->combobox_type->setCurrentIndex(index);
+    onLogActivated(index);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SysInfoWidgetEventLogs::move(Move to)
+{
+    QPushButton* button = moveButton(to);
+    if (!button->isEnabled())
+        return false;
+
+    button->click();
+    return true;
+}
 
 //--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetEventLogs::category() const
@@ -261,6 +291,25 @@ QTreeWidget* SysInfoWidgetEventLogs::treeWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
+void SysInfoWidgetEventLogs::buildReport(SysInfoReport* report)
+{
+    QStringList header;
+    for (int i = 0; i < ui->tree->columnCount(); ++i)
+        header << ui->tree->headerItem()->text(i);
+
+    QList<QTreeWidgetItem*> items;
+    for (int i = 0; i < ui->tree->topLevelItemCount(); ++i)
+    {
+        QTreeWidgetItem* item = ui->tree->topLevelItem(i)->clone();
+        item->setText(4, item->data(4, Qt::UserRole).toString());
+        items.append(item);
+    }
+
+    report->addItems(QString(), header, items);
+    qDeleteAll(items);
+}
+
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetEventLogs::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui->tree->itemAt(point);
@@ -274,6 +323,16 @@ void SysInfoWidgetEventLogs::onContextMenu(const QPoint& point)
     menu->addAction(ui->action_copy_value);
 
     menu->exec(ui->tree->viewport()->mapToGlobal(point));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SysInfoWidgetEventLogs::onLogActivated(int index)
+{
+    proto::system_info::EventLogs::Event::Type type =
+        static_cast<proto::system_info::EventLogs::Event::Type>(
+            ui->combobox_type->itemData(index).toInt());
+    emit sig_systemInfoRequest(createRequest(
+        type, QByteArray(), proto::system_info::EventLogsData::DIRECTION_OLDER));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -297,6 +356,24 @@ proto::system_info::SystemInfoRequest SysInfoWidgetEventLogs::createRequest(
     data->set_direction(direction);
 
     return system_info_request;
+}
+
+//--------------------------------------------------------------------------------------------------
+QPushButton* SysInfoWidgetEventLogs::moveButton(Move to) const
+{
+    switch (to)
+    {
+        case Move::NEWEST:
+            return ui->button_first;
+        case Move::NEWER:
+            return ui->button_prev;
+        case Move::OLDER:
+            return ui->button_next;
+        case Move::OLDEST:
+            return ui->button_last;
+    }
+
+    return ui->button_first;
 }
 
 //--------------------------------------------------------------------------------------------------
