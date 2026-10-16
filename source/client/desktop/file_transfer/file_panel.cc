@@ -119,7 +119,7 @@ void FilePanel::openPath(const QString& path)
 bool FilePanel::isCurrentPathListed() const
 {
     // The action of a new folder turns on when the list of the folder comes.
-    return !ui->address_bar->hasCurrentPath() || ui->action_add_folder->isEnabled();
+    return !refreshing_ && (!ui->address_bar->hasCurrentPath() || ui->action_add_folder->isEnabled());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -181,9 +181,47 @@ bool FilePanel::sendSelection()
 }
 
 //--------------------------------------------------------------------------------------------------
+void FilePanel::removeSelected()
+{
+    FileRemover::TaskList items = selectedRemoveTasks();
+    if (items.isEmpty())
+        return;
+
+    if (MsgBox::question(this,
+            tr("Are you sure you want to delete the selected items?")) != MsgBox::Yes)
+        return;
+
+    emit sig_removeItems(this, items);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FilePanel::removeSelectedConfirmed()
+{
+    FileRemover::TaskList items = selectedRemoveTasks();
+    if (!items.isEmpty())
+        emit sig_removeItems(this, items);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FilePanel::createFolder(const QString& name)
+{
+    onCreateFolderRequest(name);
+    refresh();
+}
+
+//--------------------------------------------------------------------------------------------------
+void FilePanel::renameItem(const QString& old_name, const QString& new_name)
+{
+    onNameChangeRequest(old_name, new_name);
+    refresh();
+}
+
+//--------------------------------------------------------------------------------------------------
 void FilePanel::onDriveList(
     proto::file_transfer::ErrorCode error_code, const proto::file_transfer::DriveList& drive_list)
 {
+    refreshing_ = false;
+
     if (error_code != proto::file_transfer::ERROR_CODE_SUCCESS)
     {
         showError(tr("Failed to get list of drives: %1").arg(fileErrorToString(error_code)));
@@ -295,6 +333,7 @@ void FilePanel::restoreState(const QByteArray& state)
 //--------------------------------------------------------------------------------------------------
 void FilePanel::refresh()
 {
+    refreshing_ = true;
     emit sig_driveList();
 }
 
@@ -508,31 +547,6 @@ void FilePanel::addFolder()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FilePanel::removeSelected()
-{
-    if (!ui->action_delete->isEnabled())
-        return;
-
-    FileListModel* model = static_cast<FileListModel*>(ui->list->model());
-    QString current_path = currentPath();
-
-    QModelIndexList selected_rows = ui->list->selectionModel()->selectedRows();
-    FileRemover::TaskList items;
-
-    for (const auto& index : std::as_const(selected_rows))
-        items.emplace_back(current_path + model->nameAt(index), model->isFolder(index));
-
-    if (items.isEmpty())
-        return;
-
-    if (MsgBox::question(this,
-            tr("Are you sure you want to delete the selected items?")) != MsgBox::Yes)
-        return;
-
-    emit sig_removeItems(this, items);
-}
-
-//--------------------------------------------------------------------------------------------------
 void FilePanel::sendSelected()
 {
     if (!ui->action_send->isEnabled())
@@ -550,6 +564,23 @@ void FilePanel::sendSelected()
         return;
 
     emit sig_sendItems(this, items);
+}
+
+//--------------------------------------------------------------------------------------------------
+FileRemover::TaskList FilePanel::selectedRemoveTasks() const
+{
+    FileRemover::TaskList items;
+    if (!ui->action_delete->isEnabled())
+        return items;
+
+    FileListModel* model = static_cast<FileListModel*>(ui->list->model());
+    QString current_path = currentPath();
+
+    QModelIndexList selected_rows = ui->list->selectionModel()->selectedRows();
+    for (const auto& index : std::as_const(selected_rows))
+        items.emplace_back(current_path + model->nameAt(index), model->isFolder(index));
+
+    return items;
 }
 
 //--------------------------------------------------------------------------------------------------

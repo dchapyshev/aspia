@@ -92,12 +92,14 @@ public:
     class FileTransferWindow
     {
     public:
-        struct TransferState
+        struct TaskState
         {
-            bool running = false;
+            enum class Task { NONE, TRANSFER, REMOVAL };
+
+            Task task = Task::NONE;
             int total_progress = 0;
             int current_progress = 0;
-            bool error_shown = false;
+            QString dialog;
         };
 
         virtual ~FileTransferWindow() = default;
@@ -108,8 +110,12 @@ public:
         virtual QList<FileTransfer::Item> currentItems(FileTask::Target target) const = 0;
         virtual bool isBusy() const = 0;
         virtual QStringList selectItems(FileTask::Target target, const QStringList& names) = 0;
-        virtual bool sendSelection(FileTask::Target target) = 0;
-        virtual TransferState transferState() const = 0;
+        virtual bool sendSelection(FileTask::Target target, bool replace_existing) = 0;
+        virtual bool removeSelection(FileTask::Target target, bool confirmed) = 0;
+        virtual bool createFolder(FileTask::Target target, const QString& name) = 0;
+        virtual bool renameItem(FileTask::Target target, const QString& old_name, const QString& new_name) = 0;
+        virtual TaskState taskState() const = 0;
+        virtual bool closeDialog(bool abort) = 0;
     };
 
     class TerminalWindow

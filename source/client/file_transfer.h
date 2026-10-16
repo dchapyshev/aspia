@@ -165,6 +165,7 @@ public:
     void start();
     void stop();
 
+    void setActionForErrorType(Error::Type error_type, Error::Action action);
     void setAction(FileTransfer::Error::Type error_type,
                    FileTransfer::Error::Action action);
 
@@ -188,7 +189,6 @@ private:
     void doNextTask();
     void doUpdateSpeed();
     void onError(Error::Type type, proto::file_transfer::ErrorCode code, const QString& path = QString());
-    void setActionForErrorType(Error::Type error_type, Error::Action action);
     void onFinished(const Location& location);
 
     const Type type_;

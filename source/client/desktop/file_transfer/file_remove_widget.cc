@@ -99,6 +99,29 @@ void FileRemoveWidget::requestStop()
 }
 
 //--------------------------------------------------------------------------------------------------
+int FileRemoveWidget::progress() const
+{
+    return ui->progress->value();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString FileRemoveWidget::errorText() const
+{
+    return error_dialog_ ? error_dialog_->text() : QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FileRemoveWidget::closeError(bool abort)
+{
+    QAbstractButton* button = abort || !error_skip_button_ ? error_abort_button_ : error_skip_button_;
+    if (!button)
+        return false;
+
+    button->click();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileRemoveWidget::start()
 {
     updateTaskbarWindow();
@@ -167,6 +190,7 @@ void FileRemoveWidget::errorOccurred(const QString& path,
     }
 
     MsgBox* dialog = new MsgBox(window());
+    error_dialog_ = dialog;
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->setWindowModality(Qt::WindowModal);
 
@@ -181,11 +205,13 @@ void FileRemoveWidget::errorOccurred(const QString& path,
     if (available_actions & FileRemover::ACTION_SKIP)
         skip_button = dialog->addButton(tr("Skip"), MsgBox::ButtonRole::ActionRole);
 
+    error_skip_button_ = skip_button;
+
     if (available_actions & FileRemover::ACTION_SKIP_ALL)
         skip_all_button = dialog->addButton(tr("Skip All"), MsgBox::ButtonRole::ActionRole);
 
     if (available_actions & FileRemover::ACTION_ABORT)
-        dialog->addButton(tr("Abort"), MsgBox::ButtonRole::ActionRole);
+        error_abort_button_ = dialog->addButton(tr("Abort"), MsgBox::ButtonRole::ActionRole);
 
     connect(dialog, &MsgBox::buttonClicked, this,
             [this, skip_button, skip_all_button](QAbstractButton* button)

@@ -19,6 +19,7 @@
 #ifndef CLIENT_DESKTOP_FILE_TRANSFER_FILE_REMOVE_WIDGET_H
 #define CLIENT_DESKTOP_FILE_TRANSFER_FILE_REMOVE_WIDGET_H
 
+#include <QPointer>
 #include <QWidget>
 
 #include <memory>
@@ -28,6 +29,9 @@
 #if defined(Q_OS_WINDOWS)
 class TaskbarProgress;
 #endif // defined(Q_OS_WINDOWS)
+
+class MsgBox;
+class QAbstractButton;
 
 namespace Ui {
 class FileRemoveWidget;
@@ -44,6 +48,9 @@ public:
     void reset();
     void requestStop();
     bool isFinished() const { return finished_; }
+    int progress() const;
+    QString errorText() const;
+    bool closeError(bool abort);
 
 public slots:
     void start();
@@ -66,6 +73,9 @@ private:
     bool queue_building_ = true;
     bool stopping_ = false;
     bool finished_ = false;
+    QPointer<MsgBox> error_dialog_;
+    QPointer<QAbstractButton> error_skip_button_;
+    QPointer<QAbstractButton> error_abort_button_;
 
 #if defined(Q_OS_WINDOWS)
     TaskbarProgress* taskbar_progress_ = nullptr;

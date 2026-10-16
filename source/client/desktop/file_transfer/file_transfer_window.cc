@@ -224,20 +224,102 @@ QStringList FileTransferWindow::selectItems(FileTask::Target target, const QStri
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileTransferWindow::sendSelection(FileTask::Target target)
+bool FileTransferWindow::sendSelection(FileTask::Target target, bool replace_existing)
 {
-    return filePanel(target)->sendSelection();
+    // The panel starts the transfer right in this call.
+    replace_existing_ = replace_existing;
+    const bool sent = filePanel(target)->sendSelection();
+    replace_existing_ = false;
+    return sent;
 }
 
 //--------------------------------------------------------------------------------------------------
-McpController::FileTransferWindow::TransferState FileTransferWindow::transferState() const
+bool FileTransferWindow::removeSelection(FileTask::Target target, bool confirmed)
 {
-    TransferState state;
-    state.running = !ui->transfer_widget->isHidden();
-    state.total_progress = ui->transfer_widget->totalProgress();
-    state.current_progress = ui->transfer_widget->currentProgress();
-    state.error_shown = ui->transfer_widget->isErrorShown();
+    if (isBusy())
+        return false;
+
+    FilePanel* panel = filePanel(target);
+    if (confirmed)
+    {
+        panel->removeSelectedConfirmed();
+        return true;
+    }
+
+    // The question to the user must not hold the reply of the tool.
+    QMetaObject::invokeMethod(panel, [panel]() { panel->removeSelected(); }, Qt::QueuedConnection);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FileTransferWindow::createFolder(FileTask::Target target, const QString& name)
+{
+    if (isBusy())
+        return false;
+
+    // A wrong name brings up a warning that must not hold the reply of the tool.
+    FilePanel* panel = filePanel(target);
+    QMetaObject::invokeMethod(panel, [panel, name]() { panel->createFolder(name); }, Qt::QueuedConnection);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FileTransferWindow::renameItem(FileTask::Target target, const QString& old_name, const QString& new_name)
+{
+    if (isBusy())
+        return false;
+
+    // A wrong name brings up a warning that must not hold the reply of the tool.
+    FilePanel* panel = filePanel(target);
+    QMetaObject::invokeMethod(panel, [panel, old_name, new_name]()
+    {
+        panel->renameItem(old_name, new_name);
+    }, Qt::QueuedConnection);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+McpController::FileTransferWindow::TaskState FileTransferWindow::taskState() const
+{
+    TaskState state;
+
+    if (!ui->transfer_widget->isHidden())
+    {
+        state.task = TaskState::Task::TRANSFER;
+        state.total_progress = ui->transfer_widget->totalProgress();
+        state.current_progress = ui->transfer_widget->currentProgress();
+    }
+    else if (!ui->remove_widget->isHidden())
+    {
+        state.task = TaskState::Task::REMOVAL;
+        state.total_progress = ui->remove_widget->progress();
+    }
+
+    state.dialog = ui->transfer_widget->errorText();
+    if (state.dialog.isEmpty())
+        state.dialog = ui->remove_widget->errorText();
+
+    if (state.dialog.isEmpty())
+    {
+        if (MsgBox* message_box = shownMessageBox())
+            state.dialog = message_box->text();
+    }
+
     return state;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FileTransferWindow::closeDialog(bool abort)
+{
+    if (ui->transfer_widget->closeError(abort) || ui->remove_widget->closeError(abort))
+        return true;
+
+    MsgBox* message_box = shownMessageBox();
+    if (!message_box)
+        return false;
+
+    message_box->reject();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -442,6 +524,12 @@ void FileTransferWindow::transferItems(
     setFilePanelsEnabled(false);
 
     FileTransfer* transfer = new FileTransfer(type, source_path, target_path, items);
+    if (replace_existing_)
+    {
+        transfer->setActionForErrorType(
+            FileTransfer::Error::Type::ALREADY_EXISTS, FileTransfer::Error::ACTION_REPLACE_ALL);
+    }
+
     transfer->moveToThread(file_worker_->thread());
 
     connect(transfer, &FileTransfer::sig_started, ui->transfer_widget, &FileTransferWidget::start,
@@ -513,4 +601,17 @@ void FileTransferWindow::setFilePanelsEnabled(bool enabled)
 FilePanel* FileTransferWindow::filePanel(FileTask::Target target) const
 {
     return target == FileTask::Target::LOCAL ? ui->local_panel : ui->remote_panel;
+}
+
+//--------------------------------------------------------------------------------------------------
+MsgBox* FileTransferWindow::shownMessageBox() const
+{
+    const QList<MsgBox*> message_boxes = findChildren<MsgBox*>();
+    for (MsgBox* message_box : message_boxes)
+    {
+        if (message_box->isVisible())
+            return message_box;
+    }
+
+    return nullptr;
 }

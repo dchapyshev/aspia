@@ -22,9 +22,11 @@
 #include <QJsonDocument>
 #include <QTimer>
 
+#include <algorithm>
 #include <optional>
 
 #include "base/time_types.h"
+#include "client/database.h"
 #include "client/mcp/mcp_controller.h"
 #include "client/mcp/tools/mcp_utils.h"
 
@@ -74,7 +76,9 @@ void waitPanelList(qint64 client_id, FileTask::Target side, McpTool::Reply reply
     QObject::connect(timer, &QTimer::timeout, timer, [timer, client_id, side, deadline, reply]()
     {
         McpController::FileTransferWindow* window = McpController::instance().fileTransferWindow(client_id);
-        if (window && !window->isCurrentPathListed(side) && Clock::now() < deadline)
+        const QString dialog = window ? window->taskState().dialog : QString();
+
+        if (window && dialog.isEmpty() && !window->isCurrentPathListed(side) && Clock::now() < deadline)
             return;
 
         timer->stop();
@@ -83,6 +87,13 @@ void waitPanelList(qint64 client_id, FileTask::Target side, McpTool::Reply reply
         if (!window)
         {
             reply(false, QString("The client %1 was closed.").arg(client_id));
+            return;
+        }
+
+        if (!dialog.isEmpty())
+        {
+            reply(false, QString("The client %1 shows the dialog \"%2\". Close it with close_dialog or let the user "
+                                 "answer, then use list.").arg(QString::number(client_id), dialog));
             return;
         }
 
@@ -99,23 +110,36 @@ void waitPanelList(qint64 client_id, FileTask::Target side, McpTool::Reply reply
 }
 
 //--------------------------------------------------------------------------------------------------
-QString transferText(const McpController::FileTransferWindow& window)
+QString taskText(const McpController::FileTransferWindow& window)
 {
-    const McpController::FileTransferWindow::TransferState state = window.transferState();
+    using Task = McpController::FileTransferWindow::TaskState::Task;
 
-    QJsonObject content{ { "running", state.running } };
-    if (state.running)
+    const McpController::FileTransferWindow::TaskState state = window.taskState();
+    QJsonObject content{ { "dialog_shown", !state.dialog.isEmpty() } };
+    if (!state.dialog.isEmpty())
+        content.insert("dialog", state.dialog);
+
+    switch (state.task)
     {
-        content.insert("total_progress", state.total_progress);
-        content.insert("current_progress", state.current_progress);
-        content.insert("error_shown", state.error_shown);
+        case Task::NONE:
+            content.insert("task", "none");
+            break;
+        case Task::TRANSFER:
+            content.insert("task", "transfer");
+            content.insert("total_progress", state.total_progress);
+            content.insert("current_progress", state.current_progress);
+            break;
+        case Task::REMOVAL:
+            content.insert("task", "removal");
+            content.insert("progress", state.total_progress);
+            break;
     }
 
     return QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact));
 }
 
 //--------------------------------------------------------------------------------------------------
-void waitTransfer(qint64 client_id, qint64 wait, McpTool::Reply reply)
+void waitTask(qint64 client_id, qint64 wait, McpTool::Reply reply)
 {
     const TimePoint deadline = Clock::now() + Seconds(wait);
 
@@ -125,8 +149,8 @@ void waitTransfer(qint64 client_id, qint64 wait, McpTool::Reply reply)
         McpController::FileTransferWindow* window = McpController::instance().fileTransferWindow(client_id);
         if (window && Clock::now() < deadline)
         {
-            const McpController::FileTransferWindow::TransferState state = window->transferState();
-            if (state.running && !state.error_shown)
+            const McpController::FileTransferWindow::TaskState state = window->taskState();
+            if (state.task != McpController::FileTransferWindow::TaskState::Task::NONE && state.dialog.isEmpty())
                 return;
         }
 
@@ -139,9 +163,34 @@ void waitTransfer(qint64 client_id, qint64 wait, McpTool::Reply reply)
             return;
         }
 
-        reply(true, transferText(*window));
+        reply(true, taskText(*window));
     });
     timer->start(kWaitInterval);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Returns the error for the model, or an empty string once all names are selected.
+QString selectNames(McpController::FileTransferWindow* window, FileTask::Target side, const QJsonValue& value)
+{
+    const QJsonArray array = value.toArray();
+    QStringList names;
+
+    for (const QJsonValue& name : array)
+    {
+        if (!name.isString() || name.toString().isEmpty())
+            return "The names must be non-empty strings.";
+
+        names.append(name.toString());
+    }
+
+    if (names.isEmpty())
+        return "The names must be a non-empty array.";
+
+    const QStringList missing = window->selectItems(side, names);
+    if (!missing.isEmpty())
+        return QString("The folder has no items \"%1\", nothing is selected.").arg(missing.join("\", \""));
+
+    return QString();
 }
 
 } // namespace
@@ -159,14 +208,22 @@ QJsonObject FileTransferClientTool::definition() const
                            { "description", "Id of a file_transfer client window from list_clients." } };
 
     QJsonObject action{ { "type", "string" },
-                        { "enum", QJsonArray{ "open", "list", "select", "send", "status" } },
+                        { "enum", QJsonArray{ "open", "list", "select", "send", "mkdir", "rename", "remove",
+                                              "status", "close_dialog" } },
                         { "description", "open opens path in the panel of the side, list returns the folder that "
                                          "the panel of the side shows now. select selects names in the panel of the "
                                          "side, send sends the selected items to the folder that the other panel "
-                                         "shows, as the button Send does. status returns the state of the transfer, "
-                                         "running and its progress in percent, and error_shown when the transfer "
-                                         "waits for the user to answer an error, for example about a file that "
-                                         "already exists." } };
+                                         "shows, as the button Send does. mkdir creates the folder name and rename "
+                                         "renames the item name to new_name in the folder of the panel, both return "
+                                         "the folder after it. remove selects names and removes them after the user "
+                                         "confirms it in the window. status returns the task of the window, a "
+                                         "transfer with its progress in percent or a removal, and dialog_shown with "
+                                         "the text of dialog when the window waits for the user to answer, for "
+                                         "example about an error. close_dialog closes that dialog, an error of a "
+                                         "transfer or a removal skips the item or aborts with abort. When the user "
+                                         "turned on the automatic confirmation in Aspia Client, remove does not ask "
+                                         "the user, send replaces the files that already exist, and close_dialog "
+                                         "works. Otherwise the user answers the dialogs." } };
 
     QJsonObject side{ { "type", "string" },
                       { "enum", QJsonArray{ "local", "remote" } },
@@ -180,14 +237,24 @@ QJsonObject FileTransferClientTool::definition() const
     QJsonObject names{ { "type", "array" },
                        { "items", QJsonObject{ { "type", "string" } } },
                        { "minItems", 1 },
-                       { "description", "Names of select from the items of open or list. Nothing is selected when "
-                                        "a name is missing." } };
+                       { "description", "Names of select and remove from the items of open or list. Nothing is "
+                                        "selected when a name is missing." } };
+
+    QJsonObject item_name{ { "type", "string" },
+                           { "description", "Name of the folder of mkdir, or of the item of rename." } };
+
+    QJsonObject new_name{ { "type", "string" },
+                          { "description", "New name of the item of rename." } };
+
+    QJsonObject abort{ { "type", "boolean" },
+                       { "description", "close_dialog aborts the transfer or the removal instead of skipping the "
+                                        "item. false by default." } };
 
     QJsonObject wait{ { "type", "integer" },
                       { "minimum", 0 },
                       { "maximum", kMaxWait },
-                      { "description", "Seconds that status waits for the end of the transfer. It returns earlier "
-                                       "when the transfer ends or shows an error to the user. 0 by default." } };
+                      { "description", "Seconds that status waits for the end of the task. It returns earlier when "
+                                       "the task ends or the window waits for the user. 0 by default." } };
 
     return QJsonObject{
         { "name", name() },
@@ -197,16 +264,20 @@ QJsonObject FileTransferClientTool::definition() const
                          "window has a panel for each side, and the actions work with the panels as the user does, "
                          "so the user sees them. open and list return the path of the panel and its items. The path "
                          "is empty while the panel shows the drives, and then the names of the items are the paths "
-                         "of the drives. The size is in bytes. When a folder can not be opened, the user sees the "
-                         "error and the panel stays in the previous folder, so compare the path in the result. "
-                         "A transfer turns off the panels until it ends, and the panels show the new items then." },
+                         "of the drives. The size is in bytes. When the window shows a dialog, for example an error "
+                         "about a folder that can not be opened, created or renamed, these actions return its text "
+                         "instead. A transfer or a removal turns off the panels until it ends, and the panels show "
+                         "the new items then." },
         { "inputSchema", QJsonObject{ { "type", "object" },
                                       { "properties", QJsonObject{ { "client_id", client_id },
                                                                    { "action", action },
                                                                    { "side", side },
                                                                    { "path", path },
                                                                    { "names", names },
-                                                                   { "wait", wait } } },
+                                                                   { "name", item_name },
+                                                                   { "new_name", new_name },
+                                                                   { "wait", wait },
+                                                                   { "abort", abort } } },
                                       { "required", QJsonArray{ "client_id", "action" } },
                                       { "additionalProperties", false } } } };
 }
@@ -222,9 +293,11 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
     }
 
     const QString action = arguments.value("action").toString();
-    if (action != "open" && action != "list" && action != "select" && action != "send" && action != "status")
+    if (action != "open" && action != "list" && action != "select" && action != "send" && action != "mkdir" &&
+        action != "rename" && action != "remove" && action != "status" && action != "close_dialog")
     {
-        reply(false, "The action must be one of open, list, select, send, status.");
+        reply(false, "The action must be one of open, list, select, send, mkdir, rename, remove, status, "
+                     "close_dialog.");
         return;
     }
 
@@ -235,6 +308,27 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
             reply(false, QString("The client %1 is not a file_transfer client.").arg(*client_id));
         else
             reply(false, QString("There is no client %1. Use list_clients to get the ids.").arg(*client_id));
+        return;
+    }
+
+    const bool auto_confirm = Database::instance().isMcpAutoConfirmEnabled();
+
+    if (action == "close_dialog")
+    {
+        if (!auto_confirm)
+        {
+            reply(false, "The user answers the dialogs, because the automatic confirmation is turned off in Aspia "
+                         "Client.");
+            return;
+        }
+
+        if (!window->closeDialog(arguments.value("abort").toBool()))
+        {
+            reply(false, QString("The client %1 shows no dialog.").arg(*client_id));
+            return;
+        }
+
+        reply(true, QString("The dialog of the client %1 is closed. Use status to follow the task.").arg(*client_id));
         return;
     }
 
@@ -251,9 +345,9 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
         }
 
         if (*wait == 0)
-            reply(true, transferText(*window));
+            reply(true, taskText(*window));
         else
-            waitTransfer(*client_id, *wait, reply);
+            waitTask(*client_id, *wait, reply);
         return;
     }
 
@@ -264,61 +358,27 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    const QString busy = QString("The panels of the client %1 are busy with a transfer or a removal.").arg(*client_id);
-
-    if (action == "select")
+    if (action == "list")
     {
-        if (window->isBusy())
-        {
-            reply(false, busy);
-            return;
-        }
+        waitPanelList(*client_id, *side, reply);
+        return;
+    }
 
-        if (window->currentPath(*side).isEmpty())
-        {
-            reply(false, "The panel shows the drives. Open a folder first.");
-            return;
-        }
+    if (window->isBusy())
+    {
+        reply(false, QString("The panels of the client %1 are busy with a transfer or a removal.").arg(*client_id));
+        return;
+    }
 
-        const QJsonArray array = arguments.value("names").toArray();
-        QStringList names;
-
-        for (const QJsonValue& value : array)
-        {
-            if (!value.isString() || value.toString().isEmpty())
-            {
-                reply(false, "The names must be non-empty strings.");
-                return;
-            }
-
-            names.append(value.toString());
-        }
-
-        if (names.isEmpty())
-        {
-            reply(false, "The names of select must be a non-empty array.");
-            return;
-        }
-
-        const QStringList missing = window->selectItems(*side, names);
-        if (!missing.isEmpty())
-        {
-            reply(false, QString("The folder has no items \"%1\", nothing is selected.").arg(missing.join("\", \"")));
-            return;
-        }
-
-        reply(true, QString("%1 items are selected in the panel.").arg(names.size()));
+    if (action == "open")
+    {
+        window->openPath(*side, arguments.value("path").toString());
+        waitPanelList(*client_id, *side, reply);
         return;
     }
 
     if (action == "send")
     {
-        if (window->isBusy())
-        {
-            reply(false, busy);
-            return;
-        }
-
         const FileTask::Target target_side =
             *side == FileTask::Target::LOCAL ? FileTask::Target::REMOTE : FileTask::Target::LOCAL;
         const QString target_path = window->currentPath(target_side);
@@ -329,7 +389,7 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
             return;
         }
 
-        if (!window->sendSelection(*side))
+        if (!window->sendSelection(*side, auto_confirm))
         {
             reply(false, "Nothing is selected in the panel. Use select first.");
             return;
@@ -340,11 +400,71 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    if (action == "open" && !window->openPath(*side, arguments.value("path").toString()))
+    if (window->currentPath(*side).isEmpty())
     {
-        reply(false, busy);
+        reply(false, "The panel shows the drives. Open a folder first.");
         return;
     }
 
+    if (action == "select" || action == "remove")
+    {
+        const QString error = selectNames(window, *side, arguments.value("names"));
+        if (!error.isEmpty())
+        {
+            reply(false, error);
+            return;
+        }
+
+        if (action == "select")
+        {
+            reply(true, "The items are selected in the panel.");
+            return;
+        }
+
+        window->removeSelection(*side, auto_confirm);
+
+        if (auto_confirm)
+        {
+            reply(true, QString("The client %1 removes the items. Use status to follow it, and list to see the "
+                                "result.").arg(*client_id));
+        }
+        else
+        {
+            reply(true, QString("The client %1 asks the user to confirm the removal. Use status to follow it, and "
+                                "list to see the result.").arg(*client_id));
+        }
+        return;
+    }
+
+    const QString item_name = arguments.value("name").toString();
+    if (item_name.isEmpty())
+    {
+        reply(false, QString("The name of %1 must be a non-empty string.").arg(action));
+        return;
+    }
+
+    if (action == "mkdir")
+    {
+        window->createFolder(*side, item_name);
+        waitPanelList(*client_id, *side, reply);
+        return;
+    }
+
+    const QList<FileTransfer::Item> items = window->currentItems(*side);
+    auto is_item = [&item_name](const FileTransfer::Item& item) { return item.name == item_name; };
+    if (std::none_of(items.cbegin(), items.cend(), is_item))
+    {
+        reply(false, QString("The folder has no item \"%1\".").arg(item_name));
+        return;
+    }
+
+    const QString new_name = arguments.value("new_name").toString();
+    if (new_name.isEmpty())
+    {
+        reply(false, "The new_name of rename must be a non-empty string.");
+        return;
+    }
+
+    window->renameItem(*side, item_name, new_name);
     waitPanelList(*client_id, *side, reply);
 }

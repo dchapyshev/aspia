@@ -73,7 +73,9 @@ void AddressBar::setDriveList(const proto::file_transfer::DriveList& list)
 //--------------------------------------------------------------------------------------------------
 void AddressBar::setCurrentPath(const QString& path)
 {
-    onPathIndexChanged(model_->setCurrentPath(path));
+    const QModelIndex index = model_->setCurrentPath(path);
+    if (index.isValid())
+        onPathIndexChanged(index);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -124,6 +124,23 @@ int FileTransferWidget::currentProgress() const
 }
 
 //--------------------------------------------------------------------------------------------------
+QString FileTransferWidget::errorText() const
+{
+    return error_dialog_ ? error_dialog_->text() : QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FileTransferWidget::closeError(bool abort)
+{
+    QAbstractButton* button = abort || !error_skip_button_ ? error_abort_button_ : error_skip_button_;
+    if (!button)
+        return false;
+
+    button->click();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileTransferWidget::start()
 {
     updateTaskbarWindow();
@@ -216,6 +233,8 @@ void FileTransferWidget::errorOccurred(const FileTransfer::Error& error)
     if (available_actions & FileTransfer::Error::ACTION_SKIP)
         skip_button = dialog->addButton(tr("Skip"), MsgBox::ButtonRole::ActionRole);
 
+    error_skip_button_ = skip_button;
+
     if (available_actions & FileTransfer::Error::ACTION_SKIP_ALL)
         skip_all_button = dialog->addButton(tr("Skip All"), MsgBox::ButtonRole::ActionRole);
 
@@ -226,7 +245,7 @@ void FileTransferWidget::errorOccurred(const FileTransfer::Error& error)
         replace_all_button = dialog->addButton(tr("Replace All"), MsgBox::ButtonRole::ActionRole);
 
     if (available_actions & FileTransfer::Error::ACTION_ABORT)
-        dialog->addButton(tr("Abort"), MsgBox::ButtonRole::ActionRole);
+        error_abort_button_ = dialog->addButton(tr("Abort"), MsgBox::ButtonRole::ActionRole);
 
     FileTransfer::Error::Type error_type = error.type();
 

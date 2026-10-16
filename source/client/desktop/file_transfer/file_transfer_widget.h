@@ -31,6 +31,7 @@ class TaskbarProgress;
 #endif
 
 class MsgBox;
+class QAbstractButton;
 
 namespace Ui {
 class FileTransferWidget;
@@ -49,7 +50,8 @@ public:
     bool isFinished() const { return finished_; }
     int totalProgress() const;
     int currentProgress() const;
-    bool isErrorShown() const { return error_dialog_ != nullptr; }
+    QString errorText() const;
+    bool closeError(bool abort);
 
 public slots:
     void start();
@@ -80,6 +82,8 @@ private:
     bool finished_ = false;
 
     QPointer<MsgBox> error_dialog_;
+    QPointer<QAbstractButton> error_skip_button_;
+    QPointer<QAbstractButton> error_abort_button_;
 
     Q_DISABLE_COPY_MOVE(FileTransferWidget)
 };

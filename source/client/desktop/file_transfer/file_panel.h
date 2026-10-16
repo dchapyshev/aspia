@@ -63,6 +63,10 @@ public:
     QList<FileTransfer::Item> items() const;
     QStringList selectItems(const QStringList& names);
     bool sendSelection();
+    void removeSelected();
+    void removeSelectedConfirmed();
+    void createFolder(const QString& name);
+    void renameItem(const QString& old_name, const QString& new_name);
 
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);
@@ -98,10 +102,10 @@ private slots:
     void toChildFolder(const QString& child_name);
     void toParentFolder();
     void addFolder();
-    void removeSelected();
     void sendSelected();
 
 private:
+    FileRemover::TaskList selectedRemoveTasks() const;
     void showError(const QString& message);
     void applyMirrored();
 
@@ -111,6 +115,7 @@ private:
     bool transfer_allowed_ = false;
     bool transfer_enabled_ = false;
     bool mirrored_ = false;
+    bool refreshing_ = false;
 
     Q_DISABLE_COPY_MOVE(FilePanel)
 };

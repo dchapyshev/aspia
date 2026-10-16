@@ -33,6 +33,7 @@ class FileTransferWindow;
 } // namespace Ui
 
 class FilePanel;
+class MsgBox;
 class FileWorker;
 
 class FileTransferWindow final
@@ -75,8 +76,12 @@ protected:
     QList<FileTransfer::Item> currentItems(FileTask::Target target) const final;
     bool isBusy() const final;
     QStringList selectItems(FileTask::Target target, const QStringList& names) final;
-    bool sendSelection(FileTask::Target target) final;
-    TransferState transferState() const final;
+    bool sendSelection(FileTask::Target target, bool replace_existing) final;
+    bool removeSelection(FileTask::Target target, bool confirmed) final;
+    bool createFolder(FileTask::Target target, const QString& name) final;
+    bool renameItem(FileTask::Target target, const QString& old_name, const QString& new_name) final;
+    TaskState taskState() const final;
+    bool closeDialog(bool abort) final;
 
 private slots:
     void onErrorOccurred(proto::file_transfer::ErrorCode error_code);
@@ -110,9 +115,11 @@ private:
 
     void setFilePanelsEnabled(bool enabled);
     FilePanel* filePanel(FileTask::Target target) const;
+    MsgBox* shownMessageBox() const;
 
     std::unique_ptr<Ui::FileTransferWindow> ui;
     QPointer<FileWorker> file_worker_;
+    bool replace_existing_ = false;
 
     Q_DISABLE_COPY_MOVE(FileTransferWindow)
 };
