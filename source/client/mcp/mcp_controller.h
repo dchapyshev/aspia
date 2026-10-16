@@ -145,6 +145,8 @@ public:
         virtual DesktopWindow* desktopWindow(qint64 client_id) const = 0;
         virtual FileTransferWindow* fileTransferWindow(qint64 client_id) const = 0;
         virtual TerminalWindow* terminalWindow(qint64 client_id) const = 0;
+        virtual QString clientDialog(qint64 client_id) const = 0;
+        virtual void closeClient(qint64 client_id) = 0;
         virtual void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) = 0;
         virtual void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) = 0;
     };
@@ -162,6 +164,8 @@ public:
     DesktopWindow* desktopWindow(qint64 client_id) const;
     FileTransferWindow* fileTransferWindow(qint64 client_id) const;
     TerminalWindow* terminalWindow(qint64 client_id) const;
+    QString clientDialog(qint64 client_id) const;
+    void closeClient(qint64 client_id);
 
     // The session starts when the event loop gets control, so a modal dialog of the session does not
     // hold the reply of the tool.

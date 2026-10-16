@@ -21,6 +21,8 @@ collect_sources(SOURCE_CLIENT_CORE_MCP_TOOLS
     check_local_hosts_tool.h
     check_router_hosts_tool.cc
     check_router_hosts_tool.h
+    close_client_tool.cc
+    close_client_tool.h
     connect_local_host_tool.cc
     connect_local_host_tool.h
     connect_router_host_tool.cc

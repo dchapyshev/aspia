@@ -37,6 +37,7 @@ enum SessionType : int;
 } // namespace proto::peer
 
 class AppLock;
+class ClientWindow;
 class Tab;
 class ManagementTab;
 class SearchDialog;
@@ -72,6 +73,8 @@ protected:
     McpController::DesktopWindow* desktopWindow(qint64 client_id) const final;
     McpController::FileTransferWindow* fileTransferWindow(qint64 client_id) const final;
     McpController::TerminalWindow* terminalWindow(qint64 client_id) const final;
+    QString clientDialog(qint64 client_id) const final;
+    void closeClient(qint64 client_id) final;
     void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) final;
     void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) final;
 
@@ -106,6 +109,7 @@ private:
     Tab* tabAt(int index);
     bool activateTab(Tab::Type type);
     ManagementTab* managementTab() const;
+    ClientWindow* clientWindow(qint64 client_id) const;
     void showSearchDialog();
     void syncSearchField();
     void updateStatusBarVisibility();

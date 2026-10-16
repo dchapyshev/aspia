@@ -425,6 +425,33 @@ McpController::TerminalWindow* MainWindow::terminalWindow(qint64 client_id) cons
 }
 
 //--------------------------------------------------------------------------------------------------
+QString MainWindow::clientDialog(qint64 client_id) const
+{
+    ClientWindow* client_window = clientWindow(client_id);
+    if (!client_window)
+        return QString();
+
+    const QList<QDialog*> dialogs = client_window->findChildren<QDialog*>();
+    for (QDialog* dialog : dialogs)
+    {
+        if (dialog->isVisible() && dialog->isModal())
+        {
+            QMessageBox* message_box = qobject_cast<QMessageBox*>(dialog);
+            return message_box ? message_box->text() : dialog->windowTitle();
+        }
+    }
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::closeClient(qint64 client_id)
+{
+    if (ClientWindow* client_window = clientWindow(client_id))
+        client_window->close();
+}
+
+//--------------------------------------------------------------------------------------------------
 void MainWindow::connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type)
 {
     if (ManagementTab* management_tab = managementTab())
@@ -1031,6 +1058,20 @@ ManagementTab* MainWindow::managementTab() const
         ManagementTab* tab = dynamic_cast<ManagementTab*>(ui->tabs->widget(i));
         if (tab)
             return tab;
+    }
+
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+ClientWindow* MainWindow::clientWindow(qint64 client_id) const
+{
+    for (int i = 0; i < ui->tabs->count(); ++i)
+    {
+        ClientTab* client_tab = dynamic_cast<ClientTab*>(ui->tabs->widget(i));
+        ClientWindow* client_window = client_tab ? client_tab->clientWindow() : nullptr;
+        if (client_window && client_window->clientId() == client_id)
+            return client_window;
     }
 
     return nullptr;
