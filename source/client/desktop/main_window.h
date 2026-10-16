@@ -103,6 +103,7 @@ private slots:
     void onTabShowRequested();
     void onAlwaysOnTop(bool checked);
     void onMcpConnector(bool enable);
+    void onMcpClientsChanged(const QStringList& clients);
     void onLockRequested();
 
 private:
@@ -134,6 +135,7 @@ private:
     QList<QPair<QMenu*, QList<QPointer<QAction>>>> tab_menu_actions_;
 
     McpController* mcp_controller_ = nullptr;
+    QString window_title_;
 
     Q_DISABLE_COPY_MOVE(MainWindow)
 };

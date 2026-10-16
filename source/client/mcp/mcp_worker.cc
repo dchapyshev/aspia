@@ -284,6 +284,7 @@ void McpWorker::onDisable()
         socket->deleteLater();
     }
 
+    reportClients();
     LOG(INFO) << "MCP connector stopped";
 }
 
@@ -362,6 +363,7 @@ void McpWorker::onNewConnection()
     {
         LOG(INFO) << "MCP connection opened";
         connections_.insert(socket, Connection());
+        reportClients();
 
         connect(socket, &QLocalSocket::readyRead, this, [this, socket]() { readMessages(socket); });
         connect(socket, &QLocalSocket::disconnected, this, [this, socket]()
@@ -369,8 +371,19 @@ void McpWorker::onNewConnection()
             LOG(INFO) << "MCP connection closed";
             connections_.remove(socket);
             socket->deleteLater();
+            reportClients();
         });
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void McpWorker::reportClients()
+{
+    QStringList clients;
+    for (const Connection& connection : std::as_const(connections_))
+        clients.append(connection.client_name);
+
+    emit sig_clientsChanged(clients);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -447,6 +460,13 @@ void McpWorker::processMessage(const QByteArray& message, Connection* connection
             version = kLegacyVersions.front();
 
         connection->initialized = true;
+
+        const QJsonObject client_info = params.value("clientInfo").toObject();
+        connection->client_name = client_info.value("title").toString();
+        if (connection->client_name.isEmpty())
+            connection->client_name = client_info.value("name").toString();
+        reportClients();
+
         respond(resultResponse(id, QJsonObject{
             { "protocolVersion", version }, { "capabilities", capabilities() }, { "serverInfo", serverInfo() } }));
         return;

@@ -89,6 +89,8 @@ McpController::McpController(MainWindow* main_window, QObject* parent)
 
     connect(mcp_worker_, &McpWorker::sig_enableFailed,
             this, &McpController::sig_enableFailed, Qt::QueuedConnection);
+    connect(mcp_worker_, &McpWorker::sig_clientsChanged,
+            this, &McpController::sig_clientsChanged, Qt::QueuedConnection);
     connect(mcp_worker_, &McpWorker::sig_toolsListRequested,
             this, &McpController::onToolsListRequested, Qt::QueuedConnection);
     connect(mcp_worker_, &McpWorker::sig_toolCallRequested,

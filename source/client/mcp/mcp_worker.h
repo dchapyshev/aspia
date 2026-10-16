@@ -24,6 +24,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QStringList>
 
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
@@ -52,6 +53,7 @@ public slots:
 
 signals:
     void sig_enableFailed();
+    void sig_clientsChanged(const QStringList& clients);
     void sig_toolsListRequested(qint64 request_id);
     void sig_toolCallRequested(qint64 request_id, const QString& name, const QJsonObject& arguments);
 
@@ -71,6 +73,7 @@ private:
     {
         QByteArray buffer;
         bool initialized = false;
+        QString client_name;
     };
 
     // A request that waits for the answer of the tools.
@@ -82,6 +85,7 @@ private:
     };
 
     void readMessages(QLocalSocket* socket);
+    void reportClients();
     void processMessage(const QByteArray& message, Connection* connection, const Respond& respond);
     void processMethod(const QJsonValue& id, const QString& method, const QJsonObject& params, bool modern,
                        const Respond& respond);

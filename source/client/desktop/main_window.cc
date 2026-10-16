@@ -114,6 +114,7 @@ MainWindow::MainWindow(QWidget* parent)
     Settings settings;
 
     ui->setupUi(this);
+    window_title_ = windowTitle();
 
     connect(ui->tabs->tabBar(), &TabBar::sig_tabDetachRequested, this, &MainWindow::onTabDetachRequested);
 
@@ -218,6 +219,7 @@ MainWindow::MainWindow(QWidget* parent)
             QSignalBlocker blocker(ui->action_mcp_connector);
             ui->action_mcp_connector->setChecked(false);
         });
+        connect(mcp_controller_, &McpController::sig_clientsChanged, this, &MainWindow::onMcpClientsChanged);
     }
 
     connect(GuiApplication::instance(), &GuiApplication::sig_themeChanged,
@@ -977,6 +979,28 @@ void MainWindow::onAlwaysOnTop(bool checked)
 void MainWindow::onMcpConnector(bool enable)
 {
     mcp_controller_->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onMcpClientsChanged(const QStringList& clients)
+{
+    LOG(INFO) << "MCP clients changed:" << clients;
+
+    if (clients.isEmpty())
+    {
+        ui->action_mcp_connector->setIcon(QIcon(":/img/ai.svg"));
+        ui->action_mcp_connector->setToolTip(ui->action_mcp_connector->text());
+        setWindowTitle(window_title_);
+        return;
+    }
+
+    QStringList names;
+    for (const QString& client : clients)
+        names.append(client.isEmpty() ? tr("Unknown application") : client);
+
+    ui->action_mcp_connector->setIcon(QIcon(":/img/ai-online.svg"));
+    ui->action_mcp_connector->setToolTip(tr("MCP Connector. Connected: %1").arg(names.join(", ")));
+    setWindowTitle(tr("%1 - AI is connected").arg(window_title_));
 }
 
 //--------------------------------------------------------------------------------------------------

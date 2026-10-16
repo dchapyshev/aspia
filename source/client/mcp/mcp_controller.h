@@ -220,6 +220,9 @@ public:
 signals:
     void sig_enableFailed();
 
+    // The AI applications that are connected now. The name is empty when an application does not give it.
+    void sig_clientsChanged(const QStringList& clients);
+
 private slots:
     void onToolsListRequested(qint64 request_id);
     void onToolCallRequested(qint64 request_id, const QString& name, const QJsonObject& arguments);
