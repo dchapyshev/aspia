@@ -77,6 +77,7 @@ protected:
     McpController::ChatWindow* chatWindow(qint64 client_id) const final;
     QString clientDialog(qint64 client_id) const final;
     void closeClient(qint64 client_id) final;
+    bool showClient(qint64 client_id) final;
     bool asksCredentials() const final;
     void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) final;
     void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) final;
@@ -111,6 +112,7 @@ private:
     void hideCloseButtonForTab(int index);
     Tab* tabAt(int index);
     bool activateTab(Tab::Type type);
+    bool showTab(Tab* tab);
     ManagementTab* managementTab() const;
     ClientWindow* clientWindow(qint64 client_id) const;
     void showSearchDialog();

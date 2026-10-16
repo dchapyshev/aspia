@@ -62,15 +62,16 @@ QJsonObject ListClientsTool::definition() const
         { "name", name() },
         { "description", "Lists the client windows of Aspia Client that are connected to hosts, with their "
                          "client_id, session_type, the host and whether the window is detached or is a tab of the "
-                         "main window. The client_id stays the same while the window is open. A host of the local "
+                         "main window. current is true for the chosen tab of the main window and for every detached "
+                         "window. The client_id stays the same while the window is open. A host of the local "
                          "database has the id from find_local_hosts, a host of a router has the router_id and "
-                         "host_id, and quick_support says whether it is a Quick Support host. A host entered by "
-                         "its address in the quick connection has only the address. The state is connecting while "
-                         "the client connects, authorization while it asks the user for the credentials of the "
-                         "host, dialog while it shows another dialog to the user, disconnected when the connection "
-                         "has ended or the client waits to connect again, and connected. The message is the text "
-                         "that the user sees in the window, in the language of Aspia Client. Tell the user what to "
-                         "do when the client waits for the user." },
+                         "host_id, and quick_support says whether it is a Quick Support host. A host entered by its "
+                         "address in the quick connection has only the address. The state is connecting while the "
+                         "client connects, authorization while it asks the user for the credentials of the host, "
+                         "dialog while it shows another dialog to the user, disconnected when the connection has "
+                         "ended or the client waits to connect again, and connected. The message is the text that "
+                         "the user sees in the window, in the language of Aspia Client. Tell the user what to do "
+                         "when the client waits for the user." },
         { "inputSchema", QJsonObject{ { "type", "object" }, { "additionalProperties", false } } } };
 }
 
@@ -85,6 +86,7 @@ void ListClientsTool::call(const QJsonObject& /* arguments */, Reply reply)
                            { "session_type", sessionTypeName(client.session_type) },
                            { "name", client.name.isEmpty() ? client.address : client.name },
                            { "detached", client.detached },
+                           { "current", client.current },
                            { "state", stateName(client.state) } };
 
         if (!client.message.isEmpty())

@@ -79,6 +79,7 @@ public:
         QString address;
         bool portable = false;
         bool detached = false;
+        bool current = false;
         ClientState state = ClientState::CONNECTING;
         QString message;
     };
@@ -183,6 +184,7 @@ public:
         virtual ChatWindow* chatWindow(qint64 client_id) const = 0;
         virtual QString clientDialog(qint64 client_id) const = 0;
         virtual void closeClient(qint64 client_id) = 0;
+        virtual bool showClient(qint64 client_id) = 0;
         virtual bool asksCredentials() const = 0;
         virtual void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) = 0;
         virtual void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) = 0;
@@ -205,6 +207,7 @@ public:
     ChatWindow* chatWindow(qint64 client_id) const;
     QString clientDialog(qint64 client_id) const;
     void closeClient(qint64 client_id);
+    bool showClient(qint64 client_id);
 
     // True while a window that is not opened yet asks the user for the credentials of the host.
     bool asksCredentials() const;

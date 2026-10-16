@@ -398,6 +398,8 @@ QList<McpController::ClientInfo> MainWindow::clients() const
                                               host.name(), host.entryId(), host.routerId(),
                                               host.address(), host.isPortable(), client_tab->isDetached() };
 
+            client.current = client.detached || ui->tabs->currentWidget() == client_tab;
+
             const StatusOverlay* status_overlay = client_window->statusOverlay();
 
             if (const QDialog* dialog = shownDialog(client_window))
@@ -494,6 +496,20 @@ void MainWindow::closeClient(qint64 client_id)
 {
     if (ClientWindow* client_window = clientWindow(client_id))
         client_window->close();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool MainWindow::showClient(qint64 client_id)
+{
+    for (int i = 0; i < ui->tabs->count(); ++i)
+    {
+        ClientTab* client_tab = dynamic_cast<ClientTab*>(ui->tabs->widget(i));
+        ClientWindow* client_window = client_tab ? client_tab->clientWindow() : nullptr;
+        if (client_window && client_window->clientId() == client_id)
+            return showTab(client_tab);
+    }
+
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -933,26 +949,8 @@ void MainWindow::onTabMinimizeRequested()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onTabShowRequested()
 {
-    Tab* tab = qobject_cast<Tab*>(sender());
-    if (!tab)
-        return;
-
-    int index = ui->tabs->indexOf(tab);
-    if (index == -1)
-        return;
-
-    if (tab->isDetached())
-    {
-        if (QWidget* window = tab->detachedWindow())
-        {
-            window->showNormal();
-            window->activateWindow();
-        }
-    }
-    else if (ui->tabs->tabBar()->isTabVisible(index))
-    {
-        ui->tabs->setCurrentIndex(index);
-    }
+    if (Tab* tab = qobject_cast<Tab*>(sender()))
+        showTab(tab);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1103,6 +1101,31 @@ bool MainWindow::activateTab(Tab::Type type)
             ui->tabs->setCurrentIndex(i);
             return true;
         }
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool MainWindow::showTab(Tab* tab)
+{
+    int index = ui->tabs->indexOf(tab);
+    if (index == -1)
+        return false;
+
+    if (tab->isDetached())
+    {
+        if (QWidget* window = tab->detachedWindow())
+        {
+            window->showNormal();
+            window->activateWindow();
+            return true;
+        }
+    }
+    else if (ui->tabs->tabBar()->isTabVisible(index))
+    {
+        ui->tabs->setCurrentIndex(index);
+        return true;
     }
 
     return false;

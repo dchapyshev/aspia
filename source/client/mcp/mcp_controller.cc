@@ -41,6 +41,7 @@
 #include "client/mcp/tools/list_quick_support_hosts_tool.h"
 #include "client/mcp/tools/list_router_groups_tool.h"
 #include "client/mcp/tools/list_routers_tool.h"
+#include "client/mcp/tools/show_client_tool.h"
 #include "client/mcp/tools/system_info_client_tool.h"
 #include "client/mcp/tools/terminal_client_tool.h"
 
@@ -71,6 +72,7 @@ McpController::McpController(MainWindow* main_window, QObject* parent)
     tools_.push_back(std::make_unique<ListQuickSupportHostsTool>());
     tools_.push_back(std::make_unique<ConnectRouterHostTool>());
     tools_.push_back(std::make_unique<ListClientsTool>());
+    tools_.push_back(std::make_unique<ShowClientTool>());
     tools_.push_back(std::make_unique<CloseClientTool>());
     tools_.push_back(std::make_unique<DesktopClientTool>());
     tools_.push_back(std::make_unique<FileTransferClientTool>());
@@ -173,6 +175,12 @@ QString McpController::clientDialog(qint64 client_id) const
 void McpController::closeClient(qint64 client_id)
 {
     main_window_->closeClient(client_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool McpController::showClient(qint64 client_id)
+{
+    return main_window_->showClient(client_id);
 }
 
 //--------------------------------------------------------------------------------------------------
