@@ -112,6 +112,18 @@ void FileTransferWidget::requestStop()
 }
 
 //--------------------------------------------------------------------------------------------------
+int FileTransferWidget::totalProgress() const
+{
+    return ui->progress_total->value();
+}
+
+//--------------------------------------------------------------------------------------------------
+int FileTransferWidget::currentProgress() const
+{
+    return ui->progress_current->value();
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileTransferWidget::start()
 {
     updateTaskbarWindow();
@@ -185,6 +197,7 @@ void FileTransferWidget::errorOccurred(const FileTransfer::Error& error)
 #endif
 
     MsgBox* dialog = new MsgBox(window());
+    error_dialog_ = dialog;
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->setWindowModality(Qt::WindowModal);
 

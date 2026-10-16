@@ -185,9 +185,10 @@ QString FileTransferWindow::currentPath(FileTask::Target target) const
 //--------------------------------------------------------------------------------------------------
 bool FileTransferWindow::openPath(FileTask::Target target, const QString& path)
 {
-    FilePanel* panel = filePanel(target);
-    if (!panel->isEnabled())
+    if (isBusy())
         return false;
+
+    FilePanel* panel = filePanel(target);
 
     // A wrong path brings up a warning that must not hold the reply of the tool.
     QMetaObject::invokeMethod(panel, [panel, path]()
@@ -208,6 +209,35 @@ bool FileTransferWindow::isCurrentPathListed(FileTask::Target target) const
 QList<FileTransfer::Item> FileTransferWindow::currentItems(FileTask::Target target) const
 {
     return filePanel(target)->items();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FileTransferWindow::isBusy() const
+{
+    return !ui->transfer_widget->isHidden() || !ui->remove_widget->isHidden();
+}
+
+//--------------------------------------------------------------------------------------------------
+QStringList FileTransferWindow::selectItems(FileTask::Target target, const QStringList& names)
+{
+    return filePanel(target)->selectItems(names);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FileTransferWindow::sendSelection(FileTask::Target target)
+{
+    return filePanel(target)->sendSelection();
+}
+
+//--------------------------------------------------------------------------------------------------
+McpController::FileTransferWindow::TransferState FileTransferWindow::transferState() const
+{
+    TransferState state;
+    state.running = !ui->transfer_widget->isHidden();
+    state.total_progress = ui->transfer_widget->totalProgress();
+    state.current_progress = ui->transfer_widget->currentProgress();
+    state.error_shown = ui->transfer_widget->isErrorShown();
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -61,6 +61,8 @@ public:
     void openPath(const QString& path);
     bool isCurrentPathListed() const;
     QList<FileTransfer::Item> items() const;
+    QStringList selectItems(const QStringList& names);
+    bool sendSelection();
 
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);

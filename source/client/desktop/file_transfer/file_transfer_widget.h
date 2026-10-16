@@ -19,6 +19,7 @@
 #ifndef CLIENT_DESKTOP_FILE_TRANSFER_FILE_TRANSFER_WIDGET_H
 #define CLIENT_DESKTOP_FILE_TRANSFER_FILE_TRANSFER_WIDGET_H
 
+#include <QPointer>
 #include <QWidget>
 
 #include <memory>
@@ -28,6 +29,8 @@
 #if defined(Q_OS_WINDOWS)
 class TaskbarProgress;
 #endif
+
+class MsgBox;
 
 namespace Ui {
 class FileTransferWidget;
@@ -44,6 +47,9 @@ public:
     void reset();
     void requestStop();
     bool isFinished() const { return finished_; }
+    int totalProgress() const;
+    int currentProgress() const;
+    bool isErrorShown() const { return error_dialog_ != nullptr; }
 
 public slots:
     void start();
@@ -72,6 +78,8 @@ private:
     bool task_queue_building_ = true;
     bool stopping_ = false;
     bool finished_ = false;
+
+    QPointer<MsgBox> error_dialog_;
 
     Q_DISABLE_COPY_MOVE(FileTransferWidget)
 };

@@ -73,6 +73,10 @@ protected:
     bool openPath(FileTask::Target target, const QString& path) final;
     bool isCurrentPathListed(FileTask::Target target) const final;
     QList<FileTransfer::Item> currentItems(FileTask::Target target) const final;
+    bool isBusy() const final;
+    QStringList selectItems(FileTask::Target target, const QStringList& names) final;
+    bool sendSelection(FileTask::Target target) final;
+    TransferState transferState() const final;
 
 private slots:
     void onErrorOccurred(proto::file_transfer::ErrorCode error_code);

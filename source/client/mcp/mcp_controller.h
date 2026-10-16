@@ -92,12 +92,24 @@ public:
     class FileTransferWindow
     {
     public:
+        struct TransferState
+        {
+            bool running = false;
+            int total_progress = 0;
+            int current_progress = 0;
+            bool error_shown = false;
+        };
+
         virtual ~FileTransferWindow() = default;
 
         virtual QString currentPath(FileTask::Target target) const = 0;
         virtual bool openPath(FileTask::Target target, const QString& path) = 0;
         virtual bool isCurrentPathListed(FileTask::Target target) const = 0;
         virtual QList<FileTransfer::Item> currentItems(FileTask::Target target) const = 0;
+        virtual bool isBusy() const = 0;
+        virtual QStringList selectItems(FileTask::Target target, const QStringList& names) = 0;
+        virtual bool sendSelection(FileTask::Target target) = 0;
+        virtual TransferState transferState() const = 0;
     };
 
     class TerminalWindow

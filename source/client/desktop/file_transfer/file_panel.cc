@@ -149,6 +149,38 @@ QList<FileTransfer::Item> FilePanel::items() const
 }
 
 //--------------------------------------------------------------------------------------------------
+QStringList FilePanel::selectItems(const QStringList& names)
+{
+    FileListModel* model = static_cast<FileListModel*>(ui->list->model());
+    QStringList missing = names;
+    QItemSelection selection;
+
+    for (int row = 0; row < model->rowCount(QModelIndex()); ++row)
+    {
+        const QModelIndex index = model->index(row, 0, QModelIndex());
+        if (missing.removeOne(model->nameAt(index)))
+            selection.select(index, index);
+    }
+
+    if (!missing.isEmpty())
+        return missing;
+
+    ui->list->selectionModel()->select(selection, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    ui->list->scrollTo(selection.indexes().first());
+    return missing;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FilePanel::sendSelection()
+{
+    if (!ui->action_send->isEnabled())
+        return false;
+
+    sendSelected();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 void FilePanel::onDriveList(
     proto::file_transfer::ErrorCode error_code, const proto::file_transfer::DriveList& drive_list)
 {
