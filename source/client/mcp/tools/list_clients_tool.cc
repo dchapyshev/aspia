@@ -25,6 +25,30 @@
 #include "client/mcp/mcp_controller.h"
 #include "client/mcp/tools/mcp_utils.h"
 
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+QString stateName(McpController::ClientState state)
+{
+    switch (state)
+    {
+        case McpController::ClientState::CONNECTING:
+            return "connecting";
+        case McpController::ClientState::CONNECTED:
+            return "connected";
+        case McpController::ClientState::DISCONNECTED:
+            return "disconnected";
+        case McpController::ClientState::AUTHORIZATION:
+            return "authorization";
+        case McpController::ClientState::DIALOG:
+            return "dialog";
+    }
+
+    return "connecting";
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 QString ListClientsTool::name() const
 {
@@ -41,8 +65,12 @@ QJsonObject ListClientsTool::definition() const
                          "main window. The client_id stays the same while the window is open. A host of the local "
                          "database has the id from find_local_hosts, a host of a router has the router_id and "
                          "host_id, and quick_support says whether it is a Quick Support host. A host entered by "
-                         "its address in the quick connection has only the address. The state of the connection "
-                         "is not reported." },
+                         "its address in the quick connection has only the address. The state is connecting while "
+                         "the client connects, authorization while it asks the user for the credentials of the "
+                         "host, dialog while it shows another dialog to the user, disconnected when the connection "
+                         "has ended or the client waits to connect again, and connected. The message is the text "
+                         "that the user sees in the window, in the language of Aspia Client. Tell the user what to "
+                         "do when the client waits for the user." },
         { "inputSchema", QJsonObject{ { "type", "object" }, { "additionalProperties", false } } } };
 }
 
@@ -56,7 +84,11 @@ void ListClientsTool::call(const QJsonObject& /* arguments */, Reply reply)
         QJsonObject entry{ { "client_id", client.client_id },
                            { "session_type", sessionTypeName(client.session_type) },
                            { "name", client.name.isEmpty() ? client.address : client.name },
-                           { "detached", client.detached } };
+                           { "detached", client.detached },
+                           { "state", stateName(client.state) } };
+
+        if (!client.message.isEmpty())
+            entry.insert("message", client.message);
 
         if (client.entry_id != 0)
             entry.insert("id", client.entry_id);

@@ -75,6 +75,18 @@ void StatusOverlay::setError(const QString& message)
 }
 
 //--------------------------------------------------------------------------------------------------
+QString StatusOverlay::message() const
+{
+    return message_label_->text();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool StatusOverlay::isBusy() const
+{
+    return !busy_bar_->isHidden();
+}
+
+//--------------------------------------------------------------------------------------------------
 bool StatusOverlay::eventFilter(QObject* object, QEvent* event)
 {
     if (object == parentWidget())

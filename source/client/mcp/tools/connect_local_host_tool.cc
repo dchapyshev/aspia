@@ -40,9 +40,10 @@ QJsonObject ConnectLocalHostTool::definition() const
         { "name", name() },
         { "description", "Opens a session to a host saved in the local database of Aspia Client, the same way "
                          "as the user does it from the address book. The session window opens on the screen of "
-                         "the user, who sees the authorization, its errors and the session itself. Nothing of "
-                         "it is returned here, and the credentials stay in Aspia Client. The hosts of routers "
-                         "are connected by connect_router_host." },
+                         "the user, who sees the authorization, its errors and the session itself. The reply "
+                         "gives the client_id of the window or says that the user is asked for the credentials, "
+                         "and list_clients shows the state of the client later. The credentials stay in Aspia "
+                         "Client. The hosts of routers are connected by connect_router_host." },
         { "inputSchema", QJsonObject{ { "type", "object" },
                                       { "properties", QJsonObject{ { "id", id },
                                                                    { "session_type", sessionTypeSchema() } } },
@@ -91,7 +92,5 @@ void ConnectLocalHostTool::call(const QJsonObject& arguments, Reply reply)
     }
 
     McpController::instance().connectLocalHost(id, *session_type);
-
-    reply(true, QString("Aspia Client opens the %1 session to \"%2\" on the screen of the user.")
-        .arg(arguments.value("session_type").toString(), host.name()));
+    replyAfterConnect(arguments.value("session_type").toString(), host.name(), reply);
 }

@@ -160,6 +160,12 @@ void McpController::closeClient(qint64 client_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool McpController::asksCredentials() const
+{
+    return main_window_->asksCredentials();
+}
+
+//--------------------------------------------------------------------------------------------------
 void McpController::connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type)
 {
     QMetaObject::invokeMethod(this, [this, entry_id, session_type]()

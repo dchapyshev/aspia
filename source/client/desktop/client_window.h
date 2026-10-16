@@ -53,6 +53,7 @@ public:
     qint64 clientId() const { return client_id_; }
     std::shared_ptr<SessionState> sessionState() { return session_state_; }
     proto::peer::SessionType sessionType() const { return session_type_; }
+    const StatusOverlay* statusOverlay() const { return status_overlay_; }
 
     // Notifies the session that it has been embedded in a tab (tabbed=true) or detached into a
     // top-level window (tabbed=false). Subclasses override to hide their own session-level

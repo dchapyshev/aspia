@@ -75,6 +75,7 @@ protected:
     McpController::TerminalWindow* terminalWindow(qint64 client_id) const final;
     QString clientDialog(qint64 client_id) const final;
     void closeClient(qint64 client_id) final;
+    bool asksCredentials() const final;
     void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) final;
     void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) final;
 

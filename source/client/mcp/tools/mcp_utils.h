@@ -26,6 +26,7 @@
 
 #include <optional>
 
+#include "client/mcp/mcp_tool.h"
 #include "proto/peer.h"
 
 class LocalGroupConfig;
@@ -55,5 +56,9 @@ bool hasClient(qint64 client_id);
 bool routersFromArgument(const QJsonValue& value, QList<RouterInfo>* routers, QString* error);
 
 QString localGroupPath(qint64 group_id, const QHash<qint64, LocalGroupConfig>& groups);
+
+// Replies to a connect tool after the session to |host_name| is started, with the client_id of its window or with
+// the request of the credentials that the user answers.
+void replyAfterConnect(const QString& session_name, const QString& host_name, McpTool::Reply reply);
 
 #endif // CLIENT_MCP_TOOLS_MCP_UTILS_H

@@ -136,8 +136,9 @@ QJsonObject ConnectRouterHostTool::definition() const
         { "description", "Opens a session to a host of a router saved in Aspia Client, the same way as the user "
                          "does it from the address book. The router must be connected. The session window opens "
                          "on the screen of the user, who sees the authorization, its errors and the session "
-                         "itself. Nothing of it is returned here, and the credentials stay in Aspia Client. A "
-                         "Quick Support host accepts only desktop and file_transfer, and the user enters the "
+                         "itself. The reply gives the client_id of the window or says that the user is asked for "
+                         "the credentials, and list_clients shows the state of the client later. The credentials "
+                         "stay in Aspia Client. A Quick Support host accepts only desktop and file_transfer, and the user enters the "
                          "one-time password that the person on the other side tells. The local hosts are "
                          "connected by connect_local_host." },
         { "inputSchema", QJsonObject{ { "type", "object" },
@@ -230,9 +231,7 @@ void ConnectRouterHostTool::call(const QJsonObject& arguments, Reply reply)
         host.setPortable(quick_support);
 
         McpController::instance().connectRouterHost(host, *session_type);
-
-        reply(true, QString("Aspia Client opens the %1 session to \"%2\" on the screen of the user.")
-            .arg(session_name, lookup.name));
+        replyAfterConnect(session_name, lookup.name, reply);
     };
 
     if (quick_support)

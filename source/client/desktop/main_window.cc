@@ -42,12 +42,14 @@
 #include "client/settings.h"
 #include "client/system_settings.h"
 #include "client/desktop/app_lock.h"
+#include "client/desktop/authorization_dialog.h"
 #include "client/desktop/client_tab.h"
 #include "client/desktop/credentials_tab.h"
 #include "client/desktop/client_window.h"
 #include "client/desktop/management_tab.h"
 #include "client/desktop/quick_connect_dialog.h"
 #include "client/desktop/settings_tab.h"
+#include "client/desktop/status_overlay.h"
 #include "client/desktop/tab_bar.h"
 #include "client/desktop/tab_widget.h"
 #include "client/desktop/ui_main_window.h"
@@ -77,6 +79,26 @@ QString escapeTabTitle(const QString& title)
     QString result = title;
     result.replace('&', "&&");
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+QDialog* shownDialog(const QWidget* widget)
+{
+    const QList<QDialog*> dialogs = widget->findChildren<QDialog*>();
+    for (QDialog* dialog : dialogs)
+    {
+        if (dialog->isVisible() && dialog->isModal())
+            return dialog;
+    }
+
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString dialogText(const QDialog* dialog)
+{
+    const QMessageBox* message_box = qobject_cast<const QMessageBox*>(dialog);
+    return message_box ? message_box->text() : dialog->windowTitle();
 }
 
 } // namespace
@@ -372,10 +394,30 @@ QList<McpController::ClientInfo> MainWindow::clients() const
         if (client_window && client_window->sessionState())
         {
             const HostConfig& host = client_window->sessionState()->host();
-            list.append(McpController::ClientInfo{ client_window->clientId(), client_window->sessionType(),
-                                                   host.name(), host.entryId(), host.routerId(),
-                                                   host.address(), host.isPortable(),
-                                                   client_tab->isDetached() });
+            McpController::ClientInfo client{ client_window->clientId(), client_window->sessionType(),
+                                              host.name(), host.entryId(), host.routerId(),
+                                              host.address(), host.isPortable(), client_tab->isDetached() };
+
+            const StatusOverlay* status_overlay = client_window->statusOverlay();
+
+            if (const QDialog* dialog = shownDialog(client_window))
+            {
+                client.state = qobject_cast<const AuthorizationDialog*>(dialog) ?
+                    McpController::ClientState::AUTHORIZATION : McpController::ClientState::DIALOG;
+                client.message = dialogText(dialog);
+            }
+            else if (!status_overlay->isHidden())
+            {
+                client.state = status_overlay->isBusy() ?
+                    McpController::ClientState::CONNECTING : McpController::ClientState::DISCONNECTED;
+                client.message = status_overlay->message();
+            }
+            else
+            {
+                client.state = McpController::ClientState::CONNECTED;
+            }
+
+            list.append(client);
         }
     }
 
@@ -431,17 +473,8 @@ QString MainWindow::clientDialog(qint64 client_id) const
     if (!client_window)
         return QString();
 
-    const QList<QDialog*> dialogs = client_window->findChildren<QDialog*>();
-    for (QDialog* dialog : dialogs)
-    {
-        if (dialog->isVisible() && dialog->isModal())
-        {
-            QMessageBox* message_box = qobject_cast<QMessageBox*>(dialog);
-            return message_box ? message_box->text() : dialog->windowTitle();
-        }
-    }
-
-    return QString();
+    const QDialog* dialog = shownDialog(client_window);
+    return dialog ? dialogText(dialog) : QString();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -449,6 +482,19 @@ void MainWindow::closeClient(qint64 client_id)
 {
     if (ClientWindow* client_window = clientWindow(client_id))
         client_window->close();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool MainWindow::asksCredentials() const
+{
+    const QList<ClientWindow*> client_windows = findChildren<ClientWindow*>(Qt::FindDirectChildrenOnly);
+    for (const ClientWindow* client_window : client_windows)
+    {
+        if (qobject_cast<const AuthorizationDialog*>(shownDialog(client_window)))
+            return true;
+    }
+
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------

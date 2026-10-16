@@ -176,3 +176,39 @@ QString localGroupPath(qint64 group_id, const QHash<qint64, LocalGroupConfig>& g
 
     return names.join('/');
 }
+
+//--------------------------------------------------------------------------------------------------
+void replyAfterConnect(const QString& session_name, const QString& host_name, McpTool::Reply reply)
+{
+    QList<qint64> client_ids;
+    for (const McpController::ClientInfo& client : McpController::instance().clients())
+        client_ids.append(client.client_id);
+
+    // The start of the session is queued before, so this runs when the window has its tab or inside the dialog
+    // that asks for the credentials.
+    QMetaObject::invokeMethod(&McpController::instance(), [session_name, host_name, reply, client_ids]()
+    {
+        McpController& controller = McpController::instance();
+
+        if (controller.asksCredentials())
+        {
+            reply(true, QString("Aspia Client asks the user to enter the credentials of \"%1\". Tell the user to "
+                                "enter them. The client appears in list_clients after that.").arg(host_name));
+            return;
+        }
+
+        for (const McpController::ClientInfo& client : controller.clients())
+        {
+            if (!client_ids.contains(client.client_id))
+            {
+                reply(true, QString("Aspia Client opens the %1 session to \"%2\" on the screen of the user as the "
+                                    "client %3. Its state is in list_clients.")
+                    .arg(session_name, host_name, QString::number(client.client_id)));
+                return;
+            }
+        }
+
+        reply(false, QString("Aspia Client did not open the %1 session to \"%2\". The user cancelled it or Aspia "
+                             "Client shows the reason to the user.").arg(session_name, host_name));
+    }, Qt::QueuedConnection);
+}

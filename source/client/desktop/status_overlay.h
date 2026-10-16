@@ -38,6 +38,9 @@ public:
     void setProgress(const QString& message);
     void setError(const QString& message);
 
+    QString message() const;
+    bool isBusy() const;
+
 signals:
     // Emitted when the user clicks the close button to cancel the connection or dismiss an error.
     void sig_closeRequested();
