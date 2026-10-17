@@ -49,6 +49,7 @@
 #include "client/application.h"
 #include "client/database.h"
 #include "client/master_password.h"
+#include "client/mcp/mcp_worker.h"
 #include "client/settings.h"
 #include "client/system_settings.h"
 #include "client/desktop/ui_settings_tab.h"
@@ -655,8 +656,8 @@ void SettingsTab::onMcpEnabledChanged()
     ui->groupbox_mcp_session_types->setEnabled(enable);
     ui->groupbox_mcp_actions->setEnabled(enable);
 
-    if (enable)
-        MsgBox::information(this, tr("MCP will work after the application is restarted."));
+    if (enable != (GuiApplication::findWorker<McpWorker>() != nullptr))
+        MsgBox::information(this, tr("The setting will be applied after the application is restarted."));
 }
 
 //--------------------------------------------------------------------------------------------------
