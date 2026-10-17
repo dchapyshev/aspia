@@ -98,9 +98,9 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     ui->tree_host->header()->resizeSection(
         model_->sectionOf(HostListModel::Column::VERSION), 65);
     ui->tree_host->header()->resizeSection(
-        model_->sectionOf(HostListModel::Column::LAST_CONNECT), 130);
+        model_->sectionOf(HostListModel::Column::LAST_CONNECT), 150);
     ui->tree_host->header()->resizeSection(
-        model_->sectionOf(HostListModel::Column::LAST_MODIFY), 135);
+        model_->sectionOf(HostListModel::Column::LAST_MODIFY), 150);
 
     connect(ui->tree_host->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterGroupWidget::onHeaderContextMenu);

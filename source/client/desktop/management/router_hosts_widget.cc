@@ -117,8 +117,8 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
     ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::OS), 140);
     ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::VERSION), 70);
     ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::ARCH), 90);
-    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::LAST_CONNECT), 135);
-    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::LAST_MODIFY), 135);
+    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::LAST_CONNECT), 150);
+    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::LAST_MODIFY), 150);
 
     connect(ui->tree_hosts->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterHostsWidget::onHeaderContextMenu);
