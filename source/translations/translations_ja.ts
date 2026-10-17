@@ -3830,8 +3830,8 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
-        <source>Last Online</source>
-        <translation>最終オンライン</translation>
+        <source>Last Connection</source>
+        <translation>最終接続</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>

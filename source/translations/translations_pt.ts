@@ -3845,8 +3845,8 @@ Credenciais substituídas: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
-        <source>Last Online</source>
-        <translation>Última vez online</translation>
+        <source>Last Connection</source>
+        <translation>Última ligação</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>

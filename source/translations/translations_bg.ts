@@ -3845,8 +3845,8 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
-        <source>Last Online</source>
-        <translation>Последно онлайн</translation>
+        <source>Last Connection</source>
+        <translation>Последно свързване</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>

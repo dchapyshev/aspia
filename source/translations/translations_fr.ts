@@ -3845,8 +3845,8 @@ Identifiants remplacés: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
-        <source>Last Online</source>
-        <translation>Dernière fois en ligne</translation>
+        <source>Last Connection</source>
+        <translation>Dernière connexion</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>

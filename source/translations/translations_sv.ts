@@ -3845,8 +3845,8 @@ Ersatta inloggningsuppgifter: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
-        <source>Last Online</source>
-        <translation>Senast online</translation>
+        <source>Last Connection</source>
+        <translation>Senaste anslutning</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>

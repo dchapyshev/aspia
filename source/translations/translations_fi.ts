@@ -3845,8 +3845,8 @@ Korvattuja kirjautumistietoja: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
-        <source>Last Online</source>
-        <translation>Viimeksi verkossa</translation>
+        <source>Last Connection</source>
+        <translation>Viimeisin yhteys</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
