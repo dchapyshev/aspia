@@ -102,7 +102,10 @@ public:
         PROXY_AUTH_REQUIRED,
 
         // The proxy server refused to open the tunnel or sent an invalid response.
-        PROXY_ERROR
+        PROXY_ERROR,
+
+        // The proxy server could not connect to the destination host.
+        PROXY_DESTINATION_UNREACHABLE
     };
     Q_ENUM(ErrorCode)
 

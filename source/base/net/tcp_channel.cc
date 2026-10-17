@@ -157,6 +157,10 @@ QString TcpChannel::errorToString(ErrorCode error_code)
             message = QT_TR_NOOP("Proxy server refused the connection or sent an invalid response.");
             break;
 
+        case ErrorCode::PROXY_DESTINATION_UNREACHABLE:
+            message = QT_TR_NOOP("Proxy server could not connect to the destination host.");
+            break;
+
         default:
         {
             if (error_code != ErrorCode::UNKNOWN)

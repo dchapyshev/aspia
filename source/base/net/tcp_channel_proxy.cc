@@ -102,6 +102,9 @@ TcpChannel::ErrorCode tunnelErrorCode(CURLcode result, long proxy_response, long
     if (proxy_response == 407)
         return TcpChannel::ErrorCode::PROXY_AUTH_REQUIRED;
 
+    if (proxy_response == 502 || proxy_response == 503 || proxy_response == 504)
+        return TcpChannel::ErrorCode::PROXY_DESTINATION_UNREACHABLE;
+
     switch (result)
     {
         case CURLE_COULDNT_RESOLVE_PROXY:
