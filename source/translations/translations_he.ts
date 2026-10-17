@@ -12774,7 +12774,12 @@ Credentials imported: %5</source>
         <translation>שרת הפרוקסי דחה את החיבור או שלח תגובה לא חוקית.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>שרת הפרוקסי לא הצליח להתחבר למארח היעד.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>אירעה שגיאה לא ידועה.</translation>
     </message>

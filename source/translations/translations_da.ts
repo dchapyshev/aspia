@@ -12774,7 +12774,12 @@ Importerede legitimationsoplysninger: %5</translation>
         <translation>Proxyserveren afviste forbindelsen eller sendte et ugyldigt svar.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>Proxyserveren kunne ikke oprette forbindelse til destinationsværten.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Der opstod en ukendt fejl.</translation>
     </message>

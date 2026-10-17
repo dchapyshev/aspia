@@ -12726,7 +12726,12 @@ Credentials imported: %5</source>
         <translation>プロキシ サーバーが接続を拒否したか、無効な応答を返しました。</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>プロキシ サーバーが接続先ホストに接続できませんでした。</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>不明なエラーが発生しました。</translation>
     </message>

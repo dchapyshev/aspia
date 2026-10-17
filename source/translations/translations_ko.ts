@@ -12726,7 +12726,12 @@ Credentials imported: %5</source>
         <translation>프록시 서버가 연결을 거부했거나 잘못된 응답을 보냈습니다.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>프록시 서버가 대상 호스트에 연결할 수 없습니다.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>알 수 없는 오류가 발생했습니다.</translation>
     </message>

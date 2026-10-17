@@ -12774,7 +12774,12 @@ Credentials imported: %5</source>
         <translation>Прокси сървърът отказа връзката или изпрати невалиден отговор.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>Прокси сървърът не успя да се свърже с целевия възел.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Възникна неизвестна грешка.</translation>
     </message>

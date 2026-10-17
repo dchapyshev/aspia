@@ -12774,7 +12774,12 @@ Importerade inloggningsuppgifter: %5</translation>
         <translation>Proxyservern nekade anslutningen eller skickade ett ogiltigt svar.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>Proxyservern kunde inte ansluta till målvärden.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Ett okänt fel uppstod.</translation>
     </message>

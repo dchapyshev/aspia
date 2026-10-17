@@ -12726,7 +12726,12 @@ Importált hitelesítő adatok: %5</translation>
         <translation>A proxykiszolgáló elutasította a kapcsolatot, vagy érvénytelen választ küldött.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>A proxykiszolgáló nem tudott kapcsolódni a célgazdagéphez.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Ismeretlen hiba történt.</translation>
     </message>

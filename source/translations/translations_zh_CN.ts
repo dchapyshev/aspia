@@ -12726,7 +12726,12 @@ Credentials imported: %5</source>
         <translation>代理服务器拒绝了连接或发送了无效的响应。</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>代理服务器无法连接到目标主机。</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>发生未知错误。</translation>
     </message>

@@ -12774,7 +12774,12 @@ Identifiants importés: %5</translation>
         <translation>Le serveur proxy a refusé la connexion ou a envoyé une réponse non valide.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>Le serveur proxy n&apos;a pas pu se connecter à l&apos;hôte de destination.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Une erreur inconnue s&apos;est produite.</translation>
     </message>

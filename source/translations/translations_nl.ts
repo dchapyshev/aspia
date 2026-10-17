@@ -12774,7 +12774,12 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>De proxyserver heeft de verbinding geweigerd of een ongeldig antwoord verzonden.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>De proxyserver kon geen verbinding maken met de doelhost.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Er is een onbekende fout opgetreden.</translation>
     </message>

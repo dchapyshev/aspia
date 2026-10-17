@@ -12774,7 +12774,12 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Proxyserveren avviste tilkoblingen eller sendte et ugyldig svar.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>Proxyserveren kunne ikke koble til målverten.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Det oppstod en ukjent feil.</translation>
     </message>

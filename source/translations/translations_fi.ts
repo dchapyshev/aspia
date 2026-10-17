@@ -12774,7 +12774,12 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Proxy-palvelin hylkäsi yhteyden tai lähetti virheellisen vastauksen.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>Proxy-palvelin ei pystynyt muodostamaan yhteyttä kohdeisäntään.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Tapahtui tuntematon virhe.</translation>
     </message>

@@ -12824,7 +12824,12 @@ Credentials imported: %5</source>
         <translation>Проксі-сервер відхилив підключення або надіслав некоректну відповідь.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>Проксі-сервер не зміг підключитися до вузла призначення.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Сталася невідома помилка.</translation>
     </message>

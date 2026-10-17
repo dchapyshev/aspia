@@ -12822,7 +12822,12 @@ Zaimportowane dane logowania: %5</translation>
         <translation>Serwer proxy odrzucił połączenie lub wysłał nieprawidłową odpowiedź.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>Serwer proxy nie mógł połączyć się z hostem docelowym.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Wystąpił nieznany błąd.</translation>
     </message>

@@ -12774,7 +12774,12 @@ Credenciales importadas: %5</translation>
         <translation>El servidor proxy rechazó la conexión o envió una respuesta no válida.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>El servidor proxy no pudo conectarse al host de destino.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Se produjo un error desconocido.</translation>
     </message>

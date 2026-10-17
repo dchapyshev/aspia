@@ -12774,7 +12774,12 @@ Credentials imported: %5</source>
         <translation>Ο διακομιστής μεσολάβησης απέρριψε τη σύνδεση ή έστειλε μη έγκυρη απόκριση.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>Ο διακομιστής μεσολάβησης δεν μπόρεσε να συνδεθεί με τον κεντρικό υπολογιστή προορισμού.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Παρουσιάστηκε άγνωστο σφάλμα.</translation>
     </message>

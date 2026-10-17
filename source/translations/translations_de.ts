@@ -12774,7 +12774,12 @@ Importierte Anmeldedaten: %5</translation>
         <translation>Der Proxyserver hat die Verbindung abgelehnt oder eine ungültige Antwort gesendet.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>Der Proxyserver konnte keine Verbindung zum Zielhost herstellen.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Ein unbekannter Fehler ist aufgetreten.</translation>
     </message>

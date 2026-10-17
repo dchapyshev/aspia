@@ -12726,7 +12726,12 @@ Credentials imported: %5</source>
         <translation>Ara sunucu bağlantıyı reddetti veya geçersiz bir yanıt gönderdi.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>Ara sunucu hedef ana bilgisayara bağlanamadı.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>Bilinmeyen bir hata oluştu.</translation>
     </message>

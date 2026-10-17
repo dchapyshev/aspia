@@ -12726,7 +12726,12 @@ Credentials imported: %5</source>
         <translation>Proxy 伺服器拒絕了連線或傳送了無效的回應。</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>Proxy 伺服器無法連線到目的地主機。</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>發生未知的錯誤。</translation>
     </message>

@@ -12726,7 +12726,12 @@ Credentials imported: %5</source>
         <translation>سرور پروکسی اتصال را رد کرد یا پاسخ نامعتبری ارسال کرد.</translation>
     </message>
     <message>
-        <location filename="../base/net/tcp_channel.cc" line="167"/>
+        <location filename="../base/net/tcp_channel.cc" line="161"/>
+        <source>Proxy server could not connect to the destination host.</source>
+        <translation>سرور پروکسی نتوانست به میزبان مقصد متصل شود.</translation>
+    </message>
+    <message>
+        <location filename="../base/net/tcp_channel.cc" line="171"/>
         <source>An unknown error occurred.</source>
         <translation>خطای ناشناخته‌ای رخ داد.</translation>
     </message>
