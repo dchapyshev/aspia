@@ -228,7 +228,7 @@ private slots:
     void onToolCallRequested(qint64 request_id, const QString& name, const QJsonObject& arguments);
 
 private:
-    MainWindow* main_window_;
+    MainWindow* main_window_ = nullptr;
     QPointer<McpWorker> mcp_worker_;
     std::vector<std::unique_ptr<McpTool>> tools_;
 

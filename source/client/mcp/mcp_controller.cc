@@ -61,24 +61,24 @@ McpController::McpController(MainWindow* main_window, QObject* parent)
     CHECK(!g_instance);
     g_instance = this;
 
-    tools_.push_back(std::make_unique<FindLocalHostsTool>());
-    tools_.push_back(std::make_unique<ListLocalGroupsTool>());
-    tools_.push_back(std::make_unique<CheckLocalHostsTool>());
-    tools_.push_back(std::make_unique<ConnectLocalHostTool>());
-    tools_.push_back(std::make_unique<ListRoutersTool>());
-    tools_.push_back(std::make_unique<FindRouterHostsTool>());
-    tools_.push_back(std::make_unique<ListRouterGroupsTool>());
-    tools_.push_back(std::make_unique<CheckRouterHostsTool>());
-    tools_.push_back(std::make_unique<ListQuickSupportHostsTool>());
-    tools_.push_back(std::make_unique<ConnectRouterHostTool>());
-    tools_.push_back(std::make_unique<ListClientsTool>());
-    tools_.push_back(std::make_unique<ShowClientTool>());
-    tools_.push_back(std::make_unique<CloseClientTool>());
-    tools_.push_back(std::make_unique<DesktopClientTool>());
-    tools_.push_back(std::make_unique<FileTransferClientTool>());
-    tools_.push_back(std::make_unique<TerminalClientTool>());
-    tools_.push_back(std::make_unique<SystemInfoClientTool>());
-    tools_.push_back(std::make_unique<ChatClientTool>());
+    tools_.emplace_back(std::make_unique<FindLocalHostsTool>());
+    tools_.emplace_back(std::make_unique<ListLocalGroupsTool>());
+    tools_.emplace_back(std::make_unique<CheckLocalHostsTool>());
+    tools_.emplace_back(std::make_unique<ConnectLocalHostTool>());
+    tools_.emplace_back(std::make_unique<ListRoutersTool>());
+    tools_.emplace_back(std::make_unique<FindRouterHostsTool>());
+    tools_.emplace_back(std::make_unique<ListRouterGroupsTool>());
+    tools_.emplace_back(std::make_unique<CheckRouterHostsTool>());
+    tools_.emplace_back(std::make_unique<ListQuickSupportHostsTool>());
+    tools_.emplace_back(std::make_unique<ConnectRouterHostTool>());
+    tools_.emplace_back(std::make_unique<ListClientsTool>());
+    tools_.emplace_back(std::make_unique<ShowClientTool>());
+    tools_.emplace_back(std::make_unique<CloseClientTool>());
+    tools_.emplace_back(std::make_unique<DesktopClientTool>());
+    tools_.emplace_back(std::make_unique<FileTransferClientTool>());
+    tools_.emplace_back(std::make_unique<TerminalClientTool>());
+    tools_.emplace_back(std::make_unique<SystemInfoClientTool>());
+    tools_.emplace_back(std::make_unique<ChatClientTool>());
 
     mcp_worker_ = GuiApplication::findWorker<McpWorker>();
     if (!mcp_worker_)
