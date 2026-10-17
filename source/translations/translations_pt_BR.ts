@@ -8055,7 +8055,7 @@ Credenciais importadas: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="814"/>
-        <location filename="../client/desktop/settings_tab.cc" line="144"/>
+        <location filename="../client/desktop/settings_tab.cc" line="145"/>
         <source>Update</source>
         <translation>Atualização</translation>
     </message>
@@ -8090,123 +8090,123 @@ Credenciais importadas: %5</translation>
         <translation>Verificar atualizações</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="141"/>
+        <location filename="../client/desktop/settings_tab.cc" line="142"/>
         <source>General</source>
         <translation>Geral</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="142"/>
+        <location filename="../client/desktop/settings_tab.cc" line="143"/>
         <source>Desktop</source>
         <translation>Área de Trabalho</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="197"/>
+        <location filename="../client/desktop/settings_tab.cc" line="198"/>
         <source>1 week</source>
         <translation>1 semana</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="198"/>
+        <location filename="../client/desktop/settings_tab.cc" line="199"/>
         <source>2 weeks</source>
         <translation>2 semanas</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="199"/>
+        <location filename="../client/desktop/settings_tab.cc" line="200"/>
         <source>1 month</source>
         <translation>1 mês</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="200"/>
+        <location filename="../client/desktop/settings_tab.cc" line="201"/>
         <source>6 months</source>
         <translation>6 meses</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="201"/>
+        <location filename="../client/desktop/settings_tab.cc" line="202"/>
         <source>1 year</source>
         <translation>1 ano</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="205"/>
+        <location filename="../client/desktop/settings_tab.cc" line="206"/>
         <source>Do not lock</source>
         <translation>Não bloquear</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="206"/>
+        <location filename="../client/desktop/settings_tab.cc" line="207"/>
         <source>1 minute</source>
         <translation>1 minuto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="207"/>
+        <location filename="../client/desktop/settings_tab.cc" line="208"/>
         <source>5 minutes</source>
         <translation>5 minutos</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="208"/>
+        <location filename="../client/desktop/settings_tab.cc" line="209"/>
         <source>10 minutes</source>
         <translation>10 minutos</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="209"/>
+        <location filename="../client/desktop/settings_tab.cc" line="210"/>
         <source>30 minutes</source>
         <translation>30 minutos</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="210"/>
+        <location filename="../client/desktop/settings_tab.cc" line="211"/>
         <source>1 hour</source>
         <translation>1 hora</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="225"/>
+        <location filename="../client/desktop/settings_tab.cc" line="226"/>
         <source>No proxy</source>
         <translation>Sem servidor proxy</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="264"/>
+        <location filename="../client/desktop/settings_tab.cc" line="265"/>
         <source>None</source>
         <translation>Nenhum</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="319"/>
+        <location filename="../client/desktop/settings_tab.cc" line="320"/>
         <source>Stable</source>
         <translation>Estável</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="320"/>
+        <location filename="../client/desktop/settings_tab.cc" line="321"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="321"/>
+        <location filename="../client/desktop/settings_tab.cc" line="322"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="457"/>
+        <location filename="../client/desktop/settings_tab.cc" line="458"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>O novo idioma será aplicado após o reinício do aplicativo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="506"/>
-        <location filename="../client/desktop/settings_tab.cc" line="631"/>
+        <location filename="../client/desktop/settings_tab.cc" line="507"/>
+        <location filename="../client/desktop/settings_tab.cc" line="632"/>
         <source>Choose path</source>
         <translation>Escolher caminho</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="659"/>
-        <source>MCP will work after the application is restarted.</source>
-        <translation>O MCP funcionará após o reinício do aplicativo.</translation>
+        <location filename="../client/desktop/settings_tab.cc" line="660"/>
+        <source>The settings will be applied after the application is restarted.</source>
+        <translation>As configurações serão aplicadas após o reinício do aplicativo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="706"/>
+        <location filename="../client/desktop/settings_tab.cc" line="707"/>
         <source>Change Master Password</source>
         <translation>Alterar senha mestra</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="708"/>
+        <location filename="../client/desktop/settings_tab.cc" line="709"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Digite sua senha atual e escolha uma nova.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="716"/>
+        <location filename="../client/desktop/settings_tab.cc" line="717"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>A senha não pode ter menos de %n caractere.</numerusform>
@@ -8214,12 +8214,12 @@ Credenciais importadas: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="723"/>
+        <location filename="../client/desktop/settings_tab.cc" line="724"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>A senha digitada não atende aos requisitos de segurança!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="724"/>
+        <location filename="../client/desktop/settings_tab.cc" line="725"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>A senha deve conter letras maiúsculas e minúsculas, números e não deve ter menos de %n caractere.</numerusform>
@@ -8227,62 +8227,62 @@ Credenciais importadas: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="727"/>
+        <location filename="../client/desktop/settings_tab.cc" line="728"/>
         <source>Do you want to enter a different password?</source>
         <translation>Deseja digitar uma senha diferente?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="740"/>
+        <location filename="../client/desktop/settings_tab.cc" line="741"/>
         <source>Invalid current password.</source>
         <translation>Senha atual inválida.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="744"/>
+        <location filename="../client/desktop/settings_tab.cc" line="745"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Alguns registros do banco de dados estão corrompidos. Corrija-os ou exclua-os e tente novamente.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="748"/>
+        <location filename="../client/desktop/settings_tab.cc" line="749"/>
         <source>Unable to change the password.</source>
         <translation>Não foi possível alterar a senha.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="781"/>
+        <location filename="../client/desktop/settings_tab.cc" line="782"/>
         <source>Unable to read the proxy settings.</source>
         <translation>Não foi possível ler as configurações do servidor proxy.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="895"/>
+        <location filename="../client/desktop/settings_tab.cc" line="896"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>A chave do banco de dados será armazenada neste computador. Qualquer programa em execução na sua conta poderá lê-la, mesmo quando o aplicativo não estiver em execução.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="898"/>
+        <location filename="../client/desktop/settings_tab.cc" line="899"/>
         <source>Do you want to continue?</source>
         <translation>Deseja continuar?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="909"/>
+        <location filename="../client/desktop/settings_tab.cc" line="910"/>
         <source>Unlock Automatically</source>
         <translation>Desbloqueio automático</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="911"/>
+        <location filename="../client/desktop/settings_tab.cc" line="912"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>Digite a senha mestra para desbloquear o aplicativo automaticamente ao iniciar.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="921"/>
+        <location filename="../client/desktop/settings_tab.cc" line="922"/>
         <source>Invalid master password.</source>
         <translation>Senha mestra inválida.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="925"/>
+        <location filename="../client/desktop/settings_tab.cc" line="926"/>
         <source>Unable to unlock the database.</source>
         <translation>Não foi possível desbloquear o banco de dados.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="939"/>
+        <location filename="../client/desktop/settings_tab.cc" line="940"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>Não foi possível ativar o desbloqueio automático.</translation>
     </message>

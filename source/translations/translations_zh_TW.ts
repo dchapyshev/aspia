@@ -8014,7 +8014,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="814"/>
-        <location filename="../client/desktop/settings_tab.cc" line="144"/>
+        <location filename="../client/desktop/settings_tab.cc" line="145"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
@@ -8049,197 +8049,197 @@ Credentials imported: %5</source>
         <translation>檢查更新</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="141"/>
+        <location filename="../client/desktop/settings_tab.cc" line="142"/>
         <source>General</source>
         <translation>一般</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="142"/>
+        <location filename="../client/desktop/settings_tab.cc" line="143"/>
         <source>Desktop</source>
         <translation>桌面</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="197"/>
+        <location filename="../client/desktop/settings_tab.cc" line="198"/>
         <source>1 week</source>
         <translation>1 週</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="198"/>
+        <location filename="../client/desktop/settings_tab.cc" line="199"/>
         <source>2 weeks</source>
         <translation>2 週</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="199"/>
+        <location filename="../client/desktop/settings_tab.cc" line="200"/>
         <source>1 month</source>
         <translation>1 個月</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="200"/>
+        <location filename="../client/desktop/settings_tab.cc" line="201"/>
         <source>6 months</source>
         <translation>6 個月</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="201"/>
+        <location filename="../client/desktop/settings_tab.cc" line="202"/>
         <source>1 year</source>
         <translation>1 年</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="205"/>
+        <location filename="../client/desktop/settings_tab.cc" line="206"/>
         <source>Do not lock</source>
         <translation>不鎖定</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="206"/>
+        <location filename="../client/desktop/settings_tab.cc" line="207"/>
         <source>1 minute</source>
         <translation>1 分鐘</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="207"/>
+        <location filename="../client/desktop/settings_tab.cc" line="208"/>
         <source>5 minutes</source>
         <translation>5 分鐘</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="208"/>
+        <location filename="../client/desktop/settings_tab.cc" line="209"/>
         <source>10 minutes</source>
         <translation>10 分鐘</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="209"/>
+        <location filename="../client/desktop/settings_tab.cc" line="210"/>
         <source>30 minutes</source>
         <translation>30 分鐘</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="210"/>
+        <location filename="../client/desktop/settings_tab.cc" line="211"/>
         <source>1 hour</source>
         <translation>1 小時</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="225"/>
+        <location filename="../client/desktop/settings_tab.cc" line="226"/>
         <source>No proxy</source>
         <translation>不使用 Proxy 伺服器</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="264"/>
+        <location filename="../client/desktop/settings_tab.cc" line="265"/>
         <source>None</source>
         <translation>無</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="319"/>
+        <location filename="../client/desktop/settings_tab.cc" line="320"/>
         <source>Stable</source>
         <translation>穩定版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="320"/>
+        <location filename="../client/desktop/settings_tab.cc" line="321"/>
         <source>Beta</source>
         <translation>測試版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="321"/>
+        <location filename="../client/desktop/settings_tab.cc" line="322"/>
         <source>Alpha</source>
         <translation>早期測試版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="457"/>
+        <location filename="../client/desktop/settings_tab.cc" line="458"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>新語言將在應用程式重新啟動後套用。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="506"/>
-        <location filename="../client/desktop/settings_tab.cc" line="631"/>
+        <location filename="../client/desktop/settings_tab.cc" line="507"/>
+        <location filename="../client/desktop/settings_tab.cc" line="632"/>
         <source>Choose path</source>
         <translation>選擇路徑</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="659"/>
-        <source>MCP will work after the application is restarted.</source>
-        <translation>MCP 將在應用程式重新啟動後生效。</translation>
+        <location filename="../client/desktop/settings_tab.cc" line="660"/>
+        <source>The settings will be applied after the application is restarted.</source>
+        <translation>設定將在應用程式重新啟動後套用。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="706"/>
+        <location filename="../client/desktop/settings_tab.cc" line="707"/>
         <source>Change Master Password</source>
         <translation>變更主密碼</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="708"/>
+        <location filename="../client/desktop/settings_tab.cc" line="709"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>輸入您目前的密碼並選擇新密碼。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="716"/>
+        <location filename="../client/desktop/settings_tab.cc" line="717"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="723"/>
+        <location filename="../client/desktop/settings_tab.cc" line="724"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>輸入的密碼不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="724"/>
+        <location filename="../client/desktop/settings_tab.cc" line="725"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼必須包含大小寫字母和數字，且長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="727"/>
+        <location filename="../client/desktop/settings_tab.cc" line="728"/>
         <source>Do you want to enter a different password?</source>
         <translation>要輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="740"/>
+        <location filename="../client/desktop/settings_tab.cc" line="741"/>
         <source>Invalid current password.</source>
         <translation>目前密碼無效。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="744"/>
+        <location filename="../client/desktop/settings_tab.cc" line="745"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>資料庫中有部分記錄已損壞。請修復或刪除這些記錄後再試一次。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="748"/>
+        <location filename="../client/desktop/settings_tab.cc" line="749"/>
         <source>Unable to change the password.</source>
         <translation>無法變更密碼。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="781"/>
+        <location filename="../client/desktop/settings_tab.cc" line="782"/>
         <source>Unable to read the proxy settings.</source>
         <translation>無法讀取 Proxy 伺服器設定。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="895"/>
+        <location filename="../client/desktop/settings_tab.cc" line="896"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>資料庫的金鑰將儲存在此電腦上。在您的帳戶下執行的任何程式都能讀取它，即使應用程式未在執行中也一樣。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="898"/>
+        <location filename="../client/desktop/settings_tab.cc" line="899"/>
         <source>Do you want to continue?</source>
         <translation>要繼續嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="909"/>
+        <location filename="../client/desktop/settings_tab.cc" line="910"/>
         <source>Unlock Automatically</source>
         <translation>自動解除鎖定</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="911"/>
+        <location filename="../client/desktop/settings_tab.cc" line="912"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>輸入主密碼以在啟動時自動解除鎖定應用程式。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="921"/>
+        <location filename="../client/desktop/settings_tab.cc" line="922"/>
         <source>Invalid master password.</source>
         <translation>主密碼無效。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="925"/>
+        <location filename="../client/desktop/settings_tab.cc" line="926"/>
         <source>Unable to unlock the database.</source>
         <translation>無法解除鎖定資料庫。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="939"/>
+        <location filename="../client/desktop/settings_tab.cc" line="940"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>無法啟用自動解除鎖定。</translation>
     </message>

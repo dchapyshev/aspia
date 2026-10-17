@@ -657,7 +657,7 @@ void SettingsTab::onMcpEnabledChanged()
     ui->groupbox_mcp_actions->setEnabled(enable);
 
     if (enable != (GuiApplication::findWorker<McpWorker>() != nullptr))
-        MsgBox::information(this, tr("The setting will be applied after the application is restarted."));
+        MsgBox::information(this, tr("The settings will be applied after the application is restarted."));
 }
 
 //--------------------------------------------------------------------------------------------------
