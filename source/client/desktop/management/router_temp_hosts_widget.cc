@@ -88,6 +88,7 @@ RouterTempHostsWidget::RouterTempHostsWidget(bool portable, QWidget* parent)
     page_.setPageSize(combo_page_size_->currentData().toLongLong());
 
     QHBoxLayout* pagination_layout = new QHBoxLayout();
+    pagination_layout->setContentsMargins(0, 0, 0, 6);
     pagination_layout->addWidget(button_prev_);
     pagination_layout->addWidget(combo_page_);
     pagination_layout->addWidget(button_next_);

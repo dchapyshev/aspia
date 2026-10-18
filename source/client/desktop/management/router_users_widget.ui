@@ -50,6 +50,9 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="layout_users_pagination">
+     <property name="bottomMargin">
+      <number>6</number>
+     </property>
      <item>
       <widget class="IconTextButton" name="button_users_prev">
        <property name="toolTip">
