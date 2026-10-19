@@ -818,7 +818,9 @@ void RouterHostsWidget::updateHostsPagination()
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::updateStatusLabel()
 {
-    status_hosts_label_->setText(tr("%n host(s)", "", model_->rowCount()));
+    const QString text = tr("%n host(s)", "", model_->rowCount());
+    status_hosts_label_->setText(text);
+    ui->label_hosts_count->setText(text);
 }
 
 //--------------------------------------------------------------------------------------------------

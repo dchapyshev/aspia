@@ -97,6 +97,7 @@ private:
     QComboBox* combo_page_ = nullptr;
     IconTextButton* button_prev_ = nullptr;
     IconTextButton* button_next_ = nullptr;
+    QLabel* label_count_ = nullptr;
     QString current_query_;
 
     // One source of matches. The local address book comes first and each online router follows,

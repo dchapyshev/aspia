@@ -432,7 +432,9 @@ void RouterUsersWidget::updateUsersPagination()
 //--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::updateStatusLabel()
 {
-    status_users_label_->setText(tr("%n user(s)", "", model_->rowCount()));
+    const QString text = tr("%n user(s)", "", model_->rowCount());
+    status_users_label_->setText(text);
+    ui->label_users_count->setText(text);
 }
 
 //--------------------------------------------------------------------------------------------------

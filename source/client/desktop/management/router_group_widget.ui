@@ -41,6 +41,9 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="layout_hosts_pagination">
+     <property name="rightMargin">
+      <number>6</number>
+     </property>
      <property name="bottomMargin">
       <number>6</number>
      </property>
@@ -105,6 +108,9 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_hosts_count"/>
      </item>
     </layout>
    </item>

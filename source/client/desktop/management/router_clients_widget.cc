@@ -499,7 +499,9 @@ void RouterClientsWidget::updatePagination()
 //--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::updateStatusLabel()
 {
-    status_clients_label_->setText(tr("%n client(s)", "", model_->rowCount()));
+    const QString text = tr("%n client(s)", "", model_->rowCount());
+    status_clients_label_->setText(text);
+    ui->label_clients_count->setText(text);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -306,16 +306,19 @@ SearchWidget::SearchWidget(QWidget* parent)
     button_next_->setIcon(QIcon(":/img/arrow-right.svg"));
     button_next_->setIconOnRight(true);
 
+    label_count_ = new QLabel(this);
+
     connect(button_prev_, &QToolButton::clicked, this, &SearchWidget::onPrevClicked);
     connect(button_next_, &QToolButton::clicked, this, &SearchWidget::onNextClicked);
     connect(combo_page_, &QComboBox::currentIndexChanged, this, &SearchWidget::onPageChanged);
 
     QHBoxLayout* pagination_layout = new QHBoxLayout();
-    pagination_layout->setContentsMargins(0, 0, 0, 6);
+    pagination_layout->setContentsMargins(0, 0, 6, 6);
     pagination_layout->addWidget(button_prev_);
     pagination_layout->addWidget(combo_page_);
     pagination_layout->addWidget(button_next_);
     pagination_layout->addStretch();
+    pagination_layout->addWidget(label_count_);
 
     layout->addWidget(tree_host_);
     layout->addLayout(pagination_layout);
@@ -805,6 +808,7 @@ void SearchWidget::updateStatusLabels()
 {
     // The count is of the whole result and not of the page: the page is what the user can
     // see, the count is what they can reach.
-    status_results_label_->setText(
-        tr("%n result(s)", "", static_cast<int>(page_model_.totalCount())));
+    const QString text = tr("%n result(s)", "", static_cast<int>(page_model_.totalCount()));
+    status_results_label_->setText(text);
+    label_count_->setText(text);
 }

@@ -47,6 +47,9 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="layout_clients_pagination">
+     <property name="rightMargin">
+      <number>6</number>
+     </property>
      <property name="bottomMargin">
       <number>6</number>
      </property>
@@ -111,6 +114,9 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_clients_count"/>
      </item>
     </layout>
    </item>
