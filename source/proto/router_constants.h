@@ -34,6 +34,11 @@ namespace proto::router {
 // Bound on the workspaces of a HostFilter. Every one of them becomes a parameter of the query.
 [[maybe_unused]] constexpr int kMaxHostFilterWorkspaces = 100;
 
+// Bounds on the text of a HostFilter and of a host search query, in UTF-8 bytes. The id is a run of
+// decimal digits no longer than the largest id.
+[[maybe_unused]] constexpr size_t kMaxHostQueryLength = 256;
+[[maybe_unused]] constexpr size_t kMaxHostIdLength = 20;
+
 // Device tokens one user holds at a time. Issuing a token over the cap drops the least recently
 // used ones, so a client that never comes back cannot grow the list without bound.
 [[maybe_unused]] constexpr int kMaxDeviceTokensPerUser = 50;

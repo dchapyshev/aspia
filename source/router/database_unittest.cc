@@ -474,6 +474,14 @@ TEST_F(RouterDatabaseTest, HostsRefusesAnInvalidFilter)
     for (int i = 0; i < proto::router::kMaxHostFilterWorkspaces; ++i)
         at_limit.add_workspace_id(i);
 
+    const std::string text_at_limit(proto::router::kMaxHostQueryLength, 'a');
+    at_limit.set_address(text_at_limit);
+    at_limit.set_os_name(text_at_limit);
+    at_limit.set_version(text_at_limit);
+    at_limit.set_cpu_arch(text_at_limit);
+    at_limit.set_display_name(text_at_limit);
+    at_limit.set_host_id(std::string(proto::router::kMaxHostIdLength, '9'));
+
     proto::router::HostList accepted;
     db_.hosts(at_limit, 0, proto::router::kMaxHostPageSize, &accepted);
     EXPECT_EQ(accepted.error_code(), proto::router::kErrorOk);
@@ -484,7 +492,32 @@ TEST_F(RouterDatabaseTest, HostsRefusesAnInvalidFilter)
     proto::router::HostFilter negative_workspace;
     negative_workspace.add_workspace_id(-1);
 
-    for (const proto::router::HostFilter& filter : { over_limit, negative_workspace })
+    const std::string long_text(proto::router::kMaxHostQueryLength + 1, 'a');
+
+    proto::router::HostFilter long_address;
+    long_address.set_address(long_text);
+
+    proto::router::HostFilter long_os_name;
+    long_os_name.set_os_name(long_text);
+
+    proto::router::HostFilter long_version;
+    long_version.set_version(long_text);
+
+    proto::router::HostFilter long_cpu_arch;
+    long_cpu_arch.set_cpu_arch(long_text);
+
+    proto::router::HostFilter long_display_name;
+    long_display_name.set_display_name(long_text);
+
+    proto::router::HostFilter long_host_id;
+    long_host_id.set_host_id(std::string(proto::router::kMaxHostIdLength + 1, '1'));
+
+    proto::router::HostFilter non_digit_host_id;
+    non_digit_host_id.set_host_id("12a");
+
+    for (const proto::router::HostFilter& filter : { over_limit, negative_workspace, long_address, long_os_name,
+                                                     long_version, long_cpu_arch, long_display_name, long_host_id,
+                                                     non_digit_host_id })
     {
         proto::router::HostList list;
         db_.hosts(filter, 0, proto::router::kMaxHostPageSize, &list);
@@ -594,8 +627,7 @@ TEST_F(RouterDatabaseTest, HostFilterMatchesAPartOfTheId)
         host_ids.append(host_id);
     }
 
-    for (const std::string& text : { std::to_string(host_ids.first()), std::to_string(host_ids.last()),
-                                     std::string("%") })
+    for (const std::string& text : { std::to_string(host_ids.first()), std::to_string(host_ids.last()) })
     {
         QList<HostId> matches;
         for (HostId host_id : std::as_const(host_ids))

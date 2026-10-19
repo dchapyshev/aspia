@@ -74,6 +74,24 @@ bool isHostFilterValid(const proto::router::HostFilter& filter)
             return false;
     }
 
+    const std::string_view texts[] =
+        { filter.address(), filter.os_name(), filter.version(), filter.cpu_arch(), filter.display_name() };
+
+    for (std::string_view text : texts)
+    {
+        if (text.size() > proto::router::kMaxHostQueryLength)
+            return false;
+    }
+
+    if (filter.host_id().size() > proto::router::kMaxHostIdLength)
+        return false;
+
+    for (char symbol : filter.host_id())
+    {
+        if (symbol < '0' || symbol > '9')
+            return false;
+    }
+
     return true;
 }
 
@@ -2045,6 +2063,13 @@ void Database::searchHosts(std::string_view query_text, const std::set<qint64>& 
     if (!isPageValid(offset, count, proto::router::kMaxHostPageSize))
     {
         LOG(ERROR) << "Invalid host search page: offset" << offset << "count" << count;
+        out->set_error_code(proto::router::kErrorInvalidRequest);
+        return;
+    }
+
+    if (query_text.size() > proto::router::kMaxHostQueryLength)
+    {
+        LOG(ERROR) << "Host search query is too long:" << query_text.size();
         out->set_error_code(proto::router::kErrorInvalidRequest);
         return;
     }

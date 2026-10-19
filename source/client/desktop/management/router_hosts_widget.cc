@@ -35,6 +35,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QPushButton>
+#include <QRegularExpressionValidator>
 #include <QSaveFile>
 #include <QSignalBlocker>
 #include <QTimer>
@@ -149,6 +150,14 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
     filter_timer_->setSingleShot(true);
     filter_timer_->setInterval(MilliSeconds(300));
     connect(filter_timer_, &QTimer::timeout, this, &RouterHostsWidget::onFilterChanged);
+
+    ui->edit_filter_id->setMaxLength(static_cast<int>(proto::router::kMaxHostIdLength));
+    ui->edit_filter_id->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]*"), ui->edit_filter_id));
+
+    // Counts UTF-16 units, the bound counts UTF-8 bytes. A unit takes at most three bytes.
+    for (QLineEdit* edit : { ui->edit_filter_name, ui->edit_filter_address, ui->edit_filter_os,
+                             ui->edit_filter_version, ui->edit_filter_arch })
+        edit->setMaxLength(static_cast<int>(proto::router::kMaxHostQueryLength / 3));
 
     for (QLineEdit* edit : { ui->edit_filter_id, ui->edit_filter_name, ui->edit_filter_address, ui->edit_filter_os,
                              ui->edit_filter_version, ui->edit_filter_arch })

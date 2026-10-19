@@ -982,6 +982,20 @@ TEST_F(HostListTest, SearchReturnsWindowAndFullCount)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST_F(HostListTest, SearchWithATooLongQueryIsRejected)
+{
+    ASSERT_NE(addHostTo("hash-1", workspace_id_, 0, "host-a"), kInvalidHostId);
+
+    const QString at_limit(static_cast<qsizetype>(proto::router::kMaxHostQueryLength), QChar('a'));
+    EXPECT_EQ(searchHosts(at_limit).error_code(), proto::router::kErrorOk);
+
+    const proto::router::HostSearchResult result = searchHosts(at_limit + QChar('a'));
+    EXPECT_EQ(result.error_code(), proto::router::kErrorInvalidRequest);
+    EXPECT_EQ(result.host_size(), 0);
+    EXPECT_EQ(result.total_count(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The search is bounded by the same rule as the list, and a refused request carries neither
 // matches nor a count.
 TEST_F(HostListTest, SearchWithAnInvalidPageIsRejected)
