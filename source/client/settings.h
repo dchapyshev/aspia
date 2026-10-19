@@ -64,9 +64,6 @@ public:
     bool isToolBarEnabled() const;
     void setToolBarEnabled(bool enable);
 
-    bool isStatusBarEnabled() const;
-    void setStatusBarEnabled(bool enable);
-
     bool isSearchFieldEnabled() const;
     void setSearchFieldEnabled(bool enable);
 

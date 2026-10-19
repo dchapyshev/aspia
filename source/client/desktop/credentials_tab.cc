@@ -92,22 +92,16 @@ void CredentialsTab::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void CredentialsTab::activate(QStatusBar* /* statusbar */)
+void CredentialsTab::activate()
 {
     const CredentialConfig* credential = selectedCredential();
     reload(credential ? credential->id() : -1);
 }
 
 //--------------------------------------------------------------------------------------------------
-void CredentialsTab::deactivate(QStatusBar* /* statusbar */)
+void CredentialsTab::deactivate()
 {
     // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
-bool CredentialsTab::hasStatusBar() const
-{
-    return false;
 }
 
 //--------------------------------------------------------------------------------------------------

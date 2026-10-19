@@ -94,7 +94,6 @@
     </property>
     <addaction name="action_always_on_top"/>
     <addaction name="action_toolbar"/>
-    <addaction name="action_statusbar"/>
     <addaction name="action_search_field"/>
     <addaction name="action_large_icons"/>
     <addaction name="separator"/>
@@ -135,11 +134,6 @@
    <addaction name="action_lock"/>
    <addaction name="action_help"/>
    <addaction name="action_exit"/>
-  </widget>
-  <widget class="QStatusBar" name="statusbar">
-   <property name="styleSheet">
-    <string notr="true">QStatusBar QLabel { padding: 3px; }</string>
-   </property>
   </widget>
   <action name="action_help">
    <property name="icon">
@@ -222,14 +216,6 @@
    </property>
    <property name="text">
     <string>Tool Bar</string>
-   </property>
-  </action>
-  <action name="action_statusbar">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Status Bar</string>
    </property>
   </action>
   <action name="action_search_field">

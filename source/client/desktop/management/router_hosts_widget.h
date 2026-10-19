@@ -34,8 +34,6 @@ namespace Ui {
 class RouterHostsWidget;
 } // namespace Ui
 
-class QLabel;
-class QStatusBar;
 class QTimer;
 
 namespace proto::router {
@@ -70,8 +68,6 @@ public:
     void reload() final;
     bool canSave() const final { return true; }
     void save() final;
-    void activate(QStatusBar* statusbar) final;
-    void deactivate(QStatusBar* statusbar) final;
 
 public slots:
     void onModifyHost();
@@ -110,7 +106,7 @@ private:
     proto::router::HostFilter hostFilter() const;
     void clearFilter();
     void updateHostsPagination();
-    void updateStatusLabel();
+    void updateCountLabel();
     void startDrag();
     QString workspaceNameById(qint64 workspace_id) const;
     QList<RouterHost> selectedHosts() const;
@@ -120,7 +116,6 @@ private:
     qint64 router_id_ = 0;
     QString mime_type_;
     QPoint start_pos_;
-    QLabel* status_hosts_label_ = nullptr;
     QTimer* filter_timer_ = nullptr;
 
     // Maps workspace entry_id -> name, kept in sync via onWorkspaceListReceived. Used to populate

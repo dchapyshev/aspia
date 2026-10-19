@@ -29,11 +29,9 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QLabel>
 #include <QMenu>
 #include <QSaveFile>
 #include <QSplitter>
-#include <QStatusBar>
 
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
@@ -49,8 +47,7 @@
 //--------------------------------------------------------------------------------------------------
 RouterRelaysWidget::RouterRelaysWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER_RELAYS, parent),
-      ui(std::make_unique<Ui::RouterRelaysWidget>()),
-      status_relays_label_(new QLabel(this))
+      ui(std::make_unique<Ui::RouterRelaysWidget>())
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
@@ -99,7 +96,6 @@ RouterRelaysWidget::RouterRelaysWidget(QWidget* parent)
         {
             relay_model_->clear();
             peer_model_->clear();
-            updateStatusLabel();
         }
     });
 }
@@ -117,7 +113,6 @@ void RouterRelaysWidget::showRouter(qint64 router_id)
 
     relay_model_->clear();
     peer_model_->clear();
-    updateStatusLabel();
     fetchRelays();
 }
 
@@ -323,28 +318,6 @@ void RouterRelaysWidget::save()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterRelaysWidget::activate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    updateStatusLabel();
-
-    statusbar->addWidget(status_relays_label_);
-    status_relays_label_->show();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterRelaysWidget::deactivate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    statusbar->removeWidget(status_relays_label_);
-    status_relays_label_->setParent(this);
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::onDisconnectRelay()
 {
     const proto::router::RelayInfo* relay = currentRelay();
@@ -527,7 +500,6 @@ void RouterRelaysWidget::onRelayListReceived(const proto::router::RelayList& rel
         ui->tree_relays->setCurrentIndex(relay_model_->index(selected_row, 0));
 
     updateRelayStatistics();
-    updateStatusLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -594,12 +566,6 @@ void RouterRelaysWidget::updateRelayStatistics()
     const int selected_row = peer_model_->rowOf(selected_peer_id);
     if (selected_row >= 0)
         ui->tree_peers->setCurrentIndex(peer_model_->index(selected_row, 0));
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterRelaysWidget::updateStatusLabel()
-{
-    status_relays_label_->setText(tr("%n relay(s)", "", relay_model_->rowCount()));
 }
 
 //--------------------------------------------------------------------------------------------------

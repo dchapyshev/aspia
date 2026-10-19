@@ -32,7 +32,6 @@
 class IconTextButton;
 class QComboBox;
 class QLabel;
-class QStatusBar;
 class QTimer;
 class QTreeView;
 
@@ -58,8 +57,6 @@ public:
     // ContentWidget implementation.
     QByteArray saveState() final;
     void restoreState(const QByteArray& state) final;
-    void activate(QStatusBar* statusbar) final;
-    void deactivate(QStatusBar* statusbar) final;
 
 signals:
     void sig_activated();
@@ -76,7 +73,7 @@ private slots:
 private:
     class HighlightDelegate;
 
-    void updateStatusLabels();
+    void updateCountLabel();
 
     // Counts the matches of the local address book and of every online router, in that order, and
     // hands the counts to the page model. The page itself is fetched once every source answered.
@@ -91,7 +88,6 @@ private:
 
     QTreeView* tree_host_ = nullptr;
     SearchResultModel* model_ = nullptr;
-    QLabel* status_results_label_ = nullptr;
     HighlightDelegate* highlight_delegate_ = nullptr;
     QTimer* router_search_timer_ = nullptr;
     QComboBox* combo_page_ = nullptr;

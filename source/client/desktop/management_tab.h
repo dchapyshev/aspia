@@ -62,8 +62,8 @@ public:
     // Tab implementation.
     QByteArray saveState() final;
     void restoreState(const QByteArray& state) final;
-    void activate(QStatusBar* statusbar) final;
-    void deactivate(QStatusBar* statusbar) final;
+    void activate() final;
+    void deactivate() final;
     QString searchText() const final;
     void searchTextChanged(const QString& text) final;
 
@@ -139,8 +139,6 @@ private:
     QSet<qint64> dismissed_two_factor_;
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;
-
-    QStatusBar* statusbar_ = nullptr;
 
     LocalGroupWidget* local_group_widget_ = nullptr;
     RouterGroupWidget* router_group_widget_ = nullptr;

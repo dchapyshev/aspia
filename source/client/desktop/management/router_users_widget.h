@@ -29,9 +29,6 @@ namespace Ui {
 class RouterUsersWidget;
 } // namespace Ui
 
-class QLabel;
-class QStatusBar;
-
 namespace proto::router {
 class UserList;
 class UserResult;
@@ -54,8 +51,6 @@ public:
     void restoreState(const QByteArray& state) final;
     bool canReload() const final { return true; }
     void reload() final;
-    void activate(QStatusBar* statusbar) final;
-    void deactivate(QStatusBar* statusbar) final;
 
 public slots:
     void onAddUser();
@@ -83,7 +78,7 @@ private slots:
 private:
     void fetchUsers();
     void updateUsersPagination();
-    void updateStatusLabel();
+    void updateCountLabel();
 
     // The user of the row the user of the application is on, or null when the list is empty.
     const RouterUser* currentUser() const;
@@ -91,7 +86,6 @@ private:
     std::unique_ptr<Ui::RouterUsersWidget> ui;
     qint64 router_id_ = 0;
     UserListModel* model_ = nullptr;
-    QLabel* status_users_label_ = nullptr;
     PageModel users_page_;
     // Guards the one-time warning about a failed initial load: the list is refetched on every
     // batched notification, and a repeating transient error must not turn into a message storm.

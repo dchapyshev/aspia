@@ -22,8 +22,6 @@
 #include <QAction>
 #include <QWidget>
 
-class QStatusBar;
-
 class ContentWidget : public QWidget
 {
     Q_OBJECT
@@ -72,8 +70,6 @@ public:
     virtual void reload() {}
     virtual bool canSave() const { return false; }
     virtual void save() {}
-    virtual void activate(QStatusBar* /* statusbar */) {}
-    virtual void deactivate(QStatusBar* /* statusbar */) {}
 
 private:
     Type type_;

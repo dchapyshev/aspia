@@ -39,7 +39,6 @@ const QString kWindowGeometryParam = "window_geometry";
 const QString kWindowStateParam = "window_state";
 const QString kLargeIconsParam = "large_icons";
 const QString kToolbarParam = "toolbar";
-const QString kStatusbarParam = "statusbar";
 const QString kSearchFieldParam = "search_field";
 const QString kOnlineCheckParam = "online_check";
 const QString kAlwaysOnTopParam = "always_on_top";
@@ -201,18 +200,6 @@ bool Settings::isToolBarEnabled() const
 void Settings::setToolBarEnabled(bool enable)
 {
     settings_.setValue(kToolbarParam, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Settings::isStatusBarEnabled() const
-{
-    return settings_.value(kStatusbarParam, true).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setStatusBarEnabled(bool enable)
-{
-    settings_.setValue(kStatusbarParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------

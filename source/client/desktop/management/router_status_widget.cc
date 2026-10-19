@@ -24,7 +24,6 @@
 #include <QIcon>
 #include <QLabel>
 #include <QPushButton>
-#include <QStatusBar>
 #include <QTreeWidget>
 
 #include "base/gui_application.h"
@@ -45,8 +44,7 @@ enum Column
 //--------------------------------------------------------------------------------------------------
 RouterStatusWidget::RouterStatusWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER, parent),
-      ui(std::make_unique<Ui::RouterStatusWidget>()),
-      status_events_label_(new QLabel(this))
+      ui(std::make_unique<Ui::RouterStatusWidget>())
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
@@ -76,7 +74,6 @@ void RouterStatusWidget::showRouter(qint64 router_id, const QList<RouterEvent>& 
         addEvent(event);
 
     ui->tree_events->scrollToBottom();
-    updateStatusLabel();
     updateTwoFactorPrompt();
 }
 
@@ -113,28 +110,6 @@ void RouterStatusWidget::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::activate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    updateStatusLabel();
-
-    statusbar->addWidget(status_events_label_);
-    status_events_label_->show();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::deactivate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    statusbar->removeWidget(status_events_label_);
-    status_events_label_->setParent(this);
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterStatusWidget::onEvent(qint64 router_id, const RouterEvent& event)
 {
     if (router_id != router_id_)
@@ -142,7 +117,6 @@ void RouterStatusWidget::onEvent(qint64 router_id, const RouterEvent& event)
 
     addEvent(event);
     ui->tree_events->scrollToBottom();
-    updateStatusLabel();
     updateTwoFactorPrompt();
 }
 
@@ -192,12 +166,6 @@ void RouterStatusWidget::addEvent(const RouterEvent& event)
         }
         delete ui->tree_events->takeTopLevelItem(oldest);
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::updateStatusLabel()
-{
-    status_events_label_->setText(tr("%n event(s)", "", ui->tree_events->topLevelItemCount()));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -143,7 +143,7 @@ void ClientTab::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTab::activate(QStatusBar* /* statusbar */)
+void ClientTab::activate()
 {
     if (!client_window_)
         return;
@@ -152,15 +152,9 @@ void ClientTab::activate(QStatusBar* /* statusbar */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTab::deactivate(QStatusBar* /* statusbar */)
+void ClientTab::deactivate()
 {
     // Nothing.
-}
-
-//--------------------------------------------------------------------------------------------------
-bool ClientTab::hasStatusBar() const
-{
-    return false;
 }
 
 //--------------------------------------------------------------------------------------------------

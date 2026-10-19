@@ -26,7 +26,6 @@
 #include <QIODevice>
 #include <QMenu>
 #include <QPointer>
-#include <QStatusBar>
 #include <QTimer>
 
 #include "base/auto_qpointer.h"
@@ -445,19 +444,15 @@ void ManagementTab::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ManagementTab::activate(QStatusBar* statusbar)
+void ManagementTab::activate()
 {
-    statusbar_ = statusbar;
-    if (current_content_ && statusbar_)
-        current_content_->activate(statusbar_);
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-void ManagementTab::deactivate(QStatusBar* /* statusbar */)
+void ManagementTab::deactivate()
 {
-    if (current_content_ && statusbar_)
-        current_content_->deactivate(statusbar_);
-    statusbar_ = nullptr;
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1944,14 +1939,8 @@ void ManagementTab::switchContent(ContentWidget* new_widget)
     if (!new_widget || new_widget == current_content_)
         return;
 
-    if (current_content_ && statusbar_)
-        current_content_->deactivate(statusbar_);
-
     current_content_ = new_widget;
     ui->content_stack->setCurrentWidget(new_widget);
-
-    if (statusbar_)
-        current_content_->activate(statusbar_);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -118,7 +118,6 @@ private:
     ClientWindow* clientWindow(qint64 client_id) const;
     void showSearchDialog();
     void syncSearchField();
-    void updateStatusBarVisibility();
     void installTabActions(Tab* tab);
     void removeTabActions();
     void updateSeparatorVisibility();

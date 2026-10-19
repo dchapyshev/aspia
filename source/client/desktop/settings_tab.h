@@ -40,9 +40,8 @@ public:
     // Tab implementation.
     QByteArray saveState() final;
     void restoreState(const QByteArray& state) final;
-    void activate(QStatusBar* statusbar) final;
-    void deactivate(QStatusBar* statusbar) final;
-    bool hasStatusBar() const final;
+    void activate() final;
+    void deactivate() final;
 
 signals:
     void sig_desktopConfigChanged();

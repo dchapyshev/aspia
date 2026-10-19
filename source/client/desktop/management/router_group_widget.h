@@ -33,8 +33,6 @@ namespace Ui {
 class RouterGroupWidget;
 } // namespace Ui
 
-class QLabel;
-
 class RouterGroupWidget final : public ContentWidget
 {
     Q_OBJECT
@@ -55,8 +53,6 @@ public:
     void restoreState(const QByteArray& state) final;
     bool canReload() const final { return true; }
     void reload() final;
-    void activate(QStatusBar* statusbar) final;
-    void deactivate(QStatusBar* statusbar) final;
 
     QString mimeType() const { return mime_type_; }
 
@@ -83,7 +79,7 @@ private slots:
 
 private:
     void fetchHosts(RouterSession::CachePolicy policy);
-    void updateStatusLabel();
+    void updateCountLabel();
     void updatePagination();
     void startDrag();
     QList<RouterHost> selectedHosts() const;
@@ -94,7 +90,6 @@ private:
     qint64 group_id_ = 0;
     QString mime_type_;
     QPoint start_pos_;
-    QLabel* status_hosts_label_ = nullptr;
 
     HostListModel* model_ = nullptr;
     PageModel hosts_page_;

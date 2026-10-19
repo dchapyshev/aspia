@@ -409,21 +409,15 @@ void SettingsTab::restoreState(const QByteArray& /* state */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::activate(QStatusBar* /* statusbar */)
+void SettingsTab::activate()
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::deactivate(QStatusBar* /* statusbar */)
+void SettingsTab::deactivate()
 {
     // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SettingsTab::hasStatusBar() const
-{
-    return false;
 }
 
 //--------------------------------------------------------------------------------------------------

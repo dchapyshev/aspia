@@ -33,9 +33,6 @@ namespace Ui {
 class LocalGroupWidget;
 } // namespace Ui
 
-class QLabel;
-class QStatusBar;
-
 class LocalGroupWidget final : public ContentWidget
 {
     Q_OBJECT
@@ -58,8 +55,6 @@ public:
     void restoreState(const QByteArray& state) final;
     bool canReload() const final { return true; }
     void reload() final;
-    void activate(QStatusBar* statusbar) final;
-    void deactivate(QStatusBar* statusbar) final;
 
     QString mimeType() const { return mime_type_; }
 
@@ -82,7 +77,6 @@ private slots:
 
 private:
     void startDrag();
-    void updateStatusLabels();
     void startOnlineChecker();
     void clearOnlineStatuses();
 
@@ -93,9 +87,6 @@ private:
 
     qint64 current_group_id_ = -1;
     bool online_check_enabled_ = true;
-    QLabel* status_groups_label_ = nullptr;
-    QLabel* status_hosts_label_ = nullptr;
-    QLabel* status_check_label_ = nullptr;
 
     OnlineChecker* online_checker_ = nullptr;
 

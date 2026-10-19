@@ -33,7 +33,6 @@
 #include <QMenu>
 #include <QPainter>
 #include <QSignalBlocker>
-#include <QStatusBar>
 #include <QStyledItemDelegate>
 #include <QTextDocument>
 #include <QTextOption>
@@ -228,8 +227,7 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 SearchWidget::SearchWidget(QWidget* parent)
-    : ContentWidget(Type::SEARCH, parent),
-      status_results_label_(new QLabel(this))
+    : ContentWidget(Type::SEARCH, parent)
 {
     LOG(INFO) << "Ctor";
 
@@ -350,7 +348,7 @@ void SearchWidget::search(const QString& query)
     {
         router_search_timer_->stop();
         updatePagination();
-        updateStatusLabels();
+        updateCountLabel();
         return;
     }
 
@@ -598,7 +596,7 @@ void SearchWidget::showCurrentPage()
 
     model_->setRows(rows);
 
-    updateStatusLabels();
+    updateCountLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -664,7 +662,7 @@ void SearchWidget::clear()
     local_groups_.clear();
 
     updatePagination();
-    updateStatusLabels();
+    updateCountLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -728,7 +726,7 @@ void SearchWidget::removeItem(qint64 entry_id)
         tree_host_->setFocus();
     }
 
-    updateStatusLabels();
+    updateCountLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -760,28 +758,6 @@ void SearchWidget::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SearchWidget::activate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    updateStatusLabels();
-
-    statusbar->addWidget(status_results_label_);
-    status_results_label_->show();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SearchWidget::deactivate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    statusbar->removeWidget(status_results_label_);
-    status_results_label_->setParent(this);
-}
-
-//--------------------------------------------------------------------------------------------------
 void SearchWidget::onHeaderContextMenu(const QPoint& pos)
 {
     QPointer<QHeaderView> header = tree_host_->header();
@@ -804,11 +780,9 @@ void SearchWidget::onHeaderContextMenu(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SearchWidget::updateStatusLabels()
+void SearchWidget::updateCountLabel()
 {
     // The count is of the whole result and not of the page: the page is what the user can
     // see, the count is what they can reach.
-    const QString text = tr("%n result(s)", "", static_cast<int>(page_model_.totalCount()));
-    status_results_label_->setText(text);
-    label_count_->setText(text);
+    label_count_->setText(tr("%n result(s)", "", static_cast<int>(page_model_.totalCount())));
 }

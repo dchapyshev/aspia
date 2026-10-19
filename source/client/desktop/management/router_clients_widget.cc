@@ -33,7 +33,6 @@
 #include <QMenu>
 #include <QSaveFile>
 #include <QSignalBlocker>
-#include <QStatusBar>
 #include <QToolButton>
 
 #include "base/auto_qpointer.h"
@@ -56,8 +55,7 @@ const qint64 kMaxClientCount = 500000;
 //--------------------------------------------------------------------------------------------------
 RouterClientsWidget::RouterClientsWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER_CLIENTS, parent),
-      ui(std::make_unique<Ui::RouterClientsWidget>()),
-      status_clients_label_(new QLabel(this))
+      ui(std::make_unique<Ui::RouterClientsWidget>())
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
@@ -111,7 +109,7 @@ RouterClientsWidget::RouterClientsWidget(QWidget* parent)
         if (router_id == router_id_ && status != RouterStatus::ONLINE)
         {
             model_->clear();
-            updateStatusLabel();
+            updateCountLabel();
         }
     });
 }
@@ -129,7 +127,7 @@ void RouterClientsWidget::showRouter(qint64 router_id)
     page_.clear();
 
     model_->clear();
-    updateStatusLabel();
+    updateCountLabel();
     fetchClients();
 }
 
@@ -280,28 +278,6 @@ void RouterClientsWidget::save()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterClientsWidget::activate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    updateStatusLabel();
-
-    statusbar->addWidget(status_clients_label_);
-    status_clients_label_->show();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterClientsWidget::deactivate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    statusbar->removeWidget(status_clients_label_);
-    status_clients_label_->setParent(this);
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::onDisconnectClient()
 {
     const proto::router::ClientInfo* client = currentClient();
@@ -379,7 +355,7 @@ void RouterClientsWidget::onClientListReceived(const proto::router::ClientList& 
         fetchClients();
 
     emit sig_currentChanged();
-    updateStatusLabel();
+    updateCountLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -497,11 +473,9 @@ void RouterClientsWidget::updatePagination()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterClientsWidget::updateStatusLabel()
+void RouterClientsWidget::updateCountLabel()
 {
-    const QString text = tr("%n client(s)", "", model_->rowCount());
-    status_clients_label_->setText(text);
-    ui->label_clients_count->setText(text);
+    ui->label_clients_count->setText(tr("%n client(s)", "", model_->rowCount()));
 }
 
 //--------------------------------------------------------------------------------------------------

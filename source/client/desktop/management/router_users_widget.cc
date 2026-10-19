@@ -26,7 +26,6 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QMenu>
-#include <QStatusBar>
 
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
@@ -41,8 +40,7 @@
 //--------------------------------------------------------------------------------------------------
 RouterUsersWidget::RouterUsersWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER_USERS, parent),
-      ui(std::make_unique<Ui::RouterUsersWidget>()),
-      status_users_label_(new QLabel(this))
+      ui(std::make_unique<Ui::RouterUsersWidget>())
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
@@ -100,7 +98,7 @@ RouterUsersWidget::RouterUsersWidget(QWidget* parent)
             model_->clear();
             users_page_.clear();
             updateUsersPagination();
-            updateStatusLabel();
+            updateCountLabel();
         }
     });
 }
@@ -119,7 +117,7 @@ void RouterUsersWidget::showRouter(qint64 router_id)
     model_->clear();
     users_page_.clear();
     updateUsersPagination();
-    updateStatusLabel();
+    updateCountLabel();
     fetchUsers();
 }
 
@@ -165,28 +163,6 @@ void RouterUsersWidget::restoreState(const QByteArray& state)
 void RouterUsersWidget::reload()
 {
     fetchUsers();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterUsersWidget::activate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    updateStatusLabel();
-
-    statusbar->addWidget(status_users_label_);
-    status_users_label_->show();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterUsersWidget::deactivate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    statusbar->removeWidget(status_users_label_);
-    status_users_label_->setParent(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -316,7 +292,7 @@ void RouterUsersWidget::onUserListReceived(const proto::router::UserList& list)
         fetchUsers();
 
     emit sig_currentChanged();
-    updateStatusLabel();
+    updateCountLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -430,11 +406,9 @@ void RouterUsersWidget::updateUsersPagination()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterUsersWidget::updateStatusLabel()
+void RouterUsersWidget::updateCountLabel()
 {
-    const QString text = tr("%n user(s)", "", model_->rowCount());
-    status_users_label_->setText(text);
-    ui->label_users_count->setText(text);
+    ui->label_users_count->setText(tr("%n user(s)", "", model_->rowCount()));
 }
 
 //--------------------------------------------------------------------------------------------------

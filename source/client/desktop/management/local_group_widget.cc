@@ -23,11 +23,9 @@
 #include <QEvent>
 #include <QIODevice>
 #include <QKeyEvent>
-#include <QLabel>
 #include <QLocale>
 #include <QMenu>
 #include <QMouseEvent>
-#include <QStatusBar>
 #include <QUuid>
 
 #include "base/auto_qpointer.h"
@@ -44,9 +42,6 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     : ContentWidget(Type::LOCAL_GROUP, parent),
       ui(std::make_unique<Ui::LocalGroupWidget>()),
       mime_type_(QString("application/%1").arg(QUuid::createUuid().toString())),
-      status_groups_label_(new QLabel(this)),
-      status_hosts_label_(new QLabel(this)),
-      status_check_label_(new QLabel(tr("Status update..."), this)),
       online_checker_(new OnlineChecker(this))
 {
     LOG(INFO) << "Ctor";
@@ -64,8 +59,6 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     ui->tree_host->header()->resizeSection(static_cast<int>(LocalHostListModel::Column::NAME), 110);
     ui->tree_host->header()->resizeSection(static_cast<int>(LocalHostListModel::Column::MODIFIED), 150);
     ui->tree_host->header()->resizeSection(static_cast<int>(LocalHostListModel::Column::CONNECT), 150);
-
-    status_check_label_->setVisible(false);
 
     ui->tree_host->viewport()->installEventFilter(this);
     ui->tree_host->installEventFilter(this);
@@ -158,8 +151,6 @@ void LocalGroupWidget::showGroup(qint64 group_id)
         current_group_id_ = group_id;
         model_->setHosts(hosts);
 
-        updateStatusLabels();
-
         if (online_check_enabled_)
             startOnlineChecker();
     }
@@ -232,8 +223,6 @@ void LocalGroupWidget::removeItem(qint64 entry_id)
         ui->tree_host->setCurrentIndex(model_->index(qMin(row, count - 1), 0));
         ui->tree_host->setFocus();
     }
-
-    updateStatusLabels();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -275,39 +264,6 @@ void LocalGroupWidget::reload()
     online_checker_->invalidate(ids);
 
     startOnlineChecker();
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::activate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    updateStatusLabels();
-
-    statusbar->addWidget(status_groups_label_);
-    statusbar->addWidget(status_hosts_label_);
-    statusbar->addWidget(status_check_label_);
-
-    status_groups_label_->show();
-    status_hosts_label_->show();
-    status_check_label_->setVisible(false);
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::deactivate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    statusbar->removeWidget(status_groups_label_);
-    status_groups_label_->setParent(this);
-
-    statusbar->removeWidget(status_hosts_label_);
-    status_hosts_label_->setParent(this);
-
-    statusbar->removeWidget(status_check_label_);
-    status_check_label_->setParent(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -392,7 +348,6 @@ void LocalGroupWidget::onOnlineCheckerResult(qint64 entry_id, OnlineStatus statu
 void LocalGroupWidget::onOnlineCheckerFinished()
 {
     LOG(INFO) << "Online checker finished";
-    status_check_label_->setVisible(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -418,21 +373,6 @@ void LocalGroupWidget::startDrag()
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::updateStatusLabels()
-{
-    qsizetype child_groups_count = 0;
-    if (current_group_id_ >= 0)
-    {
-        QList<LocalGroupConfig> child_groups;
-        Database::instance().localGroupList(current_group_id_, &child_groups);
-        child_groups_count = child_groups.size();
-    }
-
-    status_groups_label_->setText(tr("%n child group(s)", "", child_groups_count));
-    status_hosts_label_->setText(tr("%n child host(s)", "", model_->rowCount()));
-}
-
-//--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::startOnlineChecker()
 {
     clearOnlineStatuses();
@@ -442,13 +382,11 @@ void LocalGroupWidget::startOnlineChecker()
     if (hosts.isEmpty())
     {
         LOG(INFO) << "No hosts to check";
-        status_check_label_->setVisible(false);
         return;
     }
 
     LOG(INFO) << "Start online checker for" << hosts.size() << "host(s)";
     online_checker_->start(hosts);
-    status_check_label_->setVisible(true);
 }
 
 //--------------------------------------------------------------------------------------------------

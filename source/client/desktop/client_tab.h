@@ -22,7 +22,6 @@
 #include "base/scoped_qpointer.h"
 #include "client/desktop/tab.h"
 
-class QStatusBar;
 class ClientWindow;
 
 class ClientTab final : public Tab
@@ -43,9 +42,8 @@ public:
     QWidget* detachedWindow() const final;
     QByteArray saveState() final;
     void restoreState(const QByteArray& state) final;
-    void activate(QStatusBar* statusbar) final;
-    void deactivate(QStatusBar* statusbar) final;
-    bool hasStatusBar() const final;
+    void activate() final;
+    void deactivate() final;
     QList<ActionGroupEntry> actionGroups() const final;
 
 protected:

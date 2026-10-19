@@ -30,7 +30,6 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QSignalBlocker>
-#include <QStatusBar>
 #include <QToolButton>
 #include <QUuid>
 
@@ -54,8 +53,7 @@ const qint64 kMaxHostCount = 500000;
 RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER_GROUP, parent),
       ui(std::make_unique<Ui::RouterGroupWidget>()),
-      mime_type_(QString("application/%1").arg(QUuid::createUuid().toString())),
-      status_hosts_label_(new QLabel(this))
+      mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
@@ -161,7 +159,7 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id, qint64 
     hosts_page_.clear();
 
     model_->setHosts({});
-    updateStatusLabel();
+    updateCountLabel();
     fetchHosts(RouterSession::CachePolicy::USE_CACHE);
 }
 
@@ -227,28 +225,6 @@ void RouterGroupWidget::restoreState(const QByteArray& state)
 void RouterGroupWidget::reload()
 {
     fetchHosts(RouterSession::CachePolicy::RELOAD);
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::activate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    updateStatusLabel();
-
-    statusbar->addWidget(status_hosts_label_);
-    status_hosts_label_->show();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::deactivate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    statusbar->removeWidget(status_hosts_label_);
-    status_hosts_label_->setParent(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -345,7 +321,7 @@ void RouterGroupWidget::onHostListReceived(const RouterHostList& list)
 
     const bool page_moved = hosts_page_.setTotalCount(qMin(list.total_count, kMaxHostCount));
     updatePagination();
-    updateStatusLabel();
+    updateCountLabel();
 
     // The page the list was fetched for is gone, so the tree was just emptied. Nothing else asks
     // for the page it was moved to, and the user would be left looking at nothing. The cached
@@ -447,11 +423,9 @@ void RouterGroupWidget::fetchHosts(RouterSession::CachePolicy policy)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::updateStatusLabel()
+void RouterGroupWidget::updateCountLabel()
 {
-    const QString text = tr("%n host(s)", "", model_->rowCount());
-    status_hosts_label_->setText(text);
-    ui->label_hosts_count->setText(text);
+    ui->label_hosts_count->setText(tr("%n host(s)", "", model_->rowCount()));
 }
 
 //--------------------------------------------------------------------------------------------------

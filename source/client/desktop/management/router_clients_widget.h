@@ -29,9 +29,6 @@ namespace Ui {
 class RouterClientsWidget;
 } // namespace Ui
 
-class QLabel;
-class QStatusBar;
-
 namespace proto::router {
 class ClientList;
 class ClientResult;
@@ -60,8 +57,6 @@ public:
     void reload() final;
     bool canSave() const final { return true; }
     void save() final;
-    void activate(QStatusBar* statusbar) final;
-    void deactivate(QStatusBar* statusbar) final;
 
 public slots:
     void onDisconnectClient();
@@ -84,13 +79,12 @@ private slots:
 private:
     void fetchClients();
     void updatePagination();
-    void updateStatusLabel();
+    void updateCountLabel();
     const proto::router::ClientInfo* currentClient() const;
 
     std::unique_ptr<Ui::RouterClientsWidget> ui;
     qint64 router_id_ = 0;
     ClientListModel* model_ = nullptr;
-    QLabel* status_clients_label_ = nullptr;
     PageModel page_;
 
     Q_DISABLE_COPY_MOVE(RouterClientsWidget)

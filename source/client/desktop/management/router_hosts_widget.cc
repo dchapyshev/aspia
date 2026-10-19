@@ -37,7 +37,6 @@
 #include <QPushButton>
 #include <QSaveFile>
 #include <QSignalBlocker>
-#include <QStatusBar>
 #include <QTimer>
 #include <QToolButton>
 
@@ -72,8 +71,7 @@ const qint64 kAllWorkspaces = -1;
 //--------------------------------------------------------------------------------------------------
 RouterHostsWidget::RouterHostsWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER_HOSTS, parent),
-      ui(std::make_unique<Ui::RouterHostsWidget>()),
-      status_hosts_label_(new QLabel(this))
+      ui(std::make_unique<Ui::RouterHostsWidget>())
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
@@ -177,7 +175,7 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
         {
             model_->setHosts({});
             workspace_names_.clear();
-            updateStatusLabel();
+            updateCountLabel();
         }
     });
 }
@@ -195,7 +193,7 @@ void RouterHostsWidget::showRouter(qint64 router_id)
     hosts_page_.clear();
 
     model_->setHosts({});
-    updateStatusLabel();
+    updateCountLabel();
 
     clearFilter();
     workspace_names_.clear();
@@ -334,28 +332,6 @@ void RouterHostsWidget::reload()
 void RouterHostsWidget::save()
 {
     saveHostsToFile();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterHostsWidget::activate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    updateStatusLabel();
-
-    statusbar->addWidget(status_hosts_label_);
-    status_hosts_label_->show();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterHostsWidget::deactivate(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    statusbar->removeWidget(status_hosts_label_);
-    status_hosts_label_->setParent(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -584,7 +560,7 @@ void RouterHostsWidget::onHostListReceived(const RouterHostList& list)
         fetchHosts();
 
     emit sig_currentChanged();
-    updateStatusLabel();
+    updateCountLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -816,11 +792,9 @@ void RouterHostsWidget::updateHostsPagination()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostsWidget::updateStatusLabel()
+void RouterHostsWidget::updateCountLabel()
 {
-    const QString text = tr("%n host(s)", "", model_->rowCount());
-    status_hosts_label_->setText(text);
-    ui->label_hosts_count->setText(text);
+    ui->label_hosts_count->setText(tr("%n host(s)", "", model_->rowCount()));
 }
 
 //--------------------------------------------------------------------------------------------------

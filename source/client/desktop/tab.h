@@ -28,7 +28,6 @@ namespace proto::peer {
 enum SessionType : int;
 } // namespace proto::peer
 
-class QStatusBar;
 class HostConfig;
 
 class Tab : public QWidget
@@ -61,9 +60,8 @@ public:
     virtual QWidget* detachedWindow() const;
     virtual QByteArray saveState() = 0;
     virtual void restoreState(const QByteArray& state) = 0;
-    virtual void activate(QStatusBar* statusbar) = 0;
-    virtual void deactivate(QStatusBar* statusbar) = 0;
-    virtual bool hasStatusBar() const;
+    virtual void activate() = 0;
+    virtual void deactivate() = 0;
     virtual QString searchText() const;
     virtual void searchTextChanged(const QString& text);
 

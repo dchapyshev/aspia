@@ -29,9 +29,6 @@ namespace Ui {
 class RouterRelaysWidget;
 } // namespace Ui
 
-class QLabel;
-class QStatusBar;
-
 namespace proto::router {
 class PeerResult;
 class RelayList;
@@ -61,8 +58,6 @@ public:
     void reload() final;
     bool canSave() const final { return true; }
     void save() final;
-    void activate(QStatusBar* statusbar) final;
-    void deactivate(QStatusBar* statusbar) final;
 
 public slots:
     void onDisconnectRelay();
@@ -84,7 +79,6 @@ private slots:
 private:
     void fetchRelays();
     void updateRelayStatistics();
-    void updateStatusLabel();
 
     // The relay and the pair of peers of the rows the user is on, or null when the lists are empty.
     const proto::router::RelayInfo* currentRelay() const;
@@ -94,7 +88,6 @@ private:
     RelayListModel* relay_model_ = nullptr;
     PeerListModel* peer_model_ = nullptr;
     qint64 router_id_ = 0;
-    QLabel* status_relays_label_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(RouterRelaysWidget)
 };
