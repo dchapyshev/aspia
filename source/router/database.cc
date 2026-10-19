@@ -128,6 +128,8 @@ std::string hostFilterClause(const proto::router::HostFilter& filter)
         conditions.emplace_back("cpu_arch LIKE ? ESCAPE '\\'");
     if (!filter.display_name().empty())
         conditions.emplace_back("casefold(display_name) LIKE casefold(?) ESCAPE '\\'");
+    if (!filter.host_id().empty())
+        conditions.emplace_back("CAST(id AS TEXT) LIKE ? ESCAPE '\\'");
 
     if (conditions.empty())
         return std::string();
@@ -153,6 +155,8 @@ void bindHostFilter(const proto::router::HostFilter& filter, SqlQuery* query)
         query->addText(substringPattern(filter.cpu_arch()));
     if (!filter.display_name().empty())
         query->addText(substringPattern(filter.display_name()));
+    if (!filter.host_id().empty())
+        query->addText(substringPattern(filter.host_id()));
 }
 
 //--------------------------------------------------------------------------------------------------

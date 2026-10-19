@@ -583,6 +583,46 @@ TEST_F(RouterDatabaseTest, HostFilterMatchesTheDisplayNameInAnyCase)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The ID is matched as a part of its decimal form, like the host search does it.
+TEST_F(RouterDatabaseTest, HostFilterMatchesAPartOfTheId)
+{
+    QList<HostId> host_ids;
+    for (int i = 0; i < 12; ++i)
+    {
+        const HostId host_id = addHost("hash-" + std::to_string(i));
+        ASSERT_NE(host_id, kInvalidHostId);
+        host_ids.append(host_id);
+    }
+
+    for (const std::string& text : { std::to_string(host_ids.first()), std::to_string(host_ids.last()),
+                                     std::string("%") })
+    {
+        QList<HostId> matches;
+        for (HostId host_id : std::as_const(host_ids))
+        {
+            if (std::to_string(host_id).find(text) != std::string::npos)
+                matches.append(host_id);
+        }
+
+        proto::router::HostFilter filter;
+        filter.set_host_id(text);
+
+        qint64 count = 0;
+        ASSERT_EQ(db_.hostCount(filter, &count), proto::router::kErrorOk) << text;
+        EXPECT_EQ(count, matches.size()) << text;
+
+        proto::router::HostList list;
+        db_.hosts(filter, 0, proto::router::kMaxHostPageSize, &list);
+        ASSERT_EQ(list.error_code(), proto::router::kErrorOk) << text;
+
+        QList<HostId> found;
+        for (const proto::router::Host& host : list.host())
+            found.append(host.host_id());
+        EXPECT_EQ(found, matches) << text;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 // I1: a modify names the new level as one bit and the row gets its full mask. The change is
 // reported, and the same level again is not a change.
 TEST_F(RouterDatabaseTest, ModifyUserStoresTheFullMaskOfTheNewLevel)

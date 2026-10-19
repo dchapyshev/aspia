@@ -150,7 +150,7 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
     filter_timer_->setInterval(MilliSeconds(300));
     connect(filter_timer_, &QTimer::timeout, this, &RouterHostsWidget::onFilterChanged);
 
-    for (QLineEdit* edit : { ui->edit_filter_name, ui->edit_filter_address, ui->edit_filter_os,
+    for (QLineEdit* edit : { ui->edit_filter_id, ui->edit_filter_name, ui->edit_filter_address, ui->edit_filter_os,
                              ui->edit_filter_version, ui->edit_filter_arch })
         connect(edit, &QLineEdit::textChanged, filter_timer_, qOverload<>(&QTimer::start));
 
@@ -756,6 +756,7 @@ proto::router::HostFilter RouterHostsWidget::hostFilter() const
     if (workspace_id != kAllWorkspaces)
         filter.add_workspace_id(workspace_id);
 
+    filter.set_host_id(ui->edit_filter_id->text().trimmed().toStdString());
     filter.set_display_name(ui->edit_filter_name->text().trimmed().toStdString());
     filter.set_address(ui->edit_filter_address->text().trimmed().toStdString());
     filter.set_os_name(ui->edit_filter_os->text().trimmed().toStdString());
@@ -767,6 +768,7 @@ proto::router::HostFilter RouterHostsWidget::hostFilter() const
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::clearFilter()
 {
+    ui->edit_filter_id->clear();
     ui->edit_filter_name->clear();
     ui->edit_filter_address->clear();
     ui->edit_filter_os->clear();
