@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>420</height>
+    <width>690</width>
+    <height>530</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -80,12 +80,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="toolTip">
+              <string>Previous page</string>
+             </property>
              <property name="icon">
               <iconset resource="../../../common/resources/common.qrc">
                <normaloff>:/img/arrow-left.svg</normaloff>:/img/arrow-left.svg</iconset>
-             </property>
-             <property name="toolTip">
-              <string>Previous page</string>
              </property>
             </widget>
            </item>
@@ -104,12 +104,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="toolTip">
+              <string>Next page</string>
+             </property>
              <property name="icon">
               <iconset resource="../../../common/resources/common.qrc">
                <normaloff>:/img/arrow-right.svg</normaloff>:/img/arrow-right.svg</iconset>
-             </property>
-             <property name="toolTip">
-              <string>Next page</string>
              </property>
             </widget>
            </item>
@@ -136,6 +136,12 @@
           <spacer name="verticalSpacer_top">
            <property name="orientation">
             <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
            </property>
           </spacer>
          </item>
@@ -169,6 +175,12 @@
           <spacer name="verticalSpacer_bottom">
            <property name="orientation">
             <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
            </property>
           </spacer>
          </item>
@@ -217,12 +229,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="toolTip">
+              <string>Previous page</string>
+             </property>
              <property name="icon">
               <iconset resource="../../../common/resources/common.qrc">
                <normaloff>:/img/arrow-left.svg</normaloff>:/img/arrow-left.svg</iconset>
-             </property>
-             <property name="toolTip">
-              <string>Previous page</string>
              </property>
             </widget>
            </item>
@@ -241,12 +253,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="toolTip">
+              <string>Next page</string>
+             </property>
              <property name="icon">
               <iconset resource="../../../common/resources/common.qrc">
                <normaloff>:/img/arrow-right.svg</normaloff>:/img/arrow-right.svg</iconset>
-             </property>
-             <property name="toolTip">
-              <string>Next page</string>
              </property>
             </widget>
            </item>
@@ -273,6 +285,12 @@
           <spacer name="verticalSpacer_hosts_top">
            <property name="orientation">
             <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
            </property>
           </spacer>
          </item>
@@ -307,6 +325,12 @@
            <property name="orientation">
             <enum>Qt::Orientation::Vertical</enum>
            </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
           </spacer>
          </item>
         </layout>
@@ -333,12 +357,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="toolTip">
+              <string>Previous page</string>
+             </property>
              <property name="icon">
               <iconset resource="../../../common/resources/common.qrc">
                <normaloff>:/img/arrow-left.svg</normaloff>:/img/arrow-left.svg</iconset>
-             </property>
-             <property name="toolTip">
-              <string>Previous page</string>
              </property>
             </widget>
            </item>
@@ -357,12 +381,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="toolTip">
+              <string>Next page</string>
+             </property>
              <property name="icon">
               <iconset resource="../../../common/resources/common.qrc">
                <normaloff>:/img/arrow-right.svg</normaloff>:/img/arrow-right.svg</iconset>
-             </property>
-             <property name="toolTip">
-              <string>Next page</string>
              </property>
             </widget>
            </item>
