@@ -117,15 +117,17 @@ std::string hostFilterClause(const proto::router::HostFilter& filter)
     std::vector<std::string> conditions;
 
     if (filter.workspace_id_size() > 0)
-        conditions.push_back(strCat({"workspace_id IN (", placeholders(filter.workspace_id_size()), ")"}));
+        conditions.emplace_back(strCat({"workspace_id IN (", placeholders(filter.workspace_id_size()), ")"}));
     if (!filter.address().empty())
-        conditions.push_back("address LIKE ? ESCAPE '\\'");
+        conditions.emplace_back("address LIKE ? ESCAPE '\\'");
     if (!filter.os_name().empty())
-        conditions.push_back("os_name LIKE ? ESCAPE '\\'");
+        conditions.emplace_back("os_name LIKE ? ESCAPE '\\'");
     if (!filter.version().empty())
-        conditions.push_back("version LIKE ? ESCAPE '\\'");
+        conditions.emplace_back("version LIKE ? ESCAPE '\\'");
     if (!filter.cpu_arch().empty())
-        conditions.push_back("cpu_arch LIKE ? ESCAPE '\\'");
+        conditions.emplace_back("cpu_arch LIKE ? ESCAPE '\\'");
+    if (!filter.display_name().empty())
+        conditions.emplace_back("casefold(display_name) LIKE casefold(?) ESCAPE '\\'");
 
     if (conditions.empty())
         return std::string();
@@ -149,6 +151,8 @@ void bindHostFilter(const proto::router::HostFilter& filter, SqlQuery* query)
         query->addText(substringPattern(filter.version()));
     if (!filter.cpu_arch().empty())
         query->addText(substringPattern(filter.cpu_arch()));
+    if (!filter.display_name().empty())
+        query->addText(substringPattern(filter.display_name()));
 }
 
 //--------------------------------------------------------------------------------------------------

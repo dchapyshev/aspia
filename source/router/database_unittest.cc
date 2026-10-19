@@ -542,6 +542,47 @@ TEST_F(RouterDatabaseTest, HostFilterMatchesTheAddressLiterally)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The display name is typed by the user in any letter case, the Cyrillic one included.
+TEST_F(RouterDatabaseTest, HostFilterMatchesTheDisplayNameInAnyCase)
+{
+    const HostId latin = addHost("hash-1");
+    const HostId cyrillic = addHost("hash-2");
+    ASSERT_NE(latin, kInvalidHostId);
+    ASSERT_NE(cyrillic, kInvalidHostId);
+
+    // A capitalized Cyrillic name and a lowercase part of it.
+    const char kCyrillicName[] = "\xd0\xa1\xd0\xb5\xd1\x80\xd0\xb2\xd0\xb5\xd1\x80 1";
+    const char kCyrillicPart[] = "\xd1\x81\xd0\xb5\xd1\x80\xd0\xb2";
+
+    ASSERT_EQ(db_.modifyHost(latin, findHost(latin).revision(), 0, 0, "Office PC", std::string_view()),
+              proto::router::kErrorOk);
+    ASSERT_EQ(db_.modifyHost(cyrillic, findHost(cyrillic).revision(), 0, 0, kCyrillicName, std::string_view()),
+              proto::router::kErrorOk);
+
+    const struct { const char* name; HostId host_id; } kCases[] = {
+        { "OFFICE", latin },
+        { "ce p", latin },
+        { kCyrillicPart, cyrillic }
+    };
+
+    for (const auto& test_case : kCases)
+    {
+        proto::router::HostFilter filter;
+        filter.set_display_name(test_case.name);
+
+        qint64 count = 0;
+        ASSERT_EQ(db_.hostCount(filter, &count), proto::router::kErrorOk) << test_case.name;
+        EXPECT_EQ(count, 1) << test_case.name;
+
+        proto::router::HostList list;
+        db_.hosts(filter, 0, proto::router::kMaxHostPageSize, &list);
+        ASSERT_EQ(list.error_code(), proto::router::kErrorOk) << test_case.name;
+        ASSERT_EQ(list.host_size(), 1) << test_case.name;
+        EXPECT_EQ(list.host(0).host_id(), test_case.host_id) << test_case.name;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 // I1: a modify names the new level as one bit and the row gets its full mask. The change is
 // reported, and the same level again is not a change.
 TEST_F(RouterDatabaseTest, ModifyUserStoresTheFullMaskOfTheNewLevel)

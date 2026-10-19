@@ -134,6 +134,7 @@ message HostFilter
     string os_name              = 3;
     string version              = 4;
     string cpu_arch             = 5;
+    string display_name         = 6;
 }
 
 // A page of hosts. The page is mandatory in both modes: a reply carrying every host of the scope
