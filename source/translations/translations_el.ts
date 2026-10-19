@@ -2412,17 +2412,17 @@ Credentials replaced: %2</source>
         <translation>Διαγραφή διαπιστευτηρίων</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="180"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="174"/>
         <source>Are you sure you want to delete credentials &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να διαγράψετε τα διαπιστευτήρια &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="188"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="182"/>
         <source>Unable to delete credentials.</source>
         <translation>Δεν είναι δυνατή η διαγραφή των διαπιστευτηρίων.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="233"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="227"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων. Η λίστα ενδέχεται να μην είναι ενημερωμένη.</translation>
     </message>
@@ -4294,30 +4294,9 @@ Credentials replaced: %2</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
-        <source>Status update...</source>
-        <translation>Ενημέρωση κατάστασης...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="170"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="161"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων. Η λίστα ενδέχεται να μην είναι ενημερωμένη.</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="431"/>
-        <source>%n child group(s)</source>
-        <translation>
-            <numerusform>%n θυγατρική ομάδα</numerusform>
-            <numerusform>%n θυγατρικές ομάδες</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="432"/>
-        <source>%n child host(s)</source>
-        <translation>
-            <numerusform>%n θυγατρικός κεντρικός υπολογιστής</numerusform>
-            <numerusform>%n θυγατρικοί κεντρικοί υπολογιστές</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -4835,15 +4814,10 @@ Credentials imported: %5</source>
         <translation>Προβολή</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="122"/>
-        <location filename="../client/desktop/main_window.ui" line="224"/>
+        <location filename="../client/desktop/main_window.ui" line="121"/>
+        <location filename="../client/desktop/main_window.ui" line="217"/>
         <source>Tool Bar</source>
         <translation>Γραμμή εργαλείων</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="232"/>
-        <source>Status Bar</source>
-        <translation>Γραμμή κατάστασης</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="81"/>
@@ -4851,18 +4825,18 @@ Credentials imported: %5</source>
         <translation>Βοήθεια</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="216"/>
+        <location filename="../client/desktop/main_window.ui" line="209"/>
         <source>Exit</source>
         <translation>Έξοδος</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="150"/>
+        <location filename="../client/desktop/main_window.ui" line="143"/>
         <source>Online Help...</source>
         <translation>Ηλεκτρονική βοήθεια...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="635"/>
+        <location filename="../client/desktop/main_window.cc" line="632"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4877,62 +4851,62 @@ Credentials imported: %5</source>
         <translation>Επεξεργασία</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="105"/>
+        <location filename="../client/desktop/main_window.ui" line="104"/>
         <source>Session Type</source>
         <translation>Τύπος περιόδου λειτουργίας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="110"/>
+        <location filename="../client/desktop/main_window.ui" line="109"/>
         <source>Actions</source>
         <translation>Ενέργειες</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="159"/>
+        <location filename="../client/desktop/main_window.ui" line="152"/>
         <source>About</source>
         <translation>Πληροφορίες</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="168"/>
+        <location filename="../client/desktop/main_window.ui" line="161"/>
         <source>Quick Connect...</source>
         <translation>Γρήγορη σύνδεση...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="177"/>
+        <location filename="../client/desktop/main_window.ui" line="170"/>
         <source>Credentials...</source>
         <translation>Διαπιστευτήρια...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="186"/>
+        <location filename="../client/desktop/main_window.ui" line="179"/>
         <source>Settings...</source>
         <translation>Ρυθμίσεις...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="198"/>
+        <location filename="../client/desktop/main_window.ui" line="191"/>
         <source>MCP Connector</source>
         <translation>Μονάδα σύνδεσης MCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="207"/>
+        <location filename="../client/desktop/main_window.ui" line="200"/>
         <source>Lock</source>
         <translation>Κλείδωμα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="240"/>
+        <location filename="../client/desktop/main_window.ui" line="225"/>
         <source>Search Field</source>
         <translation>Πεδίο αναζήτησης</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="248"/>
+        <location filename="../client/desktop/main_window.ui" line="233"/>
         <source>Large icons</source>
         <translation>Μεγάλα εικονίδια</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="256"/>
+        <location filename="../client/desktop/main_window.ui" line="241"/>
         <source>Open Sessions in Tabs</source>
         <translation>Άνοιγμα περιόδων λειτουργίας σε καρτέλες</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="264"/>
+        <location filename="../client/desktop/main_window.ui" line="249"/>
         <source>Always on Top</source>
         <translation>Πάντα σε πρώτο πλάνο</translation>
     </message>
@@ -4942,83 +4916,83 @@ Credentials imported: %5</source>
         <translation>Αναζήτηση...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="217"/>
+        <location filename="../client/desktop/main_window.cc" line="214"/>
         <source>Unable to turn on the MCP connector.</source>
         <translation>Δεν είναι δυνατή η ενεργοποίηση της μονάδας σύνδεσης MCP.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="235"/>
+        <location filename="../client/desktop/main_window.cc" line="232"/>
         <source>Management</source>
         <translation>Διαχείριση</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="281"/>
+        <location filename="../client/desktop/main_window.cc" line="278"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Μη έγκυρος σύνδεσμος &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="304"/>
+        <location filename="../client/desktop/main_window.cc" line="301"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Ο δρομολογητής στον οποίο αναφέρεται ο σύνδεσμος δεν βρίσκεται μεταξύ των αποθηκευμένων δρομολογητών.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="353"/>
+        <location filename="../client/desktop/main_window.cc" line="350"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Ο κεντρικός υπολογιστής στον οποίο αναφέρεται ο σύνδεσμος δεν βρίσκεται μεταξύ των αποθηκευμένων κεντρικών υπολογιστών.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="611"/>
+        <location filename="../client/desktop/main_window.cc" line="608"/>
         <source>Close all sessions to lock the application.</source>
         <translation>Κλείστε όλες τις περιόδους λειτουργίας για να κλειδώσετε την εφαρμογή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="617"/>
+        <location filename="../client/desktop/main_window.cc" line="614"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>Κλείστε όλα τα παράθυρα διαλόγου για να κλειδώσετε την εφαρμογή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="732"/>
+        <location filename="../client/desktop/main_window.cc" line="728"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Στις ιδιότητες του κεντρικού υπολογιστή έχει καθοριστεί σύνδεση μέσω ID, αλλά ο δρομολογητής δεν έχει ρυθμιστεί. Ελέγξτε τις παραμέτρους του δρομολογητή στις ιδιότητες του κεντρικού υπολογιστή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="999"/>
+        <location filename="../client/desktop/main_window.cc" line="995"/>
         <source>Unknown application</source>
         <translation>Άγνωστη εφαρμογή</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="1002"/>
+        <location filename="../client/desktop/main_window.cc" line="998"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>Μονάδα σύνδεσης MCP. Συνδεδεμένες: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="1003"/>
+        <location filename="../client/desktop/main_window.cc" line="999"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - Η ΤΝ είναι συνδεδεμένη</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="365"/>
+        <location filename="../client/desktop/main_window.cc" line="362"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Ο δρομολογητής που είναι συσχετισμένος με αυτόν τον κεντρικό υπολογιστή έχει διαγραφεί. Επεξεργαστείτε τον κεντρικό υπολογιστή για να επιλέξετε άλλον δρομολογητή ή μεταβείτε σε απευθείας σύνδεση.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="312"/>
-        <location filename="../client/desktop/main_window.cc" line="364"/>
+        <location filename="../client/desktop/main_window.cc" line="309"/>
+        <location filename="../client/desktop/main_window.cc" line="361"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Τα δεδομένα του δρομολογητή είναι κατεστραμμένα. Επεξεργαστείτε τον δρομολογητή και εισαγάγετέ τα ξανά.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="352"/>
+        <location filename="../client/desktop/main_window.cc" line="349"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Τα δεδομένα του κεντρικού υπολογιστή είναι κατεστραμμένα. Επεξεργαστείτε τον κεντρικό υπολογιστή και εισαγάγετέ τα ξανά.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="570"/>
+        <location filename="../client/desktop/main_window.cc" line="567"/>
         <source>Credentials</source>
         <translation>Διαπιστευτήρια</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="601"/>
+        <location filename="../client/desktop/main_window.cc" line="598"/>
         <source>Settings</source>
         <translation>Ρυθμίσεις</translation>
     </message>
@@ -5213,151 +5187,151 @@ Credentials imported: %5</source>
         <translation>Αυτόματη ανανέωση κατάστασης</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1115"/>
+        <location filename="../client/desktop/management_tab.cc" line="1110"/>
         <source>(copy)</source>
         <translation>(αντίγραφο)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1083"/>
-        <location filename="../client/desktop/management_tab.cc" line="1157"/>
-        <location filename="../client/desktop/management_tab.cc" line="2256"/>
+        <location filename="../client/desktop/management_tab.cc" line="1078"/>
+        <location filename="../client/desktop/management_tab.cc" line="1152"/>
+        <location filename="../client/desktop/management_tab.cc" line="2245"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Δεν ήταν δυνατή η ανάκτηση των πληροφοριών του κεντρικού υπολογιστή από την τοπική βάση δεδομένων.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="893"/>
+        <location filename="../client/desktop/management_tab.cc" line="888"/>
         <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
         <translation>Ο τύπος περιόδου λειτουργίας &quot;%1&quot; δεν είναι διαθέσιμος για το Quick Support.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1120"/>
+        <location filename="../client/desktop/management_tab.cc" line="1115"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Δεν ήταν δυνατή η προσθήκη του κεντρικού υπολογιστή στην τοπική βάση δεδομένων.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1161"/>
+        <location filename="../client/desktop/management_tab.cc" line="1156"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να διαγράψετε τον κεντρικό υπολογιστή &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1171"/>
+        <location filename="../client/desktop/management_tab.cc" line="1166"/>
         <source>Unable to remove host</source>
         <translation>Δεν είναι δυνατή η κατάργηση του κεντρικού υπολογιστή</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1234"/>
-        <location filename="../client/desktop/management_tab.cc" line="1304"/>
-        <location filename="../client/desktop/management_tab.cc" line="1330"/>
+        <location filename="../client/desktop/management_tab.cc" line="1229"/>
+        <location filename="../client/desktop/management_tab.cc" line="1299"/>
+        <location filename="../client/desktop/management_tab.cc" line="1325"/>
         <source>Copy Row</source>
         <translation>Αντιγραφή γραμμής</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1235"/>
-        <location filename="../client/desktop/management_tab.cc" line="1305"/>
-        <location filename="../client/desktop/management_tab.cc" line="1331"/>
+        <location filename="../client/desktop/management_tab.cc" line="1230"/>
+        <location filename="../client/desktop/management_tab.cc" line="1300"/>
+        <location filename="../client/desktop/management_tab.cc" line="1326"/>
         <source>Copy Value</source>
         <translation>Αντιγραφή τιμής</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1432"/>
+        <location filename="../client/desktop/management_tab.cc" line="1427"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να διαγράψετε τον χώρο εργασίας &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1452"/>
+        <location filename="../client/desktop/management_tab.cc" line="1447"/>
         <source>Failed to delete the workspace.</source>
         <translation>Δεν ήταν δυνατή η διαγραφή του χώρου εργασίας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1554"/>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Είστε βέβαιοι ότι θέλετε να διαγράψετε την ομάδα &quot;%1&quot;; Οι κεντρικοί υπολογιστές που έχουν αντιστοιχιστεί σε αυτήν την ομάδα ή στις υποομάδες της θα μετακινηθούν στη ρίζα του χώρου εργασίας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1572"/>
+        <location filename="../client/desktop/management_tab.cc" line="1567"/>
         <source>Failed to delete the group.</source>
         <translation>Δεν ήταν δυνατή η διαγραφή της ομάδας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1611"/>
-        <location filename="../client/desktop/management_tab.cc" line="1668"/>
+        <location filename="../client/desktop/management_tab.cc" line="1606"/>
+        <location filename="../client/desktop/management_tab.cc" line="1663"/>
         <source>The database is not available.</source>
         <translation>Η βάση δεδομένων δεν είναι διαθέσιμη.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1617"/>
+        <location filename="../client/desktop/management_tab.cc" line="1612"/>
         <source>Create Backup</source>
         <translation>Δημιουργία αντιγράφου ασφαλείας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1634"/>
+        <location filename="../client/desktop/management_tab.cc" line="1629"/>
         <source>There is nothing to save.</source>
         <translation>Δεν υπάρχει τίποτα για αποθήκευση.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2251"/>
+        <location filename="../client/desktop/management_tab.cc" line="2240"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Τα δεδομένα του κεντρικού υπολογιστή είναι κατεστραμμένα. Επεξεργαστείτε τον κεντρικό υπολογιστή και εισαγάγετέ τα ξανά.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2272"/>
+        <location filename="../client/desktop/management_tab.cc" line="2261"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Τα δεδομένα του δρομολογητή είναι κατεστραμμένα. Επεξεργαστείτε τον δρομολογητή και εισαγάγετέ τα ξανά.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1646"/>
+        <location filename="../client/desktop/management_tab.cc" line="1641"/>
         <source>Failed to create the backup.</source>
         <translation>Δεν ήταν δυνατή η δημιουργία του αντιγράφου ασφαλείας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1674"/>
-        <location filename="../client/desktop/management_tab.cc" line="1700"/>
+        <location filename="../client/desktop/management_tab.cc" line="1669"/>
+        <location filename="../client/desktop/management_tab.cc" line="1695"/>
         <source>Restore from Backup</source>
         <translation>Επαναφορά από αντίγραφο ασφαλείας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1683"/>
+        <location filename="../client/desktop/management_tab.cc" line="1678"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Ό,τι είναι αποθηκευμένο τώρα θα διαγραφεί και θα αντικατασταθεί με το περιεχόμενο του αντιγράφου ασφαλείας. Συνέχεια;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1702"/>
+        <location filename="../client/desktop/management_tab.cc" line="1697"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Το αντίγραφο ασφαλείας δημιουργήθηκε σε άλλη εγκατάσταση. Εισαγάγετε τον κύριο κωδικό πρόσβασης που χρησιμοποιείται εκεί.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1727"/>
+        <location filename="../client/desktop/management_tab.cc" line="1722"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Το αντίγραφο ασφαλείας δεν περιέχει δεδομένα, επομένως δεν έγινε καμία αλλαγή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1735"/>
+        <location filename="../client/desktop/management_tab.cc" line="1730"/>
         <source>The file is not a valid backup.</source>
         <translation>Το αρχείο δεν είναι έγκυρο αντίγραφο ασφαλείας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1739"/>
+        <location filename="../client/desktop/management_tab.cc" line="1734"/>
         <source>Failed to restore from the backup.</source>
         <translation>Δεν ήταν δυνατή η επαναφορά από το αντίγραφο ασφαλείας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1618"/>
-        <location filename="../client/desktop/management_tab.cc" line="1675"/>
+        <location filename="../client/desktop/management_tab.cc" line="1613"/>
+        <location filename="../client/desktop/management_tab.cc" line="1670"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Αντίγραφο ασφαλείας Aspia (*.aspia-backup);;Όλα τα αρχεία (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1638"/>
+        <location filename="../client/desktop/management_tab.cc" line="1633"/>
         <source>Unable to write the file.</source>
         <translation>Δεν είναι δυνατή η εγγραφή του αρχείου.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1731"/>
+        <location filename="../client/desktop/management_tab.cc" line="1726"/>
         <source>Unable to read the file.</source>
         <translation>Δεν είναι δυνατή η ανάγνωση του αρχείου.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1651"/>
+        <location filename="../client/desktop/management_tab.cc" line="1646"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5372,22 +5346,22 @@ Credentials exported: %5</source>
 Διαπιστευτήρια που εξήχθησαν: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1642"/>
+        <location filename="../client/desktop/management_tab.cc" line="1637"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Ορισμένες εγγραφές της βάσης δεδομένων είναι κατεστραμμένες. Διορθώστε τις ή διαγράψτε τις και δοκιμάστε ξανά.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1719"/>
+        <location filename="../client/desktop/management_tab.cc" line="1714"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Δεν είναι δυνατή η αποκρυπτογράφηση του αρχείου με τον καθορισμένο κωδικό πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1723"/>
+        <location filename="../client/desktop/management_tab.cc" line="1718"/>
         <source>Unsupported file format version.</source>
         <translation>Μη υποστηριζόμενη έκδοση μορφής αρχείου.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1744"/>
+        <location filename="../client/desktop/management_tab.cc" line="1739"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5402,29 +5376,29 @@ Credentials imported: %5</source>
 Διαπιστευτήρια που εισήχθησαν: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2179"/>
-        <location filename="../client/desktop/management_tab.cc" line="2210"/>
+        <location filename="../client/desktop/management_tab.cc" line="2168"/>
+        <location filename="../client/desktop/management_tab.cc" line="2199"/>
         <source>Copy Link</source>
         <translation>Αντιγραφή συνδέσμου</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2198"/>
-        <location filename="../client/desktop/management_tab.cc" line="2232"/>
+        <location filename="../client/desktop/management_tab.cc" line="2187"/>
+        <location filename="../client/desktop/management_tab.cc" line="2221"/>
         <source>Unable to create a link for this host.</source>
         <translation>Δεν είναι δυνατή η δημιουργία συνδέσμου για αυτόν τον κεντρικό υπολογιστή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2273"/>
+        <location filename="../client/desktop/management_tab.cc" line="2262"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Ο δρομολογητής που είναι συσχετισμένος με αυτόν τον κεντρικό υπολογιστή έχει διαγραφεί. Επεξεργαστείτε τον κεντρικό υπολογιστή για να επιλέξετε άλλον δρομολογητή ή μεταβείτε σε απευθείας σύνδεση.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2280"/>
+        <location filename="../client/desktop/management_tab.cc" line="2269"/>
         <source>The host has an invalid host ID.</source>
         <translation>Ο κεντρικός υπολογιστής έχει μη έγκυρο ID.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2289"/>
+        <location filename="../client/desktop/management_tab.cc" line="2278"/>
         <source>The host has an incorrect address.</source>
         <translation>Ο κεντρικός υπολογιστής έχει εσφαλμένη διεύθυνση.</translation>
     </message>
@@ -6301,37 +6275,37 @@ Credentials imported: %5</source>
 <context>
     <name>RouterClientsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="231"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="229"/>
         <source>Save File</source>
         <translation>Αποθήκευση αρχείου</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="231"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="229"/>
         <source>JSON files (*.json)</source>
         <translation>Αρχεία JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="242"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="240"/>
         <source>Could not open file for writing.</source>
         <translation>Δεν ήταν δυνατό το άνοιγμα του αρχείου για εγγραφή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="277"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="275"/>
         <source>Unable to write file.</source>
         <translation>Δεν είναι δυνατή η εγγραφή του αρχείου.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="316"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="292"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε τον πελάτη &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="341"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="317"/>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε όλους τους πελάτες;</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="502"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="478"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>%n πελάτης</numerusform>
@@ -6339,27 +6313,27 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="59"/>
         <source>Previous page</source>
         <translation>Προηγούμενη σελίδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="62"/>
         <source>Previous</source>
         <translation>Προηγούμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="74"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="80"/>
         <source>Next page</source>
         <translation>Επόμενη σελίδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="77"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="83"/>
         <source>Next</source>
         <translation>Επόμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="88"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="94"/>
         <source>Items per page:</source>
         <translation>Στοιχεία ανά σελίδα:</translation>
     </message>
@@ -6722,7 +6696,7 @@ Credentials imported: %5</source>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="452"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="428"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n κεντρικός υπολογιστής</numerusform>
@@ -6730,27 +6704,27 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="53"/>
         <source>Previous page</source>
         <translation>Προηγούμενη σελίδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="56"/>
         <source>Previous</source>
         <translation>Προηγούμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="68"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="74"/>
         <source>Next page</source>
         <translation>Επόμενη σελίδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="71"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="77"/>
         <source>Next</source>
         <translation>Επόμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="82"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="88"/>
         <source>Items per page:</source>
         <translation>Στοιχεία ανά σελίδα:</translation>
     </message>
@@ -6910,81 +6884,91 @@ Credentials imported: %5</source>
     <name>RouterHostsWidget</name>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="56"/>
+        <source>Host ID</source>
+        <translation>ID κεντρικού υπολογιστή</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="72"/>
+        <source>Display Name</source>
+        <translation>Εμφανιζόμενο όνομα</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
         <source>Address</source>
         <translation>Διεύθυνση</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="72"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="104"/>
         <source>Operating System</source>
         <translation>Λειτουργικό σύστημα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="120"/>
         <source>Version</source>
         <translation>Έκδοση</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="104"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="136"/>
         <source>Architecture</source>
         <translation>Αρχιτεκτονική</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="120"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="152"/>
         <source>Reset filter</source>
         <translation>Επαναφορά φίλτρου</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="157"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="195"/>
         <source>Previous page</source>
         <translation>Προηγούμενη σελίδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="160"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="198"/>
         <source>Previous</source>
         <translation>Προηγούμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="178"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="216"/>
         <source>Next page</source>
         <translation>Επόμενη σελίδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="181"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="219"/>
         <source>Next</source>
         <translation>Επόμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="192"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="230"/>
         <source>Items per page:</source>
         <translation>Στοιχεία ανά σελίδα:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="145"/>
         <source>All workspaces</source>
         <translation>Όλοι οι χώροι εργασίας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="146"/>
         <source>Without workspace</source>
         <translation>Χωρίς χώρο εργασίας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="392"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε τον κεντρικό υπολογιστή &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="417"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="394"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε όλους τους κεντρικούς υπολογιστές;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="445"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="422"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Η διαγραφή ενός κεντρικού υπολογιστή θα έχει ως αποτέλεσμα τη διαγραφή όλων των ρυθμίσεών του για τη σύνδεση με τον δρομολογητή, ενώ η εφαρμογή θα απεγκατασταθεί από τον κεντρικό υπολογιστή. Αυτή η ενέργεια είναι μη αναστρέψιμη. Είστε βέβαιοι ότι θέλετε να συνεχίσετε;</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="821"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="802"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n κεντρικός υπολογιστής</numerusform>
@@ -6992,22 +6976,22 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="858"/>
         <source>Save File</source>
         <translation>Αποθήκευση αρχείου</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="858"/>
         <source>JSON files (*.json)</source>
         <translation>Αρχεία JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="888"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="869"/>
         <source>Could not open file for writing.</source>
         <translation>Δεν ήταν δυνατό το άνοιγμα του αρχείου για εγγραφή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="935"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="916"/>
         <source>Unable to write file.</source>
         <translation>Δεν είναι δυνατή η εγγραφή του αρχείου.</translation>
     </message>
@@ -7015,62 +6999,54 @@ Credentials imported: %5</source>
 <context>
     <name>RouterRelaysWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="247"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="242"/>
         <source>Save File</source>
         <translation>Αποθήκευση αρχείου</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="247"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="242"/>
         <source>JSON files (*.json)</source>
         <translation>Αρχεία JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="258"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="253"/>
         <source>Could not open file for writing.</source>
         <translation>Δεν ήταν δυνατό το άνοιγμα του αρχείου για εγγραφή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="320"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="315"/>
         <source>Unable to write file.</source>
         <translation>Δεν είναι δυνατή η εγγραφή του αρχείου.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="359"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="332"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε τον αναμεταδότη &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="384"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="357"/>
         <source>Are you sure you want to disconnect all relays?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε όλους τους αναμεταδότες;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="450"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="423"/>
         <source>Disconnect</source>
         <translation>Αποσύνδεση</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="452"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="425"/>
         <source>Copy Row</source>
         <translation>Αντιγραφή γραμμής</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="453"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="426"/>
         <source>Copy Value</source>
         <translation>Αντιγραφή τιμής</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="462"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="435"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε τον κόμβο &quot;%1&quot;;</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="602"/>
-        <source>%n relay(s)</source>
-        <translation>
-            <numerusform>%n αναμεταδότης</numerusform>
-            <numerusform>%n αναμεταδότες</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -7085,13 +7061,13 @@ Credentials imported: %5</source>
     <name>RouterStatusWidget</name>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="230"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="198"/>
         <source>The router is waiting for a two-factor code.</source>
         <translation>Ο δρομολογητής αναμένει κωδικό δύο παραγόντων.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="231"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="199"/>
         <source>Enter Code</source>
         <translation>Εισαγωγή κωδικού</translation>
     </message>
@@ -7105,26 +7081,18 @@ Credentials imported: %5</source>
         <source>Event</source>
         <translation>Συμβάν</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/management/router_status_widget.cc" line="200"/>
-        <source>%n event(s)</source>
-        <translation>
-            <numerusform>%n συμβάν</numerusform>
-            <numerusform>%n συμβάντα</numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="218"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="186"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
         <translation>Ο έλεγχος ταυτότητας δύο παραγόντων αποκλείστηκε μετά από πάρα πολλές αποτυχημένες προσπάθειες.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="235"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="203"/>
         <source>Two-factor authentication has to be set up for this router.</source>
         <translation>Ο έλεγχος ταυτότητας δύο παραγόντων πρέπει να ρυθμιστεί για αυτόν τον δρομολογητή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="236"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="204"/>
         <source>Set Up</source>
         <translation>Ρύθμιση</translation>
     </message>
@@ -7152,17 +7120,17 @@ Credentials imported: %5</source>
         <translation>Επόμενη σελίδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="94"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="95"/>
         <source>Items per page:</source>
         <translation>Στοιχεία ανά σελίδα:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="220"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="221"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
         <translation>Η έγκριση ενός κεντρικού υπολογιστή θα του δώσει μόνιμη πρόσβαση στον δρομολογητή. Είστε βέβαιοι ότι θέλετε να εγκρίνετε τον κεντρικό υπολογιστή &quot;%1&quot;;</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="227"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="228"/>
         <source>Approving hosts will give them permanent access to the router. Are you sure you want to approve %n hosts?</source>
         <translation>
             <numerusform>Η έγκριση κεντρικών υπολογιστών θα τους δώσει μόνιμη πρόσβαση στον δρομολογητή. Είστε βέβαιοι ότι θέλετε να εγκρίνετε %n κεντρικό υπολογιστή;</numerusform>
@@ -7170,12 +7138,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="267"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="268"/>
         <source>Failed to approve the host.</source>
         <translation>Δεν ήταν δυνατή η έγκριση του κεντρικού υπολογιστή.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="269"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="270"/>
         <source>Failed to approve %n of the selected hosts.</source>
         <translation>
             <numerusform>Δεν ήταν δυνατή η έγκριση %n από τους επιλεγμένους κεντρικούς υπολογιστές.</numerusform>
@@ -7383,22 +7351,22 @@ Credentials imported: %5</source>
 <context>
     <name>RouterUsersWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="229"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="205"/>
         <source>You cannot delete a built-in user.</source>
         <translation>Δεν μπορείτε να διαγράψετε έναν ενσωματωμένο χρήστη.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="234"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="210"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να διαγράψετε τον χρήστη &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="292"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="268"/>
         <source>Failed to get list of users.</source>
         <translation>Δεν ήταν δυνατή η λήψη της λίστας χρηστών.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="435"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="411"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n χρήστης</numerusform>
@@ -7406,27 +7374,27 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="62"/>
         <source>Previous page</source>
         <translation>Προηγούμενη σελίδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="65"/>
         <source>Previous</source>
         <translation>Προηγούμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="77"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="83"/>
         <source>Next page</source>
         <translation>Επόμενη σελίδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="80"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="86"/>
         <source>Next</source>
         <translation>Επόμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="91"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="97"/>
         <source>Items per page:</source>
         <translation>Στοιχεία ανά σελίδα:</translation>
     </message>
@@ -7610,27 +7578,27 @@ Credentials imported: %5</source>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="296"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="294"/>
         <source>Previous</source>
         <translation>Προηγούμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="297"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="295"/>
         <source>Previous page</source>
         <translation>Προηγούμενη σελίδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="304"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
         <source>Next</source>
         <translation>Επόμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="305"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next page</source>
         <translation>Επόμενη σελίδα</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/search_widget.cc" line="808"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="787"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>%n αποτέλεσμα</numerusform>
@@ -8180,33 +8148,33 @@ Credentials imported: %5</source>
         <translation>Άλφα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="458"/>
+        <location filename="../client/desktop/settings_tab.cc" line="452"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Η νέα γλώσσα θα εφαρμοστεί μετά την επανεκκίνηση της εφαρμογής.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="507"/>
-        <location filename="../client/desktop/settings_tab.cc" line="632"/>
+        <location filename="../client/desktop/settings_tab.cc" line="501"/>
+        <location filename="../client/desktop/settings_tab.cc" line="626"/>
         <source>Choose path</source>
         <translation>Επιλογή διαδρομής</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="660"/>
+        <location filename="../client/desktop/settings_tab.cc" line="654"/>
         <source>The settings will be applied after the application is restarted.</source>
         <translation>Οι ρυθμίσεις θα εφαρμοστούν μετά την επανεκκίνηση της εφαρμογής.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="707"/>
+        <location filename="../client/desktop/settings_tab.cc" line="701"/>
         <source>Change Master Password</source>
         <translation>Αλλαγή κύριου κωδικού πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="709"/>
+        <location filename="../client/desktop/settings_tab.cc" line="703"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Εισαγάγετε τον τρέχοντα κωδικό πρόσβασης και επιλέξτε έναν νέο.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="717"/>
+        <location filename="../client/desktop/settings_tab.cc" line="711"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Ο κωδικός πρόσβασης δεν πρέπει να είναι μικρότερος από %n χαρακτήρα.</numerusform>
@@ -8214,12 +8182,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="724"/>
+        <location filename="../client/desktop/settings_tab.cc" line="718"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Ο κωδικός πρόσβασης που εισαγάγατε δεν πληροί τις απαιτήσεις ασφαλείας!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="725"/>
+        <location filename="../client/desktop/settings_tab.cc" line="719"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Ο κωδικός πρόσβασης πρέπει να περιέχει πεζούς και κεφαλαίους χαρακτήρες, αριθμούς και να μην είναι μικρότερος από %n χαρακτήρα.</numerusform>
@@ -8227,62 +8195,62 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="728"/>
+        <location filename="../client/desktop/settings_tab.cc" line="722"/>
         <source>Do you want to enter a different password?</source>
         <translation>Θέλετε να εισαγάγετε διαφορετικό κωδικό πρόσβασης;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="741"/>
+        <location filename="../client/desktop/settings_tab.cc" line="735"/>
         <source>Invalid current password.</source>
         <translation>Μη έγκυρος τρέχων κωδικός πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="745"/>
+        <location filename="../client/desktop/settings_tab.cc" line="739"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Ορισμένες εγγραφές της βάσης δεδομένων είναι κατεστραμμένες. Διορθώστε τις ή διαγράψτε τις και δοκιμάστε ξανά.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="749"/>
+        <location filename="../client/desktop/settings_tab.cc" line="743"/>
         <source>Unable to change the password.</source>
         <translation>Δεν είναι δυνατή η αλλαγή του κωδικού πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="782"/>
+        <location filename="../client/desktop/settings_tab.cc" line="776"/>
         <source>Unable to read the proxy settings.</source>
         <translation>Δεν είναι δυνατή η ανάγνωση των ρυθμίσεων του διακομιστή μεσολάβησης.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="896"/>
+        <location filename="../client/desktop/settings_tab.cc" line="890"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>Το κλειδί της βάσης δεδομένων θα αποθηκευτεί σε αυτόν τον υπολογιστή. Οποιοδήποτε πρόγραμμα εκτελείται με τον λογαριασμό σας θα μπορεί να το διαβάσει, ακόμη και όταν η εφαρμογή δεν εκτελείται.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="899"/>
+        <location filename="../client/desktop/settings_tab.cc" line="893"/>
         <source>Do you want to continue?</source>
         <translation>Θέλετε να συνεχίσετε;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="910"/>
+        <location filename="../client/desktop/settings_tab.cc" line="904"/>
         <source>Unlock Automatically</source>
         <translation>Αυτόματο ξεκλείδωμα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="912"/>
+        <location filename="../client/desktop/settings_tab.cc" line="906"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>Εισαγάγετε τον κύριο κωδικό πρόσβασης για να ξεκλειδώσετε την εφαρμογή αυτόματα κατά την εκκίνηση.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="922"/>
+        <location filename="../client/desktop/settings_tab.cc" line="916"/>
         <source>Invalid master password.</source>
         <translation>Μη έγκυρος κύριος κωδικός πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="926"/>
+        <location filename="../client/desktop/settings_tab.cc" line="920"/>
         <source>Unable to unlock the database.</source>
         <translation>Δεν είναι δυνατό το ξεκλείδωμα της βάσης δεδομένων.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="940"/>
+        <location filename="../client/desktop/settings_tab.cc" line="934"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>Δεν είναι δυνατή η ενεργοποίηση του αυτόματου ξεκλειδώματος.</translation>
     </message>
@@ -8654,7 +8622,7 @@ Credentials imported: %5</source>
 <context>
     <name>Sidebar</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="116"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="115"/>
         <location filename="../client/desktop/management/sidebar.cc" line="154"/>
         <source>Local</source>
         <translation>Τοπικά</translation>

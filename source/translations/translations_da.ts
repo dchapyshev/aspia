@@ -2412,17 +2412,17 @@ Legitimationsoplysninger erstattet: %2</translation>
         <translation>Slet legitimationsoplysninger</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="180"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="174"/>
         <source>Are you sure you want to delete credentials &quot;%1&quot;?</source>
         <translation>Er du sikker på, at du vil slette legitimationsoplysningerne &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="188"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="182"/>
         <source>Unable to delete credentials.</source>
         <translation>Kan ikke slette legitimationsoplysningerne.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="233"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="227"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Kunne ikke læse dataene. Listen er muligvis forældet.</translation>
     </message>
@@ -4294,30 +4294,9 @@ Legitimationsoplysninger erstattet: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
-        <source>Status update...</source>
-        <translation>Statusopdatering...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="170"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="161"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Kunne ikke læse dataene. Listen er muligvis forældet.</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="431"/>
-        <source>%n child group(s)</source>
-        <translation>
-            <numerusform>%n undergruppe</numerusform>
-            <numerusform>%n undergrupper</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="432"/>
-        <source>%n child host(s)</source>
-        <translation>
-            <numerusform>%n underliggende vært</numerusform>
-            <numerusform>%n underliggende værter</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -4835,15 +4814,10 @@ Importerede legitimationsoplysninger: %5</translation>
         <translation>Vis</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="122"/>
-        <location filename="../client/desktop/main_window.ui" line="224"/>
+        <location filename="../client/desktop/main_window.ui" line="121"/>
+        <location filename="../client/desktop/main_window.ui" line="217"/>
         <source>Tool Bar</source>
         <translation>Værktøjslinje</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="232"/>
-        <source>Status Bar</source>
-        <translation>Statuslinje</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="81"/>
@@ -4851,18 +4825,18 @@ Importerede legitimationsoplysninger: %5</translation>
         <translation>Hjælp</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="216"/>
+        <location filename="../client/desktop/main_window.ui" line="209"/>
         <source>Exit</source>
         <translation>Afslut</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="150"/>
+        <location filename="../client/desktop/main_window.ui" line="143"/>
         <source>Online Help...</source>
         <translation>Onlinehjælp...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="635"/>
+        <location filename="../client/desktop/main_window.cc" line="632"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4877,62 +4851,62 @@ Importerede legitimationsoplysninger: %5</translation>
         <translation>Rediger</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="105"/>
+        <location filename="../client/desktop/main_window.ui" line="104"/>
         <source>Session Type</source>
         <translation>Sessionstype</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="110"/>
+        <location filename="../client/desktop/main_window.ui" line="109"/>
         <source>Actions</source>
         <translation>Handlinger</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="159"/>
+        <location filename="../client/desktop/main_window.ui" line="152"/>
         <source>About</source>
         <translation>Om</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="168"/>
+        <location filename="../client/desktop/main_window.ui" line="161"/>
         <source>Quick Connect...</source>
         <translation>Hurtig forbindelse...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="177"/>
+        <location filename="../client/desktop/main_window.ui" line="170"/>
         <source>Credentials...</source>
         <translation>Legitimationsoplysninger...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="186"/>
+        <location filename="../client/desktop/main_window.ui" line="179"/>
         <source>Settings...</source>
         <translation>Indstillinger...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="198"/>
+        <location filename="../client/desktop/main_window.ui" line="191"/>
         <source>MCP Connector</source>
         <translation>MCP-connector</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="207"/>
+        <location filename="../client/desktop/main_window.ui" line="200"/>
         <source>Lock</source>
         <translation>Lås</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="240"/>
+        <location filename="../client/desktop/main_window.ui" line="225"/>
         <source>Search Field</source>
         <translation>Søgefelt</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="248"/>
+        <location filename="../client/desktop/main_window.ui" line="233"/>
         <source>Large icons</source>
         <translation>Store ikoner</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="256"/>
+        <location filename="../client/desktop/main_window.ui" line="241"/>
         <source>Open Sessions in Tabs</source>
         <translation>Åbn sessioner i faner</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="264"/>
+        <location filename="../client/desktop/main_window.ui" line="249"/>
         <source>Always on Top</source>
         <translation>Altid øverst</translation>
     </message>
@@ -4942,83 +4916,83 @@ Importerede legitimationsoplysninger: %5</translation>
         <translation>Søg...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="217"/>
+        <location filename="../client/desktop/main_window.cc" line="214"/>
         <source>Unable to turn on the MCP connector.</source>
         <translation>Kan ikke aktivere MCP-connectoren.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="235"/>
+        <location filename="../client/desktop/main_window.cc" line="232"/>
         <source>Management</source>
         <translation>Administration</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="281"/>
+        <location filename="../client/desktop/main_window.cc" line="278"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Ugyldigt link &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="304"/>
+        <location filename="../client/desktop/main_window.cc" line="301"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Routeren, som linket henviser til, er ikke blandt de gemte routere.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="353"/>
+        <location filename="../client/desktop/main_window.cc" line="350"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Værten, som linket henviser til, er ikke blandt de gemte værter.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="611"/>
+        <location filename="../client/desktop/main_window.cc" line="608"/>
         <source>Close all sessions to lock the application.</source>
         <translation>Luk alle sessioner for at låse programmet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="617"/>
+        <location filename="../client/desktop/main_window.cc" line="614"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>Luk alle dialogbokse for at låse programmet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="732"/>
+        <location filename="../client/desktop/main_window.cc" line="728"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Forbindelse via ID er angivet i værtens egenskaber, men routeren er ikke konfigureret. Kontroller routerens parametre i værtens egenskaber.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="999"/>
+        <location filename="../client/desktop/main_window.cc" line="995"/>
         <source>Unknown application</source>
         <translation>Ukendt program</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="1002"/>
+        <location filename="../client/desktop/main_window.cc" line="998"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>MCP-connector. Forbundet: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="1003"/>
+        <location filename="../client/desktop/main_window.cc" line="999"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - AI er forbundet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="365"/>
+        <location filename="../client/desktop/main_window.cc" line="362"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Routeren, der er knyttet til denne vært, er blevet slettet. Rediger værten for at vælge en anden router eller skifte til direkte forbindelse.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="312"/>
-        <location filename="../client/desktop/main_window.cc" line="364"/>
+        <location filename="../client/desktop/main_window.cc" line="309"/>
+        <location filename="../client/desktop/main_window.cc" line="361"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Dataene for routeren er beskadigede. Rediger routeren, og indtast dem igen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="352"/>
+        <location filename="../client/desktop/main_window.cc" line="349"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Dataene for værten er beskadigede. Rediger værten, og indtast dem igen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="570"/>
+        <location filename="../client/desktop/main_window.cc" line="567"/>
         <source>Credentials</source>
         <translation>Legitimationsoplysninger</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="601"/>
+        <location filename="../client/desktop/main_window.cc" line="598"/>
         <source>Settings</source>
         <translation>Indstillinger</translation>
     </message>
@@ -5213,151 +5187,151 @@ Importerede legitimationsoplysninger: %5</translation>
         <translation>Opdater status automatisk</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1115"/>
+        <location filename="../client/desktop/management_tab.cc" line="1110"/>
         <source>(copy)</source>
         <translation>(kopi)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1083"/>
-        <location filename="../client/desktop/management_tab.cc" line="1157"/>
-        <location filename="../client/desktop/management_tab.cc" line="2256"/>
+        <location filename="../client/desktop/management_tab.cc" line="1078"/>
+        <location filename="../client/desktop/management_tab.cc" line="1152"/>
+        <location filename="../client/desktop/management_tab.cc" line="2245"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Kunne ikke hente værtsoplysninger fra den lokale database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="893"/>
+        <location filename="../client/desktop/management_tab.cc" line="888"/>
         <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
         <translation>Sessionstypen &quot;%1&quot; er ikke tilgængelig for Quick Support.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1120"/>
+        <location filename="../client/desktop/management_tab.cc" line="1115"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Kunne ikke tilføje værten til den lokale database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1161"/>
+        <location filename="../client/desktop/management_tab.cc" line="1156"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Er du sikker på, at du vil slette værten &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1171"/>
+        <location filename="../client/desktop/management_tab.cc" line="1166"/>
         <source>Unable to remove host</source>
         <translation>Kan ikke fjerne værten</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1234"/>
-        <location filename="../client/desktop/management_tab.cc" line="1304"/>
-        <location filename="../client/desktop/management_tab.cc" line="1330"/>
+        <location filename="../client/desktop/management_tab.cc" line="1229"/>
+        <location filename="../client/desktop/management_tab.cc" line="1299"/>
+        <location filename="../client/desktop/management_tab.cc" line="1325"/>
         <source>Copy Row</source>
         <translation>Kopier række</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1235"/>
-        <location filename="../client/desktop/management_tab.cc" line="1305"/>
-        <location filename="../client/desktop/management_tab.cc" line="1331"/>
+        <location filename="../client/desktop/management_tab.cc" line="1230"/>
+        <location filename="../client/desktop/management_tab.cc" line="1300"/>
+        <location filename="../client/desktop/management_tab.cc" line="1326"/>
         <source>Copy Value</source>
         <translation>Kopier værdi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1432"/>
+        <location filename="../client/desktop/management_tab.cc" line="1427"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Er du sikker på, at du vil slette arbejdsområdet &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1452"/>
+        <location filename="../client/desktop/management_tab.cc" line="1447"/>
         <source>Failed to delete the workspace.</source>
         <translation>Kunne ikke slette arbejdsområdet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1554"/>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Er du sikker på, at du vil slette gruppen &quot;%1&quot;? Værter, der er tildelt denne gruppe eller dens undergrupper, flyttes til arbejdsområdets rod.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1572"/>
+        <location filename="../client/desktop/management_tab.cc" line="1567"/>
         <source>Failed to delete the group.</source>
         <translation>Kunne ikke slette gruppen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1611"/>
-        <location filename="../client/desktop/management_tab.cc" line="1668"/>
+        <location filename="../client/desktop/management_tab.cc" line="1606"/>
+        <location filename="../client/desktop/management_tab.cc" line="1663"/>
         <source>The database is not available.</source>
         <translation>Databasen er ikke tilgængelig.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1617"/>
+        <location filename="../client/desktop/management_tab.cc" line="1612"/>
         <source>Create Backup</source>
         <translation>Opret sikkerhedskopi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1634"/>
+        <location filename="../client/desktop/management_tab.cc" line="1629"/>
         <source>There is nothing to save.</source>
         <translation>Der er intet at gemme.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2251"/>
+        <location filename="../client/desktop/management_tab.cc" line="2240"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Dataene for værten er beskadigede. Rediger værten, og indtast dem igen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2272"/>
+        <location filename="../client/desktop/management_tab.cc" line="2261"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Dataene for routeren er beskadigede. Rediger routeren, og indtast dem igen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1646"/>
+        <location filename="../client/desktop/management_tab.cc" line="1641"/>
         <source>Failed to create the backup.</source>
         <translation>Kunne ikke oprette sikkerhedskopien.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1674"/>
-        <location filename="../client/desktop/management_tab.cc" line="1700"/>
+        <location filename="../client/desktop/management_tab.cc" line="1669"/>
+        <location filename="../client/desktop/management_tab.cc" line="1695"/>
         <source>Restore from Backup</source>
         <translation>Gendan fra sikkerhedskopi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1683"/>
+        <location filename="../client/desktop/management_tab.cc" line="1678"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Alt, hvad der er gemt nu, slettes og erstattes med indholdet af sikkerhedskopien. Vil du fortsætte?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1702"/>
+        <location filename="../client/desktop/management_tab.cc" line="1697"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Sikkerhedskopien blev oprettet på en anden installation. Indtast hovedadgangskoden, der blev brugt der.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1727"/>
+        <location filename="../client/desktop/management_tab.cc" line="1722"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Sikkerhedskopien indeholder ingen data, så intet blev ændret.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1735"/>
+        <location filename="../client/desktop/management_tab.cc" line="1730"/>
         <source>The file is not a valid backup.</source>
         <translation>Filen er ikke en gyldig sikkerhedskopi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1739"/>
+        <location filename="../client/desktop/management_tab.cc" line="1734"/>
         <source>Failed to restore from the backup.</source>
         <translation>Kunne ikke gendanne fra sikkerhedskopien.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1618"/>
-        <location filename="../client/desktop/management_tab.cc" line="1675"/>
+        <location filename="../client/desktop/management_tab.cc" line="1613"/>
+        <location filename="../client/desktop/management_tab.cc" line="1670"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia Backup (*.aspia-backup);;Alle filer (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1638"/>
+        <location filename="../client/desktop/management_tab.cc" line="1633"/>
         <source>Unable to write the file.</source>
         <translation>Kan ikke skrive filen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1731"/>
+        <location filename="../client/desktop/management_tab.cc" line="1726"/>
         <source>Unable to read the file.</source>
         <translation>Kan ikke læse filen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1651"/>
+        <location filename="../client/desktop/management_tab.cc" line="1646"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5372,22 +5346,22 @@ Eksporterede gemte adgangskoder: %4
 Eksporterede legitimationsoplysninger: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1642"/>
+        <location filename="../client/desktop/management_tab.cc" line="1637"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Nogle poster i databasen er beskadigede. Ret eller slet dem, og prøv igen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1719"/>
+        <location filename="../client/desktop/management_tab.cc" line="1714"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Kan ikke dekryptere filen med den angivne adgangskode.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1723"/>
+        <location filename="../client/desktop/management_tab.cc" line="1718"/>
         <source>Unsupported file format version.</source>
         <translation>Ikke-understøttet filformatversion.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1744"/>
+        <location filename="../client/desktop/management_tab.cc" line="1739"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5402,29 +5376,29 @@ Importerede gemte adgangskoder: %4
 Importerede legitimationsoplysninger: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2179"/>
-        <location filename="../client/desktop/management_tab.cc" line="2210"/>
+        <location filename="../client/desktop/management_tab.cc" line="2168"/>
+        <location filename="../client/desktop/management_tab.cc" line="2199"/>
         <source>Copy Link</source>
         <translation>Kopier link</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2198"/>
-        <location filename="../client/desktop/management_tab.cc" line="2232"/>
+        <location filename="../client/desktop/management_tab.cc" line="2187"/>
+        <location filename="../client/desktop/management_tab.cc" line="2221"/>
         <source>Unable to create a link for this host.</source>
         <translation>Kan ikke oprette et link til denne vært.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2273"/>
+        <location filename="../client/desktop/management_tab.cc" line="2262"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Routeren, der er knyttet til denne vært, er blevet slettet. Rediger værten for at vælge en anden router eller skifte til direkte forbindelse.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2280"/>
+        <location filename="../client/desktop/management_tab.cc" line="2269"/>
         <source>The host has an invalid host ID.</source>
         <translation>Værten har et ugyldigt værts-ID.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2289"/>
+        <location filename="../client/desktop/management_tab.cc" line="2278"/>
         <source>The host has an incorrect address.</source>
         <translation>Værten har en forkert adresse.</translation>
     </message>
@@ -6301,37 +6275,37 @@ Importerede legitimationsoplysninger: %5</translation>
 <context>
     <name>RouterClientsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="231"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="229"/>
         <source>Save File</source>
         <translation>Gem fil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="231"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="229"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-filer (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="242"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="240"/>
         <source>Could not open file for writing.</source>
         <translation>Kunne ikke åbne filen til skrivning.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="277"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="275"/>
         <source>Unable to write file.</source>
         <translation>Kan ikke skrive filen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="316"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="292"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>Er du sikker på, at du vil afbryde klienten &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="341"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="317"/>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>Er du sikker på, at du vil afbryde alle klienter?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="502"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="478"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>%n klient</numerusform>
@@ -6339,27 +6313,27 @@ Importerede legitimationsoplysninger: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="59"/>
         <source>Previous page</source>
         <translation>Forrige side</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="62"/>
         <source>Previous</source>
         <translation>Forrige</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="74"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="80"/>
         <source>Next page</source>
         <translation>Næste side</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="77"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="83"/>
         <source>Next</source>
         <translation>Næste</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="88"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="94"/>
         <source>Items per page:</source>
         <translation>Elementer pr. side:</translation>
     </message>
@@ -6722,7 +6696,7 @@ Importerede legitimationsoplysninger: %5</translation>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="452"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="428"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n vært</numerusform>
@@ -6730,27 +6704,27 @@ Importerede legitimationsoplysninger: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="53"/>
         <source>Previous page</source>
         <translation>Forrige side</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="56"/>
         <source>Previous</source>
         <translation>Forrige</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="68"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="74"/>
         <source>Next page</source>
         <translation>Næste side</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="71"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="77"/>
         <source>Next</source>
         <translation>Næste</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="82"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="88"/>
         <source>Items per page:</source>
         <translation>Elementer pr. side:</translation>
     </message>
@@ -6910,81 +6884,91 @@ Importerede legitimationsoplysninger: %5</translation>
     <name>RouterHostsWidget</name>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="56"/>
+        <source>Host ID</source>
+        <translation>Værts-ID</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="72"/>
+        <source>Display Name</source>
+        <translation>Vist navn</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
         <source>Address</source>
         <translation>Adresse</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="72"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="104"/>
         <source>Operating System</source>
         <translation>Operativsystem</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="120"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="104"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="136"/>
         <source>Architecture</source>
         <translation>Arkitektur</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="120"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="152"/>
         <source>Reset filter</source>
         <translation>Nulstil filter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="157"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="195"/>
         <source>Previous page</source>
         <translation>Forrige side</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="160"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="198"/>
         <source>Previous</source>
         <translation>Forrige</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="178"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="216"/>
         <source>Next page</source>
         <translation>Næste side</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="181"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="219"/>
         <source>Next</source>
         <translation>Næste</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="192"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="230"/>
         <source>Items per page:</source>
         <translation>Elementer pr. side:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="145"/>
         <source>All workspaces</source>
         <translation>Alle arbejdsområder</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="146"/>
         <source>Without workspace</source>
         <translation>Uden arbejdsområde</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="392"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Er du sikker på, at du vil afbryde værten &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="417"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="394"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Er du sikker på, at du vil afbryde alle værter?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="445"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="422"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Sletning af en vært medfører, at hele dens konfiguration til forbindelse med routeren slettes, og programmet afinstalleres på værten. Denne handling kan ikke fortrydes. Er du sikker på, at du vil gøre dette?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="821"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="802"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n vært</numerusform>
@@ -6992,22 +6976,22 @@ Importerede legitimationsoplysninger: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="858"/>
         <source>Save File</source>
         <translation>Gem fil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="858"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-filer (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="888"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="869"/>
         <source>Could not open file for writing.</source>
         <translation>Kunne ikke åbne filen til skrivning.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="935"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="916"/>
         <source>Unable to write file.</source>
         <translation>Kan ikke skrive filen.</translation>
     </message>
@@ -7015,62 +6999,54 @@ Importerede legitimationsoplysninger: %5</translation>
 <context>
     <name>RouterRelaysWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="247"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="242"/>
         <source>Save File</source>
         <translation>Gem fil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="247"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="242"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-filer (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="258"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="253"/>
         <source>Could not open file for writing.</source>
         <translation>Kunne ikke åbne filen til skrivning.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="320"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="315"/>
         <source>Unable to write file.</source>
         <translation>Kan ikke skrive filen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="359"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="332"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
         <translation>Er du sikker på, at du vil afbryde relæet &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="384"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="357"/>
         <source>Are you sure you want to disconnect all relays?</source>
         <translation>Er du sikker på, at du vil afbryde alle relæer?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="450"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="423"/>
         <source>Disconnect</source>
         <translation>Afbryd</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="452"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="425"/>
         <source>Copy Row</source>
         <translation>Kopier række</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="453"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="426"/>
         <source>Copy Value</source>
         <translation>Kopier værdi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="462"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="435"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>Er du sikker på, at du vil afbryde peeren &quot;%1&quot;?</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="602"/>
-        <source>%n relay(s)</source>
-        <translation>
-            <numerusform>%n relæ</numerusform>
-            <numerusform>%n relæer</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -7085,13 +7061,13 @@ Importerede legitimationsoplysninger: %5</translation>
     <name>RouterStatusWidget</name>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="230"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="198"/>
         <source>The router is waiting for a two-factor code.</source>
         <translation>Routeren venter på en tofaktorkode.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="231"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="199"/>
         <source>Enter Code</source>
         <translation>Indtast kode</translation>
     </message>
@@ -7105,26 +7081,18 @@ Importerede legitimationsoplysninger: %5</translation>
         <source>Event</source>
         <translation>Hændelse</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/management/router_status_widget.cc" line="200"/>
-        <source>%n event(s)</source>
-        <translation>
-            <numerusform>%n hændelse</numerusform>
-            <numerusform>%n hændelser</numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="218"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="186"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
         <translation>Tofaktorgodkendelse er blokeret efter for mange mislykkede forsøg.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="235"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="203"/>
         <source>Two-factor authentication has to be set up for this router.</source>
         <translation>Tofaktorgodkendelse skal opsættes for denne router.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="236"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="204"/>
         <source>Set Up</source>
         <translation>Opsæt</translation>
     </message>
@@ -7152,17 +7120,17 @@ Importerede legitimationsoplysninger: %5</translation>
         <translation>Næste side</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="94"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="95"/>
         <source>Items per page:</source>
         <translation>Elementer pr. side:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="220"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="221"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
         <translation>Godkendelse af en vært giver den permanent adgang til routeren. Er du sikker på, at du vil godkende værten &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="227"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="228"/>
         <source>Approving hosts will give them permanent access to the router. Are you sure you want to approve %n hosts?</source>
         <translation>
             <numerusform>Godkendelse af værter giver dem permanent adgang til routeren. Er du sikker på, at du vil godkende %n vært?</numerusform>
@@ -7170,12 +7138,12 @@ Importerede legitimationsoplysninger: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="267"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="268"/>
         <source>Failed to approve the host.</source>
         <translation>Kunne ikke godkende værten.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="269"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="270"/>
         <source>Failed to approve %n of the selected hosts.</source>
         <translation>
             <numerusform>Kunne ikke godkende %n af de valgte værter.</numerusform>
@@ -7383,22 +7351,22 @@ Importerede legitimationsoplysninger: %5</translation>
 <context>
     <name>RouterUsersWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="229"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="205"/>
         <source>You cannot delete a built-in user.</source>
         <translation>Du kan ikke slette en indbygget bruger.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="234"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="210"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Er du sikker på, at du vil slette brugeren &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="292"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="268"/>
         <source>Failed to get list of users.</source>
         <translation>Kunne ikke hente listen over brugere.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="435"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="411"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n bruger</numerusform>
@@ -7406,27 +7374,27 @@ Importerede legitimationsoplysninger: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="62"/>
         <source>Previous page</source>
         <translation>Forrige side</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="65"/>
         <source>Previous</source>
         <translation>Forrige</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="77"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="83"/>
         <source>Next page</source>
         <translation>Næste side</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="80"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="86"/>
         <source>Next</source>
         <translation>Næste</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="91"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="97"/>
         <source>Items per page:</source>
         <translation>Elementer pr. side:</translation>
     </message>
@@ -7610,27 +7578,27 @@ Importerede legitimationsoplysninger: %5</translation>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="296"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="294"/>
         <source>Previous</source>
         <translation>Forrige</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="297"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="295"/>
         <source>Previous page</source>
         <translation>Forrige side</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="304"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
         <source>Next</source>
         <translation>Næste</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="305"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next page</source>
         <translation>Næste side</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/search_widget.cc" line="808"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="787"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>%n resultat</numerusform>
@@ -8180,33 +8148,33 @@ Importerede legitimationsoplysninger: %5</translation>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="458"/>
+        <location filename="../client/desktop/settings_tab.cc" line="452"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Det nye sprog anvendes, når programmet er genstartet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="507"/>
-        <location filename="../client/desktop/settings_tab.cc" line="632"/>
+        <location filename="../client/desktop/settings_tab.cc" line="501"/>
+        <location filename="../client/desktop/settings_tab.cc" line="626"/>
         <source>Choose path</source>
         <translation>Vælg sti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="660"/>
+        <location filename="../client/desktop/settings_tab.cc" line="654"/>
         <source>The settings will be applied after the application is restarted.</source>
         <translation>Indstillingerne anvendes, når programmet er genstartet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="707"/>
+        <location filename="../client/desktop/settings_tab.cc" line="701"/>
         <source>Change Master Password</source>
         <translation>Skift hovedadgangskode</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="709"/>
+        <location filename="../client/desktop/settings_tab.cc" line="703"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Indtast din nuværende adgangskode, og vælg en ny.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="717"/>
+        <location filename="../client/desktop/settings_tab.cc" line="711"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Adgangskoden må ikke være kortere end %n tegn.</numerusform>
@@ -8214,12 +8182,12 @@ Importerede legitimationsoplysninger: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="724"/>
+        <location filename="../client/desktop/settings_tab.cc" line="718"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Den indtastede adgangskode opfylder ikke sikkerhedskravene!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="725"/>
+        <location filename="../client/desktop/settings_tab.cc" line="719"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Adgangskoden skal indeholde små og store bogstaver samt tal og må ikke være kortere end %n tegn.</numerusform>
@@ -8227,62 +8195,62 @@ Importerede legitimationsoplysninger: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="728"/>
+        <location filename="../client/desktop/settings_tab.cc" line="722"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vil du indtaste en anden adgangskode?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="741"/>
+        <location filename="../client/desktop/settings_tab.cc" line="735"/>
         <source>Invalid current password.</source>
         <translation>Den nuværende adgangskode er ugyldig.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="745"/>
+        <location filename="../client/desktop/settings_tab.cc" line="739"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Nogle poster i databasen er beskadigede. Ret eller slet dem, og prøv igen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="749"/>
+        <location filename="../client/desktop/settings_tab.cc" line="743"/>
         <source>Unable to change the password.</source>
         <translation>Kan ikke ændre adgangskoden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="782"/>
+        <location filename="../client/desktop/settings_tab.cc" line="776"/>
         <source>Unable to read the proxy settings.</source>
         <translation>Kan ikke læse indstillingerne for proxyserveren.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="896"/>
+        <location filename="../client/desktop/settings_tab.cc" line="890"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>Databasens nøgle gemmes på denne computer. Ethvert program, der kører under din konto, vil kunne læse den, også når programmet ikke kører.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="899"/>
+        <location filename="../client/desktop/settings_tab.cc" line="893"/>
         <source>Do you want to continue?</source>
         <translation>Vil du fortsætte?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="910"/>
+        <location filename="../client/desktop/settings_tab.cc" line="904"/>
         <source>Unlock Automatically</source>
         <translation>Automatisk oplåsning</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="912"/>
+        <location filename="../client/desktop/settings_tab.cc" line="906"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>Indtast hovedadgangskoden for at låse programmet op automatisk ved opstart.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="922"/>
+        <location filename="../client/desktop/settings_tab.cc" line="916"/>
         <source>Invalid master password.</source>
         <translation>Ugyldig hovedadgangskode.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="926"/>
+        <location filename="../client/desktop/settings_tab.cc" line="920"/>
         <source>Unable to unlock the database.</source>
         <translation>Kan ikke låse databasen op.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="940"/>
+        <location filename="../client/desktop/settings_tab.cc" line="934"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>Kan ikke aktivere automatisk oplåsning.</translation>
     </message>
@@ -8654,7 +8622,7 @@ Importerede legitimationsoplysninger: %5</translation>
 <context>
     <name>Sidebar</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="116"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="115"/>
         <location filename="../client/desktop/management/sidebar.cc" line="154"/>
         <source>Local</source>
         <translation>Lokal</translation>

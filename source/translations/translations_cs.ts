@@ -2423,17 +2423,17 @@ Nahrazené přihlašovací údaje: %2</translation>
         <translation>Odstranit přihlašovací údaje</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="180"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="174"/>
         <source>Are you sure you want to delete credentials &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit přihlašovací údaje &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="188"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="182"/>
         <source>Unable to delete credentials.</source>
         <translation>Nelze odstranit přihlašovací údaje.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="233"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="227"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Nepodařilo se načíst data. Seznam může být zastaralý.</translation>
     </message>
@@ -4313,32 +4313,9 @@ Nahrazené přihlašovací údaje: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
-        <source>Status update...</source>
-        <translation>Aktualizace stavu...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="170"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="161"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Nepodařilo se načíst data. Seznam může být zastaralý.</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="431"/>
-        <source>%n child group(s)</source>
-        <translation>
-            <numerusform>%n podřízená skupina</numerusform>
-            <numerusform>%n podřízené skupiny</numerusform>
-            <numerusform>%n podřízených skupin</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="432"/>
-        <source>%n child host(s)</source>
-        <translation>
-            <numerusform>%n podřízený hostitel</numerusform>
-            <numerusform>%n podřízení hostitelé</numerusform>
-            <numerusform>%n podřízených hostitelů</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -4860,15 +4837,10 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Zobrazení</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="122"/>
-        <location filename="../client/desktop/main_window.ui" line="224"/>
+        <location filename="../client/desktop/main_window.ui" line="121"/>
+        <location filename="../client/desktop/main_window.ui" line="217"/>
         <source>Tool Bar</source>
         <translation>Panel nástrojů</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.ui" line="232"/>
-        <source>Status Bar</source>
-        <translation>Stavový řádek</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="81"/>
@@ -4876,18 +4848,18 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Nápověda</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="216"/>
+        <location filename="../client/desktop/main_window.ui" line="209"/>
         <source>Exit</source>
         <translation>Ukončit</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="150"/>
+        <location filename="../client/desktop/main_window.ui" line="143"/>
         <source>Online Help...</source>
         <translation>Online nápověda...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="635"/>
+        <location filename="../client/desktop/main_window.cc" line="632"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4902,62 +4874,62 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Úpravy</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="105"/>
+        <location filename="../client/desktop/main_window.ui" line="104"/>
         <source>Session Type</source>
         <translation>Typ relace</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="110"/>
+        <location filename="../client/desktop/main_window.ui" line="109"/>
         <source>Actions</source>
         <translation>Akce</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="159"/>
+        <location filename="../client/desktop/main_window.ui" line="152"/>
         <source>About</source>
         <translation>O aplikaci</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="168"/>
+        <location filename="../client/desktop/main_window.ui" line="161"/>
         <source>Quick Connect...</source>
         <translation>Rychlé připojení...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="177"/>
+        <location filename="../client/desktop/main_window.ui" line="170"/>
         <source>Credentials...</source>
         <translation>Přihlašovací údaje...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="186"/>
+        <location filename="../client/desktop/main_window.ui" line="179"/>
         <source>Settings...</source>
         <translation>Nastavení...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="198"/>
+        <location filename="../client/desktop/main_window.ui" line="191"/>
         <source>MCP Connector</source>
         <translation>MCP konektor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="207"/>
+        <location filename="../client/desktop/main_window.ui" line="200"/>
         <source>Lock</source>
         <translation>Uzamknout</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="240"/>
+        <location filename="../client/desktop/main_window.ui" line="225"/>
         <source>Search Field</source>
         <translation>Pole hledání</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="248"/>
+        <location filename="../client/desktop/main_window.ui" line="233"/>
         <source>Large icons</source>
         <translation>Velké ikony</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="256"/>
+        <location filename="../client/desktop/main_window.ui" line="241"/>
         <source>Open Sessions in Tabs</source>
         <translation>Otevírat relace na kartách</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="264"/>
+        <location filename="../client/desktop/main_window.ui" line="249"/>
         <source>Always on Top</source>
         <translation>Vždy navrchu</translation>
     </message>
@@ -4967,83 +4939,83 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Hledat...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="217"/>
+        <location filename="../client/desktop/main_window.cc" line="214"/>
         <source>Unable to turn on the MCP connector.</source>
         <translation>Nelze zapnout MCP konektor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="235"/>
+        <location filename="../client/desktop/main_window.cc" line="232"/>
         <source>Management</source>
         <translation>Správa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="281"/>
+        <location filename="../client/desktop/main_window.cc" line="278"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Neplatný odkaz &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="304"/>
+        <location filename="../client/desktop/main_window.cc" line="301"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Router, na který odkaz odkazuje, není mezi uloženými routery.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="353"/>
+        <location filename="../client/desktop/main_window.cc" line="350"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Hostitel, na kterého odkaz odkazuje, není mezi uloženými hostiteli.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="611"/>
+        <location filename="../client/desktop/main_window.cc" line="608"/>
         <source>Close all sessions to lock the application.</source>
         <translation>Pro uzamknutí aplikace zavřete všechny relace.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="617"/>
+        <location filename="../client/desktop/main_window.cc" line="614"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>Pro uzamknutí aplikace zavřete všechny dialogy.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="732"/>
+        <location filename="../client/desktop/main_window.cc" line="728"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Ve vlastnostech hostitele je zadáno připojení podle ID, ale router není nakonfigurován. Zkontrolujte parametry routeru ve vlastnostech hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="999"/>
+        <location filename="../client/desktop/main_window.cc" line="995"/>
         <source>Unknown application</source>
         <translation>Neznámá aplikace</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="1002"/>
+        <location filename="../client/desktop/main_window.cc" line="998"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>MCP konektor. Připojeno: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="1003"/>
+        <location filename="../client/desktop/main_window.cc" line="999"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - AI je připojena</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="365"/>
+        <location filename="../client/desktop/main_window.cc" line="362"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Router přidružený k tomuto hostiteli byl odstraněn. Upravte hostitele a vyberte jiný router, nebo přepněte na přímé připojení.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="312"/>
-        <location filename="../client/desktop/main_window.cc" line="364"/>
+        <location filename="../client/desktop/main_window.cc" line="309"/>
+        <location filename="../client/desktop/main_window.cc" line="361"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Data routeru jsou poškozena. Upravte router a zadejte je znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="352"/>
+        <location filename="../client/desktop/main_window.cc" line="349"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Data hostitele jsou poškozena. Upravte hostitele a zadejte je znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="570"/>
+        <location filename="../client/desktop/main_window.cc" line="567"/>
         <source>Credentials</source>
         <translation>Přihlašovací údaje</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="601"/>
+        <location filename="../client/desktop/main_window.cc" line="598"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
     </message>
@@ -5238,151 +5210,151 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Automaticky obnovovat stav</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1115"/>
+        <location filename="../client/desktop/management_tab.cc" line="1110"/>
         <source>(copy)</source>
         <translation>(kopie)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1083"/>
-        <location filename="../client/desktop/management_tab.cc" line="1157"/>
-        <location filename="../client/desktop/management_tab.cc" line="2256"/>
+        <location filename="../client/desktop/management_tab.cc" line="1078"/>
+        <location filename="../client/desktop/management_tab.cc" line="1152"/>
+        <location filename="../client/desktop/management_tab.cc" line="2245"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Nepodařilo se načíst informace o hostiteli z místní databáze.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="893"/>
+        <location filename="../client/desktop/management_tab.cc" line="888"/>
         <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
         <translation>Typ relace &quot;%1&quot; není pro Quick Support k dispozici.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1120"/>
+        <location filename="../client/desktop/management_tab.cc" line="1115"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Nepodařilo se přidat hostitele do místní databáze.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1161"/>
+        <location filename="../client/desktop/management_tab.cc" line="1156"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit hostitele &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1171"/>
+        <location filename="../client/desktop/management_tab.cc" line="1166"/>
         <source>Unable to remove host</source>
         <translation>Nelze odebrat hostitele</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1234"/>
-        <location filename="../client/desktop/management_tab.cc" line="1304"/>
-        <location filename="../client/desktop/management_tab.cc" line="1330"/>
+        <location filename="../client/desktop/management_tab.cc" line="1229"/>
+        <location filename="../client/desktop/management_tab.cc" line="1299"/>
+        <location filename="../client/desktop/management_tab.cc" line="1325"/>
         <source>Copy Row</source>
         <translation>Kopírovat řádek</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1235"/>
-        <location filename="../client/desktop/management_tab.cc" line="1305"/>
-        <location filename="../client/desktop/management_tab.cc" line="1331"/>
+        <location filename="../client/desktop/management_tab.cc" line="1230"/>
+        <location filename="../client/desktop/management_tab.cc" line="1300"/>
+        <location filename="../client/desktop/management_tab.cc" line="1326"/>
         <source>Copy Value</source>
         <translation>Kopírovat hodnotu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1432"/>
+        <location filename="../client/desktop/management_tab.cc" line="1427"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit pracovní prostor &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1452"/>
+        <location filename="../client/desktop/management_tab.cc" line="1447"/>
         <source>Failed to delete the workspace.</source>
         <translation>Nepodařilo se odstranit pracovní prostor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1554"/>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Opravdu chcete odstranit skupinu &quot;%1&quot;? Hostitelé přiřazení k této skupině nebo jejím podskupinám budou přesunuti do kořene pracovního prostoru.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1572"/>
+        <location filename="../client/desktop/management_tab.cc" line="1567"/>
         <source>Failed to delete the group.</source>
         <translation>Nepodařilo se odstranit skupinu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1611"/>
-        <location filename="../client/desktop/management_tab.cc" line="1668"/>
+        <location filename="../client/desktop/management_tab.cc" line="1606"/>
+        <location filename="../client/desktop/management_tab.cc" line="1663"/>
         <source>The database is not available.</source>
         <translation>Databáze není k dispozici.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1617"/>
+        <location filename="../client/desktop/management_tab.cc" line="1612"/>
         <source>Create Backup</source>
         <translation>Vytvořit zálohu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1634"/>
+        <location filename="../client/desktop/management_tab.cc" line="1629"/>
         <source>There is nothing to save.</source>
         <translation>Není co uložit.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2251"/>
+        <location filename="../client/desktop/management_tab.cc" line="2240"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Data hostitele jsou poškozena. Upravte hostitele a zadejte je znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2272"/>
+        <location filename="../client/desktop/management_tab.cc" line="2261"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Data routeru jsou poškozena. Upravte router a zadejte je znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1646"/>
+        <location filename="../client/desktop/management_tab.cc" line="1641"/>
         <source>Failed to create the backup.</source>
         <translation>Nepodařilo se vytvořit zálohu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1674"/>
-        <location filename="../client/desktop/management_tab.cc" line="1700"/>
+        <location filename="../client/desktop/management_tab.cc" line="1669"/>
+        <location filename="../client/desktop/management_tab.cc" line="1695"/>
         <source>Restore from Backup</source>
         <translation>Obnovit ze zálohy</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1683"/>
+        <location filename="../client/desktop/management_tab.cc" line="1678"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Vše, co je nyní uloženo, bude odstraněno a nahrazeno obsahem zálohy. Pokračovat?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1702"/>
+        <location filename="../client/desktop/management_tab.cc" line="1697"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Záloha byla vytvořena v jiné instalaci. Zadejte hlavní heslo dané instalace.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1727"/>
+        <location filename="../client/desktop/management_tab.cc" line="1722"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Záloha neobsahuje žádná data, takže nebylo nic změněno.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1735"/>
+        <location filename="../client/desktop/management_tab.cc" line="1730"/>
         <source>The file is not a valid backup.</source>
         <translation>Soubor není platná záloha.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1739"/>
+        <location filename="../client/desktop/management_tab.cc" line="1734"/>
         <source>Failed to restore from the backup.</source>
         <translation>Nepodařilo se obnovit ze zálohy.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1618"/>
-        <location filename="../client/desktop/management_tab.cc" line="1675"/>
+        <location filename="../client/desktop/management_tab.cc" line="1613"/>
+        <location filename="../client/desktop/management_tab.cc" line="1670"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Záloha Aspia (*.aspia-backup);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1638"/>
+        <location filename="../client/desktop/management_tab.cc" line="1633"/>
         <source>Unable to write the file.</source>
         <translation>Nelze zapsat soubor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1731"/>
+        <location filename="../client/desktop/management_tab.cc" line="1726"/>
         <source>Unable to read the file.</source>
         <translation>Nelze číst soubor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1651"/>
+        <location filename="../client/desktop/management_tab.cc" line="1646"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5397,22 +5369,22 @@ Exportovaná uložená hesla: %4
 Exportované přihlašovací údaje: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1642"/>
+        <location filename="../client/desktop/management_tab.cc" line="1637"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Některé záznamy databáze jsou poškozeny. Opravte je nebo odstraňte a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1719"/>
+        <location filename="../client/desktop/management_tab.cc" line="1714"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Soubor nelze zadaným heslem dešifrovat.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1723"/>
+        <location filename="../client/desktop/management_tab.cc" line="1718"/>
         <source>Unsupported file format version.</source>
         <translation>Nepodporovaná verze formátu souboru.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1744"/>
+        <location filename="../client/desktop/management_tab.cc" line="1739"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5427,29 +5399,29 @@ Importovaná uložená hesla: %4
 Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2179"/>
-        <location filename="../client/desktop/management_tab.cc" line="2210"/>
+        <location filename="../client/desktop/management_tab.cc" line="2168"/>
+        <location filename="../client/desktop/management_tab.cc" line="2199"/>
         <source>Copy Link</source>
         <translation>Kopírovat odkaz</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2198"/>
-        <location filename="../client/desktop/management_tab.cc" line="2232"/>
+        <location filename="../client/desktop/management_tab.cc" line="2187"/>
+        <location filename="../client/desktop/management_tab.cc" line="2221"/>
         <source>Unable to create a link for this host.</source>
         <translation>Nelze vytvořit odkaz pro tohoto hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2273"/>
+        <location filename="../client/desktop/management_tab.cc" line="2262"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Router přidružený k tomuto hostiteli byl odstraněn. Upravte hostitele a vyberte jiný router, nebo přepněte na přímé připojení.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2280"/>
+        <location filename="../client/desktop/management_tab.cc" line="2269"/>
         <source>The host has an invalid host ID.</source>
         <translation>Hostitel má neplatné ID hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2289"/>
+        <location filename="../client/desktop/management_tab.cc" line="2278"/>
         <source>The host has an incorrect address.</source>
         <translation>Hostitel má nesprávnou adresu.</translation>
     </message>
@@ -6328,37 +6300,37 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>RouterClientsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="231"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="229"/>
         <source>Save File</source>
         <translation>Uložit soubor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="231"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="229"/>
         <source>JSON files (*.json)</source>
         <translation>Soubory JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="242"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="240"/>
         <source>Could not open file for writing.</source>
         <translation>Nelze otevřít soubor pro zápis.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="277"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="275"/>
         <source>Unable to write file.</source>
         <translation>Nelze zapsat soubor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="316"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="292"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>Opravdu chcete odpojit klienta &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="341"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="317"/>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>Opravdu chcete odpojit všechny klienty?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="502"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="478"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>%n klient</numerusform>
@@ -6367,27 +6339,27 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="59"/>
         <source>Previous page</source>
         <translation>Předchozí stránka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="62"/>
         <source>Previous</source>
         <translation>Předchozí</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="74"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="80"/>
         <source>Next page</source>
         <translation>Další stránka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="77"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="83"/>
         <source>Next</source>
         <translation>Další</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.ui" line="88"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="94"/>
         <source>Items per page:</source>
         <translation>Položek na stránku:</translation>
     </message>
@@ -6752,7 +6724,7 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="452"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="428"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n hostitel</numerusform>
@@ -6761,27 +6733,27 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="53"/>
         <source>Previous page</source>
         <translation>Předchozí stránka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="56"/>
         <source>Previous</source>
         <translation>Předchozí</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="68"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="74"/>
         <source>Next page</source>
         <translation>Další stránka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="71"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="77"/>
         <source>Next</source>
         <translation>Další</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_widget.ui" line="82"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="88"/>
         <source>Items per page:</source>
         <translation>Položek na stránku:</translation>
     </message>
@@ -6941,81 +6913,91 @@ Importované přihlašovací údaje: %5</translation>
     <name>RouterHostsWidget</name>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="56"/>
+        <source>Host ID</source>
+        <translation>ID hostitele</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="72"/>
+        <source>Display Name</source>
+        <translation>Zobrazovaný název</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
         <source>Address</source>
         <translation>Adresa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="72"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="104"/>
         <source>Operating System</source>
         <translation>Operační systém</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="120"/>
         <source>Version</source>
         <translation>Verze</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="104"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="136"/>
         <source>Architecture</source>
         <translation>Architektura</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="120"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="152"/>
         <source>Reset filter</source>
         <translation>Zrušit filtr</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="157"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="195"/>
         <source>Previous page</source>
         <translation>Předchozí stránka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="160"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="198"/>
         <source>Previous</source>
         <translation>Předchozí</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="178"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="216"/>
         <source>Next page</source>
         <translation>Další stránka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="181"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="219"/>
         <source>Next</source>
         <translation>Další</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.ui" line="192"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="230"/>
         <source>Items per page:</source>
         <translation>Položek na stránku:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="145"/>
         <source>All workspaces</source>
         <translation>Všechny pracovní prostory</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="146"/>
         <source>Without workspace</source>
         <translation>Bez pracovního prostoru</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="392"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Opravdu chcete odpojit hostitele &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="417"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="394"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Opravdu chcete odpojit všechny hostitele?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="445"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="422"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Odstranění hostitele povede k odstranění celé jeho konfigurace pro připojení k routeru a aplikace bude na hostiteli odinstalována. Tato operace je nevratná. Opravdu to chcete provést?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="821"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="802"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n hostitel</numerusform>
@@ -7024,22 +7006,22 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="858"/>
         <source>Save File</source>
         <translation>Uložit soubor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="877"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="858"/>
         <source>JSON files (*.json)</source>
         <translation>Soubory JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="888"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="869"/>
         <source>Could not open file for writing.</source>
         <translation>Nelze otevřít soubor pro zápis.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="935"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="916"/>
         <source>Unable to write file.</source>
         <translation>Nelze zapsat soubor.</translation>
     </message>
@@ -7047,63 +7029,54 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>RouterRelaysWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="247"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="242"/>
         <source>Save File</source>
         <translation>Uložit soubor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="247"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="242"/>
         <source>JSON files (*.json)</source>
         <translation>Soubory JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="258"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="253"/>
         <source>Could not open file for writing.</source>
         <translation>Nelze otevřít soubor pro zápis.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="320"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="315"/>
         <source>Unable to write file.</source>
         <translation>Nelze zapsat soubor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="359"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="332"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
         <translation>Opravdu chcete odpojit relay server &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="384"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="357"/>
         <source>Are you sure you want to disconnect all relays?</source>
         <translation>Opravdu chcete odpojit všechny relay servery?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="450"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="423"/>
         <source>Disconnect</source>
         <translation>Odpojit</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="452"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="425"/>
         <source>Copy Row</source>
         <translation>Kopírovat řádek</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="453"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="426"/>
         <source>Copy Value</source>
         <translation>Kopírovat hodnotu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="462"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="435"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>Opravdu chcete odpojit protistranu &quot;%1&quot;?</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="602"/>
-        <source>%n relay(s)</source>
-        <translation>
-            <numerusform>%n relay server</numerusform>
-            <numerusform>%n relay servery</numerusform>
-            <numerusform>%n relay serverů</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -7118,13 +7091,13 @@ Importované přihlašovací údaje: %5</translation>
     <name>RouterStatusWidget</name>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="230"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="198"/>
         <source>The router is waiting for a two-factor code.</source>
         <translation>Router čeká na dvoufaktorový kód.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="231"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="199"/>
         <source>Enter Code</source>
         <translation>Zadat kód</translation>
     </message>
@@ -7138,27 +7111,18 @@ Importované přihlašovací údaje: %5</translation>
         <source>Event</source>
         <translation>Událost</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/management/router_status_widget.cc" line="200"/>
-        <source>%n event(s)</source>
-        <translation>
-            <numerusform>%n událost</numerusform>
-            <numerusform>%n události</numerusform>
-            <numerusform>%n událostí</numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="218"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="186"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
         <translation>Dvoufaktorové ověřování je po příliš mnoha neúspěšných pokusech zablokováno.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="235"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="203"/>
         <source>Two-factor authentication has to be set up for this router.</source>
         <translation>Pro tento router je nutné nastavit dvoufaktorové ověřování.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="236"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="204"/>
         <source>Set Up</source>
         <translation>Nastavit</translation>
     </message>
@@ -7186,17 +7150,17 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Další stránka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="94"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="95"/>
         <source>Items per page:</source>
         <translation>Položek na stránku:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="220"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="221"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
         <translation>Schválení hostitele mu udělí trvalý přístup k routeru. Opravdu chcete schválit hostitele &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="227"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="228"/>
         <source>Approving hosts will give them permanent access to the router. Are you sure you want to approve %n hosts?</source>
         <translation>
             <numerusform>Schválení hostitele mu udělí trvalý přístup k routeru. Opravdu chcete schválit %n hostitele?</numerusform>
@@ -7205,12 +7169,12 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="267"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="268"/>
         <source>Failed to approve the host.</source>
         <translation>Nepodařilo se schválit hostitele.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="269"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="270"/>
         <source>Failed to approve %n of the selected hosts.</source>
         <translation>
             <numerusform>Nepodařilo se schválit %n z vybraných hostitelů.</numerusform>
@@ -7422,22 +7386,22 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>RouterUsersWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="229"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="205"/>
         <source>You cannot delete a built-in user.</source>
         <translation>Vestavěného uživatele nelze odstranit.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="234"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="210"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit uživatele &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="292"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="268"/>
         <source>Failed to get list of users.</source>
         <translation>Nepodařilo se získat seznam uživatelů.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="435"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="411"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n uživatel</numerusform>
@@ -7446,27 +7410,27 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="62"/>
         <source>Previous page</source>
         <translation>Předchozí stránka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="65"/>
         <source>Previous</source>
         <translation>Předchozí</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="77"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="83"/>
         <source>Next page</source>
         <translation>Další stránka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="80"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="86"/>
         <source>Next</source>
         <translation>Další</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.ui" line="91"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="97"/>
         <source>Items per page:</source>
         <translation>Položek na stránku:</translation>
     </message>
@@ -7650,27 +7614,27 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="296"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="294"/>
         <source>Previous</source>
         <translation>Předchozí</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="297"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="295"/>
         <source>Previous page</source>
         <translation>Předchozí stránka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="304"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
         <source>Next</source>
         <translation>Další</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="305"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next page</source>
         <translation>Další stránka</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/search_widget.cc" line="808"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="787"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>%n výsledek</numerusform>
@@ -8221,33 +8185,33 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="458"/>
+        <location filename="../client/desktop/settings_tab.cc" line="452"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Nový jazyk bude použit po restartování aplikace.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="507"/>
-        <location filename="../client/desktop/settings_tab.cc" line="632"/>
+        <location filename="../client/desktop/settings_tab.cc" line="501"/>
+        <location filename="../client/desktop/settings_tab.cc" line="626"/>
         <source>Choose path</source>
         <translation>Vyberte cestu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="660"/>
+        <location filename="../client/desktop/settings_tab.cc" line="654"/>
         <source>The settings will be applied after the application is restarted.</source>
         <translation>Nastavení budou použita po restartování aplikace.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="707"/>
+        <location filename="../client/desktop/settings_tab.cc" line="701"/>
         <source>Change Master Password</source>
         <translation>Změnit hlavní heslo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="709"/>
+        <location filename="../client/desktop/settings_tab.cc" line="703"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Zadejte aktuální heslo a zvolte nové.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="717"/>
+        <location filename="../client/desktop/settings_tab.cc" line="711"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Heslo nemůže být kratší než %n znak.</numerusform>
@@ -8256,12 +8220,12 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="724"/>
+        <location filename="../client/desktop/settings_tab.cc" line="718"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Zadané heslo nesplňuje požadavky na zabezpečení!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="725"/>
+        <location filename="../client/desktop/settings_tab.cc" line="719"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Heslo musí obsahovat malá a velká písmena, číslice a nemělo by být kratší než %n znak.</numerusform>
@@ -8270,62 +8234,62 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="728"/>
+        <location filename="../client/desktop/settings_tab.cc" line="722"/>
         <source>Do you want to enter a different password?</source>
         <translation>Chcete zadat jiné heslo?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="741"/>
+        <location filename="../client/desktop/settings_tab.cc" line="735"/>
         <source>Invalid current password.</source>
         <translation>Neplatné aktuální heslo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="745"/>
+        <location filename="../client/desktop/settings_tab.cc" line="739"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Některé záznamy databáze jsou poškozeny. Opravte je nebo odstraňte a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="749"/>
+        <location filename="../client/desktop/settings_tab.cc" line="743"/>
         <source>Unable to change the password.</source>
         <translation>Nelze změnit heslo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="782"/>
+        <location filename="../client/desktop/settings_tab.cc" line="776"/>
         <source>Unable to read the proxy settings.</source>
         <translation>Nelze číst nastavení proxy serveru.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="896"/>
+        <location filename="../client/desktop/settings_tab.cc" line="890"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>Klíč databáze bude uložen v tomto počítači. Bude jej moci přečíst jakýkoli program spuštěný pod vaším účtem, a to i v době, kdy aplikace neběží.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="899"/>
+        <location filename="../client/desktop/settings_tab.cc" line="893"/>
         <source>Do you want to continue?</source>
         <translation>Chcete pokračovat?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="910"/>
+        <location filename="../client/desktop/settings_tab.cc" line="904"/>
         <source>Unlock Automatically</source>
         <translation>Automatické odemknutí</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="912"/>
+        <location filename="../client/desktop/settings_tab.cc" line="906"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>Zadejte hlavní heslo pro automatické odemknutí aplikace při spuštění.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="922"/>
+        <location filename="../client/desktop/settings_tab.cc" line="916"/>
         <source>Invalid master password.</source>
         <translation>Neplatné hlavní heslo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="926"/>
+        <location filename="../client/desktop/settings_tab.cc" line="920"/>
         <source>Unable to unlock the database.</source>
         <translation>Nelze odemknout databázi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="940"/>
+        <location filename="../client/desktop/settings_tab.cc" line="934"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>Nelze zapnout automatické odemknutí.</translation>
     </message>
@@ -8697,7 +8661,7 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>Sidebar</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="116"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="115"/>
         <location filename="../client/desktop/management/sidebar.cc" line="154"/>
         <source>Local</source>
         <translation>Místní</translation>
