@@ -132,7 +132,6 @@
    <addaction name="separator"/>
    <addaction name="action_mcp_connector"/>
    <addaction name="action_lock"/>
-   <addaction name="action_exit"/>
   </widget>
   <action name="action_help">
    <property name="icon">
