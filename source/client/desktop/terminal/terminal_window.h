@@ -49,16 +49,16 @@ protected:
     void onSessionStarted() final;
 
     // McpController::TerminalWindow implementation.
-    McpController::SignInResult signIn() final;
-    bool hasLoginPrompt() const final;
-    void sendText(const QString& text) final;
-    void sendKey(int key, Qt::KeyboardModifiers modifiers) final;
-    QSize gridSize() const final;
-    QPoint cursorPosition() const final;
-    QStringList lines(int history) const final;
-    QImage screenshot() const final;
-    TimePoint lastInputTime() const final;
-    TimePoint lastOutputTime() const final;
+    McpController::SignInResult mcpSignIn() final;
+    bool mcpHasLoginPrompt() const final;
+    void mcpSendText(const QString& text) final;
+    void mcpSendKey(int key, Qt::KeyboardModifiers modifiers) final;
+    QSize mcpGridSize() const final;
+    QPoint mcpCursorPosition() const final;
+    QStringList mcpLines(int history) const final;
+    QImage mcpScreenshot() const final;
+    TimePoint mcpLastInputTime() const final;
+    TimePoint mcpLastOutputTime() const final;
 
 private slots:
     void onChannelMessage(const QByteArray& buffer);

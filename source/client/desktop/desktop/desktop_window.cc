@@ -611,63 +611,49 @@ bool DesktopWindow::eventFilter(QObject* object, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-QSize DesktopWindow::frameSize() const
+QSize DesktopWindow::mcpFrameSize() const
 {
     return desktop_->frameSize();
 }
 
 //--------------------------------------------------------------------------------------------------
-QImage DesktopWindow::screenshot() const
+QImage DesktopWindow::mcpScreenshot() const
 {
     return desktop_->frameImage();
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::sendMouseEvent(const proto::input::MouseEvent& event)
+void DesktopWindow::mcpSendMouseEvent(const proto::input::MouseEvent& event)
 {
-    last_pos_x_ = event.x();
-    last_pos_y_ = event.y();
-    last_mask_ = event.mask() & ~kWheelMask;
-
-    ++send_mouse_count_;
-
-    proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
-    message.mutable_mouse()->CopyFrom(event);
-    sendMessage(proto::desktop::CHANNEL_ID_INPUT,
-                outgoing_message_.serialize<proto::input::ClientToHost>());
+    sendMouseEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::sendKeyEvent(quint32 usb_keycode, bool pressed)
+void DesktopWindow::mcpSendKeyEvent(quint32 usb_keycode, bool pressed)
 {
     desktop_->doKeyEvent(usb_keycode, pressed);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::sendText(const QString& text)
+void DesktopWindow::mcpSendText(const QString& text)
 {
-    ++send_text_count_;
-
-    proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
-    message.mutable_text()->set_text(text.toStdString());
-    sendMessage(proto::desktop::CHANNEL_ID_INPUT,
-                outgoing_message_.serialize<proto::input::ClientToHost>());
+    sendText(text);
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::screen::ScreenList DesktopWindow::screenList() const
+proto::screen::ScreenList DesktopWindow::mcpScreenList() const
 {
     return screen_list_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::selectScreen(const proto::screen::Screen& screen)
+void DesktopWindow::mcpSelectScreen(const proto::screen::Screen& screen)
 {
     onCurrentScreenChanged(screen);
 }
 
 //--------------------------------------------------------------------------------------------------
-McpController::SignInResult DesktopWindow::signIn()
+McpController::SignInResult DesktopWindow::mcpSignIn()
 {
     if (credential_panel_->isHidden())
         return McpController::SignInResult::NOT_REQUESTED;
@@ -1360,6 +1346,32 @@ void DesktopWindow::sendSessionListRequest()
     proto::control::SessionsRequest* request = message.mutable_sessions_request();
     request->set_dummy(1);
     sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::sendMouseEvent(const proto::input::MouseEvent& event)
+{
+    last_pos_x_ = event.x();
+    last_pos_y_ = event.y();
+    last_mask_ = event.mask() & ~kWheelMask;
+
+    ++send_mouse_count_;
+
+    proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
+    message.mutable_mouse()->CopyFrom(event);
+    sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                outgoing_message_.serialize<proto::input::ClientToHost>());
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::sendText(const QString& text)
+{
+    ++send_text_count_;
+
+    proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
+    message.mutable_text()->set_text(text.toStdString());
+    sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                outgoing_message_.serialize<proto::input::ClientToHost>());
 }
 
 //--------------------------------------------------------------------------------------------------

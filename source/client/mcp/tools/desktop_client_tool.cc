@@ -142,7 +142,7 @@ void sendMouse(McpController::DesktopWindow* window, const QPoint& point, const 
     event.set_x(point.x() * frame_size.width() / picture_size.width());
     event.set_y(point.y() * frame_size.height() / picture_size.height());
     event.set_mask(mask);
-    window->sendMouseEvent(event);
+    window->mcpSendMouseEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -340,7 +340,7 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
 
     if (action == "list_screens")
     {
-        const proto::screen::ScreenList screen_list = window->screenList();
+        const proto::screen::ScreenList screen_list = window->mcpScreenList();
         QJsonArray screens;
 
         for (int i = 0; i < screen_list.screen_size(); ++i)
@@ -364,14 +364,14 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
     if (action == "select_screen")
     {
         std::optional<qint64> screen_id = integerArgument(arguments.value("screen_id"));
-        const proto::screen::ScreenList screen_list = window->screenList();
+        const proto::screen::ScreenList screen_list = window->mcpScreenList();
 
         for (int i = 0; screen_id.has_value() && i < screen_list.screen_size(); ++i)
         {
             const proto::screen::Screen& screen = screen_list.screen(i);
             if (screen.id() == *screen_id)
             {
-                window->selectScreen(screen);
+                window->mcpSelectScreen(screen);
                 reply(true, QString("The client %1 switches to the screen %2. Take a screenshot to see it.")
                     .arg(*client_id).arg(*screen_id));
                 return;
@@ -391,7 +391,7 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
             return;
         }
 
-        switch (window->signIn())
+        switch (window->mcpSignIn())
         {
             case McpController::SignInResult::STARTED:
                 reply(true, QString("The client %1 signs in to the host with the saved credentials. Take a "
@@ -408,7 +408,7 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    const QSize frame_size = window->frameSize();
+    const QSize frame_size = window->mcpFrameSize();
     if (frame_size.isEmpty())
     {
         reply(false, QString("The client %1 has no picture of the desktop yet.").arg(*client_id));
@@ -419,7 +419,7 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
 
     if (action == "screenshot")
     {
-        QImage image = window->screenshot();
+        QImage image = window->mcpScreenshot();
         if (image.isNull())
         {
             reply(false, QString("The client %1 has no picture of the desktop yet.").arg(*client_id));
@@ -457,9 +457,9 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
         }
 
         for (quint32 usb_keycode : std::as_const(*usb_keycodes))
-            window->sendKeyEvent(usb_keycode, true);
+            window->mcpSendKeyEvent(usb_keycode, true);
         for (auto it = usb_keycodes->crbegin(); it != usb_keycodes->crend(); ++it)
-            window->sendKeyEvent(*it, false);
+            window->mcpSendKeyEvent(*it, false);
 
         reply(true, done);
         return;
@@ -474,7 +474,7 @@ void DesktopClientTool::call(const QJsonObject& arguments, Reply reply)
             return;
         }
 
-        window->sendText(text);
+        window->mcpSendText(text);
         reply(true, done);
         return;
     }

@@ -53,7 +53,7 @@ QString panelText(const McpController::FileTransferWindow& window, FileTask::Tar
 {
     QJsonArray items;
 
-    const QList<FileTransfer::Item> panel_items = window.currentItems(side);
+    const QList<FileTransfer::Item> panel_items = window.mcpCurrentItems(side);
     for (const FileTransfer::Item& item : panel_items)
     {
         QJsonObject entry{ { "name", item.name }, { "directory", item.is_directory } };
@@ -63,7 +63,7 @@ QString panelText(const McpController::FileTransferWindow& window, FileTask::Tar
         items.append(entry);
     }
 
-    QJsonObject content{ { "path", window.currentPath(side) }, { "items", items } };
+    QJsonObject content{ { "path", window.mcpCurrentPath(side) }, { "items", items } };
     return QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact));
 }
 
@@ -83,9 +83,9 @@ void waitPanelList(qint64 client_id, FileTask::Target side, McpTool::Reply reply
     QObject::connect(timer, &QTimer::timeout, timer, [timer, client_id, side, deadline, reply]()
     {
         McpController::FileTransferWindow* window = McpController::instance().fileTransferWindow(client_id);
-        const QString dialog = window ? window->taskState().dialog : QString();
+        const QString dialog = window ? window->mcpTaskState().dialog : QString();
 
-        if (window && dialog.isEmpty() && !window->isCurrentPathListed(side) && Clock::now() < deadline)
+        if (window && dialog.isEmpty() && !window->mcpIsCurrentPathListed(side) && Clock::now() < deadline)
             return;
 
         timer->stop();
@@ -103,7 +103,7 @@ void waitPanelList(qint64 client_id, FileTask::Target side, McpTool::Reply reply
             return;
         }
 
-        if (!window->isCurrentPathListed(side))
+        if (!window->mcpIsCurrentPathListed(side))
         {
             reply(false, QString("The panel shows no list after %1 seconds. The user may see an error in the window.")
                 .arg(kListTimeout.count()));
@@ -120,7 +120,7 @@ QString taskText(const McpController::FileTransferWindow& window)
 {
     using Task = McpController::FileTransferWindow::TaskState::Task;
 
-    const McpController::FileTransferWindow::TaskState state = window.taskState();
+    const McpController::FileTransferWindow::TaskState state = window.mcpTaskState();
     QJsonObject content{ { "dialog_shown", !state.dialog.isEmpty() } };
     if (!state.dialog.isEmpty())
         content.insert("dialog", state.dialog);
@@ -155,7 +155,7 @@ void waitTask(qint64 client_id, qint64 wait, McpTool::Reply reply)
         McpController::FileTransferWindow* window = McpController::instance().fileTransferWindow(client_id);
         if (window && Clock::now() < deadline)
         {
-            const McpController::FileTransferWindow::TaskState state = window->taskState();
+            const McpController::FileTransferWindow::TaskState state = window->mcpTaskState();
             if (state.task != McpController::FileTransferWindow::TaskState::Task::NONE && state.dialog.isEmpty())
                 return;
         }
@@ -192,7 +192,7 @@ QString selectNames(McpController::FileTransferWindow* window, FileTask::Target 
     if (names.isEmpty())
         return "The names must be a non-empty array.";
 
-    const QStringList missing = window->selectItems(side, names);
+    const QStringList missing = window->mcpSelectItems(side, names);
     if (!missing.isEmpty())
         return QString("The folder has no items \"%1\", nothing is selected.").arg(missing.join("\", \""));
 
@@ -337,7 +337,7 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
             return;
         }
 
-        if (!window->closeDialog(arguments.value("abort").toBool()))
+        if (!window->mcpCloseDialog(arguments.value("abort").toBool()))
         {
             reply(false, QString("The client %1 shows no dialog.").arg(*client_id));
             return;
@@ -349,7 +349,7 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
 
     if (action == "cancel")
     {
-        if (!window->cancelTask())
+        if (!window->mcpCancelTask())
         {
             reply(false, QString("The client %1 has no transfer or removal.").arg(*client_id));
             return;
@@ -391,14 +391,14 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    const QString dialog = window->taskState().dialog;
+    const QString dialog = window->mcpTaskState().dialog;
     if (!dialog.isEmpty())
     {
         reply(false, dialogMessage(*client_id, dialog));
         return;
     }
 
-    if (window->isBusy())
+    if (window->mcpIsBusy())
     {
         reply(false, QString("The panels of the client %1 are busy with a transfer or a removal.").arg(*client_id));
         return;
@@ -406,7 +406,7 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
 
     if (action == "open")
     {
-        window->openPath(*side, arguments.value("path").toString());
+        window->mcpOpenPath(*side, arguments.value("path").toString());
         waitPanelList(*client_id, *side, reply);
         return;
     }
@@ -415,7 +415,7 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
     {
         const FileTask::Target target_side =
             *side == FileTask::Target::LOCAL ? FileTask::Target::REMOTE : FileTask::Target::LOCAL;
-        const QString target_path = window->currentPath(target_side);
+        const QString target_path = window->mcpCurrentPath(target_side);
 
         if (target_path.isEmpty())
         {
@@ -423,7 +423,7 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
             return;
         }
 
-        if (!window->sendSelection(*side, auto_confirm))
+        if (!window->mcpSendSelection(*side, auto_confirm))
         {
             reply(false, "Nothing is selected in the panel. Use select first.");
             return;
@@ -434,7 +434,7 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    if (window->currentPath(*side).isEmpty())
+    if (window->mcpCurrentPath(*side).isEmpty())
     {
         reply(false, "The panel shows the drives. Open a folder first.");
         return;
@@ -455,7 +455,7 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
             return;
         }
 
-        window->removeSelection(*side, auto_confirm);
+        window->mcpRemoveSelection(*side, auto_confirm);
 
         if (auto_confirm)
         {
@@ -479,12 +479,12 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
 
     if (action == "mkdir")
     {
-        window->createFolder(*side, item_name);
+        window->mcpCreateFolder(*side, item_name);
         waitPanelList(*client_id, *side, reply);
         return;
     }
 
-    const QList<FileTransfer::Item> items = window->currentItems(*side);
+    const QList<FileTransfer::Item> items = window->mcpCurrentItems(*side);
     auto is_item = [&item_name](const FileTransfer::Item& item) { return item.name == item_name; };
     if (std::none_of(items.cbegin(), items.cend(), is_item))
     {
@@ -499,6 +499,6 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    window->renameItem(*side, item_name, new_name);
+    window->mcpRenameItem(*side, item_name, new_name);
     waitPanelList(*client_id, *side, reply);
 }

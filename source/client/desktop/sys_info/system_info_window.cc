@@ -105,54 +105,6 @@ void SystemInfoWindow::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<SysInfoView::Page> SystemInfoWindow::pages() const
-{
-    return view_->pages();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SystemInfoWindow::showPage(const QString& key)
-{
-    return view_->showPage(key);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemInfoWindow::buildReport(SysInfoReport* report)
-{
-    view_->buildReport(report);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemInfoWindow::refresh()
-{
-    view_->onRefresh();
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::system_info::EventLogs::Event::Type SystemInfoWindow::currentEventLog() const
-{
-    return event_logs_->currentLog();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SystemInfoWindow::canMoveEventLog(SysInfoWidgetEventLogs::Move to) const
-{
-    return event_logs_->canMove(to);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SystemInfoWindow::selectEventLog(proto::system_info::EventLogs::Event::Type type)
-{
-    return event_logs_->selectLog(type);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SystemInfoWindow::moveEventLog(SysInfoWidgetEventLogs::Move to)
-{
-    return event_logs_->move(to);
-}
-
-//--------------------------------------------------------------------------------------------------
 void SystemInfoWindow::onInternalReset()
 {
     // Nothing
@@ -178,6 +130,54 @@ void SystemInfoWindow::onSessionStarted()
     activateWindow();
 
     view_->onRefresh();
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<SysInfoView::Page> SystemInfoWindow::mcpPages() const
+{
+    return view_->pages();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SystemInfoWindow::mcpShowPage(const QString& key)
+{
+    return view_->showPage(key);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemInfoWindow::mcpBuildReport(SysInfoReport* report)
+{
+    view_->buildReport(report);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemInfoWindow::mcpRefresh()
+{
+    view_->onRefresh();
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::system_info::EventLogs::Event::Type SystemInfoWindow::mcpCurrentEventLog() const
+{
+    return event_logs_->currentLog();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SystemInfoWindow::mcpCanMoveEventLog(SysInfoWidgetEventLogs::Move to) const
+{
+    return event_logs_->canMove(to);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SystemInfoWindow::mcpSelectEventLog(proto::system_info::EventLogs::Event::Type type)
+{
+    return event_logs_->selectLog(type);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SystemInfoWindow::mcpMoveEventLog(SysInfoWidgetEventLogs::Move to)
+{
+    return event_logs_->move(to);
 }
 
 //--------------------------------------------------------------------------------------------------

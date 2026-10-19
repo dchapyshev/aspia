@@ -124,11 +124,11 @@ std::optional<QKeyCombination> keysArgument(const QJsonValue& value)
 bool untilMatched(const McpController::TerminalWindow& window, const QRegularExpression& until)
 {
     // Until the host echoes the last input, the line of the cursor still holds the previous prompt.
-    if (window.lastOutputTime() <= window.lastInputTime())
+    if (window.mcpLastOutputTime() <= window.mcpLastInputTime())
         return false;
 
-    const QStringList lines = window.lines(0);
-    const int row = window.cursorPosition().y();
+    const QStringList lines = window.mcpLines(0);
+    const int row = window.mcpCursorPosition().y();
 
     return row >= 0 && row < lines.size() && until.match(lines[row]).hasMatch();
 }
@@ -137,9 +137,9 @@ bool untilMatched(const McpController::TerminalWindow& window, const QRegularExp
 QString screenText(
     const McpController::TerminalWindow& window, int history, const std::optional<QRegularExpression>& until)
 {
-    QStringList lines = window.lines(history);
-    const QSize grid_size = window.gridSize();
-    const QPoint cursor = window.cursorPosition();
+    QStringList lines = window.mcpLines(history);
+    const QSize grid_size = window.mcpGridSize();
+    const QPoint cursor = window.mcpCursorPosition();
     const int cursor_line = static_cast<int>(lines.size()) - grid_size.height() + cursor.y();
 
     while (lines.size() > cursor_line + 1 && lines.back().isEmpty())
@@ -147,7 +147,7 @@ QString screenText(
 
     QJsonObject content{ { "columns", grid_size.width() },
                          { "rows", grid_size.height() },
-                         { "login_prompt", window.hasLoginPrompt() },
+                         { "login_prompt", window.mcpHasLoginPrompt() },
                          { "cursor_line", cursor_line },
                          { "cursor_column", cursor.x() },
                          { "lines", QJsonArray::fromStringList(lines) } };
@@ -276,7 +276,7 @@ void TerminalClientTool::call(const QJsonObject& arguments, Reply reply)
             return;
         }
 
-        switch (window->signIn())
+        switch (window->mcpSignIn())
         {
             case McpController::SignInResult::STARTED:
                 reply(true, QString("The client %1 signs in to the host with the saved credentials. Read the "
@@ -353,7 +353,7 @@ void TerminalClientTool::call(const QJsonObject& arguments, Reply reply)
             if (window && now < deadline)
             {
                 const bool done = until.has_value() ? untilMatched(*window, *until) :
-                                                      now - std::max(start, window->lastOutputTime()) >= kSettleTime;
+                                                      now - std::max(start, window->mcpLastOutputTime()) >= kSettleTime;
                 if (!done)
                     return;
             }
@@ -375,7 +375,7 @@ void TerminalClientTool::call(const QJsonObject& arguments, Reply reply)
 
     if (action == "screenshot")
     {
-        QImage image = window->screenshot();
+        QImage image = window->mcpScreenshot();
         if (image.isNull())
         {
             reply(false, QString("Unable to take the picture of the client %1.").arg(*client_id));
@@ -398,7 +398,7 @@ void TerminalClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    if (window->hasLoginPrompt())
+    if (window->mcpHasLoginPrompt())
     {
         reply(false, QString("The client %1 asks for credentials. Use sign_in, or the user signs in.")
             .arg(*client_id));
@@ -414,7 +414,7 @@ void TerminalClientTool::call(const QJsonObject& arguments, Reply reply)
             return;
         }
 
-        window->sendText(text);
+        window->mcpSendText(text);
     }
     else
     {
@@ -426,7 +426,7 @@ void TerminalClientTool::call(const QJsonObject& arguments, Reply reply)
             return;
         }
 
-        window->sendKey(keys->key(), keys->keyboardModifiers());
+        window->mcpSendKey(keys->key(), keys->keyboardModifiers());
     }
 
     reply(true, QString("The client %1 got %2. Read the terminal to see the result.").arg(*client_id).arg(action));

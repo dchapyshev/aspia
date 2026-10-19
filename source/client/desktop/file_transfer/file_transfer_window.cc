@@ -176,16 +176,16 @@ void FileTransferWindow::closeEvent(QCloseEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString FileTransferWindow::currentPath(FileTask::Target target) const
+QString FileTransferWindow::mcpCurrentPath(FileTask::Target target) const
 {
     const QString path = filePanel(target)->currentPath();
     return path == AddressBarModel::computerPath() ? QString() : path;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileTransferWindow::openPath(FileTask::Target target, const QString& path)
+bool FileTransferWindow::mcpOpenPath(FileTask::Target target, const QString& path)
 {
-    if (isBusy())
+    if (mcpIsBusy())
         return false;
 
     FilePanel* panel = filePanel(target);
@@ -200,31 +200,31 @@ bool FileTransferWindow::openPath(FileTask::Target target, const QString& path)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileTransferWindow::isCurrentPathListed(FileTask::Target target) const
+bool FileTransferWindow::mcpIsCurrentPathListed(FileTask::Target target) const
 {
     return filePanel(target)->isCurrentPathListed();
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<FileTransfer::Item> FileTransferWindow::currentItems(FileTask::Target target) const
+QList<FileTransfer::Item> FileTransferWindow::mcpCurrentItems(FileTask::Target target) const
 {
     return filePanel(target)->items();
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileTransferWindow::isBusy() const
+bool FileTransferWindow::mcpIsBusy() const
 {
     return !ui->transfer_widget->isHidden() || !ui->remove_widget->isHidden();
 }
 
 //--------------------------------------------------------------------------------------------------
-QStringList FileTransferWindow::selectItems(FileTask::Target target, const QStringList& names)
+QStringList FileTransferWindow::mcpSelectItems(FileTask::Target target, const QStringList& names)
 {
     return filePanel(target)->selectItems(names);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileTransferWindow::sendSelection(FileTask::Target target, bool replace_existing)
+bool FileTransferWindow::mcpSendSelection(FileTask::Target target, bool replace_existing)
 {
     // The panel starts the transfer right in this call.
     replace_existing_ = replace_existing;
@@ -234,9 +234,9 @@ bool FileTransferWindow::sendSelection(FileTask::Target target, bool replace_exi
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileTransferWindow::removeSelection(FileTask::Target target, bool confirmed)
+bool FileTransferWindow::mcpRemoveSelection(FileTask::Target target, bool confirmed)
 {
-    if (isBusy())
+    if (mcpIsBusy())
         return false;
 
     FilePanel* panel = filePanel(target);
@@ -252,9 +252,9 @@ bool FileTransferWindow::removeSelection(FileTask::Target target, bool confirmed
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileTransferWindow::createFolder(FileTask::Target target, const QString& name)
+bool FileTransferWindow::mcpCreateFolder(FileTask::Target target, const QString& name)
 {
-    if (isBusy())
+    if (mcpIsBusy())
         return false;
 
     // A wrong name brings up a warning that must not hold the reply of the tool.
@@ -264,9 +264,9 @@ bool FileTransferWindow::createFolder(FileTask::Target target, const QString& na
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileTransferWindow::renameItem(FileTask::Target target, const QString& old_name, const QString& new_name)
+bool FileTransferWindow::mcpRenameItem(FileTask::Target target, const QString& old_name, const QString& new_name)
 {
-    if (isBusy())
+    if (mcpIsBusy())
         return false;
 
     // A wrong name brings up a warning that must not hold the reply of the tool.
@@ -279,7 +279,7 @@ bool FileTransferWindow::renameItem(FileTask::Target target, const QString& old_
 }
 
 //--------------------------------------------------------------------------------------------------
-McpController::FileTransferWindow::TaskState FileTransferWindow::taskState() const
+McpController::FileTransferWindow::TaskState FileTransferWindow::mcpTaskState() const
 {
     TaskState state;
 
@@ -309,7 +309,7 @@ McpController::FileTransferWindow::TaskState FileTransferWindow::taskState() con
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileTransferWindow::closeDialog(bool abort)
+bool FileTransferWindow::mcpCloseDialog(bool abort)
 {
     if (ui->transfer_widget->closeError(abort) || ui->remove_widget->closeError(abort))
         return true;
@@ -323,7 +323,7 @@ bool FileTransferWindow::closeDialog(bool abort)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileTransferWindow::cancelTask()
+bool FileTransferWindow::mcpCancelTask()
 {
     if (!ui->transfer_widget->isHidden())
     {

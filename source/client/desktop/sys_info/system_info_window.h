@@ -44,21 +44,21 @@ public:
     QByteArray saveState() const final;
     void restoreState(const QByteArray& state) final;
 
-    // McpController::SystemInfoWindow implementation.
-    QList<SysInfoView::Page> pages() const final;
-    bool showPage(const QString& key) final;
-    void buildReport(SysInfoReport* report) final;
-    void refresh() final;
-    proto::system_info::EventLogs::Event::Type currentEventLog() const final;
-    bool canMoveEventLog(SysInfoWidgetEventLogs::Move to) const final;
-    bool selectEventLog(proto::system_info::EventLogs::Event::Type type) final;
-    bool moveEventLog(SysInfoWidgetEventLogs::Move to) final;
-
 protected:
     // ClientWindow implementation.
     void onInternalReset() final;
     void onRegisterWorkers() final;
     void onSessionStarted() final;
+
+    // McpController::SystemInfoWindow implementation.
+    QList<SysInfoView::Page> mcpPages() const final;
+    bool mcpShowPage(const QString& key) final;
+    void mcpBuildReport(SysInfoReport* report) final;
+    void mcpRefresh() final;
+    proto::system_info::EventLogs::Event::Type mcpCurrentEventLog() const final;
+    bool mcpCanMoveEventLog(SysInfoWidgetEventLogs::Move to) const final;
+    bool mcpSelectEventLog(proto::system_info::EventLogs::Event::Type type) final;
+    bool mcpMoveEventLog(SysInfoWidgetEventLogs::Move to) final;
 
 private slots:
     void onChannelMessage(const QByteArray& buffer);

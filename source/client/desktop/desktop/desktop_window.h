@@ -95,14 +95,14 @@ protected:
     bool eventFilter(QObject* object, QEvent* event) final;
 
     // McpController::DesktopWindow implementation.
-    QSize frameSize() const final;
-    QImage screenshot() const final;
-    void sendMouseEvent(const proto::input::MouseEvent& event) final;
-    void sendKeyEvent(quint32 usb_keycode, bool pressed) final;
-    void sendText(const QString& text) final;
-    proto::screen::ScreenList screenList() const final;
-    void selectScreen(const proto::screen::Screen& screen) final;
-    McpController::SignInResult signIn() final;
+    QSize mcpFrameSize() const final;
+    QImage mcpScreenshot() const final;
+    void mcpSendMouseEvent(const proto::input::MouseEvent& event) final;
+    void mcpSendKeyEvent(quint32 usb_keycode, bool pressed) final;
+    void mcpSendText(const QString& text) final;
+    proto::screen::ScreenList mcpScreenList() const final;
+    void mcpSelectScreen(const proto::screen::Screen& screen) final;
+    McpController::SignInResult mcpSignIn() final;
 
 private slots:
     // Incoming session channels (video/audio/cursor are parsed by the workers).
@@ -145,6 +145,8 @@ private:
     void sendConfig(const proto::control::Config& config);
     void sendCapabilities();
     void sendSessionListRequest();
+    void sendMouseEvent(const proto::input::MouseEvent& event);
+    void sendText(const QString& text);
     void onDesktopConfigChanged(const proto::control::Config& config);
     void readCapabilities(const proto::control::Capabilities& capabilities);
     void readClipboardEvent(const proto::clipboard::Event& event);

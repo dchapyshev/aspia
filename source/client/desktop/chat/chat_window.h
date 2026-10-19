@@ -44,16 +44,16 @@ public:
     void setTabbedMode(bool tabbed) final;
     QList<QPair<Tab::ActionRole, QList<QAction*>>> tabActionGroups() const final;
 
-    // McpController::ChatWindow implementation.
-    QList<ChatWidget::Message> messages() const final;
-    QString chatStatus() const final;
-    bool sendText(const QString& text) final;
-
 protected:
     // ClientWindow implementation.
     void onInternalReset() final;
     void onRegisterWorkers() final;
     void onSessionStarted() final;
+
+    // McpController::ChatWindow implementation.
+    QList<ChatWidget::Message> mcpMessages() const final;
+    QString mcpChatStatus() const final;
+    bool mcpSendText(const QString& text) final;
 
 private slots:
     void onChannelMessage(const QByteArray& buffer);

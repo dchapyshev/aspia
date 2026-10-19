@@ -70,19 +70,19 @@ protected:
     void closeEvent(QCloseEvent* event) final;
 
     // McpController::FileTransferWindow implementation.
-    QString currentPath(FileTask::Target target) const final;
-    bool openPath(FileTask::Target target, const QString& path) final;
-    bool isCurrentPathListed(FileTask::Target target) const final;
-    QList<FileTransfer::Item> currentItems(FileTask::Target target) const final;
-    bool isBusy() const final;
-    QStringList selectItems(FileTask::Target target, const QStringList& names) final;
-    bool sendSelection(FileTask::Target target, bool replace_existing) final;
-    bool removeSelection(FileTask::Target target, bool confirmed) final;
-    bool createFolder(FileTask::Target target, const QString& name) final;
-    bool renameItem(FileTask::Target target, const QString& old_name, const QString& new_name) final;
-    TaskState taskState() const final;
-    bool closeDialog(bool abort) final;
-    bool cancelTask() final;
+    QString mcpCurrentPath(FileTask::Target target) const final;
+    bool mcpOpenPath(FileTask::Target target, const QString& path) final;
+    bool mcpIsCurrentPathListed(FileTask::Target target) const final;
+    QList<FileTransfer::Item> mcpCurrentItems(FileTask::Target target) const final;
+    bool mcpIsBusy() const final;
+    QStringList mcpSelectItems(FileTask::Target target, const QStringList& names) final;
+    bool mcpSendSelection(FileTask::Target target, bool replace_existing) final;
+    bool mcpRemoveSelection(FileTask::Target target, bool confirmed) final;
+    bool mcpCreateFolder(FileTask::Target target, const QString& name) final;
+    bool mcpRenameItem(FileTask::Target target, const QString& old_name, const QString& new_name) final;
+    TaskState mcpTaskState() const final;
+    bool mcpCloseDialog(bool abort) final;
+    bool mcpCancelTask() final;
 
 private slots:
     void onErrorOccurred(proto::file_transfer::ErrorCode error_code);

@@ -78,7 +78,7 @@ struct ReadOptions
 //--------------------------------------------------------------------------------------------------
 std::optional<SysInfoView::Page> findPage(const McpController::SystemInfoWindow& window, const QString& key)
 {
-    const QList<SysInfoView::Page> pages = window.pages();
+    const QList<SysInfoView::Page> pages = window.mcpPages();
     for (const SysInfoView::Page& page : pages)
     {
         if (page.key == key)
@@ -91,7 +91,7 @@ std::optional<SysInfoView::Page> findPage(const McpController::SystemInfoWindow&
 //--------------------------------------------------------------------------------------------------
 bool isRefreshing(const McpController::SystemInfoWindow& window)
 {
-    const QList<SysInfoView::Page> pages = window.pages();
+    const QList<SysInfoView::Page> pages = window.mcpPages();
     return std::any_of(pages.begin(), pages.end(), [](const SysInfoView::Page& page) { return page.refreshing; });
 }
 
@@ -112,7 +112,7 @@ QString pagesText(const McpController::SystemInfoWindow& window)
 {
     QJsonArray list;
 
-    const QList<SysInfoView::Page> pages = window.pages();
+    const QList<SysInfoView::Page> pages = window.mcpPages();
     for (const SysInfoView::Page& page : pages)
     {
         list.append(QJsonObject{ { "page", page.key }, { "name", page.name }, { "group", page.group },
@@ -126,7 +126,7 @@ QString pagesText(const McpController::SystemInfoWindow& window)
 QString reportText(McpController::SystemInfoWindow* window, const ReadOptions& options)
 {
     SysInfoReport report;
-    window->buildReport(&report);
+    window->mcpBuildReport(&report);
 
     QJsonArray tables;
 
@@ -182,9 +182,9 @@ QString reportText(McpController::SystemInfoWindow* window, const ReadOptions& o
 
     if (options.page == kEventLogsPage)
     {
-        content.insert("log", eventLogName(window->currentEventLog()));
-        content.insert("newer", window->canMoveEventLog(SysInfoWidgetEventLogs::Move::NEWER));
-        content.insert("older", window->canMoveEventLog(SysInfoWidgetEventLogs::Move::OLDER));
+        content.insert("log", eventLogName(window->mcpCurrentEventLog()));
+        content.insert("newer", window->mcpCanMoveEventLog(SysInfoWidgetEventLogs::Move::NEWER));
+        content.insert("older", window->mcpCanMoveEventLog(SysInfoWidgetEventLogs::Move::OLDER));
     }
 
     return QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact));
@@ -382,7 +382,7 @@ void SystemInfoClientTool::call(const QJsonObject& arguments, Reply reply)
             return;
         }
 
-        window->refresh();
+        window->mcpRefresh();
 
         if (*wait == 0)
             reply(true, pagesText(*window));
@@ -477,15 +477,15 @@ void SystemInfoClientTool::call(const QJsonObject& arguments, Reply reply)
         }
     }
 
-    window->showPage(options.page);
+    window->mcpShowPage(options.page);
 
-    if (log_type.has_value() && !window->selectEventLog(*log_type))
+    if (log_type.has_value() && !window->mcpSelectEventLog(*log_type))
     {
         reply(false, "The window can not choose the log while the page is loading. Read the page again later.");
         return;
     }
 
-    if (move.has_value() && !window->moveEventLog(*move))
+    if (move.has_value() && !window->mcpMoveEventLog(*move))
     {
         reply(false, QString("The page of the log can not move to %1. It is loading or it is already at the end "
                              "of the log.").arg(arguments.value("move").toString()));

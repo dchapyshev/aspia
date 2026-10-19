@@ -69,18 +69,18 @@ protected:
     void closeEvent(QCloseEvent* event) final;
 
     // McpController::MainWindow implementation.
-    QList<McpController::ClientInfo> clients() const final;
-    McpController::DesktopWindow* desktopWindow(qint64 client_id) const final;
-    McpController::FileTransferWindow* fileTransferWindow(qint64 client_id) const final;
-    McpController::TerminalWindow* terminalWindow(qint64 client_id) const final;
-    McpController::SystemInfoWindow* systemInfoWindow(qint64 client_id) const final;
-    McpController::ChatWindow* chatWindow(qint64 client_id) const final;
-    QString clientDialog(qint64 client_id) const final;
-    void closeClient(qint64 client_id) final;
-    bool showClient(qint64 client_id) final;
-    bool asksCredentials() const final;
-    void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) final;
-    void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) final;
+    QList<McpController::ClientInfo> mcpClients() const final;
+    McpController::DesktopWindow* mcpDesktopWindow(qint64 client_id) const final;
+    McpController::FileTransferWindow* mcpFileTransferWindow(qint64 client_id) const final;
+    McpController::TerminalWindow* mcpTerminalWindow(qint64 client_id) const final;
+    McpController::SystemInfoWindow* mcpSystemInfoWindow(qint64 client_id) const final;
+    McpController::ChatWindow* mcpChatWindow(qint64 client_id) const final;
+    QString mcpClientDialog(qint64 client_id) const final;
+    void mcpCloseClient(qint64 client_id) final;
+    bool mcpShowClient(qint64 client_id) final;
+    bool mcpAsksCredentials() const final;
+    void mcpConnectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) final;
+    void mcpConnectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) final;
 
 private slots:
     void onAfterThemeChanged();

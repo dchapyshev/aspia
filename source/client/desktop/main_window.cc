@@ -382,7 +382,7 @@ void MainWindow::closeEvent(QCloseEvent* /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<McpController::ClientInfo> MainWindow::clients() const
+QList<McpController::ClientInfo> MainWindow::mcpClients() const
 {
     QList<McpController::ClientInfo> list;
 
@@ -426,7 +426,7 @@ QList<McpController::ClientInfo> MainWindow::clients() const
 }
 
 //--------------------------------------------------------------------------------------------------
-McpController::DesktopWindow* MainWindow::desktopWindow(qint64 client_id) const
+McpController::DesktopWindow* MainWindow::mcpDesktopWindow(qint64 client_id) const
 {
     for (int i = 0; i < ui->tabs->count(); ++i)
     {
@@ -440,7 +440,7 @@ McpController::DesktopWindow* MainWindow::desktopWindow(qint64 client_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-McpController::FileTransferWindow* MainWindow::fileTransferWindow(qint64 client_id) const
+McpController::FileTransferWindow* MainWindow::mcpFileTransferWindow(qint64 client_id) const
 {
     for (int i = 0; i < ui->tabs->count(); ++i)
     {
@@ -454,7 +454,7 @@ McpController::FileTransferWindow* MainWindow::fileTransferWindow(qint64 client_
 }
 
 //--------------------------------------------------------------------------------------------------
-McpController::TerminalWindow* MainWindow::terminalWindow(qint64 client_id) const
+McpController::TerminalWindow* MainWindow::mcpTerminalWindow(qint64 client_id) const
 {
     for (int i = 0; i < ui->tabs->count(); ++i)
     {
@@ -468,19 +468,19 @@ McpController::TerminalWindow* MainWindow::terminalWindow(qint64 client_id) cons
 }
 
 //--------------------------------------------------------------------------------------------------
-McpController::SystemInfoWindow* MainWindow::systemInfoWindow(qint64 client_id) const
+McpController::SystemInfoWindow* MainWindow::mcpSystemInfoWindow(qint64 client_id) const
 {
     return dynamic_cast<McpController::SystemInfoWindow*>(clientWindow(client_id));
 }
 
 //--------------------------------------------------------------------------------------------------
-McpController::ChatWindow* MainWindow::chatWindow(qint64 client_id) const
+McpController::ChatWindow* MainWindow::mcpChatWindow(qint64 client_id) const
 {
     return dynamic_cast<McpController::ChatWindow*>(clientWindow(client_id));
 }
 
 //--------------------------------------------------------------------------------------------------
-QString MainWindow::clientDialog(qint64 client_id) const
+QString MainWindow::mcpClientDialog(qint64 client_id) const
 {
     ClientWindow* client_window = clientWindow(client_id);
     if (!client_window)
@@ -491,14 +491,14 @@ QString MainWindow::clientDialog(qint64 client_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::closeClient(qint64 client_id)
+void MainWindow::mcpCloseClient(qint64 client_id)
 {
     if (ClientWindow* client_window = clientWindow(client_id))
         client_window->close();
 }
 
 //--------------------------------------------------------------------------------------------------
-bool MainWindow::showClient(qint64 client_id)
+bool MainWindow::mcpShowClient(qint64 client_id)
 {
     for (int i = 0; i < ui->tabs->count(); ++i)
     {
@@ -512,7 +512,7 @@ bool MainWindow::showClient(qint64 client_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool MainWindow::asksCredentials() const
+bool MainWindow::mcpAsksCredentials() const
 {
     const QList<ClientWindow*> client_windows = findChildren<ClientWindow*>(Qt::FindDirectChildrenOnly);
     for (const ClientWindow* client_window : client_windows)
@@ -525,14 +525,14 @@ bool MainWindow::asksCredentials() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type)
+void MainWindow::mcpConnectLocalHost(qint64 entry_id, proto::peer::SessionType session_type)
 {
     if (ManagementTab* management_tab = managementTab())
         management_tab->connectLocalHost(entry_id, session_type);
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type)
+void MainWindow::mcpConnectRouterHost(const HostConfig& host, proto::peer::SessionType session_type)
 {
     if (ManagementTab* management_tab = managementTab())
         management_tab->connectRouterHost(host, session_type);

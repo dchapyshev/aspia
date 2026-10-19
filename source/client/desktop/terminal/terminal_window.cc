@@ -106,7 +106,7 @@ void TerminalWindow::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-McpController::SignInResult TerminalWindow::signIn()
+McpController::SignInResult TerminalWindow::mcpSignIn()
 {
     if (!terminal_widget_->hasLoginPrompt())
         return McpController::SignInResult::NOT_REQUESTED;
@@ -116,57 +116,57 @@ McpController::SignInResult TerminalWindow::signIn()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TerminalWindow::hasLoginPrompt() const
+bool TerminalWindow::mcpHasLoginPrompt() const
 {
     return terminal_widget_->hasLoginPrompt();
 }
 
 //--------------------------------------------------------------------------------------------------
-void TerminalWindow::sendText(const QString& text)
+void TerminalWindow::mcpSendText(const QString& text)
 {
     last_input_time_ = Clock::now();
     terminal_widget_->sendText(text);
 }
 
 //--------------------------------------------------------------------------------------------------
-void TerminalWindow::sendKey(int key, Qt::KeyboardModifiers modifiers)
+void TerminalWindow::mcpSendKey(int key, Qt::KeyboardModifiers modifiers)
 {
     last_input_time_ = Clock::now();
     terminal_widget_->sendKey(key, modifiers);
 }
 
 //--------------------------------------------------------------------------------------------------
-QSize TerminalWindow::gridSize() const
+QSize TerminalWindow::mcpGridSize() const
 {
     return terminal_widget_->gridSize();
 }
 
 //--------------------------------------------------------------------------------------------------
-QPoint TerminalWindow::cursorPosition() const
+QPoint TerminalWindow::mcpCursorPosition() const
 {
     return terminal_widget_->cursorPosition();
 }
 
 //--------------------------------------------------------------------------------------------------
-QStringList TerminalWindow::lines(int history) const
+QStringList TerminalWindow::mcpLines(int history) const
 {
     return terminal_widget_->lines(history);
 }
 
 //--------------------------------------------------------------------------------------------------
-QImage TerminalWindow::screenshot() const
+QImage TerminalWindow::mcpScreenshot() const
 {
     return terminal_widget_->grab().toImage();
 }
 
 //--------------------------------------------------------------------------------------------------
-TimePoint TerminalWindow::lastInputTime() const
+TimePoint TerminalWindow::mcpLastInputTime() const
 {
     return last_input_time_;
 }
 
 //--------------------------------------------------------------------------------------------------
-TimePoint TerminalWindow::lastOutputTime() const
+TimePoint TerminalWindow::mcpLastOutputTime() const
 {
     return last_output_time_;
 }

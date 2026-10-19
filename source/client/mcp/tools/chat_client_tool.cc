@@ -64,7 +64,7 @@ bool hasAnswer(const QList<ChatWidget::Message>& messages, qint64 after)
 //--------------------------------------------------------------------------------------------------
 QString messagesText(const McpController::ChatWindow& window, qint64 after)
 {
-    const QList<ChatWidget::Message> messages = window.messages();
+    const QList<ChatWidget::Message> messages = window.mcpMessages();
 
     // The user cleared the chat, so the ids start again.
     if (after > messages.size())
@@ -87,7 +87,7 @@ QString messagesText(const McpController::ChatWindow& window, qint64 after)
 
     QJsonObject content{ { "count", messages.size() }, { "messages", list } };
 
-    const QString status = window.chatStatus();
+    const QString status = window.mcpChatStatus();
     if (!status.isEmpty())
         content.insert("status", status);
 
@@ -104,7 +104,7 @@ void waitAnswer(qint64 client_id, qint64 after, qint64 wait, McpTool::Reply repl
     {
         McpController::ChatWindow* window = McpController::instance().chatWindow(client_id);
 
-        if (window && !hasAnswer(window->messages(), after) && Clock::now() < deadline)
+        if (window && !hasAnswer(window->mcpMessages(), after) && Clock::now() < deadline)
             return;
 
         timer->stop();
@@ -252,7 +252,7 @@ void ChatClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    if (!window->sendText(text.toString()))
+    if (!window->mcpSendText(text.toString()))
     {
         reply(false, QString("The client %1 can not send now. Its message field is turned off or holds the text "
                              "that the user types.").arg(*client_id));
@@ -260,5 +260,5 @@ void ChatClientTool::call(const QJsonObject& arguments, Reply reply)
     }
 
     reply(true, QString("The message is sent. Use read with after %1 and wait to get the answer.")
-        .arg(window->messages().size()));
+        .arg(window->mcpMessages().size()));
 }

@@ -89,14 +89,14 @@ public:
     public:
         virtual ~DesktopWindow() = default;
 
-        virtual QSize frameSize() const = 0;
-        virtual QImage screenshot() const = 0;
-        virtual void sendMouseEvent(const proto::input::MouseEvent& event) = 0;
-        virtual void sendKeyEvent(quint32 usb_keycode, bool pressed) = 0;
-        virtual void sendText(const QString& text) = 0;
-        virtual proto::screen::ScreenList screenList() const = 0;
-        virtual void selectScreen(const proto::screen::Screen& screen) = 0;
-        virtual SignInResult signIn() = 0;
+        virtual QSize mcpFrameSize() const = 0;
+        virtual QImage mcpScreenshot() const = 0;
+        virtual void mcpSendMouseEvent(const proto::input::MouseEvent& event) = 0;
+        virtual void mcpSendKeyEvent(quint32 usb_keycode, bool pressed) = 0;
+        virtual void mcpSendText(const QString& text) = 0;
+        virtual proto::screen::ScreenList mcpScreenList() const = 0;
+        virtual void mcpSelectScreen(const proto::screen::Screen& screen) = 0;
+        virtual SignInResult mcpSignIn() = 0;
     };
 
     class FileTransferWindow
@@ -114,19 +114,19 @@ public:
 
         virtual ~FileTransferWindow() = default;
 
-        virtual QString currentPath(FileTask::Target target) const = 0;
-        virtual bool openPath(FileTask::Target target, const QString& path) = 0;
-        virtual bool isCurrentPathListed(FileTask::Target target) const = 0;
-        virtual QList<FileTransfer::Item> currentItems(FileTask::Target target) const = 0;
-        virtual bool isBusy() const = 0;
-        virtual QStringList selectItems(FileTask::Target target, const QStringList& names) = 0;
-        virtual bool sendSelection(FileTask::Target target, bool replace_existing) = 0;
-        virtual bool removeSelection(FileTask::Target target, bool confirmed) = 0;
-        virtual bool createFolder(FileTask::Target target, const QString& name) = 0;
-        virtual bool renameItem(FileTask::Target target, const QString& old_name, const QString& new_name) = 0;
-        virtual TaskState taskState() const = 0;
-        virtual bool closeDialog(bool abort) = 0;
-        virtual bool cancelTask() = 0;
+        virtual QString mcpCurrentPath(FileTask::Target target) const = 0;
+        virtual bool mcpOpenPath(FileTask::Target target, const QString& path) = 0;
+        virtual bool mcpIsCurrentPathListed(FileTask::Target target) const = 0;
+        virtual QList<FileTransfer::Item> mcpCurrentItems(FileTask::Target target) const = 0;
+        virtual bool mcpIsBusy() const = 0;
+        virtual QStringList mcpSelectItems(FileTask::Target target, const QStringList& names) = 0;
+        virtual bool mcpSendSelection(FileTask::Target target, bool replace_existing) = 0;
+        virtual bool mcpRemoveSelection(FileTask::Target target, bool confirmed) = 0;
+        virtual bool mcpCreateFolder(FileTask::Target target, const QString& name) = 0;
+        virtual bool mcpRenameItem(FileTask::Target target, const QString& old_name, const QString& new_name) = 0;
+        virtual TaskState mcpTaskState() const = 0;
+        virtual bool mcpCloseDialog(bool abort) = 0;
+        virtual bool mcpCancelTask() = 0;
     };
 
     class TerminalWindow
@@ -134,16 +134,16 @@ public:
     public:
         virtual ~TerminalWindow() = default;
 
-        virtual SignInResult signIn() = 0;
-        virtual bool hasLoginPrompt() const = 0;
-        virtual void sendText(const QString& text) = 0;
-        virtual void sendKey(int key, Qt::KeyboardModifiers modifiers) = 0;
-        virtual QSize gridSize() const = 0;
-        virtual QPoint cursorPosition() const = 0;
-        virtual QStringList lines(int history) const = 0;
-        virtual QImage screenshot() const = 0;
-        virtual TimePoint lastInputTime() const = 0;
-        virtual TimePoint lastOutputTime() const = 0;
+        virtual SignInResult mcpSignIn() = 0;
+        virtual bool mcpHasLoginPrompt() const = 0;
+        virtual void mcpSendText(const QString& text) = 0;
+        virtual void mcpSendKey(int key, Qt::KeyboardModifiers modifiers) = 0;
+        virtual QSize mcpGridSize() const = 0;
+        virtual QPoint mcpCursorPosition() const = 0;
+        virtual QStringList mcpLines(int history) const = 0;
+        virtual QImage mcpScreenshot() const = 0;
+        virtual TimePoint mcpLastInputTime() const = 0;
+        virtual TimePoint mcpLastOutputTime() const = 0;
     };
 
     class ChatWindow
@@ -151,9 +151,9 @@ public:
     public:
         virtual ~ChatWindow() = default;
 
-        virtual QList<ChatWidget::Message> messages() const = 0;
-        virtual QString chatStatus() const = 0;
-        virtual bool sendText(const QString& text) = 0;
+        virtual QList<ChatWidget::Message> mcpMessages() const = 0;
+        virtual QString mcpChatStatus() const = 0;
+        virtual bool mcpSendText(const QString& text) = 0;
     };
 
     class SystemInfoWindow
@@ -161,14 +161,14 @@ public:
     public:
         virtual ~SystemInfoWindow() = default;
 
-        virtual QList<SysInfoView::Page> pages() const = 0;
-        virtual bool showPage(const QString& key) = 0;
-        virtual void buildReport(SysInfoReport* report) = 0;
-        virtual void refresh() = 0;
-        virtual proto::system_info::EventLogs::Event::Type currentEventLog() const = 0;
-        virtual bool canMoveEventLog(SysInfoWidgetEventLogs::Move to) const = 0;
-        virtual bool selectEventLog(proto::system_info::EventLogs::Event::Type type) = 0;
-        virtual bool moveEventLog(SysInfoWidgetEventLogs::Move to) = 0;
+        virtual QList<SysInfoView::Page> mcpPages() const = 0;
+        virtual bool mcpShowPage(const QString& key) = 0;
+        virtual void mcpBuildReport(SysInfoReport* report) = 0;
+        virtual void mcpRefresh() = 0;
+        virtual proto::system_info::EventLogs::Event::Type mcpCurrentEventLog() const = 0;
+        virtual bool mcpCanMoveEventLog(SysInfoWidgetEventLogs::Move to) const = 0;
+        virtual bool mcpSelectEventLog(proto::system_info::EventLogs::Event::Type type) = 0;
+        virtual bool mcpMoveEventLog(SysInfoWidgetEventLogs::Move to) = 0;
     };
 
     class MainWindow
@@ -176,18 +176,18 @@ public:
     public:
         virtual ~MainWindow() = default;
 
-        virtual QList<ClientInfo> clients() const = 0;
-        virtual DesktopWindow* desktopWindow(qint64 client_id) const = 0;
-        virtual FileTransferWindow* fileTransferWindow(qint64 client_id) const = 0;
-        virtual TerminalWindow* terminalWindow(qint64 client_id) const = 0;
-        virtual SystemInfoWindow* systemInfoWindow(qint64 client_id) const = 0;
-        virtual ChatWindow* chatWindow(qint64 client_id) const = 0;
-        virtual QString clientDialog(qint64 client_id) const = 0;
-        virtual void closeClient(qint64 client_id) = 0;
-        virtual bool showClient(qint64 client_id) = 0;
-        virtual bool asksCredentials() const = 0;
-        virtual void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) = 0;
-        virtual void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) = 0;
+        virtual QList<ClientInfo> mcpClients() const = 0;
+        virtual DesktopWindow* mcpDesktopWindow(qint64 client_id) const = 0;
+        virtual FileTransferWindow* mcpFileTransferWindow(qint64 client_id) const = 0;
+        virtual TerminalWindow* mcpTerminalWindow(qint64 client_id) const = 0;
+        virtual SystemInfoWindow* mcpSystemInfoWindow(qint64 client_id) const = 0;
+        virtual ChatWindow* mcpChatWindow(qint64 client_id) const = 0;
+        virtual QString mcpClientDialog(qint64 client_id) const = 0;
+        virtual void mcpCloseClient(qint64 client_id) = 0;
+        virtual bool mcpShowClient(qint64 client_id) = 0;
+        virtual bool mcpAsksCredentials() const = 0;
+        virtual void mcpConnectLocalHost(qint64 entry_id, proto::peer::SessionType session_type) = 0;
+        virtual void mcpConnectRouterHost(const HostConfig& host, proto::peer::SessionType session_type) = 0;
     };
 
     // Only one lives at a time. |main_window| must outlive the controller.

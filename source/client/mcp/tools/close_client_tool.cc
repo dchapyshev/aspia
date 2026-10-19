@@ -92,7 +92,7 @@ void CloseClientTool::call(const QJsonObject& arguments, Reply reply)
     }
 
     McpController::FileTransferWindow* file_transfer = controller.fileTransferWindow(*client_id);
-    if (file_transfer && file_transfer->isBusy())
+    if (file_transfer && file_transfer->mcpIsBusy())
     {
         reply(false, QString("The client %1 transfers or removes files. Stop it with the action cancel of "
                              "file_transfer_client or wait for the end, then close the client.").arg(*client_id));
