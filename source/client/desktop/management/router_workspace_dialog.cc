@@ -235,7 +235,7 @@ void RouterWorkspaceDialog::onWorkspaceListReceived(const RouterWorkspaceList& l
             // refetch keeps the lists fetched before. |closing_| collapses the errors of the list
             // requests into a single message.
             closing_ = true;
-            MsgBox::warning(this, tr("Failed to get list of workspaces."));
+            MsgBox::warning(this, tr("Failed to get list of spaces."));
             reject();
         }
         return;
@@ -262,7 +262,7 @@ void RouterWorkspaceDialog::onWorkspaceListReceived(const RouterWorkspaceList& l
         // action would fail with NotFound, so the dialog closes right away.
         LOG(ERROR) << "Edited workspace" << entry_id_ << "no longer exists";
         closing_ = true;
-        MsgBox::warning(this, tr("The workspace was deleted from another console."));
+        MsgBox::warning(this, tr("The space was deleted from another console."));
         reject();
         return;
     }
@@ -425,7 +425,7 @@ void RouterWorkspaceDialog::onWorkspaceResultReceived(const proto::router::Works
         LOG(ERROR) << "Workspace save rejected: concurrent change";
         setEnabled(true);
         refetchLists();
-        MsgBox::warning(this, tr("The workspace was changed from another console. The lists are "
+        MsgBox::warning(this, tr("The space was changed from another console. The lists are "
                                  "being refreshed - check the changes and save again."));
         return;
     }
@@ -531,7 +531,7 @@ void RouterWorkspaceDialog::onHostRemoveClicked()
     // so the id is taken before asking.
     const quint64 host_id = item->data(Qt::UserRole).toULongLong();
 
-    if (MsgBox::question(this, tr("Are you sure you want to remove the host from the workspace?")) == MsgBox::No)
+    if (MsgBox::question(this, tr("Are you sure you want to remove the host from the space?")) == MsgBox::No)
     {
         LOG(INFO) << "Action is rejected by user";
         return;
@@ -914,7 +914,7 @@ QString RouterWorkspaceDialog::validatedName()
     if (new_name.isEmpty())
     {
         LOG(ERROR) << "Empty workspace name";
-        MsgBox::warning(this, tr("Workspace name cannot be empty."));
+        MsgBox::warning(this, tr("Space name cannot be empty."));
         ui->tab_widget->setCurrentWidget(ui->tab_general);
         ui->edit_name->setFocus();
         return QString();
@@ -925,7 +925,7 @@ QString RouterWorkspaceDialog::validatedName()
         if (new_name.compare(existing, Qt::CaseInsensitive) == 0)
         {
             LOG(ERROR) << "Workspace name already exists:" << new_name;
-            MsgBox::warning(this, tr("A workspace with the specified name already exists."));
+            MsgBox::warning(this, tr("A space with the specified name already exists."));
             ui->tab_widget->setCurrentWidget(ui->tab_general);
             ui->edit_name->selectAll();
             ui->edit_name->setFocus();

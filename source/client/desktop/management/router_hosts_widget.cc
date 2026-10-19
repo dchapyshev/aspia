@@ -142,8 +142,8 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
 
     updateHostsPagination();
 
-    ui->combo_filter_workspace->addItem(tr("All workspaces"), QVariant::fromValue<qint64>(kAllWorkspaces));
-    ui->combo_filter_workspace->addItem(tr("Without workspace"), QVariant::fromValue<qint64>(0));
+    ui->combo_filter_workspace->addItem(tr("All spaces"), QVariant::fromValue<qint64>(kAllWorkspaces));
+    ui->combo_filter_workspace->addItem(tr("Not in any space"), QVariant::fromValue<qint64>(0));
 
     filter_timer_ = new QTimer(this);
     filter_timer_->setSingleShot(true);

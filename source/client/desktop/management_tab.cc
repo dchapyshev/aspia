@@ -1424,7 +1424,7 @@ void ManagementTab::onDeleteWorkspaceAction()
     const qint64 router_id = workspace_item->routerId();
     const qint64 workspace_id = workspace_item->workspaceId();
 
-    if (MsgBox::question(this, tr("Are you sure you want to delete workspace \"%1\"?")
+    if (MsgBox::question(this, tr("Are you sure you want to delete space \"%1\"?")
             .arg(workspace_item->workspaceName())) != MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Delete workspace rejected by user";
@@ -1444,7 +1444,7 @@ void ManagementTab::onDeleteWorkspaceAction()
             // The operator explicitly confirmed the delete - a silent no-op would read as a UI
             // bug, so the failure is reported like every other mutation.
             LOG(ERROR) << "Workspace delete failed:" << result.error_code();
-            MsgBox::warning(this, tr("Failed to delete the workspace."));
+            MsgBox::warning(this, tr("Failed to delete the space."));
         }
         ui->sidebar->onRefreshWorkspaces(router_id);
     } });
@@ -1548,7 +1548,7 @@ void ManagementTab::onDeleteGroupAction()
 
     const QString question = tr("Are you sure you want to delete the group \"%1\"? "
                                 "Hosts assigned to this group or its subgroups will be moved "
-                                "to the workspace root.").arg(group_item->text(0));
+                                "to the space root.").arg(group_item->text(0));
     if (MsgBox::question(this, question) == MsgBox::No)
         return;
 

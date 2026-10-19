@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Workspace Properties</string>
+   <string>Space Properties</string>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -279,7 +279,7 @@
          <item>
           <widget class="QToolButton" name="button_host_add">
            <property name="toolTip">
-            <string>Move the selected host into the workspace</string>
+            <string>Move the selected host into the space</string>
            </property>
            <property name="iconSize">
             <size>
@@ -292,7 +292,7 @@
          <item>
           <widget class="QToolButton" name="button_host_remove">
            <property name="toolTip">
-            <string>Remove the selected host from the workspace</string>
+            <string>Remove the selected host from the space</string>
            </property>
            <property name="iconSize">
             <size>
@@ -316,7 +316,7 @@
          <item>
           <widget class="QLabel" name="label_hosts_in_workspace">
            <property name="text">
-            <string>Hosts in workspace</string>
+            <string>Hosts in space</string>
            </property>
           </widget>
          </item>

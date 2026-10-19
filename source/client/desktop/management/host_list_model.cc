@@ -198,7 +198,7 @@ QVariant HostListModel::headerData(int section, Qt::Orientation orientation, int
             return tr("Comment");
 
         case Column::WORKSPACE:
-            return tr("Workspace");
+            return tr("Space");
 
         case Column::OS:
             return tr("Operating System");

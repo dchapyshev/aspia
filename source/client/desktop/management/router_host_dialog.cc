@@ -132,7 +132,7 @@ void RouterHostDialog::onWorkspaceListReceived(const RouterWorkspaceList& list)
     if (list.error_code != proto::router::kErrorOk)
     {
         LOG(ERROR) << "Unable to get the list of the workspaces:" << list.error_code;
-        MsgBox::warning(this, tr("Failed to get list of workspaces."));
+        MsgBox::warning(this, tr("Failed to get list of spaces."));
         reject();
         return;
     }
