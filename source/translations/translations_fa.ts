@@ -2737,17 +2737,17 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1164"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
         <source>Save File</source>
         <translation>ذخیره فایل</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1165"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1151"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>تصویر PNG (*.png);;تصویر BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1196"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1182"/>
         <source>Could not save image</source>
         <translation>ذخیره تصویر ممکن نیست</translation>
     </message>
@@ -3810,8 +3810,8 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
-        <source>Workspace</source>
-        <translation>فضای کاری</translation>
+        <source>Space</source>
+        <translation>فضا</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
@@ -5070,18 +5070,18 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="275"/>
-        <source>Add Workspace</source>
-        <translation>افزودن فضای کاری</translation>
+        <source>Add Space</source>
+        <translation>افزودن فضا</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="284"/>
-        <source>Edit Workspace</source>
-        <translation>ویرایش فضای کاری</translation>
+        <source>Edit Space</source>
+        <translation>ویرایش فضا</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="293"/>
-        <source>Delete Workspace</source>
-        <translation>حذف فضای کاری</translation>
+        <source>Delete Space</source>
+        <translation>حذف فضا</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="302"/>
@@ -5210,21 +5210,6 @@ Credentials imported: %5</source>
         <translation>کپی مقدار</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1427"/>
-        <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation>آیا مطمئن هستید که می‌خواهید فضای کاری &quot;%1&quot; را حذف کنید؟</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1447"/>
-        <source>Failed to delete the workspace.</source>
-        <translation>حذف فضای کاری ناموفق بود.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1549"/>
-        <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation>آیا مطمئن هستید که می‌خواهید گروه &quot;%1&quot; را حذف کنید؟ میزبان‌های اختصاص‌یافته به این گروه یا زیرگروه‌های آن به ریشه فضای کاری منتقل خواهند شد.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1567"/>
         <source>Failed to delete the group.</source>
         <translation>حذف گروه ناموفق بود.</translation>
@@ -5321,6 +5306,21 @@ Credentials exported: %5</source>
 میزبان‌های صادرشده: %3
 گذرواژه‌های ذخیره‌شده صادرشده: %4
 اطلاعات ورود صادرشده: %5</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1427"/>
+        <source>Are you sure you want to delete space &quot;%1&quot;?</source>
+        <translation>آیا مطمئن هستید که می‌خواهید فضای &quot;%1&quot; را حذف کنید؟</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1447"/>
+        <source>Failed to delete the space.</source>
+        <translation>حذف فضا ناموفق بود.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
+        <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the space root.</source>
+        <translation>آیا مطمئن هستید که می‌خواهید گروه &quot;%1&quot; را حذف کنید؟ میزبان‌های اختصاص‌یافته به این گروه یا زیرگروه‌های آن به ریشه فضا منتقل خواهند شد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1637"/>
@@ -6708,11 +6708,6 @@ Credentials imported: %5</source>
         <translation>ویژگی‌های میزبان</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
-        <source>Workspace:</source>
-        <translation>فضای کاری:</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="39"/>
         <source>Group:</source>
         <translation>گروه:</translation>
@@ -6738,6 +6733,11 @@ Credentials imported: %5</source>
         <translation>گذرواژه:</translation>
     </message>
     <message>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
+        <source>Space:</source>
+        <translation>فضا:</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="63"/>
         <source>Use saved credentials</source>
         <translation>استفاده از اطلاعات ورود ذخیره‌شده</translation>
@@ -6754,8 +6754,8 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="135"/>
-        <source>Failed to get list of workspaces.</source>
-        <translation>دریافت فهرست فضاهای کاری ناموفق بود.</translation>
+        <source>Failed to get list of spaces.</source>
+        <translation>دریافت فهرست فضاها ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="143"/>
@@ -6915,13 +6915,13 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="145"/>
-        <source>All workspaces</source>
-        <translation>همه فضاهای کاری</translation>
+        <source>All spaces</source>
+        <translation>همه فضاها</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="146"/>
-        <source>Without workspace</source>
-        <translation>بدون فضای کاری</translation>
+        <source>Not in any space</source>
+        <translation>بدون فضا</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
@@ -7366,11 +7366,6 @@ Credentials imported: %5</source>
 <context>
     <name>RouterWorkspaceDialog</name>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
-        <source>Workspace Properties</source>
-        <translation>ویژگی‌های فضای کاری</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="27"/>
         <source>General</source>
         <translation>کلی</translation>
@@ -7396,6 +7391,21 @@ Credentials imported: %5</source>
         <translation>کاربران دارای دسترسی</translation>
     </message>
     <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
+        <source>Move the selected host into the space</source>
+        <translation>انتقال میزبان انتخاب‌شده به فضا</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
+        <source>Remove the selected host from the space</source>
+        <translation>حذف میزبان انتخاب‌شده از فضا</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
+        <source>Hosts in space</source>
+        <translation>میزبان‌های داخل فضا</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="145"/>
         <source>Grant access to the selected user</source>
         <translation>اعطای دسترسی به کاربر انتخاب‌شده</translation>
@@ -7409,6 +7419,11 @@ Credentials imported: %5</source>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="66"/>
         <source>Available users</source>
         <translation>کاربران موجود</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
+        <source>Space Properties</source>
+        <translation>ویژگی‌های فضا</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="88"/>
@@ -7430,34 +7445,19 @@ Credentials imported: %5</source>
         <translation>میزبان‌ها</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
-        <source>Hosts in workspace</source>
-        <translation>میزبان‌های داخل فضای کاری</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
-        <source>Move the selected host into the workspace</source>
-        <translation>انتقال میزبان انتخاب‌شده به فضای کاری</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
-        <source>Remove the selected host from the workspace</source>
-        <translation>حذف میزبان انتخاب‌شده از فضای کاری</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="203"/>
         <source>Unassigned hosts</source>
         <translation>میزبان‌های اختصاص‌نیافته</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="238"/>
-        <source>Failed to get list of workspaces.</source>
-        <translation>دریافت فهرست فضاهای کاری ناموفق بود.</translation>
+        <source>Failed to get list of spaces.</source>
+        <translation>دریافت فهرست فضاها ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="265"/>
-        <source>The workspace was deleted from another console.</source>
-        <translation>این فضای کاری از کنسول دیگری حذف شده است.</translation>
+        <source>The space was deleted from another console.</source>
+        <translation>این فضا از کنسول دیگری حذف شده است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="306"/>
@@ -7466,23 +7466,23 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="428"/>
-        <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation>فضای کاری از کنسول دیگری تغییر کرده است. فهرست‌ها در حال تازه‌سازی هستند - تغییرات را بررسی کنید و دوباره ذخیره کنید.</translation>
+        <source>The space was changed from another console. The lists are being refreshed - check the changes and save again.</source>
+        <translation>فضا از کنسول دیگری تغییر کرده است. فهرست‌ها در حال تازه‌سازی هستند - تغییرات را بررسی کنید و دوباره ذخیره کنید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="534"/>
-        <source>Are you sure you want to remove the host from the workspace?</source>
-        <translation>آیا مطمئن هستید که می‌خواهید میزبان را از فضای کاری حذف کنید؟</translation>
+        <source>Are you sure you want to remove the host from the space?</source>
+        <translation>آیا مطمئن هستید که می‌خواهید میزبان را از فضا حذف کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="917"/>
-        <source>Workspace name cannot be empty.</source>
-        <translation>نام فضای کاری نمی‌تواند خالی باشد.</translation>
+        <source>Space name cannot be empty.</source>
+        <translation>نام فضا نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="928"/>
-        <source>A workspace with the specified name already exists.</source>
-        <translation>فضای کاری با نام مشخص‌شده از قبل وجود دارد.</translation>
+        <source>A space with the specified name already exists.</source>
+        <translation>فضایی با نام مشخص‌شده از قبل وجود دارد.</translation>
     </message>
 </context>
 <context>

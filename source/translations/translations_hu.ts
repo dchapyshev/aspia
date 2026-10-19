@@ -2737,17 +2737,17 @@ Lecserélt hitelesítő adatok: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1164"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
         <source>Save File</source>
         <translation>Fájl mentése</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1165"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1151"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-kép (*.png);;BMP-kép (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1196"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1182"/>
         <source>Could not save image</source>
         <translation>Nem sikerült menteni a képet</translation>
     </message>
@@ -3810,8 +3810,8 @@ Lecserélt hitelesítő adatok: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
-        <source>Workspace</source>
-        <translation>Munkaterület</translation>
+        <source>Space</source>
+        <translation>Tér</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
@@ -5070,18 +5070,18 @@ Importált hitelesítő adatok: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="275"/>
-        <source>Add Workspace</source>
-        <translation>Munkaterület hozzáadása</translation>
+        <source>Add Space</source>
+        <translation>Tér hozzáadása</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="284"/>
-        <source>Edit Workspace</source>
-        <translation>Munkaterület szerkesztése</translation>
+        <source>Edit Space</source>
+        <translation>Tér szerkesztése</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="293"/>
-        <source>Delete Workspace</source>
-        <translation>Munkaterület törlése</translation>
+        <source>Delete Space</source>
+        <translation>Tér törlése</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="302"/>
@@ -5210,21 +5210,6 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Érték másolása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1427"/>
-        <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation>Biztosan törli a(z) &quot;%1&quot; munkaterületet?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1447"/>
-        <source>Failed to delete the workspace.</source>
-        <translation>Nem sikerült törölni a munkaterületet.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1549"/>
-        <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation>Biztosan törli a(z) &quot;%1&quot; csoportot? A csoporthoz vagy alcsoportjaihoz rendelt gazdagépek a munkaterület gyökerébe kerülnek.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1567"/>
         <source>Failed to delete the group.</source>
         <translation>Nem sikerült törölni a csoportot.</translation>
@@ -5321,6 +5306,21 @@ Exportált csoportok: %2
 Exportált gazdagépek: %3
 Exportált mentett jelszavak: %4
 Exportált hitelesítő adatok: %5</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1427"/>
+        <source>Are you sure you want to delete space &quot;%1&quot;?</source>
+        <translation>Biztosan törli a(z) &quot;%1&quot; teret?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1447"/>
+        <source>Failed to delete the space.</source>
+        <translation>Nem sikerült törölni a teret.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
+        <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the space root.</source>
+        <translation>Biztosan törli a(z) &quot;%1&quot; csoportot? A csoporthoz vagy alcsoportjaihoz rendelt gazdagépek a tér gyökerébe kerülnek.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1637"/>
@@ -6708,11 +6708,6 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Gazdagép tulajdonságai</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
-        <source>Workspace:</source>
-        <translation>Munkaterület:</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="39"/>
         <source>Group:</source>
         <translation>Csoport:</translation>
@@ -6738,6 +6733,11 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Jelszó:</translation>
     </message>
     <message>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
+        <source>Space:</source>
+        <translation>Tér:</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="63"/>
         <source>Use saved credentials</source>
         <translation>Mentett hitelesítő adatok használata</translation>
@@ -6754,8 +6754,8 @@ Importált hitelesítő adatok: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="135"/>
-        <source>Failed to get list of workspaces.</source>
-        <translation>Nem sikerült lekérni a munkaterületek listáját.</translation>
+        <source>Failed to get list of spaces.</source>
+        <translation>Nem sikerült lekérni a terek listáját.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="143"/>
@@ -6915,13 +6915,13 @@ Importált hitelesítő adatok: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="145"/>
-        <source>All workspaces</source>
-        <translation>Összes munkaterület</translation>
+        <source>All spaces</source>
+        <translation>Összes tér</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="146"/>
-        <source>Without workspace</source>
-        <translation>Munkaterület nélkül</translation>
+        <source>Not in any space</source>
+        <translation>Tér nélkül</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
@@ -7366,11 +7366,6 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>RouterWorkspaceDialog</name>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
-        <source>Workspace Properties</source>
-        <translation>Munkaterület tulajdonságai</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="27"/>
         <source>General</source>
         <translation>Általános</translation>
@@ -7396,6 +7391,21 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Hozzáféréssel rendelkező felhasználók</translation>
     </message>
     <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
+        <source>Move the selected host into the space</source>
+        <translation>A kiválasztott gazdagép áthelyezése a térbe</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
+        <source>Remove the selected host from the space</source>
+        <translation>A kiválasztott gazdagép eltávolítása a térből</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
+        <source>Hosts in space</source>
+        <translation>Gazdagépek a térben</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="145"/>
         <source>Grant access to the selected user</source>
         <translation>Hozzáférés megadása a kiválasztott felhasználónak</translation>
@@ -7409,6 +7419,11 @@ Importált hitelesítő adatok: %5</translation>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="66"/>
         <source>Available users</source>
         <translation>Elérhető felhasználók</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
+        <source>Space Properties</source>
+        <translation>Tér tulajdonságai</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="88"/>
@@ -7430,34 +7445,19 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Gazdagépek</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
-        <source>Hosts in workspace</source>
-        <translation>Gazdagépek a munkaterületen</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
-        <source>Move the selected host into the workspace</source>
-        <translation>A kiválasztott gazdagép áthelyezése a munkaterületre</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
-        <source>Remove the selected host from the workspace</source>
-        <translation>A kiválasztott gazdagép eltávolítása a munkaterületről</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="203"/>
         <source>Unassigned hosts</source>
         <translation>Hozzá nem rendelt gazdagépek</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="238"/>
-        <source>Failed to get list of workspaces.</source>
-        <translation>Nem sikerült lekérni a munkaterületek listáját.</translation>
+        <source>Failed to get list of spaces.</source>
+        <translation>Nem sikerült lekérni a terek listáját.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="265"/>
-        <source>The workspace was deleted from another console.</source>
-        <translation>A munkaterületet egy másik konzolból törölték.</translation>
+        <source>The space was deleted from another console.</source>
+        <translation>A teret egy másik konzolból törölték.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="306"/>
@@ -7466,23 +7466,23 @@ Importált hitelesítő adatok: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="428"/>
-        <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation>A munkaterületet egy másik konzolból módosították. A listák frissítés alatt állnak - ellenőrizze a változásokat, és mentse újra.</translation>
+        <source>The space was changed from another console. The lists are being refreshed - check the changes and save again.</source>
+        <translation>A teret egy másik konzolból módosították. A listák frissítés alatt állnak - ellenőrizze a változásokat, és mentse újra.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="534"/>
-        <source>Are you sure you want to remove the host from the workspace?</source>
-        <translation>Biztosan eltávolítja a gazdagépet a munkaterületről?</translation>
+        <source>Are you sure you want to remove the host from the space?</source>
+        <translation>Biztosan eltávolítja a gazdagépet a térből?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="917"/>
-        <source>Workspace name cannot be empty.</source>
-        <translation>A munkaterület neve nem lehet üres.</translation>
+        <source>Space name cannot be empty.</source>
+        <translation>A tér neve nem lehet üres.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="928"/>
-        <source>A workspace with the specified name already exists.</source>
-        <translation>A megadott névvel már létezik munkaterület.</translation>
+        <source>A space with the specified name already exists.</source>
+        <translation>A megadott névvel már létezik tér.</translation>
     </message>
 </context>
 <context>

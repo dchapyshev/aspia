@@ -2748,17 +2748,17 @@ Ersetzte Anmeldedaten: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1164"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
         <source>Save File</source>
         <translation>Datei speichern</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1165"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1151"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-Bild (*.png);;BMP-Bild (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1196"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1182"/>
         <source>Could not save image</source>
         <translation>Bild konnte nicht gespeichert werden</translation>
     </message>
@@ -3825,8 +3825,8 @@ Ersetzte Anmeldedaten: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
-        <source>Workspace</source>
-        <translation>Arbeitsbereich</translation>
+        <source>Space</source>
+        <translation>Bereich</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
@@ -5093,18 +5093,18 @@ Importierte Anmeldedaten: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="275"/>
-        <source>Add Workspace</source>
-        <translation>Arbeitsbereich hinzufügen</translation>
+        <source>Add Space</source>
+        <translation>Bereich hinzufügen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="284"/>
-        <source>Edit Workspace</source>
-        <translation>Arbeitsbereich bearbeiten</translation>
+        <source>Edit Space</source>
+        <translation>Bereich bearbeiten</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="293"/>
-        <source>Delete Workspace</source>
-        <translation>Arbeitsbereich löschen</translation>
+        <source>Delete Space</source>
+        <translation>Bereich löschen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="302"/>
@@ -5233,21 +5233,6 @@ Importierte Anmeldedaten: %5</translation>
         <translation>Wert kopieren</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1427"/>
-        <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation>Möchten Sie den Arbeitsbereich &quot;%1&quot; wirklich löschen?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1447"/>
-        <source>Failed to delete the workspace.</source>
-        <translation>Der Arbeitsbereich konnte nicht gelöscht werden.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1549"/>
-        <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation>Möchten Sie die Gruppe &quot;%1&quot; wirklich löschen? Hosts, die dieser Gruppe oder ihren Untergruppen zugeordnet sind, werden in die Wurzel des Arbeitsbereichs verschoben.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1567"/>
         <source>Failed to delete the group.</source>
         <translation>Die Gruppe konnte nicht gelöscht werden.</translation>
@@ -5344,6 +5329,21 @@ Exportierte Gruppen: %2
 Exportierte Hosts: %3
 Exportierte gespeicherte Kennwörter: %4
 Exportierte Anmeldedaten: %5</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1427"/>
+        <source>Are you sure you want to delete space &quot;%1&quot;?</source>
+        <translation>Möchten Sie den Bereich &quot;%1&quot; wirklich löschen?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1447"/>
+        <source>Failed to delete the space.</source>
+        <translation>Der Bereich konnte nicht gelöscht werden.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
+        <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the space root.</source>
+        <translation>Möchten Sie die Gruppe &quot;%1&quot; wirklich löschen? Hosts, die dieser Gruppe oder ihren Untergruppen zugeordnet sind, werden in die Wurzel des Bereichs verschoben.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1637"/>
@@ -6737,11 +6737,6 @@ Importierte Anmeldedaten: %5</translation>
         <translation>Host-Eigenschaften</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
-        <source>Workspace:</source>
-        <translation>Arbeitsbereich:</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="39"/>
         <source>Group:</source>
         <translation>Gruppe:</translation>
@@ -6767,6 +6762,11 @@ Importierte Anmeldedaten: %5</translation>
         <translation>Kennwort:</translation>
     </message>
     <message>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
+        <source>Space:</source>
+        <translation>Bereich:</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="63"/>
         <source>Use saved credentials</source>
         <translation>Gespeicherte Anmeldedaten verwenden</translation>
@@ -6783,8 +6783,8 @@ Importierte Anmeldedaten: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="135"/>
-        <source>Failed to get list of workspaces.</source>
-        <translation>Die Liste der Arbeitsbereiche konnte nicht abgerufen werden.</translation>
+        <source>Failed to get list of spaces.</source>
+        <translation>Die Liste der Bereiche konnte nicht abgerufen werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="143"/>
@@ -6944,13 +6944,13 @@ Importierte Anmeldedaten: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="145"/>
-        <source>All workspaces</source>
-        <translation>Alle Arbeitsbereiche</translation>
+        <source>All spaces</source>
+        <translation>Alle Bereiche</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="146"/>
-        <source>Without workspace</source>
-        <translation>Ohne Arbeitsbereich</translation>
+        <source>Not in any space</source>
+        <translation>Ohne Bereich</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
@@ -7402,11 +7402,6 @@ Importierte Anmeldedaten: %5</translation>
 <context>
     <name>RouterWorkspaceDialog</name>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
-        <source>Workspace Properties</source>
-        <translation>Arbeitsbereichseigenschaften</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="27"/>
         <source>General</source>
         <translation>Allgemein</translation>
@@ -7432,6 +7427,21 @@ Importierte Anmeldedaten: %5</translation>
         <translation>Benutzer mit Zugriff</translation>
     </message>
     <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
+        <source>Move the selected host into the space</source>
+        <translation>Den ausgewählten Host in den Bereich verschieben</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
+        <source>Remove the selected host from the space</source>
+        <translation>Den ausgewählten Host aus dem Bereich entfernen</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
+        <source>Hosts in space</source>
+        <translation>Hosts im Bereich</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="145"/>
         <source>Grant access to the selected user</source>
         <translation>Dem ausgewählten Benutzer Zugriff gewähren</translation>
@@ -7445,6 +7455,11 @@ Importierte Anmeldedaten: %5</translation>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="66"/>
         <source>Available users</source>
         <translation>Verfügbare Benutzer</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
+        <source>Space Properties</source>
+        <translation>Bereichseigenschaften</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="88"/>
@@ -7466,34 +7481,19 @@ Importierte Anmeldedaten: %5</translation>
         <translation>Hosts</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
-        <source>Hosts in workspace</source>
-        <translation>Hosts im Arbeitsbereich</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
-        <source>Move the selected host into the workspace</source>
-        <translation>Den ausgewählten Host in den Arbeitsbereich verschieben</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
-        <source>Remove the selected host from the workspace</source>
-        <translation>Den ausgewählten Host aus dem Arbeitsbereich entfernen</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="203"/>
         <source>Unassigned hosts</source>
         <translation>Nicht zugeordnete Hosts</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="238"/>
-        <source>Failed to get list of workspaces.</source>
-        <translation>Die Liste der Arbeitsbereiche konnte nicht abgerufen werden.</translation>
+        <source>Failed to get list of spaces.</source>
+        <translation>Die Liste der Bereiche konnte nicht abgerufen werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="265"/>
-        <source>The workspace was deleted from another console.</source>
-        <translation>Der Arbeitsbereich wurde von einer anderen Konsole gelöscht.</translation>
+        <source>The space was deleted from another console.</source>
+        <translation>Der Bereich wurde von einer anderen Konsole gelöscht.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="306"/>
@@ -7502,23 +7502,23 @@ Importierte Anmeldedaten: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="428"/>
-        <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation>Der Arbeitsbereich wurde von einer anderen Konsole geändert. Die Listen werden aktualisiert - prüfen Sie die Änderungen und speichern Sie erneut.</translation>
+        <source>The space was changed from another console. The lists are being refreshed - check the changes and save again.</source>
+        <translation>Der Bereich wurde von einer anderen Konsole geändert. Die Listen werden aktualisiert - prüfen Sie die Änderungen und speichern Sie erneut.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="534"/>
-        <source>Are you sure you want to remove the host from the workspace?</source>
-        <translation>Möchten Sie den Host wirklich aus dem Arbeitsbereich entfernen?</translation>
+        <source>Are you sure you want to remove the host from the space?</source>
+        <translation>Möchten Sie den Host wirklich aus dem Bereich entfernen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="917"/>
-        <source>Workspace name cannot be empty.</source>
-        <translation>Der Name des Arbeitsbereichs darf nicht leer sein.</translation>
+        <source>Space name cannot be empty.</source>
+        <translation>Der Name des Bereichs darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="928"/>
-        <source>A workspace with the specified name already exists.</source>
-        <translation>Ein Arbeitsbereich mit dem angegebenen Namen existiert bereits.</translation>
+        <source>A space with the specified name already exists.</source>
+        <translation>Ein Bereich mit dem angegebenen Namen existiert bereits.</translation>
     </message>
 </context>
 <context>

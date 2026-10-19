@@ -2759,17 +2759,17 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1164"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1165"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1151"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1196"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1182"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
@@ -3840,8 +3840,8 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
-        <source>Workspace</source>
-        <translation>Рабочее пространство</translation>
+        <source>Space</source>
+        <translation>Пространство</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
@@ -5116,18 +5116,18 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="275"/>
-        <source>Add Workspace</source>
-        <translation>Добавить рабочее пространство</translation>
+        <source>Add Space</source>
+        <translation>Добавить пространство</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="284"/>
-        <source>Edit Workspace</source>
-        <translation>Изменить рабочее пространство</translation>
+        <source>Edit Space</source>
+        <translation>Изменить пространство</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="293"/>
-        <source>Delete Workspace</source>
-        <translation>Удалить рабочее пространство</translation>
+        <source>Delete Space</source>
+        <translation>Удалить пространство</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="302"/>
@@ -5251,21 +5251,6 @@ Credentials imported: %5</source>
         <translation>Копировать значение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1427"/>
-        <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation>Вы уверены, что хотите удалить рабочее пространство &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1447"/>
-        <source>Failed to delete the workspace.</source>
-        <translation>Не удалось удалить рабочее пространство.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1549"/>
-        <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;? Хосты, назначенные этой группе или ее подгруппам, будут перемещены в корень рабочего пространства.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1567"/>
         <source>Failed to delete the group.</source>
         <translation>Не удалось удалить группу.</translation>
@@ -5367,6 +5352,21 @@ Credentials exported: %5</source>
         <location filename="../client/desktop/management_tab.cc" line="888"/>
         <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
         <translation>Тип сессии &quot;%1&quot; недоступен для Быстрой поддержки.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1427"/>
+        <source>Are you sure you want to delete space &quot;%1&quot;?</source>
+        <translation>Вы уверены, что хотите удалить пространство &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1447"/>
+        <source>Failed to delete the space.</source>
+        <translation>Не удалось удалить пространство.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
+        <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the space root.</source>
+        <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;? Хосты, назначенные этой группе или ее подгруппам, будут перемещены в корень пространства.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1637"/>
@@ -6766,11 +6766,6 @@ Credentials imported: %5</source>
         <translation>Свойства хоста</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
-        <source>Workspace:</source>
-        <translation>Рабочее пространство:</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="39"/>
         <source>Group:</source>
         <translation>Группа:</translation>
@@ -6796,6 +6791,11 @@ Credentials imported: %5</source>
         <translation>Пароль:</translation>
     </message>
     <message>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
+        <source>Space:</source>
+        <translation>Пространство:</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="63"/>
         <source>Use saved credentials</source>
         <translation>Сохраненные учетные данные</translation>
@@ -6812,8 +6812,8 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="135"/>
-        <source>Failed to get list of workspaces.</source>
-        <translation>Не удалось получить список рабочих пространств.</translation>
+        <source>Failed to get list of spaces.</source>
+        <translation>Не удалось получить список пространств.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="143"/>
@@ -6973,13 +6973,13 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="145"/>
-        <source>All workspaces</source>
-        <translation>Все рабочие пространства</translation>
+        <source>All spaces</source>
+        <translation>Все пространства</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="146"/>
-        <source>Without workspace</source>
-        <translation>Без рабочего пространства</translation>
+        <source>Not in any space</source>
+        <translation>Без пространства</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
@@ -7438,11 +7438,6 @@ Credentials imported: %5</source>
 <context>
     <name>RouterWorkspaceDialog</name>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
-        <source>Workspace Properties</source>
-        <translation>Свойства рабочего пространства</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="27"/>
         <source>General</source>
         <translation>Основные</translation>
@@ -7468,6 +7463,21 @@ Credentials imported: %5</source>
         <translation>Пользователи с доступом</translation>
     </message>
     <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
+        <source>Move the selected host into the space</source>
+        <translation>Переместить выбранный хост в пространство</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
+        <source>Remove the selected host from the space</source>
+        <translation>Удалить выбранный хост из пространства</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
+        <source>Hosts in space</source>
+        <translation>Хосты в пространстве</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="145"/>
         <source>Grant access to the selected user</source>
         <translation>Предоставить доступ выбранному пользователю</translation>
@@ -7481,6 +7491,11 @@ Credentials imported: %5</source>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="66"/>
         <source>Available users</source>
         <translation>Доступные пользователи</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
+        <source>Space Properties</source>
+        <translation>Свойства пространства</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="88"/>
@@ -7502,34 +7517,19 @@ Credentials imported: %5</source>
         <translation>Хосты</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
-        <source>Hosts in workspace</source>
-        <translation>Хосты в рабочем пространстве</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
-        <source>Move the selected host into the workspace</source>
-        <translation>Переместить выбранный хост в рабочее пространство</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
-        <source>Remove the selected host from the workspace</source>
-        <translation>Удалить выбранный хост из рабочего пространства</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="203"/>
         <source>Unassigned hosts</source>
         <translation>Неназначенные хосты</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="238"/>
-        <source>Failed to get list of workspaces.</source>
-        <translation>Не удалось получить список рабочих пространств.</translation>
+        <source>Failed to get list of spaces.</source>
+        <translation>Не удалось получить список пространств.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="265"/>
-        <source>The workspace was deleted from another console.</source>
-        <translation>Рабочее пространство было удалено из другой консоли.</translation>
+        <source>The space was deleted from another console.</source>
+        <translation>Пространство было удалено из другой консоли.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="306"/>
@@ -7538,23 +7538,23 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="428"/>
-        <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation>Рабочее пространство было изменено из другой консоли. Списки обновляются - проверьте изменения и сохраните еще раз.</translation>
+        <source>The space was changed from another console. The lists are being refreshed - check the changes and save again.</source>
+        <translation>Пространство было изменено из другой консоли. Списки обновляются - проверьте изменения и сохраните еще раз.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="534"/>
-        <source>Are you sure you want to remove the host from the workspace?</source>
-        <translation>Вы уверены, что хотите удалить хост из рабочего пространства?</translation>
+        <source>Are you sure you want to remove the host from the space?</source>
+        <translation>Вы уверены, что хотите удалить хост из пространства?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="917"/>
-        <source>Workspace name cannot be empty.</source>
-        <translation>Имя рабочего пространства не может быть пустым.</translation>
+        <source>Space name cannot be empty.</source>
+        <translation>Имя пространства не может быть пустым.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="928"/>
-        <source>A workspace with the specified name already exists.</source>
-        <translation>Рабочее пространство с указанным именем уже существует.</translation>
+        <source>A space with the specified name already exists.</source>
+        <translation>Пространство с указанным именем уже существует.</translation>
     </message>
 </context>
 <context>

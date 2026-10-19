@@ -2737,17 +2737,17 @@ Değiştirilen kimlik bilgileri: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1164"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
         <source>Save File</source>
         <translation>Dosyayı Kaydet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1165"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1151"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG Görüntüsü (*.png);;BMP Görüntüsü (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1196"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1182"/>
         <source>Could not save image</source>
         <translation>Görüntü kaydedilemedi</translation>
     </message>
@@ -3810,8 +3810,8 @@ Değiştirilen kimlik bilgileri: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
-        <source>Workspace</source>
-        <translation>Çalışma Alanı</translation>
+        <source>Space</source>
+        <translation>Bölüm</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
@@ -5070,18 +5070,18 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="275"/>
-        <source>Add Workspace</source>
-        <translation>Çalışma Alanı Ekle</translation>
+        <source>Add Space</source>
+        <translation>Bölüm Ekle</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="284"/>
-        <source>Edit Workspace</source>
-        <translation>Çalışma Alanını Düzenle</translation>
+        <source>Edit Space</source>
+        <translation>Bölümü Düzenle</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="293"/>
-        <source>Delete Workspace</source>
-        <translation>Çalışma Alanını Sil</translation>
+        <source>Delete Space</source>
+        <translation>Bölümü Sil</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="302"/>
@@ -5210,21 +5210,6 @@ Credentials imported: %5</source>
         <translation>Değeri Kopyala</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1427"/>
-        <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation>&quot;%1&quot; çalışma alanını silmek istediğinizden emin misiniz?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1447"/>
-        <source>Failed to delete the workspace.</source>
-        <translation>Çalışma alanı silinemedi.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1549"/>
-        <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation>&quot;%1&quot; grubunu silmek istediğinizden emin misiniz? Bu gruba veya alt gruplarına atanmış ana bilgisayarlar çalışma alanı köküne taşınacak.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1567"/>
         <source>Failed to delete the group.</source>
         <translation>Grup silinemedi.</translation>
@@ -5321,6 +5306,21 @@ Dışa aktarılan gruplar: %2
 Dışa aktarılan ana bilgisayarlar: %3
 Dışa aktarılan kayıtlı parolalar: %4
 Dışa aktarılan kimlik bilgileri: %5</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1427"/>
+        <source>Are you sure you want to delete space &quot;%1&quot;?</source>
+        <translation>&quot;%1&quot; bölümünü silmek istediğinizden emin misiniz?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1447"/>
+        <source>Failed to delete the space.</source>
+        <translation>Bölüm silinemedi.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1549"/>
+        <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the space root.</source>
+        <translation>&quot;%1&quot; grubunu silmek istediğinizden emin misiniz? Bu gruba veya alt gruplarına atanmış ana bilgisayarlar bölüm köküne taşınacak.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1637"/>
@@ -6708,11 +6708,6 @@ Credentials imported: %5</source>
         <translation>Ana Bilgisayar Özellikleri</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
-        <source>Workspace:</source>
-        <translation>Çalışma Alanı:</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="39"/>
         <source>Group:</source>
         <translation>Grup:</translation>
@@ -6738,6 +6733,11 @@ Credentials imported: %5</source>
         <translation>Parola:</translation>
     </message>
     <message>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
+        <source>Space:</source>
+        <translation>Bölüm:</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="63"/>
         <source>Use saved credentials</source>
         <translation>Kayıtlı kimlik bilgilerini kullan</translation>
@@ -6754,8 +6754,8 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="135"/>
-        <source>Failed to get list of workspaces.</source>
-        <translation>Çalışma alanı listesi alınamadı.</translation>
+        <source>Failed to get list of spaces.</source>
+        <translation>Bölüm listesi alınamadı.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="143"/>
@@ -6915,13 +6915,13 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="145"/>
-        <source>All workspaces</source>
-        <translation>Tüm çalışma alanları</translation>
+        <source>All spaces</source>
+        <translation>Tüm bölümler</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="146"/>
-        <source>Without workspace</source>
-        <translation>Çalışma alanı olmadan</translation>
+        <source>Not in any space</source>
+        <translation>Bölüm olmadan</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
@@ -7366,11 +7366,6 @@ Credentials imported: %5</source>
 <context>
     <name>RouterWorkspaceDialog</name>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
-        <source>Workspace Properties</source>
-        <translation>Çalışma Alanı Özellikleri</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="27"/>
         <source>General</source>
         <translation>Genel</translation>
@@ -7396,6 +7391,21 @@ Credentials imported: %5</source>
         <translation>Erişimi olan kullanıcılar</translation>
     </message>
     <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
+        <source>Move the selected host into the space</source>
+        <translation>Seçilen ana bilgisayarı bölüme taşı</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
+        <source>Remove the selected host from the space</source>
+        <translation>Seçilen ana bilgisayarı bölümden kaldır</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
+        <source>Hosts in space</source>
+        <translation>Bölümdeki ana bilgisayarlar</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="145"/>
         <source>Grant access to the selected user</source>
         <translation>Seçilen kullanıcıya erişim ver</translation>
@@ -7409,6 +7419,11 @@ Credentials imported: %5</source>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="66"/>
         <source>Available users</source>
         <translation>Kullanılabilir kullanıcılar</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
+        <source>Space Properties</source>
+        <translation>Bölüm Özellikleri</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="88"/>
@@ -7430,34 +7445,19 @@ Credentials imported: %5</source>
         <translation>Ana Bilgisayarlar</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
-        <source>Hosts in workspace</source>
-        <translation>Çalışma alanındaki ana bilgisayarlar</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
-        <source>Move the selected host into the workspace</source>
-        <translation>Seçilen ana bilgisayarı çalışma alanına taşı</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
-        <source>Remove the selected host from the workspace</source>
-        <translation>Seçilen ana bilgisayarı çalışma alanından kaldır</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="203"/>
         <source>Unassigned hosts</source>
         <translation>Atanmamış ana bilgisayarlar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="238"/>
-        <source>Failed to get list of workspaces.</source>
-        <translation>Çalışma alanı listesi alınamadı.</translation>
+        <source>Failed to get list of spaces.</source>
+        <translation>Bölüm listesi alınamadı.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="265"/>
-        <source>The workspace was deleted from another console.</source>
-        <translation>Çalışma alanı başka bir konsoldan silindi.</translation>
+        <source>The space was deleted from another console.</source>
+        <translation>Bölüm başka bir konsoldan silindi.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="306"/>
@@ -7466,23 +7466,23 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="428"/>
-        <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation>Çalışma alanı başka bir konsoldan değiştirildi. Listeler yenileniyor - değişiklikleri denetleyip yeniden kaydedin.</translation>
+        <source>The space was changed from another console. The lists are being refreshed - check the changes and save again.</source>
+        <translation>Bölüm başka bir konsoldan değiştirildi. Listeler yenileniyor - değişiklikleri denetleyip yeniden kaydedin.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="534"/>
-        <source>Are you sure you want to remove the host from the workspace?</source>
-        <translation>Ana bilgisayarı çalışma alanından kaldırmak istediğinizden emin misiniz?</translation>
+        <source>Are you sure you want to remove the host from the space?</source>
+        <translation>Ana bilgisayarı bölümden kaldırmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="917"/>
-        <source>Workspace name cannot be empty.</source>
-        <translation>Çalışma alanı adı boş olamaz.</translation>
+        <source>Space name cannot be empty.</source>
+        <translation>Bölüm adı boş olamaz.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="928"/>
-        <source>A workspace with the specified name already exists.</source>
-        <translation>Belirtilen ada sahip bir çalışma alanı zaten var.</translation>
+        <source>A space with the specified name already exists.</source>
+        <translation>Belirtilen ada sahip bir bölüm zaten var.</translation>
     </message>
 </context>
 <context>
