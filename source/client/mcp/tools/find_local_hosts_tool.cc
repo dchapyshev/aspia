@@ -58,8 +58,8 @@ QString FindLocalHostsTool::name() const
 QJsonObject FindLocalHostsTool::definition() const
 {
     QJsonObject query{ { "type", "string" },
-                       { "description", "Text to look for in the name or address of a host. Without it all "
-                                        "hosts are listed." } };
+                       { "description", "Text to look for in the name, address or comment of a host. Without "
+                                        "it all hosts are listed." } };
 
     QJsonObject group_id{ { "type", "integer" },
                           { "description", "Id of a group from list_local_groups. Only the hosts of this group and "
@@ -67,8 +67,8 @@ QJsonObject FindLocalHostsTool::definition() const
 
     return QJsonObject{
         { "name", name() },
-        { "description", "Lists the hosts saved in the local database of Aspia Client, or only those whose name "
-                         "or address contains the query, ignoring case, and that are in the given group. The "
+        { "description", "Lists the hosts saved in the local database of Aspia Client, or only those whose name, "
+                         "address or comment contains the query, ignoring case, and that are in the given group. The "
                          "hosts of routers are found by find_router_hosts. Passwords, user names and comments are "
                          "never returned." },
         { "inputSchema", QJsonObject{ { "type", "object" },

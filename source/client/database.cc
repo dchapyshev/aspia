@@ -803,7 +803,8 @@ Database::ReadResult Database::searchLocalHosts(
         const ReadResult host_result = readLocalHost(query, &host);
 
         if (host.name().contains(query_text, Qt::CaseInsensitive) ||
-            host.address().contains(query_text, Qt::CaseInsensitive))
+            host.address().contains(query_text, Qt::CaseInsensitive) ||
+            host.comment().contains(query_text, Qt::CaseInsensitive))
         {
             if (host_result != ReadResult::OK)
                 result = ReadResult::INCOMPLETE;

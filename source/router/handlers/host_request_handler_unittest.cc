@@ -943,6 +943,21 @@ TEST_F(HostListTest, SearchMatchesDisplayNameAndHostId)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST_F(HostListTest, SearchMatchesComment)
+{
+    const HostId host_id = addHost("hash-1");
+    ASSERT_NE(host_id, kInvalidHostId);
+    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), workspace_id_, 0, "Office",
+                             "Second Floor"), proto::router::kErrorOk);
+
+    const proto::router::HostSearchResult result = searchHosts("second");
+    ASSERT_EQ(result.error_code(), proto::router::kErrorOk);
+    ASSERT_EQ(result.host_size(), 1);
+    EXPECT_EQ(result.host(0).host_id(), host_id);
+    EXPECT_EQ(result.total_count(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The search answers with the page that was asked for and with the number of matches in the whole
 // scope, so the client can walk the rest instead of being handed a silently cut list.
 TEST_F(HostListTest, SearchReturnsWindowAndFullCount)

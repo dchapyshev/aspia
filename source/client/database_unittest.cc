@@ -484,6 +484,23 @@ TEST_F(DatabaseTest, HostsAreListedByName)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST_F(DatabaseTest, SearchMatchesComment)
+{
+    addHost("office", 0);
+
+    LocalHostConfig host;
+    host.setName("backup");
+    host.setAddress("192.168.0.2");
+    host.setComment("Second Floor");
+    ASSERT_TRUE(db_.addLocalHost(host));
+
+    QList<LocalHostConfig> found;
+    EXPECT_EQ(db_.searchLocalHosts("second", &found), Database::ReadResult::OK);
+    ASSERT_EQ(found.size(), 1);
+    EXPECT_EQ(found[0].id(), host.id());
+}
+
+//--------------------------------------------------------------------------------------------------
 // The move writes the group and nothing else. A record whose sealed column did not open goes to
 // another group like any other, and one that opens is not resealed on the way.
 TEST_F(DatabaseTest, HostThatDoesNotOpenIsMovedLikeAnyOther)

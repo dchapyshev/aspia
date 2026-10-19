@@ -37,7 +37,7 @@ QString FindRouterHostsTool::name() const
 QJsonObject FindRouterHostsTool::definition() const
 {
     QJsonObject query{ { "type", "string" },
-                       { "description", "Text to look for in the name or the host ID." } };
+                       { "description", "Text to look for in the name, the comment or the host ID." } };
 
     QJsonObject router_id{ { "type", "integer" },
                            { "description", "Id of a router from list_routers. Without it every connected router "
@@ -45,8 +45,8 @@ QJsonObject FindRouterHostsTool::definition() const
 
     return QJsonObject{
         { "name", name() },
-        { "description", "Searches the hosts of the routers saved in Aspia Client, whose name or host ID "
-                         "contains the query. A router that is not connected is not searched, and a warning says "
+        { "description", "Searches the hosts of the routers saved in Aspia Client, whose name, comment or host "
+                         "ID contains the query. A router that is not connected is not searched, and a warning says "
                          "so. A router returns at most 100 matches, and a warning says when it has more. The "
                          "host_id is the ID that the host is connected by. The local hosts are found by "
                          "find_local_hosts. Passwords, user names and comments are never returned." },

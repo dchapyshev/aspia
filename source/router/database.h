@@ -265,11 +265,11 @@ public:
     std::string_view hostCount(const proto::router::HostFilter& filter, qint64* count) const;
     std::string_view hostCount(qint64 workspace_id, qint64 group_id, qint64* count) const;
 
-    // Substring search over |display_name| (case-insensitive) and the decimal host_id, restricted
-    // to the given workspaces. |workspace_ids| must already be the set the user is allowed to see;
-    // an empty list yields no results. The page is mandatory and bounded exactly like the one of
-    // hosts(). Matches are appended to |out|, its total_count is set to the number of matches in
-    // the whole scope and its error_code is set; Host.online is left unset.
+    // Substring search over |display_name|, |comment| (case-insensitive) and the decimal host_id,
+    // restricted to the given workspaces. |workspace_ids| must already be the set the user is
+    // allowed to see; an empty list yields no results. The page is mandatory and bounded exactly
+    // like the one of hosts(). Matches are appended to |out|, its total_count is set to the number
+    // of matches in the whole scope and its error_code is set; Host.online is left unset.
     void searchHosts(std::string_view query, const std::set<qint64>& workspace_ids,
         qint64 offset, qint64 count, proto::router::HostSearchResult* out) const;
 

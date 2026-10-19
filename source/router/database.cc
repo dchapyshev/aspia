@@ -2080,6 +2080,7 @@ void Database::searchHosts(std::string_view query_text, const std::set<qint64>& 
     const std::string where =
         " FROM hosts WHERE workspace_id IN (" + placeholders + ") "
         "AND (casefold(display_name) LIKE casefold(?) ESCAPE '\\' "
+        "OR casefold(comment) LIKE casefold(?) ESCAPE '\\' "
         "OR CAST(id AS TEXT) LIKE ? ESCAPE '\\')";
 
     // A zero count from a failed query would make the client truncate its pagination while the
@@ -2095,6 +2096,7 @@ void Database::searchHosts(std::string_view query_text, const std::set<qint64>& 
 
     for (qint64 workspace_id : workspace_ids)
         count_query.addInt64(workspace_id);
+    count_query.addText(pattern);
     count_query.addText(pattern);
     count_query.addText(pattern);
 
@@ -2124,6 +2126,7 @@ void Database::searchHosts(std::string_view query_text, const std::set<qint64>& 
 
     for (qint64 workspace_id : workspace_ids)
         query.addInt64(workspace_id);
+    query.addText(pattern);
     query.addText(pattern);
     query.addText(pattern);
     query.addInt64(count);
