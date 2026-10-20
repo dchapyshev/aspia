@@ -1190,10 +1190,12 @@ void ManagementTab::onUserContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
 {
-    if (!router_hosts_widget_->hasSelectedHost())
+    const qsizetype count = router_hosts_widget_->selectedHosts().size();
+    if (count == 0)
         return;
 
-    bool is_online = router_hosts_widget_->isSelectedHostOnline();
+    const bool is_single = count == 1;
+    const bool has_online = !router_hosts_widget_->selectedOnlineHosts().isEmpty();
 
     AutoQPointer<QMenu> menu(new QMenu(this));
     auto addProxy = [&menu](QAction* action)
@@ -1201,18 +1203,26 @@ void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
         menu->addAction(action->icon(), action->text(), action, &QAction::triggered);
     };
 
-    menu->addAction(ui->action_edit_host);
+    if (is_single)
+        menu->addAction(ui->action_edit_host);
 
-    if (is_online)
+    if (has_online)
     {
         menu->addAction(ui->action_host_check_updates);
         menu->addAction(ui->action_disconnect);
     }
 
-    menu->addAction(ui->action_host_telemetry);
+    if (is_single)
+        menu->addAction(ui->action_host_telemetry);
     menu->addAction(ui->action_host_remove);
 
-    if (is_online)
+    if (!is_single)
+    {
+        menu->exec(pos);
+        return;
+    }
+
+    if (has_online)
     {
         menu->addSeparator();
         addProxy(ui->action_desktop_connect);
@@ -2066,14 +2076,15 @@ void ManagementTab::updateActionsState()
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_HOSTS)
     {
         const bool has_host = router_hosts_widget_->hasSelectedHost();
-        const bool can_connect = router_hosts_widget_->isSelectedHostOnline();
+        const bool has_hosts = !router_hosts_widget_->selectedHosts().isEmpty();
+        const bool has_online = !router_hosts_widget_->selectedOnlineHosts().isEmpty();
 
-        ui->action_disconnect->setVisible(can_connect);
+        ui->action_disconnect->setVisible(has_online);
         ui->action_disconnect_all->setVisible(router_hosts_widget_->hostCount() > 0);
-        ui->action_host_remove->setVisible(has_host);
+        ui->action_host_remove->setVisible(has_hosts);
         ui->action_edit_host->setVisible(has_host);
 
-        ui->action_host_check_updates->setVisible(can_connect);
+        ui->action_host_check_updates->setVisible(has_online);
         ui->action_host_telemetry->setVisible(has_host);
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_TEMP_HOSTS)

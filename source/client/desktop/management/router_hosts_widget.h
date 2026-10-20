@@ -26,6 +26,7 @@
 
 #include "client/config.h"
 #include "client/page_model.h"
+#include "client/router_rpc.h"
 #include "client/router_types.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/host_list_model.h"
@@ -35,6 +36,7 @@ class RouterHostsWidget;
 } // namespace Ui
 
 class QTimer;
+class RouterSession;
 
 namespace proto::router {
 class HostFilter;
@@ -53,9 +55,10 @@ public:
     qint64 routerId() const { return router_id_; }
     void setMimeType(const QString& mime_type);
     bool hasSelectedHost() const;
-    bool isSelectedHostOnline() const;
     HostId selectedHostId() const;
     HostConfig selectedHostConfig() const;
+    QList<RouterHost> selectedHosts() const;
+    QList<RouterHost> selectedOnlineHosts() const;
     int hostCount() const;
 
     void copyCurrentHostRow();
@@ -109,8 +112,11 @@ private:
     void updateCountLabel();
     void startDrag();
     QString workspaceNameById(qint64 workspace_id) const;
-    QList<RouterHost> selectedHosts() const;
     void saveHostsToFile();
+
+    using HostRequest = void (RouterSession::*)(HostId, RouterCallback<proto::router::HostResult>);
+    void sendHostRequests(const QList<RouterHost>& hosts, HostRequest request,
+                          const std::function<QString(int)>& error_text);
 
     std::unique_ptr<Ui::RouterHostsWidget> ui;
     qint64 router_id_ = 0;

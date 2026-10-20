@@ -45,6 +45,7 @@
 
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
+#include "base/shared_pointer.h"
 #include "base/time_types.h"
 #include "base/peer/host_id.h"
 #include "client/router_controller.h"
@@ -227,13 +228,6 @@ bool RouterHostsWidget::hasSelectedHost() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool RouterHostsWidget::isSelectedHostOnline() const
-{
-    const QList<RouterHost> hosts = selectedHosts();
-    return hosts.size() == 1 && hosts.front().online;
-}
-
-//--------------------------------------------------------------------------------------------------
 HostId RouterHostsWidget::selectedHostId() const
 {
     const QList<RouterHost> hosts = selectedHosts();
@@ -364,30 +358,32 @@ void RouterHostsWidget::onModifyHost()
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::onDisconnectHost()
 {
-    const QList<RouterHost> hosts = selectedHosts();
-    if (hosts.size() != 1)
+    const QList<RouterHost> hosts = selectedOnlineHosts();
+    if (hosts.isEmpty())
     {
-        LOG(INFO) << "No single selected host";
+        LOG(INFO) << "No selected online host";
         return;
     }
 
-    const RouterHost& host = hosts.front();
+    const int total = static_cast<int>(hosts.size());
 
-    const HostId host_id = host.host_id;
+    QString message;
+    if (total == 1)
+        message = tr("Are you sure you want to disconnect host \"%1\"?").arg(hosts.front().computer_name);
+    else
+        message = tr("Are you sure you want to disconnect %n hosts?", "", total);
 
-    if (MsgBox::question(this, tr("Are you sure you want to disconnect host \"%1\"?")
-        .arg(host.computer_name)) != MsgBox::Yes)
+    if (MsgBox::question(this, message) != MsgBox::Yes)
     {
-        LOG(INFO) << "[ACTION] Disconnect host rejected by user";
+        LOG(INFO) << "[ACTION] Disconnect hosts rejected by user";
         return;
     }
 
-    RouterSession* session = RouterController::session(router_id_);
-    if (!session)
-        return;
-
-    LOG(INFO) << "[ACTION] Disconnect host accepted by user";
-    session->disconnectHost(host_id, { this, &RouterHostsWidget::onHostResultReceived });
+    LOG(INFO) << "[ACTION] Disconnect hosts accepted by user:" << total;
+    sendHostRequests(hosts, &RouterSession::disconnectHost, [this](int failed)
+    {
+        return tr("Failed to disconnect %n of the selected hosts.", "", failed);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -418,53 +414,49 @@ void RouterHostsWidget::onDisconnectAllHosts()
 void RouterHostsWidget::onRemoveHost()
 {
     const QList<RouterHost> hosts = selectedHosts();
-    if (hosts.size() != 1)
+    if (hosts.isEmpty())
     {
-        LOG(INFO) << "No single selected host";
+        LOG(INFO) << "No selected host";
         return;
     }
 
-    const RouterHost& host = hosts.front();
-
-    const HostId host_id = host.host_id;
+    const int total = static_cast<int>(hosts.size());
 
     QString message = tr("Deleting a host will result in all its configuration for connecting "
                          "to the router being deleted, and the application will be uninstalled "
                          "on the host. This operation is irreversible. Are you sure you want to "
                          "do this?");
+    if (total > 1)
+        message = tr("%n hosts will be deleted.", "", total) + "\n\n" + message;
 
     if (MsgBox::importantQuestion(this, message, Seconds(10)) == MsgBox::No)
     {
-        LOG(INFO) << "[ACTION] Remove host rejected by user";
+        LOG(INFO) << "[ACTION] Remove hosts rejected by user";
         return;
     }
 
-    RouterSession* session = RouterController::session(router_id_);
-    if (!session)
-        return;
-
-    LOG(INFO) << "[ACTION] Remove host accepted by user";
-    session->removeHost(host_id, { this, &RouterHostsWidget::onHostResultReceived });
+    LOG(INFO) << "[ACTION] Remove hosts accepted by user:" << total;
+    sendHostRequests(hosts, &RouterSession::removeHost, [this](int failed)
+    {
+        return tr("Failed to remove %n of the selected hosts.", "", failed);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::onCheckHostUpdates()
 {
-    const QList<RouterHost> hosts = selectedHosts();
-    if (hosts.size() != 1)
+    const QList<RouterHost> hosts = selectedOnlineHosts();
+    if (hosts.isEmpty())
     {
-        LOG(INFO) << "No single selected host";
+        LOG(INFO) << "No selected online host";
         return;
     }
 
-    const RouterHost& host = hosts.front();
-
-    RouterSession* session = RouterController::session(router_id_);
-    if (!session)
-        return;
-
-    LOG(INFO) << "[ACTION] Check host updates requested by user";
-    session->checkHostUpdates(host.host_id, { this, &RouterHostsWidget::onHostResultReceived });
+    LOG(INFO) << "[ACTION] Check host updates requested by user:" << hosts.size();
+    sendHostRequests(hosts, &RouterSession::checkHostUpdates, [this](int failed)
+    {
+        return tr("Failed to check for updates on %n of the selected hosts.", "", failed);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -608,7 +600,7 @@ void RouterHostsWidget::onWorkspaceListReceived(const RouterWorkspaceList& list)
 void RouterHostsWidget::onHostContextMenu(const QPoint& pos)
 {
     const QModelIndex index = ui->tree_hosts->indexAt(pos);
-    if (index.isValid())
+    if (index.isValid() && !ui->tree_hosts->selectionModel()->isRowSelected(index.row()))
         ui->tree_hosts->setCurrentIndex(index);
 
     const int column = index.column();
@@ -858,6 +850,14 @@ QList<RouterHost> RouterHostsWidget::selectedHosts() const
 }
 
 //--------------------------------------------------------------------------------------------------
+QList<RouterHost> RouterHostsWidget::selectedOnlineHosts() const
+{
+    QList<RouterHost> hosts = selectedHosts();
+    hosts.removeIf([](const RouterHost& host) { return !host.online; });
+    return hosts;
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::saveHostsToFile()
 {
     LOG(INFO) << "[ACTION] Save hosts to file";
@@ -924,5 +924,56 @@ void RouterHostsWidget::saveHostsToFile()
         LOG(INFO) << "Unable to write file:" << file.errorString();
         MsgBox::warning(this, tr("Unable to write file."));
         return;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterHostsWidget::sendHostRequests(const QList<RouterHost>& hosts, HostRequest request,
+                                         const std::function<QString(int)>& error_text)
+{
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
+        return;
+
+    struct Batch
+    {
+        int pending = 0;
+        int failed = 0;
+        std::string error_code;
+    };
+
+    const int total = static_cast<int>(hosts.size());
+
+    SharedPointer<Batch> batch(new Batch());
+    batch->pending = total;
+
+    for (const RouterHost& host : hosts)
+    {
+        const HostId host_id = host.host_id;
+
+        (session->*request)(host_id, { this,
+            [this, batch, total, error_text, host_id](const proto::router::HostResult& result)
+        {
+            if (result.error_code() != proto::router::kErrorOk)
+            {
+                LOG(ERROR) << "Request" << result.command_name() << "for host" << host_id
+                           << "failed:" << result.error_code();
+                ++batch->failed;
+                batch->error_code = result.error_code();
+            }
+
+            if (--batch->pending > 0)
+                return;
+
+            if (batch->failed > 0)
+            {
+                if (total == 1)
+                    MsgBox::warning(this, routerErrorText(batch->error_code));
+                else
+                    MsgBox::warning(this, error_text(batch->failed));
+            }
+
+            fetchHosts();
+        }});
     }
 }
