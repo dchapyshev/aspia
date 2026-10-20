@@ -271,7 +271,6 @@ ManagementTab::ManagementTab(QWidget* parent)
     connect(ui->action_export_book, &QAction::triggered, this, &ManagementTab::onExportBookAction);
     connect(ui->action_import_book, &QAction::triggered, this, &ManagementTab::onImportBookAction);
     connect(ui->action_disconnect, &QAction::triggered, this, &ManagementTab::onDisconnectAction);
-    connect(ui->action_disconnect_all, &QAction::triggered, this, &ManagementTab::onDisconnectAllAction);
     connect(ui->action_host_remove, &QAction::triggered, this, &ManagementTab::onRemoveHostAction);
     connect(ui->action_host_approve, &QAction::triggered, this, &ManagementTab::onApproveHostAction);
     connect(ui->action_host_check_updates, &QAction::triggered, this, &ManagementTab::onCheckHostUpdatesAction);
@@ -305,7 +304,7 @@ ManagementTab::ManagementTab(QWidget* parent)
     {
         ui->action_add_host, ui->action_edit_host, ui->action_copy_host, ui->action_delete_host,
         ui->action_host_check_updates, ui->action_host_telemetry, ui->action_host_approve,
-        ui->action_host_remove, ui->action_disconnect, ui->action_disconnect_all
+        ui->action_host_remove, ui->action_disconnect
     });
     addActions(ActionRole::ACTION,
     {
@@ -1303,7 +1302,6 @@ void ManagementTab::onClientContextMenu(const QPoint& pos, int column)
 
     AutoQPointer<QMenu> menu(new QMenu(this));
     menu->addAction(ui->action_disconnect);
-    menu->addAction(ui->action_disconnect_all);
 
     if (count != 1)
     {
@@ -1337,7 +1335,6 @@ void ManagementTab::onRelayContextMenu(const QPoint& pos, int column)
 
     AutoQPointer<QMenu> menu(new QMenu(this));
     menu->addAction(ui->action_disconnect);
-    menu->addAction(ui->action_disconnect_all);
 
     if (count != 1)
     {
@@ -1810,25 +1807,6 @@ void ManagementTab::onDisconnectAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ManagementTab::onDisconnectAllAction()
-{
-    if (current_content_ == router_clients_widget_)
-    {
-        router_clients_widget_->onDisconnectAllClients();
-        return;
-    }
-
-    if (current_content_ == router_relays_widget_)
-    {
-        router_relays_widget_->onDisconnectAllRelays();
-        return;
-    }
-
-    if (current_content_ == router_hosts_widget_)
-        router_hosts_widget_->onDisconnectAllHosts();
-}
-
-//--------------------------------------------------------------------------------------------------
 void ManagementTab::onRemoveHostAction()
 {
     if (current_content_ == router_hosts_widget_)
@@ -2003,7 +1981,6 @@ void ManagementTab::updateActionsState()
     ui->action_reload->setVisible(false);
     ui->action_save->setVisible(false);
     ui->action_disconnect->setVisible(false);
-    ui->action_disconnect_all->setVisible(false);
     ui->action_host_remove->setVisible(false);
     ui->action_host_approve->setVisible(false);
     ui->action_host_check_updates->setVisible(false);
@@ -2082,12 +2059,10 @@ void ManagementTab::updateActionsState()
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_CLIENTS)
     {
         ui->action_disconnect->setVisible(router_clients_widget_->selectedClientCount() > 0);
-        ui->action_disconnect_all->setVisible(router_clients_widget_->clientCount() > 0);
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_RELAYS)
     {
         ui->action_disconnect->setVisible(router_relays_widget_->selectedRelayCount() > 0);
-        ui->action_disconnect_all->setVisible(router_relays_widget_->relayCount() > 0);
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_HOSTS)
     {
@@ -2096,7 +2071,6 @@ void ManagementTab::updateActionsState()
         const bool has_online = !router_hosts_widget_->selectedOnlineHosts().isEmpty();
 
         ui->action_disconnect->setVisible(has_online);
-        ui->action_disconnect_all->setVisible(router_hosts_widget_->hostCount() > 0);
         ui->action_host_remove->setVisible(has_hosts);
         ui->action_edit_host->setVisible(has_host);
 

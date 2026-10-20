@@ -109,7 +109,6 @@ private slots:
     void onReloadAction();
     void onSaveAction();
     void onDisconnectAction();
-    void onDisconnectAllAction();
     void onRemoveHostAction();
     void onApproveHostAction();
     void onCheckHostUpdatesAction();

@@ -125,12 +125,6 @@ int RouterRelaysWidget::selectedRelayCount() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int RouterRelaysWidget::relayCount() const
-{
-    return relay_model_->rowCount();
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::copyCurrentRelayRow()
 {
     const int row = ui->tree_relays->currentIndex().row();
@@ -395,30 +389,6 @@ void RouterRelaysWidget::onDisconnectRelay()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterRelaysWidget::onDisconnectAllRelays()
-{
-    if (relay_model_->rowCount() <= 0)
-    {
-        LOG(INFO) << "Relay list is empty";
-        return;
-    }
-
-    if (MsgBox::question(this,
-            tr("Are you sure you want to disconnect all relays?")) != MsgBox::Yes)
-    {
-        LOG(INFO) << "[ACTION] Disconnect all relays rejected by user";
-        return;
-    }
-
-    RouterSession* session = RouterController::session(router_id_);
-    if (!session)
-        return;
-
-    LOG(INFO) << "[ACTION] Disconnect all relays accepted by user";
-    session->disconnectRelay(-1, { this, &RouterRelaysWidget::onRelayResultReceived });
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::onCurrentRelayChanged()
 {
     updateRelayStatistics();
@@ -563,18 +533,6 @@ void RouterRelaysWidget::onRelayListReceived(const proto::router::RelayList& rel
     selection_model->select(selection, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
 
     updateRelayStatistics();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterRelaysWidget::onRelayResultReceived(const proto::router::RelayResult& result)
-{
-    const std::string& error_code = result.error_code();
-    if (error_code != proto::router::kErrorOk)
-    {
-        MsgBox::warning(this, routerErrorText(error_code));
-    }
-
-    fetchRelays();
 }
 
 //--------------------------------------------------------------------------------------------------

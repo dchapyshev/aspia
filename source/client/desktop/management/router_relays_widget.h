@@ -32,7 +32,6 @@ class RouterRelaysWidget;
 namespace proto::router {
 class PeerResult;
 class RelayList;
-class RelayResult;
 } // namespace proto::router
 
 class RouterRelaysWidget final : public ContentWidget
@@ -46,7 +45,6 @@ public:
     void showRouter(qint64 router_id);
     qint64 routerId() const { return router_id_; }
     int selectedRelayCount() const;
-    int relayCount() const;
 
     void copyCurrentRelayRow();
     void copyCurrentRelayColumn(int column);
@@ -61,7 +59,6 @@ public:
 
 public slots:
     void onDisconnectRelay();
-    void onDisconnectAllRelays();
 
 signals:
     void sig_currentChanged();
@@ -73,7 +70,6 @@ private slots:
     void onPeerContextMenu(const QPoint& pos);
     void onHeaderContextMenu(const QPoint& pos);
     void onRelayListReceived(const proto::router::RelayList& relays);
-    void onRelayResultReceived(const proto::router::RelayResult& result);
     void onPeerResultReceived(const proto::router::PeerResult& result);
 
 private:

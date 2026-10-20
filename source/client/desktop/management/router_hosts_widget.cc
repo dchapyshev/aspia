@@ -251,12 +251,6 @@ HostConfig RouterHostsWidget::selectedHostConfig() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int RouterHostsWidget::hostCount() const
-{
-    return model_->rowCount();
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::copyCurrentHostRow()
 {
     const int row = ui->tree_hosts->currentIndex().row();
@@ -384,30 +378,6 @@ void RouterHostsWidget::onDisconnectHost()
     {
         return tr("Failed to disconnect %n of the selected hosts.", "", failed);
     });
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterHostsWidget::onDisconnectAllHosts()
-{
-    if (model_->rowCount() <= 0)
-    {
-        LOG(INFO) << "Host list is empty";
-        return;
-    }
-
-    if (MsgBox::question(this,
-            tr("Are you sure you want to disconnect all hosts?")) != MsgBox::Yes)
-    {
-        LOG(INFO) << "[ACTION] Disconnect all hosts rejected by user";
-        return;
-    }
-
-    RouterSession* session = RouterController::session(router_id_);
-    if (!session)
-        return;
-
-    LOG(INFO) << "[ACTION] Disconnect all hosts accepted by user";
-    session->disconnectHost(kAllHostsId, { this, &RouterHostsWidget::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -563,18 +533,6 @@ void RouterHostsWidget::onHostListReceived(const RouterHostList& list)
 
     emit sig_currentChanged();
     updateCountLabel();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterHostsWidget::onHostResultReceived(const proto::router::HostResult& result)
-{
-    const std::string& error_code = result.error_code();
-    if (error_code != proto::router::kErrorOk)
-    {
-        MsgBox::warning(this, routerErrorText(error_code));
-    }
-
-    fetchHosts();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -140,12 +140,6 @@ int RouterClientsWidget::selectedClientCount() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int RouterClientsWidget::clientCount() const
-{
-    return model_->rowCount();
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::copyCurrentClientRow()
 {
     const int row = ui->tree_clients->currentIndex().row();
@@ -355,30 +349,6 @@ void RouterClientsWidget::onDisconnectClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterClientsWidget::onDisconnectAllClients()
-{
-    if (model_->rowCount() <= 0)
-    {
-        LOG(INFO) << "Client list is empty";
-        return;
-    }
-
-    if (MsgBox::question(this,
-            tr("Are you sure you want to disconnect all clients?")) != MsgBox::Yes)
-    {
-        LOG(INFO) << "[ACTION] Disconnect all clients rejected by user";
-        return;
-    }
-
-    RouterSession* session = RouterController::session(router_id_);
-    if (!session)
-        return;
-
-    LOG(INFO) << "[ACTION] Disconnect all clients accepted by user";
-    session->disconnectClient(-1, { this, &RouterClientsWidget::onClientResultReceived });
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::onClientListReceived(const proto::router::ClientList& clients)
 {
     if (clients.error_code() != proto::router::kErrorOk)
@@ -419,18 +389,6 @@ void RouterClientsWidget::onClientListReceived(const proto::router::ClientList& 
 
     emit sig_currentChanged();
     updateCountLabel();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterClientsWidget::onClientResultReceived(const proto::router::ClientResult& result)
-{
-    const std::string& error_code = result.error_code();
-    if (error_code != proto::router::kErrorOk)
-    {
-        MsgBox::warning(this, routerErrorText(error_code));
-    }
-
-    fetchClients();
 }
 
 //--------------------------------------------------------------------------------------------------

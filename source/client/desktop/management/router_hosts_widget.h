@@ -59,7 +59,6 @@ public:
     HostConfig selectedHostConfig() const;
     QList<RouterHost> selectedHosts() const;
     QList<RouterHost> selectedOnlineHosts() const;
-    int hostCount() const;
 
     void copyCurrentHostRow();
     void copyCurrentHostColumn(int column);
@@ -75,7 +74,6 @@ public:
 public slots:
     void onModifyHost();
     void onDisconnectHost();
-    void onDisconnectAllHosts();
     void onRemoveHost();
     void onCheckHostUpdates();
     void onHostTelemetry();
@@ -91,7 +89,6 @@ protected:
 
 private slots:
     void onHostListReceived(const RouterHostList& list);
-    void onHostResultReceived(const proto::router::HostResult& result);
     void onWorkspaceListReceived(const RouterWorkspaceList& list);
     void onHostContextMenu(const QPoint& pos);
     void onHeaderContextMenu(const QPoint& pos);

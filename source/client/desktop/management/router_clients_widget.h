@@ -31,7 +31,6 @@ class RouterClientsWidget;
 
 namespace proto::router {
 class ClientList;
-class ClientResult;
 } // namespace proto::router
 
 class RouterClientsWidget final : public ContentWidget
@@ -45,7 +44,6 @@ public:
     void showRouter(qint64 router_id);
     qint64 routerId() const { return router_id_; }
     int selectedClientCount() const;
-    int clientCount() const;
 
     void copyCurrentClientRow();
     void copyCurrentClientColumn(int column);
@@ -60,7 +58,6 @@ public:
 
 public slots:
     void onDisconnectClient();
-    void onDisconnectAllClients();
 
 signals:
     void sig_currentChanged();
@@ -68,7 +65,6 @@ signals:
 
 private slots:
     void onClientListReceived(const proto::router::ClientList& clients);
-    void onClientResultReceived(const proto::router::ClientResult& result);
     void onClientContextMenu(const QPoint& pos);
     void onHeaderContextMenu(const QPoint& pos);
     void onPageSizeChanged(int index);
