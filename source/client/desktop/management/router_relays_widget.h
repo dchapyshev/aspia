@@ -45,7 +45,7 @@ public:
 
     void showRouter(qint64 router_id);
     qint64 routerId() const { return router_id_; }
-    bool hasSelectedRelay() const;
+    int selectedRelayCount() const;
     int relayCount() const;
 
     void copyCurrentRelayRow();
@@ -83,6 +83,7 @@ private:
     // The relay and the pair of peers of the rows the user is on, or null when the lists are empty.
     const proto::router::RelayInfo* currentRelay() const;
     const proto::router::Peer* currentPeer() const;
+    QList<proto::router::RelayInfo> selectedRelays() const;
 
     std::unique_ptr<Ui::RouterRelaysWidget> ui;
     RelayListModel* relay_model_ = nullptr;

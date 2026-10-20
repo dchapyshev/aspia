@@ -1297,12 +1297,20 @@ void ManagementTab::onTempHostContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onClientContextMenu(const QPoint& pos, int column)
 {
-    if (!router_clients_widget_->hasSelectedClient())
+    const int count = router_clients_widget_->selectedClientCount();
+    if (count == 0)
         return;
 
     AutoQPointer<QMenu> menu(new QMenu(this));
     menu->addAction(ui->action_disconnect);
     menu->addAction(ui->action_disconnect_all);
+
+    if (count != 1)
+    {
+        menu->exec(pos);
+        return;
+    }
+
     menu->addSeparator();
 
     const QIcon copy_icon(":/img/copy.svg");
@@ -1323,12 +1331,20 @@ void ManagementTab::onClientContextMenu(const QPoint& pos, int column)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onRelayContextMenu(const QPoint& pos, int column)
 {
-    if (!router_relays_widget_->hasSelectedRelay())
+    const int count = router_relays_widget_->selectedRelayCount();
+    if (count == 0)
         return;
 
     AutoQPointer<QMenu> menu(new QMenu(this));
     menu->addAction(ui->action_disconnect);
     menu->addAction(ui->action_disconnect_all);
+
+    if (count != 1)
+    {
+        menu->exec(pos);
+        return;
+    }
+
     menu->addSeparator();
 
     const QIcon copy_icon(":/img/copy.svg");
@@ -2065,12 +2081,12 @@ void ManagementTab::updateActionsState()
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_CLIENTS)
     {
-        ui->action_disconnect->setVisible(router_clients_widget_->hasSelectedClient());
+        ui->action_disconnect->setVisible(router_clients_widget_->selectedClientCount() > 0);
         ui->action_disconnect_all->setVisible(router_clients_widget_->clientCount() > 0);
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_RELAYS)
     {
-        ui->action_disconnect->setVisible(router_relays_widget_->hasSelectedRelay());
+        ui->action_disconnect->setVisible(router_relays_widget_->selectedRelayCount() > 0);
         ui->action_disconnect_all->setVisible(router_relays_widget_->relayCount() > 0);
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_HOSTS)

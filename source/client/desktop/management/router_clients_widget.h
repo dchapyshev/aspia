@@ -44,7 +44,7 @@ public:
 
     void showRouter(qint64 router_id);
     qint64 routerId() const { return router_id_; }
-    bool hasSelectedClient() const;
+    int selectedClientCount() const;
     int clientCount() const;
 
     void copyCurrentClientRow();
@@ -81,6 +81,7 @@ private:
     void updatePagination();
     void updateCountLabel();
     const proto::router::ClientInfo* currentClient() const;
+    QList<proto::router::ClientInfo> selectedClients() const;
 
     std::unique_ptr<Ui::RouterClientsWidget> ui;
     qint64 router_id_ = 0;
