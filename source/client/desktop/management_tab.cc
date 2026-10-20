@@ -1998,6 +1998,7 @@ void ManagementTab::updateActionsState()
 
     ui->action_add_host->setVisible(false);
     ui->action_delete_host->setVisible(false);
+    ui->action_delete_host->setText(tr("Delete Host"));
     ui->action_edit_host->setVisible(false);
     ui->action_copy_host->setVisible(false);
 
@@ -2055,6 +2056,8 @@ void ManagementTab::updateActionsState()
 
         ui->action_add_host->setVisible(true);
         ui->action_delete_host->setVisible(count > 0);
+        if (count > 1)
+            ui->action_delete_host->setText(tr("Delete Hosts"));
         ui->action_edit_host->setVisible(has_host);
         ui->action_copy_host->setVisible(has_host);
     }
