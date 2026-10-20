@@ -83,7 +83,7 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     connect(ui->tree_host, &QWidget::customContextMenuRequested, this, [this](const QPoint& pos)
     {
         const QModelIndex index = ui->tree_host->indexAt(pos);
-        if (index.isValid())
+        if (index.isValid() && !ui->tree_host->selectionModel()->isRowSelected(index.row()))
             ui->tree_host->setCurrentIndex(index);
 
         const LocalHostConfig* host = model_->hostAt(index.row());

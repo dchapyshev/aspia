@@ -920,7 +920,11 @@ void ManagementTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
 {
     AutoQPointer<QMenu> menu(new QMenu(this));
 
-    if (entry_id)
+    if (entry_id && local_group_widget_->selectedHosts().size() > 1)
+    {
+        menu->addAction(ui->action_delete_host);
+    }
+    else if (entry_id)
     {
         auto addProxy = [&menu](QAction* action)
         {
@@ -1137,22 +1141,41 @@ void ManagementTab::onRemoveHost()
 {
     LOG(INFO) << "[ACTION] Delete host";
 
-    qint64 entry_id = currentHostEntryId();
-    if (entry_id <= 0)
+    QList<LocalHostConfig> hosts;
+    if (current_content_ == local_group_widget_)
     {
-        LOG(INFO) << "No current host";
+        hosts = local_group_widget_->selectedHosts();
+    }
+    else
+    {
+        const qint64 entry_id = currentHostEntryId();
+        if (entry_id > 0)
+        {
+            LocalHostConfig host;
+            const Database::FindResult host_found = Database::instance().findLocalHost(entry_id, &host);
+            if (host_found == Database::FindResult::NOT_FOUND || host_found == Database::FindResult::FAILED)
+            {
+                MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
+                return;
+            }
+
+            hosts.append(host);
+        }
+    }
+
+    if (hosts.isEmpty())
+    {
+        LOG(INFO) << "No selected host";
         return;
     }
 
-    LocalHostConfig host;
-    const Database::FindResult host_found = Database::instance().findLocalHost(entry_id, &host);
-    if (host_found == Database::FindResult::NOT_FOUND || host_found == Database::FindResult::FAILED)
-    {
-        MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
-        return;
-    }
+    const int total = static_cast<int>(hosts.size());
 
-    QString message = tr("Are you sure you want to delete host \"%1\"?").arg(host.name());
+    QString message;
+    if (total == 1)
+        message = tr("Are you sure you want to delete host \"%1\"?").arg(hosts.front().name());
+    else
+        message = tr("Are you sure you want to delete %n hosts?", "", total);
 
     if (MsgBox::question(this, message) == MsgBox::No)
     {
@@ -1160,14 +1183,27 @@ void ManagementTab::onRemoveHost()
         return;
     }
 
-    if (!Database::instance().removeLocalHost(entry_id))
+    int failed = 0;
+    for (const LocalHostConfig& host : std::as_const(hosts))
     {
-        MsgBox::warning(this, tr("Unable to remove host"));
-        LOG(INFO) << "Unable to remove host with id" << entry_id;
-        return;
+        if (Database::instance().removeLocalHost(host.id()))
+        {
+            removeItem(host.id());
+        }
+        else
+        {
+            LOG(INFO) << "Unable to remove host with id" << host.id();
+            ++failed;
+        }
     }
 
-    removeItem(entry_id);
+    if (failed == 0)
+        return;
+
+    if (total == 1)
+        MsgBox::warning(this, tr("Unable to remove host"));
+    else
+        MsgBox::warning(this, tr("Failed to delete %n of the selected hosts.", "", failed));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2014,10 +2050,11 @@ void ManagementTab::updateActionsState()
         ui->action_delete_group->setVisible(sidebar_item->groupId() != 0);
         ui->action_edit_group->setVisible(sidebar_item->groupId() != 0);
 
-        const bool has_host = local_group_widget_->selectedHosts().size() == 1;
+        const qsizetype count = local_group_widget_->selectedHosts().size();
+        const bool has_host = count == 1;
 
         ui->action_add_host->setVisible(true);
-        ui->action_delete_host->setVisible(has_host);
+        ui->action_delete_host->setVisible(count > 0);
         ui->action_edit_host->setVisible(has_host);
         ui->action_copy_host->setVisible(has_host);
     }
