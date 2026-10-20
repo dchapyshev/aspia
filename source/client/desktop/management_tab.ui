@@ -323,7 +323,7 @@
   <action name="action_disconnect">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/disconnect-one.svg</normaloff>:/img/disconnect-one.svg</iconset>
+     <normaloff>:/img/disconnect.svg</normaloff>:/img/disconnect.svg</iconset>
    </property>
    <property name="text">
     <string>Disconnect</string>
