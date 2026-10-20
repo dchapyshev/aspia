@@ -4787,7 +4787,7 @@ Credentials imported: %5</source>
     <name>MainWindow</name>
     <message>
         <location filename="../client/desktop/main_window.ui" line="121"/>
-        <location filename="../client/desktop/main_window.ui" line="217"/>
+        <location filename="../client/desktop/main_window.ui" line="216"/>
         <source>Tool Bar</source>
         <translation>工具列</translation>
     </message>
@@ -4802,12 +4802,12 @@ Credentials imported: %5</source>
         <translation>檢視</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="209"/>
+        <location filename="../client/desktop/main_window.ui" line="208"/>
         <source>Exit</source>
         <translation>離開</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="143"/>
+        <location filename="../client/desktop/main_window.ui" line="142"/>
         <source>Online Help...</source>
         <translation>線上說明...</translation>
     </message>
@@ -4833,47 +4833,47 @@ Credentials imported: %5</source>
         <translation>工作階段類型</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="161"/>
+        <location filename="../client/desktop/main_window.ui" line="160"/>
         <source>Quick Connect...</source>
         <translation>快速連線...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="170"/>
+        <location filename="../client/desktop/main_window.ui" line="169"/>
         <source>Credentials...</source>
         <translation>認證...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="191"/>
+        <location filename="../client/desktop/main_window.ui" line="190"/>
         <source>MCP Connector</source>
         <translation>MCP 連接器</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="200"/>
+        <location filename="../client/desktop/main_window.ui" line="199"/>
         <source>Lock</source>
         <translation>鎖定</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="225"/>
+        <location filename="../client/desktop/main_window.ui" line="224"/>
         <source>Search Field</source>
         <translation>搜尋欄位</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="233"/>
+        <location filename="../client/desktop/main_window.ui" line="232"/>
         <source>Large icons</source>
         <translation>大圖示</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="241"/>
+        <location filename="../client/desktop/main_window.ui" line="240"/>
         <source>Open Sessions in Tabs</source>
         <translation>在索引標籤中開啟工作階段</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="249"/>
+        <location filename="../client/desktop/main_window.ui" line="248"/>
         <source>Always on Top</source>
         <translation>總在最上層</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="152"/>
+        <location filename="../client/desktop/main_window.ui" line="151"/>
         <source>About</source>
         <translation>關於</translation>
     </message>
@@ -4883,7 +4883,7 @@ Credentials imported: %5</source>
         <translation>動作</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="179"/>
+        <location filename="../client/desktop/main_window.ui" line="178"/>
         <source>Settings...</source>
         <translation>設定...</translation>
     </message>
@@ -5171,7 +5171,7 @@ Credentials imported: %5</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1078"/>
         <location filename="../client/desktop/management_tab.cc" line="1152"/>
-        <location filename="../client/desktop/management_tab.cc" line="2245"/>
+        <location filename="../client/desktop/management_tab.cc" line="2256"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>無法從本機資料庫取得主機資訊。</translation>
     </message>
@@ -5196,104 +5196,104 @@ Credentials imported: %5</source>
         <translation>無法移除主機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1229"/>
-        <location filename="../client/desktop/management_tab.cc" line="1299"/>
-        <location filename="../client/desktop/management_tab.cc" line="1325"/>
+        <location filename="../client/desktop/management_tab.cc" line="1239"/>
+        <location filename="../client/desktop/management_tab.cc" line="1309"/>
+        <location filename="../client/desktop/management_tab.cc" line="1335"/>
         <source>Copy Row</source>
         <translation>複製列</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1230"/>
-        <location filename="../client/desktop/management_tab.cc" line="1300"/>
-        <location filename="../client/desktop/management_tab.cc" line="1326"/>
+        <location filename="../client/desktop/management_tab.cc" line="1240"/>
+        <location filename="../client/desktop/management_tab.cc" line="1310"/>
+        <location filename="../client/desktop/management_tab.cc" line="1336"/>
         <source>Copy Value</source>
         <translation>複製值</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1567"/>
+        <location filename="../client/desktop/management_tab.cc" line="1577"/>
         <source>Failed to delete the group.</source>
         <translation>無法刪除群組。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1606"/>
-        <location filename="../client/desktop/management_tab.cc" line="1663"/>
+        <location filename="../client/desktop/management_tab.cc" line="1616"/>
+        <location filename="../client/desktop/management_tab.cc" line="1673"/>
         <source>The database is not available.</source>
         <translation>資料庫無法使用。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1612"/>
+        <location filename="../client/desktop/management_tab.cc" line="1622"/>
         <source>Create Backup</source>
         <translation>建立備份</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1629"/>
+        <location filename="../client/desktop/management_tab.cc" line="1639"/>
         <source>There is nothing to save.</source>
         <translation>沒有可儲存的內容。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2240"/>
+        <location filename="../client/desktop/management_tab.cc" line="2251"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>主機的資料已損壞。請編輯主機並重新輸入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2261"/>
+        <location filename="../client/desktop/management_tab.cc" line="2272"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>路由器的資料已損壞。請編輯路由器並重新輸入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1641"/>
+        <location filename="../client/desktop/management_tab.cc" line="1651"/>
         <source>Failed to create the backup.</source>
         <translation>無法建立備份。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1669"/>
-        <location filename="../client/desktop/management_tab.cc" line="1695"/>
+        <location filename="../client/desktop/management_tab.cc" line="1679"/>
+        <location filename="../client/desktop/management_tab.cc" line="1705"/>
         <source>Restore from Backup</source>
         <translation>從備份還原</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1678"/>
+        <location filename="../client/desktop/management_tab.cc" line="1688"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>目前儲存的所有內容都將被刪除，並以備份中的內容取代。要繼續嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1697"/>
+        <location filename="../client/desktop/management_tab.cc" line="1707"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>此備份是在另一個安裝上建立的。請輸入該處使用的主密碼。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1722"/>
+        <location filename="../client/desktop/management_tab.cc" line="1732"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>備份中沒有資料，因此未做任何變更。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1730"/>
+        <location filename="../client/desktop/management_tab.cc" line="1740"/>
         <source>The file is not a valid backup.</source>
         <translation>此檔案不是有效的備份。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1734"/>
+        <location filename="../client/desktop/management_tab.cc" line="1744"/>
         <source>Failed to restore from the backup.</source>
         <translation>無法從備份還原。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1613"/>
-        <location filename="../client/desktop/management_tab.cc" line="1670"/>
+        <location filename="../client/desktop/management_tab.cc" line="1623"/>
+        <location filename="../client/desktop/management_tab.cc" line="1680"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia 備份 (*.aspia-backup);;所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1633"/>
+        <location filename="../client/desktop/management_tab.cc" line="1643"/>
         <source>Unable to write the file.</source>
         <translation>無法寫入檔案。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1726"/>
+        <location filename="../client/desktop/management_tab.cc" line="1736"/>
         <source>Unable to read the file.</source>
         <translation>無法讀取檔案。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1646"/>
+        <location filename="../client/desktop/management_tab.cc" line="1656"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5308,37 +5308,37 @@ Credentials exported: %5</source>
 已匯出認證：%5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1427"/>
+        <location filename="../client/desktop/management_tab.cc" line="1437"/>
         <source>Are you sure you want to delete space &quot;%1&quot;?</source>
         <translation>確定要刪除空間「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1447"/>
+        <location filename="../client/desktop/management_tab.cc" line="1457"/>
         <source>Failed to delete the space.</source>
         <translation>無法刪除空間。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1549"/>
+        <location filename="../client/desktop/management_tab.cc" line="1559"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the space root.</source>
         <translation>確定要刪除群組「%1」嗎？指派給此群組或其子群組的主機將被移至空間根目錄。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1637"/>
+        <location filename="../client/desktop/management_tab.cc" line="1647"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>資料庫中有部分記錄已損壞。請修復或刪除這些記錄後再試一次。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1714"/>
+        <location filename="../client/desktop/management_tab.cc" line="1724"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>無法使用指定的密碼解密檔案。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1718"/>
+        <location filename="../client/desktop/management_tab.cc" line="1728"/>
         <source>Unsupported file format version.</source>
         <translation>不支援的檔案格式版本。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1739"/>
+        <location filename="../client/desktop/management_tab.cc" line="1749"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5353,29 +5353,29 @@ Credentials imported: %5</source>
 已匯入認證：%5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2168"/>
-        <location filename="../client/desktop/management_tab.cc" line="2199"/>
+        <location filename="../client/desktop/management_tab.cc" line="2179"/>
+        <location filename="../client/desktop/management_tab.cc" line="2210"/>
         <source>Copy Link</source>
         <translation>複製連結</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2187"/>
-        <location filename="../client/desktop/management_tab.cc" line="2221"/>
+        <location filename="../client/desktop/management_tab.cc" line="2198"/>
+        <location filename="../client/desktop/management_tab.cc" line="2232"/>
         <source>Unable to create a link for this host.</source>
         <translation>無法為此主機建立連結。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2262"/>
+        <location filename="../client/desktop/management_tab.cc" line="2273"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>與此主機關聯的路由器已被刪除。請編輯主機以選擇其他路由器，或改用直接連線。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2269"/>
+        <location filename="../client/desktop/management_tab.cc" line="2280"/>
         <source>The host has an invalid host ID.</source>
         <translation>主機的 ID 無效。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2278"/>
+        <location filename="../client/desktop/management_tab.cc" line="2289"/>
         <source>The host has an incorrect address.</source>
         <translation>主機的位址不正確。</translation>
     </message>
@@ -6914,54 +6914,89 @@ Credentials imported: %5</source>
         <translation>每頁項目數：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="145"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
         <source>All spaces</source>
         <translation>所有空間</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="146"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
         <source>Not in any space</source>
         <translation>不屬於任何空間</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="372"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>確定要中斷主機「%1」的連線嗎？</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="374"/>
+        <source>Are you sure you want to disconnect %n hosts?</source>
+        <translation>
+            <numerusform>確定要中斷 %n 個主機的連線嗎？</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="385"/>
+        <source>Failed to disconnect %n of the selected hosts.</source>
+        <translation>
+            <numerusform>無法中斷所選主機中 %n 個的連線。</numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="394"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="399"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>確定要中斷所有主機的連線嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="422"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="425"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>刪除主機將會刪除其連線到路由器的所有設定，且主機上的應用程式將被解除安裝。此操作無法復原。確定要繼續嗎？</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="802"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="430"/>
+        <source>%n hosts will be deleted.</source>
+        <translation>
+            <numerusform>將刪除 %n 個主機。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="441"/>
+        <source>Failed to remove %n of the selected hosts.</source>
+        <translation>
+            <numerusform>無法刪除所選主機中的 %n 個。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="458"/>
+        <source>Failed to check for updates on %n of the selected hosts.</source>
+        <translation>
+            <numerusform>無法為所選主機中的 %n 個檢查更新。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="803"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n 個主機</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="858"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="867"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="858"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="867"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 檔案 (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="869"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="878"/>
         <source>Could not open file for writing.</source>
         <translation>無法開啟檔案進行寫入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="916"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="925"/>
         <source>Unable to write file.</source>
         <translation>無法寫入檔案。</translation>
     </message>
@@ -7386,32 +7421,32 @@ Credentials imported: %5</source>
         <translation>存取</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="182"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="194"/>
         <source>Users with access</source>
         <translation>具有存取權的使用者</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="282"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="300"/>
         <source>Move the selected host into the space</source>
         <translation>將所選主機移入空間</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="295"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="313"/>
         <source>Remove the selected host from the space</source>
         <translation>從空間移除所選主機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="319"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="343"/>
         <source>Hosts in space</source>
         <translation>空間中的主機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="145"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="151"/>
         <source>Grant access to the selected user</source>
         <translation>授予所選使用者存取權</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="158"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="164"/>
         <source>Revoke access from the selected user</source>
         <translation>撤銷所選使用者的存取權</translation>
     </message>
@@ -7426,26 +7461,26 @@ Credentials imported: %5</source>
         <translation>空間內容</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="88"/>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="225"/>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="341"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="84"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="233"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="361"/>
         <source>Previous page</source>
         <translation>上一頁</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="112"/>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="249"/>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="365"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="108"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="257"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="385"/>
         <source>Next page</source>
         <translation>下一頁</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="195"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="207"/>
         <source>Hosts</source>
         <translation>主機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="203"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="215"/>
         <source>Unassigned hosts</source>
         <translation>未指派的主機</translation>
     </message>
