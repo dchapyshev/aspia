@@ -95,9 +95,26 @@ void OnlineCheckerDirect::Instance::start()
                << "(host:" << host_.id() << ")";
 
     ClientAuthenticator* authenticator = new ClientAuthenticator();
-    authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
-    authenticator->setUserName(host_.username());
-    authenticator->setPassword(SecureString(host_.password()));
+
+    // Operating system / domain accounts, and hosts without credentials (nothing to check SRP
+    // with: the attempt could only fail and showed the host offline), are probed without any
+    // credentials. A probe must never make the host check a password in the domain (failed
+    // attempts lock the account out), so no key is pinned here: the host answers with its
+    // identity key, the handshake stops before any credentials are sent and HOST_KEY_UNTRUSTED
+    // means that the host is online.
+    const bool no_credentials = host_.username().isEmpty() || host_.password().isEmpty();
+    if (host_.isOsAccount() || no_credentials)
+    {
+        authenticator->setIdentify(proto::key_exchange::IDENTIFY_PASSWORD);
+        authenticator->setUserName(QString());
+        authenticator->setPassword(SecureString());
+    }
+    else
+    {
+        authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
+        authenticator->setUserName(host_.username());
+        authenticator->setPassword(SecureString(host_.password()));
+    }
     authenticator->setSessionType(proto::peer::SESSION_TYPE_DESKTOP);
     authenticator->setProbe(true);
 
@@ -117,8 +134,31 @@ void OnlineCheckerDirect::Instance::onTcpAuthenticated()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::Instance::onTcpErrorOccurred(TcpChannel::ErrorCode /* error_code */)
+void OnlineCheckerDirect::Instance::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 {
+    if (error_code == TcpChannel::ErrorCode::HOST_KEY_UNTRUSTED)
+    {
+        LOG(TRACE) << "Host answered with its identity key (host:" << host_.id() << ")";
+        onFinished(FROM_HERE, OnlineStatus::ONLINE);
+        return;
+    }
+
+    switch (error_code)
+    {
+        // The host answered at the protocol level: it is running and reachable, it only did not
+        // let this probe in (for example, domain accounts are disabled or the saved Aspia
+        // credentials are out of date). Showing such a host offline was misleading.
+        case TcpChannel::ErrorCode::ACCESS_DENIED:
+        case TcpChannel::ErrorCode::SESSION_DENIED:
+        case TcpChannel::ErrorCode::VERSION_ERROR:
+            LOG(TRACE) << "Host answered with error" << static_cast<int>(error_code) << "(host:" << host_.id() << ")";
+            onFinished(FROM_HERE, OnlineStatus::ONLINE);
+            return;
+
+        default:
+            break;
+    }
+
     LOG(TRACE) << "Connection aborted for host:" << host_.id();
     onFinished(FROM_HERE, OnlineStatus::OFFLINE);
 }

@@ -19,11 +19,19 @@
 #ifndef BASE_PEER_SERVER_AUTHENTICATOR_H
 #define BASE_PEER_SERVER_AUTHENTICATOR_H
 
+#include <QElapsedTimer>
+
+#include <atomic>
+#include <memory>
+
 #include "base/shared_pointer.h"
 #include "base/crypto/big_num.h"
 #include "base/crypto/key_pair.h"
 #include "base/peer/authenticator.h"
+#include "base/peer/domain_authenticator.h"
 #include "base/peer/user_list.h"
+
+class DomainAuthLimiter;
 
 class ServerAuthenticator final : public Authenticator
 {
@@ -51,6 +59,15 @@ public:
     // By default, anonymous access is disabled.
     [[nodiscard]] bool setAnonymousAccess(AnonymousAccess anonymous_access, quint32 session_types);
 
+    // Address of the client ("192.0.2.1", "2001:db8::1"). Used to limit failed operating system /
+    // domain logons per source and passed to the operating system for its logs and policies.
+    void setPeerAddress(const QString& address);
+
+    // Persistent identity key of the host, used only by IDENTIFY_PASSWORD (the client pins its
+    // public key). It is separate from the key of setPrivateKey(), which serves anonymous access
+    // and the router; the identity key never enables or signs anything else.
+    [[nodiscard]] bool setIdentityKey(const SecureByteArray& private_key);
+
 protected:
     // Authenticator implementation.
     [[nodiscard]] bool onStarted() final;
@@ -61,17 +78,34 @@ private:
     void onClientHello(const QByteArray& buffer);
     void onIdentify(const QByteArray& buffer);
     void onClientKeyExchange(const QByteArray& buffer);
+    void onPasswordCredentials(const QByteArray& buffer);
+    void onDomainAuthFinished(const DomainAuthenticator::Result& result);
+    void finishDomainAuthFailure();
+    void finishMalformedCredentials(const char* reason);
+    void cancelDomainLogon();
     void doSessionChallenge();
     void onSessionResponse(const QByteArray& buffer);
     [[nodiscard]] QByteArray createSrpKey();
 
     SharedPointer<UserList> user_list_;
+    std::shared_ptr<const DomainAuthenticator> domain_authenticator_;
+    std::shared_ptr<DomainAuthLimiter> domain_auth_limiter_;
+
+    // Set when the handshake ends, so that a logon still waiting in the queue is skipped.
+    std::shared_ptr<std::atomic_bool> logon_cancel_;
+
+    QString peer_address_;
+
+    // Started when PasswordCredentials is received. Failures are answered at a fixed time after it.
+    QElapsedTimer credentials_timer_;
 
     enum class InternalState
     {
         READ_CLIENT_HELLO,
         READ_IDENTIFY,
         READ_CLIENT_KEY_EXCHANGE,
+        READ_PASSWORD_CREDENTIALS,
+        WAIT_DOMAIN_AUTH,
         READ_SESSION_RESPONSE
     };
 
@@ -82,6 +116,7 @@ private:
     quint32 session_types_ = 0;
 
     KeyPair key_pair_;
+    KeyPair identity_key_pair_;
 
     BigNum N_;
     BigNum g_;

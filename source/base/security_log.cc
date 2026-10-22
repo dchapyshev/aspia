@@ -73,6 +73,15 @@ QString ensureLogDirectory()
         return QString();
     }
 
+#if defined(Q_OS_UNIX)
+    // Only the service reads and writes the security log.
+    if (!QFile::setPermissions(path, QFileDevice::ReadOwner | QFileDevice::WriteOwner |
+                                     QFileDevice::ExeOwner))
+    {
+        LOG(WARNING) << "Unable to restrict permissions of" << path;
+    }
+#endif
+
     removeOldFiles(path);
     dir_path = path;
 
@@ -122,6 +131,13 @@ void openFileIfNeeded()
                    << "error:" << g_writer_file.errorString();
         return;
     }
+
+#if defined(Q_OS_UNIX)
+    // A new weekly file would otherwise get the umask permissions (0644). The directory is 0700,
+    // but the file itself must not be readable by others either (names, addresses, reasons).
+    if (!g_writer_file.setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner))
+        LOG(WARNING) << "Unable to restrict permissions of" << file_path;
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------

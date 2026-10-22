@@ -50,6 +50,9 @@ public:
     void setPrivateKey(const SecureByteArray& private_key);
     const SecureByteArray& privateKey() const { return private_key_; }
 
+    // Identity key for operating system / domain accounts (IDENTIFY_PASSWORD only).
+    void setIdentityKey(const SecureByteArray& identity_key) { identity_key_ = identity_key; }
+
     void setAnonymousAccess(
         ServerAuthenticator::AnonymousAccess anonymous_access, quint32 session_types);
 
@@ -95,6 +98,7 @@ private:
 
     SharedPointer<UserList> user_list_;
     SecureByteArray private_key_;
+    SecureByteArray identity_key_;
 
     ServerAuthenticator::AnonymousAccess anonymous_access_ =
         ServerAuthenticator::AnonymousAccess::DISABLE;

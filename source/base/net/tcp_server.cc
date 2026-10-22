@@ -284,6 +284,17 @@ void TcpServer::doAccept()
             ScopedQPointer<ServerAuthenticator> authenticator(new ServerAuthenticator());
             authenticator->setUserList(user_list_);
 
+            {
+                // Failed operating system / domain logons are limited per source address.
+                std::error_code endpoint_error;
+                const asio::ip::tcp::endpoint endpoint = socket.remote_endpoint(endpoint_error);
+                if (!endpoint_error)
+                    authenticator->setPeerAddress(QString::fromStdString(endpoint.address().to_string()));
+            }
+
+            if (!identity_key_.isEmpty() && !authenticator->setIdentityKey(identity_key_))
+                LOG(ERROR) << "Failed to set identity key for authenticator";
+
             if (!private_key_.isEmpty())
             {
                 if (!authenticator->setPrivateKey(private_key_))

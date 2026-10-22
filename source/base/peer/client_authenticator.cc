@@ -26,9 +26,13 @@
 #include "base/sys_info.h"
 #include "base/version_constants.h"
 #include "base/crypto/key_pair.h"
+#include "base/crypto/secure_memory.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/crypto/srp_math.h"
+#include "base/peer/domain_authenticator.h"
+#include "base/peer/host_key.h"
+#include "base/peer/user.h"
 #include "proto/key_exchange.h"
 
 namespace {
@@ -134,6 +138,13 @@ void ClientAuthenticator::setProbe(bool probe)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientAuthenticator::setPinnedHostKey(const QByteArray& public_key)
+{
+    CLOG(TRACE) << "Pinned host key assigned:" << public_key.size();
+    pinned_host_key_ = public_key;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::onStarted()
 {
     sendClientHello();
@@ -153,6 +164,8 @@ void ClientAuthenticator::onReceived(const QByteArray& buffer)
                     internal_state_ = InternalState::READ_SESSION_CHALLENGE;
                 else if (identify_ == proto::key_exchange::IDENTIFY_SRP)
                     sendIdentify();
+                else if (identify_ == proto::key_exchange::IDENTIFY_PASSWORD)
+                    sendPasswordCredentials();
                 else
                     finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             }
@@ -193,6 +206,7 @@ void ClientAuthenticator::sendClientHello()
     {
         case proto::key_exchange::IDENTIFY_ANONYMOUS:
         case proto::key_exchange::IDENTIFY_SRP:
+        case proto::key_exchange::IDENTIFY_PASSWORD:
             break;
 
         default:
@@ -207,9 +221,10 @@ void ClientAuthenticator::sendClientHello()
         return;
     }
 
-    // SRP uses ephemeral X25519 derived during the handshake itself - there is no out-of-band
-    // peer public key.
-    if (identify_ == proto::key_exchange::IDENTIFY_SRP && !peer_public_key_.isEmpty())
+    // SRP and PASSWORD use ephemeral X25519 derived during the handshake itself - there is no
+    // out-of-band peer public key (PASSWORD checks the host key against the pinned one instead).
+    if ((identify_ == proto::key_exchange::IDENTIFY_SRP ||
+         identify_ == proto::key_exchange::IDENTIFY_PASSWORD) && !peer_public_key_.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
         return;
@@ -323,13 +338,38 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
     // server's public key.
     const QByteArray server_public_key = QByteArray::fromStdString(server_hello.public_key());
 
-    const bool is_srp = (identify_ == proto::key_exchange::IDENTIFY_SRP);
+    const bool is_password = (identify_ == proto::key_exchange::IDENTIFY_PASSWORD);
+    const bool is_srp = (identify_ == proto::key_exchange::IDENTIFY_SRP) || is_password;
 
-    // Public key is required for SRP.
+    // Public key is required for SRP and PASSWORD.
     if (is_srp == server_public_key.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
+    }
+
+    if (is_password)
+    {
+        host_key_ = QByteArray::fromStdString(server_hello.host_public_key());
+        if (host_key_.size() != HostKey::kPublicKeySize)
+        {
+            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+            return false;
+        }
+
+        // Trust on first use: the password goes only to a host whose key the user has confirmed.
+        // An unknown or changed key stops the handshake before any credentials are sent.
+        if (pinned_host_key_ != host_key_)
+        {
+            const bool key_changed = !pinned_host_key_.isEmpty();
+
+            CLOG(ERROR) << "Host key is not trusted (changed:" << key_changed << "fingerprint:"
+                        << HostKey::fingerprint(host_key_) << ")";
+
+            emit sig_hostKeyUntrusted(host_key_, key_changed);
+            finish(FROM_HERE, ErrorCode::HOST_KEY_UNTRUSTED);
+            return false;
+        }
     }
 
     if (is_srp)
@@ -350,6 +390,22 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
         }
 
         appendTranscript(x25519_secret.toByteArray());
+
+        if (is_password)
+        {
+            // PASSWORD: also bind the session key to the persistent key of the host.
+            // Order: ClientHello || x25519_secret || static_secret || ServerHello.
+            appendTranscript(QByteArray(kPasswordModeLabel));
+
+            SecureByteArray static_secret(key_pair_.sessionKey(host_key_));
+            if (static_secret.isEmpty())
+            {
+                finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+                return false;
+            }
+
+            appendTranscript(static_secret.toByteArray());
+        }
 
         // No further use of the keypair.
         key_pair_ = KeyPair();
@@ -392,6 +448,57 @@ void ClientAuthenticator::sendIdentify()
 
     emit sig_outgoingMessage(message, true);
     internal_state_ = InternalState::READ_SERVER_KEY_EXCHANGE;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientAuthenticator::sendPasswordCredentials()
+{
+    // readServerHello() has verified the host key and installed the session key bound to it, so
+    // the message below is readable only by the owner of the pinned key.
+    if (username_.isEmpty() || password_.isEmpty() || host_key_.isEmpty())
+    {
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
+    }
+
+    // A NUL character would be refused by the host (and cut the password short in the operating
+    // system), so it is not sent at all.
+    if (!User::isValidDomainUserName(username_) || password_.toString().contains(QChar(char16_t(0))))
+    {
+        finish(FROM_HERE, ErrorCode::ACCESS_DENIED);
+        return;
+    }
+
+    QString domain;
+    QString username;
+    DomainAuthenticator::splitAccountName(username_, &domain, &username);
+
+    proto::key_exchange::PasswordCredentials credentials;
+    credentials.set_domain(domain.toStdString());
+    credentials.set_username(username.toStdString());
+
+    {
+        SecureByteArray password_utf8 = password_.toUtf8();
+        credentials.set_password(password_utf8.constData(), static_cast<size_t>(password_utf8.size()));
+    }
+
+    QByteArray message = serialize(credentials);
+    memZero(credentials.mutable_password());
+
+    if (message.isEmpty())
+    {
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
+    }
+
+    CLOG(TRACE) << "Sending: PasswordCredentials (" << message.size() << ")";
+    emit sig_outgoingMessage(message, true);
+    credentials_sent_ = true;
+
+    // The channel encrypts the message when it is queued; the plain copy is not needed anymore.
+    memZero(&message);
+
+    internal_state_ = InternalState::READ_SESSION_CHALLENGE;
 }
 
 //--------------------------------------------------------------------------------------------------

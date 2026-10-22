@@ -53,11 +53,28 @@ package proto.key_exchange;
 //    The client selects the session type from the offered by the server and sends the message
 //    |AuthorizationResponse|. Field |session_type| contains the selected session type.
 //
+// Description of method |IDENTIFY_PASSWORD| (operating system / domain account):
+// The host has a persistent X25519 key pair. The client pins the public key of the host on the
+// first connection (trust on first use) and refuses to continue if it changes later.
+// 1. The client sends |ClientHello| with an ephemeral public key.
+// 2. The server generates an ephemeral X25519 key pair and sends |ServerHello| with its ephemeral
+//    public key in |public_key| and its persistent public key in |host_public_key|.
+//    Both peers mix into the transcript: ClientHello || DH(ephemeral, ephemeral) ||
+//    DH(client ephemeral, host persistent) || ServerHello. Only the owner of the persistent private
+//    key can derive the session key, so the server is authenticated by its key.
+// 3. The client compares |host_public_key| with the pinned one. If there is no pinned key or it
+//    differs, the client stops without sending any credentials.
+// 4. Otherwise the client sends |PasswordCredentials| encrypted with the session key derived from
+//    the whole transcript. The server checks the credentials with the operating system (LogonUserW
+//    on Windows, PAM on Linux) and maps the groups of the account to the allowed session types.
+// 5. The server sends |SessionChallenge|, the client answers with |SessionResponse| as usual.
+//
 
 enum Identify
 {
     IDENTIFY_SRP       = 0;
     IDENTIFY_ANONYMOUS = 1;
+    IDENTIFY_PASSWORD  = 2;
 }
 
 enum Encryption
@@ -81,6 +98,7 @@ message ServerHello
     Encryption encryption = 1;
     bytes iv              = 2;
     bytes public_key      = 3;
+    bytes host_public_key = 4; // Only for IDENTIFY_PASSWORD.
 }
 
 // Client to server.
@@ -97,6 +115,14 @@ message SrpServerKeyExchange
     bytes salt      = 3;
     bytes B         = 4;
     bytes iv        = 5;
+}
+
+// Client to server. Only for IDENTIFY_PASSWORD, always encrypted.
+message PasswordCredentials
+{
+    string domain   = 1; // May be empty: the domain is then taken from |username| or the host.
+    string username = 2;
+    bytes password  = 3;
 }
 
 // Client to server.

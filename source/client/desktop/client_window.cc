@@ -22,13 +22,17 @@
 #include <QCursor>
 #include <QEvent>
 #include <QGuiApplication>
+#include <QMessageBox>
 #include <QMoveEvent>
+#include <QPushButton>
 #include <QTimer>
+#include <QVariantMap>
 
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/peer/host_id.h"
+#include "base/peer/host_key.h"
 #include "base/threading/worker.h"
 #include "client/database.h"
 #include "client/router_controller.h"
@@ -65,14 +69,16 @@ bool canSaveCredentials(const HostConfig& host)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<std::pair<QString, SecureString>> storedCredentials(const HostConfig& host)
+std::optional<std::pair<QString, SecureString>> storedCredentials(
+    const HostConfig& host, bool* os_account)
 {
+    *os_account = false;
     if (!canSaveCredentials(host))
         return std::nullopt;
 
     Database& db = Database::instance();
     return host.entryId() > 0 ?
-        db.localHostCredentials(host.entryId()) :
+        db.localHostCredentials(host.entryId(), os_account) :
         db.routerHostCredentials(host.routerId(), stringToHostId(host.address()));
 }
 
@@ -123,12 +129,19 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
     LOG(INFO) << "Connecting to host";
     setClientTitle(host, session_type_);
 
-    std::optional<std::pair<QString, SecureString>> credentials = storedCredentials(host);
+    bool os_account = false;
+    std::optional<std::pair<QString, SecureString>> credentials = storedCredentials(host, &os_account);
     if (credentials.has_value())
     {
-        LOG(INFO) << "Using stored credentials of host" << host.address();
+        LOG(INFO) << "Using stored credentials of host" << host.address() << "(OS account:"
+                  << os_account << ")";
         host.setUsername(credentials->first);
         host.setPassword(credentials->second);
+
+        // Operating system / domain accounts go over IDENTIFY_PASSWORD. Only direct
+        // connections: a router-reached host can not be pinned by address.
+        if (os_account && host.entryId() > 0 && !isHostId(host.address()))
+            host.setDomainAccount(true);
     }
 
     if (host.username().isEmpty() || host.password().isEmpty())
@@ -326,6 +339,28 @@ void ClientWindow::onStatusChanged(NetworkWorker::Status status, const QVariant&
         }
         break;
 
+        case NetworkWorker::Status::HOST_KEY_UNTRUSTED:
+        {
+            reconnect_timeout_timer_->stop();
+
+            const QVariantMap map = data.toMap();
+            const QByteArray public_key = map.value("public_key").toByteArray();
+            const QString address = map.value("address").toString();
+            const bool key_changed = map.value("key_changed").toBool();
+
+            if (confirmHostKey(address, public_key, key_changed))
+            {
+                // The key is pinned now; connect again and send the credentials.
+                startNewSession();
+            }
+            else
+            {
+                onErrorOccurred(tr("The connection was canceled because the identity key of the host "
+                                   "is not trusted. No credentials were sent."));
+            }
+        }
+        break;
+
         case NetworkWorker::Status::WAIT_FOR_HOST:
             onErrorOccurred(tr("Host is unavailable yet. Waiting to reconnect..."));
             if (!session_state_->isAutoReconnect())
@@ -373,7 +408,8 @@ void ClientWindow::onDragPoll()
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data)
 {
-    if (status == NetworkWorker::Status::HOST_DISCONNECTED)
+    if (status == NetworkWorker::Status::HOST_DISCONNECTED ||
+        status == NetworkWorker::Status::HOST_KEY_UNTRUSTED)
     {
         if (session_keeper_)
             session_keeper_->release();
@@ -419,6 +455,8 @@ void ClientWindow::saveHostCredentials(const HostConfig& host, qint64 credential
         local_host.setCredentialId(credential_id);
         local_host.setUsername(username);
         local_host.setPassword(password);
+        // D-12: keep the account mode, otherwise "user@domain" comes back as an Aspia user.
+        local_host.setOsAccount(credential_id <= 0 && host.isDomainAccount());
 
         if (!db.modifyLocalHost(local_host))
             LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();
@@ -511,11 +549,25 @@ bool ClientWindow::askCredentials(HostConfig* host)
     auth_dialog->setSaveCredentialsVisible(can_save_credentials);
     auth_dialog->setUserName(host->username());
     auth_dialog->setPassword(host->password());
+    // The identity key of a host reached through a router can not be pinned by address, so
+    // operating system / domain accounts are offered for direct connections only.
+    auth_dialog->setDomainAccountVisible(!isHostId(host->address()) && !host->isPortable());
+    auth_dialog->setDomainAccount(host->isDomainAccount());
 
+    // Operating system records are offered where OS / domain accounts are possible.
     QList<CredentialConfig> credentials;
     if (Database::instance().credentialList(&credentials, CredentialConfig::Type::ASPIA) !=
         Database::ReadResult::OK)
         LOG(ERROR) << "Unable to read credentials";
+
+    if (!isHostId(host->address()) && !host->isPortable())
+    {
+        QList<CredentialConfig> os_credentials;
+        if (Database::instance().credentialList(&os_credentials, CredentialConfig::Type::OS) !=
+            Database::ReadResult::OK)
+            LOG(ERROR) << "Unable to read OS credentials";
+        credentials.append(os_credentials);
+    }
 
     auth_dialog->setSavedCredentials(credentials);
 
@@ -527,6 +579,7 @@ bool ClientWindow::askCredentials(HostConfig* host)
 
     host->setUsername(auth_dialog->userName());
     host->setPassword(auth_dialog->password());
+    host->setDomainAccount(auth_dialog->isDomainAccount());
 
     if (can_save_credentials && auth_dialog->isSaveCredentialsChecked() && !host->username().isEmpty())
     {
@@ -543,7 +596,8 @@ void ClientWindow::askCredentialsAgain()
     HostConfig host = session_state_->host();
 
     // Stored credentials are changed in the host editor, not here.
-    if (storedCredentials(host).has_value())
+    bool os_account = false;
+    if (storedCredentials(host, &os_account).has_value())
         return;
 
     if (host.username().startsWith(u'#'))
@@ -554,6 +608,75 @@ void ClientWindow::askCredentialsAgain()
         return;
 
     startConnection(host, session_state_->displayName());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ClientWindow::confirmHostKey(const QString& address, const QByteArray& public_key, bool key_changed)
+{
+    const QString fingerprint = HostKey::fingerprint(public_key);
+    if (fingerprint.isEmpty() || address.isEmpty())
+    {
+        LOG(ERROR) << "Invalid host key or address";
+        return false;
+    }
+
+    LOG(INFO) << "Host key confirmation (address:" << address << "changed:" << key_changed
+              << "fingerprint:" << fingerprint << ")";
+
+    QMessageBox message_box(this);
+    message_box.setWindowTitle(tr("Host Identity"));
+    message_box.setTextFormat(Qt::RichText);
+
+    QString text;
+    if (key_changed)
+    {
+        message_box.setIcon(QMessageBox::Critical);
+        text = tr("<b>WARNING: THE IDENTITY KEY OF HOST %1 HAS CHANGED!</b><br><br>"
+                  "Someone may be intercepting the connection to steal your password, or the host "
+                  "was reinstalled. Do not continue unless the administrator of the host has "
+                  "confirmed the new fingerprint.").arg(address.toHtmlEscaped());
+    }
+    else
+    {
+        message_box.setIcon(QMessageBox::Question);
+        text = tr("You are connecting to host %1 with an operating system / domain account for "
+                  "the first time. Make sure that the fingerprint below matches the one shown in the "
+                  "host settings (Domain tab) before you send your password.")
+                  .arg(address.toHtmlEscaped());
+    }
+
+    text += QLatin1String("<br><br>") + tr("Fingerprint (SHA-256):") +
+            QLatin1String("<br><tt>") + fingerprint.toHtmlEscaped() + QLatin1String("</tt><br><br>") +
+            tr("Do you trust this host?");
+
+    message_box.setText(text);
+
+    QPushButton* trust_button = message_box.addButton(
+        key_changed ? tr("Trust the new key") : tr("Trust"), QMessageBox::AcceptRole);
+    QPushButton* cancel_button = message_box.addButton(QMessageBox::Cancel);
+
+    // A changed key must never be accepted by pressing Enter.
+    message_box.setDefaultButton(key_changed ? cancel_button : trust_button);
+    message_box.setEscapeButton(cancel_button);
+
+    message_box.exec();
+
+    if (message_box.clickedButton() != trust_button)
+    {
+        LOG(INFO) << "[ACTION] Host key rejected by user";
+        return false;
+    }
+
+    LOG(INFO) << "[ACTION] Host key accepted by user";
+
+    if (!Database::instance().setHostPublicKey(address, public_key))
+    {
+        LOG(ERROR) << "Unable to save the host key";
+        onErrorOccurred(tr("Unable to save the identity key of the host."));
+        return false;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

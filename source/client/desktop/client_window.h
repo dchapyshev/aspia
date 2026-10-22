@@ -161,6 +161,10 @@ private:
     void setClientTitle(const HostConfig& host, proto::peer::SessionType session_type);
     bool askCredentials(HostConfig* host);
     void askCredentialsAgain();
+
+    // Asks the user to trust the identity key of the host (operating system / domain accounts)
+    // and pins it on success.
+    bool confirmHostKey(const QString& address, const QByteArray& public_key, bool key_changed);
     void startConnection(HostConfig host, const QString& display_name);
     void fetchConnectionOffer();
     void startNewSession();

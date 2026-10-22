@@ -138,8 +138,12 @@ bool OSCrypt::encryptBytes(const QByteArray& plaintext, QByteArray* ciphertext)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool OSCrypt::decryptBytes(const QByteArray& ciphertext, QByteArray* plaintext)
+bool OSCrypt::decryptBytes(const QByteArray& ciphertext, QByteArray* plaintext,
+                           bool* needs_reencrypt)
 {
+    if (needs_reencrypt)
+        *needs_reencrypt = false;
+
     if (ciphertext.isEmpty())
     {
         *plaintext = QByteArray();

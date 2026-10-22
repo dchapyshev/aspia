@@ -31,6 +31,7 @@
 #include "base/net/proxy_settings.h"
 #include "base/peer/user.h"
 #include "base/sql/sql_database.h"
+#include "host/domain_group_rule.h"
 
 class SecureString;
 
@@ -123,6 +124,23 @@ public:
     QByteArray hostKey() const;
     bool setHostKey(const QByteArray& key);
 
+    // Persistent X25519 private key that identifies the host to clients (IDENTIFY_PASSWORD).
+    // Unrelated to hostKey(), which identifies the host to a router.
+    QByteArray identityPrivateKey() const;
+    bool setIdentityPrivateKey(const QByteArray& private_key);
+
+    // Operating system / domain accounts (IDENTIFY_PASSWORD). Disabled by default.
+    bool isDomainAuthEnabled() const;
+    bool setDomainAuthEnabled(bool enable);
+    // PAM service used on Linux (a file in /etc/pam.d).
+    QString domainPamService() const;
+    bool setDomainPamService(const QString& service);
+    DomainGroupRuleList domainGroups() const;
+    bool replaceDomainGroups(const DomainGroupRuleList& groups);
+    // Saves the whole Domain tab in one transaction. Fails (and changes nothing) if the PAM
+    // service name is invalid.
+    bool saveDomainConfig(bool enable, const QString& pam_service, const DomainGroupRuleList& groups);
+
     // Password protection.
     PasswordProtection passwordProtectionState() const;
     bool setPassword(const SecureString& password);
@@ -134,6 +152,7 @@ public:
     bool setPasswordHashSalt(const QByteArray& salt);
 
 private:
+    bool writeDomainGroups(const DomainGroupRuleList& groups);
     Database() = default;
 
     bool open(const QString& file_path);

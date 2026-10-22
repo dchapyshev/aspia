@@ -18,10 +18,23 @@
 
 #include "host/ui/config_dialog.h"
 
+#include "host/domain_logon.h"
+
+#include <QMessageBox>
+
+#include <QCheckBox>
 #include <QCollator>
 #include <QDir>
 #include <QFileDialog>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLineEdit>
 #include <QMenu>
+#include <QPushButton>
+#include <QTreeWidget>
+#include <QVBoxLayout>
 #include <QStandardPaths>
 #include <QTimer>
 #include <QTranslator>
@@ -34,18 +47,23 @@
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/net/curl_util.h"
+#include "base/peer/host_key.h"
 #include "base/peer/user.h"
 #include "common/desktop/msg_box.h"
+#include "common/desktop/session_type.h"
 #include "common/desktop/update_dialog.h"
 #include "host/database.h"
+#include "host/host_identity.h"
 #include "host/screen_capturer.h"
 #include "host/service.h"
 #include "host/settings_util.h"
 #include "host/system_settings.h"
 #include "host/ui/change_password_dialog.h"
 #include "host/ui/check_password_dialog.h"
+#include "host/ui/domain_group_dialog.h"
 #include "host/ui/ui_config_dialog.h"
 #include "host/ui/user_dialog.h"
+#include "proto/peer.h"
 #include "version.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -114,6 +132,57 @@ private:
     qint64 entry_id_;
     Q_DISABLE_COPY_MOVE(UserTreeItem)
 };
+
+//--------------------------------------------------------------------------------------------------
+QString sessionsText(quint32 sessions)
+{
+    const proto::peer::SessionType kSessionTypes[] =
+    {
+        proto::peer::SESSION_TYPE_DESKTOP,
+        proto::peer::SESSION_TYPE_TERMINAL,
+        proto::peer::SESSION_TYPE_FILE_TRANSFER,
+        proto::peer::SESSION_TYPE_SYSTEM_INFO,
+        proto::peer::SESSION_TYPE_CHAT
+    };
+
+    QStringList names;
+    for (proto::peer::SessionType session_type : kSessionTypes)
+    {
+        if (sessions & static_cast<quint32>(session_type))
+            names.append(sessionName(session_type));
+    }
+
+    return names.join(QLatin1String(", "));
+}
+
+//--------------------------------------------------------------------------------------------------
+const int kRoleSessions = Qt::UserRole;
+const int kRoleId = Qt::UserRole + 1;
+const int kRoleKind = Qt::UserRole + 2;
+
+//--------------------------------------------------------------------------------------------------
+void setDomainGroupItem(QTreeWidgetItem* item, const DomainGroupRule& rule)
+{
+    item->setText(0, rule.group);
+    item->setText(1, rule.id.isEmpty() ?
+        ConfigDialog::tr("Not resolved (modify the group to fix)") : rule.id);
+    item->setText(2, sessionsText(rule.sessions));
+    item->setData(0, kRoleSessions, QVariant(rule.sessions));
+    item->setData(0, kRoleId, QVariant(rule.id));
+    item->setData(0, kRoleKind, QVariant(static_cast<int>(rule.kind)));
+}
+
+//--------------------------------------------------------------------------------------------------
+DomainGroupRule domainGroupFromItem(const QTreeWidgetItem* item)
+{
+    DomainGroupRule rule;
+    rule.group = item->text(0);
+    rule.sessions = item->data(0, kRoleSessions).toUInt();
+    rule.id = item->data(0, kRoleId).toString();
+    rule.kind = item->data(0, kRoleKind).toInt() == static_cast<int>(DomainGroupRule::Kind::USER) ?
+        DomainGroupRule::Kind::USER : DomainGroupRule::Kind::GROUP;
+    return rule;
+}
 
 } // namespace
 
@@ -354,6 +423,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui->button_add, &QPushButton::clicked, this, &ConfigDialog::onAddUser);
     connect(ui->button_modify, &QPushButton::clicked, this, &ConfigDialog::onModifyUser);
     connect(ui->button_delete, &QPushButton::clicked, this, &ConfigDialog::onDeleteUser);
+
+    //---------------------------------------------------------------------------------------------
+    // Domain Tab
+    //---------------------------------------------------------------------------------------------
+
+    createDomainTab();
 
     //---------------------------------------------------------------------------------------------
     // Other
@@ -810,6 +885,12 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         db.setNoUserAction(static_cast<Database::NoUserAction>(
             ui->combobox_no_user_action->currentData().toInt()));
 
+        if (!saveDomainTab())
+        {
+            MsgBox::warning(this, tr("Unable to save the domain account settings."));
+            return;
+        }
+
         settings.sync();
 
         setConfigChanged(FROM_HERE, false);
@@ -921,6 +1002,7 @@ void ConfigDialog::reloadAll()
         ui->combo_video_capturer->setCurrentIndex(current_video_capturer);
 
     reloadUserList();
+    reloadDomainTab();
 
     ui->spinbox_port->setValue(db.tcpPort());
 
@@ -992,4 +1074,237 @@ void ConfigDialog::reloadUserList()
 
     ui->action_modify->setEnabled(false);
     ui->action_delete->setEnabled(false);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ConfigDialog::createDomainTab()
+{
+    QWidget* tab = new QWidget();
+    QVBoxLayout* layout = new QVBoxLayout(tab);
+
+    checkbox_domain_auth_ = new QCheckBox(tr("Allow connections with operating system / domain accounts"), tab);
+    layout->addWidget(checkbox_domain_auth_);
+
+    QLabel* label_description = new QLabel(
+        tr("Users sign in with their Windows or domain account (\"DOMAIN\\user\" or "
+           "\"user@domain\"). The password is checked by the operating system of this computer, "
+           "which must be joined to the domain. Access is granted to the members of the groups "
+           "listed below. Clients verify the identity key of this computer on the first "
+           "connection: compare the fingerprint they show with the one below."), tab);
+    label_description->setWordWrap(true);
+    layout->addWidget(label_description);
+
+    QHBoxLayout* pam_layout = new QHBoxLayout();
+    label_pam_service_ = new QLabel(tr("PAM service:"), tab);
+    edit_pam_service_ = new QLineEdit(tab);
+    edit_pam_service_->setMaxLength(64);
+    edit_pam_service_->setToolTip(tr("Name of the file in /etc/pam.d used to check the credentials."));
+    pam_layout->addWidget(label_pam_service_);
+    pam_layout->addWidget(edit_pam_service_);
+    layout->addLayout(pam_layout);
+
+#if !defined(Q_OS_LINUX)
+    // PAM is used only on Linux.
+    label_pam_service_->hide();
+    edit_pam_service_->hide();
+#endif
+
+    QGroupBox* group_box = new QGroupBox(tr("Groups and allowed sessions"), tab);
+    QHBoxLayout* groups_layout = new QHBoxLayout(group_box);
+
+    tree_domain_groups_ = new QTreeWidget(group_box);
+    tree_domain_groups_->setColumnCount(3);
+    tree_domain_groups_->setHeaderLabels({ tr("Group"), tr("Identifier"), tr("Sessions") });
+    tree_domain_groups_->setRootIsDecorated(false);
+    tree_domain_groups_->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    groups_layout->addWidget(tree_domain_groups_);
+
+    QVBoxLayout* buttons_layout = new QVBoxLayout();
+    button_add_domain_group_ = new QPushButton(tr("Add"), group_box);
+    button_modify_domain_group_ = new QPushButton(tr("Modify"), group_box);
+    button_delete_domain_group_ = new QPushButton(tr("Delete"), group_box);
+    buttons_layout->addWidget(button_add_domain_group_);
+    buttons_layout->addWidget(button_modify_domain_group_);
+    buttons_layout->addWidget(button_delete_domain_group_);
+    buttons_layout->addStretch();
+    groups_layout->addLayout(buttons_layout);
+
+    layout->addWidget(group_box);
+
+    QHBoxLayout* fingerprint_layout = new QHBoxLayout();
+    QLabel* label_fingerprint = new QLabel(tr("Identity key fingerprint (SHA-256):"), tab);
+    edit_identity_fingerprint_ = new QLineEdit(tab);
+    edit_identity_fingerprint_->setReadOnly(true);
+    fingerprint_layout->addWidget(label_fingerprint);
+    fingerprint_layout->addWidget(edit_identity_fingerprint_);
+
+    QPushButton* button_regenerate = new QPushButton(tr("Regenerate"), tab);
+    button_regenerate->setToolTip(tr("Create a new identity key. Every client will warn that the key "
+                                     "of this host has changed."));
+    fingerprint_layout->addWidget(button_regenerate);
+    connect(button_regenerate, &QPushButton::clicked, this, [this]()
+    {
+        if (QMessageBox::question(this, tr("Confirmation"),
+                tr("A new identity key will be created. Every client that has connected with an "
+                   "operating system / domain account will show a warning that the key has changed, "
+                   "and users must compare the new fingerprint before they trust it. The service "
+                   "uses the new key after it is restarted.\n\nContinue?"),
+                QMessageBox::Yes | QMessageBox::No, QMessageBox::No) != QMessageBox::Yes)
+        {
+            return;
+        }
+
+        Database& db = Database::instance();
+        if (!HostIdentity::regenerate(db))
+        {
+            QMessageBox::warning(this, tr("Warning"), tr("Unable to create a new identity key."));
+            return;
+        }
+
+        const QString fingerprint = HostKey::fingerprint(HostIdentity::publicKey(db));
+        edit_identity_fingerprint_->setText(fingerprint.isEmpty() ? tr("Not available") : fingerprint);
+    });
+    layout->addLayout(fingerprint_layout);
+
+    ui->tab_bar->addTab(tab, tr("Domain"));
+
+    connect(checkbox_domain_auth_, &QCheckBox::toggled, this, [this]()
+    {
+        setConfigChanged(FROM_HERE, true);
+        updateDomainFields();
+    });
+
+    connect(edit_pam_service_, &QLineEdit::textEdited, this, &ConfigDialog::onConfigChanged);
+    connect(button_add_domain_group_, &QPushButton::clicked, this, &ConfigDialog::onAddDomainGroup);
+    connect(button_modify_domain_group_, &QPushButton::clicked, this, &ConfigDialog::onModifyDomainGroup);
+    connect(button_delete_domain_group_, &QPushButton::clicked, this, &ConfigDialog::onDeleteDomainGroup);
+    connect(tree_domain_groups_, &QTreeWidget::itemDoubleClicked, this, &ConfigDialog::onModifyDomainGroup);
+    connect(tree_domain_groups_, &QTreeWidget::currentItemChanged, this, &ConfigDialog::updateDomainFields);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ConfigDialog::reloadDomainTab()
+{
+    Database& db = Database::instance();
+
+    checkbox_domain_auth_->setChecked(db.isDomainAuthEnabled());
+    edit_pam_service_->setText(db.domainPamService());
+
+    tree_domain_groups_->clear();
+
+    const DomainGroupRuleList groups = db.domainGroups();
+    for (const DomainGroupRule& rule : groups)
+    {
+        QTreeWidgetItem* item = new QTreeWidgetItem();
+        setDomainGroupItem(item, rule);
+        tree_domain_groups_->addTopLevelItem(item);
+    }
+
+    // The key is generated here if the service has not done it yet.
+    const QString fingerprint = HostKey::fingerprint(HostIdentity::publicKey(db));
+    edit_identity_fingerprint_->setText(fingerprint.isEmpty() ? tr("Not available") : fingerprint);
+
+    updateDomainFields();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ConfigDialog::updateDomainFields()
+{
+    const bool enabled = checkbox_domain_auth_->isChecked();
+    const bool has_current = tree_domain_groups_->currentItem() != nullptr;
+
+    label_pam_service_->setEnabled(enabled);
+    edit_pam_service_->setEnabled(enabled);
+    tree_domain_groups_->setEnabled(enabled);
+    button_add_domain_group_->setEnabled(enabled);
+    button_modify_domain_group_->setEnabled(enabled && has_current);
+    button_delete_domain_group_->setEnabled(enabled && has_current);
+}
+
+//--------------------------------------------------------------------------------------------------
+QStringList ConfigDialog::domainGroupNames(QTreeWidgetItem* except) const
+{
+    QStringList names;
+    for (int i = 0; i < tree_domain_groups_->topLevelItemCount(); ++i)
+    {
+        QTreeWidgetItem* item = tree_domain_groups_->topLevelItem(i);
+        if (item != except)
+            names.append(item->text(0));
+    }
+    return names;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ConfigDialog::onAddDomainGroup()
+{
+    DomainGroupRule rule;
+    rule.sessions = proto::peer::SESSION_TYPE_DESKTOP | proto::peer::SESSION_TYPE_FILE_TRANSFER;
+
+    AutoQPointer<DomainGroupDialog> dialog(new DomainGroupDialog(rule, domainGroupNames(nullptr), this));
+    if (dialog->exec() != DomainGroupDialog::Accepted)
+        return;
+
+    QTreeWidgetItem* item = new QTreeWidgetItem();
+    setDomainGroupItem(item, dialog->rule());
+    tree_domain_groups_->addTopLevelItem(item);
+    tree_domain_groups_->setCurrentItem(item);
+
+    setConfigChanged(FROM_HERE, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ConfigDialog::onModifyDomainGroup()
+{
+    QTreeWidgetItem* item = tree_domain_groups_->currentItem();
+    if (!item || !checkbox_domain_auth_->isChecked())
+        return;
+
+    AutoQPointer<DomainGroupDialog> dialog(
+        new DomainGroupDialog(domainGroupFromItem(item), domainGroupNames(item), this));
+    if (dialog->exec() != DomainGroupDialog::Accepted)
+        return;
+
+    setDomainGroupItem(item, dialog->rule());
+    setConfigChanged(FROM_HERE, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ConfigDialog::onDeleteDomainGroup()
+{
+    QTreeWidgetItem* item = tree_domain_groups_->currentItem();
+    if (!item)
+        return;
+
+    if (MsgBox::question(this, tr("Are you sure you want to delete group \"%1\"?")
+        .arg(item->text(0))) != MsgBox::Yes)
+    {
+        return;
+    }
+
+    delete item;
+    updateDomainFields();
+    setConfigChanged(FROM_HERE, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ConfigDialog::saveDomainTab()
+{
+    Database& db = Database::instance();
+
+    DomainGroupRuleList groups;
+    for (int i = 0; i < tree_domain_groups_->topLevelItemCount(); ++i)
+        groups.append(domainGroupFromItem(tree_domain_groups_->topLevelItem(i)));
+
+    if (checkbox_domain_auth_->isChecked())
+    {
+        QString error;
+        if (!isUsablePamService(edit_pam_service_->text().trimmed(), &error))
+        {
+            QMessageBox::warning(this, tr("Warning"),
+                                 tr("The PAM service can not be used: %1").arg(error));
+            return false;
+        }
+    }
+
+    return db.saveDomainConfig(checkbox_domain_auth_->isChecked(), edit_pam_service_->text(), groups);
 }

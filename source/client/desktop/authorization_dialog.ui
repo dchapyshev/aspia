@@ -59,14 +59,24 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0" colspan="2">
+     <item row="3" column="1">
+      <widget class="QCheckBox" name="checkbox_domain_account">
+       <property name="text">
+        <string>Operating system / domain account</string>
+       </property>
+       <property name="toolTip">
+        <string>Sign in with a Windows or domain account (DOMAIN\user or user@domain) instead of an Aspia user</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="2">
       <widget class="QRadioButton" name="radio_one_time_password">
        <property name="text">
         <string>One-time password connection</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QLabel" name="label_one_time_password">
        <property name="text">
         <string>Password:</string>
@@ -76,7 +86,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="5" column="1">
       <widget class="PasswordEdit" name="edit_one_time_password">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -86,14 +96,14 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0" colspan="2">
+     <item row="6" column="0" colspan="2">
       <widget class="QRadioButton" name="radio_saved_credentials">
        <property name="text">
         <string>Use saved credentials</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
+     <item row="7" column="0">
       <widget class="QLabel" name="label_credential">
        <property name="text">
         <string>Credentials:</string>
@@ -103,7 +113,7 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item row="7" column="1">
       <widget class="QComboBox" name="combo_credential">
        <property name="sizeAdjustPolicy">
         <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
@@ -116,14 +126,14 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="0" colspan="2">
+     <item row="8" column="0" colspan="2">
       <widget class="Line" name="line">
        <property name="orientation">
         <enum>Qt::Orientation::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="8" column="0" colspan="2">
+     <item row="9" column="0" colspan="2">
       <widget class="QCheckBox" name="checkbox_save_credentials">
        <property name="text">
         <string>Save sign-in data</string>

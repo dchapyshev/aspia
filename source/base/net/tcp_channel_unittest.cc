@@ -24,16 +24,20 @@
 #include <asio/ip/tcp.hpp>
 #include <asio/write.hpp>
 
+#include <atomic>
 #include <condition_variable>
 #include <functional>
 #include <memory>
 #include <mutex>
 
 #include "base/shared_pointer.h"
+#include "base/crypto/key_pair.h"
+#include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/tcp_channel_native.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/client_authenticator.h"
+#include "base/peer/domain_authenticator.h"
 #include "base/peer/user.h"
 #include "base/peer/user_list.h"
 #include "base/threading/asio_event_dispatcher.h"
@@ -60,6 +64,38 @@ constexpr quint16 kPortCount = 50;
 // anything.
 const Seconds kWaitTimeout{ 30 };
 
+// Operating system / domain logon: accepts one account and allows the session type the SRP user
+// is allowed.
+const char kDomainAccount[] = "CORP\\operator";
+
+class TestDomainAuthenticator final : public DomainAuthenticator
+{
+public:
+    // DomainAuthenticator implementation.
+    Result authenticate(const QString& domain, const QString& username,
+                        const SecureString& password,
+                        const QString& /* peer_address */) const final
+    {
+        ++calls;
+
+        Result result;
+        result.account = domain + QLatin1Char('\\') + username;
+
+        if (result.account != QLatin1String(kDomainAccount) ||
+            password.toString() != QLatin1String(kPassword))
+        {
+            result.status = Status::INVALID_CREDENTIALS;
+            return result;
+        }
+
+        result.status = Status::SUCCESS;
+        result.session_types = kAllowedSessionType;
+        return result;
+    }
+
+    mutable std::atomic_int calls = 0;
+};
+
 // A user list with a single user - the same thing the router hands to its server, minus the
 // database behind it.
 class TestUserList final : public UserList
@@ -77,6 +113,13 @@ public:
     void setSeedKey(const QByteArray& seed_key) final { seed_key_ = seed_key; }
 
     void setUser(const User& user) { user_ = user; }
+
+    std::shared_ptr<const DomainAuthenticator> domainAuthenticator() const final
+    {
+        return domain_authenticator;
+    }
+
+    std::shared_ptr<TestDomainAuthenticator> domain_authenticator;
 
 private:
     User user_;
@@ -206,6 +249,8 @@ protected:
         {
             server_ = new TcpServer();
             server_->setUserList(user_list_);
+            if (host_key_.isValid())
+                server_->setIdentityKey(host_key_.privateKey());
 
             // The rate limiter is not what these tests are about, and every connection here comes
             // from the same address.
@@ -257,12 +302,16 @@ protected:
     // Opens a client channel and starts the handshake. Returns once the connect is under way, not
     // once it has completed.
     void connectClient(quint16 port, const QString& user_name, const QString& password,
-                       quint32 session_type)
+                       quint32 session_type,
+                       proto::key_exchange::Identify identify = proto::key_exchange::IDENTIFY_SRP,
+                       const QByteArray& pinned_host_key = QByteArray())
     {
         worker_->invoke([&]()
         {
             ClientAuthenticator* authenticator = new ClientAuthenticator();
-            authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
+            authenticator->setIdentify(identify);
+            if (identify == proto::key_exchange::IDENTIFY_PASSWORD)
+                authenticator->setPinnedHostKey(pinned_host_key);
             authenticator->setUserName(user_name);
             authenticator->setPassword(SecureString(password));
             authenticator->setSessionType(session_type);
@@ -384,6 +433,7 @@ protected:
 
     // Declared before |workers_| so the worker threads are stopped before the objects they used.
     SharedPointer<TestUserList> user_list_;
+    KeyPair host_key_;
 
     TcpServer* server_ = nullptr;
     TcpChannel* server_channel_ = nullptr;
@@ -751,4 +801,107 @@ TEST_F(TcpChannelTest, PeerDisappearanceIsReported)
 
     ASSERT_TRUE(server_error_.wait(1, kWaitTimeout));
     EXPECT_EQ(server_error_code_, TcpChannel::ErrorCode::REMOTE_HOST_CLOSED);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Operating system / domain logon: the host proves its pinned key, the password travels inside the
+// encrypted channel, and the channel carries the account the host checked.
+class TcpChannelDomainTest : public TcpChannelTest
+{
+protected:
+    void SetUp() override
+    {
+        TcpChannelTest::SetUp();
+
+        host_key_ = KeyPair::create(KeyPair::Type::X25519);
+        ASSERT_TRUE(host_key_.isValid());
+
+        user_list_->domain_authenticator = std::make_shared<TestDomainAuthenticator>();
+    }
+
+    int domainLogonCalls() const { return user_list_->domain_authenticator->calls; }
+};
+
+TEST_F(TcpChannelDomainTest, LogonWithPinnedHostKeyCarriesTheAccount)
+{
+    const quint16 port = startServer();
+    ASSERT_NE(port, 0);
+
+    connectClient(port, QLatin1String(kDomainAccount), QLatin1String(kPassword),
+                  kAllowedSessionType, proto::key_exchange::IDENTIFY_PASSWORD,
+                  host_key_.publicKey());
+
+    ASSERT_TRUE(client_authenticated_.wait(1, kWaitTimeout));
+    ASSERT_TRUE(accepted_.wait(1, kWaitTimeout));
+    resumeBothEnds();
+
+    worker_->invoke([this]()
+    {
+        ASSERT_NE(server_channel_, nullptr);
+        EXPECT_EQ(server_channel_->peerUserName(), kDomainAccount);
+        EXPECT_EQ(server_channel_->peerSessionType(), kAllowedSessionType);
+    });
+
+    // Both ends derived the same keys.
+    sendFromClient(1, payload(100, 'd'));
+    ASSERT_TRUE(server_message_.wait(1, kWaitTimeout));
+    worker_->invoke([this]() { EXPECT_EQ(server_messages_.front().second, payload(100, 'd')); });
+    EXPECT_EQ(domainLogonCalls(), 1);
+}
+
+TEST_F(TcpChannelDomainTest, WrongPasswordIsReportedAsAccessDenied)
+{
+    const quint16 port = startServer();
+    ASSERT_NE(port, 0);
+
+    connectClient(port, QLatin1String(kDomainAccount), "WrongPassword!", kAllowedSessionType,
+                  proto::key_exchange::IDENTIFY_PASSWORD, host_key_.publicKey());
+
+    // The host closes the connection; the client must not take it for a network problem (and
+    // reconnect with the same password).
+    ASSERT_TRUE(client_error_.wait(1, kWaitTimeout));
+    EXPECT_EQ(client_error_code_, TcpChannel::ErrorCode::ACCESS_DENIED);
+    EXPECT_EQ(accepted_.count(), 0);
+    EXPECT_EQ(domainLogonCalls(), 1);
+}
+
+TEST_F(TcpChannelDomainTest, UnknownHostKeyGetsNoCredentials)
+{
+    const quint16 port = startServer();
+    ASSERT_NE(port, 0);
+
+    connectClient(port, QLatin1String(kDomainAccount), QLatin1String(kPassword),
+                  kAllowedSessionType, proto::key_exchange::IDENTIFY_PASSWORD, QByteArray());
+
+    ASSERT_TRUE(client_error_.wait(1, kWaitTimeout));
+    EXPECT_EQ(client_error_code_, TcpChannel::ErrorCode::HOST_KEY_UNTRUSTED);
+    EXPECT_EQ(accepted_.count(), 0);
+    EXPECT_EQ(domainLogonCalls(), 0);
+}
+
+TEST_F(TcpChannelDomainTest, ChangedHostKeyGetsNoCredentials)
+{
+    const quint16 port = startServer();
+    ASSERT_NE(port, 0);
+
+    KeyPair other_key = KeyPair::create(KeyPair::Type::X25519);
+    connectClient(port, QLatin1String(kDomainAccount), QLatin1String(kPassword),
+                  kAllowedSessionType, proto::key_exchange::IDENTIFY_PASSWORD,
+                  other_key.publicKey());
+
+    ASSERT_TRUE(client_error_.wait(1, kWaitTimeout));
+    EXPECT_EQ(client_error_code_, TcpChannel::ErrorCode::HOST_KEY_UNTRUSTED);
+    EXPECT_EQ(domainLogonCalls(), 0);
+}
+
+TEST_F(TcpChannelDomainTest, SrpUsersStillWorkWithDomainLogonEnabled)
+{
+    ASSERT_NE(connectAuthenticatedPair(), 0);
+
+    worker_->invoke([this]()
+    {
+        ASSERT_NE(server_channel_, nullptr);
+        EXPECT_EQ(server_channel_->peerUserName(), kUserName);
+    });
+    EXPECT_EQ(domainLogonCalls(), 0);
 }

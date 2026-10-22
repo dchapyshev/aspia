@@ -1,0 +1,27 @@
+# PAM policy for Aspia operating system / domain accounts (Debian/Ubuntu). Used by the host service
+# to check the password of a client that signs in with "DOMAIN\user" or "user@domain". The computer
+# must be joined to the domain (realmd + sssd, or winbind); common-auth/common-account then include
+# pam_sss.so or pam_winbind.so. Installed only if the file does not exist yet, so local changes
+# (e.g. "account required pam_access.so") survive upgrades.
+# pam_unix waits about 2 seconds after a wrong password (and not after a correct one). The host does
+# not rely on it: every failed logon is answered 4 seconds (or the next multiple of 4 seconds if the
+# logon is slower) after the credentials are received, so the
+# answer time does not reveal whether the password was correct. "nodelay" is therefore not needed in
+# the system files included here.
+#
+# System accounts (root, daemons: uid < 1000) can never sign in through Aspia; their passwords are
+# not even checked. Lower the value only if the domain uses smaller uids.
+#
+# pam_faillock (Debian 11+/Ubuntu 22.04+; the "-" makes PAM skip it where the module is missing):
+# "preauth" refuses an account that is locked out by failures counted in /var/run/faillock, and the
+# account line resets the count after a good logon. Failures are counted only if pam_faillock is
+# also enabled system-wide in /etc/pam.d/common-auth ("authfail" after pam_unix, see
+# pam_faillock(8)); it can not be added after "@include common-auth" here, because common-auth
+# ends a failed stack with "requisite pam_deny.so" and the line would never run. The host limits
+# failed logons per account and per client address itself (with growing delays) in any case.
+auth     requisite  pam_succeed_if.so uid >= 1000 quiet
+-auth    required   pam_faillock.so preauth
+@include common-auth
+account  required   pam_succeed_if.so uid >= 1000 quiet
+-account required   pam_faillock.so
+@include common-account

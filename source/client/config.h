@@ -208,6 +208,12 @@ public:
     const SecureString& password() const { return password_; }
     void setPassword(const SecureString& value) { password_ = value; }
 
+    // The inline credentials are an operating system / domain account (a name in the
+    // "DOMAIN\user" form always is). Not used with a saved credential record: an OS record is
+    // always a domain account.
+    bool isOsAccount() const { return os_account_ || username_.contains(QLatin1Char('\\')); }
+    void setOsAccount(bool value) { os_account_ = value; }
+
     // The sealed column for database I/O. See RouterConfig for what the two answer.
     std::optional<QByteArray> encryptedData() const;
     bool setEncryptedData(const QByteArray& blob);
@@ -227,6 +233,7 @@ private:
     QString address_;
     QString username_;
     SecureString password_;
+    bool os_account_ = false;
 };
 
 class LocalGroupConfig final
@@ -351,6 +358,13 @@ public:
     bool isPortable() const { return portable_; }
     void setPortable(bool portable) { portable_ = portable; }
 
+    // Connect with an operating system / domain account (IDENTIFY_PASSWORD) instead of an Aspia
+    // user (SRP). A user name in the "DOMAIN\user" form always means a domain account, so saved
+    // credentials keep the mode without storing it; for "user@domain" the mode is chosen in the
+    // authorization dialog for the session.
+    bool isDomainAccount() const { return domain_account_ || username_.contains(QLatin1Char('\\')); }
+    void setDomainAccount(bool domain_account) { domain_account_ = domain_account; }
+
 private:
     qint64 entry_id_ = 0;
     qint64 router_id_ = 0;
@@ -359,6 +373,7 @@ private:
     QString username_;
     SecureString password_;
     bool portable_ = false;
+    bool domain_account_ = false;
 };
 
 proto::control::Config defaultDesktopConfig();

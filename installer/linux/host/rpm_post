@@ -1,5 +1,7 @@
 # Install the RHEL/Fedora PAM policy (system-auth) for terminal sessions.
 install -m 0644 /usr/share/aspia/aspia-terminal-rhel.pam /etc/pam.d/aspia-terminal
+# Operating system / domain accounts. Kept if it exists: the administrator may have changed it.
+[ -e /etc/pam.d/aspia-domain ] || install -m 0644 /usr/share/aspia/aspia-domain-rhel.pam /etc/pam.d/aspia-domain
 
 # Enable and (re)start the host service. The host needs no prior configuration, so it starts right
 # away; %post also runs on upgrade ($1=2), refreshing the service.

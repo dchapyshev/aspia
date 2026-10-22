@@ -9,4 +9,5 @@ fi
 # Remove the PAM policy installed by postinst (it is not part of the package file list).
 if [ "$1" = "remove" ]; then
     rm -f /etc/pam.d/aspia-terminal
+    rm -f /etc/pam.d/aspia-domain
 fi

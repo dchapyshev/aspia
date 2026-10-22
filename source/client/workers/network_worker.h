@@ -59,7 +59,11 @@ public:
         HOST_DISCONNECTED,
         WAIT_FOR_HOST,
         VERSION_MISMATCH,
-        RELAY_ERROR
+        RELAY_ERROR,
+        // Operating system / domain account: the identity key of the host is not pinned yet or
+        // differs from the pinned one. Data: QVariantMap { "public_key": QByteArray,
+        // "key_changed": bool, "address": QString }. No credentials were sent.
+        HOST_KEY_UNTRUSTED
     };
     Q_ENUM(Status)
 
@@ -125,6 +129,7 @@ private:
     void routeMessage(quint8 channel_id, const QByteArray& buffer);
     void tcpChannelReady();
     void connectionLost(TcpChannel::ErrorCode error_code);
+    QString pinnedKeyAddress() const;
     void readBandwidthProbe(const proto::peer::BandwidthProbe& probe, bool via_udp);
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
     void readStunUdpRequest(const proto::peer::StunUdpRequest& request);
@@ -142,6 +147,10 @@ private:
 
     std::list<ScopedQPointer<UdpAttempt>> attempts_;
     std::shared_ptr<SessionState> session_state_;
+
+    // IDENTIFY_PASSWORD: the key presented by the host when it was not trusted.
+    QByteArray untrusted_host_key_;
+    bool host_key_changed_ = false;
 
     bool udp_ready_ = false;
     const quint32 udp_methods_;

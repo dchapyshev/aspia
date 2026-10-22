@@ -78,3 +78,93 @@ TEST(OSCryptTest, GarbageIsRefused)
     QByteArray opened;
     EXPECT_FALSE(OSCrypt::decryptBytes(QByteArray("not a sealed blob"), &opened));
 }
+
+#if !defined(Q_OS_WINDOWS) && !defined(Q_OS_APPLE)
+
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QTemporaryDir>
+
+namespace {
+
+class OSCryptKeyFileTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+        ASSERT_TRUE(dir_.isValid());
+        key_path_ = dir_.path() + QStringLiteral("/aspia/os_crypt.key");
+        OSCrypt::setKeyFilePathForTesting(key_path_);
+    }
+
+    void TearDown() override { OSCrypt::setKeyFilePathForTesting(QString()); }
+
+    QTemporaryDir dir_;
+    QString key_path_;
+};
+
+} // namespace
+
+// The key is a private random file, not something derived from public machine data.
+TEST_F(OSCryptKeyFileTest, KeyFileIsCreatedPrivate)
+{
+    QByteArray ciphertext;
+    ASSERT_TRUE(OSCrypt::encryptBytes(QByteArray("secret"), &ciphertext));
+
+    QFileInfo key(key_path_);
+    ASSERT_TRUE(key.exists());
+    EXPECT_EQ(key.size(), 32);
+    EXPECT_EQ(key.permissions() & (QFileDevice::ReadGroup | QFileDevice::ReadOther |
+                                   QFileDevice::WriteGroup | QFileDevice::WriteOther),
+              QFileDevice::Permissions());
+    EXPECT_EQ(QFileInfo(key.absolutePath()).permissions() &
+                  (QFileDevice::ReadOther | QFileDevice::ExeOther | QFileDevice::ReadGroup),
+              QFileDevice::Permissions());
+
+    // Without the key file the seal does not open (it is not the machine-id key).
+    ASSERT_TRUE(QFile::remove(key_path_));
+    QByteArray opened;
+    EXPECT_FALSE(OSCrypt::decryptBytes(ciphertext, &opened));
+}
+
+// Seals of older versions (machine-id key) still open and are reported for re-encryption; the
+// new seal opens without the report.
+TEST_F(OSCryptKeyFileTest, LegacySealMigrates)
+{
+    QByteArray legacy;
+    ASSERT_TRUE(OSCrypt::encryptBytesLegacyForTesting(QByteArray("old secret"), &legacy));
+
+    QByteArray opened;
+    bool needs_reencrypt = false;
+    ASSERT_TRUE(OSCrypt::decryptBytes(legacy, &opened, &needs_reencrypt));
+    EXPECT_EQ(opened, QByteArray("old secret"));
+    EXPECT_TRUE(needs_reencrypt);
+
+    QByteArray fresh;
+    ASSERT_TRUE(OSCrypt::encryptBytes(opened, &fresh));
+    ASSERT_TRUE(OSCrypt::decryptBytes(fresh, &opened, &needs_reencrypt));
+    EXPECT_EQ(opened, QByteArray("old secret"));
+    EXPECT_FALSE(needs_reencrypt);
+}
+
+// A key file readable by others is taken back to 0600; a key file of the wrong size is refused.
+TEST_F(OSCryptKeyFileTest, LooseKeyFileIsTightenedAndBadOneRefused)
+{
+    QByteArray ciphertext;
+    ASSERT_TRUE(OSCrypt::encryptBytes(QByteArray("secret"), &ciphertext));
+    ASSERT_TRUE(QFile::setPermissions(key_path_, QFileDevice::ReadOwner | QFileDevice::WriteOwner |
+                                                 QFileDevice::ReadOther));
+
+    QByteArray opened;
+    ASSERT_TRUE(OSCrypt::decryptBytes(ciphertext, &opened));
+    EXPECT_FALSE(QFileInfo(key_path_).permissions() & QFileDevice::ReadOther);
+
+    QFile file(key_path_);
+    ASSERT_TRUE(file.open(QIODevice::WriteOnly | QIODevice::Truncate));
+    file.write("short");
+    file.close();
+    EXPECT_FALSE(OSCrypt::encryptBytes(QByteArray("secret"), &ciphertext));
+}
+
+#endif

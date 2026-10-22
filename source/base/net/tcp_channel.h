@@ -105,7 +105,11 @@ public:
         PROXY_ERROR,
 
         // The proxy server could not connect to the destination host.
-        PROXY_DESTINATION_UNREACHABLE
+        PROXY_DESTINATION_UNREACHABLE,
+
+        // The key of the host is not trusted yet or differs from the pinned one. No credentials
+        // were sent.
+        HOST_KEY_UNTRUSTED
     };
     Q_ENUM(ErrorCode)
 

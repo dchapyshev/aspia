@@ -19,6 +19,7 @@
 #include "host/database.h"
 
 #include <QDir>
+#include <QFile>
 #include <QFileInfo>
 
 #include "base/build_config.h"
@@ -30,6 +31,7 @@
 #include "base/files/base_paths.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
+#include "host/domain_logon.h"
 
 namespace {
 
@@ -54,6 +56,11 @@ const char kSettingOneTimePasswordCharacters[] = "one_time_password_characters";
 const char kSettingHostKey[] = "host_key";
 const char kSettingPasswordHash[] = "password_hash";
 const char kSettingPasswordHashSalt[] = "password_hash_salt";
+const char kSettingIdentityPrivateKey[] = "identity_private_key";
+const char kSettingDomainAuthEnabled[] = "domain_auth_enabled";
+const char kSettingDomainPamService[] = "domain_pam_service";
+
+const char kDefaultDomainPamService[] = "aspia-domain";
 
 constexpr size_t kPasswordHashSaltSize = 256;
 
@@ -72,6 +79,36 @@ User readUser(const SqlQuery& query)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Adds |column| to a |table| that was made before the column was there.
+bool addMissingColumn(SqlDatabase& db, const QString& table, const QString& column, const QString& definition)
+{
+    SqlQuery query(db, "SELECT 1 FROM pragma_table_info(?) WHERE name=? LIMIT 1");
+    query.addText(table);
+    query.addText(column);
+
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the schema of table" << table << ":" << db.lastError();
+        return false;
+    }
+
+    if (step == SqlQuery::StepResult::ROW)
+        return true;
+
+    LOG(INFO) << "Adding column" << column << "to table" << table;
+
+    const QString sql = QString("ALTER TABLE \"%1\" ADD COLUMN \"%2\" %3").arg(table, column, definition);
+    if (!db.exec(sql.toUtf8().constData()))
+    {
+        LOG(ERROR) << "Unable to add column" << column << "to table" << table << ":" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool createTables(SqlDatabase& db)
 {
     if (!db.exec("CREATE TABLE IF NOT EXISTS \"users\" ("
@@ -85,6 +122,27 @@ bool createTables(SqlDatabase& db)
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create users table:" << db.lastError();
+        return false;
+    }
+
+    // Members of the operating system / domain account |account_id| (a SID, GID or "uid:N" of the
+    // |kind|, see DomainGroupRule) get |sessions|. |group| is the name for display.
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"domain_groups\" ("
+                 "\"id\" INTEGER UNIQUE,"
+                 "\"group\" TEXT NOT NULL UNIQUE COLLATE NOCASE,"
+                 "\"sessions\" INTEGER DEFAULT 0,"
+                 "\"account_id\" TEXT NOT NULL DEFAULT '',"
+                 "\"kind\" INTEGER NOT NULL DEFAULT 0,"
+                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        LOG(ERROR) << "Unable to create domain_groups table:" << db.lastError();
+        return false;
+    }
+
+    // Tables made by the first version of the feature had no identifiers.
+    if (!addMissingColumn(db, "domain_groups", "account_id", "TEXT NOT NULL DEFAULT ''") ||
+        !addMissingColumn(db, "domain_groups", "kind", "INTEGER NOT NULL DEFAULT 0"))
+    {
         return false;
     }
 
@@ -647,6 +705,169 @@ bool Database::setHostKey(const QByteArray& key)
 }
 
 //--------------------------------------------------------------------------------------------------
+QByteArray Database::identityPrivateKey() const
+{
+    return QByteArray::fromHex(readSetting(kSettingIdentityPrivateKey).toLatin1());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setIdentityPrivateKey(const QByteArray& private_key)
+{
+    return writeSetting(kSettingIdentityPrivateKey, QString::fromLatin1(private_key.toHex()));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::isDomainAuthEnabled() const
+{
+    return readSetting(kSettingDomainAuthEnabled).toInt() != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setDomainAuthEnabled(bool enable)
+{
+    return writeSetting(kSettingDomainAuthEnabled, QString::number(enable ? 1 : 0));
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Database::domainPamService() const
+{
+    const QString value = readSetting(kSettingDomainPamService).trimmed();
+    return value.isEmpty() ? QString::fromLatin1(kDefaultDomainPamService) : value;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setDomainPamService(const QString& service)
+{
+    const QString value = service.trimmed();
+    if (!value.isEmpty() && !isValidPamServiceName(value))
+    {
+        LOG(ERROR) << "Invalid PAM service name:" << value;
+        return false;
+    }
+
+    return writeSetting(kSettingDomainPamService, value);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::saveDomainConfig(bool enable, const QString& pam_service,
+                                const DomainGroupRuleList& groups)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    const QString service = pam_service.trimmed();
+    if (!service.isEmpty() && !isValidPamServiceName(service))
+    {
+        LOG(ERROR) << "Invalid PAM service name:" << service;
+        return false;
+    }
+
+    // One transaction: the service never sees the switch turned on with the old groups, or the
+    // new groups with the old switch.
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
+
+    if (!writeDomainGroups(groups) ||
+        !writeSetting(kSettingDomainPamService, service) ||
+        !writeSetting(kSettingDomainAuthEnabled, QString::number(enable ? 1 : 0)))
+    {
+        return false; // Rolled back by the destructor.
+    }
+
+    return transaction.commit();
+}
+
+//--------------------------------------------------------------------------------------------------
+DomainGroupRuleList Database::domainGroups() const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    SqlQuery query(db_, "SELECT id, \"group\", sessions, account_id, kind FROM domain_groups ORDER BY id");
+
+    DomainGroupRuleList groups;
+    while (query.next() == SqlQuery::StepResult::ROW)
+    {
+        DomainGroupRule rule;
+        rule.entry_id = query.columnInt64(0);
+        rule.group    = query.columnText(1);
+        rule.sessions = static_cast<quint32>(query.columnInt64(2));
+        rule.id       = query.columnText(3);
+        rule.kind     = query.columnInt64(4) == static_cast<qint64>(DomainGroupRule::Kind::USER) ?
+            DomainGroupRule::Kind::USER : DomainGroupRule::Kind::GROUP;
+        groups.append(rule);
+    }
+
+    return groups;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::replaceDomainGroups(const DomainGroupRuleList& groups)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
+
+    // On any failure the early return skips commit() and the old list is preserved.
+    if (!writeDomainGroups(groups))
+        return false;
+
+    return transaction.commit();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::writeDomainGroups(const DomainGroupRuleList& groups)
+{
+    SqlQuery clear(db_, "DELETE FROM domain_groups");
+    if (!clear.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    for (const DomainGroupRule& rule : groups)
+    {
+        const QString group = rule.group.trimmed();
+        if (group.isEmpty())
+            continue;
+
+        SqlQuery query(db_, "INSERT INTO domain_groups (id, \"group\", sessions, account_id, kind) "
+                            "VALUES (NULL, ?, ?, ?, ?)");
+        query.addText(group);
+        query.addUInt64(rule.sessions);
+        query.addText(rule.id.trimmed());
+        query.addInt64(static_cast<qint64>(rule.kind));
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 Database::PasswordProtection Database::passwordProtectionState() const
 {
     if (!isValid())
@@ -779,6 +1000,15 @@ bool Database::open(const QString& file_path)
 
     if (!db_.open(file_path))
         return false;
+
+#if defined(Q_OS_UNIX)
+    // The database holds the identity key of the host and password hashes. The service also
+    // secures its directory at startup, but a file created later (or by the configuration dialog)
+    // would get the default umask permissions until the next restart. SQLite gives journal files
+    // the permissions of the database file.
+    if (!QFile::setPermissions(file_path, QFileDevice::ReadOwner | QFileDevice::WriteOwner))
+        LOG(WARNING) << "Unable to restrict permissions of" << file_path;
+#endif
 
     if (!db_.exec("PRAGMA secure_delete = ON"))
         LOG(WARNING) << "Unable to enable secure_delete:" << db_.lastError();

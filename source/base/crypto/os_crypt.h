@@ -20,6 +20,7 @@
 #define BASE_CRYPTO_OS_CRYPT_H
 
 #include <QByteArray>
+#include <QString>
 
 class OSCrypt
 {
@@ -27,8 +28,17 @@ public:
     // Encrypt an array of bytes.
     static bool encryptBytes(const QByteArray& plaintext, QByteArray* ciphertext);
 
-    // Decrypt an array of bytes.
-    static bool decryptBytes(const QByteArray& ciphertext, QByteArray* plaintext);
+    // Decrypt an array of bytes. |needs_reencrypt| (optional) is set when the bytes were sealed
+    // with an outdated key (Linux: the key derived from the machine id); the caller should
+    // encrypt the plaintext again and store the new ciphertext.
+    static bool decryptBytes(const QByteArray& ciphertext, QByteArray* plaintext,
+                             bool* needs_reencrypt = nullptr);
+
+#if !defined(Q_OS_WINDOWS) && !defined(Q_OS_APPLE)
+    // Tests only: where the random key is kept, and a seal with the outdated key.
+    static void setKeyFilePathForTesting(const QString& path);
+    static bool encryptBytesLegacyForTesting(const QByteArray& plaintext, QByteArray* ciphertext);
+#endif
 
 private:
     Q_DISABLE_COPY_MOVE(OSCrypt)

@@ -38,6 +38,10 @@ namespace proto::peer {
 class Version;
 } // namespace proto::peer
 
+// Mixed into the transcript of IDENTIFY_PASSWORD before the static (host identity) secret: binds
+// the session key to this method and version. Changing it breaks only this method.
+inline constexpr char kPasswordModeLabel[] = "aspia/identify-password/v2";
+
 class Authenticator : public QObject
 {
     Q_OBJECT
@@ -62,7 +66,8 @@ public:
         PROTOCOL_ERROR,
         VERSION_ERROR,
         ACCESS_DENIED,
-        SESSION_DENIED
+        SESSION_DENIED,
+        HOST_KEY_UNTRUSTED // IDENTIFY_PASSWORD: the host key is not pinned yet or has changed.
     };
     Q_ENUM(ErrorCode)
 
@@ -89,6 +94,10 @@ public:
 
     // Returns the current state.
     [[nodiscard]] State state() const { return state_; }
+
+    // Returns true if the peer closing the connection while the handshake is pending means that
+    // the credentials were refused (the server refuses domain logons by closing the connection).
+    [[nodiscard]] virtual bool isRefusedOnClose() const { return false; }
 
     // Key for the requested direction. Channels read it after sig_keyChanged(). Returns an empty
     // array until setSessionKeyReady() has been called, so accidental reads before the handshake
