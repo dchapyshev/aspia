@@ -915,6 +915,11 @@
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="0"/>
+        <source>The connection was canceled because the identity key of the host is not trusted. No credentials were sent.</source>
+        <translation>Подключение отменено, так как ключ идентификации хоста не является доверенным. Учётные данные не отправлялись.</translation>
+    </message>
 </context>
 <context>
     <name>CheckPasswordDialog</name>
@@ -2939,6 +2944,11 @@ Credentials replaced: %2</source>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="0"/>
+        <source>The connection was canceled because the identity key of the host is not trusted. No credentials were sent.</source>
+        <translation>Подключение отменено, так как ключ идентификации хоста не является доверенным. Учётные данные не отправлялись.</translation>
+    </message>
 </context>
 <context>
     <name>DialogButtonBox</name>
@@ -3688,6 +3698,63 @@ Credentials replaced: %2</source>
         <location filename="../client/android/file_transfer_window.cc" line="516"/>
         <source>Deleting</source>
         <translation>Удаление</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="0"/>
+        <source>The connection was canceled because the identity key of the host is not trusted. No credentials were sent.</source>
+        <translation>Подключение отменено, так как ключ идентификации хоста не является доверенным. Учётные данные не отправлялись.</translation>
+    </message>
+</context>
+<context>
+    <name>HostKeyDialog</name>
+    <message>
+        <location filename="../client/android/host_key_dialog.cc" line="0"/>
+        <source>Host Identity</source>
+        <translation>Идентификация хоста</translation>
+    </message>
+    <message>
+        <location filename="../client/android/host_key_dialog.cc" line="0"/>
+        <source>WARNING: THE IDENTITY KEY OF HOST %1 HAS CHANGED!
+
+Someone may be intercepting the connection to steal your password, or the host was reinstalled. Do not continue unless the administrator of the host has confirmed the new fingerprint.</source>
+        <translation>ВНИМАНИЕ: КЛЮЧ ИДЕНТИФИКАЦИИ ХОСТА %1 ИЗМЕНИЛСЯ!
+
+Возможно, кто-то перехватывает подключение, чтобы украсть ваш пароль, или хост был переустановлен. Не продолжайте, пока администратор хоста не подтвердит новый отпечаток.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/host_key_dialog.cc" line="0"/>
+        <source>You are connecting to host %1 with an operating system / domain account for the first time. Make sure that the fingerprint below matches the one shown in the host settings (Domain tab) before you send your password.</source>
+        <translation>Вы впервые подключаетесь к хосту %1 с учётной записью операционной системы / домена. Перед отправкой пароля убедитесь, что отпечаток ниже совпадает с отпечатком в настройках хоста (вкладка «Домен»).</translation>
+    </message>
+    <message>
+        <location filename="../client/android/host_key_dialog.cc" line="0"/>
+        <source>Fingerprint (SHA-256):</source>
+        <translation>Отпечаток (SHA-256):</translation>
+    </message>
+    <message>
+        <location filename="../client/android/host_key_dialog.cc" line="0"/>
+        <source>Do you trust this host?</source>
+        <translation>Доверяете этому хосту?</translation>
+    </message>
+    <message>
+        <location filename="../client/android/host_key_dialog.cc" line="0"/>
+        <source>Reject</source>
+        <translation>Отклонить</translation>
+    </message>
+    <message>
+        <location filename="../client/android/host_key_dialog.cc" line="0"/>
+        <source>Trust the new key</source>
+        <translation>Доверять новому ключу</translation>
+    </message>
+    <message>
+        <location filename="../client/android/host_key_dialog.cc" line="0"/>
+        <source>Trust</source>
+        <translation>Доверять</translation>
+    </message>
+    <message>
+        <location filename="../client/android/host_key_dialog.cc" line="0"/>
+        <source>Unable to save the identity key of the host.</source>
+        <translation>Не удалось сохранить ключ идентификации хоста.</translation>
     </message>
 </context>
 <context>

@@ -32,6 +32,7 @@
 #include "client/session_state.h"
 #include "client/android/file_panel_widget.h"
 #include "client/android/file_progress_sheet.h"
+#include "client/android/host_key_dialog.h"
 #include "client/workers/file_worker.h"
 #include "client/workers/network_worker.h"
 #include "common/android/app_bar.h"
@@ -118,7 +119,8 @@ void FileTransferWindow::resizeEvent(QResizeEvent* event)
 //--------------------------------------------------------------------------------------------------
 void FileTransferWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data)
 {
-    if (status == NetworkWorker::Status::HOST_DISCONNECTED && session_keeper_)
+    if ((status == NetworkWorker::Status::HOST_DISCONNECTED ||
+         status == NetworkWorker::Status::HOST_KEY_UNTRUSTED) && session_keeper_)
         session_keeper_->release();
 
     onStatusChanged(status, data);
@@ -164,6 +166,25 @@ void FileTransferWindow::onStatusChanged(NetworkWorker::Status status, const QVa
             else
             {
                 setStatusText(tr("The connection to the host has been lost."));
+            }
+        }
+        break;
+
+        case NetworkWorker::Status::HOST_KEY_UNTRUSTED:
+        {
+            const QVariantMap map = data.toMap();
+            if (HostKeyDialog::confirm(this, map.value("address").toString(),
+                                       map.value("public_key").toByteArray(),
+                                       map.value("key_changed").toBool()))
+            {
+                // The key is pinned now; connect again and send the credentials.
+                setStatusText(tr("Connecting to host %1...").arg(session_state_->hostAddress()));
+                startNewSession();
+            }
+            else
+            {
+                setStatusText(tr("The connection was canceled because the identity key of the host "
+                                 "is not trusted. No credentials were sent."));
             }
         }
         break;
