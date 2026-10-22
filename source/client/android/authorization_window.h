@@ -59,6 +59,9 @@ public:
 
     bool isSaveCredentialsChecked() const;
 
+    // True when the typed user name is an operating system / domain account.
+    bool isDomainAccount() const;
+
 signals:
     void sig_accepted();
     void sig_closed();
@@ -79,6 +82,7 @@ private:
     bool isOneTimePasswordOffered() const;
     bool usesSavedCredentials() const;
     bool hasSavedCredentials() const;
+    bool isDomainAccountOffered() const;
     const CredentialConfig* selectedCredential() const;
     void updateModes();
 
@@ -95,6 +99,7 @@ private:
     QWidget* saved_credentials_block_ = nullptr;
     LineEdit* edit_username_ = nullptr;
     LineEdit* edit_password_ = nullptr;
+    Switch* switch_domain_account_ = nullptr;
     LineEdit* edit_one_time_password_ = nullptr;
     ComboBox* combo_credential_ = nullptr;
     Switch* switch_save_credentials_ = nullptr;

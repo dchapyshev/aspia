@@ -843,22 +843,34 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
     if (can_save_credentials)
     {
         Database& db = Database::instance();
+        bool os_account = false;
         std::optional<std::pair<QString, SecureString>> credentials = host.entryId() > 0 ?
-            db.localHostCredentials(host.entryId()) :
+            db.localHostCredentials(host.entryId(), &os_account) :
             db.routerHostCredentials(host.routerId(), stringToHostId(host.address()));
         if (credentials.has_value())
         {
-            LOG(INFO) << "Using stored credentials of host" << host.address();
+            LOG(INFO) << "Using stored credentials of host" << host.address() << "(OS account:"
+                      << os_account << ")";
 
             host.setUsername(credentials->first);
             host.setPassword(credentials->second);
+
+            // Operating system / domain accounts go over IDENTIFY_PASSWORD. Only direct
+            // connections: a router-reached host can not be pinned by address.
+            if (os_account && host.entryId() > 0 && !isHostId(host.address()))
+                host.setDomainAccount(true);
         }
     }
 
     if (host.username().isEmpty() || host.password().isEmpty())
     {
+        // Operating system records are offered where OS / domain accounts are possible.
+        const bool direct = host.routerId() <= 0 && !host.isPortable() && !isHostId(host.address());
+
         QList<CredentialConfig> credentials;
-        if (Database::instance().credentialList(&credentials, CredentialConfig::Type::ASPIA) !=
+        if (Database::instance().credentialList(&credentials, direct ?
+                std::optional<CredentialConfig::Type>() :
+                std::optional<CredentialConfig::Type>(CredentialConfig::Type::ASPIA)) !=
             Database::ReadResult::OK)
             LOG(ERROR) << "Unable to read credentials";
 
@@ -922,6 +934,8 @@ void AndroidMainWindow::saveHostCredentials(const HostConfig& host, qint64 crede
         local_host.setCredentialId(credential_id);
         local_host.setUsername(username);
         local_host.setPassword(password);
+        // Keep the account mode, otherwise "user@domain" comes back as an Aspia user.
+        local_host.setOsAccount(credential_id <= 0 && host.isDomainAccount());
 
         if (!db.modifyLocalHost(local_host))
             LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();

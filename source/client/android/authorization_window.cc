@@ -23,6 +23,8 @@
 #include <QButtonGroup>
 #include <QVBoxLayout>
 
+#include "base/peer/host_id.h"
+#include "base/peer/user.h"
 #include "common/android/app_bar.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
@@ -77,6 +79,7 @@ AuthorizationWindow::AuthorizationWindow(const HostConfig& host, proto::peer::Se
       saved_credentials_block_(new QWidget()),
       edit_username_(new LineEdit()),
       edit_password_(new LineEdit()),
+      switch_domain_account_(new Switch(tr("Domain account"))),
       edit_one_time_password_(new LineEdit()),
       combo_credential_(new ComboBox()),
       label_error_(new Label(QString(), Label::Role::CAPTION))
@@ -100,7 +103,21 @@ AuthorizationWindow::AuthorizationWindow(const HostConfig& host, proto::peer::Se
 
     combo_credential_->setLabel(tr("Credentials"));
     for (const CredentialConfig& credential : credentials_)
-        combo_credential_->addItem(credential.displayName(), QVariant::fromValue(credential.id()));
+    {
+        const QString display_name = credential.type() == CredentialConfig::Type::OS ?
+            tr("%1 (OS account)").arg(credential.displayName()) : credential.displayName();
+        combo_credential_->addItem(display_name, QVariant::fromValue(credential.id()));
+    }
+
+    // Operating system / domain accounts are offered for direct connections only: the identity key
+    // of a host reached through a router can not be pinned by address.
+    switch_domain_account_->setChecked(host.isDomainAccount());
+    switch_domain_account_->setVisible(isDomainAccountOffered());
+    connect(edit_username_, &LineEdit::textEdited, this, [this](const QString& text)
+    {
+        if (text.contains(QLatin1Char('\\')))
+            switch_domain_account_->setChecked(true);
+    });
 
     Button* connect_button = new Button(tr("Connect"), Button::Role::FILLED);
 
@@ -109,6 +126,7 @@ AuthorizationWindow::AuthorizationWindow(const HostConfig& host, proto::peer::Se
     user_password_layout->setSpacing(kFormSpacing);
     user_password_layout->addWidget(edit_username_);
     user_password_layout->addWidget(edit_password_);
+    user_password_layout->addWidget(switch_domain_account_);
 
     QVBoxLayout* one_time_password_layout = new QVBoxLayout(one_time_password_block_);
     one_time_password_layout->setContentsMargins(0, 0, 0, 0);
@@ -186,6 +204,7 @@ HostConfig AuthorizationWindow::host() const
     {
         host.setUsername(credential->username());
         host.setPassword(credential->password());
+        host.setDomainAccount(credential->type() == CredentialConfig::Type::OS);
         return host;
     }
 
@@ -193,11 +212,13 @@ HostConfig AuthorizationWindow::host() const
     {
         host.setUsername(QString());
         host.setPassword(SecureString(edit_one_time_password_->text()));
+        host.setDomainAccount(false);
         return host;
     }
 
-    host.setUsername(edit_username_->text());
+    host.setUsername(edit_username_->text().trimmed());
     host.setPassword(SecureString(edit_password_->text()));
+    host.setDomainAccount(isDomainAccount());
     return host;
 }
 
@@ -217,6 +238,16 @@ bool AuthorizationWindow::isSaveCredentialsChecked() const
 }
 
 //--------------------------------------------------------------------------------------------------
+bool AuthorizationWindow::isDomainAccount() const
+{
+    if (!isDomainAccountOffered() || usesOneTimePassword() || usesSavedCredentials())
+        return false;
+
+    return switch_domain_account_->isChecked() ||
+           edit_username_->text().contains(QLatin1Char('\\'));
+}
+
+//--------------------------------------------------------------------------------------------------
 void AuthorizationWindow::onConnectClicked()
 {
     if (usesOneTimePassword())
@@ -233,6 +264,15 @@ void AuthorizationWindow::onConnectClicked()
         if (edit_username_->text().isEmpty())
         {
             showError(tr("User name cannot be empty."));
+            edit_username_->setFocus();
+            return;
+        }
+
+        const QString username = edit_username_->text().trimmed();
+        if (isDomainAccount() && !User::isValidDomainUserName(username))
+        {
+            showError(tr("User Name: enter the operating system / domain account as \"DOMAIN\\user\", "
+                         "\"user@domain\" or \"user\"."));
             edit_username_->setFocus();
             return;
         }
@@ -264,6 +304,12 @@ bool AuthorizationWindow::usesOneTimePassword() const
 bool AuthorizationWindow::isOneTimePasswordOffered() const
 {
     return host_.routerId() > 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AuthorizationWindow::isDomainAccountOffered() const
+{
+    return host_.routerId() <= 0 && !host_.isPortable() && !isHostId(host_.address());
 }
 
 //--------------------------------------------------------------------------------------------------

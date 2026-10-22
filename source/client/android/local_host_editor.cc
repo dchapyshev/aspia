@@ -55,6 +55,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
       switch_saved_credentials_(new Switch(tr("Use existing"))),
       edit_username_(new LineEdit()),
       edit_password_(new LineEdit()),
+      switch_os_account_(new Switch(tr("Operating system / domain account"))),
       combo_credential_(new ComboBox()),
       edit_comment_(new TextArea()),
       label_error_(new Label(QString(), Label::Role::CAPTION))
@@ -92,6 +93,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
     form_layout->addWidget(switch_saved_credentials_);
     form_layout->addWidget(edit_username_);
     form_layout->addWidget(edit_password_);
+    form_layout->addWidget(switch_os_account_);
     form_layout->addWidget(combo_credential_);
     form_layout->addWidget(edit_comment_);
     form_layout->addWidget(save);
@@ -109,6 +111,12 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
     connect(combo_router_, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LocalHostEditor::onRouterChanged);
     connect(switch_saved_credentials_, &Switch::toggled, this, &LocalHostEditor::onSavedCredentialsToggled);
+    connect(edit_username_, &LineEdit::textEdited, this, [this](const QString& text)
+    {
+        // "DOMAIN\user" is always an operating system / domain account.
+        if (text.contains(QLatin1Char('\\')))
+            switch_os_account_->setChecked(true);
+    });
     connect(save, &Button::clicked, this, &LocalHostEditor::onSaveClicked);
     connect(button_delete_, &Button::clicked, this, &LocalHostEditor::onDeleteClicked);
 }
@@ -126,6 +134,7 @@ void LocalHostEditor::prepareForAdd(qint64 group_id)
     edit_address_->clear();
     edit_username_->clear();
     edit_password_->clear();
+    switch_os_account_->setChecked(false);
     edit_comment_->clear();
     label_error_->setVisible(false);
     button_delete_->hide();
@@ -156,6 +165,7 @@ bool LocalHostEditor::prepareForEdit(qint64 host_id)
     edit_address_->setText(host.address());
     edit_username_->setText(host.username());
     edit_password_->setText(host.password().toString());
+    switch_os_account_->setChecked(host.isOsAccount());
     edit_comment_->setText(host.comment());
     label_error_->setVisible(false);
     button_delete_->show();
@@ -206,28 +216,51 @@ bool LocalHostEditor::loadRouters(qint64 selected_router_id)
 //--------------------------------------------------------------------------------------------------
 bool LocalHostEditor::loadCredentials(qint64 selected_credential_id)
 {
-    combo_credential_->clear();
+    credentials_.clear();
 
-    QList<CredentialConfig> credentials;
-    const Database::ReadResult result = Database::instance().credentialList(
-        &credentials, CredentialConfig::Type::ASPIA);
+    // Both Aspia users and operating system / domain accounts. An OS record connects with
+    // IDENTIFY_PASSWORD, so it is offered for direct connections only.
+    const Database::ReadResult result = Database::instance().credentialList(&credentials_);
     if (result == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the list of credentials";
         showError(tr("Failed to read data from the local database."));
+        fillCredentials(0);
         return false;
     }
 
     if (result == Database::ReadResult::INCOMPLETE)
         LOG(ERROR) << "Unable to read some of the credentials";
 
+    fillCredentials(selected_credential_id);
+    switch_saved_credentials_->setChecked(combo_credential_->findData(
+        QVariant::fromValue(selected_credential_id)) >= 0);
+    onSavedCredentialsToggled(switch_saved_credentials_->isChecked());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalHostEditor::fillCredentials(qint64 selected_credential_id)
+{
+    const bool direct = (combo_router_->currentData().toLongLong() == 0);
+
+    combo_credential_->clear();
+
     const QIcon icon = GuiApplication::svgIcon(":/img/keys.svg");
     const QIcon unread_icon = GuiApplication::svgIcon(":/img/key-corrupted.svg");
 
-    for (const CredentialConfig& credential : std::as_const(credentials))
+    for (const CredentialConfig& credential : std::as_const(credentials_))
     {
+        const bool os = (credential.type() == CredentialConfig::Type::OS);
+
+        // A router does not accept operating system / domain accounts.
+        if (os && !direct)
+            continue;
+
+        const QString display_name = os ?
+            tr("%1 (OS account)").arg(credential.displayName()) : credential.displayName();
         combo_credential_->addItem(credential.isValid() ? icon : unread_icon,
-                                   credential.displayName(),
+                                   display_name,
                                    QVariant::fromValue(credential.id()));
     }
 
@@ -235,10 +268,21 @@ bool LocalHostEditor::loadCredentials(qint64 selected_credential_id)
     combo_credential_->setCurrentIndex(index >= 0 ? index : 0);
 
     // Nothing to share until a record of credentials is added.
-    switch_saved_credentials_->setEnabled(!credentials.isEmpty());
-    switch_saved_credentials_->setChecked(index >= 0);
-    onSavedCredentialsToggled(switch_saved_credentials_->isChecked());
-    return true;
+    const bool has_credentials = combo_credential_->count() > 0;
+    switch_saved_credentials_->setEnabled(has_credentials);
+    if (!has_credentials && switch_saved_credentials_->isChecked())
+    {
+        switch_saved_credentials_->setChecked(false);
+        onSavedCredentialsToggled(false);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalHostEditor::updateOsAccountVisibility()
+{
+    // Domain accounts are accepted on direct connections only.
+    const bool direct = (combo_router_->currentData().toLongLong() == 0);
+    switch_os_account_->setVisible(direct && !switch_saved_credentials_->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -247,6 +291,9 @@ void LocalHostEditor::onRouterChanged()
     // Without a router the address is a host name or IP; through a router it is a host ID.
     const bool direct = (combo_router_->currentData().toLongLong() == 0);
     edit_address_->setLabel(direct ? tr("Address") : tr("ID"));
+
+    fillCredentials(combo_credential_->currentData().toLongLong());
+    updateOsAccountVisibility();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -262,6 +309,7 @@ void LocalHostEditor::onSavedCredentialsToggled(bool checked)
     edit_username_->setVisible(!checked);
     edit_password_->setVisible(!checked);
     combo_credential_->setVisible(checked);
+    updateOsAccountVisibility();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -319,13 +367,29 @@ void LocalHostEditor::onSaveClicked()
         return;
     }
 
-    const QString username = edit_username_->text();
-    const QString password = edit_password_->text();
+    const bool use_saved_credentials = switch_saved_credentials_->isChecked();
+    const QString username = use_saved_credentials ? QString() : edit_username_->text().trimmed();
+    const QString password = use_saved_credentials ? QString() : edit_password_->text();
 
-    if (!username.isEmpty() && !User::isValidUserName(username))
+    // "DOMAIN\user", "user@domain.fqdn" and non-Latin names are operating system / domain accounts.
+    // Aspia (SRP) user names keep their own rules. Routers accept Aspia users only.
+    const bool os_account = (router_id == 0) &&
+        (switch_os_account_->isChecked() || username.contains(QLatin1Char('\\')));
+
+    if (os_account && !username.isEmpty() && !User::isValidDomainUserName(username))
     {
-        showError(tr("The user name can not be empty and can contain only alphabet characters,"
-                     " numbers and \"_\", \"-\", \".\" characters."));
+        showError(tr("User Name: enter the operating system / domain account as \"DOMAIN\\user\", "
+                     "\"user@domain\" or \"user\"."));
+        edit_username_->setFocus();
+        edit_username_->selectAll();
+        return;
+    }
+
+    if (!os_account && !username.isEmpty() && !User::isValidUserName(username))
+    {
+        showError(tr("User Name: an Aspia user name can contain only letters, numbers and \"_\", \"-\", "
+                     "\".\", \"@\" characters. For a domain account (\"DOMAIN\\user\") check "
+                     "\"Operating system / domain account\"."));
         edit_username_->setFocus();
         edit_username_->selectAll();
         return;
@@ -343,9 +407,10 @@ void LocalHostEditor::onSaveClicked()
     data.setRouterId(router_id);
     data.setName(name);
     data.setAddress(address_text);
-    data.setCredentialId(switch_saved_credentials_->isChecked() ? combo_credential_->currentData().toLongLong() : 0);
+    data.setCredentialId(use_saved_credentials ? combo_credential_->currentData().toLongLong() : 0);
     data.setUsername(username);
     data.setPassword(SecureString(password));
+    data.setOsAccount(os_account && !use_saved_credentials);
     data.setComment(edit_comment_->text());
 
     Database& db = Database::instance();

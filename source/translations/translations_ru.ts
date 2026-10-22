@@ -503,6 +503,21 @@
 <context>
     <name>AuthorizationWindow</name>
     <message>
+        <location filename="../client/android/authorization_window.cc" line="0"/>
+        <source>Domain account</source>
+        <translation>Доменная учётная запись</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="0"/>
+        <source>%1 (OS account)</source>
+        <translation>%1 (учётная запись ОС)</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="0"/>
+        <source>User Name: enter the operating system / domain account as &quot;DOMAIN\user&quot;, &quot;user@domain&quot; or &quot;user&quot;.</source>
+        <translation>Имя пользователя: введите учётную запись операционной системы / домена в виде &quot;DOMAIN\user&quot;, &quot;user@domain&quot; или &quot;user&quot;.</translation>
+    </message>
+    <message>
         <location filename="../client/android/authorization_window.cc" line="72"/>
         <source>Enter user name and password</source>
         <translation>Имя пользователя и пароль</translation>
@@ -4507,6 +4522,26 @@ Credentials replaced: %2</source>
 </context>
 <context>
     <name>LocalHostEditor</name>
+    <message>
+        <location filename="../client/android/local_host_editor.cc" line="0"/>
+        <source>Operating system / domain account</source>
+        <translation>Учётная запись ОС / домена</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_host_editor.cc" line="0"/>
+        <source>%1 (OS account)</source>
+        <translation>%1 (учётная запись ОС)</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_host_editor.cc" line="0"/>
+        <source>User Name: enter the operating system / domain account as &quot;DOMAIN\user&quot;, &quot;user@domain&quot; or &quot;user&quot;.</source>
+        <translation>Имя пользователя: введите учётную запись операционной системы / домена в виде &quot;DOMAIN\user&quot;, &quot;user@domain&quot; или &quot;user&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_host_editor.cc" line="0"/>
+        <source>User Name: an Aspia user name can contain only letters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. For a domain account (&quot;DOMAIN\user&quot;) check &quot;Operating system / domain account&quot;.</source>
+        <translation>Имя пользователя: имя пользователя Aspia может содержать только буквы, цифры и символы &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;. Для доменной учётной записи (&quot;DOMAIN\user&quot;) включите &quot;Учётная запись ОС / домена&quot;.</translation>
+    </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="55"/>
         <source>Use existing</source>

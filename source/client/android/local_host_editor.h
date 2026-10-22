@@ -19,7 +19,10 @@
 #ifndef CLIENT_ANDROID_LOCAL_HOST_EDITOR_H
 #define CLIENT_ANDROID_LOCAL_HOST_EDITOR_H
 
+#include <QList>
 #include <QWidget>
+
+#include "client/config.h"
 
 class Button;
 class ComboBox;
@@ -58,6 +61,8 @@ private slots:
 private:
     bool loadRouters(qint64 selected_router_id);
     bool loadCredentials(qint64 selected_credential_id);
+    void fillCredentials(qint64 selected_credential_id);
+    void updateOsAccountVisibility();
     void showError(const QString& message);
 
     ComboBox* combo_router_ = nullptr;
@@ -66,10 +71,12 @@ private:
     Switch* switch_saved_credentials_ = nullptr;
     LineEdit* edit_username_ = nullptr;
     LineEdit* edit_password_ = nullptr;
+    Switch* switch_os_account_ = nullptr;
     ComboBox* combo_credential_ = nullptr;
     TextArea* edit_comment_ = nullptr;
     Label* label_error_ = nullptr;
     Button* button_delete_ = nullptr;
+    QList<CredentialConfig> credentials_;
     qint64 entry_id_ = -1;
     qint64 group_id_ = 0;
     bool lists_loaded_ = true;
