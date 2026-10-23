@@ -56,17 +56,18 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     // model it has, and at the time the generated setup ran there was none.
     ui->tree_host->setSortingEnabled(true);
 
-    ui->tree_host->header()->resizeSection(static_cast<int>(LocalHostListModel::Column::NAME), 110);
-    ui->tree_host->header()->resizeSection(static_cast<int>(LocalHostListModel::Column::MODIFIED), 150);
-    ui->tree_host->header()->resizeSection(static_cast<int>(LocalHostListModel::Column::CONNECT), 150);
+    QHeaderView* header = ui->tree_host->header();
+    header->resizeSection(static_cast<int>(LocalHostListModel::Column::NAME), 110);
+    header->resizeSection(static_cast<int>(LocalHostListModel::Column::CREATED), 120);
+    header->resizeSection(static_cast<int>(LocalHostListModel::Column::MODIFIED), 120);
+    header->resizeSection(static_cast<int>(LocalHostListModel::Column::CONNECT), 150);
 
     ui->tree_host->viewport()->installEventFilter(this);
     ui->tree_host->installEventFilter(this);
 
-    ui->tree_host->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    header->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(ui->tree_host->header(), &QHeaderView::customContextMenuRequested,
-            this, &LocalGroupWidget::onHeaderContextMenu);
+    connect(header, &QHeaderView::customContextMenuRequested, this, &LocalGroupWidget::onHeaderContextMenu);
 
     connect(ui->tree_host, &QAbstractItemView::activated, this, [this](const QModelIndex& index)
     {

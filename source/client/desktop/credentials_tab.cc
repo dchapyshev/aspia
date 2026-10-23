@@ -49,7 +49,9 @@ CredentialsTab::CredentialsTab(QWidget* parent)
     ui->tree_credentials->sortByColumn(
         static_cast<int>(CredentialListModel::Column::NAME), Qt::AscendingOrder);
     ui->tree_credentials->header()->resizeSection(
-        static_cast<int>(CredentialListModel::Column::NAME), 150);
+        static_cast<int>(CredentialListModel::Column::NAME), 200);
+    ui->tree_credentials->header()->resizeSection(
+        static_cast<int>(CredentialListModel::Column::USERNAME), 150);
 
     connect(ui->tree_credentials->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &CredentialsTab::onSelectionChanged);
