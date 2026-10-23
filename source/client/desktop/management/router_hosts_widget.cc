@@ -107,21 +107,22 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
     connect(ui->tree_hosts, &QWidget::customContextMenuRequested,
             this, &RouterHostsWidget::onHostContextMenu);
 
-    ui->tree_hosts->header()->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->tree_hosts->header()->setSectionHidden(model_->sectionOf(HostListModel::Column::COMMENT), true);
+    QHeaderView* header = ui->tree_hosts->header();
+    header->setContextMenuPolicy(Qt::CustomContextMenu);
+    header->setSectionHidden(model_->sectionOf(HostListModel::Column::COMMENT), true);
+    header->setSectionHidden(model_->sectionOf(HostListModel::Column::ARCH), true);
 
-    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::HOST_ID), 75);
-    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::DISPLAY_NAME), 120);
-    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::COMPUTER_NAME), 110);
-    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::WORKSPACE), 135);
-    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::OS), 140);
-    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::VERSION), 70);
-    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::ARCH), 90);
-    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::LAST_CONNECT), 150);
-    ui->tree_hosts->header()->resizeSection(model_->sectionOf(HostListModel::Column::LAST_MODIFY), 150);
+    header->resizeSection(model_->sectionOf(HostListModel::Column::HOST_ID), 75);
+    header->resizeSection(model_->sectionOf(HostListModel::Column::DISPLAY_NAME), 120);
+    header->resizeSection(model_->sectionOf(HostListModel::Column::COMPUTER_NAME), 110);
+    header->resizeSection(model_->sectionOf(HostListModel::Column::WORKSPACE), 115);
+    header->resizeSection(model_->sectionOf(HostListModel::Column::OS), 140);
+    header->resizeSection(model_->sectionOf(HostListModel::Column::VERSION), 70);
+    header->resizeSection(model_->sectionOf(HostListModel::Column::ARCH), 90);
+    header->resizeSection(model_->sectionOf(HostListModel::Column::LAST_CONNECT), 150);
+    header->resizeSection(model_->sectionOf(HostListModel::Column::LAST_MODIFY), 150);
 
-    connect(ui->tree_hosts->header(), &QHeaderView::customContextMenuRequested,
-            this, &RouterHostsWidget::onHeaderContextMenu);
+    connect(header, &QHeaderView::customContextMenuRequested, this, &RouterHostsWidget::onHeaderContextMenu);
 
     ui->tree_hosts->installEventFilter(this);
     ui->tree_hosts->viewport()->installEventFilter(this);
@@ -314,9 +315,10 @@ void RouterHostsWidget::restoreState(const QByteArray& state)
 
     if (!hosts_columns_state.isEmpty())
     {
-        ui->tree_hosts->header()->restoreState(hosts_columns_state);
-        ui->tree_hosts->header()->setSectionsClickable(true);
-        ui->tree_hosts->header()->setSortIndicatorShown(true);
+        QHeaderView* header = ui->tree_hosts->header();
+        header->restoreState(hosts_columns_state);
+        header->setSectionsClickable(true);
+        header->setSortIndicatorShown(true);
     }
 }
 
