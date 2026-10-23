@@ -18,8 +18,10 @@
 
 #include "client/desktop/credentials_tab.h"
 
+#include <QEvent>
 #include <QHeaderView>
 #include <QItemSelectionModel>
+#include <QKeyEvent>
 #include <QMenu>
 
 #include "base/auto_qpointer.h"
@@ -53,6 +55,7 @@ CredentialsTab::CredentialsTab(QWidget* parent)
             this, &CredentialsTab::onSelectionChanged);
     connect(ui->tree_credentials, &QAbstractItemView::activated,
             this, [this](const QModelIndex&) { onEditAction(); });
+    ui->tree_credentials->installEventFilter(this);
 
     ui->tree_credentials->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_credentials, &QWidget::customContextMenuRequested,
@@ -102,6 +105,19 @@ void CredentialsTab::activate()
 void CredentialsTab::deactivate()
 {
     // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool CredentialsTab::eventFilter(QObject* watched, QEvent* event)
+{
+    if (watched == ui->tree_credentials && event->type() == QEvent::KeyPress &&
+        static_cast<QKeyEvent*>(event)->key() == Qt::Key_F2)
+    {
+        onEditAction();
+        return true;
+    }
+
+    return Tab::eventFilter(watched, event);
 }
 
 //--------------------------------------------------------------------------------------------------

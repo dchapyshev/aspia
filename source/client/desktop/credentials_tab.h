@@ -44,6 +44,10 @@ public:
     void activate() final;
     void deactivate() final;
 
+protected:
+    // QObject implementation.
+    bool eventFilter(QObject* watched, QEvent* event) final;
+
 private slots:
     void onExportAction();
     void onImportAction();
