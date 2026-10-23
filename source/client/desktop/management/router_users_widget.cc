@@ -56,9 +56,10 @@ RouterUsersWidget::RouterUsersWidget(QWidget* parent)
     connect(ui->tree_users, &QWidget::customContextMenuRequested,
             this, &RouterUsersWidget::onUserContextMenu);
 
-    ui->tree_users->header()->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_users->header(), &QHeaderView::customContextMenuRequested,
-            this, &RouterUsersWidget::onHeaderContextMenu);
+    QHeaderView* header = ui->tree_users->header();
+    header->resizeSection(static_cast<int>(UserListModel::Column::NAME), 130);
+    header->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(header, &QHeaderView::customContextMenuRequested, this, &RouterUsersWidget::onHeaderContextMenu);
 
     connect(ui->tree_users->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &RouterUsersWidget::sig_currentChanged);
@@ -153,9 +154,10 @@ void RouterUsersWidget::restoreState(const QByteArray& state)
 
     if (!columns_state.isEmpty())
     {
-        ui->tree_users->header()->restoreState(columns_state);
-        ui->tree_users->header()->setSectionsClickable(true);
-        ui->tree_users->header()->setSortIndicatorShown(true);
+        QHeaderView* header = ui->tree_users->header();
+        header->restoreState(columns_state);
+        header->setSectionsClickable(true);
+        header->setSortIndicatorShown(true);
     }
 }
 
