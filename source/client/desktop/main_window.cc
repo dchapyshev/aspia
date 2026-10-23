@@ -178,6 +178,7 @@ MainWindow::MainWindow(QWidget* parent)
     });
 
     // Tab management.
+    ui->tabs->tabBar()->setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
     connect(ui->tabs, &QTabWidget::currentChanged, this, &MainWindow::onCurrentTabChanged);
     connect(ui->tabs, &QTabWidget::tabCloseRequested, this, &MainWindow::onCloseTab);
 
