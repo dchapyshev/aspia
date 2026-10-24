@@ -19,6 +19,7 @@
 #include "client/database.h"
 
 #include <QDateTime>
+#include <QFile>
 #include <QFileInfo>
 #include <QTemporaryDir>
 #include <QThread>
@@ -2736,9 +2737,8 @@ TEST_F(DatabaseTest, ResetKeepsWhatTheDatabaseHeldInACopy)
     addRouterHost(addRouter("Router"), 1, "user", "password");
     addCredential("Credential", "user", "password");
 
-    const QString copy_path = db_.saveCopyAndClearAll();
-    ASSERT_FALSE(copy_path.isEmpty());
-    EXPECT_EQ(QFileInfo(copy_path).absolutePath(), QFileInfo(file_path_).absolutePath());
+    const QString copy_path = QFileInfo(file_path_).dir().filePath("copy.db3");
+    ASSERT_TRUE(db_.saveCopyAndClearAll(copy_path));
 
     EXPECT_FALSE(db_.isMasterPasswordSet());
     EXPECT_EQ(db_.lockTimeout(), Minutes::zero());
@@ -2765,4 +2765,24 @@ TEST_F(DatabaseTest, ResetKeepsWhatTheDatabaseHeldInACopy)
     QList<CredentialConfig> credentials;
     ASSERT_EQ(copy.credentialList(&credentials), Database::ReadResult::OK);
     EXPECT_EQ(credentials.size(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A file that is already where the copy goes is not overwritten, and the database is not cleared.
+TEST_F(DatabaseTest, ResetDoesNotOverwriteAFileInPlaceOfTheCopy)
+{
+    addHost("Host", 0);
+
+    const QString copy_path = QFileInfo(file_path_).dir().filePath("copy.db3");
+
+    QFile file(copy_path);
+    ASSERT_TRUE(file.open(QIODevice::WriteOnly));
+    ASSERT_EQ(file.write("data"), 4);
+    file.close();
+
+    EXPECT_FALSE(db_.saveCopyAndClearAll(copy_path));
+    EXPECT_EQ(allLocalHosts().size(), 1);
+
+    ASSERT_TRUE(file.open(QIODevice::ReadOnly));
+    EXPECT_EQ(file.readAll(), "data");
 }

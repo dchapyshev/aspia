@@ -1886,19 +1886,15 @@ bool Database::import(const QList<RouterConfig>& routers,
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Database::saveCopyAndClearAll()
+bool Database::saveCopyAndClearAll(const QString& copy_path)
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return QString();
+        return false;
     }
 
     // The workers keep their own connections to the file, so it is not renamed but emptied in place.
-    const QFileInfo file_info(db_.filePath());
-    const QString copy_path = QString("%1/%2-%3.%4").arg(file_info.path(), file_info.completeBaseName(),
-        QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"), file_info.suffix());
-
     {
         SqlQuery copy(db_, "VACUUM INTO ?");
         copy.addText(copy_path);
@@ -1906,7 +1902,7 @@ QString Database::saveCopyAndClearAll()
         if (!copy.exec())
         {
             LOG(ERROR) << "Unable to copy the database:" << db_.lastError();
-            return QString();
+            return false;
         }
     }
 
@@ -1914,7 +1910,7 @@ QString Database::saveCopyAndClearAll()
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to begin transaction";
-        return QString();
+        return false;
     }
 
     if (!db_.exec("DELETE FROM local_groups") || !db_.exec("DELETE FROM routers") ||
@@ -1922,14 +1918,14 @@ QString Database::saveCopyAndClearAll()
         !db_.exec("DELETE FROM settings"))
     {
         LOG(ERROR) << "Unable to clear the database:" << db_.lastError();
-        return QString();
+        return false;
     }
 
     if (!transaction.commit())
-        return QString();
+        return false;
 
     LOG(INFO) << "Database is reset, the copy is saved to:" << copy_path;
-    return copy_path;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

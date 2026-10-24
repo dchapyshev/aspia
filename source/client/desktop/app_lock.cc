@@ -18,9 +18,11 @@
 
 #include "client/desktop/app_lock.h"
 
+#include <QDateTime>
 #include <QDir>
 #include <QEvent>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QThread>
 #include <QTimer>
 
@@ -90,16 +92,20 @@ AppLock::Result AppLock::unlock(bool reset_allowed)
 
         if (result == kResetResult)
         {
+            const QFileInfo file_info(Database::filePath());
+            const QString copy_path = QString("%1/%2-%3.%4").arg(file_info.path(), file_info.completeBaseName(),
+                QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"), file_info.suffix());
+
             const QString question = tr(
-                "The master password cannot be recovered. Resetting the database deletes all its records, the "
-                "master password and the settings. A copy of the current database is kept in the same folder.\n"
-                "Reset the database?");
+                "The master password cannot be recovered. To continue using the application, you need to reset "
+                "the database. All records, the master password and the settings will be deleted, but a copy of "
+                "the current database will first be saved to the file \"%1\".\nReset the database?")
+                    .arg(QDir::toNativeSeparators(copy_path));
 
             if (MsgBox::importantQuestion(nullptr, question, Seconds(30)) != MsgBox::Yes)
                 continue;
 
-            const QString copy_path = Database::instance().saveCopyAndClearAll();
-            if (copy_path.isEmpty())
+            if (!Database::instance().saveCopyAndClearAll(copy_path))
             {
                 MsgBox::warning(nullptr, tr("Unable to reset the database."));
                 continue;
