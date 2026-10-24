@@ -448,44 +448,44 @@
 <context>
     <name>AppLock</name>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="70"/>
+        <location filename="../client/desktop/app_lock.cc" line="72"/>
         <source>Unlock</source>
         <translation>잠금 해제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="72"/>
+        <location filename="../client/desktop/app_lock.cc" line="74"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>응용 프로그램의 잠금을 해제하려면 마스터 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="74"/>
+        <location filename="../client/desktop/app_lock.cc" line="77"/>
         <source>Forgot password?</source>
         <translation>암호를 잊으셨습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="92"/>
-        <source>The master password cannot be recovered. Resetting the database deletes all its records, the master password and the settings. A copy of the current database is kept in the same folder.
+        <location filename="../client/desktop/app_lock.cc" line="99"/>
+        <source>The master password cannot be recovered. To continue using the application, you need to reset the database. All records, the master password and the settings will be deleted, but a copy of the current database will first be saved to the file &quot;%1&quot;.
 Reset the database?</source>
-        <translation>마스터 암호는 복구할 수 없습니다. 데이터베이스를 다시 설정하면 모든 레코드, 마스터 암호 및 설정이 삭제됩니다. 현재 데이터베이스의 사본은 같은 폴더에 보관됩니다.
+        <translation>마스터 암호는 복구할 수 없습니다. 응용 프로그램을 계속 사용하려면 데이터베이스를 다시 설정해야 합니다. 모든 레코드, 마스터 암호 및 설정이 삭제되지만, 그 전에 현재 데이터베이스의 사본이 &quot;%1&quot; 파일에 저장됩니다.
 데이터베이스를 다시 설정하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="103"/>
+        <location filename="../client/desktop/app_lock.cc" line="110"/>
         <source>Unable to reset the database.</source>
         <translation>데이터베이스를 다시 설정할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="108"/>
+        <location filename="../client/desktop/app_lock.cc" line="115"/>
         <source>The database is reset. The previous database is saved to the file &quot;%1&quot;.</source>
         <translation>데이터베이스가 다시 설정되었습니다. 이전 데이터베이스는 &quot;%1&quot; 파일에 저장되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="129"/>
+        <location filename="../client/desktop/app_lock.cc" line="136"/>
         <source>Unable to unlock the database.</source>
         <translation>데이터베이스를 잠금 해제할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="133"/>
+        <location filename="../client/desktop/app_lock.cc" line="140"/>
         <source>Invalid master password.</source>
         <translation>잘못된 마스터 암호입니다.</translation>
     </message>

@@ -448,44 +448,44 @@
 <context>
     <name>AppLock</name>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="70"/>
+        <location filename="../client/desktop/app_lock.cc" line="72"/>
         <source>Unlock</source>
         <translation>Desbloquear</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="72"/>
+        <location filename="../client/desktop/app_lock.cc" line="74"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Introduza a palavra-passe mestra para desbloquear a aplicação.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="74"/>
+        <location filename="../client/desktop/app_lock.cc" line="77"/>
         <source>Forgot password?</source>
         <translation>Esqueceu-se da palavra-passe?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="92"/>
-        <source>The master password cannot be recovered. Resetting the database deletes all its records, the master password and the settings. A copy of the current database is kept in the same folder.
+        <location filename="../client/desktop/app_lock.cc" line="99"/>
+        <source>The master password cannot be recovered. To continue using the application, you need to reset the database. All records, the master password and the settings will be deleted, but a copy of the current database will first be saved to the file &quot;%1&quot;.
 Reset the database?</source>
-        <translation>A palavra-passe mestra não pode ser recuperada. Ao repor a base de dados, são eliminados todos os seus registos, a palavra-passe mestra e as definições. Será mantida uma cópia da base de dados atual na mesma pasta.
+        <translation>A palavra-passe mestra não pode ser recuperada. Para continuar a utilizar a aplicação, é necessário repor a base de dados. Todos os registos, a palavra-passe mestra e as definições serão eliminados, mas antes será guardada uma cópia da base de dados atual no ficheiro &quot;%1&quot;.
 Repor a base de dados?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="103"/>
+        <location filename="../client/desktop/app_lock.cc" line="110"/>
         <source>Unable to reset the database.</source>
         <translation>Não é possível repor a base de dados.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="108"/>
+        <location filename="../client/desktop/app_lock.cc" line="115"/>
         <source>The database is reset. The previous database is saved to the file &quot;%1&quot;.</source>
         <translation>A base de dados foi reposta. A base de dados anterior foi guardada no ficheiro &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="129"/>
+        <location filename="../client/desktop/app_lock.cc" line="136"/>
         <source>Unable to unlock the database.</source>
         <translation>Não é possível desbloquear a base de dados.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="133"/>
+        <location filename="../client/desktop/app_lock.cc" line="140"/>
         <source>Invalid master password.</source>
         <translation>Palavra-passe mestra inválida.</translation>
     </message>

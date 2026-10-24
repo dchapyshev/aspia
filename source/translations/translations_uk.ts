@@ -448,44 +448,44 @@
 <context>
     <name>AppLock</name>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="70"/>
+        <location filename="../client/desktop/app_lock.cc" line="72"/>
         <source>Unlock</source>
         <translation>Розблокування</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="72"/>
+        <location filename="../client/desktop/app_lock.cc" line="74"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Введіть майстер-пароль, щоб розблокувати застосунок.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="74"/>
+        <location filename="../client/desktop/app_lock.cc" line="77"/>
         <source>Forgot password?</source>
         <translation>Забули пароль?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="92"/>
-        <source>The master password cannot be recovered. Resetting the database deletes all its records, the master password and the settings. A copy of the current database is kept in the same folder.
+        <location filename="../client/desktop/app_lock.cc" line="99"/>
+        <source>The master password cannot be recovered. To continue using the application, you need to reset the database. All records, the master password and the settings will be deleted, but a copy of the current database will first be saved to the file &quot;%1&quot;.
 Reset the database?</source>
-        <translation>Відновити майстер-пароль неможливо. Під час скидання бази даних буде видалено всі записи, майстер-пароль і налаштування. Копію поточної бази даних буде збережено в тому самому каталозі.
+        <translation>Відновити майстер-пароль неможливо. Щоб продовжити роботу із застосунком, необхідно скинути базу даних. Усі записи, майстер-пароль і налаштування буде видалено, але перед цим копію поточної бази даних буде збережено у файлі &quot;%1&quot;.
 Скинути базу даних?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="103"/>
+        <location filename="../client/desktop/app_lock.cc" line="110"/>
         <source>Unable to reset the database.</source>
         <translation>Не вдалося скинути базу даних.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="108"/>
+        <location filename="../client/desktop/app_lock.cc" line="115"/>
         <source>The database is reset. The previous database is saved to the file &quot;%1&quot;.</source>
         <translation>Базу даних скинуто. Попередню базу даних збережено у файлі &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="129"/>
+        <location filename="../client/desktop/app_lock.cc" line="136"/>
         <source>Unable to unlock the database.</source>
         <translation>Не вдалося розблокувати базу даних.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="133"/>
+        <location filename="../client/desktop/app_lock.cc" line="140"/>
         <source>Invalid master password.</source>
         <translation>Невірний майстер-пароль.</translation>
     </message>

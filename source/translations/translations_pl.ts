@@ -448,44 +448,44 @@
 <context>
     <name>AppLock</name>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="70"/>
+        <location filename="../client/desktop/app_lock.cc" line="72"/>
         <source>Unlock</source>
         <translation>Odblokuj</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="72"/>
+        <location filename="../client/desktop/app_lock.cc" line="74"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Wprowadź hasło główne, aby odblokować aplikację.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="74"/>
+        <location filename="../client/desktop/app_lock.cc" line="77"/>
         <source>Forgot password?</source>
         <translation>Nie pamiętasz hasła?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="92"/>
-        <source>The master password cannot be recovered. Resetting the database deletes all its records, the master password and the settings. A copy of the current database is kept in the same folder.
+        <location filename="../client/desktop/app_lock.cc" line="99"/>
+        <source>The master password cannot be recovered. To continue using the application, you need to reset the database. All records, the master password and the settings will be deleted, but a copy of the current database will first be saved to the file &quot;%1&quot;.
 Reset the database?</source>
-        <translation>Nie można odzyskać hasła głównego. Zresetowanie bazy danych spowoduje usunięcie wszystkich jej rekordów, hasła głównego i ustawień. Kopia bieżącej bazy danych zostanie zachowana w tym samym folderze.
+        <translation>Nie można odzyskać hasła głównego. Aby kontynuować korzystanie z aplikacji, należy zresetować bazę danych. Wszystkie rekordy, hasło główne i ustawienia zostaną usunięte, ale wcześniej kopia bieżącej bazy danych zostanie zapisana w pliku &quot;%1&quot;.
 Zresetować bazę danych?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="103"/>
+        <location filename="../client/desktop/app_lock.cc" line="110"/>
         <source>Unable to reset the database.</source>
         <translation>Nie można zresetować bazy danych.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="108"/>
+        <location filename="../client/desktop/app_lock.cc" line="115"/>
         <source>The database is reset. The previous database is saved to the file &quot;%1&quot;.</source>
         <translation>Baza danych została zresetowana. Poprzednia baza danych została zapisana w pliku &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="129"/>
+        <location filename="../client/desktop/app_lock.cc" line="136"/>
         <source>Unable to unlock the database.</source>
         <translation>Nie można odblokować bazy danych.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="133"/>
+        <location filename="../client/desktop/app_lock.cc" line="140"/>
         <source>Invalid master password.</source>
         <translation>Nieprawidłowe hasło główne.</translation>
     </message>

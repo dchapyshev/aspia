@@ -448,44 +448,44 @@
 <context>
     <name>AppLock</name>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="70"/>
+        <location filename="../client/desktop/app_lock.cc" line="72"/>
         <source>Unlock</source>
         <translation>Ξεκλείδωμα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="72"/>
+        <location filename="../client/desktop/app_lock.cc" line="74"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Εισαγάγετε τον κύριο κωδικό πρόσβασης για να ξεκλειδώσετε την εφαρμογή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="74"/>
+        <location filename="../client/desktop/app_lock.cc" line="77"/>
         <source>Forgot password?</source>
         <translation>Ξεχάσατε τον κωδικό πρόσβασης;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="92"/>
-        <source>The master password cannot be recovered. Resetting the database deletes all its records, the master password and the settings. A copy of the current database is kept in the same folder.
+        <location filename="../client/desktop/app_lock.cc" line="99"/>
+        <source>The master password cannot be recovered. To continue using the application, you need to reset the database. All records, the master password and the settings will be deleted, but a copy of the current database will first be saved to the file &quot;%1&quot;.
 Reset the database?</source>
-        <translation>Ο κύριος κωδικός πρόσβασης δεν μπορεί να ανακτηθεί. Με την επαναφορά της βάσης δεδομένων θα διαγραφούν όλες οι εγγραφές της, ο κύριος κωδικός πρόσβασης και οι ρυθμίσεις. Ένα αντίγραφο της τρέχουσας βάσης δεδομένων θα διατηρηθεί στον ίδιο φάκελο.
+        <translation>Ο κύριος κωδικός πρόσβασης δεν μπορεί να ανακτηθεί. Για να συνεχίσετε να χρησιμοποιείτε την εφαρμογή, απαιτείται επαναφορά της βάσης δεδομένων. Όλες οι εγγραφές, ο κύριος κωδικός πρόσβασης και οι ρυθμίσεις θα διαγραφούν, αλλά πρώτα ένα αντίγραφο της τρέχουσας βάσης δεδομένων θα αποθηκευτεί στο αρχείο &quot;%1&quot;.
 Επαναφορά της βάσης δεδομένων;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="103"/>
+        <location filename="../client/desktop/app_lock.cc" line="110"/>
         <source>Unable to reset the database.</source>
         <translation>Δεν είναι δυνατή η επαναφορά της βάσης δεδομένων.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="108"/>
+        <location filename="../client/desktop/app_lock.cc" line="115"/>
         <source>The database is reset. The previous database is saved to the file &quot;%1&quot;.</source>
         <translation>Έγινε επαναφορά της βάσης δεδομένων. Η προηγούμενη βάση δεδομένων αποθηκεύτηκε στο αρχείο &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="129"/>
+        <location filename="../client/desktop/app_lock.cc" line="136"/>
         <source>Unable to unlock the database.</source>
         <translation>Δεν είναι δυνατό το ξεκλείδωμα της βάσης δεδομένων.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="133"/>
+        <location filename="../client/desktop/app_lock.cc" line="140"/>
         <source>Invalid master password.</source>
         <translation>Μη έγκυρος κύριος κωδικός πρόσβασης.</translation>
     </message>

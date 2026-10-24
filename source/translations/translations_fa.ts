@@ -448,44 +448,44 @@
 <context>
     <name>AppLock</name>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="70"/>
+        <location filename="../client/desktop/app_lock.cc" line="72"/>
         <source>Unlock</source>
         <translation>باز کردن قفل</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="72"/>
+        <location filename="../client/desktop/app_lock.cc" line="74"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>برای باز کردن قفل برنامه، گذرواژه اصلی را وارد کنید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="74"/>
+        <location filename="../client/desktop/app_lock.cc" line="77"/>
         <source>Forgot password?</source>
         <translation>گذرواژه را فراموش کرده‌اید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="92"/>
-        <source>The master password cannot be recovered. Resetting the database deletes all its records, the master password and the settings. A copy of the current database is kept in the same folder.
+        <location filename="../client/desktop/app_lock.cc" line="99"/>
+        <source>The master password cannot be recovered. To continue using the application, you need to reset the database. All records, the master password and the settings will be deleted, but a copy of the current database will first be saved to the file &quot;%1&quot;.
 Reset the database?</source>
-        <translation>گذرواژه اصلی قابل بازیابی نیست. با بازنشانی پایگاه داده، همه رکوردهای آن، گذرواژه اصلی و تنظیمات حذف خواهند شد. یک نسخه از پایگاه داده فعلی در همان پوشه نگه داشته می‌شود.
+        <translation>گذرواژه اصلی قابل بازیابی نیست. برای ادامه کار با برنامه، باید پایگاه داده را بازنشانی کنید. همه رکوردها، گذرواژه اصلی و تنظیمات حذف خواهند شد، اما پیش از آن یک نسخه از پایگاه داده فعلی در فایل &quot;%1&quot; ذخیره خواهد شد.
 پایگاه داده را بازنشانی می‌کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="103"/>
+        <location filename="../client/desktop/app_lock.cc" line="110"/>
         <source>Unable to reset the database.</source>
         <translation>بازنشانی پایگاه داده ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="108"/>
+        <location filename="../client/desktop/app_lock.cc" line="115"/>
         <source>The database is reset. The previous database is saved to the file &quot;%1&quot;.</source>
         <translation>پایگاه داده بازنشانی شد. پایگاه داده قبلی در فایل &quot;%1&quot; ذخیره شد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="129"/>
+        <location filename="../client/desktop/app_lock.cc" line="136"/>
         <source>Unable to unlock the database.</source>
         <translation>باز کردن قفل پایگاه داده ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="133"/>
+        <location filename="../client/desktop/app_lock.cc" line="140"/>
         <source>Invalid master password.</source>
         <translation>گذرواژه اصلی نامعتبر است.</translation>
     </message>
