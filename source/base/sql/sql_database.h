@@ -51,6 +51,7 @@ public:
 
     bool isOpen() const { return db_ != nullptr; }
     void close();
+    QString filePath() const;
 
     // Runs one or more statements that return no rows (pragmas without a result, DDL). For
     // statements that need binding or produce rows use an SqlQuery.

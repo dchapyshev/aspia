@@ -204,6 +204,14 @@ void SqlDatabase::close()
 }
 
 //--------------------------------------------------------------------------------------------------
+QString SqlDatabase::filePath() const
+{
+    if (!db_)
+        return QString();
+    return QString::fromUtf8(sqlite3_db_filename(db_, "main"));
+}
+
+//--------------------------------------------------------------------------------------------------
 bool SqlDatabase::exec(const char* sql)
 {
     if (!db_)
