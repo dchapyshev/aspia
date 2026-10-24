@@ -2401,17 +2401,17 @@ Credentials replaced: %2</source>
         <translation>자격 증명 삭제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="174"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="192"/>
         <source>Are you sure you want to delete credentials &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 자격 증명을 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="182"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="200"/>
         <source>Unable to delete credentials.</source>
         <translation>자격 증명을 삭제할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="227"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="245"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>데이터를 읽지 못했습니다. 목록이 오래되었을 수 있습니다.</translation>
     </message>
@@ -4275,7 +4275,7 @@ Credentials replaced: %2</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="161"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="162"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>데이터를 읽지 못했습니다. 목록이 오래되었을 수 있습니다.</translation>
     </message>
@@ -4787,7 +4787,7 @@ Credentials imported: %5</source>
     <name>MainWindow</name>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="632"/>
+        <location filename="../client/desktop/main_window.cc" line="633"/>
         <source>Aspia Client</source>
         <translation>Aspia 클라이언트</translation>
     </message>
@@ -4893,83 +4893,83 @@ Credentials imported: %5</source>
         <translation>검색...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="214"/>
+        <location filename="../client/desktop/main_window.cc" line="215"/>
         <source>Unable to turn on the MCP connector.</source>
         <translation>MCP 커넥터를 켤 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="232"/>
+        <location filename="../client/desktop/main_window.cc" line="233"/>
         <source>Management</source>
         <translation>관리</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="278"/>
+        <location filename="../client/desktop/main_window.cc" line="279"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>잘못된 링크 &quot;%1&quot;입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="301"/>
+        <location filename="../client/desktop/main_window.cc" line="302"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>링크가 참조하는 라우터가 저장된 라우터 중에 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="350"/>
+        <location filename="../client/desktop/main_window.cc" line="351"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>링크가 참조하는 호스트가 저장된 호스트 중에 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="608"/>
+        <location filename="../client/desktop/main_window.cc" line="609"/>
         <source>Close all sessions to lock the application.</source>
         <translation>응용 프로그램을 잠그려면 모든 세션을 닫으십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="614"/>
+        <location filename="../client/desktop/main_window.cc" line="615"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>응용 프로그램을 잠그려면 모든 대화 상자를 닫으십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="728"/>
+        <location filename="../client/desktop/main_window.cc" line="729"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>호스트 속성에 ID로 연결하도록 지정되어 있지만 라우터가 구성되지 않았습니다. 호스트 속성에서 라우터 설정을 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="995"/>
+        <location filename="../client/desktop/main_window.cc" line="996"/>
         <source>Unknown application</source>
         <translation>알 수 없는 응용 프로그램</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="998"/>
+        <location filename="../client/desktop/main_window.cc" line="999"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>MCP 커넥터. 연결됨: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="999"/>
+        <location filename="../client/desktop/main_window.cc" line="1000"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - AI 연결됨</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="362"/>
+        <location filename="../client/desktop/main_window.cc" line="363"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>이 호스트에 연결된 라우터가 삭제되었습니다. 호스트를 편집하여 다른 라우터를 선택하거나 직접 연결로 전환하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="309"/>
-        <location filename="../client/desktop/main_window.cc" line="361"/>
+        <location filename="../client/desktop/main_window.cc" line="310"/>
+        <location filename="../client/desktop/main_window.cc" line="362"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>라우터의 데이터가 손상되었습니다. 라우터를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="349"/>
+        <location filename="../client/desktop/main_window.cc" line="350"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>호스트의 데이터가 손상되었습니다. 호스트를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="567"/>
+        <location filename="../client/desktop/main_window.cc" line="568"/>
         <source>Credentials</source>
         <translation>자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="598"/>
+        <location filename="../client/desktop/main_window.cc" line="599"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
@@ -6938,84 +6938,84 @@ Credentials imported: %5</source>
         <translation>페이지당 항목 수:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
         <source>All spaces</source>
         <translation>모든 스페이스</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="149"/>
         <source>Not in any space</source>
         <translation>스페이스 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="366"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="368"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 호스트의 연결을 끊으시겠습니까?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="368"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="370"/>
         <source>Are you sure you want to disconnect %n hosts?</source>
         <translation>
             <numerusform>호스트 %n개의 연결을 끊으시겠습니까?</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="379"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="381"/>
         <source>Failed to disconnect %n of the selected hosts.</source>
         <translation>
             <numerusform>선택한 호스트 중 %n개의 연결을 끊지 못했습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="395"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="397"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>호스트를 삭제하면 라우터 연결에 대한 모든 구성이 삭제되고 호스트에서 응용 프로그램이 제거됩니다. 이 작업은 되돌릴 수 없습니다. 정말로 계속하시겠습니까?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="400"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="402"/>
         <source>%n hosts will be deleted.</source>
         <translation>
             <numerusform>호스트 %n개가 삭제됩니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="411"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="413"/>
         <source>Failed to remove %n of the selected hosts.</source>
         <translation>
             <numerusform>선택한 호스트 중 %n개를 삭제하지 못했습니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="428"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="430"/>
         <source>Failed to check for updates on %n of the selected hosts.</source>
         <translation>
             <numerusform>선택한 호스트 중 %n개에서 업데이트를 확인하지 못했습니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="761"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="763"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>호스트 %n개</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="825"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="827"/>
         <source>Save File</source>
         <translation>파일 저장</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="825"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="827"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 파일 (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="836"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="838"/>
         <source>Could not open file for writing.</source>
         <translation>쓰기 위해 파일을 열 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="883"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="885"/>
         <source>Unable to write file.</source>
         <translation>파일을 쓸 수 없습니다.</translation>
     </message>
@@ -7379,22 +7379,22 @@ Credentials imported: %5</source>
 <context>
     <name>RouterUsersWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="205"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="207"/>
         <source>You cannot delete a built-in user.</source>
         <translation>기본 제공 사용자는 삭제할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="210"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="212"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 사용자를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="268"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="270"/>
         <source>Failed to get list of users.</source>
         <translation>사용자 목록을 가져오지 못했습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="411"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="413"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>사용자 %n명</numerusform>
@@ -12222,7 +12222,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="230"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="357"/>
         <source>No</source>
         <translation>아니요</translation>
     </message>
@@ -12233,7 +12233,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="245"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="317"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="320"/>
         <source>Version</source>
         <translation>버전</translation>
     </message>
@@ -12253,95 +12253,100 @@ Credentials imported: %5</source>
         <translation>설치 날짜</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="259"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="257"/>
+        <source>Last User</source>
+        <translation>마지막 사용자</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="262"/>
         <source>Operating System</source>
         <translation>운영 체제</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="269"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="341"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="344"/>
         <source>Manufacturer</source>
         <translation>제조업체</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="287"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="275"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="290"/>
         <source>Model</source>
         <translation>모델</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="277"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="280"/>
         <source>Motherboard</source>
         <translation>메인보드</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="290"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="314"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="317"/>
         <source>Vendor</source>
         <translation>공급업체</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="296"/>
         <source>Packages</source>
         <translation>패키지</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="296"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="299"/>
         <source>Cores</source>
         <translation>코어</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="299"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="302"/>
         <source>Threads</source>
         <translation>스레드</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="304"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="307"/>
         <source>Processor</source>
         <translation>프로세서</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="320"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="323"/>
         <source>Date</source>
         <translation>날짜</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="344"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="347"/>
         <source>Size</source>
         <translation>크기</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="347"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
         <source>Type</source>
         <translation>유형</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>Speed</source>
         <translation>속도</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>%1 MT/s</source>
         <translation>%1 MT/s</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="357"/>
         <source>Installed</source>
         <translation>설치됨</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="364"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="367"/>
         <source>Memory</source>
         <translation>메모리</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="393"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="396"/>
         <source>%1 (%2 free)</source>
         <translation>%1 (%2 사용 가능)</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="403"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="406"/>
         <source>Logical Drives</source>
         <translation>논리 드라이브</translation>
     </message>

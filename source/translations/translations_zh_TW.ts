@@ -2401,17 +2401,17 @@ Credentials replaced: %2</source>
         <translation>刪除認證</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="174"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="192"/>
         <source>Are you sure you want to delete credentials &quot;%1&quot;?</source>
         <translation>確定要刪除認證「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="182"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="200"/>
         <source>Unable to delete credentials.</source>
         <translation>無法刪除認證。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="227"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="245"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>無法讀取資料。清單可能已過時。</translation>
     </message>
@@ -4275,7 +4275,7 @@ Credentials replaced: %2</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="161"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="162"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>無法讀取資料。清單可能已過時。</translation>
     </message>
@@ -4813,7 +4813,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="632"/>
+        <location filename="../client/desktop/main_window.cc" line="633"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4893,83 +4893,83 @@ Credentials imported: %5</source>
         <translation>搜尋...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="214"/>
+        <location filename="../client/desktop/main_window.cc" line="215"/>
         <source>Unable to turn on the MCP connector.</source>
         <translation>無法啟用 MCP 連接器。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="232"/>
+        <location filename="../client/desktop/main_window.cc" line="233"/>
         <source>Management</source>
         <translation>管理</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="278"/>
+        <location filename="../client/desktop/main_window.cc" line="279"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>無效的連結「%1」。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="301"/>
+        <location filename="../client/desktop/main_window.cc" line="302"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>在已儲存的路由器中找不到連結所指的路由器。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="350"/>
+        <location filename="../client/desktop/main_window.cc" line="351"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>在已儲存的主機中找不到連結所指的主機。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="608"/>
+        <location filename="../client/desktop/main_window.cc" line="609"/>
         <source>Close all sessions to lock the application.</source>
         <translation>請關閉所有工作階段以鎖定應用程式。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="614"/>
+        <location filename="../client/desktop/main_window.cc" line="615"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>請關閉所有對話方塊以鎖定應用程式。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="728"/>
+        <location filename="../client/desktop/main_window.cc" line="729"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>主機的內容中指定了以 ID 連線，但尚未設定路由器。請檢查主機內容中的路由器參數。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="995"/>
+        <location filename="../client/desktop/main_window.cc" line="996"/>
         <source>Unknown application</source>
         <translation>未知應用程式</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="998"/>
+        <location filename="../client/desktop/main_window.cc" line="999"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>MCP 連接器。已連線：%1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="999"/>
+        <location filename="../client/desktop/main_window.cc" line="1000"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - AI 已連線</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="362"/>
+        <location filename="../client/desktop/main_window.cc" line="363"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>與此主機關聯的路由器已被刪除。請編輯主機以選擇其他路由器，或改用直接連線。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="309"/>
-        <location filename="../client/desktop/main_window.cc" line="361"/>
+        <location filename="../client/desktop/main_window.cc" line="310"/>
+        <location filename="../client/desktop/main_window.cc" line="362"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>路由器的資料已損壞。請編輯路由器並重新輸入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="349"/>
+        <location filename="../client/desktop/main_window.cc" line="350"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>主機的資料已損壞。請編輯主機並重新輸入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="567"/>
+        <location filename="../client/desktop/main_window.cc" line="568"/>
         <source>Credentials</source>
         <translation>認證</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="598"/>
+        <location filename="../client/desktop/main_window.cc" line="599"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
@@ -6938,84 +6938,84 @@ Credentials imported: %5</source>
         <translation>每頁項目數：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
         <source>All spaces</source>
         <translation>所有空間</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="149"/>
         <source>Not in any space</source>
         <translation>不屬於任何空間</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="366"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="368"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>確定要中斷主機「%1」的連線嗎？</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="368"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="370"/>
         <source>Are you sure you want to disconnect %n hosts?</source>
         <translation>
             <numerusform>確定要中斷 %n 個主機的連線嗎？</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="379"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="381"/>
         <source>Failed to disconnect %n of the selected hosts.</source>
         <translation>
             <numerusform>無法中斷所選主機中 %n 個的連線。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="395"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="397"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>刪除主機將會刪除其連線到路由器的所有設定，且主機上的應用程式將被解除安裝。此操作無法復原。確定要繼續嗎？</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="400"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="402"/>
         <source>%n hosts will be deleted.</source>
         <translation>
             <numerusform>將刪除 %n 個主機。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="411"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="413"/>
         <source>Failed to remove %n of the selected hosts.</source>
         <translation>
             <numerusform>無法刪除所選主機中的 %n 個。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="428"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="430"/>
         <source>Failed to check for updates on %n of the selected hosts.</source>
         <translation>
             <numerusform>無法為所選主機中的 %n 個檢查更新。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="761"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="763"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n 個主機</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="825"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="827"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="825"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="827"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 檔案 (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="836"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="838"/>
         <source>Could not open file for writing.</source>
         <translation>無法開啟檔案進行寫入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="883"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="885"/>
         <source>Unable to write file.</source>
         <translation>無法寫入檔案。</translation>
     </message>
@@ -7379,22 +7379,22 @@ Credentials imported: %5</source>
 <context>
     <name>RouterUsersWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="205"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="207"/>
         <source>You cannot delete a built-in user.</source>
         <translation>無法刪除內建使用者。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="210"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="212"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>確定要刪除使用者「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="268"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="270"/>
         <source>Failed to get list of users.</source>
         <translation>無法取得使用者清單。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="411"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="413"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n 位使用者</numerusform>
@@ -12227,7 +12227,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="245"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="317"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="320"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
@@ -12247,101 +12247,106 @@ Credentials imported: %5</source>
         <translation>安裝日期</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="259"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="262"/>
         <source>Operating System</source>
         <translation>作業系統</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="269"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="341"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="344"/>
         <source>Manufacturer</source>
         <translation>製造商</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="287"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="275"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="290"/>
         <source>Model</source>
         <translation>型號</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="277"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="280"/>
         <source>Motherboard</source>
         <translation>主機板</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="290"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="314"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="317"/>
         <source>Vendor</source>
         <translation>廠商</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="296"/>
         <source>Packages</source>
         <translation>處理器插槽</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="296"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="299"/>
         <source>Cores</source>
         <translation>核心</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="299"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="302"/>
         <source>Threads</source>
         <translation>執行緒</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="304"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="307"/>
         <source>Processor</source>
         <translation>處理器</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="320"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="323"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="344"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="347"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>Speed</source>
         <translation>速度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="347"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="357"/>
         <source>Installed</source>
         <translation>已安裝</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="230"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="357"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="257"/>
+        <source>Last User</source>
+        <translation>上次登入的使用者</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>%1 MT/s</source>
         <translation>%1 MT/s</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="364"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="367"/>
         <source>Memory</source>
         <translation>記憶體</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="393"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="396"/>
         <source>%1 (%2 free)</source>
         <translation>%1（剩餘 %2）</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="403"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="406"/>
         <source>Logical Drives</source>
         <translation>邏輯磁碟</translation>
     </message>

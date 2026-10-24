@@ -2412,17 +2412,17 @@ Credentials replaced: %2</source>
         <translation>מחיקת פרטי כניסה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="174"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="192"/>
         <source>Are you sure you want to delete credentials &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך למחוק את פרטי הכניסה &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="182"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="200"/>
         <source>Unable to delete credentials.</source>
         <translation>לא ניתן למחוק פרטי כניסה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="227"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="245"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>קריאת הנתונים נכשלה. ייתכן שהרשימה אינה מעודכנת.</translation>
     </message>
@@ -4294,7 +4294,7 @@ Credentials replaced: %2</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="161"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="162"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>קריאת הנתונים נכשלה. ייתכן שהרשימה אינה מעודכנת.</translation>
     </message>
@@ -4836,7 +4836,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="632"/>
+        <location filename="../client/desktop/main_window.cc" line="633"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4916,83 +4916,83 @@ Credentials imported: %5</source>
         <translation>חיפוש...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="214"/>
+        <location filename="../client/desktop/main_window.cc" line="215"/>
         <source>Unable to turn on the MCP connector.</source>
         <translation>לא ניתן להפעיל את מחבר ה-MCP.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="232"/>
+        <location filename="../client/desktop/main_window.cc" line="233"/>
         <source>Management</source>
         <translation>ניהול</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="278"/>
+        <location filename="../client/desktop/main_window.cc" line="279"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>קישור לא חוקי &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="301"/>
+        <location filename="../client/desktop/main_window.cc" line="302"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>הנתב שאליו מפנה הקישור אינו נמצא בין הנתבים השמורים.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="350"/>
+        <location filename="../client/desktop/main_window.cc" line="351"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>המארח שאליו מפנה הקישור אינו נמצא בין המארחים השמורים.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="608"/>
+        <location filename="../client/desktop/main_window.cc" line="609"/>
         <source>Close all sessions to lock the application.</source>
         <translation>סגור את כל ההפעלות כדי לנעול את היישום.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="614"/>
+        <location filename="../client/desktop/main_window.cc" line="615"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>סגור את כל תיבות הדו-שיח כדי לנעול את היישום.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="728"/>
+        <location filename="../client/desktop/main_window.cc" line="729"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>במאפייני המארח צוין חיבור לפי ID, אך הנתב אינו מוגדר. בדוק את פרמטרי הנתב במאפייני המארח.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="995"/>
+        <location filename="../client/desktop/main_window.cc" line="996"/>
         <source>Unknown application</source>
         <translation>יישום לא ידוע</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="998"/>
+        <location filename="../client/desktop/main_window.cc" line="999"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>מחבר MCP. יישומים מחוברים: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="999"/>
+        <location filename="../client/desktop/main_window.cc" line="1000"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - בינה מלאכותית מחוברת</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="362"/>
+        <location filename="../client/desktop/main_window.cc" line="363"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>הנתב המשויך למארח זה נמחק. ערוך את המארח כדי לבחור נתב אחר או לעבור לחיבור ישיר.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="309"/>
-        <location filename="../client/desktop/main_window.cc" line="361"/>
+        <location filename="../client/desktop/main_window.cc" line="310"/>
+        <location filename="../client/desktop/main_window.cc" line="362"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="349"/>
+        <location filename="../client/desktop/main_window.cc" line="350"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>נתוני המארח פגומים. ערוך את המארח והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="567"/>
+        <location filename="../client/desktop/main_window.cc" line="568"/>
         <source>Credentials</source>
         <translation>פרטי כניסה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="598"/>
+        <location filename="../client/desktop/main_window.cc" line="599"/>
         <source>Settings</source>
         <translation>הגדרות</translation>
     </message>
@@ -6971,22 +6971,22 @@ Credentials imported: %5</source>
         <translation>פריטים בעמוד:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
         <source>All spaces</source>
         <translation>כל המרחבים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="149"/>
         <source>Not in any space</source>
         <translation>ללא מרחב</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="366"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="368"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך לנתק את המארח &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="368"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="370"/>
         <source>Are you sure you want to disconnect %n hosts?</source>
         <translation>
             <numerusform>האם אתה בטוח שברצונך לנתק %n מארח?</numerusform>
@@ -6994,7 +6994,7 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="379"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="381"/>
         <source>Failed to disconnect %n of the selected hosts.</source>
         <translation>
             <numerusform>ניתוק %n מהמארחים שנבחרו נכשל.</numerusform>
@@ -7002,12 +7002,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="395"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="397"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>מחיקת המארח תמחק את כל הגדרות החיבור שלו לנתב, והיישום יוסר מהמארח. פעולה זו אינה הפיכה. האם אתה בטוח שברצונך להמשיך?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="400"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="402"/>
         <source>%n hosts will be deleted.</source>
         <translation>
             <numerusform>%n מארח יימחק.</numerusform>
@@ -7015,7 +7015,7 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="411"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="413"/>
         <source>Failed to remove %n of the selected hosts.</source>
         <translation>
             <numerusform>מחיקת %n מהמארחים שנבחרו נכשלה.</numerusform>
@@ -7023,7 +7023,7 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="428"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="430"/>
         <source>Failed to check for updates on %n of the selected hosts.</source>
         <translation>
             <numerusform>בדיקת עדכונים ב-%n מהמארחים שנבחרו נכשלה.</numerusform>
@@ -7031,7 +7031,7 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="761"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="763"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n מארח</numerusform>
@@ -7039,22 +7039,22 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="825"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="827"/>
         <source>Save File</source>
         <translation>שמירת קובץ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="825"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="827"/>
         <source>JSON files (*.json)</source>
         <translation>קובצי JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="836"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="838"/>
         <source>Could not open file for writing.</source>
         <translation>לא ניתן לפתוח קובץ לכתיבה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="883"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="885"/>
         <source>Unable to write file.</source>
         <translation>לא ניתן לכתוב את הקובץ.</translation>
     </message>
@@ -7425,22 +7425,22 @@ Credentials imported: %5</source>
 <context>
     <name>RouterUsersWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="205"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="207"/>
         <source>You cannot delete a built-in user.</source>
         <translation>לא ניתן למחוק משתמש מובנה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="210"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="212"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך למחוק את המשתמש &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="268"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="270"/>
         <source>Failed to get list of users.</source>
         <translation>קבלת רשימת המשתמשים נכשלה.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="411"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="413"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n משתמש</numerusform>
@@ -12282,7 +12282,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="245"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="317"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="320"/>
         <source>Version</source>
         <translation>גרסה</translation>
     </message>
@@ -12302,101 +12302,106 @@ Credentials imported: %5</source>
         <translation>תאריך התקנה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="259"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="262"/>
         <source>Operating System</source>
         <translation>מערכת הפעלה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="269"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="341"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="344"/>
         <source>Manufacturer</source>
         <translation>יצרן</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="287"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="275"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="290"/>
         <source>Model</source>
         <translation>דגם</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="277"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="280"/>
         <source>Motherboard</source>
         <translation>לוח אם</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="290"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="314"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="317"/>
         <source>Vendor</source>
         <translation>ספק</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="296"/>
         <source>Packages</source>
         <translation>מארזי מעבד</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="296"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="299"/>
         <source>Cores</source>
         <translation>ליבות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="299"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="302"/>
         <source>Threads</source>
         <translation>הליכי משנה</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="304"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="307"/>
         <source>Processor</source>
         <translation>מעבד</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="320"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="323"/>
         <source>Date</source>
         <translation>תאריך</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="344"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="347"/>
         <source>Size</source>
         <translation>גודל</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>Speed</source>
         <translation>מהירות</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="347"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
         <source>Type</source>
         <translation>סוג</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="357"/>
         <source>Installed</source>
         <translation>מותקן</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="230"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="357"/>
         <source>No</source>
         <translation>לא</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="257"/>
+        <source>Last User</source>
+        <translation>משתמש אחרון</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>%1 MT/s</source>
         <translation>%1 MT/s</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="364"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="367"/>
         <source>Memory</source>
         <translation>זיכרון</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="393"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="396"/>
         <source>%1 (%2 free)</source>
         <translation>%1 (%2 פנוי)</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="403"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="406"/>
         <source>Logical Drives</source>
         <translation>כוננים לוגיים</translation>
     </message>

@@ -254,7 +254,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& r
             items << mk(tr("Install Date"), Formatter::timeToString(os.install_date()));
 
         if (!os.last_logon_user().empty())
-            items << mk(tr("Last Logged On User"), os.last_logon_user());
+            items << mk(tr("Last User"), os.last_logon_user());
 
         if (!items.isEmpty())
         {

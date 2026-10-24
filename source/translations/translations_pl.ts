@@ -2423,17 +2423,17 @@ Zastąpione dane logowania: %2</translation>
         <translation>Usuń dane logowania</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="174"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="192"/>
         <source>Are you sure you want to delete credentials &quot;%1&quot;?</source>
         <translation>Czy na pewno chcesz usunąć dane logowania &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="182"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="200"/>
         <source>Unable to delete credentials.</source>
         <translation>Nie można usunąć danych logowania.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="227"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="245"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Nie udało się odczytać danych. Lista może być nieaktualna.</translation>
     </message>
@@ -4313,7 +4313,7 @@ Zastąpione dane logowania: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="161"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="162"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Nie udało się odczytać danych. Lista może być nieaktualna.</translation>
     </message>
@@ -4859,7 +4859,7 @@ Zaimportowane dane logowania: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="632"/>
+        <location filename="../client/desktop/main_window.cc" line="633"/>
         <source>Aspia Client</source>
         <translation>Klient Aspia</translation>
     </message>
@@ -4939,83 +4939,83 @@ Zaimportowane dane logowania: %5</translation>
         <translation>Szukaj...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="214"/>
+        <location filename="../client/desktop/main_window.cc" line="215"/>
         <source>Unable to turn on the MCP connector.</source>
         <translation>Nie można włączyć konektora MCP.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="232"/>
+        <location filename="../client/desktop/main_window.cc" line="233"/>
         <source>Management</source>
         <translation>Zarządzanie</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="278"/>
+        <location filename="../client/desktop/main_window.cc" line="279"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Nieprawidłowy link &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="301"/>
+        <location filename="../client/desktop/main_window.cc" line="302"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Router wskazywany przez link nie znajduje się wśród zapisanych routerów.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="350"/>
+        <location filename="../client/desktop/main_window.cc" line="351"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Host wskazywany przez link nie znajduje się wśród zapisanych hostów.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="608"/>
+        <location filename="../client/desktop/main_window.cc" line="609"/>
         <source>Close all sessions to lock the application.</source>
         <translation>Zamknij wszystkie sesje, aby zablokować aplikację.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="614"/>
+        <location filename="../client/desktop/main_window.cc" line="615"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>Zamknij wszystkie okna dialogowe, aby zablokować aplikację.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="728"/>
+        <location filename="../client/desktop/main_window.cc" line="729"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>We właściwościach hosta określono połączenie przez ID, ale router nie jest skonfigurowany. Sprawdź parametry routera we właściwościach hosta.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="995"/>
+        <location filename="../client/desktop/main_window.cc" line="996"/>
         <source>Unknown application</source>
         <translation>Nieznana aplikacja</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="998"/>
+        <location filename="../client/desktop/main_window.cc" line="999"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>Konektor MCP. Połączone: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="999"/>
+        <location filename="../client/desktop/main_window.cc" line="1000"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - połączono z AI</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="362"/>
+        <location filename="../client/desktop/main_window.cc" line="363"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Router powiązany z tym hostem został usunięty. Edytuj hosta, aby wybrać inny router lub przełączyć się na połączenie bezpośrednie.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="309"/>
-        <location filename="../client/desktop/main_window.cc" line="361"/>
+        <location filename="../client/desktop/main_window.cc" line="310"/>
+        <location filename="../client/desktop/main_window.cc" line="362"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Dane routera są uszkodzone. Edytuj router i wprowadź je ponownie.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="349"/>
+        <location filename="../client/desktop/main_window.cc" line="350"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Dane hosta są uszkodzone. Edytuj hosta i wprowadź je ponownie.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="567"/>
+        <location filename="../client/desktop/main_window.cc" line="568"/>
         <source>Credentials</source>
         <translation>Dane logowania</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="598"/>
+        <location filename="../client/desktop/main_window.cc" line="599"/>
         <source>Settings</source>
         <translation>Ustawienia</translation>
     </message>
@@ -7004,22 +7004,22 @@ Zaimportowane dane logowania: %5</translation>
         <translation>Elementów na stronę:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
         <source>All spaces</source>
         <translation>Wszystkie przestrzenie</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="149"/>
         <source>Not in any space</source>
         <translation>Bez przestrzeni</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="366"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="368"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Czy na pewno chcesz rozłączyć hosta &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="368"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="370"/>
         <source>Are you sure you want to disconnect %n hosts?</source>
         <translation>
             <numerusform>Czy na pewno chcesz rozłączyć %n hosta?</numerusform>
@@ -7028,7 +7028,7 @@ Zaimportowane dane logowania: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="379"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="381"/>
         <source>Failed to disconnect %n of the selected hosts.</source>
         <translation>
             <numerusform>Nie udało się rozłączyć %n z wybranych hostów.</numerusform>
@@ -7037,12 +7037,12 @@ Zaimportowane dane logowania: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="395"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="397"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Usunięcie hosta spowoduje usunięcie całej jego konfiguracji połączenia z routerem, a aplikacja zostanie odinstalowana na hoście. Ta operacja jest nieodwracalna. Czy na pewno chcesz to zrobić?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="400"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="402"/>
         <source>%n hosts will be deleted.</source>
         <translation>
             <numerusform>%n host zostanie usunięty.</numerusform>
@@ -7051,7 +7051,7 @@ Zaimportowane dane logowania: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="411"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="413"/>
         <source>Failed to remove %n of the selected hosts.</source>
         <translation>
             <numerusform>Nie udało się usunąć %n z wybranych hostów.</numerusform>
@@ -7060,7 +7060,7 @@ Zaimportowane dane logowania: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="428"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="430"/>
         <source>Failed to check for updates on %n of the selected hosts.</source>
         <translation>
             <numerusform>Nie udało się sprawdzić aktualizacji na %n z wybranych hostów.</numerusform>
@@ -7069,7 +7069,7 @@ Zaimportowane dane logowania: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="761"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="763"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n host</numerusform>
@@ -7078,22 +7078,22 @@ Zaimportowane dane logowania: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="825"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="827"/>
         <source>Save File</source>
         <translation>Zapisz plik</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="825"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="827"/>
         <source>JSON files (*.json)</source>
         <translation>Pliki JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="836"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="838"/>
         <source>Could not open file for writing.</source>
         <translation>Nie można otworzyć pliku do zapisu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="883"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="885"/>
         <source>Unable to write file.</source>
         <translation>Nie można zapisać pliku.</translation>
     </message>
@@ -7471,22 +7471,22 @@ Zaimportowane dane logowania: %5</translation>
 <context>
     <name>RouterUsersWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="205"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="207"/>
         <source>You cannot delete a built-in user.</source>
         <translation>Nie można usunąć użytkownika wbudowanego.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="210"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="212"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Czy na pewno chcesz usunąć użytkownika &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="268"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="270"/>
         <source>Failed to get list of users.</source>
         <translation>Nie udało się pobrać listy użytkowników.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="411"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="413"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n użytkownik</numerusform>
@@ -12337,7 +12337,7 @@ Zaimportowane dane logowania: %5</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="245"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="317"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="320"/>
         <source>Version</source>
         <translation>Wersja</translation>
     </message>
@@ -12357,101 +12357,106 @@ Zaimportowane dane logowania: %5</translation>
         <translation>Data instalacji</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="259"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="262"/>
         <source>Operating System</source>
         <translation>System operacyjny</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="269"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="341"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="344"/>
         <source>Manufacturer</source>
         <translation>Producent</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="287"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="275"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="290"/>
         <source>Model</source>
         <translation>Model</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="277"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="280"/>
         <source>Motherboard</source>
         <translation>Płyta główna</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="290"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="314"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="317"/>
         <source>Vendor</source>
         <translation>Producent</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="296"/>
         <source>Packages</source>
         <translation>Pakiety</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="296"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="299"/>
         <source>Cores</source>
         <translation>Rdzenie</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="299"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="302"/>
         <source>Threads</source>
         <translation>Wątki</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="304"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="307"/>
         <source>Processor</source>
         <translation>Procesor</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="320"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="323"/>
         <source>Date</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="344"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="347"/>
         <source>Size</source>
         <translation>Rozmiar</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>Speed</source>
         <translation>Szybkość</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="347"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="357"/>
         <source>Installed</source>
         <translation>Zainstalowane</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="230"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="357"/>
         <source>No</source>
         <translation>Nie</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="257"/>
+        <source>Last User</source>
+        <translation>Ostatni użytkownik</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>%1 MT/s</source>
         <translation>%1 MT/s</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="364"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="367"/>
         <source>Memory</source>
         <translation>Pamięć</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="393"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="396"/>
         <source>%1 (%2 free)</source>
         <translation>%1 (%2 wolne)</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="403"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="406"/>
         <source>Logical Drives</source>
         <translation>Dyski logiczne</translation>
     </message>

@@ -2401,17 +2401,17 @@ Değiştirilen kimlik bilgileri: %2</translation>
         <translation>Kimlik Bilgilerini Sil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="174"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="192"/>
         <source>Are you sure you want to delete credentials &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; kimlik bilgilerini silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="182"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="200"/>
         <source>Unable to delete credentials.</source>
         <translation>Kimlik bilgileri silinemiyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="227"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="245"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Veriler okunamadı. Liste güncel olmayabilir.</translation>
     </message>
@@ -4275,7 +4275,7 @@ Değiştirilen kimlik bilgileri: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="161"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="162"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Veriler okunamadı. Liste güncel olmayabilir.</translation>
     </message>
@@ -4813,7 +4813,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="632"/>
+        <location filename="../client/desktop/main_window.cc" line="633"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4893,83 +4893,83 @@ Credentials imported: %5</source>
         <translation>Ara...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="214"/>
+        <location filename="../client/desktop/main_window.cc" line="215"/>
         <source>Unable to turn on the MCP connector.</source>
         <translation>MCP bağlayıcısı etkinleştirilemiyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="232"/>
+        <location filename="../client/desktop/main_window.cc" line="233"/>
         <source>Management</source>
         <translation>Yönetim</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="278"/>
+        <location filename="../client/desktop/main_window.cc" line="279"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Geçersiz link &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="301"/>
+        <location filename="../client/desktop/main_window.cc" line="302"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Linkte belirtilen yönlendirici, kayıtlı yönlendiriciler arasında bulunamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="350"/>
+        <location filename="../client/desktop/main_window.cc" line="351"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Linkte belirtilen ana bilgisayar, kayıtlı ana bilgisayarlar arasında bulunamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="608"/>
+        <location filename="../client/desktop/main_window.cc" line="609"/>
         <source>Close all sessions to lock the application.</source>
         <translation>Uygulamayı kilitlemek için tüm oturumları kapatın.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="614"/>
+        <location filename="../client/desktop/main_window.cc" line="615"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>Uygulamayı kilitlemek için tüm iletişim kutularını kapatın.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="728"/>
+        <location filename="../client/desktop/main_window.cc" line="729"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Ana bilgisayarın özelliklerinde ID ile bağlantı belirtilmiş, ancak yönlendirici yapılandırılmamış. Ana bilgisayarın özelliklerinden yönlendirici parametrelerini denetleyin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="995"/>
+        <location filename="../client/desktop/main_window.cc" line="996"/>
         <source>Unknown application</source>
         <translation>Bilinmeyen uygulama</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="998"/>
+        <location filename="../client/desktop/main_window.cc" line="999"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>MCP Bağlayıcısı. Bağlı: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="999"/>
+        <location filename="../client/desktop/main_window.cc" line="1000"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - YZ bağlı</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="362"/>
+        <location filename="../client/desktop/main_window.cc" line="363"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Bu ana bilgisayarla ilişkili yönlendirici silinmiş. Başka bir yönlendirici seçmek veya doğrudan bağlantıya geçmek için ana bilgisayarı düzenleyin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="309"/>
-        <location filename="../client/desktop/main_window.cc" line="361"/>
+        <location filename="../client/desktop/main_window.cc" line="310"/>
+        <location filename="../client/desktop/main_window.cc" line="362"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Yönlendiricinin verileri hasarlı. Yönlendiriciyi düzenleyin ve verileri yeniden girin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="349"/>
+        <location filename="../client/desktop/main_window.cc" line="350"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Ana bilgisayarın verileri hasarlı. Ana bilgisayarı düzenleyin ve verileri yeniden girin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="567"/>
+        <location filename="../client/desktop/main_window.cc" line="568"/>
         <source>Credentials</source>
         <translation>Kimlik Bilgileri</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="598"/>
+        <location filename="../client/desktop/main_window.cc" line="599"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
@@ -6938,84 +6938,84 @@ Credentials imported: %5</source>
         <translation>Sayfa başına öğe:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
         <source>All spaces</source>
         <translation>Tüm bölümler</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="149"/>
         <source>Not in any space</source>
         <translation>Bölüm olmadan</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="366"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="368"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; ana bilgisayarının bağlantısını kesmek istediğinizden emin misiniz?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="368"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="370"/>
         <source>Are you sure you want to disconnect %n hosts?</source>
         <translation>
             <numerusform>%n ana bilgisayarın bağlantısını kesmek istediğinizden emin misiniz?</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="379"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="381"/>
         <source>Failed to disconnect %n of the selected hosts.</source>
         <translation>
             <numerusform>Seçilen ana bilgisayarlardan %n tanesinin bağlantısı kesilemedi.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="395"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="397"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Bir ana bilgisayarın silinmesi, yönlendiriciye bağlanmak için yapılmış tüm yapılandırmasının silinmesine ve uygulamanın ana bilgisayardan kaldırılmasına neden olur. Bu işlem geri alınamaz. Bunu yapmak istediğinizden emin misiniz?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="400"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="402"/>
         <source>%n hosts will be deleted.</source>
         <translation>
             <numerusform>%n ana bilgisayar silinecek.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="411"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="413"/>
         <source>Failed to remove %n of the selected hosts.</source>
         <translation>
             <numerusform>Seçilen ana bilgisayarlardan %n tanesi silinemedi.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="428"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="430"/>
         <source>Failed to check for updates on %n of the selected hosts.</source>
         <translation>
             <numerusform>Seçilen ana bilgisayarlardan %n tanesinde güncellemeler denetlenemedi.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="761"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="763"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n ana bilgisayar</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="825"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="827"/>
         <source>Save File</source>
         <translation>Dosyayı Kaydet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="825"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="827"/>
         <source>JSON files (*.json)</source>
         <translation>JSON dosyaları (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="836"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="838"/>
         <source>Could not open file for writing.</source>
         <translation>Dosya yazma için açılamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="883"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="885"/>
         <source>Unable to write file.</source>
         <translation>Dosya yazılamıyor.</translation>
     </message>
@@ -7379,22 +7379,22 @@ Credentials imported: %5</source>
 <context>
     <name>RouterUsersWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="205"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="207"/>
         <source>You cannot delete a built-in user.</source>
         <translation>Yerleşik bir kullanıcıyı silemezsiniz.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="210"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="212"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; kullanıcısını silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="268"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="270"/>
         <source>Failed to get list of users.</source>
         <translation>Kullanıcı listesi alınamadı.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="411"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="413"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n kullanıcı</numerusform>
@@ -12227,7 +12227,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="245"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="317"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="320"/>
         <source>Version</source>
         <translation>Sürüm</translation>
     </message>
@@ -12247,101 +12247,106 @@ Credentials imported: %5</source>
         <translation>Yükleme Tarihi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="259"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="262"/>
         <source>Operating System</source>
         <translation>İşletim Sistemi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="269"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="341"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="344"/>
         <source>Manufacturer</source>
         <translation>Üretici</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="287"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="275"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="290"/>
         <source>Model</source>
         <translation>Model</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="277"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="280"/>
         <source>Motherboard</source>
         <translation>Anakart</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="290"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="314"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="317"/>
         <source>Vendor</source>
         <translation>Satıcı</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="293"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="296"/>
         <source>Packages</source>
         <translation>Paketler</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="296"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="299"/>
         <source>Cores</source>
         <translation>Çekirdekler</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="299"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="302"/>
         <source>Threads</source>
         <translation>İş Parçacıkları</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="304"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="307"/>
         <source>Processor</source>
         <translation>İşlemci</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="320"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="323"/>
         <source>Date</source>
         <translation>Tarih</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="344"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="347"/>
         <source>Size</source>
         <translation>Boyut</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>Speed</source>
         <translation>Hız</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="347"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
         <source>Type</source>
         <translation>Tür</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="357"/>
         <source>Installed</source>
         <translation>Yüklü</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="230"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="354"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="357"/>
         <source>No</source>
         <translation>Hayır</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="350"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="257"/>
+        <source>Last User</source>
+        <translation>Son Oturum Açan</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>%1 MT/s</source>
         <translation>%1 MT/s</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="364"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="367"/>
         <source>Memory</source>
         <translation>Bellek</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="393"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="396"/>
         <source>%1 (%2 free)</source>
         <translation>%1 (%2 boş)</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="403"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="406"/>
         <source>Logical Drives</source>
         <translation>Mantıksal Sürücüler</translation>
     </message>
