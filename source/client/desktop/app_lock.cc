@@ -58,7 +58,7 @@ AppLock::~AppLock() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-AppLock::Result AppLock::unlock()
+AppLock::Result AppLock::unlock(bool reset_allowed)
 {
     const int kResetResult = QDialog::Accepted + 1;
 
@@ -71,7 +71,8 @@ AppLock::Result AppLock::unlock()
         dialog->setHeaderIcon(":/img/lock.svg");
         dialog->setHeaderText(tr("Enter the master password to unlock the application."));
         dialog->setShowPasswordButtonVisible(true);
-        dialog->setLink(tr("Forgot password?"), kResetResult);
+        if (reset_allowed)
+            dialog->setLink(tr("Forgot password?"), kResetResult);
 
         Settings settings;
         dialog->restoreGeometry(settings.dialogGeometry(dialog->objectName()));

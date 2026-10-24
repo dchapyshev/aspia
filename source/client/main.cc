@@ -330,7 +330,7 @@ int main(int argc, char* argv[])
     {
         LOG(INFO) << "Master password is set, prompting user";
 
-        switch (AppLock::unlock())
+        switch (AppLock::unlock(true))
         {
             case AppLock::Result::UNLOCKED:
                 break;
@@ -381,9 +381,7 @@ int main(int argc, char* argv[])
             pending_url_connection = QObject::connect(
                 &application, &Application::sig_urlOpened, &application, remember_url);
 
-            const AppLock::Result unlocked = AppLock::unlock();
-            if (unlocked != AppLock::Result::UNLOCKED &&
-                (unlocked != AppLock::Result::RESET || !setMasterPassword()))
+            if (AppLock::unlock(false) != AppLock::Result::UNLOCKED)
             {
                 QApplication::quit();
                 return;
