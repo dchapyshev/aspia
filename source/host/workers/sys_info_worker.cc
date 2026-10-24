@@ -613,6 +613,7 @@ void fillOperatingSystem(proto::system_info::SystemInfo* system_info)
     operating_system->set_name(SysInfo::operatingSystemName().toStdString());
     operating_system->set_version(SysInfo::operatingSystemVersion().toStdString());
     operating_system->set_arch(SysInfo::operatingSystemArchitecture().toStdString());
+    operating_system->set_last_logon_user(SysInfo::lastLogonUser().toStdString());
 #if defined(Q_OS_WINDOWS)
     operating_system->set_key(SysInfo::operatingSystemKey().toStdString());
     operating_system->set_install_date(SysInfo::operatingSystemInstallDate());
