@@ -36,11 +36,18 @@ public:
     SqlDatabase() = default;
     ~SqlDatabase();
 
-    // Opens (creating it if absent) the database at |file_path|. |busy_timeout| sets how long
-    // a call blocked on another connection's lock waits before failing with SQLITE_BUSY; zero
-    // disables waiting so collisions fail instantly. Returns false and leaves the object closed
-    // on failure.
-    bool open(const QString& file_path, MilliSeconds busy_timeout = MilliSeconds(5000));
+    enum class OpenMode
+    {
+        READ_WRITE = 0,
+        READ_ONLY = 1
+    };
+
+    // Opens the database at |file_path|. In READ_WRITE mode a missing file is created, in READ_ONLY
+    // mode it is not and the open fails. |busy_timeout| sets how long a call blocked on another
+    // connection's lock waits before failing with SQLITE_BUSY; zero disables waiting so collisions
+    // fail instantly. Returns false and leaves the object closed on failure.
+    bool open(const QString& file_path, OpenMode mode = OpenMode::READ_WRITE,
+              MilliSeconds busy_timeout = MilliSeconds(5000));
 
     bool isOpen() const { return db_ != nullptr; }
     void close();

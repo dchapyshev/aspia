@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 
 #include <QByteArray>
+#include <QFile>
 #include <QString>
 #include <QTemporaryDir>
 
@@ -46,6 +47,46 @@ TEST(SqliteTest, OpenInMemory)
     SqlDatabase db;
     ASSERT_TRUE(db.open(":memory:"));
     EXPECT_TRUE(db.isOpen());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SqliteTest, ReadOnlyDoesNotCreateFile)
+{
+    QTemporaryDir temp_dir;
+    ASSERT_TRUE(temp_dir.isValid());
+
+    SqlDatabase db;
+    EXPECT_FALSE(db.open(temp_dir.filePath("test.db"), SqlDatabase::OpenMode::READ_ONLY));
+    EXPECT_FALSE(db.isOpen());
+    EXPECT_FALSE(QFile::exists(temp_dir.filePath("test.db")));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SqliteTest, ReadOnlyReadsButDoesNotWrite)
+{
+    QTemporaryDir temp_dir;
+    ASSERT_TRUE(temp_dir.isValid());
+
+    {
+        SqlDatabase writer;
+        ASSERT_TRUE(writer.open(temp_dir.filePath("test.db")));
+        ASSERT_TRUE(createSchema(writer));
+
+        SqlQuery insert(writer, "INSERT INTO t (name, data, value) VALUES (?, ?, ?)");
+        insert.addText(QString("row")).addBlob(QByteArray()).addInt64(1);
+        ASSERT_TRUE(insert.exec());
+    }
+
+    SqlDatabase reader;
+    ASSERT_TRUE(reader.open(temp_dir.filePath("test.db"), SqlDatabase::OpenMode::READ_ONLY));
+
+    {
+        SqlQuery select(reader, "SELECT name FROM t");
+        ASSERT_EQ(select.next(), SqlQuery::StepResult::ROW);
+        EXPECT_EQ(select.columnText(0), QString("row"));
+    }
+
+    EXPECT_FALSE(reader.exec("DELETE FROM t"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -239,11 +280,11 @@ TEST(SqliteTest, FailedCommitDoesNotWedgeConnection)
 
     // Zero busy timeout: the test expects the lock collision to fail instantly, not after a wait.
     SqlDatabase writer;
-    ASSERT_TRUE(writer.open(temp_dir.filePath("test.db"), MilliSeconds(0)));
+    ASSERT_TRUE(writer.open(temp_dir.filePath("test.db"), SqlDatabase::OpenMode::READ_WRITE, MilliSeconds(0)));
     ASSERT_TRUE(createSchema(writer));
 
     SqlDatabase reader;
-    ASSERT_TRUE(reader.open(temp_dir.filePath("test.db"), MilliSeconds(0)));
+    ASSERT_TRUE(reader.open(temp_dir.filePath("test.db"), SqlDatabase::OpenMode::READ_WRITE, MilliSeconds(0)));
 
     // The reader holds a shared lock for the duration of its transaction, so the writer's COMMIT
     // (which needs an exclusive lock) fails with SQLITE_BUSY and leaves the transaction open.
@@ -281,11 +322,11 @@ TEST(SqliteTest, ImmediateTransactionTakesWriteLock)
 
     // Zero busy timeout: the test expects the lock collision to fail instantly, not after a wait.
     SqlDatabase first;
-    ASSERT_TRUE(first.open(temp_dir.filePath("test.db"), MilliSeconds(0)));
+    ASSERT_TRUE(first.open(temp_dir.filePath("test.db"), SqlDatabase::OpenMode::READ_WRITE, MilliSeconds(0)));
     ASSERT_TRUE(createSchema(first));
 
     SqlDatabase second;
-    ASSERT_TRUE(second.open(temp_dir.filePath("test.db"), MilliSeconds(0)));
+    ASSERT_TRUE(second.open(temp_dir.filePath("test.db"), SqlDatabase::OpenMode::READ_WRITE, MilliSeconds(0)));
 
     // IMMEDIATE takes the write lock at BEGIN, so a competing immediate begin fails up front
     // instead of at the first write statement.

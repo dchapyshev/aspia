@@ -129,7 +129,7 @@ SqlDatabase::~SqlDatabase()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SqlDatabase::open(const QString& file_path, MilliSeconds busy_timeout)
+bool SqlDatabase::open(const QString& file_path, OpenMode mode, MilliSeconds busy_timeout)
 {
     if (db_)
     {
@@ -141,7 +141,11 @@ bool SqlDatabase::open(const QString& file_path, MilliSeconds busy_timeout)
 
     // NOMUTEX selects multi-thread mode: the connection carries no internal mutex because it is
     // never touched by more than one thread at a time.
-    const int flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_NOMUTEX;
+    int flags = SQLITE_OPEN_NOMUTEX;
+    if (mode == OpenMode::READ_ONLY)
+        flags |= SQLITE_OPEN_READONLY;
+    else
+        flags |= SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
 
     const int result = sqlite3_open_v2(utf8_path.constData(), &db_, flags, nullptr);
     if (result != SQLITE_OK)
