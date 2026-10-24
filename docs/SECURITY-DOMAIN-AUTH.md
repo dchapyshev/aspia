@@ -1,58 +1,51 @@
-# Вход по учётным записям ОС / домена: безопасность и развёртывание
+# Operating system / domain account logon: security and deployment
 
-Документ относится к режиму `IDENTIFY_PASSWORD` (вход в хост с учётной записью Windows/AD или Linux через PAM/sssd/winbind) в сборках с поддержкой этого режима.
+This document covers the `IDENTIFY_PASSWORD` mode (logging on to a host with a Windows/AD account or a Linux account via PAM/sssd/winbind) in builds that support this mode.
 
-## Как это защищено
+## How it is protected
 
-- **Ключ хоста и TOFU.** У хоста есть постоянный ключ X25519 («identity key»). При первом подключении клиент показывает его отпечаток SHA-256 и закрепляет ключ за адресом. Учётные данные отправляются только по каналу, ключ которого выведен в том числе из DH с этим ключом, поэтому MITM без закрытого ключа хоста их не прочитает. В транскрипт добавляется метка режима `aspia/identify-password/v2`. С v3.1.3-rc1 этот режим несовместим, SRP и анонимный вход не менялись. Ключ идентичности используется только для этого режима.
-- **Хранение ключа.** На Windows ключ лежит в БД хоста, зашифрованный DPAPI (machine scope), поэтому копия БД бесполезна на другом компьютере. На Linux `host.db3` имеет права 0600. Повреждённый или нечитаемый ключ не пересоздаётся молча: вход по учёткам ОС отключается, пока администратор не нажмёт **Regenerate** на вкладке Domain. После этого клиенты увидят предупреждение о смене ключа.
-- **Постоянное время отказа.** На любой отказ (неверный пароль, нет группы, блокировка, ошибка формата, переполнение) хост отвечает через 4 с после получения учётных данных или через следующее кратное 4 с. Успешный вход не задерживается.
-- **Ограничение подбора:**
-  - Проверка и резервирование выполняются атомарно: одновременно идёт не больше 1 проверки на учётку и не больше 2 на источник (IPv4-адрес или IPv6 /64).
-  - На учётку: 3 бесплатные ошибки, затем блокировка на 1, 2, 4 … 30 мин. На источник: 5 бесплатных ошибок, затем 30 с, 1 … 30 мин. Счётчики забываются через 1 ч без ошибок.
-  - Имя учётки нормализуется (NFKC, регистр, `DOMAIN\`, `@suffix`), поэтому разные написания одной учётки не дают лишних попыток.
-  - **Доверенные источники:** адрес (или /64), с которого за последние 30 дней был успешный вход в учётку, не попадает под блокировку этой учётки. Посторонний не может «запереть» владельца. Лимиты самого источника на него действуют.
-  - Таблицы ограничены (10000 записей). Активные блокировки и идущие проверки никогда не вытесняются; если таблица заполнена активными записями, новые ключи отклоняются.
-  - Пока учётка или источник заблокированы, ОС и домен не опрашиваются, и счётчик блокировки AD не растёт.
-  - Состояние хранится в памяти службы и сбрасывается при её перезапуске. Перезапуск требует прав администратора; в этом случае защиту обеспечивают пороги AD и `pam_faillock`.
+- **Host key and TOFU.** The host has a persistent X25519 key ("identity key"). On the first connection the client shows its SHA-256 fingerprint and pins the key to the address. Credentials are sent only over a channel whose key is derived, among other things, from a DH with this key, so a MITM without the host private key cannot read them. The mode label `aspia/identify-password/v2` is added to the transcript. SRP and anonymous logon are unchanged. The identity key is used only for this mode.
+- **Key storage.** On Windows the key is stored in the host database encrypted with DPAPI (machine scope), so a copy of the database is useless on another computer. On Linux `host.db3` has mode 0600. A corrupted or unreadable key is never silently regenerated: OS account logon is disabled until the administrator presses **Regenerate** on the Domain tab. After that, clients will see a key change warning.
+- **Constant failure time.** For any failure (wrong password, no matching group, block, malformed input, overload) the host answers 4 s after the credentials were received, or at the next multiple of 4 s. A successful logon is not delayed.
+- **Brute-force limiting:**
+  - Check and reservation are atomic: at most 1 check per account and at most 2 per source (IPv4 address or IPv6 /64) run at the same time.
+  - Per account: 3 free failures, then a block for 1, 2, 4 … 30 min. Per source: 5 free failures, then 30 s, 1 … 30 min. Counters are forgotten after 1 h without failures.
+  - Account names are normalized (NFKC, case, `DOMAIN\`, `@suffix`), so different spellings of the same account do not give extra attempts.
+  - **Trusted sources:** an address (or /64) that had a successful logon to an account in the last 30 days is not affected by that account's block. An outsider cannot lock the owner out. The source's own limits still apply to it.
+  - Tables are bounded (10000 entries). Active blocks and in-flight checks are never evicted; if a table is full of active entries, new keys are refused.
+  - While an account or a source is blocked, the OS and the domain are not queried, and the AD lockout counter does not grow.
+  - The state is kept in the service memory and is reset when the service restarts. A restart requires administrator rights; in that case AD thresholds and `pam_faillock` provide the protection.
 - **Windows:**
-  - Проверка идёт через `LogonUserW(LOGON32_LOGON_NETWORK)`.
-  - Принимаются только учётки типа «пользователь», с отказом при любом сомнении (fail-closed). Отклоняются компьютерные учётки, gMSA, учётки с основной группой или членством в Domain Computers / Domain Controllers, а также учётки, тип которых не удалось определить.
-  - Принимаются только учётки этого компьютера или домена, в который он введён. Пользователи доверенных доменов и лесов отклоняются.
-  - Правила сопоставляются только по SID.
+  - Credentials are checked with `LogonUserW(LOGON32_LOGON_NETWORK)`.
+  - Only "user" type accounts are accepted, refusing on any doubt (fail-closed). Computer accounts, gMSA, accounts whose primary group or membership is Domain Computers / Domain Controllers, and accounts whose type cannot be determined are refused.
+  - Only accounts of this computer or of the domain it is joined to are accepted. Users of trusted domains and forests are refused.
+  - Rules are matched by SID only.
 - **Linux:**
-  - Используются PAM (`pam_authenticate` + `pam_acct_mgmt`) и `PAM_RHOST`, `PAM_TTY=aspia`. `PAM_RUSER` не задаётся.
-  - Имя сервиса проверяется (`[A-Za-z0-9._-]{1,64}`, файл должен существовать в `/etc/pam.d`), иначе PAM ушёл бы в сервис `other`.
-  - Пароль отдаётся только на первый запрос; запросы OTP и смены пароля дают отказ.
-  - Правила сопоставляются по GID / `uid:N`.
-  - **Ввод группы или пользователя** на вкладке Domain: `DOMAIN\name`, `name@domain`, `name` в любом регистре; префиксы `group:` / `user:`; GID; `uid:N`. Если имя одновременно группа и пользователь, требуется префикс, GID или `uid:N`.
-  - **Имя без домена вместо `DOMAIN\name`** ищется только если NSS не знает полную форму и `DOMAIN` совпадает с доменом, в который введён компьютер. Домен определяется по `default_domain_suffix` или первому из `domains` в sssd.conf (с `ad_domain`, `krb5_realm`, `ipa_domain`, `dns_discovery_domain` и их первой меткой как NetBIOS-именем) либо по `workgroup` / `realm` в smb.conf. Иначе выдаётся ошибка, поэтому `PARTNER\ivanov` не превратится в `ivanov` своего домена. Если sssd.conf не читается (GUI запущен не от root), такое сокращение не выполняется.
-  - Локальная учётка никогда не принимается за доменную: отклоняются имена из `/etc/passwd`, `/etc/group`, `/var/lib/extrausers`, а также id системного диапазона (меньше `UID_MIN`/`GID_MIN`), 65534 и динамические id systemd (61184–65519). **Ограничение:** glibc не сообщает, какой модуль NSS ответил, поэтому другие локальные источники (NIS, локальный LDAP, `altfiles`) не распознаются. В таких системах вводите доменные учётки полностью или по GID / `uid:N`.
-  - **Правила старых версий без идентификатора** разрешаются по прежним правилам: `uid:N`, GID или имя группы ровно как введено, без поиска пользователя. Обновление не меняет, кто получает доступ. Если такое имя теперь означает пользователя, в журнал пишется предупреждение; чтобы разрешить его, добавьте правило заново.
-- **Широкие группы** (Everyone, Authenticated Users, Domain Users/Guests/Computers, This Organization, Local account, BUILTIN\Users и т. п.) требуют подтверждения в настройках и отмечаются в журнале.
-- **Журнал безопасности:** каталог 0700, файлы 0600 (Linux); на Windows действует DACL каталога службы. Обычные журналы (`/var/log/aspia/host` и журналы клиента) тоже создаются с правами 0600 в каталоге 0700.
-- **Проверка «в сети» в клиенте.** Для хостов с учётками ОС или без сохранённых данных клиент начинает рукопожатие IDENTIFY_PASSWORD без закреплённого ключа и останавливается на ключе хоста. Учётные данные не отправляются, лимитер не затрагивается, попыткой входа это не считается.
-  - Хост отвечает на такую проверку и тогда, когда источник заблокирован. По этому ответу видна только доступность и публичный ключ, который и так показывается при TOFU.
-  - Ответы ACCESS_DENIED / SESSION_DENIED / VERSION_ERROR тоже означают «в сети» (хост ответил). Отклонённые сохранённые данные проявятся только при подключении. Так задумано: проверка не должна проверять пароли.
-  - В журнале безопасности такие соединения пишутся как WARNING `[connection closed before credentials]` не чаще раза в 10 минут на адрес, с числом пропущенных. Неудачные входы пишутся полностью.
-- **Пароли в клиенте.** Сохранённые пароли (в том числе учёток ОС / домена) зашифрованы ключом мастер-пароля, `client.db3` имеет права 0600 в каталоге 0700 (Linux).
-  - **Автоматическая разблокировка.** На Windows ключ защищён DPAPI пользователя. На Linux он зашифрован случайным ключом из `~/.config/aspia/os_crypt.key` (0600, каталог 0700). Ключ старых версий, выведенный из `/etc/machine-id`, при первом открытии автоматически перешифровывается.
-  - Файловый ключ защищает от других локальных пользователей, но не от процессов под той же учёткой и не от root. На общих компьютерах не включайте автоматическую разблокировку, если сохраняете доменные пароли.
+  - PAM (`pam_authenticate` + `pam_acct_mgmt`) is used with `PAM_RHOST` and `PAM_TTY=aspia`. `PAM_RUSER` is not set.
+  - The service name is validated (`[A-Za-z0-9._-]{1,64}`, the file must exist in `/etc/pam.d`); otherwise PAM would fall back to the `other` service.
+  - The password is given to the first prompt only; OTP and password change prompts fail.
+  - Rules are matched by GID / `uid:N`.
+  - **Group or user input** on the Domain tab: `DOMAIN\name`, `name@domain`, `name` in any case; `group:` / `user:` prefixes; GID; `uid:N`. If a name is both a group and a user, a prefix, GID or `uid:N` is required.
+  - **A short name instead of `DOMAIN\name`** is looked up only if NSS does not know the full form and `DOMAIN` matches the domain the computer is joined to. The domain is detected from `default_domain_suffix` or the first entry of `domains` in sssd.conf (with `ad_domain`, `krb5_realm`, `ipa_domain`, `dns_discovery_domain` and their first label as the NetBIOS name), or from `workgroup` / `realm` in smb.conf. Otherwise an error is returned, so `PARTNER\ivanov` never turns into `ivanov` of the own domain. If sssd.conf is not readable (GUI not running as root), this shortening is not done.
+  - A local account is never taken for a domain one: names from `/etc/passwd`, `/etc/group`, `/var/lib/extrausers` are refused, as well as ids in the system range (below `UID_MIN`/`GID_MIN`), 65534 and systemd dynamic ids (61184–65519). **Limitation:** glibc does not tell which NSS module answered, so other local sources (NIS, local LDAP, `altfiles`) are not recognized. On such systems enter domain accounts in full form or by GID / `uid:N`.
+  - **Rules from older versions without an identifier** are resolved with the old semantics: `uid:N`, GID or the group name exactly as entered, without a user lookup. An upgrade does not change who gets access. If such a name now means a user, a warning is logged; to allow it, add the rule again.
+- **Broad groups** (Everyone, Authenticated Users, Domain Users/Guests/Computers, This Organization, Local account, BUILTIN\Users, etc.) require a confirmation in the settings and are flagged in the log.
+- **Security log:** directory 0700, files 0600 (Linux); on Windows the service directory DACL applies. Regular logs (`/var/log/aspia/host` and client logs) are also created with mode 0600 in a 0700 directory.
+- **Client online check.** For hosts with OS accounts or without saved credentials, the client starts an IDENTIFY_PASSWORD handshake without a pinned key and stops at the host key. No credentials are sent, the limiter is not touched, and it does not count as a logon attempt.
+  - The host answers such a check even when the source is blocked. The answer reveals only availability and the public key, which is shown anyway during TOFU.
+  - ACCESS_DENIED / SESSION_DENIED / VERSION_ERROR answers also mean "online" (the host answered). Rejected saved credentials show up only on connect. This is by design: the check must not verify passwords.
+  - In the security log such connections are written as WARNING `[connection closed before credentials]` at most once per 10 minutes per address, with the number of skipped entries. Failed logons are logged in full.
+- **Client passwords.** Saved passwords (including OS / domain accounts) are encrypted with the master password key; `client.db3` has mode 0600 in a 0700 directory (Linux).
+  - **Automatic unlock.** On Windows the key is protected with user DPAPI. On Linux it is encrypted with a random key from `~/.config/aspia/os_crypt.key` (0600, directory 0700). The key of older versions, derived from `/etc/machine-id`, is re-encrypted automatically on first open.
+  - The file key protects against other local users, but not against processes running under the same account or root. On shared computers do not enable automatic unlock if you save domain passwords.
 
-## Чек-лист развёртывания
+## Deployment checklist
 
-1. Включайте режим только на нужных хостах. Порт хоста (8050) закройте файрволом и разрешите только из корпоративных сетей или VPN.
-2. Для доступа заведите отдельные группы (например, `aspia-users`). Не используйте Users, Domain Users, Authenticated Users, Everyone.
-3. AD: порог блокировки не ниже 10, окно сброса 15–30 мин. Мониторьте события 4625 и 4740.
-4. Linux: после обновления замените `/etc/pam.d/aspia-domain` новым шаблоном из `/usr/share/aspia/` (установщик не перезаписывает изменённый файл). Включите `pam_faillock`: на Debian/Ubuntu `authfail` в `common-auth`, на RHEL `authselect enable-feature with-faillock`. Проверьте, что `id user@domain` показывает доменные группы.
-5. Передавайте отпечаток ключа хоста пользователям по отдельному каналу. Любое предупреждение о смене ключа расследуйте.
-6. Не храните `host.db3` в незашифрованных резервных копиях. На Linux в нём закрытый ключ идентичности.
-7. Мониторьте журнал безопасности хоста (блокировки, «another logon … in progress»), журналы sssd и auth.
-8. Синхронизируйте время на хостах и контроллерах домена.
-
-## Что остаётся на стороне администратора (не исправляется кодом)
-
-- **C-02. Windows-раннер.** Регистрируйте его на уровне репозитория (не пользователя или организации), под отдельной локальной учёткой с минимальными правами, без прав администратора. Не используйте раннер для других проектов. Время раннера должно быть синхронизировано, `gzip` установлен (иначе кэш не сохраняется).
-- **C-05. Токен релизов.** `RELEASE_TOKEN` должен быть отдельным токеном с минимальными правами: в идеале служебный пользователь, у которого есть доступ только к этому репозиторию. Храните его только в секретах репозитория.
-- **C-07. Подпись пакетов.** MSI не подписаны Authenticode, deb/rpm не подписаны GPG; `SHA256SUMS` лежит в том же релизе и от подмены релиза не защищает. Для подписи нужны ваши ключи: сертификат подписи кода и GPG-ключ. Добавьте их в секреты и шаг подписи в workflow, когда ключи будут.
-- **Actions в CI** закреплены по SHA коммитов. Раннер должен получать их с зеркала с теми же коммитами (GitHub или gitea.com/actions).
+1. Enable the mode only on the hosts that need it. Firewall the host port (8050) and allow it only from corporate networks or VPN.
+2. Create dedicated groups for access (for example, `aspia-users`). Do not use Users, Domain Users, Authenticated Users, Everyone.
+3. AD: lockout threshold of at least 10, reset window 15–30 min. Monitor events 4625 and 4740.
+4. Linux: after an upgrade, replace `/etc/pam.d/aspia-domain` with the new template from `/usr/share/aspia/` (the installer does not overwrite a modified file). Enable `pam_faillock`: on Debian/Ubuntu `authfail` in `common-auth`, on RHEL `authselect enable-feature with-faillock`. Check that `id user@domain` shows the domain groups.
+5. Give users the host key fingerprint over a separate channel. Investigate every key change warning.
+6. Do not keep `host.db3` in unencrypted backups. On Linux it contains the private identity key.
+7. Monitor the host security log (blocks, "another logon … in progress"), sssd and auth logs.
+8. Keep time synchronized on hosts and domain controllers.
