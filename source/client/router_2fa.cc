@@ -204,8 +204,19 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
             // the operator is asked for a code instead.
             const QByteArray wrapped = config_->deviceToken();
             QByteArray token;
-            if (!wrapped.isEmpty() && !OSCrypt::decryptBytes(wrapped, &token))
+            bool needs_reencrypt = false;
+            if (!wrapped.isEmpty() && !OSCrypt::decryptBytes(wrapped, &token, &needs_reencrypt))
                 LOG(WARNING) << "Stored device token does not open here";
+
+            // Sealed by an older version with a key every local user could derive (Linux).
+            QByteArray rewrapped;
+            if (needs_reencrypt && !token.isEmpty() && OSCrypt::encryptBytes(token, &rewrapped) &&
+                !rewrapped.isEmpty())
+            {
+                config_->setDeviceToken(rewrapped);
+                if (!Database::instance().modifyRouter(*config_))
+                    LOG(WARNING) << "Failed to re-seal device token for router" << config_->routerId();
+            }
             if (!token.isEmpty())
             {
                 proto::router::ClientToRouter message;

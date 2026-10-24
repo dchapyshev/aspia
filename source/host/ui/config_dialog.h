@@ -26,6 +26,11 @@
 #include "base/location.h"
 
 class QAbstractButton;
+class QCheckBox;
+class QLabel;
+class QLineEdit;
+class QPushButton;
+class QTreeWidget;
 class QTreeWidgetItem;
 
 namespace Ui {
@@ -55,6 +60,9 @@ private slots:
     void onExportInstaller();
     void onExportPortable();
     void onConfigChanged() { setConfigChanged(FROM_HERE, true); }
+    void onAddDomainGroup();
+    void onModifyDomainGroup();
+    void onDeleteDomainGroup();
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
@@ -64,7 +72,23 @@ private:
     void updateProxyFields();
     void reloadUserList();
 
+    // Domain tab (operating system / domain accounts). Built in code.
+    void createDomainTab();
+    void reloadDomainTab();
+    void updateDomainFields();
+    QStringList domainGroupNames(QTreeWidgetItem* except) const;
+    bool saveDomainTab();
+
     std::unique_ptr<Ui::ConfigDialog> ui;
+
+    QCheckBox* checkbox_domain_auth_ = nullptr;
+    QLabel* label_pam_service_ = nullptr;
+    QLineEdit* edit_pam_service_ = nullptr;
+    QTreeWidget* tree_domain_groups_ = nullptr;
+    QPushButton* button_add_domain_group_ = nullptr;
+    QPushButton* button_modify_domain_group_ = nullptr;
+    QPushButton* button_delete_domain_group_ = nullptr;
+    QLineEdit* edit_identity_fingerprint_ = nullptr;
     Q_DISABLE_COPY_MOVE(ConfigDialog)
 };
 

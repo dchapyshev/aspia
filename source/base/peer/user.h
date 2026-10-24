@@ -22,6 +22,8 @@
 #include <QByteArray>
 #include <QString>
 
+#include <string>
+
 class SecureString;
 
 class User
@@ -39,6 +41,9 @@ public:
     enum Flags { ENABLED = 1 };
 
     static const size_t kMaxUserNameLength = 64;
+    // An operating system or domain account: "DOMAIN\user", "user@domain.tld" or "user".
+    static const size_t kMaxDomainUserNameLength = 256;
+    static const size_t kMaxDomainPasswordLength = 256;
     static const size_t kMinPasswordLength = 8;
     static const size_t kMaxPasswordLength = 64;
     static const size_t kSafePasswordLength = 10;
@@ -50,6 +55,18 @@ public:
     static const size_t kMaxVerifierSize = 1024;
 
     static bool isValidUserName(const QString& username);
+
+    // Validates the name of an operating system or domain account. Unlike isValidUserName() it
+    // also accepts the down-level logon name "DOMAIN\user" (a single backslash) and spaces inside
+    // the name, which Active Directory allows in sAMAccountName. Computer accounts (a name that
+    // ends with a dollar sign) are refused: people never use them and the domain manages their
+    // passwords.
+    static bool isValidDomainUserName(const QString& username);
+
+    // True when |bytes| (a field of PasswordCredentials as received) is well-formed UTF-8 without
+    // NUL characters. A NUL would cut the string short in the C APIs of the operating system, and
+    // malformed UTF-8 would be replaced by U+FFFD and could make two different inputs equal.
+    static bool isValidCredentialText(const std::string& bytes);
     static bool isValidPassword(const SecureString& password);
     static bool isSafePassword(const SecureString& password);
 

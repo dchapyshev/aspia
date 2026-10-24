@@ -1,0 +1,22 @@
+# PAM policy for Aspia operating system / domain accounts (RHEL/Fedora). Used by the host service
+# to check the password of a client that signs in with "DOMAIN\user" or "user@domain". The computer
+# must be joined to the domain (realmd + sssd, or winbind); system-auth then includes pam_sss.so or
+# pam_winbind.so. Installed only if the file does not exist yet, so local changes survive upgrades.
+# pam_unix waits about 2 seconds after a wrong password (and not after a correct one). The host does
+# not rely on it: every failed logon is answered 4 seconds (or the next multiple of 4 seconds if the
+# logon is slower) after the credentials are received, so the
+# answer time does not reveal whether the password was correct. "nodelay" is therefore not needed in
+# the system files included here.
+#
+# System accounts (root, daemons: uid < 1000) can never sign in through Aspia; their passwords are
+# not even checked. Lower the value only if the domain uses smaller uids.
+#
+# pam_faillock: system-auth contains it when the authselect feature is enabled
+# ("authselect enable-feature with-faillock", the default of the sssd profile on RHEL 8+); failed
+# Aspia logons are then counted and locked out together with ssh and the console. It is not added
+# here as well, because it would count every failure twice. The host limits failed logons per
+# account and per client address itself (with growing delays) in any case.
+auth    requisite pam_succeed_if.so uid >= 1000 quiet
+auth    include   system-auth
+account required  pam_succeed_if.so uid >= 1000 quiet
+account include   system-auth

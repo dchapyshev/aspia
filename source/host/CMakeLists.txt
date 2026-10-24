@@ -26,6 +26,11 @@ if (ANDROID)
         client.h
         database.cc
         database.h
+        domain_group_rule.h
+        domain_logon.h
+        domain_logon_stub.cc
+        host_domain_authenticator.cc
+        host_domain_authenticator.h
         host_storage.cc
         host_storage.h
         host_user_list.cc
@@ -101,12 +106,20 @@ list(APPEND SOURCE_HOST_CORE
     desktop_manager.h
     desktop_resizer.cc
     desktop_resizer.h
+    connection_log_throttle.cc
+    connection_log_throttle.h
+    domain_group_rule.h
+    domain_logon.h
     file_agent.cc
     file_agent.h
     file_client.cc
     file_client.h
     host_constants.cc
     host_constants.h
+    host_domain_authenticator.cc
+    host_domain_authenticator.h
+    host_identity.cc
+    host_identity.h
     host_storage.cc
     host_storage.h
     host_user_list.cc
@@ -157,7 +170,10 @@ list(APPEND SOURCE_HOST
 list(APPEND SOURCE_HOST_TESTS
     audio_silence_detector_unittest.cc
     capture_scheduler_unittest.cc
+    connection_log_throttle_unittest.cc
     database_unittest.cc
+    host_domain_authenticator_unittest.cc
+    host_identity_unittest.cc
     host_storage_unittest.cc
     host_user_list_unittest.cc
     router_manager_unittest.cc
@@ -175,6 +191,7 @@ if (WIN32)
         desktop_environment_win.h
         desktop_resizer_win.cc
         desktop_resizer_win.h
+        domain_logon_win.cc
         input_injector_win.cc
         input_injector_win.h
         process_monitor_win.cc
@@ -197,6 +214,8 @@ if (LINUX)
         desktop_environment_linux.h
         desktop_resizer_x11.cc
         desktop_resizer_x11.h
+        domain_logon_pam.cc
+        domain_logon_pam_internal.h
         input_injector_uinput.cc
         input_injector_uinput.h
         input_injector_wayland.cc
@@ -217,6 +236,9 @@ if (LINUX)
         screen_capturer_x11.h
         terminal_process_unix.cc
         terminal_process_unix.h)
+
+    list(APPEND SOURCE_HOST_TESTS
+        domain_logon_pam_unittest.cc)
 endif()
 
 if (APPLE)
@@ -225,6 +247,7 @@ if (APPLE)
         desktop_environment_mac.h
         desktop_resizer_mac.mm
         desktop_resizer_mac.h
+        domain_logon_stub.cc
         input_injector_mac.mm
         input_injector_mac.h
         process_monitor_mac.mm
@@ -315,7 +338,8 @@ if (LINUX)
 endif()
 
 if (LINUX OR APPLE)
-    # PAM is used to validate operating system credentials for terminal sessions.
+    # PAM is used to validate operating system credentials for terminal sessions and, on Linux, for
+    # operating system / domain accounts (host/domain_logon_pam.cc).
     find_library(PAM_LIB NAMES pam REQUIRED)
     target_link_libraries(aspia_host_core ${PAM_LIB})
 endif()

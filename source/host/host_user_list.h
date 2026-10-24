@@ -21,6 +21,8 @@
 
 #include "base/peer/user_list.h"
 
+#include <memory>
+
 class Database;
 
 class HostUserList final : public UserList
@@ -35,9 +37,13 @@ public:
     QByteArray seedKey() const final;
     void setSeedKey(const QByteArray& seed_key) final;
     void setOneTimeUser(const User& user) final;
+    std::shared_ptr<const DomainAuthenticator> domainAuthenticator() const final;
+    std::shared_ptr<DomainAuthLimiter> domainAuthLimiter() const final;
 
 private:
     Database& database_;
+    // One limiter for all connections of the server.
+    std::shared_ptr<DomainAuthLimiter> domain_auth_limiter_;
     User one_time_user_;
 
     Q_DISABLE_COPY_MOVE(HostUserList)

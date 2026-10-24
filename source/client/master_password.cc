@@ -259,14 +259,26 @@ bool MasterPassword::autoUnlock()
     // A refusal of the keystore may pass (a locked keychain), so the key is kept and the password is
     // asked this time only.
     QByteArray key;
-    if (!OSCrypt::decryptBytes(blob, &key))
+    bool needs_reencrypt = false;
+    if (!OSCrypt::decryptBytes(blob, &key, &needs_reencrypt))
     {
         LOG(WARNING) << "Remembered key does not open here";
         return false;
     }
 
     if (unlockWithKey(SecureByteArray(std::move(key))))
+    {
+        // Sealed by an older version with a key every local user could derive (Linux): store
+        // it again under the private key.
+        if (needs_reencrypt)
+        {
+            if (setAutoUnlockEnabled(true))
+                LOG(INFO) << "Remembered key re-sealed with the private key";
+            else
+                LOG(WARNING) << "Unable to re-seal the remembered key";
+        }
         return true;
+    }
 
     LOG(WARNING) << "Remembered key does not unlock the database";
     db.setAutoUnlockBlob(QByteArray());

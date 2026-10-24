@@ -51,6 +51,7 @@ public:
     quint16 hostPort() const;
     QString hostUserName() const { return host_.username(); }
     SecureString hostPassword() const { return host_.password(); }
+    bool isDomainAccount() const { return host_.isDomainAccount(); }
 
     void setRouterVersion(const QVersionNumber& router_version);
     QVersionNumber routerVersion() const;

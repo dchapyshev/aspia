@@ -118,6 +118,7 @@ void LocalHostDialog::onSavedCredentialsToggled(bool checked)
     ui->edit_username->setVisible(!checked);
     ui->label_password->setVisible(!checked);
     ui->edit_password->setVisible(!checked);
+    ui->checkbox_os_account->setVisible(!checked);
     ui->label_credential->setVisible(checked);
     ui->combo_credential->setVisible(checked);
 }
@@ -174,22 +175,42 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
-    const QString username = ui->edit_username->text();
-    const SecureString password = ui->edit_password->password();
+    // With a saved credential record the inline fields are hidden and not used: they are neither
+    // checked nor stored (a leftover value there must not block saving).
+    const bool use_saved_credentials = ui->checkbox_saved_credentials->isChecked();
+    const QString username = use_saved_credentials ? QString() : ui->edit_username->text().trimmed();
+    const SecureString password = use_saved_credentials ? SecureString() : ui->edit_password->password();
 
-    if (!username.isEmpty() && !User::isValidUserName(username))
+    // "DOMAIN\user", "user@domain.fqdn" and non-Latin names are operating system / domain accounts.
+    // Aspia (SRP) user names keep their own rules.
+    const bool os_account = ui->checkbox_os_account->isChecked() ||
+                            username.contains(QLatin1Char('\\'));
+    if (os_account && !username.isEmpty() && !User::isValidDomainUserName(username))
     {
         MsgBox::warning(this,
-            tr("The user name can not be empty and can contain only"
-               " alphabet characters, numbers and \"_\", \"-\", \".\" characters."));
+            tr("User Name: enter the operating system / domain account as \"DOMAIN\\user\", "
+               "\"user@domain\" or \"user\"."));
         ui->edit_username->setFocus();
         ui->edit_username->selectAll();
         return;
     }
 
-    if (username.isEmpty() != password.isEmpty())
+    if (!os_account && !username.isEmpty() && !User::isValidUserName(username))
     {
-        MsgBox::warning(this, tr("Enter both the user name and the password, or leave both empty."));
+        MsgBox::warning(this,
+            tr("User Name: an Aspia user name can contain only letters, numbers and \"_\", \"-\", "
+               "\".\", \"@\" characters. For a domain account (\"DOMAIN\\user\") check "
+               "\"Operating system / domain account\"."));
+        ui->edit_username->setFocus();
+        ui->edit_username->selectAll();
+        return;
+    }
+
+    // Both fields may stay empty, or the password alone: it is asked for when connecting.
+    if (username.isEmpty() && !password.isEmpty())
+    {
+        MsgBox::warning(this, tr("User Name: enter the user name for the password, or clear the password."));
+        ui->edit_username->setFocus();
         return;
     }
 
@@ -235,6 +256,8 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
         ui->checkbox_saved_credentials->isChecked() ? ui->combo_credential->currentData().toLongLong() : 0);
     host.setUsername(username);
     host.setPassword(password);
+    host.setOsAccount(!ui->checkbox_saved_credentials->isChecked() &&
+                      ui->checkbox_os_account->isChecked());
     host.setComment(ui->edit_comment->toPlainText());
 
     Database& db = Database::instance();
@@ -291,9 +314,10 @@ void LocalHostDialog::onLoadData()
                                   QVariant::fromValue(router.routerId()));
     }
 
+    // Both Aspia users and operating system / domain accounts. An OS record connects with
+    // IDENTIFY_PASSWORD (direct connections only).
     QList<CredentialConfig> credentials;
-    const Database::ReadResult credentials_result = db.credentialList(
-        &credentials, CredentialConfig::Type::ASPIA);
+    const Database::ReadResult credentials_result = db.credentialList(&credentials);
     if (credentials_result == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the list of credentials";
@@ -310,8 +334,10 @@ void LocalHostDialog::onLoadData()
 
     for (const CredentialConfig& credential : std::as_const(credentials))
     {
+        const QString display_name = credential.type() == CredentialConfig::Type::OS ?
+            tr("%1 (OS account)").arg(credential.displayName()) : credential.displayName();
         ui->combo_credential->addItem(credential.isValid() ? credential_icon : unread_credential_icon,
-                                      credential.displayName(),
+                                      display_name,
                                       QVariant::fromValue(credential.id()));
     }
 
@@ -357,6 +383,7 @@ void LocalHostDialog::onLoadData()
         ui->edit_address->setText(host.address());
         ui->edit_username->setText(host.username());
         ui->edit_password->setPassword(host.password());
+        ui->checkbox_os_account->setChecked(host.isOsAccount());
         ui->edit_comment->setPlainText(host.comment());
 
         if (host.credentialId() > 0)

@@ -31,6 +31,8 @@ collect_sources(SOURCE_HOST_UI
     connect_confirm_dialog.cc
     connect_confirm_dialog.h
     connect_confirm_dialog.ui
+    domain_group_dialog.cc
+    domain_group_dialog.h
     host_window.cc
     host_window.h
     host_window.ui

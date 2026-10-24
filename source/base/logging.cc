@@ -20,6 +20,7 @@
 
 #include <QDateTime>
 #include <QDir>
+#include <QFile>
 #include <QFileInfo>
 #include <QThread>
 
@@ -37,6 +38,10 @@
 #include <linux/limits.h>
 #include <unistd.h>
 #endif // defined(Q_OS_LINUX)
+
+#if defined(Q_OS_UNIX)
+#include <unistd.h>
+#endif // defined(Q_OS_UNIX)
 
 #if defined(Q_OS_MACOS)
 #include <mach-o/dyld.h>
@@ -147,8 +152,24 @@ bool initLoggingFile(const QString& prefix)
     QString time = QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss.zzz");
     QString file_path = QString("%1/%2-%3.log").arg(file_dir, prefix, time);
 
+#if defined(Q_OS_UNIX)
+    // Logs hold user names, addresses and computer names: only the owner reads them (the security
+    // log does the same). The directory is changed only if this process owns it.
+    QFileInfo dir_info(file_dir);
+    if (dir_info.ownerId() == static_cast<uint>(geteuid()))
+    {
+        // Logging is not set up yet, so a failure is not reported.
+        QFile::setPermissions(file_dir, QFileDevice::ReadOwner | QFileDevice::WriteOwner |
+                                        QFileDevice::ExeOwner);
+    }
+#endif // defined(Q_OS_UNIX)
+
     if (!g_log_file.open(file_path))
         return false;
+
+#if defined(Q_OS_UNIX)
+    QFile::setPermissions(file_path, QFileDevice::ReadOwner | QFileDevice::WriteOwner);
+#endif // defined(Q_OS_UNIX)
 
     setCrashLogHandle(g_log_file.nativeHandle());
 

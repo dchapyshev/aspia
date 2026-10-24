@@ -21,7 +21,12 @@
 
 #include <QVector>
 
+#include <memory>
+
 #include "base/peer/user.h"
+
+class DomainAuthenticator;
+class DomainAuthLimiter;
 
 class UserList
 {
@@ -32,6 +37,15 @@ public:
     virtual QByteArray seedKey() const = 0;
     virtual void setSeedKey(const QByteArray& seed_key) = 0;
     virtual void setOneTimeUser(const User& /* user */) {}
+
+    // Returns the authenticator for operating system / domain accounts (IDENTIFY_PASSWORD) with
+    // the current configuration, or nullptr when the method is disabled. Called on the thread of
+    // the user list for every connection; the returned object is then used on a pool thread.
+    virtual std::shared_ptr<const DomainAuthenticator> domainAuthenticator() const { return nullptr; }
+
+    // Returns the limiter of failed operating system / domain logons shared by all connections of
+    // the server, or nullptr for no limiting.
+    virtual std::shared_ptr<DomainAuthLimiter> domainAuthLimiter() const { return nullptr; }
 };
 
 #endif // BASE_PEER_USER_LIST_BASE_H

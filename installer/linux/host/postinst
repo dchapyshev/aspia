@@ -4,6 +4,8 @@ set -e
 # Install the Debian/Ubuntu PAM policy (common-auth/common-account) for terminal sessions.
 if [ "$1" = "configure" ]; then
     install -m 0644 /usr/share/aspia/aspia-terminal.pam /etc/pam.d/aspia-terminal
+    # Operating system / domain accounts. Kept if it exists: the administrator may have changed it.
+    [ -e /etc/pam.d/aspia-domain ] || install -m 0644 /usr/share/aspia/aspia-domain.pam /etc/pam.d/aspia-domain
 fi
 
 # Enable and (re)start the host service directly. Unlike the router/relay the host needs no prior

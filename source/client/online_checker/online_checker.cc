@@ -102,12 +102,14 @@ void OnlineChecker::start(const HostList& hosts)
 
         if (direct_host.credentialId() > 0)
         {
+            bool os_account = false;
             std::optional<std::pair<QString, SecureString>> credentials =
-                Database::instance().localHostCredentials(id);
+                Database::instance().localHostCredentials(id, &os_account);
             if (credentials.has_value())
             {
                 direct_host.setUsername(credentials->first);
                 direct_host.setPassword(credentials->second);
+                direct_host.setOsAccount(os_account);
             }
             else
             {

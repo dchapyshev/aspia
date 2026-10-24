@@ -72,6 +72,15 @@ const char kOneTimePasswordCharacters[] = "one_time_password_characters";
 const char kPasswordHash[] = "password_hash";
 const char kPasswordHashSalt[] = "password_hash_salt";
 const char kUsers[] = "users";
+const char kDomain[] = "domain";
+
+const char kDomainEnabled[] = "enabled";
+const char kDomainPamService[] = "pam_service";
+const char kDomainGroups[] = "groups";
+const char kDomainGroupName[] = "group";
+const char kDomainGroupId[] = "id";
+const char kDomainGroupKind[] = "kind";
+const char kDomainGroupSessions[] = "sessions";
 
 const char kUserName[] = "name";
 const char kUserGroup[] = "group";
@@ -180,6 +189,25 @@ QJsonObject exportDatabase()
         users_array.append(user_obj);
     }
     obj[kUsers] = users_array;
+
+    // OS / domain accounts (domain-auth). Names are stored as-is (UTF-8 JSON), e.g. "ASUTP\\user".
+    QJsonObject domain_obj;
+    domain_obj[kDomainEnabled] = db.isDomainAuthEnabled();
+    domain_obj[kDomainPamService] = db.domainPamService();
+
+    QJsonArray groups_array;
+    const DomainGroupRuleList groups = db.domainGroups();
+    for (const DomainGroupRule& rule : groups)
+    {
+        QJsonObject rule_obj;
+        rule_obj[kDomainGroupName] = rule.group;
+        rule_obj[kDomainGroupId] = rule.id;
+        rule_obj[kDomainGroupKind] = static_cast<int>(rule.kind);
+        rule_obj[kDomainGroupSessions] = static_cast<qint64>(rule.sessions);
+        groups_array.append(rule_obj);
+    }
+    domain_obj[kDomainGroups] = groups_array;
+    obj[kDomain] = domain_obj;
 
     return obj;
 }
@@ -306,6 +334,43 @@ bool importDatabase(const QJsonObject& obj)
         if (!db.replaceUsers(users))
         {
             LOG(ERROR) << "Unable to replace user list";
+            return false;
+        }
+    }
+
+    // Files exported before domain-auth have no "domain" section: keep the current domain config.
+    if (obj.contains(kDomain))
+    {
+        const QJsonObject domain_obj = obj[kDomain].toObject();
+
+        DomainGroupRuleList groups;
+        const QJsonArray groups_array = domain_obj[kDomainGroups].toArray();
+        for (const QJsonValue& value : groups_array)
+        {
+            const QJsonObject rule_obj = value.toObject();
+
+            DomainGroupRule rule;
+            rule.group = rule_obj[kDomainGroupName].toString().trimmed();
+            rule.id = rule_obj[kDomainGroupId].toString().trimmed();
+            rule.sessions = static_cast<quint32>(rule_obj[kDomainGroupSessions].toInteger());
+
+            const int kind = rule_obj[kDomainGroupKind].toInt(static_cast<int>(DomainGroupRule::Kind::GROUP));
+            if (rule.group.isEmpty() ||
+                (kind != static_cast<int>(DomainGroupRule::Kind::GROUP) &&
+                 kind != static_cast<int>(DomainGroupRule::Kind::USER)))
+            {
+                LOG(WARNING) << "Skipping invalid domain entry:" << rule.group;
+                continue;
+            }
+            rule.kind = static_cast<DomainGroupRule::Kind>(kind);
+            groups.append(rule);
+        }
+
+        // One transaction; an invalid PAM service name fails it without changing anything.
+        if (!db.saveDomainConfig(domain_obj[kDomainEnabled].toBool(),
+                                 domain_obj[kDomainPamService].toString(), groups))
+        {
+            LOG(ERROR) << "Unable to write domain account configuration";
             return false;
         }
     }

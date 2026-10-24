@@ -26,6 +26,7 @@
 #include "base/logging.h"
 #include "base/time_types.h"
 #include "base/crypto/secure_string.h"
+#include "base/peer/user.h"
 #include "client/settings.h"
 #include "client/desktop/ui_authorization_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -54,6 +55,13 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
         connect(button, &QRadioButton::toggled, this, &AuthorizationDialog::onModeToggled);
         connect(button, &QRadioButton::clicked, this, &AuthorizationDialog::onModeClicked);
     }
+
+    // "DOMAIN\user" can only be an operating system / domain account.
+    connect(ui->edit_username, &QLineEdit::textEdited, this, [this](const QString& text)
+    {
+        if (domain_account_visible_ && text.contains(QLatin1Char('\\')))
+            ui->checkbox_domain_account->setChecked(true);
+    });
 
     updateModes();
 }
@@ -100,8 +108,14 @@ void AuthorizationDialog::setSavedCredentials(const QList<CredentialConfig>& cre
         if (!credential.isValid())
             continue;
 
+        const bool os = credential.type() == CredentialConfig::Type::OS;
+        if (os && !domain_account_visible_)
+            continue;
+
         credentials_.append(credential);
-        ui->combo_credential->addItem(icon, credential.displayName(), QVariant::fromValue(credential.id()));
+        const QString name = os ?
+            tr("%1 (OS account)").arg(credential.displayName()) : credential.displayName();
+        ui->combo_credential->addItem(icon, name, QVariant::fromValue(credential.id()));
     }
 
     updateModes();
@@ -172,6 +186,37 @@ void AuthorizationDialog::setPassword(const SecureString& password)
 }
 
 //--------------------------------------------------------------------------------------------------
+void AuthorizationDialog::setDomainAccountVisible(bool visible)
+{
+    domain_account_visible_ = visible;
+    updateModes();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AuthorizationDialog::setDomainAccount(bool domain_account)
+{
+    ui->checkbox_domain_account->setChecked(domain_account);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AuthorizationDialog::isDomainAccount() const
+{
+    if (!domain_account_visible_ || usesOneTimePassword())
+        return false;
+
+    // Saved credentials keep the mode in the form of the name ("DOMAIN\user").
+    if (usesSavedCredentials())
+    {
+        const CredentialConfig* credential = selectedCredential();
+        if (credential && credential->type() == CredentialConfig::Type::OS)
+            return true;
+        return userName().contains(QLatin1Char('\\'));
+    }
+
+    return ui->checkbox_domain_account->isChecked();
+}
+
+//--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::showEvent(QShowEvent* event)
 {
     LOG(INFO) << "Show event detected";
@@ -230,6 +275,14 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
             {
                 LOG(ERROR) << "Empty password";
                 MsgBox::warning(this, tr("Password cannot be empty."));
+                return;
+            }
+
+            if (isDomainAccount() && !User::isValidDomainUserName(ui->edit_username->text().trimmed()))
+            {
+                LOG(ERROR) << "Invalid domain user name";
+                MsgBox::warning(this, tr("Enter the account as \"DOMAIN\\user\", \"user@domain\" "
+                                         "or \"user\"."));
                 return;
             }
         }
@@ -337,6 +390,9 @@ void AuthorizationDialog::updateModes()
     const bool one_time = usesOneTimePassword();
     const bool saved = usesSavedCredentials();
     const bool user_password = !one_time && !saved;
+
+    ui->checkbox_domain_account->setVisible(domain_account_visible_);
+    ui->checkbox_domain_account->setEnabled(user_password);
 
     ui->label_username->setEnabled(user_password);
     ui->edit_username->setEnabled(user_password);

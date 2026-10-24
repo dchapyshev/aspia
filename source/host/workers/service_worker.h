@@ -22,6 +22,7 @@
 #include "base/core_application.h"
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
+#include "host/connection_log_throttle.h"
 #include "host/system_settings.h"
 
 class Location;
@@ -72,6 +73,7 @@ private slots:
     void onRemoveHost();
 
 private:
+    ConnectionLogThrottle connection_log_throttle_;
     struct PendingConfirmation
     {
         TcpChannel* tcp_channel = nullptr;

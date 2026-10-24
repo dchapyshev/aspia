@@ -32,12 +32,14 @@
 #include "base/net/address.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
+#include "base/crypto/secure_byte_array.h"
 #include "host/credentials.h"
 #include "host/database.h"
 #include "host/desktop_client.h"
 #include "host/desktop_manager.h"
 #include "host/file_client.h"
 #include "host/host_constants.h"
+#include "host/host_identity.h"
 #include "host/host_storage.h"
 #include "host/host_user_list.h"
 #include "host/host_utils.h"
@@ -162,6 +164,22 @@ void ServiceWorker::onPrepare()
 
     connect(tcp_server_, &TcpServer::sig_errorOccurred, this, [this](const QString& address, const QString& username)
     {
+        if (username.isEmpty())
+        {
+            // Ended before any credentials were sent: online status probes of clients (they stop
+            // at the host key) and scans. Not a logon attempt, so it is rate-limited per source
+            // and logged as a warning; failed logons are logged in full below and by the
+            // authenticator ("[domain logon failed]").
+            int suppressed = 0;
+            if (connection_log_throttle_.shouldLog(address, Clock::now(), &suppressed))
+            {
+                SLOG(WARNING) << "[connection closed before credentials] address:" << address
+                              << "(similar from this address since the last line:" << suppressed
+                              << "; next ones within 10 min are only counted)";
+            }
+            return;
+        }
+
         SLOG(ERROR) << "[connection failed] address:" << address << "user:" << username;
 
         if (!username.isEmpty())
@@ -180,6 +198,15 @@ void ServiceWorker::onPrepare()
     tcp_server_->setMaxPendingConnections(kHostMaxPendingConnections);
     tcp_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
     tcp_server_->setUserList(SharedPointer<UserList>(new HostUserList(db)));
+
+    // The persistent key lets clients authenticate the host before they send the password of an
+    // operating system / domain account. It is used only for that method; SRP users are not
+    // affected and anonymous access stays disabled.
+    SecureByteArray identity_key = HostIdentity::privateKey(db);
+    if (!identity_key.isEmpty())
+        tcp_server_->setIdentityKey(identity_key);
+    else
+        LOG(ERROR) << "No identity key. Operating system / domain accounts are unavailable";
 }
 
 //--------------------------------------------------------------------------------------------------

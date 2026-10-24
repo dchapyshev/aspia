@@ -55,6 +55,11 @@ public:
     SecureString password() const;
     void setPassword(const SecureString& password);
 
+    // Operating system / domain account (direct connections only).
+    void setDomainAccountVisible(bool visible);
+    void setDomainAccount(bool domain_account);
+    bool isDomainAccount() const;
+
 protected:
     // QDialog implementation.
     void showEvent(QShowEvent* event) final;
@@ -81,6 +86,7 @@ private:
     bool one_time_password_only_ = false;
     bool one_time_password_choice_ = false;
     bool save_credentials_visible_ = false;
+    bool domain_account_visible_ = false;
     Q_DISABLE_COPY_MOVE(AuthorizationDialog)
 };
 

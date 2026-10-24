@@ -20,6 +20,7 @@
 
 #include <QDateTime>
 #include <QDir>
+#include <QFile>
 #include <QFileInfo>
 #include <QHash>
 #include <QStandardPaths>
@@ -286,6 +287,17 @@ bool createTables(SqlDatabase& db)
     // Migration end.
     //==============================================================================================
 
+    // Identity keys of hosts pinned for operating system / domain accounts. The address is the
+    // normalized "host:port"; one key per address.
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"host_keys\" ("
+                 "\"address\" TEXT PRIMARY KEY NOT NULL COLLATE NOCASE,"
+                 "\"public_key\" BLOB NOT NULL,"
+                 "\"create_time\" INTEGER NOT NULL DEFAULT 0)"))
+    {
+        LOG(ERROR) << "Unable to create host_keys table:" << db.lastError();
+        return false;
+    }
+
     if (!db.exec("CREATE TABLE IF NOT EXISTS \"settings\" ("
                  "\"name\" TEXT PRIMARY KEY NOT NULL,"
                  "\"value\" TEXT NOT NULL)"))
@@ -362,6 +374,14 @@ bool Database::open(const QString& file_path)
 
     if (!db_.open(file_path))
         return false;
+
+#if defined(Q_OS_UNIX)
+    // Saved passwords (also of operating system / domain accounts) are sealed with the master
+    // password key, but the file is nobody else's business either. SQLite gives journal files the
+    // permissions of the database file.
+    if (!QFile::setPermissions(file_path, QFileDevice::ReadOwner | QFileDevice::WriteOwner))
+        LOG(WARNING) << "Unable to restrict permissions of" << file_path;
+#endif // defined(Q_OS_UNIX)
 
     if (!db_.exec("PRAGMA secure_delete = ON"))
         LOG(WARNING) << "Unable to enable secure_delete:" << db_.lastError();
@@ -752,18 +772,33 @@ Database::FindResult Database::findLocalHostByGuid(const QString& guid, LocalHos
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<std::pair<QString, SecureString>> Database::localHostCredentials(qint64 entry_id) const
+std::optional<std::pair<QString, SecureString>> Database::localHostCredentials(
+    qint64 entry_id, bool* os_account) const
 {
+    if (os_account)
+        *os_account = false;
+
     LocalHostConfig host;
     if (findLocalHost(entry_id, &host) != FindResult::FOUND)
         return std::nullopt;
 
     if (host.credentialId() <= 0)
+    {
+        if (os_account)
+            *os_account = host.isOsAccount();
         return std::make_pair(host.username(), host.password());
+    }
 
     CredentialConfig credential;
     if (findCredential(host.credentialId(), &credential) != FindResult::FOUND)
         return std::nullopt;
+
+    // A record of the "operating system" type is an OS / domain account by definition.
+    if (os_account)
+    {
+        *os_account = credential.type() == CredentialConfig::Type::OS ||
+                      credential.username().contains(QLatin1Char('\\'));
+    }
 
     return std::make_pair(credential.username(), credential.password());
 }
@@ -1886,6 +1921,51 @@ bool Database::import(const QList<RouterConfig>& routers,
 }
 
 //--------------------------------------------------------------------------------------------------
+QByteArray Database::hostPublicKey(const QString& address) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return QByteArray();
+    }
+
+    SqlQuery query(db_, "SELECT public_key FROM host_keys WHERE address=?");
+    query.addText(address.trimmed());
+
+    if (query.next() != SqlQuery::StepResult::ROW)
+        return QByteArray();
+
+    return query.columnBlob(0);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setHostPublicKey(const QString& address, const QByteArray& public_key)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (address.trimmed().isEmpty() || public_key.isEmpty())
+        return false;
+
+    SqlQuery query(db_, "INSERT OR REPLACE INTO host_keys (address, public_key, create_time) "
+                        "VALUES (?, ?, ?)");
+    query.addText(address.trimmed());
+    query.addBlob(public_key);
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 QString Database::displayName() const
 {
     return readSetting(kSettingDisplayName);
@@ -2345,6 +2425,14 @@ bool Database::openDatabase()
             return false;
         }
     }
+
+#if defined(Q_OS_UNIX)
+    if (!QFile::setPermissions(dir_path, QFileDevice::ReadOwner | QFileDevice::WriteOwner |
+                                         QFileDevice::ExeOwner))
+    {
+        LOG(WARNING) << "Unable to restrict permissions of" << dir_path;
+    }
+#endif // defined(Q_OS_UNIX)
 
     QString file_path = filePath();
     if (file_path.isEmpty())

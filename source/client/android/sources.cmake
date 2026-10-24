@@ -45,6 +45,8 @@ collect_sources(SOURCE_CLIENT_ANDROID
     file_progress_sheet.h
     file_transfer_window.cc
     file_transfer_window.h
+    host_key_dialog.cc
+    host_key_dialog.h
     key_bar.cc
     key_bar.h
     local_group_editor.cc

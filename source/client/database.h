@@ -68,7 +68,9 @@ public:
     bool setLocalHostOsCredentialId(qint64 entry_id, qint64 credential_id);
     FindResult findLocalHost(qint64 entry_id, LocalHostConfig* host) const;
     FindResult findLocalHostByGuid(const QString& guid, LocalHostConfig* host) const;
-    std::optional<std::pair<QString, SecureString>> localHostCredentials(qint64 entry_id) const;
+    // |os_account| (optional) is set when the credentials are an operating system / domain account.
+    std::optional<std::pair<QString, SecureString>> localHostCredentials(
+        qint64 entry_id, bool* os_account = nullptr) const;
 
     // Local Search.
     ReadResult searchLocalHosts(const QString& query, QList<LocalHostConfig>* hosts) const;
@@ -119,6 +121,11 @@ public:
                 const QList<LocalHostConfig>& local_hosts,
                 const QList<RouterHostConfig>& router_hosts,
                 const QList<CredentialConfig>& credentials);
+
+    // Identity keys of hosts pinned on the first connection with an operating system / domain
+    // account (trust on first use). |address| is "host:port" as the user entered it.
+    QByteArray hostPublicKey(const QString& address) const;
+    bool setHostPublicKey(const QString& address, const QByteArray& public_key);
 
     // Settings.
     QString displayName() const;

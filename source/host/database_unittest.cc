@@ -18,6 +18,7 @@
 
 #include "host/database.h"
 
+#include <QFile>
 #include <QTemporaryDir>
 
 #include <gtest/gtest.h>
@@ -25,6 +26,7 @@
 #include "base/build_config.h"
 #include "base/crypto/password_generator.h"
 #include "base/crypto/secure_string.h"
+#include "base/sql/sql_database.h"
 
 namespace {
 
@@ -373,3 +375,92 @@ TEST_F(HostDatabaseTest, ContentsSurviveReopening)
     EXPECT_EQ(reopened->tcpPort(), 9999);
     EXPECT_TRUE(reopened->verifyPassword(kPassword));
 }
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(HostDatabaseTest, DomainGroupsKeepTheirIdentifiers)
+{
+    DomainGroupRule ops;
+    ops.group = "CORP\\Aspia Operators";
+    ops.id = "S-1-5-21-1-2-3-1105";
+    ops.sessions = 1;
+
+    DomainGroupRule single;
+    single.group = "ivanov";
+    single.id = "uid:1001";
+    single.kind = DomainGroupRule::Kind::USER;
+    single.sessions = 4;
+
+    ASSERT_TRUE(db_->replaceDomainGroups({ ops, single }));
+
+    const DomainGroupRuleList groups = db_->domainGroups();
+    ASSERT_EQ(groups.size(), 2);
+    EXPECT_EQ(groups[0].group, ops.group);
+    EXPECT_EQ(groups[0].id, ops.id);
+    EXPECT_EQ(groups[0].kind, DomainGroupRule::Kind::GROUP);
+    EXPECT_EQ(groups[0].sessions, 1u);
+    EXPECT_EQ(groups[1].id, "uid:1001");
+    EXPECT_EQ(groups[1].kind, DomainGroupRule::Kind::USER);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(HostDatabaseTest, DomainGroupsOfTheFirstVersionAreMigrated)
+{
+    const QString path = temp_dir_.path() + "/legacy.db3";
+
+    {
+        // The table as the first version of the feature created it, without identifiers.
+        SqlDatabase legacy;
+        ASSERT_TRUE(legacy.open(path));
+        ASSERT_TRUE(legacy.exec("CREATE TABLE \"domain_groups\" ("
+                                "\"id\" INTEGER UNIQUE,"
+                                "\"group\" TEXT NOT NULL UNIQUE COLLATE NOCASE,"
+                                "\"sessions\" INTEGER DEFAULT 0,"
+                                "PRIMARY KEY(\"id\" AUTOINCREMENT))"));
+        ASSERT_TRUE(legacy.exec("INSERT INTO domain_groups (\"group\", sessions) VALUES ('Ops', 1)"));
+    }
+
+    std::unique_ptr<Database> db = Database::openForTesting(path);
+    ASSERT_TRUE(db);
+
+    const DomainGroupRuleList groups = db->domainGroups();
+    ASSERT_EQ(groups.size(), 1);
+    EXPECT_EQ(groups[0].group, "Ops");
+    EXPECT_TRUE(groups[0].id.isEmpty()); // Resolved when used, until saved again.
+    EXPECT_EQ(groups[0].kind, DomainGroupRule::Kind::GROUP);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(HostDatabaseTest, DomainConfigIsSavedAtOnce)
+{
+    DomainGroupRule ops;
+    ops.group = "aspia-users";
+    ops.id = "1001";
+    ops.sessions = 1;
+
+    ASSERT_TRUE(db_->saveDomainConfig(true, "aspia-domain", { ops }));
+    EXPECT_TRUE(db_->isDomainAuthEnabled());
+    EXPECT_EQ(db_->domainPamService(), "aspia-domain");
+    EXPECT_EQ(db_->domainGroups().size(), 1);
+
+    // An invalid service name changes nothing at all.
+    EXPECT_FALSE(db_->saveDomainConfig(false, "../../etc/shadow", {}));
+    EXPECT_FALSE(db_->saveDomainConfig(false, "sshd other", {}));
+    EXPECT_TRUE(db_->isDomainAuthEnabled());
+    EXPECT_EQ(db_->domainPamService(), "aspia-domain");
+    EXPECT_EQ(db_->domainGroups().size(), 1);
+
+    EXPECT_FALSE(db_->setDomainPamService(".hidden"));
+    EXPECT_TRUE(db_->setDomainPamService("aspia_domain-2.test"));
+}
+
+#if defined(OS_POSIX) || defined(Q_OS_UNIX)
+//--------------------------------------------------------------------------------------------------
+TEST_F(HostDatabaseTest, DatabaseFileIsPrivate)
+{
+    const QFile::Permissions permissions = QFile::permissions(temp_dir_.path() + "/host.db3");
+    EXPECT_EQ(permissions & (QFileDevice::ReadGroup | QFileDevice::WriteGroup |
+                             QFileDevice::ReadOther | QFileDevice::WriteOther),
+              QFile::Permissions());
+    EXPECT_TRUE(permissions & QFileDevice::ReadOwner);
+}
+#endif

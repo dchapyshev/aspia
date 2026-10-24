@@ -21,8 +21,16 @@ collect_sources(SOURCE_BASE_PEER
     authenticator.h
     client_authenticator.cc
     client_authenticator.h
+    domain_auth_limiter.cc
+    domain_auth_limiter.h
+    domain_authenticator.cc
+    domain_authenticator.h
+    domain_logon_queue.cc
+    domain_logon_queue.h
     host_id.cc
     host_id.h
+    host_key.cc
+    host_key.h
     relay_peer.cc
     relay_peer.h
     relay_peer_manager.cc
@@ -38,6 +46,10 @@ collect_sources(SOURCE_BASE_PEER
     user_list.h)
 
 collect_sources(SOURCE_BASE_PEER_TESTS
+    domain_auth_handshake_unittest.cc
+    domain_auth_limiter_unittest.cc
+    domain_authenticator_unittest.cc
+    domain_logon_queue_unittest.cc
     host_id_unittest.cc
     router_user_unittest.cc
     user_unittest.cc)

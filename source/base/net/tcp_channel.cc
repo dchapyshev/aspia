@@ -22,6 +22,7 @@
 
 #include "base/location.h"
 #include "base/crypto/large_number_increment.h"
+#include "base/crypto/secure_memory.h"
 #include "base/crypto/stream_decryptor.h"
 #include "base/crypto/stream_encryptor.h"
 #include "base/peer/authenticator.h"
@@ -159,6 +160,10 @@ QString TcpChannel::errorToString(ErrorCode error_code)
 
         case ErrorCode::PROXY_DESTINATION_UNREACHABLE:
             message = QT_TR_NOOP("Proxy server could not connect to the destination host.");
+            break;
+
+        case ErrorCode::HOST_KEY_UNTRUSTED:
+            message = QT_TR_NOOP("The identity key of the host is not trusted. No credentials were sent.");
             break;
 
         default:
@@ -441,6 +446,16 @@ void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
     if (!io_->alive)
         return;
 
+    // A server refuses operating system / domain credentials by closing the connection (there is
+    // no reply that would tell a wrong password from a missing permission). Report it as such, so
+    // that the client does not reconnect with the same password and lock the account.
+    if (error_code == ErrorCode::REMOTE_HOST_CLOSED && authenticator_ &&
+        authenticator_->state() == Authenticator::State::PENDING &&
+        authenticator_->isRefusedOnClose())
+    {
+        error_code = ErrorCode::ACCESS_DENIED;
+    }
+
     if (authenticator_)
     {
         user_name_ = authenticator_->userName();
@@ -508,6 +523,9 @@ void TcpChannel::init()
                 return;
             case Authenticator::ErrorCode::ACCESS_DENIED:
                 onErrorOccurred(FROM_HERE, ErrorCode::ACCESS_DENIED);
+                return;
+            case Authenticator::ErrorCode::HOST_KEY_UNTRUSTED:
+                onErrorOccurred(FROM_HERE, ErrorCode::HOST_KEY_UNTRUSTED);
                 return;
             default:
                 onErrorOccurred(FROM_HERE, ErrorCode::UNKNOWN);
@@ -584,6 +602,10 @@ void TcpChannel::onMessageReceived()
         }
 
         authenticator_->onIncomingMessage(decrypt_buffer_);
+
+        // Handshake messages may carry credentials (IDENTIFY_PASSWORD): do not leave the plain
+        // text in the reused buffer.
+        memZero(&decrypt_buffer_);
         return;
     }
 

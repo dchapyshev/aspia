@@ -145,6 +145,10 @@ stage_payload()
                 "$root/usr/share/aspia/aspia-terminal.pam"
             install -D -m 644 "$SCRIPT_DIR/host/aspia-terminal-rhel.pam" \
                 "$root/usr/share/aspia/aspia-terminal-rhel.pam"
+            install -D -m 644 "$SCRIPT_DIR/host/aspia-domain.pam" \
+                "$root/usr/share/aspia/aspia-domain.pam"
+            install -D -m 644 "$SCRIPT_DIR/host/aspia-domain-rhel.pam" \
+                "$root/usr/share/aspia/aspia-domain-rhel.pam"
             ;;
         client)
             install -D -m 644 "$SCRIPT_DIR/client/aspia-client.desktop" \

@@ -47,6 +47,7 @@
 #include "client/session_keeper.h"
 #include "client/session_state.h"
 #include "client/android/chat_view.h"
+#include "client/android/host_key_dialog.h"
 #include "client/workers/network_worker.h"
 #include "common/android/app_bar.h"
 #include "common/android/icon_button.h"
@@ -212,7 +213,8 @@ void ChatWindow::resizeEvent(QResizeEvent* event)
 //--------------------------------------------------------------------------------------------------
 void ChatWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data)
 {
-    if (status == NetworkWorker::Status::HOST_DISCONNECTED && session_keeper_)
+    if ((status == NetworkWorker::Status::HOST_DISCONNECTED ||
+         status == NetworkWorker::Status::HOST_KEY_UNTRUSTED) && session_keeper_)
         session_keeper_->release();
 
     onStatusChanged(status, data);
@@ -273,6 +275,25 @@ void ChatWindow::onStatusChanged(NetworkWorker::Status status, const QVariant& d
             }
 
             view_->setInputEnabled(false);
+        }
+        break;
+
+        case NetworkWorker::Status::HOST_KEY_UNTRUSTED:
+        {
+            const QVariantMap map = data.toMap();
+            if (HostKeyDialog::confirm(this, map.value("address").toString(),
+                                       map.value("public_key").toByteArray(),
+                                       map.value("key_changed").toBool()))
+            {
+                // The key is pinned now; connect again and send the credentials.
+                setStatusText(tr("Connecting to host %1...").arg(session_state_->hostAddress()));
+                startNewSession();
+            }
+            else
+            {
+                setStatusText(tr("The connection was canceled because the identity key of the host "
+                                 "is not trusted. No credentials were sent."));
+            }
         }
         break;
 

@@ -28,6 +28,9 @@ message HostBlob
     string address  = 1;
     string username = 2;
     string password = 3;
+    // The credentials are an operating system / domain account (IDENTIFY_PASSWORD), not an Aspia
+    // user. Needed for "user@domain", which can be either.
+    bool os_account = 4;
 }
 
 // The encrypted column of a router record.

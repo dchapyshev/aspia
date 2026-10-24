@@ -18,6 +18,8 @@
 
 #include "client/workers/network_worker.h"
 
+#include <QVariantMap>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/version_constants.h"
@@ -412,9 +414,30 @@ void NetworkWorker::routeMessage(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void NetworkWorker::startConnection()
 {
-    auto setupAuthenticator = [this](auto* auth)
+    auto setupAuthenticator = [this](ClientAuthenticator* auth)
     {
-        auth->setIdentify(proto::key_exchange::IDENTIFY_SRP);
+        if (session_state_->isDomainAccount())
+        {
+            // Operating system / domain account: the password goes to the host only after the host
+            // has proven that it owns the identity key the user confirmed before.
+            auth->setIdentify(proto::key_exchange::IDENTIFY_PASSWORD);
+            auth->setPinnedHostKey(Database::instance().hostPublicKey(pinnedKeyAddress()));
+
+            untrusted_host_key_.clear();
+            host_key_changed_ = false;
+
+            connect(auth, &ClientAuthenticator::sig_hostKeyUntrusted,
+                    this, [this](const QByteArray& public_key, bool key_changed)
+            {
+                untrusted_host_key_ = public_key;
+                host_key_changed_ = key_changed;
+            });
+        }
+        else
+        {
+            auth->setIdentify(proto::key_exchange::IDENTIFY_SRP);
+        }
+
         auth->setUserName(session_state_->hostUserName());
         auth->setPassword(SecureString(session_state_->hostPassword()));
         auth->setSessionType(static_cast<quint32>(session_state_->sessionType()));
@@ -428,6 +451,15 @@ void NetworkWorker::startConnection()
         if (session_state_->routerId() <= 0)
         {
             LOG(FATAL) << "No router id. Continuation is impossible";
+            return;
+        }
+
+        if (session_state_->isDomainAccount())
+        {
+            // The identity key of a host reached through a router can not be pinned by address.
+            LOG(ERROR) << "Domain accounts are supported only for direct connections";
+            emit sig_statusChanged(Status::RELAY_ERROR,
+                tr("Operating system / domain accounts are supported only for direct connections."));
             return;
         }
 
@@ -523,8 +555,20 @@ void NetworkWorker::connectionLost(TcpChannel::ErrorCode error_code)
 
     LOG(INFO) << "Connection terminated:" << error_code;
 
-    // Show an error to the user.
-    emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
+    if (error_code == TcpChannel::ErrorCode::HOST_KEY_UNTRUSTED && !untrusted_host_key_.isEmpty())
+    {
+        // The user decides whether to trust the key; the connection is started anew then.
+        QVariantMap data;
+        data.insert("public_key", untrusted_host_key_);
+        data.insert("key_changed", host_key_changed_);
+        data.insert("address", pinnedKeyAddress());
+        emit sig_statusChanged(Status::HOST_KEY_UNTRUSTED, data);
+    }
+    else
+    {
+        // Show an error to the user.
+        emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
+    }
 
     udp_ready_ = false;
     held_udp_messages_.clear();
@@ -540,7 +584,8 @@ void NetworkWorker::connectionLost(TcpChannel::ErrorCode error_code)
         tcp_channel_.reset();
     }
 
-    if (!session_state_->isAutoReconnect() || error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
+    if (!session_state_->isAutoReconnect() || error_code == TcpChannel::ErrorCode::ACCESS_DENIED ||
+        error_code == TcpChannel::ErrorCode::HOST_KEY_UNTRUSTED)
         return;
 
     LOG(INFO) << "Reconnect to host is enabled";
@@ -549,6 +594,13 @@ void NetworkWorker::connectionLost(TcpChannel::ErrorCode error_code)
     // Both relay and direct paths are handled the same way. The owner (ClientWindow) observes
     // WAIT_FOR_HOST, destroys this Client and builds a fresh one when ready.
     emit sig_statusChanged(Status::WAIT_FOR_HOST);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString NetworkWorker::pinnedKeyAddress() const
+{
+    return QString("%1:%2").arg(session_state_->hostAddress().trimmed().toLower())
+        .arg(session_state_->hostPort());
 }
 
 //--------------------------------------------------------------------------------------------------

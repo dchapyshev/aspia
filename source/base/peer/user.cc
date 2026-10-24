@@ -18,6 +18,8 @@
 
 #include "base/peer/user.h"
 
+#include <QStringDecoder>
+
 #include "base/logging.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_string.h"
@@ -74,6 +76,74 @@ bool User::isValidUserName(const QString& username)
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool User::isValidDomainUserName(const QString& username)
+{
+    const qsizetype length = username.length();
+
+    if (!length || length > kMaxDomainUserNameLength)
+        return false;
+
+    // Leading or trailing spaces are never part of an account name.
+    if (username.front().isSpace() || username.back().isSpace())
+        return false;
+
+    qsizetype backslash_count = 0;
+    qsizetype at_count = 0;
+
+    for (qsizetype i = 0; i < length; ++i)
+    {
+        const QChar ch = username[i];
+
+        if (ch == QLatin1Char('\\'))
+        {
+            // DOMAIN\user: exactly one separator with something on both sides.
+            if (++backslash_count > 1 || i == 0 || i == length - 1)
+                return false;
+            continue;
+        }
+
+        if (ch == QLatin1Char('@'))
+        {
+            if (++at_count > 1 || i == 0 || i == length - 1)
+                return false;
+            continue;
+        }
+
+        if (ch == QLatin1Char(' ') || ch == QLatin1Char('$'))
+            continue;
+
+        if (!isValidUserNameChar(ch))
+            return false;
+    }
+
+    // "DOMAIN\user@domain" is ambiguous.
+    if (backslash_count && at_count)
+        return false;
+
+    // A computer account: "PC01$", "CORP\\PC01$" or "PC01$@corp.example.com".
+    const qsizetype at = username.indexOf(QLatin1Char('@'));
+    const QString account = at >= 0 ? username.left(at) : username;
+    if (account.endsWith(QLatin1Char('$')))
+        return false;
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool User::isValidCredentialText(const std::string& bytes)
+{
+    if (bytes.find(char(0)) != std::string::npos)
+        return false;
+
+    QStringDecoder decoder(QStringDecoder::Utf8, QStringDecoder::Flag::Stateless);
+    const QString text =
+        decoder.decode(QByteArrayView(bytes.data(), static_cast<qsizetype>(bytes.size())));
+    return !decoder.hasError();
 }
 
 //--------------------------------------------------------------------------------------------------

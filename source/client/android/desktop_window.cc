@@ -33,6 +33,7 @@
 #include "client/session_keeper.h"
 #include "client/session_state.h"
 #include "client/android/desktop_view.h"
+#include "client/android/host_key_dialog.h"
 #include "client/android/key_bar.h"
 #include "client/android/statistics_dialog.h"
 #include "client/workers/audio_worker.h"
@@ -234,7 +235,8 @@ void DesktopWindow::resizeEvent(QResizeEvent* event)
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data)
 {
-    if (status == NetworkWorker::Status::HOST_DISCONNECTED)
+    if (status == NetworkWorker::Status::HOST_DISCONNECTED ||
+        status == NetworkWorker::Status::HOST_KEY_UNTRUSTED)
     {
         if (session_keeper_)
             session_keeper_->release();
@@ -786,6 +788,25 @@ void DesktopWindow::onStatusChanged(NetworkWorker::Status status, const QVariant
 
             view_->setFrame(SharedFrame());
             connected_ = false;
+        }
+        break;
+
+        case NetworkWorker::Status::HOST_KEY_UNTRUSTED:
+        {
+            const QVariantMap map = data.toMap();
+            if (HostKeyDialog::confirm(this, map.value("address").toString(),
+                                       map.value("public_key").toByteArray(),
+                                       map.value("key_changed").toBool()))
+            {
+                // The key is pinned now; connect again and send the credentials.
+                setStatusText(tr("Connecting to host %1...").arg(session_state_->hostAddress()));
+                startNewSession();
+            }
+            else
+            {
+                setStatusText(tr("The connection was canceled because the identity key of the host "
+                                 "is not trusted. No credentials were sent."));
+            }
         }
         break;
 
