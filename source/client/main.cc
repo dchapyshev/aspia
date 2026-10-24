@@ -39,6 +39,7 @@
 
 #include <functional>
 
+#include "base/auto_qpointer.h"
 #include "base/crypto/secure_string.h"
 #include "client/database.h"
 #include "client/host_url.h"
@@ -87,6 +88,62 @@ void backupOnStartup()
             MsgBox::warning(nullptr, QApplication::translate("Client", "Unable to create a backup."));
             break;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+bool setMasterPassword()
+{
+    AutoQPointer<CredentialsDialog> dialog(
+        new CredentialsDialog(CredentialsDialog::Type::SET_PASSWORD, nullptr));
+    dialog->setWindowTitle(QApplication::translate("Client", "Set Master Password"));
+    dialog->setHeaderIcon(":/img/lock.svg");
+    dialog->setHeaderText(QApplication::translate(
+        "Client", "Set a master password required to unlock the application."));
+    dialog->setValidator([](CredentialsDialog* d) -> bool
+    {
+        SecureString new_password = d->password();
+
+        if (new_password.size() < MasterPassword::kMinPasswordLength)
+        {
+            MsgBox::warning(d, QApplication::translate(
+                "Client", "The password can not be shorter than %n characters.",
+                "", MasterPassword::kMinPasswordLength));
+            return false;
+        }
+
+        if (!MasterPassword::isSafePassword(new_password))
+        {
+            QString unsafe = QApplication::translate(
+                "Client", "Password you entered does not meet the security requirements!");
+            QString safe = QApplication::translate("Client",
+                "The password must contain lowercase and uppercase characters, "
+                "numbers and should not be shorter than %n characters.",
+                "", MasterPassword::kSafePasswordLength);
+            QString question = QApplication::translate(
+                "Client", "Do you want to enter a different password?");
+
+            if (MsgBox::warning(d, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
+                                MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
+                return false;
+        }
+
+        if (MasterPassword::setNew(new_password) != MasterPassword::Result::SUCCESS)
+        {
+            MsgBox::warning(d, QApplication::translate("Client", "Unable to set master password."));
+            return false;
+        }
+
+        return true;
+    });
+
+    if (dialog->exec() != QDialog::Accepted)
+    {
+        LOG(INFO) << "Master password set cancelled by user";
+        return false;
+    }
+
+    LOG(INFO) << "Master password set";
+    return true;
 }
 
 } // namespace
@@ -278,6 +335,11 @@ int main(int argc, char* argv[])
             case AppLock::Result::UNLOCKED:
                 break;
 
+            case AppLock::Result::RESET:
+                if (!setMasterPassword())
+                    return 0;
+                break;
+
             case AppLock::Result::CANCELLED:
                 return 0;
 
@@ -289,55 +351,8 @@ int main(int argc, char* argv[])
     {
         LOG(INFO) << "Master password is not set, prompting user to set one";
 
-        CredentialsDialog dialog(CredentialsDialog::Type::SET_PASSWORD, nullptr);
-        dialog.setWindowTitle(QApplication::translate("Client", "Set Master Password"));
-        dialog.setHeaderIcon(":/img/lock.svg");
-        dialog.setHeaderText(QApplication::translate(
-            "Client", "Set a master password required to unlock the application."));
-        dialog.setValidator([](CredentialsDialog* d) -> bool
-        {
-            SecureString new_password = d->password();
-
-            if (new_password.size() < MasterPassword::kMinPasswordLength)
-            {
-                MsgBox::warning(d, QApplication::translate(
-                    "Client", "The password can not be shorter than %n characters.",
-                    "", MasterPassword::kMinPasswordLength));
-                return false;
-            }
-
-            if (!MasterPassword::isSafePassword(new_password))
-            {
-                QString unsafe = QApplication::translate(
-                    "Client", "Password you entered does not meet the security requirements!");
-                QString safe = QApplication::translate("Client",
-                    "The password must contain lowercase and uppercase characters, "
-                    "numbers and should not be shorter than %n characters.",
-                    "", MasterPassword::kSafePasswordLength);
-                QString question = QApplication::translate(
-                    "Client", "Do you want to enter a different password?");
-
-                if (MsgBox::warning(d, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
-                                    MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
-                    return false;
-            }
-
-            if (MasterPassword::setNew(new_password) != MasterPassword::Result::SUCCESS)
-            {
-                MsgBox::warning(d, QApplication::translate("Client", "Unable to set master password."));
-                return false;
-            }
-
-            return true;
-        });
-
-        if (dialog.exec() != QDialog::Accepted)
-        {
-            LOG(INFO) << "Master password set cancelled by user";
+        if (!setMasterPassword())
             return 0;
-        }
-
-        LOG(INFO) << "Master password set";
     }
 
     backupOnStartup();
@@ -366,7 +381,9 @@ int main(int argc, char* argv[])
             pending_url_connection = QObject::connect(
                 &application, &Application::sig_urlOpened, &application, remember_url);
 
-            if (AppLock::unlock() != AppLock::Result::UNLOCKED)
+            const AppLock::Result unlocked = AppLock::unlock();
+            if (unlocked != AppLock::Result::UNLOCKED &&
+                (unlocked != AppLock::Result::RESET || !setMasterPassword()))
             {
                 QApplication::quit();
                 return;

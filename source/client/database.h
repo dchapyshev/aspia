@@ -120,6 +120,9 @@ public:
                 const QList<RouterHostConfig>& router_hosts,
                 const QList<CredentialConfig>& credentials);
 
+    // Returns the path of the copy, or an empty string when the database is left as it was.
+    QString saveCopyAndClearAll();
+
     // Settings.
     QString displayName() const;
     bool setDisplayName(const QString& name);

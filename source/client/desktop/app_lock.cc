@@ -18,14 +18,17 @@
 
 #include "client/desktop/app_lock.h"
 
+#include <QDir>
 #include <QEvent>
 #include <QFileDialog>
 #include <QThread>
 #include <QTimer>
 
+#include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "client/application.h"
+#include "client/database.h"
 #include "client/master_password.h"
 #include "client/settings.h"
 #include "client/desktop/main_window.h"
@@ -57,29 +60,55 @@ AppLock::~AppLock() = default;
 // static
 AppLock::Result AppLock::unlock()
 {
+    const int kResetResult = QDialog::Accepted + 1;
+
     while (true)
     {
-        CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, nullptr);
-        dialog.setObjectName("UnlockDialog");
-        dialog.setWindowTitle(QApplication::translate("Client", "Unlock"));
-        dialog.setHeaderIcon(":/img/lock.svg");
-        dialog.setHeaderText(QApplication::translate(
-            "Client", "Enter the master password to unlock the application."));
-        dialog.setShowPasswordButtonVisible(true);
+        AutoQPointer<CredentialsDialog> dialog(
+            new CredentialsDialog(CredentialsDialog::Type::ENTER_PASSWORD, nullptr));
+        dialog->setObjectName("UnlockDialog");
+        dialog->setWindowTitle(tr("Unlock"));
+        dialog->setHeaderIcon(":/img/lock.svg");
+        dialog->setHeaderText(tr("Enter the master password to unlock the application."));
+        dialog->setShowPasswordButtonVisible(true);
+        dialog->setLink(tr("Forgot password?"), kResetResult);
 
         Settings settings;
-        dialog.restoreGeometry(settings.dialogGeometry(dialog.objectName()));
+        dialog->restoreGeometry(settings.dialogGeometry(dialog->objectName()));
 
         // A second start of the application activates its window, and until the unlock that window
         // is this dialog.
-        connect(Application::instance(), &Application::sig_windowActivated, &dialog, [&dialog]()
+        connect(Application::instance(), &Application::sig_windowActivated, dialog.get(), [window = dialog.get()]()
         {
-            dialog.raise();
-            dialog.activateWindow();
+            window->raise();
+            window->activateWindow();
         });
 
-        const int result = dialog.exec();
-        settings.setDialogGeometry(dialog.objectName(), dialog.saveGeometry());
+        const int result = dialog->exec();
+        settings.setDialogGeometry(dialog->objectName(), dialog->saveGeometry());
+
+        if (result == kResetResult)
+        {
+            const QString question = tr(
+                "The master password can not be recovered. You can only reset the database. All records of "
+                "the database, the master password and the settings will be deleted. A copy of the database "
+                "will be saved to a file next to it.\nDo you want to reset the database?");
+
+            if (MsgBox::importantQuestion(nullptr, question, Seconds(10)) != MsgBox::Yes)
+                continue;
+
+            const QString copy_path = Database::instance().saveCopyAndClearAll();
+            if (copy_path.isEmpty())
+            {
+                MsgBox::warning(nullptr, tr("Unable to reset the database."));
+                continue;
+            }
+
+            LOG(INFO) << "Database reset by user";
+            MsgBox::information(nullptr, tr("The database is reset. The previous database is saved to the file \"%1\".")
+                .arg(QDir::toNativeSeparators(copy_path)));
+            return Result::RESET;
+        }
 
         if (result != QDialog::Accepted)
         {
@@ -87,7 +116,7 @@ AppLock::Result AppLock::unlock()
             return Result::CANCELLED;
         }
 
-        const MasterPassword::Result unlocked = MasterPassword::unlock(dialog.password());
+        const MasterPassword::Result unlocked = MasterPassword::unlock(dialog->password());
         if (unlocked == MasterPassword::Result::SUCCESS)
         {
             LOG(INFO) << "Master password accepted";
@@ -97,12 +126,11 @@ AppLock::Result AppLock::unlock()
         if (unlocked != MasterPassword::Result::INVALID_PASSWORD)
         {
             LOG(ERROR) << "Unable to unlock the database";
-            MsgBox::warning(nullptr, QApplication::translate(
-                "Client", "Unable to unlock the database."));
+            MsgBox::warning(nullptr, tr("Unable to unlock the database."));
             return Result::FAILED;
         }
 
-        MsgBox::warning(nullptr, QApplication::translate("Client", "Invalid master password."));
+        MsgBox::warning(nullptr, tr("Invalid master password."));
     }
 }
 

@@ -40,6 +40,7 @@ CredentialsDialog::CredentialsDialog(Type type, QWidget* parent)
 
     ui->label_icon->setVisible(false);
     ui->label_description->setVisible(false);
+    ui->label_link->setVisible(false);
 
     switch (type_)
     {
@@ -62,6 +63,7 @@ CredentialsDialog::CredentialsDialog(Type type, QWidget* parent)
             break;
     }
 
+    connect(ui->label_link, &QLabel::linkActivated, this, [this]() { done(link_result_); });
     connect(ui->button_box, &QDialogButtonBox::clicked, this, [this](QAbstractButton* button)
     {
         if (ui->button_box->standardButton(button) != QDialogButtonBox::Ok)
@@ -118,6 +120,15 @@ void CredentialsDialog::setShowPasswordButtonVisible(bool visible)
     ui->edit_current->setShowPasswordButtonVisible(visible);
     ui->edit_password->setShowPasswordButtonVisible(visible);
     ui->edit_confirm->setShowPasswordButtonVisible(visible);
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialsDialog::setLink(const QString& text, int result)
+{
+    link_result_ = result;
+
+    ui->label_link->setText(QString("<a href='#'>%1</a>").arg(text.toHtmlEscaped()));
+    ui->label_link->setVisible(true);
 }
 
 //--------------------------------------------------------------------------------------------------

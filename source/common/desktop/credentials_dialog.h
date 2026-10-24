@@ -55,6 +55,9 @@ public:
     // Embeds a trailing toggle action in every password edit of the dialog.
     void setShowPasswordButtonVisible(bool visible);
 
+    // Shows a link next to the buttons that closes the dialog with |result|.
+    void setLink(const QString& text, int result);
+
     // Override the default label for each field.
     void setPasswordLabel(const QString& text);
     void setNewPasswordLabel(const QString& text);
@@ -82,6 +85,7 @@ private:
     std::unique_ptr<Ui::CredentialsDialog> ui;
     const Type type_;
     Validator validator_;
+    int link_result_ = QDialog::Rejected;
 
     Q_DISABLE_COPY_MOVE(CredentialsDialog)
 };

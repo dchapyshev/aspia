@@ -34,12 +34,13 @@ class AppLock final : public QObject
     Q_OBJECT
 
 public:
-    enum class Result { UNLOCKED, CANCELLED, FAILED };
+    enum class Result { UNLOCKED, RESET, CANCELLED, FAILED };
 
     explicit AppLock(MainWindow* main_window);
     ~AppLock() final;
 
-    // Asks the master password until the user enters the right one or gives up.
+    // Asks the master password until the user enters the right one, resets the database or gives up.
+    // After a reset the database has no master password.
     static Result unlock();
 
     // A dialog, a message box, a menu or a file dialog is on the screen. The window can not be
