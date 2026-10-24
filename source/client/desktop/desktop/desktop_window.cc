@@ -62,10 +62,6 @@
 #include "proto/peer.h"
 #include "proto/task_manager.h"
 
-#if defined(Q_OS_WINDOWS)
-#include "base/win/windows_version.h"
-#endif // defined(Q_OS_WINDOWS)
-
 namespace {
 
 const quint32 kWheelMask =
@@ -447,29 +443,6 @@ void DesktopWindow::leaveEvent(QEvent* event)
         scroll_timer_->stop();
 
     QWidget::leaveEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::showEvent(QShowEvent* event)
-{
-    if (is_minimized_from_full_screen_ && isWindow())
-    {
-        LOG(INFO) << "Restore to full screen";
-        is_minimized_from_full_screen_ = false;
-
-#if defined(Q_OS_WINDOWS)
-        if (windowsVersion() >= VERSION_WIN11)
-        {
-            // In Windows 11, when you maximize a minimized window from full screen, the window does
-            // not return to full screen. We force the window to full screen.
-            // However, in versions of Windows less than 11, this breaks the window's minimization,
-            // therefore we use this piece of code only for Windows 11.
-            showFullScreen();
-        }
-#endif // defined(Q_OS_WINDOWS)
-    }
-
-    QWidget::showEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

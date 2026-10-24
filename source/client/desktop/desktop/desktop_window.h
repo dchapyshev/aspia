@@ -89,7 +89,6 @@ protected:
     // QWidget implementation.
     void resizeEvent(QResizeEvent* event) final;
     void leaveEvent(QEvent* event) final;
-    void showEvent(QShowEvent* event) final;
     void focusOutEvent(QFocusEvent* event) final;
     void closeEvent(QCloseEvent* event) final;
     bool eventFilter(QObject* object, QEvent* event) final;
