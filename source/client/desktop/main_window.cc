@@ -654,6 +654,7 @@ void MainWindow::onCurrentTabChanged(int index)
     const bool is_session = tab->tabType() == Tab::Type::SESSION;
     ui->action_help->setShortcut(is_session ? QKeySequence() : QKeySequence(Qt::Key_F1));
     ui->action_quick_connect->setShortcut(is_session ? QKeySequence() : QKeySequence(Qt::Key_F8));
+    ui->action_lock->setShortcut(is_session ? QKeySequence() : QKeySequence(Qt::CTRL | Qt::Key_L));
 
     active_tab_ = tab;
     installTabActions(active_tab_);
