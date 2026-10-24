@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/smbios.h"
 #include "base/crypto/generic_hash.h"
+#include "base/mac/scoped_cftyperef.h"
 #include "base/mac/smc_reader.h"
 
 #include <QHash>
@@ -225,6 +226,36 @@ QString SysInfo::operatingSystemArchitecture()
 QString SysInfo::operatingSystemDir()
 {
     return "/System";
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString SysInfo::lastLogonUser()
+{
+    QString user;
+
+    // The logon history goes from the oldest record to the newest. A logon at the login window has
+    // "console" for its line.
+    setutxent_wtmp(1);
+
+    for (struct utmpx* entry = getutxent_wtmp(); entry != nullptr; entry = getutxent_wtmp())
+    {
+        if (entry->ut_type == USER_PROCESS && qstrncmp(entry->ut_line, "console", sizeof(entry->ut_line)) == 0)
+            user = QString::fromUtf8(entry->ut_user);
+    }
+
+    endutxent_wtmp();
+
+    // The history keeps only recent records, while the login window remembers its last user for good.
+    if (user.isEmpty())
+    {
+        ScopedCFTypeRef<CFPropertyListRef> value(CFPreferencesCopyValue(
+            CFSTR("lastUserName"), CFSTR("com.apple.loginwindow"), kCFPreferencesAnyUser, kCFPreferencesAnyHost));
+        if (value && CFGetTypeID(value.get()) == CFStringGetTypeID())
+            user = QString::fromCFString(static_cast<CFStringRef>(value.get()));
+    }
+
+    return user;
 }
 
 //--------------------------------------------------------------------------------------------------

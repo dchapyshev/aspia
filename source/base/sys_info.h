@@ -238,6 +238,7 @@ public:
     static QString operatingSystemDir();
     static QString operatingSystemKey();
     static qint64 operatingSystemInstallDate();
+    static QString lastLogonUser();
 
     static quint64 uptime();
 

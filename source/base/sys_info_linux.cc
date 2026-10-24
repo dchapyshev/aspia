@@ -36,6 +36,8 @@
 #include "base/logging.h"
 #include "base/smbios.h"
 #include "base/crypto/generic_hash.h"
+#include "base/sql/sql_database.h"
+#include "base/sql/sql_query.h"
 
 #include <algorithm>
 
@@ -51,6 +53,7 @@
 #include <sys/sysinfo.h>
 #include <sys/utsname.h>
 #include <unistd.h>
+#include <utmpx.h>
 
 namespace {
 
@@ -746,6 +749,63 @@ QString osReleaseValue(const QByteArray& key)
     return QString();
 }
 
+//--------------------------------------------------------------------------------------------------
+// A logon to the console gets a virtual terminal (tty2), a seat (seat0) or an X display (:0) for its
+// line. Remote logons get a pseudo-terminal.
+bool isConsoleLine(QByteArrayView line)
+{
+    return line.startsWith("tty") || line.startsWith("seat") || line.startsWith(':');
+}
+
+//--------------------------------------------------------------------------------------------------
+QString lastConsoleUserFromWtmpDb()
+{
+    const char kWtmpDbPath[] = "/var/lib/wtmpdb/wtmp.db";
+    if (!QFile::exists(kWtmpDbPath))
+        return QString();
+
+    SqlDatabase db;
+    if (!db.open(kWtmpDbPath, SqlDatabase::OpenMode::READ_ONLY))
+        return QString();
+
+    // Type 3 is a user logon in wtmpdb.
+    SqlQuery query(db, "SELECT User, TTY FROM wtmp WHERE Type = 3 ORDER BY Login DESC");
+    while (query.next() == SqlQuery::StepResult::ROW)
+    {
+        const std::string_view line = query.columnTextView(1);
+        if (isConsoleLine(QByteArrayView(line.data(), line.size())))
+            return query.columnText(0);
+    }
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString lastConsoleUserFromWtmp()
+{
+    QString user;
+
+    if (utmpxname(_PATH_WTMPX) != 0)
+        return user;
+
+    setutxent();
+
+    for (struct utmpx* entry = getutxent(); entry != nullptr; entry = getutxent())
+    {
+        if (entry->ut_type != USER_PROCESS)
+            continue;
+
+        const QByteArrayView line(entry->ut_line, qstrnlen(entry->ut_line, sizeof(entry->ut_line)));
+        if (isConsoleLine(line))
+            user = QString::fromLocal8Bit(entry->ut_user, qstrnlen(entry->ut_user, sizeof(entry->ut_user)));
+    }
+
+    endutxent();
+    utmpxname(_PATH_UTMPX);
+
+    return user;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -805,6 +865,18 @@ QString SysInfo::operatingSystemDir()
 {
     NOTIMPLEMENTED();
     return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString SysInfo::lastLogonUser()
+{
+    // Newer systems keep the logons in wtmpdb and may still have a stale wtmp file next to it.
+    QString user = lastConsoleUserFromWtmpDb();
+    if (user.isEmpty())
+        user = lastConsoleUserFromWtmp();
+
+    return user;
 }
 
 //--------------------------------------------------------------------------------------------------

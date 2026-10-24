@@ -1042,6 +1042,52 @@ qint64 SysInfo::operatingSystemInstallDate()
 
 //--------------------------------------------------------------------------------------------------
 // static
+QString SysInfo::lastLogonUser()
+{
+    SessionId session_id = activeConsoleSessionId();
+    if (session_id != kInvalidSessionId)
+    {
+        SessionInfo session_info(session_id);
+        QString user_name = session_info.userName();
+
+        if (!user_name.isEmpty())
+        {
+            QString domain = session_info.domain();
+            return domain.isEmpty() ? user_name : domain + '\\' + user_name;
+        }
+    }
+
+    RegKey key;
+
+    REGSAM access = KEY_READ;
+
+#if defined(Q_PROCESSOR_X86_32)
+    if (isWow64Process())
+        access |= KEY_WOW64_64KEY;
+#endif
+
+    // Logons over RDP do not change this value.
+    LONG status = key.open(HKEY_LOCAL_MACHINE,
+                           "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI",
+                           access);
+    if (status != ERROR_SUCCESS)
+        return QString();
+
+    QString user_name;
+
+    status = key.readValue("LastLoggedOnUser", &user_name);
+    if (status != ERROR_SUCCESS)
+        return QString();
+
+    // A local account is stored with "." in place of the computer name.
+    if (user_name.startsWith(".\\"))
+        user_name.replace(0, 1, computerName());
+
+    return user_name;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 quint64 SysInfo::uptime()
 {
     LARGE_INTEGER counter;
