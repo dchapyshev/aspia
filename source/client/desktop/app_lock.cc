@@ -95,7 +95,7 @@ AppLock::Result AppLock::unlock(bool reset_allowed)
                 "master password and the settings. A copy of the current database is kept in the same folder.\n"
                 "Reset the database?");
 
-            if (MsgBox::importantQuestion(nullptr, question, Seconds(10)) != MsgBox::Yes)
+            if (MsgBox::importantQuestion(nullptr, question, Seconds(30)) != MsgBox::Yes)
                 continue;
 
             const QString copy_path = Database::instance().saveCopyAndClearAll();
