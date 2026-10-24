@@ -446,6 +446,51 @@
     </message>
 </context>
 <context>
+    <name>AppLock</name>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="70"/>
+        <source>Unlock</source>
+        <translation>Lås upp</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="72"/>
+        <source>Enter the master password to unlock the application.</source>
+        <translation>Ange huvudlösenordet för att låsa upp programmet.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="74"/>
+        <source>Forgot password?</source>
+        <translation>Glömt lösenordet?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="92"/>
+        <source>The master password cannot be recovered. Resetting the database deletes all its records, the master password and the settings. A copy of the current database is kept in the same folder.
+Reset the database?</source>
+        <translation>Huvudlösenordet kan inte återskapas. När databasen återställs tas alla dess poster, huvudlösenordet och inställningarna bort. En kopia av den aktuella databasen sparas i samma mapp.
+Återställa databasen?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="103"/>
+        <source>Unable to reset the database.</source>
+        <translation>Det går inte att återställa databasen.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="108"/>
+        <source>The database is reset. The previous database is saved to the file &quot;%1&quot;.</source>
+        <translation>Databasen har återställts. Den tidigare databasen har sparats i filen &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="129"/>
+        <source>Unable to unlock the database.</source>
+        <translation>Det går inte att låsa upp databasen.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="133"/>
+        <source>Invalid master password.</source>
+        <translation>Ogiltigt huvudlösenord.</translation>
+    </message>
+</context>
+<context>
     <name>AuthorizationDialog</name>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
@@ -926,22 +971,22 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="81"/>
+        <location filename="../client/main.cc" line="82"/>
         <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
         <translation>Det gick inte att skapa en säkerhetskopia. Vissa poster i databasen är skadade. Åtgärda eller ta bort dem.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="293"/>
+        <location filename="../client/main.cc" line="98"/>
         <source>Set Master Password</source>
         <translation>Ange huvudlösenord</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="295"/>
+        <location filename="../client/main.cc" line="100"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Ange ett huvudlösenord som krävs för att låsa upp programmet.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="303"/>
+        <location filename="../client/main.cc" line="108"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Lösenordet får inte vara kortare än %n tecken.</numerusform>
@@ -949,12 +994,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="311"/>
+        <location filename="../client/main.cc" line="116"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Lösenordet du angav uppfyller inte säkerhetskraven!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="313"/>
+        <location filename="../client/main.cc" line="118"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
@@ -962,52 +1007,32 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="317"/>
+        <location filename="../client/main.cc" line="122"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vill du ange ett annat lösenord?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="327"/>
+        <location filename="../client/main.cc" line="132"/>
         <source>Unable to set master password.</source>
         <translation>Det går inte att ange huvudlösenordet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="64"/>
-        <source>Unlock</source>
-        <translation>Lås upp</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="75"/>
+        <location filename="../client/main.cc" line="76"/>
         <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
         <translation>Det gick inte att skapa en säkerhetskopia i katalogen &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="87"/>
+        <location filename="../client/main.cc" line="88"/>
         <source>Unable to create a backup.</source>
         <translation>Det gick inte att skapa en säkerhetskopia.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="238"/>
+        <location filename="../client/main.cc" line="295"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>En aspia://-länk för att ansluta till en värd.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="66"/>
-        <source>Enter the master password to unlock the application.</source>
-        <translation>Ange huvudlösenordet för att låsa upp programmet.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="100"/>
-        <source>Unable to unlock the database.</source>
-        <translation>Det går inte att låsa upp databasen.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="105"/>
-        <source>Invalid master password.</source>
-        <translation>Ogiltigt huvudlösenord.</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="234"/>
+        <location filename="../client/main.cc" line="291"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -2353,7 +2378,7 @@ Ersatta inloggningsuppgifter: %2</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="89"/>
-        <location filename="../common/desktop/credentials_dialog.cc" line="51"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="52"/>
         <source>Password:</source>
         <translation>Lösenord:</translation>
     </message>
@@ -2363,23 +2388,23 @@ Ersatta inloggningsuppgifter: %2</translation>
         <translation>Bekräfta lösenord:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="57"/>
-        <location filename="../common/desktop/credentials_dialog.cc" line="61"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="58"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="62"/>
         <source>New password:</source>
         <translation>Nytt lösenord:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="195"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="206"/>
         <source>Enter the current password.</source>
         <translation>Ange det aktuella lösenordet.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="202"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="213"/>
         <source>Password cannot be empty.</source>
         <translation>Lösenordet får inte vara tomt.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="209"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="220"/>
         <source>Passwords do not match.</source>
         <translation>Lösenorden stämmer inte överens.</translation>
     </message>
@@ -2748,17 +2773,17 @@ Ersatta inloggningsuppgifter: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1123"/>
         <source>Save File</source>
         <translation>Spara fil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1151"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1124"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-bild (*.png);;BMP-bild (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1182"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1155"/>
         <source>Could not save image</source>
         <translation>Kunde inte spara bilden</translation>
     </message>

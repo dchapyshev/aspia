@@ -446,6 +446,51 @@
     </message>
 </context>
 <context>
+    <name>AppLock</name>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="70"/>
+        <source>Unlock</source>
+        <translation>잠금 해제</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="72"/>
+        <source>Enter the master password to unlock the application.</source>
+        <translation>응용 프로그램의 잠금을 해제하려면 마스터 암호를 입력하십시오.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="74"/>
+        <source>Forgot password?</source>
+        <translation>암호를 잊으셨습니까?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="92"/>
+        <source>The master password cannot be recovered. Resetting the database deletes all its records, the master password and the settings. A copy of the current database is kept in the same folder.
+Reset the database?</source>
+        <translation>마스터 암호는 복구할 수 없습니다. 데이터베이스를 다시 설정하면 모든 레코드, 마스터 암호 및 설정이 삭제됩니다. 현재 데이터베이스의 사본은 같은 폴더에 보관됩니다.
+데이터베이스를 다시 설정하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="103"/>
+        <source>Unable to reset the database.</source>
+        <translation>데이터베이스를 다시 설정할 수 없습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="108"/>
+        <source>The database is reset. The previous database is saved to the file &quot;%1&quot;.</source>
+        <translation>데이터베이스가 다시 설정되었습니다. 이전 데이터베이스는 &quot;%1&quot; 파일에 저장되었습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="129"/>
+        <source>Unable to unlock the database.</source>
+        <translation>데이터베이스를 잠금 해제할 수 없습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="133"/>
+        <source>Invalid master password.</source>
+        <translation>잘못된 마스터 암호입니다.</translation>
+    </message>
+</context>
+<context>
     <name>AuthorizationDialog</name>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
@@ -925,86 +970,66 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="75"/>
+        <location filename="../client/main.cc" line="76"/>
         <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
         <translation>&quot;%1&quot; 디렉터리에 백업을 만들 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="81"/>
+        <location filename="../client/main.cc" line="82"/>
         <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
         <translation>백업을 만들 수 없습니다. 데이터베이스의 일부 레코드가 손상되었습니다. 해당 레코드를 수정하거나 삭제하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="87"/>
+        <location filename="../client/main.cc" line="88"/>
         <source>Unable to create a backup.</source>
         <translation>백업을 만들 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="234"/>
+        <location filename="../client/main.cc" line="291"/>
         <source>Aspia Client</source>
         <translation>Aspia 클라이언트</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="238"/>
+        <location filename="../client/main.cc" line="295"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>호스트에 연결하기 위한 aspia:// 링크입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="64"/>
-        <source>Unlock</source>
-        <translation>잠금 해제</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="66"/>
-        <source>Enter the master password to unlock the application.</source>
-        <translation>응용 프로그램의 잠금을 해제하려면 마스터 암호를 입력하십시오.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="100"/>
-        <source>Unable to unlock the database.</source>
-        <translation>데이터베이스를 잠금 해제할 수 없습니다.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="105"/>
-        <source>Invalid master password.</source>
-        <translation>잘못된 마스터 암호입니다.</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="293"/>
+        <location filename="../client/main.cc" line="98"/>
         <source>Set Master Password</source>
         <translation>마스터 암호 설정</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="295"/>
+        <location filename="../client/main.cc" line="100"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>응용 프로그램의 잠금을 해제하는 데 필요한 마스터 암호를 설정하십시오.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="303"/>
+        <location filename="../client/main.cc" line="108"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="311"/>
+        <location filename="../client/main.cc" line="116"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="313"/>
+        <location filename="../client/main.cc" line="118"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="317"/>
+        <location filename="../client/main.cc" line="122"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="327"/>
+        <location filename="../client/main.cc" line="132"/>
         <source>Unable to set master password.</source>
         <translation>마스터 암호를 설정할 수 없습니다.</translation>
     </message>
@@ -2342,7 +2367,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="89"/>
-        <location filename="../common/desktop/credentials_dialog.cc" line="51"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="52"/>
         <source>Password:</source>
         <translation>암호:</translation>
     </message>
@@ -2352,23 +2377,23 @@ Credentials replaced: %2</source>
         <translation>암호 확인:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="57"/>
-        <location filename="../common/desktop/credentials_dialog.cc" line="61"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="58"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="62"/>
         <source>New password:</source>
         <translation>새 암호:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="195"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="206"/>
         <source>Enter the current password.</source>
         <translation>현재 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="202"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="213"/>
         <source>Password cannot be empty.</source>
         <translation>암호는 비워 둘 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="209"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="220"/>
         <source>Passwords do not match.</source>
         <translation>암호가 일치하지 않습니다.</translation>
     </message>
@@ -2888,17 +2913,17 @@ Credentials replaced: %2</source>
         <translation>예</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1123"/>
         <source>Save File</source>
         <translation>파일 저장</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1151"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1124"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 이미지 (*.png);;BMP 이미지 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1182"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1155"/>
         <source>Could not save image</source>
         <translation>이미지를 저장할 수 없습니다</translation>
     </message>

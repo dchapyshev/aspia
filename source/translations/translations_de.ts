@@ -446,6 +446,51 @@
     </message>
 </context>
 <context>
+    <name>AppLock</name>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="70"/>
+        <source>Unlock</source>
+        <translation>Entsperren</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="72"/>
+        <source>Enter the master password to unlock the application.</source>
+        <translation>Geben Sie das Master-Kennwort ein, um die Anwendung zu entsperren.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="74"/>
+        <source>Forgot password?</source>
+        <translation>Kennwort vergessen?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="92"/>
+        <source>The master password cannot be recovered. Resetting the database deletes all its records, the master password and the settings. A copy of the current database is kept in the same folder.
+Reset the database?</source>
+        <translation>Das Master-Kennwort kann nicht wiederhergestellt werden. Beim Zurücksetzen der Datenbank werden alle Datensätze, das Master-Kennwort und die Einstellungen gelöscht. Eine Kopie der aktuellen Datenbank bleibt im selben Ordner erhalten.
+Datenbank zurücksetzen?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="103"/>
+        <source>Unable to reset the database.</source>
+        <translation>Die Datenbank kann nicht zurückgesetzt werden.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="108"/>
+        <source>The database is reset. The previous database is saved to the file &quot;%1&quot;.</source>
+        <translation>Die Datenbank wurde zurückgesetzt. Die vorherige Datenbank wurde in der Datei &quot;%1&quot; gespeichert.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="129"/>
+        <source>Unable to unlock the database.</source>
+        <translation>Die Datenbank kann nicht entsperrt werden.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="133"/>
+        <source>Invalid master password.</source>
+        <translation>Ungültiges Master-Kennwort.</translation>
+    </message>
+</context>
+<context>
     <name>AuthorizationDialog</name>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
@@ -926,22 +971,22 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="81"/>
+        <location filename="../client/main.cc" line="82"/>
         <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
         <translation>Die Sicherung konnte nicht erstellt werden. Einige Datensätze der Datenbank sind beschädigt. Korrigieren oder löschen Sie sie.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="293"/>
+        <location filename="../client/main.cc" line="98"/>
         <source>Set Master Password</source>
         <translation>Master-Kennwort festlegen</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="295"/>
+        <location filename="../client/main.cc" line="100"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Legen Sie ein Master-Kennwort fest, das zum Entsperren der Anwendung erforderlich ist.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="303"/>
+        <location filename="../client/main.cc" line="108"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Das Kennwort darf nicht kürzer als %n Zeichen sein.</numerusform>
@@ -949,12 +994,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="311"/>
+        <location filename="../client/main.cc" line="116"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Das eingegebene Kennwort erfüllt nicht die Sicherheitsanforderungen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="313"/>
+        <location filename="../client/main.cc" line="118"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
@@ -962,52 +1007,32 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="317"/>
+        <location filename="../client/main.cc" line="122"/>
         <source>Do you want to enter a different password?</source>
         <translation>Möchten Sie ein anderes Kennwort eingeben?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="327"/>
+        <location filename="../client/main.cc" line="132"/>
         <source>Unable to set master password.</source>
         <translation>Master-Kennwort kann nicht festgelegt werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="64"/>
-        <source>Unlock</source>
-        <translation>Entsperren</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="75"/>
+        <location filename="../client/main.cc" line="76"/>
         <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
         <translation>Die Sicherung konnte nicht im Verzeichnis &quot;%1&quot; erstellt werden.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="87"/>
+        <location filename="../client/main.cc" line="88"/>
         <source>Unable to create a backup.</source>
         <translation>Die Sicherung konnte nicht erstellt werden.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="238"/>
+        <location filename="../client/main.cc" line="295"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>Ein aspia://-Link zum Verbinden mit einem Host.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="66"/>
-        <source>Enter the master password to unlock the application.</source>
-        <translation>Geben Sie das Master-Kennwort ein, um die Anwendung zu entsperren.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="100"/>
-        <source>Unable to unlock the database.</source>
-        <translation>Die Datenbank kann nicht entsperrt werden.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="105"/>
-        <source>Invalid master password.</source>
-        <translation>Ungültiges Master-Kennwort.</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="234"/>
+        <location filename="../client/main.cc" line="291"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -2353,7 +2378,7 @@ Ersetzte Anmeldedaten: %2</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="89"/>
-        <location filename="../common/desktop/credentials_dialog.cc" line="51"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="52"/>
         <source>Password:</source>
         <translation>Kennwort:</translation>
     </message>
@@ -2363,23 +2388,23 @@ Ersetzte Anmeldedaten: %2</translation>
         <translation>Kennwort bestätigen:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="57"/>
-        <location filename="../common/desktop/credentials_dialog.cc" line="61"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="58"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="62"/>
         <source>New password:</source>
         <translation>Neues Kennwort:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="195"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="206"/>
         <source>Enter the current password.</source>
         <translation>Geben Sie das aktuelle Kennwort ein.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="202"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="213"/>
         <source>Password cannot be empty.</source>
         <translation>Das Kennwort darf nicht leer sein.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="209"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="220"/>
         <source>Passwords do not match.</source>
         <translation>Die Kennwörter stimmen nicht überein.</translation>
     </message>
@@ -2748,17 +2773,17 @@ Ersetzte Anmeldedaten: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1123"/>
         <source>Save File</source>
         <translation>Datei speichern</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1151"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1124"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-Bild (*.png);;BMP-Bild (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1182"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1155"/>
         <source>Could not save image</source>
         <translation>Bild konnte nicht gespeichert werden</translation>
     </message>

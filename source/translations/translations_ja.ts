@@ -446,6 +446,51 @@
     </message>
 </context>
 <context>
+    <name>AppLock</name>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="70"/>
+        <source>Unlock</source>
+        <translation>ロック解除</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="72"/>
+        <source>Enter the master password to unlock the application.</source>
+        <translation>アプリケーションのロックを解除するには、マスター パスワードを入力してください。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="74"/>
+        <source>Forgot password?</source>
+        <translation>パスワードをお忘れですか？</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="92"/>
+        <source>The master password cannot be recovered. Resetting the database deletes all its records, the master password and the settings. A copy of the current database is kept in the same folder.
+Reset the database?</source>
+        <translation>マスター パスワードは復元できません。データベースをリセットすると、すべてのレコード、マスター パスワード、および設定が削除されます。現在のデータベースのコピーは同じフォルダーに保存されます。
+データベースをリセットしますか？</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="103"/>
+        <source>Unable to reset the database.</source>
+        <translation>データベースをリセットできません。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="108"/>
+        <source>The database is reset. The previous database is saved to the file &quot;%1&quot;.</source>
+        <translation>データベースはリセットされました。以前のデータベースはファイル &quot;%1&quot; に保存されました。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="129"/>
+        <source>Unable to unlock the database.</source>
+        <translation>データベースのロックを解除できません。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="133"/>
+        <source>Invalid master password.</source>
+        <translation>マスター パスワードが正しくありません。</translation>
+    </message>
+</context>
+<context>
     <name>AuthorizationDialog</name>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
@@ -925,86 +970,66 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="75"/>
+        <location filename="../client/main.cc" line="76"/>
         <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
         <translation>ディレクトリ &quot;%1&quot; にバックアップを作成できませんでした。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="81"/>
+        <location filename="../client/main.cc" line="82"/>
         <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
         <translation>バックアップを作成できませんでした。データベースの一部のレコードが破損しています。修正または削除してください。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="87"/>
+        <location filename="../client/main.cc" line="88"/>
         <source>Unable to create a backup.</source>
         <translation>バックアップを作成できませんでした。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="234"/>
+        <location filename="../client/main.cc" line="291"/>
         <source>Aspia Client</source>
         <translation>Aspia クライアント</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="238"/>
+        <location filename="../client/main.cc" line="295"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>ホストに接続するための aspia:// リンク。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="64"/>
-        <source>Unlock</source>
-        <translation>ロック解除</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="66"/>
-        <source>Enter the master password to unlock the application.</source>
-        <translation>アプリケーションのロックを解除するには、マスター パスワードを入力してください。</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="100"/>
-        <source>Unable to unlock the database.</source>
-        <translation>データベースのロックを解除できません。</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="105"/>
-        <source>Invalid master password.</source>
-        <translation>マスター パスワードが正しくありません。</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="293"/>
+        <location filename="../client/main.cc" line="98"/>
         <source>Set Master Password</source>
         <translation>マスター パスワードの設定</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="295"/>
+        <location filename="../client/main.cc" line="100"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>アプリケーションのロック解除に必要なマスター パスワードを設定してください。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="303"/>
+        <location filename="../client/main.cc" line="108"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>パスワードは %n 文字以上でなければなりません。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="311"/>
+        <location filename="../client/main.cc" line="116"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>入力されたパスワードはセキュリティ要件を満たしていません！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="313"/>
+        <location filename="../client/main.cc" line="118"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>パスワードには小文字、大文字、数字を含める必要があり、%n 文字以上でなければなりません。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="317"/>
+        <location filename="../client/main.cc" line="122"/>
         <source>Do you want to enter a different password?</source>
         <translation>別のパスワードを入力しますか？</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="327"/>
+        <location filename="../client/main.cc" line="132"/>
         <source>Unable to set master password.</source>
         <translation>マスター パスワードを設定できません。</translation>
     </message>
@@ -2342,7 +2367,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="89"/>
-        <location filename="../common/desktop/credentials_dialog.cc" line="51"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="52"/>
         <source>Password:</source>
         <translation>パスワード:</translation>
     </message>
@@ -2352,23 +2377,23 @@ Credentials replaced: %2</source>
         <translation>パスワードの確認:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="57"/>
-        <location filename="../common/desktop/credentials_dialog.cc" line="61"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="58"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="62"/>
         <source>New password:</source>
         <translation>新しいパスワード:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="195"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="206"/>
         <source>Enter the current password.</source>
         <translation>現在のパスワードを入力してください。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="202"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="213"/>
         <source>Password cannot be empty.</source>
         <translation>パスワードを空にすることはできません。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="209"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="220"/>
         <source>Passwords do not match.</source>
         <translation>パスワードが一致しません。</translation>
     </message>
@@ -2888,17 +2913,17 @@ Credentials replaced: %2</source>
         <translation>はい</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1123"/>
         <source>Save File</source>
         <translation>ファイルの保存</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1151"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1124"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 画像 (*.png);;BMP 画像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1182"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1155"/>
         <source>Could not save image</source>
         <translation>画像を保存できませんでした</translation>
     </message>

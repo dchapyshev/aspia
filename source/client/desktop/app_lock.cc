@@ -90,9 +90,9 @@ AppLock::Result AppLock::unlock()
         if (result == kResetResult)
         {
             const QString question = tr(
-                "The master password can not be recovered. You can only reset the database. All records of "
-                "the database, the master password and the settings will be deleted. A copy of the database "
-                "will be saved to a file next to it.\nDo you want to reset the database?");
+                "The master password cannot be recovered. Resetting the database deletes all its records, the "
+                "master password and the settings. A copy of the current database is kept in the same folder.\n"
+                "Reset the database?");
 
             if (MsgBox::importantQuestion(nullptr, question, Seconds(10)) != MsgBox::Yes)
                 continue;

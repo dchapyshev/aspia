@@ -446,6 +446,51 @@
     </message>
 </context>
 <context>
+    <name>AppLock</name>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="70"/>
+        <source>Unlock</source>
+        <translation>Разблокировка</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="72"/>
+        <source>Enter the master password to unlock the application.</source>
+        <translation>Введите мастер-пароль, чтобы разблокировать приложение.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="74"/>
+        <source>Forgot password?</source>
+        <translation>Забыли пароль?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="92"/>
+        <source>The master password cannot be recovered. Resetting the database deletes all its records, the master password and the settings. A copy of the current database is kept in the same folder.
+Reset the database?</source>
+        <translation>Восстановить мастер-пароль невозможно. При сбросе базы данных будут удалены все записи, мастер-пароль и настройки. Копия текущей базы данных сохранится в той же папке.
+Сбросить базу данных?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="103"/>
+        <source>Unable to reset the database.</source>
+        <translation>Не удалось сбросить базу данных.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="108"/>
+        <source>The database is reset. The previous database is saved to the file &quot;%1&quot;.</source>
+        <translation>База данных сброшена. Предыдущая база данных сохранена в файле &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="129"/>
+        <source>Unable to unlock the database.</source>
+        <translation>Не удалось разблокировать базу данных.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/app_lock.cc" line="133"/>
+        <source>Invalid master password.</source>
+        <translation>Неверный мастер-пароль.</translation>
+    </message>
+</context>
+<context>
     <name>AuthorizationDialog</name>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
@@ -927,42 +972,27 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="81"/>
+        <location filename="../client/main.cc" line="82"/>
         <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
         <translation>Не удалось создать резервную копию. Некоторые записи базы данных повреждены. Исправьте или удалите их.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="238"/>
+        <location filename="../client/main.cc" line="295"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>Ссылка aspia:// для подключения к хосту.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="64"/>
-        <source>Unlock</source>
-        <translation>Разблокировка</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="66"/>
-        <source>Enter the master password to unlock the application.</source>
-        <translation>Введите мастер-пароль, чтобы разблокировать приложение.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="100"/>
-        <source>Unable to unlock the database.</source>
-        <translation>Не удалось разблокировать базу данных.</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="293"/>
+        <location filename="../client/main.cc" line="98"/>
         <source>Set Master Password</source>
         <translation>Установка мастер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="295"/>
+        <location filename="../client/main.cc" line="100"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Установите мастер-пароль, необходимый для разблокировки приложения.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="303"/>
+        <location filename="../client/main.cc" line="108"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не должен быть короче %n символа.</numerusform>
@@ -971,12 +1001,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="311"/>
+        <location filename="../client/main.cc" line="116"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="313"/>
+        <location filename="../client/main.cc" line="118"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -985,32 +1015,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="317"/>
+        <location filename="../client/main.cc" line="122"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="327"/>
+        <location filename="../client/main.cc" line="132"/>
         <source>Unable to set master password.</source>
         <translation>Не удалось установить мастер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/app_lock.cc" line="105"/>
-        <source>Invalid master password.</source>
-        <translation>Неверный мастер-пароль.</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="75"/>
+        <location filename="../client/main.cc" line="76"/>
         <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
         <translation>Не удалось создать резервную копию в директории &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="87"/>
+        <location filename="../client/main.cc" line="88"/>
         <source>Unable to create a backup.</source>
         <translation>Не удалось создать резервную копию.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="234"/>
+        <location filename="../client/main.cc" line="291"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
@@ -2364,7 +2389,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="89"/>
-        <location filename="../common/desktop/credentials_dialog.cc" line="51"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="52"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
@@ -2374,23 +2399,23 @@ Credentials replaced: %2</source>
         <translation>Подтвердите пароль:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="57"/>
-        <location filename="../common/desktop/credentials_dialog.cc" line="61"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="58"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="62"/>
         <source>New password:</source>
         <translation>Новый пароль:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="195"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="206"/>
         <source>Enter the current password.</source>
         <translation>Введите текущий пароль.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="202"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="213"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/credentials_dialog.cc" line="209"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="220"/>
         <source>Passwords do not match.</source>
         <translation>Пароли не совпадают.</translation>
     </message>
@@ -2759,17 +2784,17 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1123"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1151"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1124"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1182"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1155"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
