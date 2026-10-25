@@ -150,11 +150,8 @@ HRESULT buildUnlockLogon(PWSTR domain, PWSTR username, PWSTR password,
             break;
 
         case CPUS_LOGON:
-            logon->MessageType = KerbInteractiveLogon;
-            break;
-
         case CPUS_CREDUI:
-            logon->MessageType = static_cast<KERB_LOGON_SUBMIT_TYPE>(0);
+            logon->MessageType = KerbInteractiveLogon;
             break;
 
         default:
