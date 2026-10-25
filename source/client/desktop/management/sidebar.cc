@@ -1104,11 +1104,24 @@ void Sidebar::onRouterStatusChanged(qint64 router_id, RouterStatus status)
 
     if (status == RouterStatus::ONLINE)
     {
+        if (!pending_item_.isEmpty())
+            pending_timer_->start();
+
         buildRouterSections(router_id);
         onRefreshWorkspaces(router_id);
     }
     else
     {
+        SidebarRouter* router = routerById(router_id);
+        SidebarItem* item = currentItem();
+
+        if (router && item && item != router && currentRouterId() == router_id)
+        {
+            const QByteArray key = itemKey(item);
+            tree_widget_->setCurrentItem(router);
+            pending_item_ = key;
+        }
+
         removeRouterSections(router_id);
         setRouterWorkspaces(router_id, {});
     }
