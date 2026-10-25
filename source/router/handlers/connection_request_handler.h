@@ -24,6 +24,7 @@
 #include "base/peer/host_id.h"
 #include "proto/router_client.h"
 
+class AccessLog;
 class SharedHosts;
 class SharedKeyPool;
 
@@ -38,8 +39,13 @@ class SharedKeyPool;
 struct ConnectionRequestClient
 {
     HostId host_id = kInvalidHostId; // The host it wants to reach.
+    proto::peer::SessionType session_type = proto::peer::SESSION_TYPE_UNKNOWN;
     std::string address;
+    qint64 user_id = 0;
     std::string user_name;
+    std::string computer_name;
+    std::string os_name;
+    std::string version;
 
     // Port of the STUN server of this router (0 - not running). Attached to the offer so the
     // peers can try a direct connection before falling back to the relay.
@@ -58,7 +64,8 @@ struct ConnectionRequestResult
     quint32 relay_key_id = 0;
 };
 
-ConnectionRequestResult handleConnectionRequest(SharedHosts& hosts, SharedKeyPool& key_pool,
+// An issued offer is recorded in |access_log|. A failure to record it does not withhold the offer.
+ConnectionRequestResult handleConnectionRequest(AccessLog& access_log, SharedHosts& hosts, SharedKeyPool& key_pool,
                                                 const ConnectionRequestClient& client);
 
 #endif // ROUTER_HANDLERS_CONNECTION_REQUEST_HANDLER_H

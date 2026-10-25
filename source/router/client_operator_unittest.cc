@@ -63,7 +63,7 @@ protected:
             LoopbackChannel channel(user, kUserPassword, session_type);
             ASSERT_NE(channel.routerEnd(), nullptr);
 
-            ClientT client(worker_->database(), channel.routerEnd(), nullptr);
+            ClientT client(worker_->database(), worker_->accessLog(), channel.routerEnd(), nullptr);
             body(client, &channel);
         });
     }
@@ -166,6 +166,15 @@ protected:
         proto::router::UserListRequest* request = message.mutable_user_list_request();
         request->set_request_id(request_id);
         request->set_count(proto::router::kMaxUserPageSize);
+        return serialize(message);
+    }
+
+    static QByteArray accessLogListRequest(qint64 request_id, qint64 count)
+    {
+        proto::router::AdminToRouter message;
+        proto::router::AccessLogListRequest* request = message.mutable_access_log_list_request();
+        request->set_request_id(request_id);
+        request->set_count(count);
         return serialize(message);
     }
 
@@ -689,6 +698,75 @@ TEST_F(ClientOperatorTest, ManagerIgnoresTheAdminChannel)
         ASSERT_TRUE(message->has_group_result());
         EXPECT_EQ(message->group_result().request_id(), 2);
         EXPECT_EQ(message->group_result().error_code(), proto::router::kErrorInvalidRequest);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(ClientOperatorTest, AccessLogIsAnsweredToAnAdministrator)
+{
+    AccessLog::Record record;
+    record.user_id = admin_.entry_id;
+    record.user_name = "admin";
+    record.host_id = HostId(1);
+    ASSERT_TRUE(access_log_.addEntry(record));
+    ASSERT_TRUE(access_log_.addEntry(record));
+
+    withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
+                            [this](ClientAdmin& client, LoopbackChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        channel->receive(proto::router::CHANNEL_ID_ADMIN,
+                         accessLogListRequest(5, proto::router::kMaxAccessLogPageSize));
+
+        std::optional<proto::router::RouterToAdmin> message =
+            lastMessage<proto::router::RouterToAdmin>(channel, proto::router::CHANNEL_ID_ADMIN);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_access_log_list());
+        EXPECT_EQ(message->access_log_list().request_id(), 5);
+        EXPECT_EQ(message->access_log_list().error_code(), proto::router::kErrorOk);
+        EXPECT_EQ(message->access_log_list().total_count(), 2);
+        EXPECT_EQ(message->access_log_list().max_entry_id(), 2);
+        EXPECT_EQ(message->access_log_list().entry_size(), 2);
+
+        // A refused request is answered too, so the client does not wait for it forever.
+        channel->receive(proto::router::CHANNEL_ID_ADMIN, accessLogListRequest(6, 0));
+
+        message = lastMessage<proto::router::RouterToAdmin>(channel, proto::router::CHANNEL_ID_ADMIN);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_access_log_list());
+        EXPECT_EQ(message->access_log_list().request_id(), 6);
+        EXPECT_EQ(message->access_log_list().error_code(), proto::router::kErrorInvalidRequest);
+        EXPECT_EQ(message->access_log_list().entry_size(), 0);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The access log is for the administrators only. A manager session does not answer the request.
+TEST_F(ClientOperatorTest, ManagerDoesNotGetTheAccessLog)
+{
+    withClient<ClientManager>(proto::router::SESSION_TYPE_MANAGER,
+                              [this](ClientManager& client, LoopbackChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        channel->receive(proto::router::CHANNEL_ID_ADMIN,
+                         accessLogListRequest(1, proto::router::kMaxAccessLogPageSize));
+        EXPECT_TRUE(channel->nothingSent());
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(ClientOperatorTest, OperatorDoesNotGetTheAccessLog)
+{
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                               [this](ClientOperator& client, LoopbackChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        channel->receive(proto::router::CHANNEL_ID_ADMIN,
+                         accessLogListRequest(1, proto::router::kMaxAccessLogPageSize));
+        EXPECT_TRUE(channel->nothingSent());
     });
 }
 

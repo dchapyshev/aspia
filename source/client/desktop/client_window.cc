@@ -602,7 +602,7 @@ void ClientWindow::fetchConnectionOffer()
     if (!session_state_->isReconnecting())
         status_overlay_->setProgress(tr("Requesting connection to the host..."));
 
-    session->requestConnection(session_state_->hostId(), { this,
+    session->requestConnection(session_state_->hostId(), session_state_->sessionType(), { this,
         [this](const proto::router::ConnectionOffer& offer)
     {
         if (offer.error_code() == proto::router::kErrorOk)

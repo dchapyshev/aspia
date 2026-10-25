@@ -31,7 +31,7 @@ class ClientManager : public ClientOperator
     Q_OBJECT
 
 public:
-    ClientManager(Database& database, TcpChannel* channel, QObject* parent);
+    ClientManager(Database& database, AccessLog& access_log, TcpChannel* channel, QObject* parent);
     ~ClientManager() override;
 
 protected:

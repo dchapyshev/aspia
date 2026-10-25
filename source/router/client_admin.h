@@ -22,6 +22,7 @@
 #include "router/client_manager.h"
 
 namespace proto::router {
+class AccessLogListRequest;
 class ClientListRequest;
 class ClientRequest;
 class HostRequest;
@@ -41,7 +42,7 @@ class ClientAdmin final : public ClientManager
     Q_OBJECT
 
 public:
-    ClientAdmin(Database& database, TcpChannel* channel, QObject* parent);
+    ClientAdmin(Database& database, AccessLog& access_log, TcpChannel* channel, QObject* parent);
     ~ClientAdmin() final;
 
 signals:
@@ -63,6 +64,7 @@ private:
     void doRelayRequest(const proto::router::RelayRequest& request);
     void doPeerRequest(const proto::router::PeerRequest& request);
     void doWorkspaceRequest(const proto::router::WorkspaceRequest& request);
+    void doAccessLogListRequest(const proto::router::AccessLogListRequest& request);
 
     Q_DISABLE_COPY_MOVE(ClientAdmin)
 };

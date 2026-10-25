@@ -125,6 +125,13 @@ public:
     {
         return worker.isUserLimitReached(user_id);
     }
+
+    // What onPrepare takes from the configuration, which the stand does not run.
+    static void setAccessLogDays(ClientWorker& worker, quint16 days)
+    {
+        worker.access_log_days_ = days;
+    }
+    static AccessLog& accessLog(ClientWorker& worker) { return worker.access_log_; }
 };
 
 // The stop command against live sessions and which of them the pair (user, token list) takes down.
@@ -169,7 +176,7 @@ protected:
         if (channel_out)
             *channel_out = channel;
 
-        ClientT* client = new ClientT(worker_->database(), channel->routerEnd(), nullptr);
+        ClientT* client = new ClientT(worker_->database(), worker_->accessLog(), channel->routerEnd(), nullptr);
         ClientWorkerTestPeer::clients(worker).push_back(client);
         QObject::connect(client, &ClientOperator::sig_twoFactorCompleted, client,
                          [&worker]() { ClientWorkerTestPeer::updateClientsMask(worker); });
@@ -434,4 +441,91 @@ TEST_F(ClientWorkerStopTest, ClientsMaskWaitsForTheSecondFactor)
 
         ClientWorkerTestPeer::stop(worker);
     });
+}
+
+class ClientWorkerAccessLogTest : public RouterTestBase
+{
+protected:
+    void SetUp() override
+    {
+        RouterTestBase::SetUp();
+
+        std::unique_ptr<RouterTestWorker> worker = std::make_unique<RouterTestWorker>(file_path_);
+        worker_ = worker.get();
+
+        workers_.add(std::move(worker));
+        workers_.start();
+    }
+
+    void addEntry(qint64 age_days)
+    {
+        AccessLog::Record record;
+        record.user_id = admin_.entry_id;
+        record.user_name = "admin";
+        record.host_id = HostId(1);
+        ASSERT_TRUE(access_log_.addEntry(record));
+
+        const qint64 time = QDateTime::currentSecsSinceEpoch() - age_days * 24 * 3600;
+        ASSERT_TRUE(execRaw(access_log_file_path_,
+            QString("UPDATE access_log SET time=%1 WHERE id=(SELECT MAX(id) FROM access_log)").arg(time)));
+    }
+
+    qint64 entryCount() { return countRaw(access_log_file_path_, "SELECT COUNT(*) FROM access_log"); }
+
+    // Destroyed before the database and the temporary directory of the base fixture, because the
+    // worker thread must be gone before the file it works with.
+    WorkerManager workers_;
+    RouterTestWorker* worker_ = nullptr;
+};
+
+//--------------------------------------------------------------------------------------------------
+// The first tick prunes the log right after the start, and the next prune waits an hour.
+TEST_F(ClientWorkerAccessLogTest, LogIsPrunedOnStartAndThenHourly)
+{
+    addEntry(31);
+    addEntry(29);
+
+    std::unique_ptr<ClientWorker> worker;
+    const TimePoint start = Clock::now();
+
+    worker_->invoke([&]()
+    {
+        worker = std::make_unique<ClientWorker>();
+        ASSERT_TRUE(ClientWorkerTestPeer::accessLog(*worker).open(access_log_file_path_));
+        ClientWorkerTestPeer::setAccessLogDays(*worker, 30);
+        ClientWorkerTestPeer::fireTimer(*worker, start);
+    });
+    EXPECT_EQ(entryCount(), 1);
+
+    addEntry(31);
+
+    worker_->invoke([&]() { ClientWorkerTestPeer::fireTimer(*worker, start + Minutes(59)); });
+    EXPECT_EQ(entryCount(), 2);
+
+    worker_->invoke([&]() { ClientWorkerTestPeer::fireTimer(*worker, start + Hours(1)); });
+    EXPECT_EQ(entryCount(), 1);
+
+    worker_->invoke([&]()
+    {
+        ClientWorkerTestPeer::stop(*worker);
+        EXPECT_FALSE(ClientWorkerTestPeer::accessLog(*worker).isValid());
+        worker.reset();
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A worker whose configuration was not read, or was refused, leaves the log alone.
+TEST_F(ClientWorkerAccessLogTest, LogIsNotPrunedWithoutTheConfiguration)
+{
+    addEntry(400);
+
+    worker_->invoke([&]()
+    {
+        ClientWorker worker;
+        ASSERT_TRUE(ClientWorkerTestPeer::accessLog(worker).open(access_log_file_path_));
+        ClientWorkerTestPeer::fireTimer(worker, Clock::now());
+        ClientWorkerTestPeer::stop(worker);
+    });
+
+    EXPECT_EQ(entryCount(), 1);
 }

@@ -19,6 +19,8 @@
 #ifndef ROUTER_ROUTER_TEST_WORKER_H
 #define ROUTER_ROUTER_TEST_WORKER_H
 
+#include <QFileInfo>
+
 #include <condition_variable>
 #include <functional>
 #include <memory>
@@ -26,6 +28,7 @@
 
 #include "base/logging.h"
 #include "base/threading/worker.h"
+#include "router/access_log.h"
 #include "router/database.h"
 
 // A real worker thread of the router: it carries the database connection of its own thread and the
@@ -65,8 +68,9 @@ public:
         finished.wait(guard, [&]() { return done; });
     }
 
-    // The connection of the worker thread. Only valid inside invoke().
+    // The connections of the worker thread. Only valid inside invoke().
     Database& database() { return *database_; }
+    AccessLog& accessLog() { return *access_log_; }
 
 protected:
     // Worker implementation.
@@ -74,16 +78,21 @@ protected:
     {
         database_ = std::make_unique<Database>();
         CHECK(database_->open(file_path_));
+
+        access_log_ = std::make_unique<AccessLog>();
+        CHECK(access_log_->open(QFileInfo(file_path_).absolutePath() + "/access_log.db3"));
     }
 
     void onStop() final
     {
+        access_log_.reset();
         database_.reset();
     }
 
 private:
     const QString file_path_;
     std::unique_ptr<Database> database_;
+    std::unique_ptr<AccessLog> access_log_;
 
     Q_DISABLE_COPY_MOVE(RouterTestWorker)
 };

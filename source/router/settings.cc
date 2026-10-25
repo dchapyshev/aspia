@@ -41,6 +41,8 @@ const QByteArray kWhiteListKey = "white_list"_ba;
 // A semicolon starts a comment in an ini file.
 constexpr auto kWhiteListSeparator = ',';
 
+constexpr quint16 kDefaultAccessLogDays = 90;
+
 //--------------------------------------------------------------------------------------------------
 bool isValidWhiteListEntry(const QString& entry)
 {
@@ -108,6 +110,7 @@ void Settings::reset()
     setRelayWhiteList(WhiteList());
     setEnableStun(true);
     setStunPort(kDefaultStunPort);
+    setAccessLogDays(kDefaultAccessLogDays);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -294,6 +297,26 @@ void Settings::setStunPort(quint16 port)
 quint16 Settings::stunPort() const
 {
     return ini_.uint16Value(kStunSection, "port", kDefaultStunPort);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setAccessLogDays(quint16 days)
+{
+    ini_.setUInt16Value(kRouterSection, "access_log_days", days);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 Settings::accessLogDays() const
+{
+    static constexpr qint64 kMinAccessLogDays = 1;
+    static constexpr qint64 kMaxAccessLogDays = 365;
+
+    const qint64 days = ini_.int64Value(kRouterSection, "access_log_days", kDefaultAccessLogDays);
+    const qint64 clamped = std::clamp(days, kMinAccessLogDays, kMaxAccessLogDays);
+    if (clamped != days)
+        LOG(WARNING) << "Access log days" << days << "out of range, using" << clamped;
+
+    return static_cast<quint16>(clamped);
 }
 
 //--------------------------------------------------------------------------------------------------

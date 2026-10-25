@@ -38,7 +38,8 @@ public:
         ROUTER_RELAYS,
         ROUTER_HOSTS,
         ROUTER_TEMP_HOSTS,
-        ROUTER_QS_HOSTS
+        ROUTER_QS_HOSTS,
+        ROUTER_ACCESS_LOG
     };
 
     // Checkable action that carries a tree-view column index. Content widgets use it to build

@@ -26,6 +26,7 @@
 
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
+#include "router/access_log.h"
 
 namespace proto::router {
 class ClientListRequest;
@@ -117,6 +118,10 @@ private:
     quint32 dirty_mask_ = 0;
     TimePoint next_notify_time_;
     quint16 stun_port_ = 0;
+
+    AccessLog access_log_;
+    quint16 access_log_days_ = 0;
+    TimePoint next_access_log_prune_;
 
     std::vector<ClientOperator*> clients_;
 

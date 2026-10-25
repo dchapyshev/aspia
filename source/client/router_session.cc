@@ -237,6 +237,17 @@ void RouterSession::listUserTokens(qint64 user_id,
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterSession::listAccessLog(proto::router::AccessLogListRequest request,
+                                  RouterCallback<proto::router::AccessLogList> callback)
+{
+    request.set_request_id(rpc_.nextRequestId());
+    proto::router::AdminToRouter message;
+    message.mutable_access_log_list_request()->Swap(&request);
+    rpc_.registerPending(&message.access_log_list_request(), std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterSession::addUser(const proto::router::User& user,
                             RouterCallback<proto::router::UserResult> callback)
 {
@@ -711,12 +722,14 @@ void RouterSession::checkHostStatus(HostId host_id, RouterCallback<proto::router
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterSession::requestConnection(HostId host_id, RouterCallback<proto::router::ConnectionOffer> callback)
+void RouterSession::requestConnection(HostId host_id, proto::peer::SessionType session_type,
+                                      RouterCallback<proto::router::ConnectionOffer> callback)
 {
     proto::router::ClientToRouter message;
     auto* request = message.mutable_connection_request();
     request->set_request_id(rpc_.nextRequestId());
     request->set_host_id(host_id);
+    request->set_session_type(session_type);
     rpc_.registerPending(request, std::move(callback));
     send(proto::router::CHANNEL_ID_CLIENT, message);
 }
@@ -816,6 +829,10 @@ void RouterSession::onMessageReceived(const proto::router::RouterToAdmin& messag
     else if (message.has_host_telemetry_result())
     {
         rpc_.dispatch(message.host_telemetry_result().request_id(), message.host_telemetry_result());
+    }
+    else if (message.has_access_log_list())
+    {
+        rpc_.dispatch(message.access_log_list().request_id(), message.access_log_list());
     }
     else
     {

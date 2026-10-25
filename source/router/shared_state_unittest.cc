@@ -56,7 +56,7 @@ TEST_F(SharedHostsTest, HostIsVisibleWhileItsSessionLives)
     EXPECT_FALSE(hosts.contains(HostId(1)));
     EXPECT_FALSE(hosts.find(HostId(1)).has_value());
 
-    hosts.add(HostId(1), QVersionNumber(3, 0, 0), "192.168.1.10");
+    hosts.add(HostId(1), QVersionNumber(3, 0, 0), "192.168.1.10", "office-pc");
 
     EXPECT_TRUE(hosts.contains(HostId(1)));
 
@@ -64,6 +64,7 @@ TEST_F(SharedHostsTest, HostIsVisibleWhileItsSessionLives)
     ASSERT_TRUE(found.has_value());
     EXPECT_EQ(found->version, QVersionNumber(3, 0, 0));
     EXPECT_EQ(found->address, "192.168.1.10");
+    EXPECT_EQ(found->computer_name, "office-pc");
 
     hosts.remove(HostId(1));
     EXPECT_FALSE(hosts.contains(HostId(1)));
@@ -76,8 +77,8 @@ TEST_F(SharedHostsTest, ReconnectionReplacesTheEntry)
 {
     SharedHosts& hosts = SharedHosts::instance();
 
-    hosts.add(HostId(1), QVersionNumber(2, 7, 0), "192.168.1.10");
-    hosts.add(HostId(1), QVersionNumber(3, 0, 0), "10.0.0.5");
+    hosts.add(HostId(1), QVersionNumber(2, 7, 0), "192.168.1.10", "office-pc");
+    hosts.add(HostId(1), QVersionNumber(3, 0, 0), "10.0.0.5", "office-pc");
 
     const std::optional<SharedHosts::Host> found = hosts.find(HostId(1));
     ASSERT_TRUE(found.has_value());
@@ -90,7 +91,7 @@ TEST_F(SharedHostsTest, RemovingAnUnknownHostChangesNothing)
 {
     SharedHosts& hosts = SharedHosts::instance();
 
-    hosts.add(HostId(1), QVersionNumber(3, 0, 0), "192.168.1.10");
+    hosts.add(HostId(1), QVersionNumber(3, 0, 0), "192.168.1.10", "office-pc");
     hosts.remove(HostId(2));
 
     EXPECT_TRUE(hosts.contains(HostId(1)));

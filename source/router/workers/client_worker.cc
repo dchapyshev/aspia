@@ -49,6 +49,8 @@ const Seconds kNotifyInterval{ 5 };
 // How long a session may sit at the two-factor stage.
 const Minutes kTwoFactorStageTimeout{ 2 };
 
+const Hours kAccessLogPruneInterval{ 1 };
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -80,6 +82,9 @@ void ClientWorker::onPrepare()
             relay_worker, &RelayWorker::onClientsChanged, Qt::QueuedConnection);
 
     Settings settings;
+
+    access_log_.open(AccessLog::filePath());
+    access_log_days_ = settings.accessLogDays();
 
     QString listen_interface = settings.clientListenInterface();
     if (!NetUtils::isValidListenInterface(listen_interface))
@@ -176,6 +181,7 @@ void ClientWorker::onStop()
     }
 
     clients_.clear();
+    access_log_.close();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -194,6 +200,14 @@ void ClientWorker::onTimer(TimePoint now)
     {
         if (stopClient(client_id))
             LOG(INFO) << "Session" << client_id << "left at the two-factor stage. Stopped";
+    }
+
+    if (access_log_days_ && now >= next_access_log_prune_)
+    {
+        next_access_log_prune_ = now + kAccessLogPruneInterval;
+
+        if (access_log_.isValid())
+            access_log_.prune(access_log_days_);
     }
 
     if (now < next_notify_time_)
@@ -290,16 +304,16 @@ void ClientWorker::onNewConnection()
         switch (session_type)
         {
             case proto::router::SESSION_TYPE_OPERATOR:
-                client = new ClientOperator(Database::instance(), channel.release(), this);
+                client = new ClientOperator(Database::instance(), access_log_, channel.release(), this);
                 break;
 
             case proto::router::SESSION_TYPE_MANAGER:
-                client = new ClientManager(Database::instance(), channel.release(), this);
+                client = new ClientManager(Database::instance(), access_log_, channel.release(), this);
                 break;
 
             case proto::router::SESSION_TYPE_ADMIN:
             {
-                ClientAdmin* admin = new ClientAdmin(Database::instance(), channel.release(), this);
+                ClientAdmin* admin = new ClientAdmin(Database::instance(), access_log_, channel.release(), this);
                 connect(admin, &ClientAdmin::sig_clientListRequest, this, &ClientWorker::onClientListRequest);
                 connect(admin, &ClientAdmin::sig_clientRequest, this, &ClientWorker::onClientRequest);
                 client = admin;

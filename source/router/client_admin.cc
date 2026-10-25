@@ -24,6 +24,7 @@
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
+#include "router/access_log.h"
 #include "router/client_operator.h"
 #include "router/database.h"
 #include "router/handlers/user_request_handler.h"
@@ -33,8 +34,8 @@
 #include "router/workers/relay_worker.h"
 
 //--------------------------------------------------------------------------------------------------
-ClientAdmin::ClientAdmin(Database& database, TcpChannel* channel, QObject* parent)
-    : ClientManager(database, channel, parent)
+ClientAdmin::ClientAdmin(Database& database, AccessLog& access_log, TcpChannel* channel, QObject* parent)
+    : ClientManager(database, access_log, channel, parent)
 {
     CLOG(INFO) << "Ctor";
 }
@@ -91,6 +92,8 @@ void ClientAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
         doWorkspaceRequest(message.workspace_request());
     else if (message.has_host_telemetry_request())
         doHostTelemetryRequest(message.host_telemetry_request());
+    else if (message.has_access_log_list_request())
+        doAccessLogListRequest(message.access_log_list_request());
     else
         CLOG(ERROR) << "Unhandled message from manager";
 }
@@ -396,4 +399,16 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 
     applyRequestResult(handled);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientAdmin::doAccessLogListRequest(const proto::router::AccessLogListRequest& request)
+{
+    proto::router::RouterToAdmin message;
+    proto::router::AccessLogList* list = message.mutable_access_log_list();
+    list->set_request_id(request.request_id());
+
+    accessLog().entries(request.filter(), request.max_entry_id(), request.offset(), request.count(), list);
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }

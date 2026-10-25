@@ -45,6 +45,7 @@
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/local_group_widget.h"
 #include "client/desktop/management/local_host_dialog.h"
+#include "client/desktop/management/router_access_log_widget.h"
 #include "client/desktop/management/router_clients_widget.h"
 #include "client/desktop/management/router_group_dialog.h"
 #include "client/desktop/management/router_group_widget.h"
@@ -146,6 +147,7 @@ ManagementTab::ManagementTab(QWidget* parent)
     router_users_widget_ = new RouterUsersWidget(this);
     router_clients_widget_ = new RouterClientsWidget(this);
     router_relays_widget_ = new RouterRelaysWidget(this);
+    router_access_log_widget_ = new RouterAccessLogWidget(this);
     router_status_widget_ = new RouterStatusWidget(this);
     search_widget_ = new SearchWidget(this);
 
@@ -157,6 +159,7 @@ ManagementTab::ManagementTab(QWidget* parent)
     ui->content_stack->addWidget(router_users_widget_);
     ui->content_stack->addWidget(router_clients_widget_);
     ui->content_stack->addWidget(router_relays_widget_);
+    ui->content_stack->addWidget(router_access_log_widget_);
     ui->content_stack->addWidget(router_status_widget_);
     ui->content_stack->addWidget(search_widget_);
 
@@ -209,6 +212,9 @@ ManagementTab::ManagementTab(QWidget* parent)
             this, &ManagementTab::updateActionsState);
     connect(router_relays_widget_, &RouterRelaysWidget::sig_contextMenu,
             this, &ManagementTab::onRelayContextMenu);
+
+    connect(router_access_log_widget_, &RouterAccessLogWidget::sig_contextMenu,
+            this, &ManagementTab::onAccessLogContextMenu);
 
     // Setup drag-and-drop: pass the host mime types from the source widgets to Sidebar. The list
     // of the approved hosts drags the same records as the group view, so it shares its type.
@@ -355,6 +361,7 @@ QByteArray ManagementTab::saveState()
         stream << router_users_widget_->saveState();
         stream << router_clients_widget_->saveState();
         stream << router_relays_widget_->saveState();
+        stream << router_access_log_widget_->saveState();
         stream << router_status_widget_->saveState();
         stream << search_widget_->saveState();
         stream << ui->splitter->saveState();
@@ -378,6 +385,7 @@ void ManagementTab::restoreState(const QByteArray& state)
     QByteArray router_users_state;
     QByteArray router_clients_state;
     QByteArray router_relays_state;
+    QByteArray router_access_log_state;
     QByteArray router_status_state;
     QByteArray search_state;
     QByteArray splitter_state;
@@ -391,6 +399,7 @@ void ManagementTab::restoreState(const QByteArray& state)
     stream >> router_users_state;
     stream >> router_clients_state;
     stream >> router_relays_state;
+    stream >> router_access_log_state;
     stream >> router_status_state;
     stream >> search_state;
     stream >> splitter_state;
@@ -419,6 +428,9 @@ void ManagementTab::restoreState(const QByteArray& state)
 
     if (!router_relays_state.isEmpty())
         router_relays_widget_->restoreState(router_relays_state);
+
+    if (!router_access_log_state.isEmpty())
+        router_access_log_widget_->restoreState(router_access_log_state);
 
     if (!router_status_state.isEmpty())
         router_status_widget_->restoreState(router_status_state);
@@ -594,6 +606,18 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
             auto* relays_item = static_cast<SidebarRouterRelays*>(sidebar_item);
             switchContent(router_relays_widget_);
             router_relays_widget_->showRouter(relays_item->routerId());
+        }
+        break;
+
+        case SidebarItem::ROUTER_ACCESS_LOG:
+        {
+            SidebarItem* sidebar_item = ui->sidebar->currentItem();
+            if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_ACCESS_LOG)
+                break;
+
+            auto* access_log_item = static_cast<SidebarRouterAccessLog*>(sidebar_item);
+            switchContent(router_access_log_widget_);
+            router_access_log_widget_->showRouter(access_log_item->routerId());
         }
         break;
 
@@ -1393,6 +1417,29 @@ void ManagementTab::onRelayContextMenu(const QPoint& pos, int column)
         router_relays_widget_->copyCurrentRelayRow();
     else if (action == copy_col)
         router_relays_widget_->copyCurrentRelayColumn(column);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ManagementTab::onAccessLogContextMenu(const QPoint& pos, int column)
+{
+    if (!router_access_log_widget_->hasCurrentEntry())
+        return;
+
+    AutoQPointer<QMenu> menu(new QMenu(this));
+
+    const QIcon copy_icon(":/img/copy.svg");
+    QAction* copy_row = menu->addAction(copy_icon, tr("Copy Row"));
+    QAction* copy_col = menu->addAction(copy_icon, tr("Copy Value"));
+
+    QPointer<ManagementTab> self(this);
+    QAction* action = menu->exec(pos);
+    if (!action || !self)
+        return;
+
+    if (action == copy_row)
+        router_access_log_widget_->copyCurrentRow();
+    else if (action == copy_col)
+        router_access_log_widget_->copyCurrentColumn(column);
 }
 
 //--------------------------------------------------------------------------------------------------

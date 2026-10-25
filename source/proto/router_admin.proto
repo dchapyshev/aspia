@@ -252,6 +252,50 @@ message HostTelemetryResult
     string json       = 4;
 }
 
+message AccessLogFilter
+{
+    int64 time_from               = 1; // Unix seconds, inclusive. 0 - no lower bound.
+    int64 time_to                 = 2; // Unix seconds, exclusive. 0 - no upper bound.
+    string user_name              = 3;
+    string client                 = 4; // Part of the address or the computer name of the client.
+    string host                   = 5; // Part of the computer name, the address or the id of the host.
+    peer.SessionType session_type = 6; // SESSION_TYPE_UNKNOWN - any type.
+}
+
+message AccessLogEntry
+{
+    int64 entry_id                = 1;
+    int64 time                    = 2;
+    int64 user_id                 = 3;
+    string user_name              = 4;
+    peer.SessionType session_type = 5;
+    string client_address         = 6;
+    string client_computer_name   = 7;
+    string client_os_name         = 8;
+    string client_version         = 9;
+    uint64 host_id                = 10;
+    string host_computer_name     = 11;
+    string host_address           = 12;
+}
+
+message AccessLogListRequest
+{
+    int64 request_id       = 1;
+    int64 offset           = 2; // Index of the first item, zero based.
+    int64 count            = 3; // Items to return. A zero count is refused, as is one over the cap.
+    int64 max_entry_id     = 4;
+    AccessLogFilter filter = 5;
+}
+
+message AccessLogList
+{
+    int64 request_id              = 1;
+    string error_code             = 2; // "ok" | "invalid_request" | "internal_error"
+    int64 total_count             = 3; // Total entries in scope. Unset on an error reply.
+    int64 max_entry_id            = 4;
+    repeated AccessLogEntry entry = 5;
+}
+
 message RouterToAdmin
 {
     RelayList relay_list                      = 1;
@@ -266,6 +310,7 @@ message RouterToAdmin
     PeerResult peer_result                    = 10;
     WorkspaceResult workspace_result          = 11;
     HostTelemetryResult host_telemetry_result = 12;
+    AccessLogList access_log_list             = 13;
 }
 
 message AdminToRouter
@@ -282,4 +327,5 @@ message AdminToRouter
     PeerRequest peer_request                     = 10;
     WorkspaceRequest workspace_request           = 11;
     HostTelemetryRequest host_telemetry_request  = 12;
+    AccessLogListRequest access_log_list_request = 13;
 }

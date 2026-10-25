@@ -89,8 +89,9 @@ message ChangePasswordResult
 // The request of a connection to a host, replied with a ConnectionOffer.
 message ConnectionRequest
 {
-    int64 request_id = 1;
-    uint64 host_id   = 2;
+    int64 request_id              = 1;
+    uint64 host_id                = 2;
+    peer.SessionType session_type = 3;
 }
 
 message CheckHostStatus

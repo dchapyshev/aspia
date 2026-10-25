@@ -35,6 +35,7 @@
 #include "proto/router_constants.h"
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
+#include "router/access_log.h"
 #include "router/database.h"
 #include "router/workspace.h"
 #include "router/handlers/request_caller.h"
@@ -56,6 +57,9 @@ protected:
         ASSERT_TRUE(temp_dir_.isValid());
         file_path_ = temp_dir_.path() + "/router.db3";
         ASSERT_TRUE(db_.open(file_path_));
+
+        access_log_file_path_ = temp_dir_.path() + "/access_log.db3";
+        ASSERT_TRUE(access_log_.open(access_log_file_path_));
 
         ASSERT_EQ(db_.addUser(makeUser("admin", kAllSessions)),
                   proto::router::kErrorOk);
@@ -158,20 +162,24 @@ protected:
 
     // Doctors rows the public API deliberately cannot produce (aged timestamps, induced holes).
     // A second connection to the same file is fine: the database runs in WAL mode.
-    bool execRaw(const QString& sql)
+    bool execRaw(const QString& sql) { return execRaw(file_path_, sql); }
+
+    static bool execRaw(const QString& file_path, const QString& sql)
     {
         SqlDatabase raw;
-        if (!raw.open(file_path_))
+        if (!raw.open(file_path))
             return false;
         return raw.exec(sql.toStdString().c_str());
     }
 
     // Counts rows the public API deliberately hides, so a test can tell "not shown" from "not
     // there". Returns -1 when the query itself fails.
-    qint64 countRaw(const QString& sql)
+    qint64 countRaw(const QString& sql) { return countRaw(file_path_, sql); }
+
+    static qint64 countRaw(const QString& file_path, const QString& sql)
     {
         SqlDatabase raw;
-        if (!raw.open(file_path_))
+        if (!raw.open(file_path))
             return -1;
 
         SqlQuery query(raw, sql.toStdString().c_str());
@@ -184,6 +192,8 @@ protected:
     QTemporaryDir temp_dir_;
     QString file_path_;
     Database db_;
+    QString access_log_file_path_;
+    AccessLog access_log_;
     RouterUser admin_;
     RequestCaller caller_;
 };

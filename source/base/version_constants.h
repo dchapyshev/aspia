@@ -25,5 +25,6 @@ extern const QVersionNumber kCurrentVersion;
 extern const QVersionNumber kMinimumSupportedVersion;
 extern const QVersionNumber kVersion_3_0_0;
 extern const QVersionNumber kVersion_3_0_34;
+extern const QVersionNumber kVersion_3_2_0;
 
 #endif // BASE_VERSION_CONSTANTS_H

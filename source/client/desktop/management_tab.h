@@ -42,6 +42,7 @@ class ContentWidget;
 class LocalGroupWidget;
 class QDialog;
 class QMenu;
+class RouterAccessLogWidget;
 class RouterClientsWidget;
 class RouterGroupWidget;
 class RouterHostsWidget;
@@ -92,6 +93,7 @@ private slots:
     void onTempHostContextMenu(const QPoint& pos);
     void onClientContextMenu(const QPoint& pos, int column);
     void onRelayContextMenu(const QPoint& pos, int column);
+    void onAccessLogContextMenu(const QPoint& pos, int column);
     void onRouterGroupContextMenu(const QPoint& pos);
     void onAddUserAction();
     void onEditUserAction();
@@ -147,6 +149,7 @@ private:
     RouterUsersWidget* router_users_widget_ = nullptr;
     RouterClientsWidget* router_clients_widget_ = nullptr;
     RouterRelaysWidget* router_relays_widget_ = nullptr;
+    RouterAccessLogWidget* router_access_log_widget_ = nullptr;
     RouterStatusWidget* router_status_widget_ = nullptr;
     SearchWidget* search_widget_ = nullptr;
 

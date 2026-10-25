@@ -91,6 +91,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     database_unittest.cc
     desktop/authorization_dialog_unittest.cc
     desktop/credentials/credential_list_model_unittest.cc
+    desktop/management/access_log_list_model_unittest.cc
     desktop/management/client_list_model_unittest.cc
     desktop/management/edit_model_unittest.cc
     desktop/management/host_list_model_unittest.cc

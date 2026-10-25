@@ -17,6 +17,8 @@
 #
 
 collect_sources(SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB
+    access_log_list_model.cc
+    access_log_list_model.h
     client_list_model.cc
     client_list_model.h
     content_widget.cc
@@ -45,6 +47,9 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB
     peer_list_model.h
     relay_list_model.cc
     relay_list_model.h
+    router_access_log_widget.cc
+    router_access_log_widget.h
+    router_access_log_widget.ui
     router_clients_widget.cc
     router_clients_widget.h
     router_clients_widget.ui

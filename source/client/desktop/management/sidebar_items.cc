@@ -209,6 +209,15 @@ SidebarRouterClients::SidebarRouterClients(qint64 router_id, QTreeWidgetItem* pa
 }
 
 //--------------------------------------------------------------------------------------------------
+SidebarRouterAccessLog::SidebarRouterAccessLog(qint64 router_id, QTreeWidgetItem* parent)
+    : SidebarItem(ROUTER_ACCESS_LOG, /*group_id=*/-1, parent),
+      router_id_(router_id)
+{
+    setText(0, tr("Access Log"));
+    setIcon(0, QIcon(":/img/log.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
 SidebarRouterRelays::SidebarRouterRelays(qint64 router_id, QTreeWidgetItem* parent)
     : SidebarItem(ROUTER_RELAYS, /*group_id=*/-1, parent),
       router_id_(router_id)

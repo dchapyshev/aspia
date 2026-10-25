@@ -39,6 +39,7 @@
 #include "base/logging.h"
 #include "base/shared_pointer.h"
 #include "base/time_types.h"
+#include "base/version_constants.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/user.h"
@@ -1020,6 +1021,7 @@ void Sidebar::onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* pr
         case SidebarItem::ROUTER_CLIENTS:
         case SidebarItem::ROUTER_RELAYS:
         case SidebarItem::ROUTER_QS_HOSTS:
+        case SidebarItem::ROUTER_ACCESS_LOG:
             // Nothing
             break;
 
@@ -1148,6 +1150,9 @@ void Sidebar::buildRouterSections(qint64 router_id)
     RouterSession* session = RouterController::session(router_id);
     if (session && session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
     {
+        if (session->version() >= kVersion_3_2_0)
+            move_to_top(new SidebarRouterAccessLog(router_id, router));
+
         move_to_top(new SidebarRouterUsers(router_id, router));
         move_to_top(new SidebarRouterRelays(router_id, router));
         move_to_top(new SidebarRouterClients(router_id, router));
@@ -1172,7 +1177,8 @@ void Sidebar::removeRouterSections(qint64 router_id)
         const SidebarItem::Type type = child->itemType();
         if (type == SidebarItem::ROUTER_HOSTS || type == SidebarItem::ROUTER_USERS ||
             type == SidebarItem::ROUTER_CLIENTS || type == SidebarItem::ROUTER_RELAYS ||
-            type == SidebarItem::ROUTER_TEMP_HOSTS || type == SidebarItem::ROUTER_QS_HOSTS)
+            type == SidebarItem::ROUTER_TEMP_HOSTS || type == SidebarItem::ROUTER_QS_HOSTS ||
+            type == SidebarItem::ROUTER_ACCESS_LOG)
         {
             delete router->takeChild(i);
         }

@@ -87,6 +87,9 @@ public:
     void setStunPort(quint16 port);
     quint16 stunPort() const;
 
+    void setAccessLogDays(quint16 days);
+    quint16 accessLogDays() const;
+
 private:
     void setListenInterface(const QByteArray& section, const QString& iface);
     QString listenInterface(const QByteArray& section) const;

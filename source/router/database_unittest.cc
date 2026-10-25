@@ -32,6 +32,7 @@
 #include "base/peer/user.h"
 #include "base/sql/sql_database.h"
 #include "proto/router.h"
+#include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 

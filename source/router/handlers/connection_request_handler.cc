@@ -22,12 +22,13 @@
 #include "base/crypto/random.h"
 #include "proto/relay_peer.h"
 #include "proto/router_constants.h"
+#include "router/access_log.h"
 #include "router/shared_hosts.h"
 #include "router/shared_key_pool.h"
 
 //--------------------------------------------------------------------------------------------------
-ConnectionRequestResult handleConnectionRequest(SharedHosts& hosts, SharedKeyPool& key_pool,
-                                                const ConnectionRequestClient& client)
+ConnectionRequestResult handleConnectionRequest(
+    AccessLog& access_log, SharedHosts& hosts, SharedKeyPool& key_pool, const ConnectionRequestClient& client)
 {
     ConnectionRequestResult result;
 
@@ -82,6 +83,21 @@ ConnectionRequestResult handleConnectionRequest(SharedHosts& hosts, SharedKeyPoo
     secret.set_host_id(client.host_id);
 
     offer_credentials->set_secret(secret.SerializeAsString());
+
+    AccessLog::Record record;
+    record.user_id = client.user_id;
+    record.user_name = client.user_name;
+    record.session_type = client.session_type;
+    record.client_address = client.address;
+    record.client_computer_name = client.computer_name;
+    record.client_os_name = client.os_name;
+    record.client_version = client.version;
+    record.host_id = client.host_id;
+    record.host_computer_name = host_info->computer_name;
+    record.host_address = host_info->address;
+
+    if (!access_log.addEntry(record))
+        LOG(ERROR) << "Unable to record the offer in the access log";
 
     return result;
 }

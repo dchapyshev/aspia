@@ -318,6 +318,33 @@ TEST_F(RouterSessionTest, ListUsersConversation)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The page of the access log comes back as the router sent it, with the pin of the pages.
+TEST_F(RouterSessionTest, AccessLogConversation)
+{
+    proto::router::AccessLogListRequest request;
+    request.set_count(proto::router::kMaxAccessLogPageSize);
+
+    proto::router::AccessLogList received;
+    router_.listAccessLog(request,
+        { &receiver_, [&received](const proto::router::AccessLogList& list) { received = list; } });
+
+    proto::router::RouterToAdmin reply;
+    proto::router::AccessLogList* list = reply.mutable_access_log_list();
+    list->set_request_id(++next_request_id_);
+    list->set_error_code(proto::router::kErrorOk);
+    list->set_total_count(1);
+    list->set_max_entry_id(7);
+    list->add_entry()->set_entry_id(7);
+    deliver(reply);
+
+    EXPECT_EQ(received.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(received.total_count(), 1);
+    EXPECT_EQ(received.max_entry_id(), 7);
+    ASSERT_EQ(received.entry_size(), 1);
+    EXPECT_EQ(received.entry(0).entry_id(), 7);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The same conversation on the manager channel, which carries the records of a workspace.
 TEST_F(RouterSessionTest, GroupConversationUsesTheManagerChannel)
 {
@@ -359,7 +386,7 @@ TEST_F(RouterSessionTest, HostStatusConversationUsesTheClientChannel)
 TEST_F(RouterSessionTest, ConnectionRequestBringsTheOffer)
 {
     std::string received_error;
-    router_.requestConnection(HostId(7),
+    router_.requestConnection(HostId(7), proto::peer::SESSION_TYPE_DESKTOP,
         { &receiver_, [&received_error](const proto::router::ConnectionOffer& offer)
     {
         received_error = offer.error_code();

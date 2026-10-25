@@ -30,6 +30,7 @@ namespace proto::router {
 [[maybe_unused]] constexpr int kMaxHostPageSize = 100;
 [[maybe_unused]] constexpr int kMaxTempHostPageSize = 100;
 [[maybe_unused]] constexpr int kMaxUserPageSize = 100;
+[[maybe_unused]] constexpr int kMaxAccessLogPageSize = 100;
 
 // Bound on the workspaces of a HostFilter. Every one of them becomes a parameter of the query.
 [[maybe_unused]] constexpr int kMaxHostFilterWorkspaces = 100;
@@ -38,6 +39,9 @@ namespace proto::router {
 // decimal digits no longer than the largest id.
 [[maybe_unused]] constexpr size_t kMaxHostQueryLength = 256;
 [[maybe_unused]] constexpr size_t kMaxHostIdLength = 20;
+
+// Bound on each text of an AccessLogFilter, in UTF-8 bytes.
+[[maybe_unused]] constexpr size_t kMaxAccessLogQueryLength = 256;
 
 // Device tokens one user holds at a time. Issuing a token over the cap drops the least recently
 // used ones, so a client that never comes back cannot grow the list without bound.

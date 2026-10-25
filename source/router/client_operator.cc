@@ -56,9 +56,10 @@ qint64 createClientId()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ClientOperator::ClientOperator(Database& database, TcpChannel* channel, QObject* parent)
+ClientOperator::ClientOperator(Database& database, AccessLog& access_log, TcpChannel* channel, QObject* parent)
     : QObject(parent),
       database_(database),
+      access_log_(access_log),
       session_id_(createClientId()),
       tcp_channel_(channel)
 {
@@ -345,13 +346,16 @@ void ClientOperator::completeTwoFactor(std::string&& new_token)
 //--------------------------------------------------------------------------------------------------
 void ClientOperator::readConnectionRequest(const proto::router::ConnectionRequest& request)
 {
-    CLOG(INFO) << "New connection request (host_id:" << request.host_id() << ")";
-    sendConnectionOffer(request.request_id(), request.host_id());
+    CLOG(INFO) << "New connection request (host_id:" << request.host_id() << "session_type:"
+               << request.session_type() << ")";
+    sendConnectionOffer(request);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientOperator::sendConnectionOffer(qint64 request_id, HostId host_id)
+void ClientOperator::sendConnectionOffer(const proto::router::ConnectionRequest& request)
 {
+    const qint64 request_id = request.request_id();
+    const HostId host_id = request.host_id();
     const TimePoint now = Clock::now();
 
     if (isOfferLimitReached(now))
@@ -368,12 +372,17 @@ void ClientOperator::sendConnectionOffer(qint64 request_id, HostId host_id)
 
     ConnectionRequestClient client;
     client.host_id = host_id;
+    client.session_type = request.session_type();
     client.address = address();
+    client.user_id = userId();
     client.user_name = userName();
+    client.computer_name = computerName();
+    client.os_name = osName();
+    client.version = version().toString().toStdString();
     client.stun_port = stun_port_;
 
     ConnectionRequestResult built = handleConnectionRequest(
-        SharedHosts::instance(), SharedKeyPool::instance(), client);
+        access_log_, SharedHosts::instance(), SharedKeyPool::instance(), client);
 
     proto::router::RouterToClient message;
     proto::router::ConnectionOffer* offer = message.mutable_connection_offer();

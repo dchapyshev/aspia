@@ -28,6 +28,7 @@
 #include "router/handlers/request_caller.h"
 #include "router/handlers/two_factor_handler.h"
 
+class AccessLog;
 class Database;
 struct RequestResult;
 
@@ -52,7 +53,7 @@ public:
     // |database| is the connection of the thread the session runs in; it outlives every session
     // of that thread. Passing it instead of reaching for the per-thread singleton is what lets a
     // session be driven against a temporary database in a test.
-    ClientOperator(Database& database, TcpChannel* channel, QObject* parent);
+    ClientOperator(Database& database, AccessLog& access_log, TcpChannel* channel, QObject* parent);
     virtual ~ClientOperator() override;
 
     void start();
@@ -92,6 +93,7 @@ protected:
     LOG_DECLARE_CONTEXT(ClientOperator);
 
     Database& database() const { return database_; }
+    AccessLog& accessLog() const { return access_log_; }
 
     virtual void onSessionMessage(quint8 channel_id, const QByteArray& buffer);
 
@@ -119,7 +121,7 @@ private:
     void applyTwoFactorResult(TwoFactorHandler::Result&& result);
     void completeTwoFactor(std::string&& new_token = std::string());
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
-    void sendConnectionOffer(qint64 request_id, HostId host_id);
+    void sendConnectionOffer(const proto::router::ConnectionRequest& request);
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
     void readHostListRequest(const proto::router::HostListRequest& request);
     void readHostSearchRequest(const proto::router::HostSearchRequest& request);
@@ -134,6 +136,7 @@ private:
     void countOffer(TimePoint now);
 
     Database& database_;
+    AccessLog& access_log_;
     const qint64 session_id_;
     TimePoint start_time_;
 

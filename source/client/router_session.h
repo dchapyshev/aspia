@@ -84,6 +84,10 @@ public:
     // The active device tokens of one user.
     void listUserTokens(qint64 user_id, RouterCallback<proto::router::UserTokenList> callback);
 
+    // One page of the access log. The caller fills the page, the filter and max_entry_id.
+    void listAccessLog(proto::router::AccessLogListRequest request,
+                       RouterCallback<proto::router::AccessLogList> callback);
+
     //----------------------------------------------------------------------------------------------
     // Admin: user operations.
     //----------------------------------------------------------------------------------------------
@@ -176,8 +180,9 @@ public:
 
     void checkHostStatus(HostId host_id, RouterCallback<proto::router::HostStatus> callback);
 
-    // Asks for a relay connection offer to the given host.
-    void requestConnection(HostId host_id, RouterCallback<proto::router::ConnectionOffer> callback);
+    // Asks for a relay connection offer to the given host for a session of |session_type|.
+    void requestConnection(HostId host_id, proto::peer::SessionType session_type,
+                           RouterCallback<proto::router::ConnectionOffer> callback);
 
     // Rotates the SRP credentials of the account under |new_password|. The router re-runs the
     // 2FA stage afterwards, so a code will be asked again.
