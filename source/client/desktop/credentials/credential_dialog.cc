@@ -20,7 +20,9 @@
 
 #include <QAbstractButton>
 #include <QIcon>
+#include <QLayout>
 #include <QPushButton>
+#include <QResizeEvent>
 #include <QTimer>
 
 #include "base/logging.h"
@@ -74,6 +76,15 @@ CredentialDialog::CredentialDialog(qint64 credential_id, QWidget* parent)
 CredentialDialog::~CredentialDialog()
 {
     LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialDialog::resizeEvent(QResizeEvent* event)
+{
+    QDialog::resizeEvent(event);
+
+    if (event->size().width() != event->oldSize().width())
+        fitHeight();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -173,7 +184,7 @@ void CredentialDialog::onTypeChanged()
         static_cast<CredentialConfig::Type>(ui->combo_type->currentData().toInt());
 
     ui->label_hint->setVisible(type == CredentialConfig::Type::OS);
-    adjustSize();
+    fitHeight();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -203,4 +214,14 @@ void CredentialDialog::onLoadData()
         LOG(ERROR) << "Data of credentials" << credential_id_ << "could not be read";
         MsgBox::warning(this, tr("The credentials are damaged. Enter them again."));
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialDialog::fitHeight()
+{
+    // The wrapped hint needs more lines in a narrower dialog. QWidget::heightForWidth() never goes
+    // below the current minimum height, so the layout is asked directly.
+    QLayout* dialog_layout = layout();
+    setFixedHeight(dialog_layout->hasHeightForWidth() ?
+        dialog_layout->totalHeightForWidth(width()) : sizeHint().height());
 }

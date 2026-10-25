@@ -51,7 +51,11 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
     ui->edit_password->setShowPasswordButtonVisible(true);
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterDialog::onButtonBoxClicked);
 
-    QTimer::singleShot(MilliSeconds::zero(), this, &RouterDialog::onLoadData);
+    QTimer::singleShot(MilliSeconds::zero(), this, [this]()
+    {
+        setFixedHeight(sizeHint().height());
+        onLoadData();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------

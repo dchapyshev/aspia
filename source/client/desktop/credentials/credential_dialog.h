@@ -41,12 +41,18 @@ public:
     // The record written, once the dialog is accepted.
     qint64 credentialId() const { return credential_id_; }
 
+protected:
+    // QWidget implementation.
+    void resizeEvent(QResizeEvent* event) final;
+
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);
     void onTypeChanged();
     void onLoadData();
 
 private:
+    void fitHeight();
+
     std::unique_ptr<Ui::CredentialDialog> ui;
     qint64 credential_id_ = -1;
 
