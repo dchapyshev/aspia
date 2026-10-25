@@ -371,6 +371,24 @@ void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
                     onChangeScreenAction(action);
             });
         }
+
+        if (screen_list.full_desktop_supported())
+        {
+            SelectScreenAction* action = new SelectScreenAction(ui->toolbar);
+
+            ui->toolbar->insertAction(ui->action_power_control, action);
+            screen_actions_.append(action);
+            screens_group_->addAction(action);
+
+            if (screen_list.current_screen() == action->screen().id())
+                action->setChecked(true);
+
+            connect(action, &SelectScreenAction::toggled, this, [this, action](bool checked)
+            {
+                if (checked)
+                    onChangeScreenAction(action);
+            });
+        }
     }
     else
     {

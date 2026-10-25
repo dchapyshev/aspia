@@ -47,10 +47,11 @@ message Screen
 // Sent by host to client. Contains a list of screens on the host.
 message ScreenList
 {
-    repeated Screen screen   = 1; // List of screens on the remote computer.
-    int64 current_screen     = 2; // ID of current screen.
-    int64 primary_screen     = 3; // ID of primary screen.
-    repeated Size resolution = 4; // List of resolutions for current screen.
+    repeated Screen screen      = 1; // List of screens on the remote computer.
+    int64 current_screen        = 2; // ID of current screen.
+    int64 primary_screen        = 3; // ID of primary screen.
+    repeated Size resolution    = 4; // List of resolutions for current screen.
+    bool full_desktop_supported = 5;
 }
 
 // Sent by host to client.

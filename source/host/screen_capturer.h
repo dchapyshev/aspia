@@ -79,6 +79,7 @@ public:
 
     using ScreenId = intptr_t;
 
+    static const ScreenId kFullDesktopScreenId = -1;
     static const ScreenId kInvalidScreenId = -2;
 
     struct Screen

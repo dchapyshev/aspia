@@ -91,6 +91,12 @@ bool DxgiDuplicatorController::isSupported()
 }
 
 //--------------------------------------------------------------------------------------------------
+DxgiDuplicatorController::Result DxgiDuplicatorController::duplicate(DxgiFrame* frame)
+{
+    return doDuplicate(frame, -1);
+}
+
+//--------------------------------------------------------------------------------------------------
 DxgiDuplicatorController::Result DxgiDuplicatorController::duplicateMonitor(DxgiFrame* frame, int monitor_id)
 {
     DCHECK_GE(monitor_id, 0);
@@ -129,6 +135,12 @@ bool DxgiDuplicatorController::deviceNames(QStringList* output)
 const QRect& DxgiDuplicatorController::desktopRect() const
 {
     return desktop_rect_;
+}
+
+//--------------------------------------------------------------------------------------------------
+const QRect& DxgiDuplicatorController::initialDesktopRect() const
+{
+    return initial_desktop_rect_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -216,7 +228,14 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(DxgiFrame
 
     if (ensureFrameCaptured(frame->context(), shared_frame))
     {
-        if (doDuplicateOne(frame->context(), monitor_id, shared_frame))
+        bool result;
+
+        if (monitor_id < 0)
+            result = doDuplicateAll(frame->context(), shared_frame);
+        else
+            result = doDuplicateOne(frame->context(), monitor_id, shared_frame);
+
+        if (result)
         {
             ++succeeded_duplications_;
             return Result::SUCCEEDED;
@@ -323,6 +342,7 @@ bool DxgiDuplicatorController::doInitialize()
 void DxgiDuplicatorController::deinitialize()
 {
     desktop_rect_ = QRect();
+    initial_desktop_rect_ = QRect();
     duplicators_.clear();
     full_screen_rect_.reset();
 }
@@ -413,6 +433,9 @@ int DxgiDuplicatorController::doScreenCount() const
 //--------------------------------------------------------------------------------------------------
 QSize DxgiDuplicatorController::selectedDesktopSize(int monitor_id) const
 {
+    if (monitor_id < 0)
+        return desktopRect().size();
+
     return screenRect(monitor_id).size();
 }
 
@@ -490,6 +513,7 @@ void DxgiDuplicatorController::translateRect()
 {
     const QPoint position = QPoint(0, 0) - desktop_rect_.topLeft();
 
+    initial_desktop_rect_ = desktop_rect_;
     desktop_rect_.translate(position);
 
     for (auto& duplicator : duplicators_)

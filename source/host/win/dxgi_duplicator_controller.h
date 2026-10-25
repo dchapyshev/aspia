@@ -66,6 +66,9 @@ public:
     // Detects whether the system supports DXGI based capturer.
     bool isSupported();
 
+    // Captures all monitors and writes into |frame|.
+    Result duplicate(DxgiFrame* frame);
+
     // Captures one monitor and writes into target. |monitor_id| should >= 0. If |monitor_id| is
     // greater than the total screen count of all the Duplicators, this function returns false.
     Result duplicateMonitor(DxgiFrame* frame, int monitor_id);
@@ -83,6 +86,9 @@ public:
     // Returns a QRect to cover the entire virtual desktop.
     const QRect& desktopRect() const;
 
+    // Same as desktopRect() but in the original Windows virtual-screen coordinates.
+    const QRect& initialDesktopRect() const;
+
     // Returns the rect of one screen. |monitor_id| should be >= 0. If the system does not support DXGI
     // based capturer, or |monitor_id| is greater than the total screen count of all the Duplicators, this
     // function returns an empty rect.
@@ -96,7 +102,7 @@ private:
     // DxgiFrameContext calls private unregister(Context*) function in reset().
     friend void DxgiFrameContext::reset();
 
-    // Does the real duplication work for the monitor identified by |monitor_id| (>= 0). This
+    // Does the real duplication work. Setting |monitor_id| < 0 to capture entire screen. This
     // function calls initialize(). And if the duplication failed, this function calls
     // deinitialize() to ensure the Dxgi components can be reinitialized next time.
     Result doDuplicate(DxgiFrame* frame, int monitor_id);
@@ -156,6 +162,7 @@ private:
     // is always initialized after DxgiDuplicatorController.
     int identity_ = 0;
     QRect desktop_rect_;
+    QRect initial_desktop_rect_;
     std::vector<DxgiAdapterDuplicator> duplicators_;
     std::optional<QRect> full_screen_rect_;
     // A number to indicate how many succeeded duplications have been performed.

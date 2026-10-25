@@ -165,6 +165,14 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
     // switching to a monitor reuses the content captured last time it was shown. The client is sent a
     // key frame on every screen switch (see ScreenWorker::onSelectScreen), so a complete frame is
     // encoded regardless of the (possibly empty) diff the duplicator produces for a static screen.
+    if (screen_id == kFullDesktopScreenId)
+    {
+        current_screen_index_ = -1;
+        current_screen_id_ = screen_id;
+        force_full_update_ = true;
+        return true;
+    }
+
     QStringList device_names;
     if (!controller_->deviceNames(&device_names))
     {
@@ -196,8 +204,12 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
     if (!frame)
         frame = std::make_unique<DxgiFrame>(controller_);
 
-    DxgiDuplicatorController::Result result =
-        controller_->duplicateMonitor(frame.get(), current_screen_index_);
+    DxgiDuplicatorController::Result result;
+
+    if (current_screen_index_ == -1)
+        result = controller_->duplicate(frame.get());
+    else
+        result = controller_->duplicateMonitor(frame.get(), current_screen_index_);
 
     using DuplicateResult = DxgiDuplicatorController::Result;
 
@@ -283,6 +295,9 @@ const QRect& ScreenCapturerDxgi::currentScreenRect() const
 {
     // The cursor position is reported by the OS in Windows virtual-screen coordinates, so this must
     // return the screen rect in the same space (not the normalized rect DXGI uses for compositing).
+    if (current_screen_index_ == -1)
+        return controller_->initialDesktopRect();
+
     return controller_->initialScreenRect(current_screen_index_);
 }
 

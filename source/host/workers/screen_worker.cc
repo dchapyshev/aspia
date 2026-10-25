@@ -1238,7 +1238,7 @@ void ScreenWorker::sendCurrentScreenList()
 
     const ScreenCapturer::ScreenId current = screen_capturer_->currentScreen();
 
-    if (screen_resizer_)
+    if (screen_resizer_ && current != ScreenCapturer::kFullDesktopScreenId)
     {
         screen_list.resolutions = screen_resizer_->supportedResolutions(current);
         if (screen_list.resolutions.isEmpty())
@@ -1261,6 +1261,10 @@ void ScreenWorker::sendScreenList(
     proto::screen::ScreenList* screen_list =
         serializer_.newMessage<proto::screen::HostToClient>().mutable_screen_list();
     screen_list->set_current_screen(current);
+
+#if defined(Q_OS_WINDOWS)
+    screen_list->set_full_desktop_supported(true);
+#endif // defined(Q_OS_WINDOWS)
 
     for (const auto& resolition_item : list.resolutions)
     {
