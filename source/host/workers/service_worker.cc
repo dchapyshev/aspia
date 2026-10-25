@@ -709,7 +709,10 @@ void ServiceWorker::startClient(const PendingConfirmation& pending)
 
                 const std::optional<Credentials::PendingRequest>& request = credentials_->pendingRequest();
                 if (request)
-                    client->onRequestCredentials(request->screen_type, request->reason);
+                {
+                    client->onRequestCredentials(
+                        request->screen_type, static_cast<quint32>(proto::control::CredentialsRequest::REASON_INITIAL));
+                }
             });
         }
 #endif // defined(Q_OS_WINDOWS)

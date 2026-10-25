@@ -193,7 +193,7 @@ void TerminalWindow::onChannelMessage(const QByteArray& buffer)
         terminal_widget_->onResult(message.result().code());
 
         if (message.result().code() == proto::terminal::Result::CODE_AUTHENTICATION_ERROR)
-            credential_panel_->popup(osCredentialId());
+            credential_panel_->popup(osCredentialId(), tr("Invalid user name or password."));
     }
 }
 

@@ -25,6 +25,7 @@
 #include "client/config.h"
 
 class QComboBox;
+class QLabel;
 class QToolButton;
 
 class CredentialPanel final : public QWidget
@@ -35,7 +36,7 @@ public:
     explicit CredentialPanel(QWidget* parent);
     ~CredentialPanel() final;
 
-    void popup(qint64 credential_id);
+    void popup(qint64 credential_id, const QString& message = QString());
     bool signIn();
 
 public slots:
@@ -58,6 +59,7 @@ private slots:
 private:
     void updatePosition();
 
+    QLabel* label_message_ = nullptr;
     QComboBox* combo_credential_ = nullptr;
     QToolButton* sign_in_button_ = nullptr;
     QList<CredentialConfig> credentials_;

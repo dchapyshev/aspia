@@ -1396,7 +1396,28 @@ void DesktopWindow::readCredentialsRequest(const proto::control::CredentialsRequ
 {
     LOG(INFO) << "Credentials requested by host (screen_type:" << credentials_request.screen_type()
               << "reason:" << credentials_request.reason() << ")";
-    credential_panel_->popup(osCredentialId());
+
+    QString message;
+
+    switch (credentials_request.reason())
+    {
+        case proto::control::CredentialsRequest::REASON_INVALID_CREDENTIALS:
+            message = tr("Invalid user name or password.");
+            break;
+        case proto::control::CredentialsRequest::REASON_PASSWORD_EXPIRED:
+            message = tr("The password has expired.");
+            break;
+        case proto::control::CredentialsRequest::REASON_ACCOUNT_LOCKED:
+            message = tr("The account is locked out.");
+            break;
+        case proto::control::CredentialsRequest::REASON_ACCOUNT_DISABLED:
+            message = tr("The account is disabled.");
+            break;
+        default:
+            break;
+    }
+
+    credential_panel_->popup(osCredentialId(), message);
 }
 
 //--------------------------------------------------------------------------------------------------

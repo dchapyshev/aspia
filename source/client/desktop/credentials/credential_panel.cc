@@ -23,8 +23,10 @@
 #include <QEvent>
 #include <QHBoxLayout>
 #include <QIcon>
+#include <QLabel>
 #include <QPainter>
 #include <QToolButton>
+#include <QVBoxLayout>
 
 #include "base/logging.h"
 #include "client/database.h"
@@ -41,6 +43,11 @@ CredentialPanel::CredentialPanel(QWidget* parent)
     : QWidget(parent)
 {
     CHECK(parent);
+
+    label_message_ = new QLabel(this);
+    label_message_->setAlignment(Qt::AlignCenter);
+    label_message_->setStyleSheet("color: #e5484d;");
+    label_message_->hide();
 
     combo_credential_ = new QComboBox(this);
     combo_credential_->setSizeAdjustPolicy(QComboBox::AdjustToContents);
@@ -60,10 +67,14 @@ CredentialPanel::CredentialPanel(QWidget* parent)
     close_button->setAutoRaise(true);
     connect(close_button, &QToolButton::clicked, this, &CredentialPanel::onDismiss);
 
-    QHBoxLayout* layout = new QHBoxLayout(this);
-    layout->addWidget(combo_credential_);
-    layout->addWidget(sign_in_button_);
-    layout->addWidget(close_button);
+    QHBoxLayout* controls_layout = new QHBoxLayout();
+    controls_layout->addWidget(combo_credential_);
+    controls_layout->addWidget(sign_in_button_);
+    controls_layout->addWidget(close_button);
+
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->addWidget(label_message_);
+    layout->addLayout(controls_layout);
 
     parent->installEventFilter(this);
     hide();
@@ -73,7 +84,7 @@ CredentialPanel::CredentialPanel(QWidget* parent)
 CredentialPanel::~CredentialPanel() = default;
 
 //--------------------------------------------------------------------------------------------------
-void CredentialPanel::popup(qint64 credential_id)
+void CredentialPanel::popup(qint64 credential_id, const QString& message)
 {
     QList<CredentialConfig> credentials;
     if (Database::instance().credentialList(&credentials, CredentialConfig::Type::OS) != Database::ReadResult::OK)
@@ -117,6 +128,9 @@ void CredentialPanel::popup(qint64 credential_id)
 
     onCurrentCredentialChanged();
 
+    label_message_->setText(message);
+    label_message_->setVisible(!message.isEmpty());
+
     adjustSize();
     updatePosition();
     show();
@@ -151,6 +165,8 @@ void CredentialPanel::onDismiss()
     hide();
     credentials_.clear();
     combo_credential_->clear();
+    label_message_->clear();
+    label_message_->hide();
 
     if (had_focus)
         parentWidget()->setFocus();
