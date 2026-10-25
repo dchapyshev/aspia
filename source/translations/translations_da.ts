@@ -2558,7 +2558,7 @@ Legitimationsoplysninger erstattet: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1004"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1022"/>
         <source>Scale</source>
         <translation>Skalering</translation>
     </message>
@@ -2648,7 +2648,7 @@ Legitimationsoplysninger erstattet: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="592"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="610"/>
         <source>Start recording</source>
         <translation>Start optagelse</translation>
     </message>
@@ -2670,69 +2670,69 @@ Legitimationsoplysninger erstattet: %2</translation>
         <translation>Skift session</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="379"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="397"/>
         <source>Resolution selection</source>
         <translation>Valg af opløsning</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1179"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1197"/>
         <source>Session %1</source>
         <translation>Session %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1179"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1197"/>
         <source>Session %1 (%2)</source>
         <translation>Session %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="587"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="605"/>
         <source>Stop recording</source>
         <translation>Stop optagelse</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="492"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="510"/>
         <source>Scripts</source>
         <translation>Skripter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Er du sikker på, at du vil køre skriptet &quot;%1&quot; på fjerncomputeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="819"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Er du sikker på, at du vil lukke fjerncomputeren ned?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="867"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="852"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="885"/>
         <source>Confirmation</source>
         <translation>Bekræftelse</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="835"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="853"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Er du sikker på, at du vil genstarte fjerncomputeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="876"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="861"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="894"/>
         <source>Wait for host</source>
         <translation>Vent på vært</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="868"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="886"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Er du sikker på, at du vil genstarte fjerncomputeren i fejlsikret tilstand?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="900"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="918"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Er du sikker på, at du vil afslutte brugersessionen på fjerncomputeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="915"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="933"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Er du sikker på, at du vil låse brugersessionen på fjerncomputeren?</translation>
     </message>
@@ -4976,22 +4976,22 @@ Importerede legitimationsoplysninger: %5</translation>
         <translation>Luk alle dialogbokse for at låse programmet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="729"/>
+        <location filename="../client/desktop/main_window.cc" line="730"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Forbindelse via ID er angivet i værtens egenskaber, men routeren er ikke konfigureret. Kontroller routerens parametre i værtens egenskaber.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="996"/>
+        <location filename="../client/desktop/main_window.cc" line="997"/>
         <source>Unknown application</source>
         <translation>Ukendt program</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="999"/>
+        <location filename="../client/desktop/main_window.cc" line="1000"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>MCP-connector. Forbundet: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="1000"/>
+        <location filename="../client/desktop/main_window.cc" line="1001"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - AI er forbundet</translation>
     </message>
@@ -7766,12 +7766,17 @@ Importerede legitimationsoplysninger: %5</translation>
 <context>
     <name>SelectScreenAction</name>
     <message>
-        <location filename="../client/desktop/desktop/select_screen_action.h" line="38"/>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="34"/>
+        <source>Full Desktop</source>
+        <translation>Hele skrivebordet</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="49"/>
         <source>Monitor %1 (primary)</source>
         <translation>Skærm %1 (primær)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="51"/>
         <source>Monitor %1</source>
         <translation>Skærm %1</translation>
     </message>
@@ -8793,12 +8798,12 @@ Importerede legitimationsoplysninger: %5</translation>
         <translation>Er du sikker på, at du vil slette routeren &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1496"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1509"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Der findes allerede en gruppe med dette navn i den valgte overordnede gruppe.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1603"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1616"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>%n af de valgte værter blev ikke flyttet, fordi der allerede findes værter med de samme navne i den valgte gruppe.</numerusform>
@@ -8806,8 +8811,8 @@ Importerede legitimationsoplysninger: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1611"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1811"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1624"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1824"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>Kunne ikke flytte %n af de valgte værter.</numerusform>
@@ -8815,26 +8820,26 @@ Importerede legitimationsoplysninger: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1486"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1708"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1499"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1518"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1721"/>
         <source>Failed to move the group.</source>
         <translation>Kunne ikke flytte gruppen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1565"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>Kunne ikke flytte værterne til den valgte gruppe.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1602"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1615"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Der findes allerede en vært med dette navn i den valgte gruppe.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1564"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1810"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1577"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1623"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1823"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Kunne ikke flytte værten til den valgte gruppe.</translation>
     </message>

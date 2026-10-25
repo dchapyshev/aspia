@@ -2547,7 +2547,7 @@ Değiştirilen kimlik bilgileri: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1004"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1022"/>
         <source>Scale</source>
         <translation>Ölçek</translation>
     </message>
@@ -2637,7 +2637,7 @@ Değiştirilen kimlik bilgileri: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="592"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="610"/>
         <source>Start recording</source>
         <translation>Kaydı başlat</translation>
     </message>
@@ -2659,69 +2659,69 @@ Değiştirilen kimlik bilgileri: %2</translation>
         <translation>Oturum Değiştir</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="379"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="397"/>
         <source>Resolution selection</source>
         <translation>Çözünürlük seçimi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1179"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1197"/>
         <source>Session %1</source>
         <translation>Oturum %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1179"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1197"/>
         <source>Session %1 (%2)</source>
         <translation>Oturum %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="587"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="605"/>
         <source>Stop recording</source>
         <translation>Kaydı durdur</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="492"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="510"/>
         <source>Scripts</source>
         <translation>Betikler</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Uzak bilgisayarda &quot;%1&quot; betiğini çalıştırmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="819"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Uzak bilgisayarı kapatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="867"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="852"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="885"/>
         <source>Confirmation</source>
         <translation>Onay</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="835"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="853"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Uzak bilgisayarı yeniden başlatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="876"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="861"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="894"/>
         <source>Wait for host</source>
         <translation>Ana bilgisayarı bekle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="868"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="886"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Uzak bilgisayarı Güvenli Modda yeniden başlatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="900"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="918"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Uzak bilgisayardaki kullanıcı oturumunu sonlandırmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="915"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="933"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Uzak bilgisayardaki kullanıcı oturumunu kilitlemek istediğinizden emin misiniz?</translation>
     </message>
@@ -4953,22 +4953,22 @@ Credentials imported: %5</source>
         <translation>Uygulamayı kilitlemek için tüm iletişim kutularını kapatın.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="729"/>
+        <location filename="../client/desktop/main_window.cc" line="730"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Ana bilgisayarın özelliklerinde ID ile bağlantı belirtilmiş, ancak yönlendirici yapılandırılmamış. Ana bilgisayarın özelliklerinden yönlendirici parametrelerini denetleyin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="996"/>
+        <location filename="../client/desktop/main_window.cc" line="997"/>
         <source>Unknown application</source>
         <translation>Bilinmeyen uygulama</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="999"/>
+        <location filename="../client/desktop/main_window.cc" line="1000"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>MCP Bağlayıcısı. Bağlı: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="1000"/>
+        <location filename="../client/desktop/main_window.cc" line="1001"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - YZ bağlı</translation>
     </message>
@@ -7718,12 +7718,17 @@ Credentials imported: %5</source>
 <context>
     <name>SelectScreenAction</name>
     <message>
-        <location filename="../client/desktop/desktop/select_screen_action.h" line="38"/>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="34"/>
+        <source>Full Desktop</source>
+        <translation>Tüm masaüstü</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="49"/>
         <source>Monitor %1 (primary)</source>
         <translation>Monitör %1 (birincil)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="51"/>
         <source>Monitor %1</source>
         <translation>Monitör %1</translation>
     </message>
@@ -8740,46 +8745,46 @@ Credentials imported: %5</source>
         <translation>&quot;%1&quot; yönlendiricisini silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1496"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1509"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Seçilen üst grupta bu ada sahip bir grup zaten var.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1603"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1616"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>Seçilen grupta aynı adlara sahip ana bilgisayarlar zaten bulunduğundan, seçilen ana bilgisayarlardan %n tanesi taşınmadı.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1611"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1811"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1624"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1824"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>Seçilen ana bilgisayarlardan %n tanesi taşınamadı.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1486"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1708"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1499"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1518"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1721"/>
         <source>Failed to move the group.</source>
         <translation>Grup taşınamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1565"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>Ana bilgisayarlar seçilen gruba taşınamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1602"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1615"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Seçilen grupta bu ada sahip bir ana bilgisayar zaten var.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1564"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1810"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1577"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1623"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1823"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Ana bilgisayar seçilen gruba taşınamadı.</translation>
     </message>

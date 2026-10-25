@@ -2558,7 +2558,7 @@ Credenziali sostituite: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1004"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1022"/>
         <source>Scale</source>
         <translation>Scala</translation>
     </message>
@@ -2648,7 +2648,7 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="592"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="610"/>
         <source>Start recording</source>
         <translation>Avvia registrazione</translation>
     </message>
@@ -2670,69 +2670,69 @@ Credenziali sostituite: %2</translation>
         <translation>Cambia sessione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="379"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="397"/>
         <source>Resolution selection</source>
         <translation>Selezione risoluzione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1179"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1197"/>
         <source>Session %1</source>
         <translation>Sessione %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1179"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1197"/>
         <source>Session %1 (%2)</source>
         <translation>Sessione %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="587"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="605"/>
         <source>Stop recording</source>
         <translation>Arresta registrazione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="492"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="510"/>
         <source>Scripts</source>
         <translation>Script</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Eseguire lo script &quot;%1&quot; sul computer remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="819"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Spegnere il computer remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="867"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="852"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="885"/>
         <source>Confirmation</source>
         <translation>Conferma</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="835"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="853"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Riavviare il computer remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="876"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="861"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="894"/>
         <source>Wait for host</source>
         <translation>Attendi l&apos;host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="868"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="886"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Riavviare il computer remoto in modalità sicura?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="900"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="918"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Terminare la sessione dell&apos;utente sul computer remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="915"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="933"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Bloccare la sessione dell&apos;utente sul computer remoto?</translation>
     </message>
@@ -4976,22 +4976,22 @@ Credenziali importate: %5</translation>
         <translation>Chiudi tutte le finestre di dialogo per bloccare l&apos;applicazione.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="729"/>
+        <location filename="../client/desktop/main_window.cc" line="730"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>La connessione tramite ID è specificata nelle proprietà dell&apos;host, ma il router non è configurato. Verifica i parametri del router nelle proprietà dell&apos;host.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="996"/>
+        <location filename="../client/desktop/main_window.cc" line="997"/>
         <source>Unknown application</source>
         <translation>Applicazione sconosciuta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="999"/>
+        <location filename="../client/desktop/main_window.cc" line="1000"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>Connettore MCP. Applicazioni connesse: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="1000"/>
+        <location filename="../client/desktop/main_window.cc" line="1001"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - IA connessa</translation>
     </message>
@@ -7766,12 +7766,17 @@ Credenziali importate: %5</translation>
 <context>
     <name>SelectScreenAction</name>
     <message>
-        <location filename="../client/desktop/desktop/select_screen_action.h" line="38"/>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="34"/>
+        <source>Full Desktop</source>
+        <translation>Desktop intero</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="49"/>
         <source>Monitor %1 (primary)</source>
         <translation>Monitor %1 (principale)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="51"/>
         <source>Monitor %1</source>
         <translation>Monitor %1</translation>
     </message>
@@ -8793,12 +8798,12 @@ Credenziali importate: %5</translation>
         <translation>Eliminare il router &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1496"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1509"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Un gruppo con questo nome esiste già nel gruppo padre selezionato.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1603"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1616"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>%n degli host selezionati non è stato spostato perché nel gruppo selezionato esiste già un host con lo stesso nome.</numerusform>
@@ -8806,8 +8811,8 @@ Credenziali importate: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1611"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1811"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1624"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1824"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>Impossibile spostare %n degli host selezionati.</numerusform>
@@ -8815,26 +8820,26 @@ Credenziali importate: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1486"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1708"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1499"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1518"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1721"/>
         <source>Failed to move the group.</source>
         <translation>Impossibile spostare il gruppo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1565"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>Impossibile spostare gli host nel gruppo selezionato.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1602"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1615"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Un host con questo nome esiste già nel gruppo selezionato.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1564"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1810"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1577"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1623"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1823"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Impossibile spostare l&apos;host nel gruppo selezionato.</translation>
     </message>

@@ -2547,7 +2547,7 @@ Lecserélt hitelesítő adatok: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1004"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1022"/>
         <source>Scale</source>
         <translation>Méretezés</translation>
     </message>
@@ -2637,7 +2637,7 @@ Lecserélt hitelesítő adatok: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="592"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="610"/>
         <source>Start recording</source>
         <translation>Felvétel indítása</translation>
     </message>
@@ -2659,69 +2659,69 @@ Lecserélt hitelesítő adatok: %2</translation>
         <translation>Munkamenet váltása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="379"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="397"/>
         <source>Resolution selection</source>
         <translation>Felbontás kiválasztása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1179"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1197"/>
         <source>Session %1</source>
         <translation>Munkamenet %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1179"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1197"/>
         <source>Session %1 (%2)</source>
         <translation>Munkamenet %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="587"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="605"/>
         <source>Stop recording</source>
         <translation>Felvétel leállítása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="492"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="510"/>
         <source>Scripts</source>
         <translation>Parancsfájlok</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Biztosan futtatja a(z) &quot;%1&quot; parancsfájlt a távoli számítógépen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="819"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Biztosan leállítja a távoli számítógépet?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="867"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="852"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="885"/>
         <source>Confirmation</source>
         <translation>Megerősítés</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="835"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="853"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Biztosan újraindítja a távoli számítógépet?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="876"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="861"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="894"/>
         <source>Wait for host</source>
         <translation>Várakozás a gazdagépre</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="868"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="886"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Biztosan újraindítja a távoli számítógépet csökkentett módban?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="900"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="918"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Biztosan befejezi a felhasználói munkamenetet a távoli számítógépen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="915"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="933"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Biztosan zárolja a felhasználói munkamenetet a távoli számítógépen?</translation>
     </message>
@@ -4953,22 +4953,22 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Zárja be az összes párbeszédablakot az alkalmazás zárolásához.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="729"/>
+        <location filename="../client/desktop/main_window.cc" line="730"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>A gazdagép tulajdonságaiban ID szerinti kapcsolat van megadva, de az útválasztó nincs konfigurálva. Ellenőrizze az útválasztó paramétereit a gazdagép tulajdonságaiban.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="996"/>
+        <location filename="../client/desktop/main_window.cc" line="997"/>
         <source>Unknown application</source>
         <translation>Ismeretlen alkalmazás</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="999"/>
+        <location filename="../client/desktop/main_window.cc" line="1000"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>MCP-összekötő. Csatlakoztatva: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="1000"/>
+        <location filename="../client/desktop/main_window.cc" line="1001"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - MI csatlakoztatva</translation>
     </message>
@@ -7718,12 +7718,17 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>SelectScreenAction</name>
     <message>
-        <location filename="../client/desktop/desktop/select_screen_action.h" line="38"/>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="34"/>
+        <source>Full Desktop</source>
+        <translation>Teljes asztal</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="49"/>
         <source>Monitor %1 (primary)</source>
         <translation>Monitor %1 (elsődleges)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="51"/>
         <source>Monitor %1</source>
         <translation>Monitor %1</translation>
     </message>
@@ -8740,46 +8745,46 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Biztosan törli a(z) &quot;%1&quot; útválasztót?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1496"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1509"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>A kiválasztott szülőcsoportban már létezik ilyen nevű csoport.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1603"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1616"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>A kijelölt gazdagépek közül %n nem lett áthelyezve, mert a kiválasztott csoportban már léteznek ilyen nevű gazdagépek.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1611"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1811"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1624"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1824"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>A kijelölt gazdagépek közül %n gazdagépet nem sikerült áthelyezni.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1486"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1708"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1499"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1518"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1721"/>
         <source>Failed to move the group.</source>
         <translation>Nem sikerült áthelyezni a csoportot.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1565"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>Nem sikerült áthelyezni a gazdagépeket a kiválasztott csoportba.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1602"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1615"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>A kiválasztott csoportban már létezik ilyen nevű gazdagép.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1564"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1810"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1577"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1623"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1823"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Nem sikerült áthelyezni a gazdagépet a kiválasztott csoportba.</translation>
     </message>
