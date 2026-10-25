@@ -43,6 +43,7 @@ public:
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);
+    void onTypeChanged();
     void onLoadData();
 
 private:

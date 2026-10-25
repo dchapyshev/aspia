@@ -47,8 +47,23 @@ CredentialDialog::CredentialDialog(qint64 credential_id, QWidget* parent)
 
     ui->edit_password->setShowPasswordButtonVisible(true);
 
+    const QString row(
+        "<tr><td valign=\"top\">&#8226;</td><td style=\"padding-left: 6px; padding-bottom: 3px;\">%1</td></tr>");
+
+    ui->label_hint->setText("<table cellspacing=\"0\" cellpadding=\"0\">" +
+        row.arg(tr("If the computer is not in a domain, enter the user name, for example %1.")
+                    .toHtmlEscaped().arg("<b>john</b>")) +
+        row.arg(tr("For a domain account, enter the domain and the user name, for example %1 or %2.")
+                    .toHtmlEscaped().arg("<b>CORP\\john</b>", "<b>john@corp.com</b>")) +
+        row.arg(tr("For a local account on a computer in a domain, add %1 before the name, for example %2.")
+                    .toHtmlEscaped().arg("<b>.\\</b>", "<b>.\\john</b>")) +
+        "</table>");
+
     setWindowTitle(credential_id_ != -1 ? tr("Edit Credentials") : tr("Add Credentials"));
 
+    onTypeChanged();
+
+    connect(ui->combo_type, &QComboBox::currentIndexChanged, this, &CredentialDialog::onTypeChanged);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &CredentialDialog::onButtonBoxClicked);
     ui->edit_name->setFocus();
 
@@ -149,6 +164,16 @@ void CredentialDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     accept();
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialDialog::onTypeChanged()
+{
+    const CredentialConfig::Type type =
+        static_cast<CredentialConfig::Type>(ui->combo_type->currentData().toInt());
+
+    ui->label_hint->setVisible(type == CredentialConfig::Type::OS);
+    adjustSize();
 }
 
 //--------------------------------------------------------------------------------------------------
