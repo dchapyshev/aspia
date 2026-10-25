@@ -79,6 +79,14 @@ CredentialDialog::~CredentialDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
+bool CredentialDialog::hasHeightForWidth() const
+{
+    // The height follows the width in resizeEvent(). With height-for-width reported, Windows does not
+    // let the user narrow the dialog below the width at which the hint fits into the fixed height.
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
 void CredentialDialog::resizeEvent(QResizeEvent* event)
 {
     QDialog::resizeEvent(event);

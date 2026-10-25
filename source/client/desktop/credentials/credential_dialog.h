@@ -41,6 +41,9 @@ public:
     // The record written, once the dialog is accepted.
     qint64 credentialId() const { return credential_id_; }
 
+    // QWidget implementation.
+    bool hasHeightForWidth() const final;
+
 protected:
     // QWidget implementation.
     void resizeEvent(QResizeEvent* event) final;
