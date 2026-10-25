@@ -1769,22 +1769,37 @@ Hasło: %2</translation>
         <translation>Dane logowania systemu operacyjnego</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="50"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
+        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
+        <translation>Jeśli komputer nie należy do domeny, wprowadź nazwę użytkownika, na przykład %1.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
+        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
+        <translation>Dla konta domenowego wprowadź domenę i nazwę użytkownika, na przykład %1 lub %2.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
+        <source>For a local account on a computer in a domain, add %1 before the name, for example %2.</source>
+        <translation>Dla konta lokalnego na komputerze w domenie dodaj %1 przed nazwą, na przykład %2.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
         <source>Edit Credentials</source>
         <translation>Edytuj dane logowania</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="50"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
         <source>Add Credentials</source>
         <translation>Dodaj dane logowania</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="76"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="91"/>
         <source>Name cannot be empty.</source>
         <translation>Nazwa nie może być pusta.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="84"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="99"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Zbyt długa nazwa. Maksymalna długość nazwy to %n znak.</numerusform>
@@ -1793,37 +1808,37 @@ Hasło: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="98"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="113"/>
         <source>Invalid user name.</source>
         <translation>Nieprawidłowa nazwa użytkownika.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="107"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="122"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Nazwa użytkownika nie może być pusta i może zawierać tylko litery, cyfry oraz znaki &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="116"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="131"/>
         <source>Password cannot be empty.</source>
         <translation>Hasło nie może być puste.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="134"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="149"/>
         <source>Unable to add credentials</source>
         <translation>Nie można dodać danych logowania</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="145"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="160"/>
         <source>Unable to modify credentials</source>
         <translation>Nie można zmodyfikować danych logowania</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="165"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="190"/>
         <source>Failed to read the credentials.</source>
         <translation>Nie udało się odczytać danych logowania.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="179"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="204"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>Dane logowania są uszkodzone. Wprowadź je ponownie.</translation>
     </message>
@@ -2365,17 +2380,17 @@ Zastąpione dane logowania: %2</translation>
 <context>
     <name>CredentialPanel</name>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="52"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="59"/>
         <source>Sign In</source>
         <translation>Zaloguj</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="59"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="66"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="109"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="120"/>
         <source>Not Selected</source>
         <translation>Nie wybrano</translation>
     </message>
@@ -2797,6 +2812,26 @@ Zastąpione dane logowania: %2</translation>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="1155"/>
         <source>Could not save image</source>
         <translation>Nie można zapisać obrazu</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1405"/>
+        <source>Invalid user name or password.</source>
+        <translation>Nieprawidłowa nazwa użytkownika lub hasło.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1408"/>
+        <source>The password has expired.</source>
+        <translation>Hasło wygasło.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1411"/>
+        <source>The account is locked out.</source>
+        <translation>Konto jest zablokowane.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1414"/>
+        <source>The account is disabled.</source>
+        <translation>Konto jest wyłączone.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="506"/>
@@ -13237,6 +13272,14 @@ Zaimportowane dane logowania: %5</translation>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1222"/>
         <source>Password</source>
         <translation>Hasło</translation>
+    </message>
+</context>
+<context>
+    <name>TerminalWindow</name>
+    <message>
+        <location filename="../client/desktop/terminal/terminal_window.cc" line="196"/>
+        <source>Invalid user name or password.</source>
+        <translation>Nieprawidłowa nazwa użytkownika lub hasło.</translation>
     </message>
 </context>
 <context>

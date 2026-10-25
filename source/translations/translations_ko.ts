@@ -1759,59 +1759,74 @@ Password: %2</source>
         <translation>OS 자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="50"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
+        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
+        <translation>컴퓨터가 도메인에 속해 있지 않으면 사용자 이름을 입력하십시오(예: %1).</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
+        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
+        <translation>도메인 계정인 경우 도메인과 사용자 이름을 입력하십시오(예: %1 또는 %2).</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
+        <source>For a local account on a computer in a domain, add %1 before the name, for example %2.</source>
+        <translation>도메인에 속한 컴퓨터의 로컬 계정인 경우 이름 앞에 %1 접두사를 추가하십시오(예: %2).</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
         <source>Edit Credentials</source>
         <translation>자격 증명 편집</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="50"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
         <source>Add Credentials</source>
         <translation>자격 증명 추가</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="76"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="91"/>
         <source>Name cannot be empty.</source>
         <translation>이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="84"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="99"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="98"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="113"/>
         <source>Invalid user name.</source>
         <translation>잘못된 사용자 이름입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="107"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="122"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 &quot;_&quot;, &quot;-&quot;, &quot;.&quot; 문자만 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="116"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="131"/>
         <source>Password cannot be empty.</source>
         <translation>암호는 비워 둘 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="134"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="149"/>
         <source>Unable to add credentials</source>
         <translation>자격 증명을 추가할 수 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="145"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="160"/>
         <source>Unable to modify credentials</source>
         <translation>자격 증명을 수정할 수 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="165"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="190"/>
         <source>Failed to read the credentials.</source>
         <translation>자격 증명을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="179"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="204"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>자격 증명이 손상되었습니다. 다시 입력하십시오.</translation>
     </message>
@@ -2343,17 +2358,17 @@ Credentials replaced: %2</source>
 <context>
     <name>CredentialPanel</name>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="52"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="59"/>
         <source>Sign In</source>
         <translation>로그인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="59"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="66"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="109"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="120"/>
         <source>Not Selected</source>
         <translation>선택되지 않음</translation>
     </message>
@@ -2926,6 +2941,26 @@ Credentials replaced: %2</source>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="1155"/>
         <source>Could not save image</source>
         <translation>이미지를 저장할 수 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1405"/>
+        <source>Invalid user name or password.</source>
+        <translation>사용자 이름 또는 암호가 잘못되었습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1408"/>
+        <source>The password has expired.</source>
+        <translation>암호가 만료되었습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1411"/>
+        <source>The account is locked out.</source>
+        <translation>계정이 잠겨 있습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1414"/>
+        <source>The account is disabled.</source>
+        <translation>계정이 사용 안 함 상태입니다.</translation>
     </message>
 </context>
 <context>
@@ -13125,6 +13160,14 @@ Credentials imported: %5</source>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1222"/>
         <source>Password</source>
         <translation>암호</translation>
+    </message>
+</context>
+<context>
+    <name>TerminalWindow</name>
+    <message>
+        <location filename="../client/desktop/terminal/terminal_window.cc" line="196"/>
+        <source>Invalid user name or password.</source>
+        <translation>사용자 이름 또는 암호가 잘못되었습니다.</translation>
     </message>
 </context>
 <context>

@@ -1764,22 +1764,37 @@ Senha: %2</translation>
         <translation>Credenciais do SO</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="50"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
+        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
+        <translation>Se o computador não estiver em um domínio, digite o nome de usuário, por exemplo %1.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
+        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
+        <translation>Para uma conta de domínio, digite o domínio e o nome de usuário, por exemplo %1 ou %2.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
+        <source>For a local account on a computer in a domain, add %1 before the name, for example %2.</source>
+        <translation>Para uma conta local em um computador de um domínio, adicione %1 antes do nome, por exemplo %2.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
         <source>Edit Credentials</source>
         <translation>Editar credenciais</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="50"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
         <source>Add Credentials</source>
         <translation>Adicionar credenciais</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="76"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="91"/>
         <source>Name cannot be empty.</source>
         <translation>O nome não pode estar vazio.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="84"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="99"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome muito longo. O comprimento máximo do nome é de %n caractere.</numerusform>
@@ -1787,37 +1802,37 @@ Senha: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="98"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="113"/>
         <source>Invalid user name.</source>
         <translation>Nome de usuário inválido.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="107"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="122"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>O nome de usuário não pode estar vazio e pode conter apenas letras, números e os caracteres &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="116"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="131"/>
         <source>Password cannot be empty.</source>
         <translation>A senha não pode estar vazia.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="134"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="149"/>
         <source>Unable to add credentials</source>
         <translation>Não foi possível adicionar as credenciais</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="145"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="160"/>
         <source>Unable to modify credentials</source>
         <translation>Não foi possível modificar as credenciais</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="165"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="190"/>
         <source>Failed to read the credentials.</source>
         <translation>Falha ao ler as credenciais.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="179"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="204"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>As credenciais estão corrompidas. Digite-as novamente.</translation>
     </message>
@@ -2354,17 +2369,17 @@ Credenciais substituídas: %2</translation>
 <context>
     <name>CredentialPanel</name>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="52"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="59"/>
         <source>Sign In</source>
         <translation>Entrar</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="59"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="66"/>
         <source>Close</source>
         <translation>Fechar</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="109"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="120"/>
         <source>Not Selected</source>
         <translation>Não selecionado</translation>
     </message>
@@ -2786,6 +2801,26 @@ Credenciais substituídas: %2</translation>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="1155"/>
         <source>Could not save image</source>
         <translation>Não foi possível salvar a imagem</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1405"/>
+        <source>Invalid user name or password.</source>
+        <translation>Nome de usuário ou senha incorretos.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1408"/>
+        <source>The password has expired.</source>
+        <translation>A senha expirou.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1411"/>
+        <source>The account is locked out.</source>
+        <translation>A conta está bloqueada.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1414"/>
+        <source>The account is disabled.</source>
+        <translation>A conta está desabilitada.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="506"/>
@@ -13181,6 +13216,14 @@ Credenciais importadas: %5</translation>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1222"/>
         <source>Password</source>
         <translation>Senha</translation>
+    </message>
+</context>
+<context>
+    <name>TerminalWindow</name>
+    <message>
+        <location filename="../client/desktop/terminal/terminal_window.cc" line="196"/>
+        <source>Invalid user name or password.</source>
+        <translation>Nome de usuário ou senha incorretos.</translation>
     </message>
 </context>
 <context>

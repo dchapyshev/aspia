@@ -1764,22 +1764,37 @@ Lösenord: %2</translation>
         <translation>OS-inloggningsuppgifter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="50"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
+        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
+        <translation>Om datorn inte tillhör en domän, ange användarnamnet, till exempel %1.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
+        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
+        <translation>För ett domänkonto, ange domänen och användarnamnet, till exempel %1 eller %2.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
+        <source>For a local account on a computer in a domain, add %1 before the name, for example %2.</source>
+        <translation>För ett lokalt konto på en dator i en domän, lägg till %1 före namnet, till exempel %2.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
         <source>Edit Credentials</source>
         <translation>Redigera inloggningsuppgifter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="50"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
         <source>Add Credentials</source>
         <translation>Lägg till inloggningsuppgifter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="76"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="91"/>
         <source>Name cannot be empty.</source>
         <translation>Namnet får inte vara tomt.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="84"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="99"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>För långt namn. Namnets maximala längd är %n tecken.</numerusform>
@@ -1787,37 +1802,37 @@ Lösenord: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="98"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="113"/>
         <source>Invalid user name.</source>
         <translation>Ogiltigt användarnamn.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="107"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="122"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="116"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="131"/>
         <source>Password cannot be empty.</source>
         <translation>Lösenordet får inte vara tomt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="134"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="149"/>
         <source>Unable to add credentials</source>
         <translation>Det går inte att lägga till inloggningsuppgifterna</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="145"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="160"/>
         <source>Unable to modify credentials</source>
         <translation>Det går inte att ändra inloggningsuppgifterna</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="165"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="190"/>
         <source>Failed to read the credentials.</source>
         <translation>Det gick inte att läsa inloggningsuppgifterna.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="179"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="204"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>Inloggningsuppgifterna är skadade. Ange dem igen.</translation>
     </message>
@@ -2354,17 +2369,17 @@ Ersatta inloggningsuppgifter: %2</translation>
 <context>
     <name>CredentialPanel</name>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="52"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="59"/>
         <source>Sign In</source>
         <translation>Logga in</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="59"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="66"/>
         <source>Close</source>
         <translation>Stäng</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="109"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="120"/>
         <source>Not Selected</source>
         <translation>Inte vald</translation>
     </message>
@@ -2786,6 +2801,26 @@ Ersatta inloggningsuppgifter: %2</translation>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="1155"/>
         <source>Could not save image</source>
         <translation>Kunde inte spara bilden</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1405"/>
+        <source>Invalid user name or password.</source>
+        <translation>Fel användarnamn eller lösenord.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1408"/>
+        <source>The password has expired.</source>
+        <translation>Lösenordet har upphört att gälla.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1411"/>
+        <source>The account is locked out.</source>
+        <translation>Kontot är låst.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1414"/>
+        <source>The account is disabled.</source>
+        <translation>Kontot är inaktiverat.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="506"/>
@@ -13181,6 +13216,14 @@ Importerade inloggningsuppgifter: %5</translation>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1222"/>
         <source>Password</source>
         <translation>Lösenord</translation>
+    </message>
+</context>
+<context>
+    <name>TerminalWindow</name>
+    <message>
+        <location filename="../client/desktop/terminal/terminal_window.cc" line="196"/>
+        <source>Invalid user name or password.</source>
+        <translation>Fel användarnamn eller lösenord.</translation>
     </message>
 </context>
 <context>

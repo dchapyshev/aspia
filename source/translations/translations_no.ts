@@ -1764,22 +1764,37 @@ Passord: %2</translation>
         <translation>OS-påloggingsinformasjon</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="50"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
+        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
+        <translation>Hvis datamaskinen ikke er i et domene, skriv inn brukernavnet, for eksempel %1.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
+        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
+        <translation>For en domenekonto, skriv inn domenet og brukernavnet, for eksempel %1 eller %2.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
+        <source>For a local account on a computer in a domain, add %1 before the name, for example %2.</source>
+        <translation>For en lokal konto på en datamaskin i et domene, legg til %1 foran navnet, for eksempel %2.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
         <source>Edit Credentials</source>
         <translation>Rediger påloggingsinformasjon</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="50"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
         <source>Add Credentials</source>
         <translation>Legg til påloggingsinformasjon</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="76"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="91"/>
         <source>Name cannot be empty.</source>
         <translation>Navnet kan ikke være tomt.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="84"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="99"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Navnet er for langt. Maksimal lengde på navnet er %n tegn.</numerusform>
@@ -1787,37 +1802,37 @@ Passord: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="98"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="113"/>
         <source>Invalid user name.</source>
         <translation>Ugyldig brukernavn.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="107"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="122"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Brukernavnet kan ikke være tomt og kan bare inneholde bokstaver, tall og tegnene &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="116"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="131"/>
         <source>Password cannot be empty.</source>
         <translation>Passordet kan ikke være tomt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="134"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="149"/>
         <source>Unable to add credentials</source>
         <translation>Kan ikke legge til påloggingsinformasjon</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="145"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="160"/>
         <source>Unable to modify credentials</source>
         <translation>Kan ikke endre påloggingsinformasjon</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="165"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="190"/>
         <source>Failed to read the credentials.</source>
         <translation>Kunne ikke lese påloggingsinformasjonen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="179"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="204"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>Påloggingsinformasjonen er skadet. Skriv den inn på nytt.</translation>
     </message>
@@ -2354,17 +2369,17 @@ Påloggingsinformasjon erstattet: %2</translation>
 <context>
     <name>CredentialPanel</name>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="52"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="59"/>
         <source>Sign In</source>
         <translation>Logg på</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="59"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="66"/>
         <source>Close</source>
         <translation>Lukk</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="109"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="120"/>
         <source>Not Selected</source>
         <translation>Ikke valgt</translation>
     </message>
@@ -2786,6 +2801,26 @@ Påloggingsinformasjon erstattet: %2</translation>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="1155"/>
         <source>Could not save image</source>
         <translation>Kunne ikke lagre bildet</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1405"/>
+        <source>Invalid user name or password.</source>
+        <translation>Feil brukernavn eller passord.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1408"/>
+        <source>The password has expired.</source>
+        <translation>Passordet er utløpt.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1411"/>
+        <source>The account is locked out.</source>
+        <translation>Kontoen er sperret.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1414"/>
+        <source>The account is disabled.</source>
+        <translation>Kontoen er deaktivert.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="506"/>
@@ -13181,6 +13216,14 @@ Påloggingsinformasjon importert: %5</translation>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1222"/>
         <source>Password</source>
         <translation>Passord</translation>
+    </message>
+</context>
+<context>
+    <name>TerminalWindow</name>
+    <message>
+        <location filename="../client/desktop/terminal/terminal_window.cc" line="196"/>
+        <source>Invalid user name or password.</source>
+        <translation>Feil brukernavn eller passord.</translation>
     </message>
 </context>
 <context>
