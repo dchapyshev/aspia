@@ -22,6 +22,12 @@
 
 #include "host/credentials/provider.h"
 
+#include <lmcons.h>
+#include <lmerr.h>
+#include <lmapibuf.h>
+#include <lmjoin.h>
+#include <strsafe.h>
+
 #include <new>
 
 #include "host/credentials/dll_main.h"
@@ -86,8 +92,8 @@ bool validateCredentials(const wchar_t* domain, const wchar_t* username, const w
         return false;
     }
 
-    // An empty domain means a local account; "." makes LogonUserW use the local account database.
-    const wchar_t* logon_domain = (domain && *domain) ? domain : L".";
+    // An empty domain comes with a UPN, and LogonUserW takes a UPN only with a null domain.
+    const wchar_t* logon_domain = (domain && *domain) ? domain : nullptr;
 
     ScopedHandle token;
     if (!LogonUserW(username, logon_domain, password, LOGON32_LOGON_INTERACTIVE,
@@ -100,6 +106,36 @@ bool validateCredentials(const wchar_t* domain, const wchar_t* username, const w
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The domain that the logon screen of Windows uses for a user name typed without one.
+void defaultLogonDomain(wchar_t* domain, DWORD size)
+{
+    DWORD bytes = size * sizeof(wchar_t);
+    LSTATUS status = RegGetValueW(HKEY_LOCAL_MACHINE,
+        L"Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", L"DefaultLogonDomain",
+        RRF_RT_REG_SZ, nullptr, domain, &bytes);
+    if (status == ERROR_SUCCESS && *domain)
+        return;
+
+    LPWSTR join_name = nullptr;
+    NETSETUP_JOIN_STATUS join_status = NetSetupUnknownStatus;
+    if (NetGetJoinInformation(nullptr, &join_name, &join_status) == NERR_Success)
+    {
+        const bool joined = join_status == NetSetupDomainName &&
+            SUCCEEDED(StringCchCopyW(domain, size, join_name));
+        NetApiBufferFree(join_name);
+        if (joined)
+            return;
+    }
+
+    DWORD length = size;
+    if (!GetComputerNameExW(ComputerNameNetBIOS, domain, &length))
+    {
+        LOG(L"GetComputerNameExW failed: %lu", GetLastError());
+        StringCchCopyW(domain, size, L".");
+    }
 }
 
 } // namespace
@@ -392,6 +428,14 @@ void Provider::onCredentials(const wchar_t* domain, const wchar_t* username, con
     {
         LOG(L"Invalid argument");
         return;
+    }
+
+    // A UPN carries its domain in the user name, so the domain stays empty for it.
+    wchar_t default_domain[256] = {};
+    if (!*domain && !wcschr(username, L'@'))
+    {
+        defaultLogonDomain(default_domain, ARRAYSIZE(default_domain));
+        domain = default_domain;
     }
 
     // Reject invalid credentials here, before LogonUI ever sees them, and ask for new ones. This

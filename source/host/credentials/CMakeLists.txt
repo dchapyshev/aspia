@@ -35,4 +35,4 @@ source_group("" FILES ${SOURCE_CREDENTIALS})
 
 add_library(aspia_credentials SHARED ${SOURCE_CREDENTIALS})
 
-target_link_libraries(aspia_credentials PRIVATE asio::asio advapi32 credui secur32 shlwapi)
+target_link_libraries(aspia_credentials PRIVATE asio::asio advapi32 credui netapi32 secur32 shlwapi)
