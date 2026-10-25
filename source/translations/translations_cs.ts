@@ -215,6 +215,64 @@
     </message>
 </context>
 <context>
+    <name>AccessLogListModel</name>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="160"/>
+        <source>Time</source>
+        <translation>Čas</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="163"/>
+        <source>User</source>
+        <translation>Uživatel</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="166"/>
+        <source>Session Type</source>
+        <translation>Typ relace</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="169"/>
+        <source>Client Address</source>
+        <translation>Adresa klienta</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="172"/>
+        <source>Client Computer</source>
+        <translation>Počítač klienta</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="175"/>
+        <source>Client Version</source>
+        <translation>Verze klienta</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="178"/>
+        <source>Client OS</source>
+        <translation>OS klienta</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="181"/>
+        <source>Host ID</source>
+        <translation>ID hostitele</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="184"/>
+        <source>Host Computer</source>
+        <translation>Počítač hostitele</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="187"/>
+        <source>Host Address</source>
+        <translation>Adresa hostitele</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="249"/>
+        <source>Unknown</source>
+        <translation>Neznámý</translation>
+    </message>
+</context>
+<context>
     <name>AddressBar</name>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar.cc" line="55"/>
@@ -5129,7 +5187,7 @@ Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="137"/>
-        <location filename="../client/desktop/management_tab.cc" line="2001"/>
+        <location filename="../client/desktop/management_tab.cc" line="2048"/>
         <source>Delete Host</source>
         <translation>Odstranit hostitele</translation>
     </message>
@@ -5266,34 +5324,34 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Automaticky obnovovat stav</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1113"/>
+        <location filename="../client/desktop/management_tab.cc" line="1137"/>
         <source>(copy)</source>
         <translation>(kopie)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1081"/>
-        <location filename="../client/desktop/management_tab.cc" line="1158"/>
-        <location filename="../client/desktop/management_tab.cc" line="2286"/>
+        <location filename="../client/desktop/management_tab.cc" line="1105"/>
+        <location filename="../client/desktop/management_tab.cc" line="1182"/>
+        <location filename="../client/desktop/management_tab.cc" line="2333"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Nepodařilo se načíst informace o hostiteli z místní databáze.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="887"/>
+        <location filename="../client/desktop/management_tab.cc" line="911"/>
         <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
         <translation>Typ relace &quot;%1&quot; není pro Quick Support k dispozici.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1118"/>
+        <location filename="../client/desktop/management_tab.cc" line="1142"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Nepodařilo se přidat hostitele do místní databáze.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1176"/>
+        <location filename="../client/desktop/management_tab.cc" line="1200"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit hostitele &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1178"/>
+        <location filename="../client/desktop/management_tab.cc" line="1202"/>
         <source>Are you sure you want to delete %n hosts?</source>
         <translation>
             <numerusform>Opravdu chcete odstranit %n hostitele?</numerusform>
@@ -5302,12 +5360,12 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1204"/>
+        <location filename="../client/desktop/management_tab.cc" line="1228"/>
         <source>Unable to remove host</source>
         <translation>Nelze odebrat hostitele</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1206"/>
+        <location filename="../client/desktop/management_tab.cc" line="1230"/>
         <source>Failed to delete %n of the selected hosts.</source>
         <translation>
             <numerusform>Nepodařilo se odstranit %n z vybraných hostitelů.</numerusform>
@@ -5316,109 +5374,111 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1274"/>
-        <location filename="../client/desktop/management_tab.cc" line="1351"/>
-        <location filename="../client/desktop/management_tab.cc" line="1384"/>
+        <location filename="../client/desktop/management_tab.cc" line="1298"/>
+        <location filename="../client/desktop/management_tab.cc" line="1375"/>
+        <location filename="../client/desktop/management_tab.cc" line="1408"/>
+        <location filename="../client/desktop/management_tab.cc" line="1431"/>
         <source>Copy Row</source>
         <translation>Kopírovat řádek</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1275"/>
-        <location filename="../client/desktop/management_tab.cc" line="1352"/>
-        <location filename="../client/desktop/management_tab.cc" line="1385"/>
+        <location filename="../client/desktop/management_tab.cc" line="1299"/>
+        <location filename="../client/desktop/management_tab.cc" line="1376"/>
+        <location filename="../client/desktop/management_tab.cc" line="1409"/>
+        <location filename="../client/desktop/management_tab.cc" line="1432"/>
         <source>Copy Value</source>
         <translation>Kopírovat hodnotu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1626"/>
+        <location filename="../client/desktop/management_tab.cc" line="1673"/>
         <source>Failed to delete the group.</source>
         <translation>Nepodařilo se odstranit skupinu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1665"/>
-        <location filename="../client/desktop/management_tab.cc" line="1722"/>
+        <location filename="../client/desktop/management_tab.cc" line="1712"/>
+        <location filename="../client/desktop/management_tab.cc" line="1769"/>
         <source>The database is not available.</source>
         <translation>Databáze není k dispozici.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1671"/>
+        <location filename="../client/desktop/management_tab.cc" line="1718"/>
         <source>Create Backup</source>
         <translation>Vytvořit zálohu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1688"/>
+        <location filename="../client/desktop/management_tab.cc" line="1735"/>
         <source>There is nothing to save.</source>
         <translation>Není co uložit.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2060"/>
+        <location filename="../client/desktop/management_tab.cc" line="2107"/>
         <source>Delete Hosts</source>
         <translation>Odstranit hostitele</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2281"/>
+        <location filename="../client/desktop/management_tab.cc" line="2328"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Data hostitele jsou poškozena. Upravte hostitele a zadejte je znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2302"/>
+        <location filename="../client/desktop/management_tab.cc" line="2349"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Data routeru jsou poškozena. Upravte router a zadejte je znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1700"/>
+        <location filename="../client/desktop/management_tab.cc" line="1747"/>
         <source>Failed to create the backup.</source>
         <translation>Nepodařilo se vytvořit zálohu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1728"/>
-        <location filename="../client/desktop/management_tab.cc" line="1754"/>
+        <location filename="../client/desktop/management_tab.cc" line="1775"/>
+        <location filename="../client/desktop/management_tab.cc" line="1801"/>
         <source>Restore from Backup</source>
         <translation>Obnovit ze zálohy</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1737"/>
+        <location filename="../client/desktop/management_tab.cc" line="1784"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Vše, co je nyní uloženo, bude odstraněno a nahrazeno obsahem zálohy. Pokračovat?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1756"/>
+        <location filename="../client/desktop/management_tab.cc" line="1803"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Záloha byla vytvořena v jiné instalaci. Zadejte hlavní heslo dané instalace.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1781"/>
+        <location filename="../client/desktop/management_tab.cc" line="1828"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Záloha neobsahuje žádná data, takže nebylo nic změněno.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1789"/>
+        <location filename="../client/desktop/management_tab.cc" line="1836"/>
         <source>The file is not a valid backup.</source>
         <translation>Soubor není platná záloha.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1793"/>
+        <location filename="../client/desktop/management_tab.cc" line="1840"/>
         <source>Failed to restore from the backup.</source>
         <translation>Nepodařilo se obnovit ze zálohy.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1672"/>
-        <location filename="../client/desktop/management_tab.cc" line="1729"/>
+        <location filename="../client/desktop/management_tab.cc" line="1719"/>
+        <location filename="../client/desktop/management_tab.cc" line="1776"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Záloha Aspia (*.aspia-backup);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1692"/>
+        <location filename="../client/desktop/management_tab.cc" line="1739"/>
         <source>Unable to write the file.</source>
         <translation>Nelze zapsat soubor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1785"/>
+        <location filename="../client/desktop/management_tab.cc" line="1832"/>
         <source>Unable to read the file.</source>
         <translation>Nelze číst soubor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1705"/>
+        <location filename="../client/desktop/management_tab.cc" line="1752"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5433,37 +5493,37 @@ Exportovaná uložená hesla: %4
 Exportované přihlašovací údaje: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1486"/>
+        <location filename="../client/desktop/management_tab.cc" line="1533"/>
         <source>Are you sure you want to delete space &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit prostor &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1506"/>
+        <location filename="../client/desktop/management_tab.cc" line="1553"/>
         <source>Failed to delete the space.</source>
         <translation>Nepodařilo se odstranit prostor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1608"/>
+        <location filename="../client/desktop/management_tab.cc" line="1655"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the space root.</source>
         <translation>Opravdu chcete odstranit skupinu &quot;%1&quot;? Hostitelé přiřazení k této skupině nebo jejím podskupinám budou přesunuti do kořene prostoru.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1696"/>
+        <location filename="../client/desktop/management_tab.cc" line="1743"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Některé záznamy databáze jsou poškozeny. Opravte je nebo odstraňte a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1773"/>
+        <location filename="../client/desktop/management_tab.cc" line="1820"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Soubor nelze zadaným heslem dešifrovat.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1777"/>
+        <location filename="../client/desktop/management_tab.cc" line="1824"/>
         <source>Unsupported file format version.</source>
         <translation>Nepodporovaná verze formátu souboru.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1798"/>
+        <location filename="../client/desktop/management_tab.cc" line="1845"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5478,29 +5538,29 @@ Importovaná uložená hesla: %4
 Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2209"/>
-        <location filename="../client/desktop/management_tab.cc" line="2240"/>
+        <location filename="../client/desktop/management_tab.cc" line="2256"/>
+        <location filename="../client/desktop/management_tab.cc" line="2287"/>
         <source>Copy Link</source>
         <translation>Kopírovat odkaz</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2228"/>
-        <location filename="../client/desktop/management_tab.cc" line="2262"/>
+        <location filename="../client/desktop/management_tab.cc" line="2275"/>
+        <location filename="../client/desktop/management_tab.cc" line="2309"/>
         <source>Unable to create a link for this host.</source>
         <translation>Nelze vytvořit odkaz pro tohoto hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2303"/>
+        <location filename="../client/desktop/management_tab.cc" line="2350"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Router přidružený k tomuto hostiteli byl odstraněn. Upravte hostitele a vyberte jiný router, nebo přepněte na přímé připojení.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2310"/>
+        <location filename="../client/desktop/management_tab.cc" line="2357"/>
         <source>The host has an invalid host ID.</source>
         <translation>Hostitel má neplatné ID hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2319"/>
+        <location filename="../client/desktop/management_tab.cc" line="2366"/>
         <source>The host has an incorrect address.</source>
         <translation>Hostitel má nesprávnou adresu.</translation>
     </message>
@@ -6355,6 +6415,93 @@ Importované přihlašovací údaje: %5</translation>
         <location filename="../client/android/remote_widget.cc" line="920"/>
         <source>Chat</source>
         <translation>Chat</translation>
+    </message>
+</context>
+<context>
+    <name>RouterAccessLogWidget</name>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="37"/>
+        <source>From</source>
+        <translation>Od</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="51"/>
+        <source>To</source>
+        <translation>Do</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="78"/>
+        <source>User</source>
+        <translation>Uživatel</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="94"/>
+        <source>Address or computer name of the client</source>
+        <translation>Adresa nebo název počítače klienta</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="97"/>
+        <source>Client</source>
+        <translation>Klient</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="113"/>
+        <source>ID, computer name or address of the host</source>
+        <translation>ID, název počítače nebo adresa hostitele</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="116"/>
+        <source>Host</source>
+        <translation>Hostitel</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="132"/>
+        <source>Reset filter</source>
+        <translation>Zrušit filtr</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="175"/>
+        <source>Previous page</source>
+        <translation>Předchozí stránka</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="178"/>
+        <source>Previous</source>
+        <translation>Předchozí</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="196"/>
+        <source>Next page</source>
+        <translation>Další stránka</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="199"/>
+        <source>Next</source>
+        <translation>Další</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="210"/>
+        <source>Items per page:</source>
+        <translation>Položek na stránku:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="94"/>
+        <source>Any</source>
+        <translation>Libovolné</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="99"/>
+        <source>All Session Types</source>
+        <translation>Všechny typy relací</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="455"/>
+        <source>%n entry(s)</source>
+        <translation>
+            <numerusform>%n záznam</numerusform>
+            <numerusform>%n záznamy</numerusform>
+            <numerusform>%n záznamů</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -8812,24 +8959,24 @@ Importované přihlašovací údaje: %5</translation>
     <name>Sidebar</name>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="115"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="154"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="155"/>
         <source>Local</source>
         <translation>Místní</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="179"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="240"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="292"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="180"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="241"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="293"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Nepodařilo se načíst data. Seznam může být zastaralý.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="598"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="599"/>
         <source>Change Password</source>
         <translation>Změnit heslo</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="606"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="607"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Heslo nemůže být kratší než %n znak.</numerusform>
@@ -8838,7 +8985,7 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="607"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="608"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>Heslo nemůže být delší než %n znak.</numerusform>
@@ -8847,12 +8994,12 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="615"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="616"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Zadané heslo nesplňuje požadavky na zabezpečení!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="616"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="617"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Heslo musí obsahovat malá a velká písmena, číslice a nemělo by být kratší než %n znak.</numerusform>
@@ -8861,37 +9008,37 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="619"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="620"/>
         <source>Do you want to enter a different password?</source>
         <translation>Chcete zadat jiné heslo?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="642"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="643"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>Změna hesla. Čekání na opětovné přihlášení relace...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="840"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="841"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit skupinu &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="853"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="854"/>
         <source>Unable to remove group</source>
         <translation>Nelze odebrat skupinu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="918"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="919"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit router &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1509"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1515"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Skupina s tímto názvem již ve vybrané nadřazené skupině existuje.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1616"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1622"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>%n z vybraných hostitelů nebyl přesunut, protože hostitel se stejným názvem již ve vybrané skupině existuje.</numerusform>
@@ -8900,8 +9047,8 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1624"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1824"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1630"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1830"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>Nepodařilo se přesunout %n z vybraných hostitelů.</numerusform>
@@ -8910,28 +9057,36 @@ Importované přihlašovací údaje: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1499"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1518"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1721"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1524"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1727"/>
         <source>Failed to move the group.</source>
         <translation>Nepodařilo se přesunout skupinu.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1584"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>Nepodařilo se přesunout hostitele do vybrané skupiny.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1615"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1621"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Hostitel s tímto názvem již ve vybrané skupině existuje.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1577"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1623"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1823"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1583"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1629"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1829"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Nepodařilo se přesunout hostitele do vybrané skupiny.</translation>
+    </message>
+</context>
+<context>
+    <name>SidebarRouterAccessLog</name>
+    <message>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="216"/>
+        <source>Access Log</source>
+        <translation>Protokol přístupů</translation>
     </message>
 </context>
 <context>
@@ -8953,7 +9108,7 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SidebarRouterQsHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="234"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="243"/>
         <source>Quick Support</source>
         <translation>Quick Support</translation>
     </message>
@@ -8961,7 +9116,7 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SidebarRouterRelays</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="216"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="225"/>
         <source>Relays</source>
         <translation>Relay servery</translation>
     </message>
@@ -8969,7 +9124,7 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>SidebarRouterTempHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="225"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="234"/>
         <source>Unapproved Hosts</source>
         <translation>Neschválení hostitelé</translation>
     </message>

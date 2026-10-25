@@ -215,6 +215,64 @@
     </message>
 </context>
 <context>
+    <name>AccessLogListModel</name>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="160"/>
+        <source>Time</source>
+        <translation>Zaman</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="163"/>
+        <source>User</source>
+        <translation>Kullanıcı</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="166"/>
+        <source>Session Type</source>
+        <translation>Oturum Türü</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="169"/>
+        <source>Client Address</source>
+        <translation>İstemci Adresi</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="172"/>
+        <source>Client Computer</source>
+        <translation>İstemci Bilgisayar Adı</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="175"/>
+        <source>Client Version</source>
+        <translation>İstemci Sürümü</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="178"/>
+        <source>Client OS</source>
+        <translation>İstemci İşletim Sistemi</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="181"/>
+        <source>Host ID</source>
+        <translation>Ana Bilgisayar ID&apos;si</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="184"/>
+        <source>Host Computer</source>
+        <translation>Ana Bilgisayar Adı</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="187"/>
+        <source>Host Address</source>
+        <translation>Ana Bilgisayar Adresi</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/access_log_list_model.cc" line="249"/>
+        <source>Unknown</source>
+        <translation>Bilinmiyor</translation>
+    </message>
+</context>
+<context>
     <name>AddressBar</name>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar.cc" line="55"/>
@@ -5083,7 +5141,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="137"/>
-        <location filename="../client/desktop/management_tab.cc" line="2001"/>
+        <location filename="../client/desktop/management_tab.cc" line="2048"/>
         <source>Delete Host</source>
         <translation>Ana Bilgisayarı Sil</translation>
     </message>
@@ -5220,155 +5278,157 @@ Credentials imported: %5</source>
         <translation>Durumu Otomatik Yenile</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1113"/>
+        <location filename="../client/desktop/management_tab.cc" line="1137"/>
         <source>(copy)</source>
         <translation>(kopya)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1081"/>
-        <location filename="../client/desktop/management_tab.cc" line="1158"/>
-        <location filename="../client/desktop/management_tab.cc" line="2286"/>
+        <location filename="../client/desktop/management_tab.cc" line="1105"/>
+        <location filename="../client/desktop/management_tab.cc" line="1182"/>
+        <location filename="../client/desktop/management_tab.cc" line="2333"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Yerel veritabanından ana bilgisayar bilgileri alınamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="887"/>
+        <location filename="../client/desktop/management_tab.cc" line="911"/>
         <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
         <translation>&quot;%1&quot; oturum türü Quick Support için kullanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1118"/>
+        <location filename="../client/desktop/management_tab.cc" line="1142"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Ana bilgisayar yerel veritabanına eklenemedi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1176"/>
+        <location filename="../client/desktop/management_tab.cc" line="1200"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; ana bilgisayarını silmek istediğinizden emin misiniz?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1178"/>
+        <location filename="../client/desktop/management_tab.cc" line="1202"/>
         <source>Are you sure you want to delete %n hosts?</source>
         <translation>
             <numerusform>%n ana bilgisayarı silmek istediğinizden emin misiniz?</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1204"/>
+        <location filename="../client/desktop/management_tab.cc" line="1228"/>
         <source>Unable to remove host</source>
         <translation>Ana bilgisayar kaldırılamıyor</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1206"/>
+        <location filename="../client/desktop/management_tab.cc" line="1230"/>
         <source>Failed to delete %n of the selected hosts.</source>
         <translation>
             <numerusform>Seçilen ana bilgisayarlardan %n tanesi silinemedi.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1274"/>
-        <location filename="../client/desktop/management_tab.cc" line="1351"/>
-        <location filename="../client/desktop/management_tab.cc" line="1384"/>
+        <location filename="../client/desktop/management_tab.cc" line="1298"/>
+        <location filename="../client/desktop/management_tab.cc" line="1375"/>
+        <location filename="../client/desktop/management_tab.cc" line="1408"/>
+        <location filename="../client/desktop/management_tab.cc" line="1431"/>
         <source>Copy Row</source>
         <translation>Satırı Kopyala</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1275"/>
-        <location filename="../client/desktop/management_tab.cc" line="1352"/>
-        <location filename="../client/desktop/management_tab.cc" line="1385"/>
+        <location filename="../client/desktop/management_tab.cc" line="1299"/>
+        <location filename="../client/desktop/management_tab.cc" line="1376"/>
+        <location filename="../client/desktop/management_tab.cc" line="1409"/>
+        <location filename="../client/desktop/management_tab.cc" line="1432"/>
         <source>Copy Value</source>
         <translation>Değeri Kopyala</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1626"/>
+        <location filename="../client/desktop/management_tab.cc" line="1673"/>
         <source>Failed to delete the group.</source>
         <translation>Grup silinemedi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1665"/>
-        <location filename="../client/desktop/management_tab.cc" line="1722"/>
+        <location filename="../client/desktop/management_tab.cc" line="1712"/>
+        <location filename="../client/desktop/management_tab.cc" line="1769"/>
         <source>The database is not available.</source>
         <translation>Veritabanı kullanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1671"/>
+        <location filename="../client/desktop/management_tab.cc" line="1718"/>
         <source>Create Backup</source>
         <translation>Yedek Oluştur</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1688"/>
+        <location filename="../client/desktop/management_tab.cc" line="1735"/>
         <source>There is nothing to save.</source>
         <translation>Kaydedilecek bir şey yok.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2060"/>
+        <location filename="../client/desktop/management_tab.cc" line="2107"/>
         <source>Delete Hosts</source>
         <translation>Ana Bilgisayarları Sil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2281"/>
+        <location filename="../client/desktop/management_tab.cc" line="2328"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Ana bilgisayarın verileri hasarlı. Ana bilgisayarı düzenleyin ve verileri yeniden girin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2302"/>
+        <location filename="../client/desktop/management_tab.cc" line="2349"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Yönlendiricinin verileri hasarlı. Yönlendiriciyi düzenleyin ve verileri yeniden girin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1700"/>
+        <location filename="../client/desktop/management_tab.cc" line="1747"/>
         <source>Failed to create the backup.</source>
         <translation>Yedek oluşturulamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1728"/>
-        <location filename="../client/desktop/management_tab.cc" line="1754"/>
+        <location filename="../client/desktop/management_tab.cc" line="1775"/>
+        <location filename="../client/desktop/management_tab.cc" line="1801"/>
         <source>Restore from Backup</source>
         <translation>Yedekten Geri Yükle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1737"/>
+        <location filename="../client/desktop/management_tab.cc" line="1784"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Şu anda kayıtlı olan her şey silinecek ve yedekteki verilerle değiştirilecek. Devam edilsin mi?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1756"/>
+        <location filename="../client/desktop/management_tab.cc" line="1803"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Yedek başka bir kurulumda oluşturulmuş. Orada kullanılan ana parolayı girin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1781"/>
+        <location filename="../client/desktop/management_tab.cc" line="1828"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Yedek veri içermiyor, bu nedenle hiçbir şey değiştirilmedi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1789"/>
+        <location filename="../client/desktop/management_tab.cc" line="1836"/>
         <source>The file is not a valid backup.</source>
         <translation>Dosya geçerli bir yedek değil.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1793"/>
+        <location filename="../client/desktop/management_tab.cc" line="1840"/>
         <source>Failed to restore from the backup.</source>
         <translation>Yedekten geri yüklenemedi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1672"/>
-        <location filename="../client/desktop/management_tab.cc" line="1729"/>
+        <location filename="../client/desktop/management_tab.cc" line="1719"/>
+        <location filename="../client/desktop/management_tab.cc" line="1776"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia Yedeği (*.aspia-backup);;Tüm dosyalar (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1692"/>
+        <location filename="../client/desktop/management_tab.cc" line="1739"/>
         <source>Unable to write the file.</source>
         <translation>Dosya yazılamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1785"/>
+        <location filename="../client/desktop/management_tab.cc" line="1832"/>
         <source>Unable to read the file.</source>
         <translation>Dosya okunamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1705"/>
+        <location filename="../client/desktop/management_tab.cc" line="1752"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -5383,37 +5443,37 @@ Dışa aktarılan kayıtlı parolalar: %4
 Dışa aktarılan kimlik bilgileri: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1486"/>
+        <location filename="../client/desktop/management_tab.cc" line="1533"/>
         <source>Are you sure you want to delete space &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; bölümünü silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1506"/>
+        <location filename="../client/desktop/management_tab.cc" line="1553"/>
         <source>Failed to delete the space.</source>
         <translation>Bölüm silinemedi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1608"/>
+        <location filename="../client/desktop/management_tab.cc" line="1655"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the space root.</source>
         <translation>&quot;%1&quot; grubunu silmek istediğinizden emin misiniz? Bu gruba veya alt gruplarına atanmış ana bilgisayarlar bölüm köküne taşınacak.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1696"/>
+        <location filename="../client/desktop/management_tab.cc" line="1743"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Veritabanındaki bazı kayıtlar hasarlı. Bunları düzeltin veya silin, ardından yeniden deneyin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1773"/>
+        <location filename="../client/desktop/management_tab.cc" line="1820"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Dosyanın şifresi belirtilen parolayla çözülemiyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1777"/>
+        <location filename="../client/desktop/management_tab.cc" line="1824"/>
         <source>Unsupported file format version.</source>
         <translation>Desteklenmeyen dosya biçimi sürümü.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1798"/>
+        <location filename="../client/desktop/management_tab.cc" line="1845"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -5428,29 +5488,29 @@ Credentials imported: %5</source>
 İçe aktarılan kimlik bilgileri: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2209"/>
-        <location filename="../client/desktop/management_tab.cc" line="2240"/>
+        <location filename="../client/desktop/management_tab.cc" line="2256"/>
+        <location filename="../client/desktop/management_tab.cc" line="2287"/>
         <source>Copy Link</source>
         <translation>Linki Kopyala</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2228"/>
-        <location filename="../client/desktop/management_tab.cc" line="2262"/>
+        <location filename="../client/desktop/management_tab.cc" line="2275"/>
+        <location filename="../client/desktop/management_tab.cc" line="2309"/>
         <source>Unable to create a link for this host.</source>
         <translation>Bu ana bilgisayar için link oluşturulamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2303"/>
+        <location filename="../client/desktop/management_tab.cc" line="2350"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Bu ana bilgisayarla ilişkili yönlendirici silinmiş. Başka bir yönlendirici seçmek veya doğrudan bağlantıya geçmek için ana bilgisayarı düzenleyin.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2310"/>
+        <location filename="../client/desktop/management_tab.cc" line="2357"/>
         <source>The host has an invalid host ID.</source>
         <translation>Ana bilgisayarın ID&apos;si geçersiz.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2319"/>
+        <location filename="../client/desktop/management_tab.cc" line="2366"/>
         <source>The host has an incorrect address.</source>
         <translation>Ana bilgisayarın adresi hatalı.</translation>
     </message>
@@ -6301,6 +6361,91 @@ Credentials imported: %5</source>
         <location filename="../client/android/remote_widget.cc" line="920"/>
         <source>Chat</source>
         <translation>Sohbet</translation>
+    </message>
+</context>
+<context>
+    <name>RouterAccessLogWidget</name>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="37"/>
+        <source>From</source>
+        <translation>Başlangıç</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="51"/>
+        <source>To</source>
+        <translation>Bitiş</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="78"/>
+        <source>User</source>
+        <translation>Kullanıcı</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="94"/>
+        <source>Address or computer name of the client</source>
+        <translation>İstemcinin adresi veya bilgisayar adı</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="97"/>
+        <source>Client</source>
+        <translation>İstemci</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="113"/>
+        <source>ID, computer name or address of the host</source>
+        <translation>Ana bilgisayarın ID&apos;si, bilgisayar adı veya adresi</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="116"/>
+        <source>Host</source>
+        <translation>Ana Bilgisayar</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="132"/>
+        <source>Reset filter</source>
+        <translation>Filtreyi sıfırla</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="175"/>
+        <source>Previous page</source>
+        <translation>Önceki sayfa</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="178"/>
+        <source>Previous</source>
+        <translation>Önceki</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="196"/>
+        <source>Next page</source>
+        <translation>Sonraki sayfa</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="199"/>
+        <source>Next</source>
+        <translation>Sonraki</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="210"/>
+        <source>Items per page:</source>
+        <translation>Sayfa başına öğe:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="94"/>
+        <source>Any</source>
+        <translation>Sınırsız</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="99"/>
+        <source>All Session Types</source>
+        <translation>Tüm oturum türleri</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="455"/>
+        <source>%n entry(s)</source>
+        <translation>
+            <numerusform>%n kayıt</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -8712,116 +8857,124 @@ Credentials imported: %5</source>
     <name>Sidebar</name>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="115"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="154"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="155"/>
         <source>Local</source>
         <translation>Yerel</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="179"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="240"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="292"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="180"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="241"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="293"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Veriler okunamadı. Liste güncel olmayabilir.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="598"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="599"/>
         <source>Change Password</source>
         <translation>Parolayı Değiştir</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="606"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="607"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Parola %n karakterden kısa olmamalıdır.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="607"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="608"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>Parola %n karakteri aşmamalıdır.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="615"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="616"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Girdiğiniz parola güvenlik gereksinimlerini karşılamıyor!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="616"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="617"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Parola küçük ve büyük harfler ile rakamlar içermeli ve %n karakterden kısa olmamalıdır.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="619"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="620"/>
         <source>Do you want to enter a different password?</source>
         <translation>Farklı bir parola girmek ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="642"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="643"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>Parola değiştiriliyor. Oturumun yeniden açılması bekleniyor...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="840"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="841"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; grubunu silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="853"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="854"/>
         <source>Unable to remove group</source>
         <translation>Grup kaldırılamıyor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="918"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="919"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; yönlendiricisini silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1509"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1515"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Seçilen üst grupta bu ada sahip bir grup zaten var.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1616"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1622"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>Seçilen grupta aynı adlara sahip ana bilgisayarlar zaten bulunduğundan, seçilen ana bilgisayarlardan %n tanesi taşınmadı.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1624"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1824"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1630"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1830"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>Seçilen ana bilgisayarlardan %n tanesi taşınamadı.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1499"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1518"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1721"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1524"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1727"/>
         <source>Failed to move the group.</source>
         <translation>Grup taşınamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1584"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>Ana bilgisayarlar seçilen gruba taşınamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1615"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1621"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Seçilen grupta bu ada sahip bir ana bilgisayar zaten var.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1577"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1623"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1823"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1583"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1629"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1829"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Ana bilgisayar seçilen gruba taşınamadı.</translation>
+    </message>
+</context>
+<context>
+    <name>SidebarRouterAccessLog</name>
+    <message>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="216"/>
+        <source>Access Log</source>
+        <translation>Erişim Günlüğü</translation>
     </message>
 </context>
 <context>
@@ -8843,7 +8996,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterQsHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="234"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="243"/>
         <source>Quick Support</source>
         <translation>Quick Support</translation>
     </message>
@@ -8851,7 +9004,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterRelays</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="216"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="225"/>
         <source>Relays</source>
         <translation>Aktarıcılar</translation>
     </message>
@@ -8859,7 +9012,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterTempHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="225"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="234"/>
         <source>Unapproved Hosts</source>
         <translation>Onaylanmamış Ana Bilgisayarlar</translation>
     </message>
