@@ -1828,13 +1828,13 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
-        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
-        <translation>Якщо комп&apos;ютер не в домені, введіть ім&apos;я користувача, наприклад %1.</translation>
+        <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
+        <translation>Введіть ім&apos;я користувача, наприклад %1. На комп&apos;ютері в домені це доменний обліковий запис.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
-        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
-        <translation>Для доменного облікового запису введіть домен та ім&apos;я користувача, наприклад %1 або %2.</translation>
+        <source>For an account of another domain, add the domain, for example %1 or %2.</source>
+        <translation>Для облікового запису іншого домену вкажіть домен, наприклад %1 або %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>

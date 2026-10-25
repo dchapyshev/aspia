@@ -1828,13 +1828,13 @@ Hasło: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
-        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
-        <translation>Jeśli komputer nie należy do domeny, wprowadź nazwę użytkownika, na przykład %1.</translation>
+        <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
+        <translation>Wprowadź nazwę użytkownika, na przykład %1. Na komputerze w domenie jest to konto domenowe.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
-        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
-        <translation>Dla konta domenowego wprowadź domenę i nazwę użytkownika, na przykład %1 lub %2.</translation>
+        <source>For an account of another domain, add the domain, for example %1 or %2.</source>
+        <translation>Dla konta z innej domeny dodaj domenę, na przykład %1 lub %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>

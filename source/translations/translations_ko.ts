@@ -1818,13 +1818,13 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
-        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
-        <translation>컴퓨터가 도메인에 속해 있지 않으면 사용자 이름을 입력하십시오(예: %1).</translation>
+        <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
+        <translation>사용자 이름을 입력하십시오(예: %1). 도메인에 속한 컴퓨터에서는 도메인 계정으로 처리됩니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
-        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
-        <translation>도메인 계정인 경우 도메인과 사용자 이름을 입력하십시오(예: %1 또는 %2).</translation>
+        <source>For an account of another domain, add the domain, for example %1 or %2.</source>
+        <translation>다른 도메인의 계정인 경우 도메인을 추가하십시오(예: %1 또는 %2).</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>

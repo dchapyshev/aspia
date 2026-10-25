@@ -1818,13 +1818,13 @@ Parola: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
-        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
-        <translation>Bilgisayar bir etki alanında değilse, kullanıcı adını girin, örneğin %1.</translation>
+        <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
+        <translation>Kullanıcı adını girin, örneğin %1. Etki alanındaki bilgisayarda bu bir etki alanı hesabıdır.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
-        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
-        <translation>Etki alanı hesabı için etki alanını ve kullanıcı adını girin, örneğin %1 veya %2.</translation>
+        <source>For an account of another domain, add the domain, for example %1 or %2.</source>
+        <translation>Başka bir etki alanının hesabı için etki alanını ekleyin, örneğin %1 veya %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>

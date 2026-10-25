@@ -1823,13 +1823,13 @@ Wachtwoord: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
-        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
-        <translation>Als de computer niet in een domein zit, voer dan de gebruikersnaam in, bijvoorbeeld %1.</translation>
+        <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
+        <translation>Voer de gebruikersnaam in, bijvoorbeeld %1. Op een computer in een domein is dit een domeinaccount.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
-        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
-        <translation>Voer voor een domeinaccount het domein en de gebruikersnaam in, bijvoorbeeld %1 of %2.</translation>
+        <source>For an account of another domain, add the domain, for example %1 or %2.</source>
+        <translation>Voeg voor een account van een ander domein het domein toe, bijvoorbeeld %1 of %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>

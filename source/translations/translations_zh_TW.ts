@@ -1818,13 +1818,13 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
-        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
-        <translation>如果電腦不在網域中，輸入使用者名稱，例如 %1。</translation>
+        <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
+        <translation>輸入使用者名稱，例如 %1。在網域中的電腦上，這是網域帳戶。</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
-        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
-        <translation>對於網域帳戶，輸入網域和使用者名稱，例如 %1 或 %2。</translation>
+        <source>For an account of another domain, add the domain, for example %1 or %2.</source>
+        <translation>對於其他網域的帳戶，加上網域，例如 %1 或 %2。</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>

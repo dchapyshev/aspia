@@ -1823,13 +1823,13 @@ Palavra-passe: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
-        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
-        <translation>Se o computador não estiver num domínio, introduza o nome de utilizador, por exemplo %1.</translation>
+        <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
+        <translation>Introduza o nome de utilizador, por exemplo %1. Num computador de um domínio, esta é uma conta de domínio.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
-        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
-        <translation>Para uma conta de domínio, introduza o domínio e o nome de utilizador, por exemplo %1 ou %2.</translation>
+        <source>For an account of another domain, add the domain, for example %1 or %2.</source>
+        <translation>Para uma conta de outro domínio, adicione o domínio, por exemplo %1 ou %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>

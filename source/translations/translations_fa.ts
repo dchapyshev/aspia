@@ -1818,13 +1818,13 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
-        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
-        <translation>اگر رایانه در دامنه نیست، نام کاربری را وارد کنید، مثلاً %1.</translation>
+        <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
+        <translation>نام کاربری را وارد کنید، مثلاً %1. در رایانه‌ای عضو دامنه، این یک حساب دامنه است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
-        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
-        <translation>برای حساب دامنه، دامنه و نام کاربری را وارد کنید، مثلاً %1 یا %2.</translation>
+        <source>For an account of another domain, add the domain, for example %1 or %2.</source>
+        <translation>برای حساب دامنه‌ای دیگر، دامنه را اضافه کنید، مثلاً %1 یا %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>

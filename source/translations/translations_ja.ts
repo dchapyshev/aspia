@@ -1818,13 +1818,13 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
-        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
-        <translation>コンピューターがドメインに参加していない場合は、ユーザー名を入力してください (例: %1)。</translation>
+        <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
+        <translation>ユーザー名を入力してください (例: %1)。ドメイン内のコンピューターでは、これはドメイン アカウントになります。</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
-        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
-        <translation>ドメイン アカウントの場合は、ドメインとユーザー名を入力してください (例: %1 または %2)。</translation>
+        <source>For an account of another domain, add the domain, for example %1 or %2.</source>
+        <translation>別のドメインのアカウントの場合は、ドメインを付けてください (例: %1 または %2)。</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>

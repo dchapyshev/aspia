@@ -1823,13 +1823,13 @@ Adgangskode: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
-        <source>If the computer is not in a domain, enter the user name, for example %1.</source>
-        <translation>Hvis computeren ikke er i et domæne, skal du indtaste brugernavnet, f.eks. %1.</translation>
+        <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
+        <translation>Indtast brugernavnet, f.eks. %1. På en computer i et domæne er dette en domænekonto.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
-        <source>For a domain account, enter the domain and the user name, for example %1 or %2.</source>
-        <translation>For en domænekonto skal du indtaste domænet og brugernavnet, f.eks. %1 eller %2.</translation>
+        <source>For an account of another domain, add the domain, for example %1 or %2.</source>
+        <translation>For en konto i et andet domæne skal du tilføje domænet, f.eks. %1 eller %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>

@@ -51,9 +51,9 @@ CredentialDialog::CredentialDialog(qint64 credential_id, QWidget* parent)
         "<tr><td valign=\"top\">&#8226;</td><td style=\"padding-left: 6px; padding-bottom: 3px;\">%1</td></tr>");
 
     ui->label_hint->setText("<table cellspacing=\"0\" cellpadding=\"0\">" +
-        row.arg(tr("If the computer is not in a domain, enter the user name, for example %1.")
+        row.arg(tr("Enter the user name, for example %1. On a computer in a domain, this is a domain account.")
                     .toHtmlEscaped().arg("<b>john</b>")) +
-        row.arg(tr("For a domain account, enter the domain and the user name, for example %1 or %2.")
+        row.arg(tr("For an account of another domain, add the domain, for example %1 or %2.")
                     .toHtmlEscaped().arg("<b>CORP\\john</b>", "<b>john@corp.com</b>")) +
         row.arg(tr("For a local account on a computer in a domain, add %1 before the name, for example %2.")
                     .toHtmlEscaped().arg("<b>.\\</b>", "<b>.\\john</b>")) +
