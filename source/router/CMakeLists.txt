@@ -29,6 +29,8 @@ list(APPEND SOURCE_ROUTER_CORE
     client_operator.h
     database.cc
     database.h
+    email_queue.cc
+    email_queue.h
     host.cc
     host.h
     migration_utils.cc
@@ -55,6 +57,7 @@ list(APPEND SOURCE_ROUTER_TESTS
     access_log_unittest.cc
     client_operator_unittest.cc
     database_unittest.cc
+    email_queue_unittest.cc
     host_lifecycle_unittest.cc
     host_unittest.cc
     loopback_channel.h

@@ -21,13 +21,14 @@
 
 #include <asio/steady_timer.hpp>
 
-#include <deque>
 #include <memory>
+#include <optional>
 #include <unordered_map>
 
 #include "base/scoped_qpointer.h"
 #include "base/net/curl_util.h"
 #include "base/threading/worker.h"
+#include "router/email_queue.h"
 
 class QSocketNotifier;
 
@@ -51,6 +52,7 @@ protected:
 private:
     struct Email
     {
+        qint64 id = 0;
         QString to;
         QByteArray data;
         qsizetype offset = 0;
@@ -70,7 +72,8 @@ private:
     static size_t readCallback(char* buffer, size_t size, size_t count, void* userp);
 
     void doSend(const QString& to, const QString& subject, const QString& text);
-    void sendFront();
+    void sendNext();
+    void sendCurrent();
     void scheduleRetry();
     void watchSocket(curl_socket_t socket, int what);
     void setMultiTimeout(long timeout_ms);
@@ -83,8 +86,10 @@ private:
     QByteArray from_;
     char error_[CURL_ERROR_SIZE] = {};
 
-    // The front email is the one being sent, or the one waiting for its retry.
-    std::deque<Email> queue_;
+    EmailQueue queue_;
+
+    // The email being sent, or the one waiting for its retry.
+    std::optional<Email> current_;
     TimePoint retry_time_ = TimePoint::max();
     Seconds retry_delay_;
 

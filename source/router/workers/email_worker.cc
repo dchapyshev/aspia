@@ -82,12 +82,13 @@ QByteArray encodeBody(const QString& text)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray makeMessage(const QByteArray& from, const QByteArray& to, const QString& subject, const QString& text)
+QByteArray makeMessage(const QByteArray& from, const QByteArray& to, const QString& subject,
+    const QString& text, qint64 time)
 {
     const QByteArray domain = from.mid(from.indexOf('@') + 1);
 
     QByteArray message;
-    message += "Date: " + QDateTime::currentDateTime().toString(Qt::RFC2822Date).toLatin1() + "\r\n";
+    message += "Date: " + QDateTime::fromSecsSinceEpoch(time).toString(Qt::RFC2822Date).toLatin1() + "\r\n";
     message += "From: " + from + "\r\n";
     message += "To: " + to + "\r\n";
     message += "Message-ID: <" + Random::byteArray(16).toHex() + "@" + domain + ">\r\n";
@@ -172,6 +173,12 @@ void EmailWorker::onPrepare()
 
     from_ = from.toLatin1();
 
+    if (!queue_.open(EmailQueue::filePath()))
+    {
+        LOG(ERROR) << "Unable to open the email queue, emails are not sent";
+        return;
+    }
+
     LOG(INFO) << "Emails are sent through" << encoded_url
               << (use_ssl == CURLUSESSL_ALL ? "with TLS" : "without TLS") << "from" << from_;
 
@@ -218,7 +225,8 @@ void EmailWorker::onPrepare()
 //--------------------------------------------------------------------------------------------------
 void EmailWorker::onStart()
 {
-    // Nothing
+    if (multi_)
+        sendNext();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -237,18 +245,14 @@ void EmailWorker::onStop()
         notifiers.setInterest(CURL_POLL_NONE);
     sockets_.clear();
 
-    if (!queue_.empty())
-    {
-        LOG(WARNING) << queue_.size() << "email(s) are not sent before the stop";
+    // While a retry waits the handle is not in the multi.
+    if (current_ && retry_time_ == TimePoint::max())
+        curl_multi_remove_handle(multi_->get(), curl_->get());
 
-        // While a retry waits the handle is not in the multi.
-        if (retry_time_ == TimePoint::max())
-            curl_multi_remove_handle(multi_->get(), curl_->get());
-    }
-
-    queue_.clear();
+    current_.reset();
     curl_.reset();
     multi_.reset();
+    queue_.close();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -258,7 +262,7 @@ void EmailWorker::onTimer(TimePoint now)
         return;
 
     retry_time_ = TimePoint::max();
-    sendFront();
+    sendCurrent();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -311,28 +315,47 @@ void EmailWorker::doSend(const QString& to, const QString& subject, const QStrin
         return;
     }
 
-    const QByteArray recipient = to.toLatin1();
-    const QByteArray envelope_recipient = "<" + recipient + ">";
-
-    Email& email = queue_.emplace_back();
-    email.to = to;
-    email.data = makeMessage(from_, recipient, subject, text);
-
-    if (!email.recipients.append(envelope_recipient.constData()))
+    if (!queue_.add(to, subject, text))
     {
-        LOG(ERROR) << "Unable to add recipient:" << to;
-        queue_.pop_back();
+        LOG(ERROR) << "Unable to queue email to" << to;
         return;
     }
 
-    if (queue_.size() == 1)
-        sendFront();
+    if (!current_)
+        sendNext();
 }
 
 //--------------------------------------------------------------------------------------------------
-void EmailWorker::sendFront()
+void EmailWorker::sendNext()
 {
-    Email& email = queue_.front();
+    EmailQueue::Record record;
+    if (!queue_.front(&record))
+        return;
+
+    const QByteArray recipient = record.to.toLatin1();
+    const QByteArray envelope_recipient = "<" + recipient + ">";
+
+    Email& email = current_.emplace();
+    email.id = record.id;
+    email.to = record.to;
+    email.data = makeMessage(from_, recipient, record.subject, record.text, record.time);
+
+    if (!email.recipients.append(envelope_recipient.constData()))
+    {
+        LOG(ERROR) << "Unable to add recipient:" << record.to;
+        scheduleRetry();
+        return;
+    }
+
+    sendCurrent();
+}
+
+//--------------------------------------------------------------------------------------------------
+void EmailWorker::sendCurrent()
+{
+    Email& email = *current_;
+    email.offset = 0;
+
     CURL* curl = curl_->get();
 
     curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, email.recipients.get());
@@ -350,7 +373,7 @@ void EmailWorker::sendFront()
 //--------------------------------------------------------------------------------------------------
 void EmailWorker::scheduleRetry()
 {
-    LOG(INFO) << "Email to" << queue_.front().to << "is retried in" << retry_delay_.count() << "seconds";
+    LOG(INFO) << "Email to" << current_->to << "is retried in" << retry_delay_.count() << "seconds";
 
     retry_time_ = Clock::now() + retry_delay_;
     retry_delay_ = std::min(retry_delay_ * 2, kMaxRetryDelay);
@@ -428,7 +451,7 @@ void EmailWorker::driveMulti(curl_socket_t socket, int action)
             continue;
 
         const CURLcode result = message->data.result;
-        const Email& email = queue_.front();
+        const Email& email = *current_;
 
         // The last reply of the server. A 5xx reply is a permanent refusal (RFC 5321), the email is
         // dropped so that it does not hold back the ones behind it. Everything else is retried.
@@ -455,9 +478,8 @@ void EmailWorker::driveMulti(curl_socket_t socket, int action)
         }
 
         retry_delay_ = kFirstRetryDelay;
-        queue_.pop_front();
-
-        if (!queue_.empty())
-            sendFront();
+        queue_.remove(email.id);
+        current_.reset();
+        sendNext();
     }
 }
