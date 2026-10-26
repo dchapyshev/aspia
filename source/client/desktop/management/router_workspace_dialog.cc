@@ -230,10 +230,6 @@ void RouterWorkspaceDialog::onWorkspaceListReceived(const RouterWorkspaceList& l
         LOG(ERROR) << "Unable to get the list of the workspaces:" << list.error_code;
         if (!model_->isLoaded() && !closing_)
         {
-            // Without the first list the dialog never leaves the loading state and every control
-            // stays disabled, so tell the operator and close instead of hanging silently. A failed
-            // refetch keeps the lists fetched before. |closing_| collapses the errors of the list
-            // requests into a single message.
             closing_ = true;
             MsgBox::warning(this, tr("Failed to get list of spaces."));
             reject();
@@ -276,9 +272,6 @@ void RouterWorkspaceDialog::onWorkspaceListReceived(const RouterWorkspaceList& l
         }
         else
         {
-            // On a refetch the fields follow the server only while the operator has not
-            // touched them: an edit in progress must not be thrown away, but an untouched
-            // field must not silently revert a rename made from another console either.
             if (!ui->edit_name->isModified())
                 ui->edit_name->setText(model_->serverName());
             if (!ui->edit_comment->document()->isModified())
@@ -419,9 +412,6 @@ void RouterWorkspaceDialog::onWorkspaceResultReceived(const proto::router::Works
 
     if (error_code == proto::router::kErrorConflict)
     {
-        // The workspace changed concurrently. The snapshots are refetched; the edits of the
-        // operator are kept by construction (see WorkspaceEditModel), so after a review the save
-        // can simply be repeated.
         LOG(ERROR) << "Workspace save rejected: concurrent change";
         setEnabled(true);
         refetchLists();
@@ -470,8 +460,6 @@ void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    // Disable the dialog while waiting for the server response so the operator cannot submit
-    // again or close-and-resubmit; re-enabled by onWorkspaceResultReceived on error.
     setEnabled(false);
 
     LOG(INFO) << "[ACTION] Submitting workspace (entry_id:" << entry_id_
@@ -726,9 +714,6 @@ void RouterWorkspaceDialog::refetchLists()
 //--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::rebuildLists()
 {
-    // A rebuild also runs on every refetch, and while another console is active the batched
-    // notifications trigger one every few seconds - so the selection and the scroll position of
-    // each list are carried over instead of being reset under the hands of the operator.
     const auto captureState = [](QListWidget* list, QVariant* selected, int* scroll)
     {
         QListWidgetItem* item = list->currentItem();

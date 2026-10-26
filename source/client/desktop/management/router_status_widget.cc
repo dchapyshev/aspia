@@ -191,8 +191,6 @@ void RouterStatusWidget::updateTwoFactorPrompt()
 
     ui->button_two_factor->setVisible(true);
 
-    // An account with no secret yet is walked through the enrollment first: the operator scans the
-    // code the router handed out and only then types what their application shows.
     if (prompt->otpauthUri().isEmpty())
     {
         ui->label_two_factor->setText(tr("The router is waiting for a two-factor code."));

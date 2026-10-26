@@ -168,8 +168,6 @@ void RouterHostDialog::onGroupListReceived(const RouterGroupList& list)
 
     if (list.error_code != proto::router::kErrorOk)
     {
-        // Without the group tree the dialog is unusable: the group combo stays empty and the
-        // OK button disabled. Tell the operator and close instead of hanging.
         LOG(ERROR) << "Unable to get the list of the groups:" << list.error_code;
         MsgBox::warning(this, tr("Failed to get list of groups."));
         reject();

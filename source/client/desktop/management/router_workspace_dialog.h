@@ -102,10 +102,6 @@ private:
     qint64 entry_id_ = 0;
     bool is_admin_ = false;
 
-    // The whole edit state machine (server snapshot, operator intents, effective membership,
-    // the revision the save is based on) lives in the model, where it is unit-tested; the dialog
-    // only feeds replies in and mirrors the state to the widgets. It is bound to the workspace it
-    // edits, so a dialog that created one for a host operation continues on a new model.
     std::unique_ptr<WorkspaceEditModel> model_;
 
     PageModel users_page_;

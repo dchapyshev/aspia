@@ -26,17 +26,6 @@
 #include <QString>
 #include <QStringList>
 
-// The complete edit state of a workspace dialog, with no UI and no networking - so every race
-// the dialog is exposed to is unit-testable. The state is the server-side snapshots (refreshed
-// on every refetch) plus the explicit edits of the operator on top of them; what is shown and
-// saved is computed from both, so a refetch never merges anything: the edits survive it by
-// construction, and a change made from another console is never silently overwritten - the
-// save carries baseRevision() and the router rejects it with "conflict" when the snapshot went
-// stale.
-//
-// Snapshots are written only by the apply*() calls fed from server replies; assembling a save
-// request must not mutate the model (see the dialog-snapshot rule) - a failed save retries
-// against the same state.
 class WorkspaceEditModel
 {
 public:
@@ -71,7 +60,7 @@ public:
     // must close.
     bool applyWorkspaceList(const QList<WorkspaceInfo>& workspaces);
 
-    // One page of the user list, the candidates the operator picks from.
+    // One page of the user list to pick the members from.
     void applyUserPage(const QList<User>& users);
 
     // The name of one member, looked up one record at a time: the membership of a workspace is
@@ -93,7 +82,7 @@ public:
     const QStringList& otherNames() const { return other_names_; }
 
     //----------------------------------------------------------------------------------------------
-    // Operator intents
+    // Edits in the form
     //----------------------------------------------------------------------------------------------
 
     void grantUser(qint64 user_id);
@@ -103,8 +92,8 @@ public:
     // Derived state
     //----------------------------------------------------------------------------------------------
 
-    // The server snapshot plus the edits of the operator. A user deleted meanwhile is dropped:
-    // the router would reject an entry for a user it cannot find.
+    // The server snapshot plus the edits in the form. A user deleted meanwhile is dropped, the
+    // router would reject it.
     QSet<qint64> effectiveAccessIds() const;
 
     // The membership of the workspace, whole. A member whose name has not arrived yet is listed
