@@ -35,12 +35,18 @@ namespace {
 using Result = RequestResult;
 
 //--------------------------------------------------------------------------------------------------
+bool hasValidEmail(const RouterUser& user)
+{
+    return user.email.isEmpty() || RouterUser::isValidEmail(user.email);
+}
+
+//--------------------------------------------------------------------------------------------------
 void handleAdd(Database& database, const proto::router::User& user, Result* result)
 {
     LOG(INFO) << "User add request:" << user.name();
 
     RouterUser new_user = RouterUser::parseFrom(user);
-    if (!new_user.isValid())
+    if (!new_user.isValid() || !hasValidEmail(new_user))
     {
         LOG(ERROR) << "Invalid user record:" << new_user.name;
         result->error_code = proto::router::kErrorInvalidData;
@@ -77,7 +83,7 @@ void handleModify(Database& database, const proto::router::User& user, Result* r
     // and the name are kept (see Database::modifyUser), so the fields it does not write are not
     // validated.
     const bool has_credentials = !new_user.salt.isEmpty() || !new_user.verifier.isEmpty();
-    if (has_credentials && !new_user.isValid())
+    if ((has_credentials && !new_user.isValid()) || !hasValidEmail(new_user))
     {
         LOG(ERROR) << "Invalid user record:" << new_user.name;
         result->error_code = proto::router::kErrorInvalidData;
@@ -236,6 +242,7 @@ void serializeUser(const RouterUser& user, proto::router::User* out)
     out->set_group(user.group.toStdString());
     out->set_sessions(user.sessions);
     out->set_flags(user.flags);
+    out->set_email(user.email.toStdString());
 
     // A presentation-only flag derived from whether the user has a confirmed TOTP secret on file.
     out->set_otp_active(!user.otp_secret.isEmpty());

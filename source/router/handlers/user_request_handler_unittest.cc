@@ -146,6 +146,29 @@ TEST_F(UserRequestHandlerTest, PropertyEditStopsNobody)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST_F(UserRequestHandlerTest, InvalidEmailIsRefused)
+{
+    RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_OPERATOR);
+    user.email = "bob example.com";
+    EXPECT_EQ(handle(makeRequest(proto::router::kCommandUserAdd, user)).error_code,
+              proto::router::kErrorInvalidData);
+
+    user.email = "bob@example.com";
+    ASSERT_EQ(handle(makeRequest(proto::router::kCommandUserAdd, user)).error_code,
+              proto::router::kErrorOk);
+    const RouterUser stored = findUser("bob");
+    EXPECT_EQ(stored.email, "bob@example.com");
+
+    RouterUser flags_only;
+    flags_only.entry_id = stored.entry_id;
+    flags_only.flags = User::ENABLED;
+    flags_only.email = "<bob@example.com>";
+    EXPECT_EQ(handle(makeRequest(proto::router::kCommandUserModify, flags_only)).error_code,
+              proto::router::kErrorInvalidData);
+    EXPECT_EQ(findUser("bob").email, "bob@example.com");
+}
+
+//--------------------------------------------------------------------------------------------------
 // A disabled account must not keep the sessions it opened while it was enabled. The tokens stay:
 // disabling is reversible, and the SRP gate holds them off while it lasts.
 TEST_F(UserRequestHandlerTest, DisablingAUserStopsTheirSessions)

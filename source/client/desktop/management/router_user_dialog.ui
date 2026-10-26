@@ -59,6 +59,13 @@
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QLabel" name="label_email">
+             <property name="text">
+              <string>Email:</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
          <item>
@@ -78,6 +85,9 @@
               <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
              </property>
             </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="edit_email"/>
            </item>
           </layout>
          </item>

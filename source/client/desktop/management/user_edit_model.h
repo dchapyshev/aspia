@@ -27,10 +27,6 @@ namespace proto::router {
 enum SessionType : int;
 } // namespace proto::router
 
-// The edit state of a user dialog, with no UI and no networking - unit-testable. The server
-// snapshot is written only by applySnapshot() (fed from list replies); the operator intents
-// live next to it and never overwrite it, so a failed save retries against the true server
-// state and an "unchanged" save can be told from a real edit (see the dialog-snapshot rule).
 class UserEditModel
 {
 public:
@@ -58,33 +54,26 @@ public:
 
     bool snapshotEnabled() const;
     proto::router::SessionType snapshotAccessLevel() const;
+    QString snapshotEmail() const;
 
     //----------------------------------------------------------------------------------------------
-    // Operator intents
+    // Edits in the form
     //----------------------------------------------------------------------------------------------
 
-    // The name/password editing began (true) or was reset by the initial load (false). While
-    // set, a refetch must not touch the name field.
     void setAccountChanged(bool changed) { account_changed_ = changed; }
     bool accountChanged() const { return account_changed_; }
 
-    // The operator toggled the enabled checkbox. An intent equal to the snapshot state clears
-    // itself: an undone edit is no edit, and the checkbox re-attaches to the refetches -
-    // otherwise a click-and-undo would silently overwrite a later concurrent change.
     void setEnabledIntent(bool enabled);
-
-    // What the checkbox must show: the operator intent while one is set, the server state
-    // otherwise.
     bool desiredEnabled() const;
 
     bool enabledTouched() const { return enabled_intent_.has_value(); }
 
-    // The operator picked a level in the combo box. Dissolves the same way as the enabled intent.
     void setAccessLevelIntent(proto::router::SessionType level);
-
-    // What the combo box must show: the operator intent while one is set, the server state
-    // otherwise (a new user starts as an operator).
     proto::router::SessionType desiredAccessLevel() const;
+
+    void setEmailIntent(const QString& email);
+    QString desiredEmail() const;
+    bool emailTouched() const { return email_intent_.has_value(); }
 
     //----------------------------------------------------------------------------------------------
     // Save
@@ -97,6 +86,7 @@ public:
 
     quint32 flagsForSave() const;
     quint32 sessionsForSave() const;
+    QString emailForSave() const;
 
 private:
     const qint64 entry_id_;
@@ -104,6 +94,7 @@ private:
     RouterUser snapshot_;
     std::optional<bool> enabled_intent_;
     std::optional<proto::router::SessionType> access_level_intent_;
+    std::optional<QString> email_intent_;
     bool account_changed_ = true; // Create mode edits the account by definition.
     bool loaded_ = false;
 };

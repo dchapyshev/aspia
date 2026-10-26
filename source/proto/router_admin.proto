@@ -124,6 +124,7 @@ message User
     uint32 sessions = 6;
     uint32 flags    = 7;
     bool otp_active = 8; // Read-only.
+    string email    = 9; // Empty in a modify request keeps the stored address.
 }
 
 // Either a page of the user list (|offset| and |count|, a zero count is refused, as is one over

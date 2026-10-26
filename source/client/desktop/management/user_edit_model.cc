@@ -38,12 +38,12 @@ bool UserEditModel::applySnapshot(const RouterUser& record, bool record_found)
 
         snapshot_ = record;
 
-        // The intent tracks the difference to the snapshot; the snapshot moved, so re-evaluate:
-        // an intent that now matches the server state dissolves into "no edit".
         if (enabled_intent_.has_value() && *enabled_intent_ == snapshotEnabled())
             enabled_intent_.reset();
         if (access_level_intent_.has_value() && *access_level_intent_ == snapshotAccessLevel())
             access_level_intent_.reset();
+        if (email_intent_.has_value() && *email_intent_ == snapshotEmail())
+            email_intent_.reset();
     }
 
     loaded_ = true;
@@ -64,6 +64,12 @@ proto::router::SessionType UserEditModel::snapshotAccessLevel() const
     if (snapshot_.sessions & proto::router::SESSION_TYPE_MANAGER)
         return proto::router::SESSION_TYPE_MANAGER;
     return proto::router::SESSION_TYPE_OPERATOR;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString UserEditModel::snapshotEmail() const
+{
+    return snapshot_.email;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -111,10 +117,32 @@ proto::router::SessionType UserEditModel::desiredAccessLevel() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void UserEditModel::setEmailIntent(const QString& email)
+{
+    if (isModifyMode() && email == snapshotEmail())
+    {
+        email_intent_.reset();
+        return;
+    }
+
+    email_intent_ = email;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString UserEditModel::desiredEmail() const
+{
+    if (email_intent_.has_value())
+        return *email_intent_;
+    if (isModifyMode())
+        return snapshotEmail();
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
 bool UserEditModel::isNoOpSave() const
 {
     return isModifyMode() && !account_changed_ && desiredEnabled() == snapshotEnabled() &&
-           desiredAccessLevel() == snapshotAccessLevel();
+           desiredAccessLevel() == snapshotAccessLevel() && emailForSave().isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -132,4 +160,12 @@ quint32 UserEditModel::sessionsForSave() const
     if (isModifyMode() && !access_level_intent_.has_value())
         return 0;
     return desiredAccessLevel();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString UserEditModel::emailForSave() const
+{
+    if (isModifyMode() && !email_intent_.has_value())
+        return QString();
+    return desiredEmail();
 }

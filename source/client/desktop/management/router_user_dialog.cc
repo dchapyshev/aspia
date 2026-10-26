@@ -97,8 +97,6 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
         setAccountChanged(true);
     });
 
-    // clicked() fires only on operator interaction, not on the programmatic setChecked of the
-    // list handler - exactly the boundary between an edit and the snapshot the model relies on.
     connect(ui->checkbox_disable, &QCheckBox::clicked, this, [this]()
     {
         model_.setEnabledIntent(!ui->checkbox_disable->isChecked());
@@ -108,6 +106,11 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
     {
         model_.setAccessLevelIntent(static_cast<proto::router::SessionType>(
             ui->combo_access_level->itemData(index).toInt()));
+    });
+
+    connect(ui->edit_email, &QLineEdit::textEdited, this, [this](const QString& text)
+    {
+        model_.setEmailIntent(text.trimmed());
     });
 
     connect(ui->button_reset_otp, &QPushButton::clicked,
@@ -146,9 +149,6 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
             reject();
     });
 
-    // The record can be changed from another console while the dialog is open (e.g. the user is
-    // disabled); without a refetch a later OK would write the stale snapshot back and silently
-    // undo that. The fields the operator has touched keep their edits (see onUserListReceived).
     connect(&controller, &RouterController::sig_usersChanged, this, [this](qint64 router_id)
     {
         if (router_id == router_id_)
@@ -198,16 +198,10 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
         LOG(ERROR) << "Unable to get the list of the users:" << list.error_code();
         if (!model_.isLoaded() && !closing_)
         {
-            // Without the list the dialog is unusable: the uniqueness check has no names, and in
-            // modify mode the form is never populated. Tell the operator and close instead of
-            // presenting an empty form as if it were real. closing_ collapses several failed
-            // replies (the ctor fetch plus refetches) into one message and one reject.
             closing_ = true;
             MsgBox::warning(this, tr("Failed to get list of users."));
             reject();
         }
-        // On a refetch keep the current snapshot: a transient error must not close the dialog
-        // under the hands of the operator.
         return;
     }
 
@@ -240,13 +234,12 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
 
     if (entry_id_ > 0)
     {
-        // The widgets mirror the model: the checkbox and the combo box show the operator intent
-        // while one is set and the server state otherwise; the name follows the server only
-        // while the operator has not started editing the account.
         ui->checkbox_disable->setChecked(!model_.desiredEnabled());
         setAccessLevel(model_.desiredAccessLevel());
         if (!model_.accountChanged() || initial_load)
             ui->edit_username->setText(model_.snapshot().name);
+        if (!model_.emailTouched())
+            ui->edit_email->setText(model_.desiredEmail());
 
         // The password fields must not be reset by a background refetch.
         if (initial_load)
@@ -367,9 +360,6 @@ void RouterUserDialog::onResetOtpResultReceived(const proto::router::UserResult&
     const std::string& error_code = result.error_code();
     if (error_code == proto::router::kErrorOk)
     {
-        // Side effect on the router side: every device token of the user was revoked too. The
-        // button stays: the user can start enrolling again at once, and a repeated reset is
-        // harmless.
         tokens_.clear();
         updateTokenTree();
         return;
@@ -430,9 +420,6 @@ void RouterUserDialog::onRevokeAllTokensClicked()
         return;
     }
 
-    // Snapshot the current ids so we can drop them from |tokens_| once the router confirms; the
-    // wire request itself carries an empty list which the router interprets as "drop every token
-    // of this user" atomically.
     pending_revoke_token_ids_.clear();
     pending_revoke_token_ids_.reserve(tokens_.size());
     for (const Token& token : std::as_const(tokens_))
@@ -494,10 +481,6 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    // Nothing was edited - do not echo the snapshot back: between the fetch and this click
-    // another console could have changed the record (e.g. disabled the user), and even an
-    // "unchanged" save would silently overwrite that. The model tells a real edit from an
-    // unchanged form against the current server snapshot.
     if (model_.isNoOpSave())
     {
         LOG(INFO) << "[ACTION] No changes - closing without a request";
@@ -506,9 +489,16 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    // The request is built in a local record: the snapshot inside the model is written only by
-    // onUserListReceived. Mutating it here would poison the no-op check above on the retry
-    // after a failed save - the intended change would read as "already applied".
+    const QString email = model_.desiredEmail();
+    if (!email.isEmpty() && !RouterUser::isValidEmail(email))
+    {
+        LOG(ERROR) << "Invalid email address:" << email;
+        MsgBox::warning(this, tr("The email address is invalid."));
+        ui->edit_email->selectAll();
+        ui->edit_email->setFocus();
+        return;
+    }
+
     RouterUser request;
 
     if (model_.accountChanged())
@@ -588,16 +578,13 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         request.sessions = model_.sessionsForSave();
         request.flags = model_.flagsForSave();
+        request.email = model_.emailForSave();
 
         submitWithNameCheck(request, username);
         return;
     }
     else
     {
-        // The credentials were not changed - do not echo the snapshot back. It could be out of
-        // date (the user rotated the password after this dialog was opened), and the router would
-        // treat the stale salt/verifier as a password change and revert the rotation. Empty
-        // fields keep the stored values.
         request = model_.snapshot();
         request.salt.clear();
         request.verifier.clear();
@@ -605,6 +592,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
     request.sessions = model_.sessionsForSave();
     request.flags = model_.flagsForSave();
+    request.email = model_.emailForSave();
 
     submitUser(request);
 }
@@ -676,10 +664,6 @@ void RouterUserDialog::submitUser(const RouterUser& request)
         return;
     }
 
-    // A rotation of our own credentials ends this session and the reply announcing it dies with
-    // the channel, so only a refusal is ever seen here. The client signs in again by itself and
-    // needs the new credentials for that, so they are stored right away and the old ones are put
-    // back if the router refuses.
     if (model_.accountChanged() && entry_id_ == session->userId())
     {
         const QString old_user_name = session->config().username();
@@ -763,9 +747,6 @@ void RouterUserDialog::updateLoadingState()
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::updateTokenTree()
 {
-    // A rebuild also runs on every refetch (batched notifications arrive every few seconds
-    // while another console is active), so the selection and the scroll position are carried
-    // over - same reasoning as the lists of the workspace dialog.
     QVariant selected_token;
     if (QTreeWidgetItem* current = ui->tree_tokens->currentItem())
         selected_token = current->data(0, Qt::UserRole);

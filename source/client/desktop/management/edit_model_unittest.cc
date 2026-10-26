@@ -386,6 +386,49 @@ TEST(UserEditModel, UntouchedLevelIsSentAsZero)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The address follows the refetches until the operator edits it, an edit back to the server value
+// is no edit, and an untouched address goes out empty, which the router reads as "keep the stored
+// one", so a stale snapshot cannot revert a concurrent change. An emptied field is a no-op too, an
+// address cannot be removed.
+TEST(UserEditModel, UntouchedEmailIsSentAsEmpty)
+{
+    UserEditModel model(kClientId);
+    RouterUser record = makeRecord(User::ENABLED);
+    record.email = "bob@example.com";
+    ASSERT_TRUE(model.applySnapshot(record, true));
+    model.setAccountChanged(false);
+
+    EXPECT_EQ(model.desiredEmail(), "bob@example.com");
+    EXPECT_TRUE(model.emailForSave().isEmpty());
+    EXPECT_TRUE(model.isNoOpSave());
+
+    record.email = "robert@example.com";
+    ASSERT_TRUE(model.applySnapshot(record, true));
+    EXPECT_EQ(model.desiredEmail(), "robert@example.com");
+    EXPECT_TRUE(model.isNoOpSave());
+
+    model.setEmailIntent("bob@example.com");
+    EXPECT_TRUE(model.emailTouched());
+    EXPECT_FALSE(model.isNoOpSave());
+    EXPECT_EQ(model.emailForSave(), "bob@example.com");
+
+    model.setEmailIntent(QString());
+    EXPECT_TRUE(model.emailTouched());
+    EXPECT_TRUE(model.desiredEmail().isEmpty());
+    EXPECT_TRUE(model.isNoOpSave());
+
+    model.setEmailIntent("robert@example.com");
+    EXPECT_FALSE(model.emailTouched());
+    EXPECT_TRUE(model.isNoOpSave());
+
+    UserEditModel create(0);
+    ASSERT_TRUE(create.applySnapshot(RouterUser(), false));
+    EXPECT_TRUE(create.emailForSave().isEmpty());
+    create.setEmailIntent("new@example.com");
+    EXPECT_EQ(create.emailForSave(), "new@example.com");
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(UserEditModel, DeletedRecordIsDetected)
 {
     UserEditModel model(kClientId);
