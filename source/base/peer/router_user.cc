@@ -37,6 +37,29 @@ RouterUser RouterUser::create(const QString& name, const SecureString& password)
 
 //--------------------------------------------------------------------------------------------------
 // static
+bool RouterUser::isValidEmail(const QString& email)
+{
+    if (email.isEmpty() || static_cast<size_t>(email.size()) > kMaxEmailLength)
+        return false;
+
+    const qsizetype at = email.indexOf('@');
+    if (at <= 0 || at != email.lastIndexOf('@') || at == email.size() - 1)
+        return false;
+
+    for (QChar ch : email)
+    {
+        if (ch.unicode() <= 0x20 || ch.unicode() >= 0x7F)
+            return false;
+
+        if (QByteArrayView("<>()[],;:\\\"").contains(static_cast<char>(ch.unicode())))
+            return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 RouterUser RouterUser::parseFrom(const proto::router::User& serialized_user)
 {
     RouterUser user;
@@ -48,6 +71,7 @@ RouterUser RouterUser::parseFrom(const proto::router::User& serialized_user)
     user.verifier = QByteArray::fromStdString(serialized_user.verifier());
     user.sessions = serialized_user.sessions();
     user.flags    = serialized_user.flags();
+    user.email    = QString::fromStdString(serialized_user.email());
 
     return user;
 }
@@ -64,6 +88,7 @@ proto::router::User RouterUser::serialize() const
     user.set_verifier(verifier.toStdString());
     user.set_sessions(sessions);
     user.set_flags(flags);
+    user.set_email(email.toStdString());
 
     return user;
 }

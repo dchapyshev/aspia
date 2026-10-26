@@ -24,6 +24,30 @@
 #include "proto/router_admin.h"
 
 // ============================================================================
+// isValidEmail
+// ============================================================================
+
+TEST(router_user_test, is_valid_email_accepts_a_plain_address)
+{
+    EXPECT_TRUE(RouterUser::isValidEmail("bob@example.com"));
+    EXPECT_TRUE(RouterUser::isValidEmail("first.last+tag@sub.example.org"));
+}
+
+TEST(router_user_test, is_valid_email_rejects_an_unusable_address)
+{
+    EXPECT_FALSE(RouterUser::isValidEmail(""));
+    EXPECT_FALSE(RouterUser::isValidEmail("bob"));
+    EXPECT_FALSE(RouterUser::isValidEmail("@example.com"));
+    EXPECT_FALSE(RouterUser::isValidEmail("bob@"));
+    EXPECT_FALSE(RouterUser::isValidEmail("bob@@example.com"));
+    EXPECT_FALSE(RouterUser::isValidEmail("bob smith@example.com"));
+    EXPECT_FALSE(RouterUser::isValidEmail("bob@example.com\r\nBcc: x@example.com"));
+    EXPECT_FALSE(RouterUser::isValidEmail("<bob@example.com>"));
+    EXPECT_FALSE(RouterUser::isValidEmail(QString(QChar(0x0431)) + "@example.com"));
+    EXPECT_FALSE(RouterUser::isValidEmail(QString(250, 'a') + "@example.com"));
+}
+
+// ============================================================================
 // create / isValid
 // ============================================================================
 
@@ -117,6 +141,10 @@ TEST(router_user_test, serialize_parseFrom_roundtrip)
     EXPECT_EQ(restored.verifier, original.verifier);
     EXPECT_EQ(restored.sessions, original.sessions);
     EXPECT_EQ(restored.flags, original.flags);
+    EXPECT_TRUE(restored.email.isEmpty());
+
+    original.email = "bob@example.com";
+    EXPECT_EQ(RouterUser::parseFrom(original.serialize()).email, "bob@example.com");
 }
 
 TEST(router_user_test, serialize_default_router_user)
@@ -131,6 +159,7 @@ TEST(router_user_test, serialize_default_router_user)
     EXPECT_TRUE(proto_user.verifier().empty());
     EXPECT_EQ(proto_user.sessions(), 0u);
     EXPECT_EQ(proto_user.flags(), 0u);
+    EXPECT_TRUE(proto_user.email().empty());
 }
 
 TEST(router_user_test, parseFrom_preserves_all_fields)

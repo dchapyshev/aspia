@@ -37,7 +37,11 @@ public:
     RouterUser(RouterUser&& other) noexcept = default;
     RouterUser& operator=(RouterUser&& other) noexcept = default;
 
+    static const size_t kMaxEmailLength = 254;
+
     static RouterUser create(const QString& name, const SecureString& password);
+
+    static bool isValidEmail(const QString& email);
 
     static RouterUser parseFrom(const proto::router::User& serialized_user);
     proto::router::User serialize() const;
@@ -49,6 +53,7 @@ public:
 
     QByteArray otp_secret;
     quint64 otp_counter = 0;
+    QString email;
 };
 
 #endif // BASE_PEER_ROUTER_USER_H
