@@ -112,3 +112,42 @@ TEST_F(RouterSettingsTest, AccessLogDaysThatAreNotANumberAreTheDefault)
     writeConfig("[router]\naccess_log_days=abc\n");
     EXPECT_EQ(Settings().accessLogDays(), 90);
 }
+
+//--------------------------------------------------------------------------------------------------
+// --create-config writes the section with an empty server, so the emails stay off until an
+// administrator fills it in.
+TEST_F(RouterSettingsTest, ResetWritesTheSmtpDefaults)
+{
+    {
+        Settings settings;
+        settings.reset();
+        ASSERT_TRUE(settings.sync());
+    }
+
+    Settings settings;
+    EXPECT_TRUE(settings.smtpServer().isEmpty());
+    EXPECT_EQ(settings.smtpPort(), 587);
+    EXPECT_EQ(settings.smtpSecurity(), Settings::SmtpSecurity::STARTTLS);
+
+    QFile file(file_path_);
+    ASSERT_TRUE(file.open(QFile::ReadOnly));
+    EXPECT_TRUE(file.readAll().contains("[smtp]"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(RouterSettingsTest, SmtpSecurityReadBack)
+{
+    const struct { const char* value; Settings::SmtpSecurity security; } kCases[] = {
+        { "none", Settings::SmtpSecurity::NONE },
+        { "starttls", Settings::SmtpSecurity::STARTTLS },
+        { "tls", Settings::SmtpSecurity::TLS },
+        { "ssl", Settings::SmtpSecurity::STARTTLS },
+        { "", Settings::SmtpSecurity::STARTTLS }
+    };
+
+    for (const auto& test_case : kCases)
+    {
+        writeConfig(QByteArray("[smtp]\nsecurity=") + test_case.value + "\n");
+        EXPECT_EQ(Settings().smtpSecurity(), test_case.security) << test_case.value;
+    }
+}

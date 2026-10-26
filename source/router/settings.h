@@ -25,6 +25,7 @@
 #include "base/ini_file.h"
 
 class SecureByteArray;
+class SecureString;
 
 class Settings
 {
@@ -89,6 +90,26 @@ public:
 
     void setAccessLogDays(quint16 days);
     quint16 accessLogDays() const;
+
+    enum class SmtpSecurity { NONE, STARTTLS, TLS };
+
+    void setSmtpServer(const QString& server);
+    QString smtpServer() const;
+
+    void setSmtpPort(quint16 port);
+    quint16 smtpPort() const;
+
+    void setSmtpSecurity(SmtpSecurity security);
+    SmtpSecurity smtpSecurity() const;
+
+    void setSmtpUser(const QString& user);
+    QString smtpUser() const;
+
+    void setSmtpPassword(const SecureString& password);
+    SecureString smtpPassword() const;
+
+    void setSmtpFrom(const QString& address);
+    QString smtpFrom() const;
 
 private:
     void setListenInterface(const QByteArray& section, const QString& iface);

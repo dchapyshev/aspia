@@ -21,6 +21,7 @@
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/crypto/secure_byte_array.h"
+#include "base/crypto/secure_string.h"
 #include "base/files/base_paths.h"
 #include "base/net/net_utils.h"
 
@@ -33,6 +34,7 @@ const QByteArray kClientSection = "client"_ba;
 const QByteArray kHostSection = "host"_ba;
 const QByteArray kRelaySection = "relay"_ba;
 const QByteArray kRouterSection = "router"_ba;
+const QByteArray kSmtpSection = "smtp"_ba;
 const QByteArray kStunSection = "stun"_ba;
 
 const QByteArray kListenInterfaceKey = "listen_interface"_ba;
@@ -42,6 +44,22 @@ const QByteArray kWhiteListKey = "white_list"_ba;
 constexpr auto kWhiteListSeparator = ',';
 
 constexpr quint16 kDefaultAccessLogDays = 90;
+
+constexpr quint16 kDefaultSmtpPort = 587;
+constexpr Settings::SmtpSecurity kDefaultSmtpSecurity = Settings::SmtpSecurity::STARTTLS;
+
+//--------------------------------------------------------------------------------------------------
+const char* smtpSecurityName(Settings::SmtpSecurity security)
+{
+    switch (security)
+    {
+        case Settings::SmtpSecurity::NONE: return "none";
+        case Settings::SmtpSecurity::STARTTLS: return "starttls";
+        case Settings::SmtpSecurity::TLS: return "tls";
+    }
+
+    return "starttls";
+}
 
 //--------------------------------------------------------------------------------------------------
 bool isValidWhiteListEntry(const QString& entry)
@@ -111,6 +129,12 @@ void Settings::reset()
     setEnableStun(true);
     setStunPort(kDefaultStunPort);
     setAccessLogDays(kDefaultAccessLogDays);
+    setSmtpServer(QString());
+    setSmtpPort(kDefaultSmtpPort);
+    setSmtpSecurity(kDefaultSmtpSecurity);
+    setSmtpUser(QString());
+    setSmtpPassword(SecureString());
+    setSmtpFrom(QString());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -317,6 +341,87 @@ quint16 Settings::accessLogDays() const
         LOG(WARNING) << "Access log days" << days << "out of range, using" << clamped;
 
     return static_cast<quint16>(clamped);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setSmtpServer(const QString& server)
+{
+    ini_.setStringValue(kSmtpSection, "server", server);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Settings::smtpServer() const
+{
+    return ini_.stringValue(kSmtpSection, "server");
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setSmtpPort(quint16 port)
+{
+    ini_.setUInt16Value(kSmtpSection, "port", port);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 Settings::smtpPort() const
+{
+    return ini_.uint16Value(kSmtpSection, "port", kDefaultSmtpPort);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setSmtpSecurity(SmtpSecurity security)
+{
+    ini_.setStringValue(kSmtpSection, "security", smtpSecurityName(security));
+}
+
+//--------------------------------------------------------------------------------------------------
+Settings::SmtpSecurity Settings::smtpSecurity() const
+{
+    const QString value = ini_.stringValue(kSmtpSection, "security", smtpSecurityName(kDefaultSmtpSecurity));
+
+    for (SmtpSecurity security : { SmtpSecurity::NONE, SmtpSecurity::STARTTLS, SmtpSecurity::TLS })
+    {
+        if (value == smtpSecurityName(security))
+            return security;
+    }
+
+    LOG(WARNING) << "Unknown SMTP security" << value << "is replaced by" << smtpSecurityName(kDefaultSmtpSecurity);
+    return kDefaultSmtpSecurity;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setSmtpUser(const QString& user)
+{
+    ini_.setStringValue(kSmtpSection, "user", user);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Settings::smtpUser() const
+{
+    return ini_.stringValue(kSmtpSection, "user");
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setSmtpPassword(const SecureString& password)
+{
+    ini_.setStringValue(kSmtpSection, "password", password.toString());
+}
+
+//--------------------------------------------------------------------------------------------------
+SecureString Settings::smtpPassword() const
+{
+    return SecureString(ini_.stringValue(kSmtpSection, "password"));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setSmtpFrom(const QString& address)
+{
+    ini_.setStringValue(kSmtpSection, "from", address);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Settings::smtpFrom() const
+{
+    return ini_.stringValue(kSmtpSection, "from");
 }
 
 //--------------------------------------------------------------------------------------------------
