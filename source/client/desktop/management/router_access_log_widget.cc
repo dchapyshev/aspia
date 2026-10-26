@@ -272,7 +272,7 @@ void RouterAccessLogWidget::onAccessLogReceived(const proto::router::AccessLogLi
     if (current_row >= 0)
         ui->tree_log->setCurrentIndex(model_->index(current_row, 0));
 
-    const bool page_moved = page_.setTotalCount(qBound<qint64>(0, list.total_count(), kMaxEntryCount));
+    const bool page_moved = page_.setTotalCount(qMin<qint64>(list.total_count(), kMaxEntryCount));
     updatePagination();
 
     // The page the list was fetched for is gone, so nothing would be shown without another fetch.
