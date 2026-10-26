@@ -56,6 +56,8 @@ public:
     void restoreState(const QByteArray& state) final;
     bool canReload() const final { return true; }
     void reload() final;
+    bool canSave() const final { return true; }
+    void save() final;
 
 signals:
     void sig_contextMenu(const QPoint& global_pos, int column);

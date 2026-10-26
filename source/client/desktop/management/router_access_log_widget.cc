@@ -21,16 +21,24 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDataStream>
+#include <QDateTime>
 #include <QHeaderView>
 #include <QIODevice>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QLocale>
 #include <QMenu>
+#include <QSaveFile>
 #include <QSignalBlocker>
 #include <QTimer>
 
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "client/router_controller.h"
+#include "client/desktop/file_dialog.h"
 #include "client/desktop/management/ui_router_access_log_widget.h"
+#include "common/desktop/msg_box.h"
 #include "common/desktop/session_type.h"
 #include "proto/peer.h"
 #include "proto/router_admin.h"
@@ -88,13 +96,18 @@ RouterAccessLogWidget::RouterAccessLogWidget(QWidget* parent)
     connect(ui->button_prev, &QToolButton::clicked, this, &RouterAccessLogWidget::onPrevClicked);
     connect(ui->button_next, &QToolButton::clicked, this, &RouterAccessLogWidget::onNextClicked);
 
-    // The lowest date of an edit stands for an open end of the period.
-    const QDate min_date(2000, 1, 1);
-    for (QDateEdit* edit : { ui->date_filter_from, ui->date_filter_to })
+    // A bound of the period is set only while its box is checked.
+    const std::pair<QCheckBox*, QDateEdit*> kBounds[] =
     {
-        edit->setMinimumDate(min_date);
-        edit->setSpecialValueText(tr("Any"));
-        edit->setDate(min_date);
+        { ui->check_filter_from, ui->date_filter_from },
+        { ui->check_filter_to, ui->date_filter_to }
+    };
+
+    for (const auto& [check, edit] : kBounds)
+    {
+        edit->setDate(QDate::currentDate());
+        connect(check, &QCheckBox::toggled, edit, &QDateEdit::setEnabled);
+        connect(check, &QCheckBox::toggled, this, &RouterAccessLogWidget::onFilterChanged);
         connect(edit, &QDateEdit::dateChanged, this, &RouterAccessLogWidget::onFilterChanged);
     }
 
@@ -255,6 +268,64 @@ void RouterAccessLogWidget::reload()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterAccessLogWidget::save()
+{
+    LOG(INFO) << "[ACTION] Save access log to file";
+
+    QString selected_filter;
+    QString file_path = FileDialog::getSaveFileName(
+        this, tr("Save File"), tr("JSON files (*.json)"), &selected_filter);
+    if (file_path.isEmpty() || selected_filter.isEmpty())
+    {
+        LOG(INFO) << "No selected path";
+        return;
+    }
+
+    QSaveFile file(file_path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        LOG(INFO) << "Unable to open file:" << file.errorString();
+        MsgBox::warning(this, tr("Could not open file for writing."));
+        return;
+    }
+
+    QJsonArray root_array;
+
+    for (int i = 0; i < model_->rowCount(); ++i)
+    {
+        const proto::router::AccessLogEntry& entry = *model_->entryAt(i);
+
+        QJsonObject entry_object;
+
+        entry_object.insert("time", QLocale::system().toString(
+            QDateTime::fromSecsSinceEpoch(entry.time()), QLocale::LongFormat));
+        entry_object.insert("user", QString::fromStdString(entry.user_name()));
+        entry_object.insert("session_type", model_->data(
+            model_->index(i, static_cast<int>(AccessLogListModel::Column::SESSION_TYPE)), Qt::DisplayRole).toString());
+        entry_object.insert("client_ip_address", QString::fromStdString(entry.client_address()));
+        entry_object.insert("client_computer_name", QString::fromStdString(entry.client_computer_name()));
+        entry_object.insert("client_version", QString::fromStdString(entry.client_version()));
+        entry_object.insert("client_operating_system", QString::fromStdString(entry.client_os_name()));
+        entry_object.insert("host_id", QString::number(entry.host_id()));
+        entry_object.insert("host_computer_name", QString::fromStdString(entry.host_computer_name()));
+        entry_object.insert("host_ip_address", QString::fromStdString(entry.host_address()));
+
+        root_array.append(entry_object);
+    }
+
+    QJsonObject root_object;
+    root_object.insert("access_log", root_array);
+
+    const QByteArray json = QJsonDocument(root_object).toJson();
+    if (file.write(json) != json.size() || !file.commit())
+    {
+        LOG(INFO) << "Unable to write file:" << file.errorString();
+        MsgBox::warning(this, tr("Unable to write file."));
+        return;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterAccessLogWidget::onAccessLogReceived(const proto::router::AccessLogList& list)
 {
     if (list.error_code() != proto::router::kErrorOk)
@@ -400,13 +471,11 @@ proto::router::AccessLogFilter RouterAccessLogWidget::filter() const
 
     // The period takes whole days of the local time, from the start of the first one to the end of
     // the last one.
-    const QDate from = ui->date_filter_from->date();
-    if (from != ui->date_filter_from->minimumDate())
-        filter.set_time_from(from.startOfDay().toSecsSinceEpoch());
+    if (ui->check_filter_from->isChecked())
+        filter.set_time_from(ui->date_filter_from->date().startOfDay().toSecsSinceEpoch());
 
-    const QDate to = ui->date_filter_to->date();
-    if (to != ui->date_filter_to->minimumDate())
-        filter.set_time_to(to.addDays(1).startOfDay().toSecsSinceEpoch());
+    if (ui->check_filter_to->isChecked())
+        filter.set_time_to(ui->date_filter_to->date().addDays(1).startOfDay().toSecsSinceEpoch());
 
     filter.set_session_type(static_cast<proto::peer::SessionType>(
         ui->combo_filter_session_type->currentData().toInt()));
@@ -419,6 +488,8 @@ proto::router::AccessLogFilter RouterAccessLogWidget::filter() const
 //--------------------------------------------------------------------------------------------------
 void RouterAccessLogWidget::clearFilter()
 {
+    const QSignalBlocker check_from_blocker(ui->check_filter_from);
+    const QSignalBlocker check_to_blocker(ui->check_filter_to);
     const QSignalBlocker from_blocker(ui->date_filter_from);
     const QSignalBlocker to_blocker(ui->date_filter_to);
     const QSignalBlocker type_blocker(ui->combo_filter_session_type);
@@ -426,8 +497,13 @@ void RouterAccessLogWidget::clearFilter()
     const QSignalBlocker client_blocker(ui->edit_filter_client);
     const QSignalBlocker host_blocker(ui->edit_filter_host);
 
-    ui->date_filter_from->setDate(ui->date_filter_from->minimumDate());
-    ui->date_filter_to->setDate(ui->date_filter_to->minimumDate());
+    // The boxes are blocked, so the edits are turned off here and not by the boxes.
+    ui->check_filter_from->setChecked(false);
+    ui->check_filter_to->setChecked(false);
+    ui->date_filter_from->setEnabled(false);
+    ui->date_filter_to->setEnabled(false);
+    ui->date_filter_from->setDate(QDate::currentDate());
+    ui->date_filter_to->setDate(QDate::currentDate());
     ui->combo_filter_session_type->setCurrentIndex(0);
     ui->edit_filter_user->clear();
     ui->edit_filter_client->clear();
