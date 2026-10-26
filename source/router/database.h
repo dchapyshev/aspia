@@ -115,14 +115,10 @@ public:
     // Adds a user record. Returns a proto::router error code.
     std::string_view addUser(const RouterUser& user);
 
-    // Updates a user record. A request with empty salt/verifier changes only the flags and the
-    // access level: the stored credentials are kept, so a snapshot taken before a concurrent
-    // password change cannot roll that change back. A zero session mask keeps the stored access
-    // level. If the change rotates the password (salt or verifier differ from the stored ones),
-    // every device token of the user is revoked. If |password_changed| and |sessions_changed| are
-    // not null they are set to whether the rotation and the level change happened (the
-    // authoritative check against the stored record).
-    // Returns a proto::router error code.
+    // Updates a user record. Empty salt/verifier keep the stored credentials, a zero session mask
+    // keeps the stored level, an empty address keeps the stored one. A password rotation revokes
+    // every device token of the user. |password_changed| and |sessions_changed|, if not null,
+    // report whether the rotation and the level change happened. Returns a proto::router error code.
     std::string_view modifyUser(const RouterUser& user, bool* password_changed = nullptr,
                                 bool* sessions_changed = nullptr);
 

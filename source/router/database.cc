@@ -185,6 +185,29 @@ QString databaseDirectory()
 }
 
 //--------------------------------------------------------------------------------------------------
+bool hasColumn(SqlDatabase& db, std::string_view table, std::string_view column)
+{
+    SqlQuery query(db, "SELECT 1 FROM pragma_table_info(?) WHERE name=?");
+    query.addText(table);
+    query.addText(column);
+
+    if (!query.isValid())
+    {
+        LOG(ERROR) << "Unable to query table info:" << db.lastError();
+        return true; // Pessimistic: pretend it exists, do not attempt ALTER.
+    }
+
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to query table info:" << db.lastError();
+        return true; // Same pessimism as above: a failed check must not trigger an ALTER.
+    }
+
+    return step == SqlQuery::StepResult::ROW;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Reads a RouterUser row. Column order must match the SELECT projections used by userList()
 // and findUser().
 RouterUser readUser(const SqlQuery& query)
@@ -199,6 +222,7 @@ RouterUser readUser(const SqlQuery& query)
     user.flags       = static_cast<quint32>(query.columnInt64(6));
     user.otp_secret  = query.columnBlob(7);
     user.otp_counter = query.columnUInt64(8);
+    user.email       = query.columnText(9);
     return user;
 }
 
@@ -237,7 +261,15 @@ bool ensureSchema(SqlDatabase& db)
              "\"flags\" INTEGER DEFAULT 0,"
              "\"otp_secret\" BLOB NOT NULL DEFAULT X'',"
              "\"otp_counter\" INTEGER NOT NULL DEFAULT 0,"
+             "\"email\" TEXT NOT NULL DEFAULT '',"
              "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        return false;
+    }
+
+    // Migration from 3.2.0.
+    if (!hasColumn(db, "users", "email") &&
+        !run("ALTER TABLE \"users\" ADD COLUMN \"email\" TEXT NOT NULL DEFAULT ''"))
     {
         return false;
     }
@@ -504,7 +536,7 @@ std::string_view Database::userList(qint64 offset, qint64 count, std::vector<Rou
     // The page has to name the same records every time it is asked for, so the order is fixed
     // here instead of being left to the query planner.
     const char kSql[] =
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter "
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email "
         "FROM users ORDER BY id LIMIT ? OFFSET ?";
     SqlQuery query(db_, kSql);
     query.addInt64(count);
@@ -598,8 +630,8 @@ std::string_view Database::addUser(const RouterUser& user)
     }
 
     const char kSql[] =
-        "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags) "
-        "VALUES (NULL, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags, email) "
+        "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)";
     SqlQuery query(db_, kSql);
     query.addText(user.name);
     query.addText(user.group);
@@ -607,6 +639,7 @@ std::string_view Database::addUser(const RouterUser& user)
     query.addBlob(user.verifier);
     query.addInt64(RouterUser::expandSessionTypes(user.sessions));
     query.addInt64(user.flags);
+    query.addText(user.email);
 
     if (!query.exec())
     {
@@ -676,9 +709,10 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
     QByteArray old_salt;
     QByteArray old_verifier;
     quint32 old_sessions = 0;
+    QString old_email;
     bool user_found = false;
     {
-        SqlQuery select(db_, "SELECT salt, verifier, sessions FROM users WHERE id=?");
+        SqlQuery select(db_, "SELECT salt, verifier, sessions, email FROM users WHERE id=?");
         select.addInt64(user.entry_id);
 
         if (!select.isValid())
@@ -702,6 +736,7 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
             old_salt = select.columnBlob(0);
             old_verifier = select.columnBlob(1);
             old_sessions = static_cast<quint32>(select.columnInt64(2));
+            old_email = select.columnText(3);
         }
     }
 
@@ -710,6 +745,7 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
 
     const quint32 sessions =
         user.sessions ? RouterUser::expandSessionTypes(user.sessions) : old_sessions;
+    const QString email = user.email.isEmpty() ? old_email : user.email;
 
     if (has_credentials)
     {
@@ -733,7 +769,7 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
         }
 
         const char kSql[] =
-            "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=? "
+            "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=?, email=? "
             "WHERE id=?";
         SqlQuery query(db_, kSql);
         query.addText(user.name);
@@ -742,6 +778,7 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
         query.addBlob(user.verifier);
         query.addInt64(sessions);
         query.addInt64(user.flags);
+        query.addText(email);
         query.addInt64(user.entry_id);
 
         if (!query.exec())
@@ -752,12 +789,10 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
     }
     else
     {
-        // Without the credentials only the level and the flags can change: the name is not
-        // editable in the dialog without re-entering the password, and writing it from a possibly
-        // out of date snapshot would revert a concurrent rename the same way.
-        SqlQuery query(db_, "UPDATE users SET sessions=?, flags=? WHERE id=?");
+        SqlQuery query(db_, "UPDATE users SET sessions=?, flags=?, email=? WHERE id=?");
         query.addInt64(sessions);
         query.addInt64(user.flags);
+        query.addText(email);
         query.addInt64(user.entry_id);
 
         if (!query.exec())
@@ -873,7 +908,7 @@ std::string_view Database::findUser(const QString& username, RouterUser* user) c
     }
 
     const char kSql[] =
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter "
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email "
         "FROM users WHERE casefold(name)=casefold(?)";
     SqlQuery query(db_, kSql);
     query.addText(username);
@@ -909,7 +944,7 @@ std::string_view Database::findUser(qint64 entry_id, RouterUser* user) const
     }
 
     const char kSql[] =
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter "
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email "
         "FROM users WHERE id=?";
     SqlQuery query(db_, kSql);
     query.addInt64(entry_id);

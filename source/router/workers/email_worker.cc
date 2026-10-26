@@ -26,6 +26,7 @@
 #include "base/logging.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_string.h"
+#include "base/peer/router_user.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "router/settings.h"
 
@@ -33,27 +34,6 @@ namespace {
 
 const Seconds kFirstRetryDelay{ 10 };
 const Seconds kMaxRetryDelay{ 600 };
-
-//--------------------------------------------------------------------------------------------------
-// Lets through only what goes into an SMTP command and a header line as it is. Quoted local parts
-// and addresses that are not ASCII are not supported.
-bool isValidAddress(const QString& address)
-{
-    const qsizetype at = address.indexOf('@');
-    if (at <= 0 || at != address.lastIndexOf('@') || at == address.size() - 1)
-        return false;
-
-    for (QChar ch : address)
-    {
-        if (ch.unicode() <= 0x20 || ch.unicode() >= 0x7F)
-            return false;
-
-        if (QByteArrayView("<>()[],;:\\\"").contains(static_cast<char>(ch.unicode())))
-            return false;
-    }
-
-    return true;
-}
 
 //--------------------------------------------------------------------------------------------------
 // RFC 2047 limits an encoded word to 75 characters, so a long text is split into several words that
@@ -158,7 +138,7 @@ void EmailWorker::onPrepare()
     }
 
     const QString from = settings.smtpFrom();
-    if (!isValidAddress(from))
+    if (!RouterUser::isValidEmail(from))
     {
         LOG(ERROR) << "Invalid sender address in configuration file:" << from;
         return;
@@ -325,7 +305,7 @@ void EmailWorker::doSend(const QString& to, const QString& subject, const QStrin
     if (!multi_)
         return;
 
-    if (!isValidAddress(to))
+    if (!RouterUser::isValidEmail(to))
     {
         LOG(ERROR) << "Invalid email address:" << to;
         return;

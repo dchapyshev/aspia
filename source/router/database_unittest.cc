@@ -713,6 +713,58 @@ TEST_F(RouterDatabaseTest, FlagsOnlyModifyChangesOnlyFlags)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A modify request with an empty address keeps the stored one, with or without the credentials.
+TEST_F(RouterDatabaseTest, EmailIsStoredAndKeptWhenNotSent)
+{
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
+              proto::router::kErrorOk);
+    const RouterUser stored = findUser("bob");
+    EXPECT_TRUE(stored.email.isEmpty());
+
+    RouterUser request;
+    request.entry_id = stored.entry_id;
+    request.flags = User::ENABLED;
+    request.email = "bob@example.com";
+    ASSERT_EQ(db_.modifyUser(request), proto::router::kErrorOk);
+    EXPECT_EQ(findUser(stored.entry_id).email, "bob@example.com");
+
+    request.email.clear();
+    request.flags = 0;
+    ASSERT_EQ(db_.modifyUser(request), proto::router::kErrorOk);
+    EXPECT_EQ(findUser(stored.entry_id).email, "bob@example.com");
+
+    RouterUser rotated = makeUser("bob", proto::router::SESSION_TYPE_OPERATOR);
+    rotated.entry_id = stored.entry_id;
+    ASSERT_EQ(db_.modifyUser(rotated), proto::router::kErrorOk);
+    EXPECT_EQ(findUser(stored.entry_id).email, "bob@example.com");
+
+    RouterUser with_email = makeUser("alice", proto::router::SESSION_TYPE_OPERATOR);
+    with_email.email = "alice@example.com";
+    ASSERT_EQ(db_.addUser(with_email), proto::router::kErrorOk);
+    EXPECT_EQ(findUser("alice").email, "alice@example.com");
+}
+
+//--------------------------------------------------------------------------------------------------
+// The users table of 3.2.0 has no email column, and opening such a database adds it.
+TEST_F(RouterDatabaseTest, UsersTableOf320GainsTheEmailColumn)
+{
+    ASSERT_TRUE(execRaw("ALTER TABLE users DROP COLUMN email"));
+
+    Database reopened;
+    ASSERT_TRUE(reopened.open(file_path_));
+
+    RouterUser request;
+    request.entry_id = admin_.entry_id;
+    request.flags = User::ENABLED;
+    request.email = "admin@example.com";
+    ASSERT_EQ(reopened.modifyUser(request), proto::router::kErrorOk);
+
+    RouterUser admin;
+    ASSERT_EQ(reopened.findUser(admin_.entry_id, &admin), proto::router::kErrorOk);
+    EXPECT_EQ(admin.email, "admin@example.com");
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST_F(RouterDatabaseTest, BuiltInUserCannotBeDisabledDemotedOrRemoved)
 {
     RouterUser request;
