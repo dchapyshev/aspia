@@ -203,6 +203,7 @@
         <file>clean.svg</file>
         <file>user-disable.svg</file>
         <file>computer-unknown.svg</file>
+        <file>unknown.svg</file>
         <file>disconnect.svg</file>
         <file>copy.svg</file>
         <file>select-all.svg</file>

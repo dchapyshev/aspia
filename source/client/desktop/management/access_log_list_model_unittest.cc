@@ -188,11 +188,11 @@ TEST_F(AccessLogListModelTest, SessionTypeWithoutANameIsShownAsUnknown)
 
     EXPECT_EQ(dataAt(model(), 0, Column::SESSION_TYPE).toString(), QString("Unknown"));
     EXPECT_EQ(dataAt(model(), 1, Column::SESSION_TYPE).toString(), QString("Unknown"));
-    EXPECT_FALSE(dataAt(model(), 0, Column::SESSION_TYPE, Qt::DecorationRole).isValid());
+    EXPECT_TRUE(dataAt(model(), 0, Column::TIME, Qt::DecorationRole).isValid());
 
     EXPECT_EQ(dataAt(model(), 2, Column::SESSION_TYPE).toString(), QString("Desktop"));
-    EXPECT_TRUE(dataAt(model(), 2, Column::SESSION_TYPE, Qt::DecorationRole).isValid());
-    EXPECT_FALSE(dataAt(model(), 2, Column::USER, Qt::DecorationRole).isValid());
+    EXPECT_TRUE(dataAt(model(), 2, Column::TIME, Qt::DecorationRole).isValid());
+    EXPECT_FALSE(dataAt(model(), 2, Column::SESSION_TYPE, Qt::DecorationRole).isValid());
 }
 
 //--------------------------------------------------------------------------------------------------

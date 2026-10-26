@@ -61,6 +61,8 @@ RouterAccessLogWidget::RouterAccessLogWidget(QWidget* parent)
 
     QHeaderView* header = ui->tree_log->header();
     header->resizeSection(static_cast<int>(AccessLogListModel::Column::TIME), 130);
+    header->resizeSection(static_cast<int>(AccessLogListModel::Column::CLIENT_COMPUTER_NAME), 160);
+    header->resizeSection(static_cast<int>(AccessLogListModel::Column::HOST_COMPUTER_NAME), 160);
     header->setSectionHidden(static_cast<int>(AccessLogListModel::Column::CLIENT_VERSION), true);
     header->setSectionHidden(static_cast<int>(AccessLogListModel::Column::CLIENT_OS), true);
 
@@ -96,7 +98,7 @@ RouterAccessLogWidget::RouterAccessLogWidget(QWidget* parent)
         connect(edit, &QDateEdit::dateChanged, this, &RouterAccessLogWidget::onFilterChanged);
     }
 
-    ui->combo_filter_session_type->addItem(tr("All Session Types"),
+    ui->combo_filter_session_type->addItem(QIcon(":/img/unknown.svg"), tr("All Session Types"),
                                            QVariant::fromValue<int>(proto::peer::SESSION_TYPE_UNKNOWN));
 
     const proto::peer::SessionType kSessionTypes[] =

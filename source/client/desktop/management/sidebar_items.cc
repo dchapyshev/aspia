@@ -214,7 +214,7 @@ SidebarRouterAccessLog::SidebarRouterAccessLog(qint64 router_id, QTreeWidgetItem
       router_id_(router_id)
 {
     setText(0, tr("Access Log"));
-    setIcon(0, QIcon(":/img/log.svg"));
+    setIcon(0, QIcon(":/img/day-view.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------

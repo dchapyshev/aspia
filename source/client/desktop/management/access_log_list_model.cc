@@ -123,12 +123,12 @@ QVariant AccessLogListModel::data(const QModelIndex& index, int role) const
 
         case Qt::DecorationRole:
         {
-            if (column != Column::SESSION_TYPE)
+            if (column != Column::TIME)
                 return QVariant();
 
             const QIcon icon = sessionIcon(entry->session_type());
             if (icon.isNull())
-                return QVariant();
+                return QIcon(":/img/unknown.svg");
 
             return icon;
         }
