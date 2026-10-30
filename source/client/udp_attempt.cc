@@ -169,7 +169,7 @@ void UdpAttempt::onChannelMessage(quint8 channel_id, const QByteArray& buffer)
 
     proto::peer::ClientToHost ack;
     ack.mutable_bandwidth_probe_ack()->set_train_id(message.bandwidth_probe().train_id());
-    channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(ack), true);
+    channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(ack));
 
     state_ = State::PROBED;
 }

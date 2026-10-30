@@ -105,8 +105,7 @@ void TerminalAgent::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TerminalAgent::onIpcMessageReceived(
-    quint32 /* ipc_channel_id */, const QByteArray& buffer, bool /* reliable */)
+void TerminalAgent::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
 {
     if (!terminal_process_)
         return;

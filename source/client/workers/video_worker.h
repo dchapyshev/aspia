@@ -95,11 +95,6 @@ private:
 
     void decodePacket(const proto::video::Packet& packet);
     void sendKeyFrameRequest();
-    // Transport adaptation: on a temporary decode failure (packet loss over UDP) ask the host to
-    // switch to reliable transport for a hold window; the metrics timer winds it back off after the
-    // window, at most twice per session.
-    void enableForceReliable();
-    void sendForceReliable(bool enable);
     void readCursorShape(const proto::cursor::Shape& shape);
     void readCursorPosition(const proto::cursor::Position& position);
 
@@ -124,12 +119,6 @@ private:
     Metrics metrics_;
     qint64 fps_frame_count_ = 0;
     TimePoint fps_time_;
-
-    // Force-reliable transport state, driven by temporary decode failures. |reliable_hold_|
-    // counts down on the metrics timer; the switch is applied at most twice per session.
-    bool force_reliable_active_ = false;
-    int reliable_disable_count_ = 0;
-    Seconds reliable_hold_{ 0 };
 
     // Recording state. The writer owns the output file and muxes the encoded video and audio; the
     // encoder re-encodes decoded frames to VP8. Both are created only while recording is on and the

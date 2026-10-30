@@ -51,7 +51,7 @@ public:
     bool isPaused() const;
     void setPaused(bool enable);
 
-    void send(quint32 channel_id, const QByteArray& buffer, bool reliable = true, bool secure = false);
+    void send(quint32 channel_id, const QByteArray& buffer, bool secure = false);
 
     quint32 instanceId() const { return instance_id_; }
     const QString& channelName() const { return channel_name_; }
@@ -64,7 +64,7 @@ signals:
     void sig_connected();
     void sig_disconnected();
     void sig_errorOccurred();
-    void sig_messageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
+    void sig_messageReceived(quint32 channel_id, const QByteArray& buffer);
 
 private:
     friend class IpcServer;
@@ -92,10 +92,9 @@ private:
     class WriteTask
     {
     public:
-        WriteTask(quint32 channel_id, const QByteArray& data, bool reliable, bool secure)
+        WriteTask(quint32 channel_id, const QByteArray& data, bool secure)
             : channel_id_(channel_id),
               data_(data),
-              reliable_(reliable),
               secure_(secure)
         {
             // Nothing
@@ -107,13 +106,11 @@ private:
         quint32 channelId() const { return channel_id_; }
         const QByteArray& data() const { return data_; }
         QByteArray& data() { return data_; }
-        bool reliable() const { return reliable_; }
         bool secure() const { return secure_; }
 
     private:
         quint32 channel_id_;
         QByteArray data_;
-        bool reliable_;
         bool secure_;
     };
 

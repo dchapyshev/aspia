@@ -64,28 +64,28 @@ void DesktopClient::releaseKeyboardKeys()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::onVideoData(const QByteArray& buffer, bool is_key_frame)
+void DesktopClient::onVideoData(const QByteArray& buffer)
 {
     if (!is_paused_)
-        send(proto::desktop::CHANNEL_ID_VIDEO, buffer, is_key_frame);
+        send(proto::desktop::CHANNEL_ID_VIDEO, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onScreenListData(const QByteArray& buffer)
 {
-    send(proto::desktop::CHANNEL_ID_SCREEN, buffer, true);
+    send(proto::desktop::CHANNEL_ID_SCREEN, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onClipboardData(const QByteArray& buffer)
 {
-    send(proto::desktop::CHANNEL_ID_CLIPBOARD, buffer, true);
+    send(proto::desktop::CHANNEL_ID_CLIPBOARD, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onAudioData(const QByteArray& buffer)
 {
-    send(proto::desktop::CHANNEL_ID_AUDIO, buffer, true);
+    send(proto::desktop::CHANNEL_ID_AUDIO, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -307,5 +307,5 @@ void DesktopClient::sendCapabilities()
     add_flag(kFlagOSAndroid);
     add_flag(kFlagClipboard);
 
-    send(proto::desktop::CHANNEL_ID_CONTROL, serialize(message), true);
+    send(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
 }

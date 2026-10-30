@@ -81,6 +81,8 @@ list(APPEND SOURCE_HOST_CORE
     audio_capturer.h
     audio_silence_detector.cc
     audio_silence_detector.h
+    bandwidth_controller.cc
+    bandwidth_controller.h
     capture_scheduler.cc
     capture_scheduler.h
     chat_client.cc
@@ -156,6 +158,8 @@ list(APPEND SOURCE_HOST
 
 list(APPEND SOURCE_HOST_TESTS
     audio_silence_detector_unittest.cc
+    bandwidth_controller_unittest.cc
+    bandwidth_scenario_unittest.cc
     capture_scheduler_unittest.cc
     database_unittest.cc
     host_storage_unittest.cc

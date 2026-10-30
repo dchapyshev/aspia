@@ -72,36 +72,36 @@ void DesktopAgentClient::releaseKeyboardKeys()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onVideoData(const QByteArray& buffer, bool is_key_frame)
+void DesktopAgentClient::onVideoData(const QByteArray& buffer)
 {
     if (!is_video_paused_)
-        sendSessionMessage(proto::desktop::CHANNEL_ID_VIDEO, buffer, is_key_frame);
+        sendSessionMessage(proto::desktop::CHANNEL_ID_VIDEO, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onScreenListData(const QByteArray& buffer)
 {
-    sendSessionMessage(proto::desktop::CHANNEL_ID_SCREEN, buffer, true);
+    sendSessionMessage(proto::desktop::CHANNEL_ID_SCREEN, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onScreenTypeData(const QByteArray& buffer)
 {
-    sendSessionMessage(proto::desktop::CHANNEL_ID_SCREEN, buffer, true);
+    sendSessionMessage(proto::desktop::CHANNEL_ID_SCREEN, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onCursorPositionData(const QByteArray& buffer)
 {
     if (config_.has_value() && config_->cursor_position())
-        sendSessionMessage(proto::desktop::CHANNEL_ID_CURSOR, buffer, false);
+        sendSessionMessage(proto::desktop::CHANNEL_ID_CURSOR, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onCursorShapeData(const QByteArray& buffer)
 {
     if (config_.has_value() && config_->cursor_shape())
-        sendSessionMessage(proto::desktop::CHANNEL_ID_CURSOR, buffer, true);
+        sendSessionMessage(proto::desktop::CHANNEL_ID_CURSOR, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -113,11 +113,11 @@ void DesktopAgentClient::onAudioData(const QByteArray& buffer)
     if (overflow_state_ == proto::desktop::Overflow::STATE_CRITICAL)
         return;
 
-    sendSessionMessage(proto::desktop::CHANNEL_ID_AUDIO, buffer, false);
+    sendSessionMessage(proto::desktop::CHANNEL_ID_AUDIO, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onMessageReceived(quint32 channel_id, const QByteArray& buffer, bool /* reliable */)
+void DesktopAgentClient::onMessageReceived(quint32 channel_id, const QByteArray& buffer)
 {
     quint16 net_channel_id = lowWord(channel_id);
     quint16 ipc_channel_id = highWord(channel_id);
@@ -253,10 +253,10 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::sendSessionMessage(quint8 net_channel_id, const QByteArray& buffer, bool reliable)
+void DesktopAgentClient::sendSessionMessage(quint8 net_channel_id, const QByteArray& buffer)
 {
     quint32 channel_id = makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, net_channel_id);
-    emit sig_sendMessage(channel_id, buffer, reliable);
+    emit sig_sendMessage(channel_id, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -433,5 +433,5 @@ void DesktopAgentClient::sendCapabilities()
 #endif
 
     CLOG(INFO) << "Sending:" << *capabilities;
-    sendSessionMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message), true);
+    sendSessionMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
 }

@@ -125,7 +125,7 @@ private:
     void routeMessage(quint8 channel_id, const QByteArray& buffer);
     void tcpChannelReady();
     void connectionLost(TcpChannel::ErrorCode error_code);
-    void readBandwidthProbe(const proto::peer::BandwidthProbe& probe, bool via_udp);
+    void readBandwidthProbe(const proto::peer::BandwidthProbe& probe, quint8 channel_id, bool via_udp);
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
     void readStunUdpRequest(const proto::peer::StunUdpRequest& request);
     void readGatewayUdpRequest(const proto::peer::GatewayUdpRequest& request);
@@ -148,16 +148,6 @@ private:
 
     bool udp_switch_pending_ = false;
     std::deque<std::pair<quint8, QByteArray>> held_udp_messages_;
-
-    struct ProbeTrain
-    {
-        quint32 id = 0;
-        bool active = false;
-        TimePoint first_arrival; // Set when the first probe of the train arrives.
-        quint64 bytes = 0;           // Payload bytes received after the first probe.
-    };
-    ProbeTrain tcp_probe_train_;
-    ProbeTrain udp_probe_train_;
 
     // Set once the session is ready; gates the periodic work in onTimer().
     bool session_ready_ = false;

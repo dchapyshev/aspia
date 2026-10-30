@@ -357,7 +357,7 @@ void UdpChannel::setPeerAddress(const QString& address, quint16 port)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::send(quint8 channel_id, const QByteArray& buffer, bool reliable)
+void UdpChannel::send(quint8 channel_id, const QByteArray& buffer)
 {
     if (!host_ || !peer_)
     {
@@ -380,11 +380,7 @@ void UdpChannel::send(quint8 channel_id, const QByteArray& buffer, bool reliable
         return;
     }
 
-    quint32 flags = 0;
-    if (reliable)
-        flags |= ENET_PACKET_FLAG_RELIABLE;
-
-    ScopedENetPacket packet = acquirePacket(target_packet_size, flags);
+    ScopedENetPacket packet = acquirePacket(target_packet_size, ENET_PACKET_FLAG_RELIABLE);
     if (!packet)
     {
         onErrorOccurred(FROM_HERE);
@@ -455,6 +451,13 @@ void UdpChannel::setPaused(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
+void UdpChannel::setWindowSize(qint64 bytes)
+{
+    window_size_ = bytes;
+    applyWindowSize();
+}
+
+//--------------------------------------------------------------------------------------------------
 void UdpChannel::setEncryptor(std::unique_ptr<DatagramEncryptor> encryptor)
 {
     encryptor_ = std::move(encryptor);
@@ -472,15 +475,6 @@ void UdpChannel::setDecryptor(std::unique_ptr<DatagramDecryptor> decryptor)
 qint64 UdpChannel::pendingBytes() const
 {
     return pending_bytes_;
-}
-
-//--------------------------------------------------------------------------------------------------
-MilliSeconds UdpChannel::roundTripTime() const
-{
-    if (!peer_ || !connected_)
-        return MilliSeconds::zero();
-
-    return MilliSeconds(peer_->roundTripTime);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -507,6 +501,27 @@ int UdpChannel::speedTx()
     bytes_tx_ = 0;
 
     return speed_tx_;
+}
+
+//--------------------------------------------------------------------------------------------------
+int UdpChannel::roundTripTime() const
+{
+    if (!peer_ || !connected_)
+        return 0;
+
+    return static_cast<int>(peer_->roundTripTime);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::logStatistics() const
+{
+    if (!peer_ || !connected_)
+        return;
+
+    CLOG(INFO) << "RTT:" << peer_->roundTripTime << "+-" << peer_->roundTripTimeVariance
+               << "ms in transit:" << peer_->reliableDataInTransit << "pending:" << pending_bytes_
+               << "window:" << peer_->windowSize << "sent:" << peer_->packetsSent << "lost:"
+               << peer_->packetsLost << "throttle:" << peer_->packetThrottle;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -579,12 +594,15 @@ void UdpChannel::processEvents()
                 enet_socket_set_option(host_->socket, ENET_SOCKOPT_SNDBUF, kSocketBufferSize);
                 enet_socket_set_option(host_->socket, ENET_SOCKOPT_RCVBUF, kSocketBufferSize);
 
-                // By default is 5s before the first retransmit. Reduce this to 3s.
-                enet_peer_timeout(peer_.get(), ENET_PEER_TIMEOUT_LIMIT, 3000, 10000);
+                const enet_uint32 kPeerTimeout = 60000;
+                enet_peer_timeout(peer_.get(), ENET_PEER_TIMEOUT_LIMIT, kPeerTimeout, kPeerTimeout);
 
-                // By default interval is 5s, we reduce it to 3s to increase the speed of
-                // adaptation to changes in network quality.
-                enet_peer_throttle_configure(peer_.get(), 3000, 2, 2);
+                // The throttle of ENet shrinks the window for reliable data down to one packet when
+                // the RTT grows. The delivered rate then shows that window instead of the path, and
+                // the session controls its rate by the delivered one, so the window stays at its full
+                // size.
+                enet_peer_throttle_configure(peer_.get(), ENET_PEER_PACKET_THROTTLE_INTERVAL,
+                                             ENET_PEER_PACKET_THROTTLE_ACCELERATION, 0);
 
                 connected_ = true;
                 onReadyCheck();
@@ -616,7 +634,10 @@ void UdpChannel::processEvents()
     {
         CLOG(ERROR) << "enet_host_service failed";
         onErrorOccurred(FROM_HERE);
+        return;
     }
+
+    applyWindowSize();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -693,6 +714,19 @@ void UdpChannel::onReadyCheck()
 
     CLOG(INFO) << "UDP channel is ready";
     emit sig_ready();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::applyWindowSize()
+{
+    if (!peer_ || !connected_ || !window_size_)
+        return;
+
+    const enet_uint32 window_size = static_cast<enet_uint32>(std::clamp<qint64>(
+        window_size_, ENET_PROTOCOL_MINIMUM_WINDOW_SIZE, ENET_PROTOCOL_MAXIMUM_WINDOW_SIZE));
+
+    if (peer_->windowSize != window_size)
+        peer_->windowSize = window_size;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -36,7 +36,7 @@
 namespace {
 
 const Seconds kAttemptTimeout{ 15 };           // Max time for one attempt to connect before it is dropped.
-const qint64 kInitialProbeDataSize = 4 * 1024; // 4 KB - smallest probe, used for the initial measurement.
+const qint64 kInitialProbeDataSize = 4 * 1024; // 4 KB
 
 //--------------------------------------------------------------------------------------------------
 QByteArray makeBandwidthProbeData()
@@ -206,27 +206,21 @@ void UdpAttempt::onChannelMessage(quint8 channel_id, const QByteArray& buffer)
         return;
     }
 
-    // The peer acked our probe: the channel is confirmed and timed. Report the bandwidth implied by
-    // the round-trip of the known-size probe.
-    auto rtt = DurationCast<MilliSeconds>(Clock::now() - probe_send_time_);
-    qint64 rtt_ms = rtt.count() > 0 ? rtt.count() : 1;
-
+    // The peer acked our probe, so the channel is confirmed.
     connected_ = true;
-    emit sig_connected(request_id_, (kInitialProbeDataSize * 1000) / rtt_ms);
+    emit sig_connected(request_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UdpAttempt::sendProbeIfReady()
 {
-    // Once the channel can carry encrypted data both ways, send a real bandwidth probe and wait for
-    // the peer's ack (see onChannelMessage). The round-trip both confirms the channel and yields its
-    // initial bandwidth. Both conditions are required to send.
+    // Once the channel can carry encrypted data both ways, send a probe and wait for the peer's ack
+    // (see onChannelMessage), which confirms the channel. Both conditions are required to send.
     if (!channel_ || connected_ || !enet_ready_ || !crypto_ready_ || probe_sent_)
         return;
     probe_sent_ = true;
 
-    probe_send_time_ = Clock::now();
-    channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData(), true);
+    channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData());
 
     CLOG(INFO) << "UDP attempt" << request_id_ << "sent probe, waiting for ack";
 }

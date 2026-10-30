@@ -75,8 +75,7 @@ public:
 
 private:
     static const uint32_t kHeaderMagic = 0x43495341; // 'A','S','I','C' read little-endian.
-    static const uint32_t kFlagReliable = 1;
-    static const uint32_t kFlagSecure = 2;
+    static const uint32_t kFlagSecure = 1;
     static const size_t kMaxChars = 256;
 
     struct Input

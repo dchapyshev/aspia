@@ -31,7 +31,6 @@
 #include "base/desktop/mouse_cursor.h"
 #include "base/threading/worker.h"
 #include "client/workers/network_worker.h"
-#include "proto/desktop_control.h"
 
 namespace {
 
@@ -165,20 +164,6 @@ void VideoWorker::onStop()
 //--------------------------------------------------------------------------------------------------
 void VideoWorker::onTimer(TimePoint now)
 {
-    // The 1-second timer also winds down the force-reliable hold window; once it elapses, back the
-    // transport off reliable mode (at most twice per session).
-    if (force_reliable_active_ && reliable_hold_ > Seconds::zero())
-    {
-        --reliable_hold_;
-        if (reliable_hold_ == Seconds::zero() && reliable_disable_count_ < 2)
-        {
-            ++reliable_disable_count_;
-            LOG(INFO) << "Disabling force reliable (disable count:" << reliable_disable_count_ << ")";
-            force_reliable_active_ = false;
-            sendForceReliable(false);
-        }
-    }
-
     if (fps_time_ != TimePoint())
     {
         const MilliSeconds duration = DurationCast<MilliSeconds>(now - fps_time_);
@@ -357,7 +342,6 @@ void VideoWorker::decodePacket(const proto::video::Packet& packet)
         key_frame_received_ = false;
 
         sendKeyFrameRequest();
-        enableForceReliable();
         return;
     }
 
@@ -411,28 +395,6 @@ void VideoWorker::sendKeyFrameRequest()
     proto::video::ClientToHost message;
     message.mutable_key_frame()->set_dummy(1);
     emit sig_sendMessage(proto::desktop::CHANNEL_ID_VIDEO, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void VideoWorker::enableForceReliable()
-{
-    if (!force_reliable_active_ && reliable_disable_count_ < 2)
-    {
-        LOG(INFO) << "Enabling force reliable (disable count:" << reliable_disable_count_ << ")";
-        force_reliable_active_ = true;
-        sendForceReliable(true);
-    }
-    reliable_hold_ = Seconds(60);
-}
-
-//--------------------------------------------------------------------------------------------------
-void VideoWorker::sendForceReliable(bool enable)
-{
-    proto::control::ClientToHost message;
-    proto::control::Feedback* feedback = message.mutable_feedback();
-    feedback->set_command_name("reliable");
-    feedback->set_boolean(enable);
-    emit sig_sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

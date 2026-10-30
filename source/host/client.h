@@ -30,6 +30,7 @@
 #include "base/crypto/key_pair.h"
 #include "base/net/tcp_channel.h"
 #include "base/scoped_qpointer.h"
+#include "host/bandwidth_controller.h"
 
 namespace proto::peer {
 enum SessionType : int;
@@ -39,6 +40,7 @@ class UdpReply;
 } // namespace proto::peer
 
 class Location;
+class QTimer;
 class UdpAttempt;
 class UdpChannel;
 
@@ -52,9 +54,8 @@ public:
 
     enum Feature
     {
-        FEATURE_NONE      = 0,
-        FEATURE_UDP       = 1,
-        FEATURE_BANDWIDTH = 2
+        FEATURE_NONE = 0,
+        FEATURE_UDP  = 1
     };
     Q_DECLARE_FLAGS(Features, Feature)
 
@@ -76,15 +77,13 @@ public:
     QString architecture() const;
     QString userName() const;
     qint64 pendingBytes() const;
-    qint64 excessPendingBytes() const;
 
-    qint64 bandwidth() const;
+    proto::desktop::Overflow::State overflowState(TimePoint now) const;
 
     enum class UdpState
     {
         DISCONNECTED,
         CONNECTED,
-        PROBED,
         READY
     };
     Q_ENUM(UdpState)
@@ -97,7 +96,7 @@ signals:
 protected:
     LOG_DECLARE_CONTEXT(Client);
 
-    void send(quint8 channel_id, const QByteArray& buffer, bool reliable = true);
+    void send(quint8 channel_id, const QByteArray& buffer);
 
     virtual void onStart() = 0;
     virtual void onMessage(quint8 channel_id, const QByteArray& buffer) = 0;
@@ -105,10 +104,12 @@ protected:
     virtual void onTimer(TimePoint now);
 
     bool isFinished() const { return finished_emitted_; }
+    qint64 publishedBandwidth() const { return published_bandwidth_; }
 
 private slots:
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
+    void onSliceTimer();
 
 private:
     void connectToUdp();
@@ -117,17 +118,14 @@ private:
     void eraseAttempt(quint32 request_id);
     void readUdpReply(const proto::peer::UdpReply& reply);
     void readUdpSwitch();
-    void onAttemptConnected(quint32 request_id, qint64 bandwidth);
+    void onAttemptConnected(quint32 request_id);
     void onAttemptError(quint32 request_id);
-    void selectAttempt(UdpAttempt* attempt, qint64 bandwidth);
+    void selectAttempt(UdpAttempt* attempt);
     void clearAttempts();
     void onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onUdpErrorOccurred();
-    void startBandwidthProbing();
-    void sendTcpBandwidthProbe(TimePoint time);
-    void sendUdpBandwidthProbe(TimePoint time);
-    void onTcpBandwidthProbeAck(const proto::peer::BandwidthProbeAck& ack);
-    void onUdpBandwidthProbeAck(const proto::peer::BandwidthProbeAck& ack);
+    void sendDelayProbe();
+    void onBandwidthProbeAck(const proto::peer::BandwidthProbeAck& ack);
     void onReceiveRate(const proto::peer::ReceiveRate& rate);
     void checkBandwidth();
     void publishBandwidth(qint64 bandwidth);
@@ -147,33 +145,15 @@ private:
     QString stun_host_;
     quint16 stun_port_ = 0;
 
-    struct BandwidthProbe
-    {
-        TimePoint send_time;
-        bool pending = false;
-        bool under_load = false; // Sent while session traffic was flowing (see the ack handlers).
-        quint32 train_id = 0;    // Id of the in-flight probe train.
-        qint64 bandwidth = 0;
-    };
-
-    // Deadline of the next bandwidth probe train; probing is inactive while unset (see onTick()).
-    TimePoint next_probe_time_;
-    TimePoint last_send_time_;
-
-    // Set when the peer's first message arrives; no probe train is sent before that (see
+    // Set when the peer's first message arrives; the bandwidth controller starts then (see
     // onTcpMessageReceived).
     bool peer_ready_ = false;
 
-    BandwidthProbe tcp_probe_;
-    BandwidthProbe udp_probe_;
     quint32 next_train_id_ = 0;
+    quint32 delay_probe_train_id_ = 0;
+    BandwidthController bandwidth_controller_;
+    QTimer* slice_timer_ = nullptr; // Sends the probes and the padding.
     qint64 published_bandwidth_ = 0; // Last estimate handed to onBandwidthChanged().
-
-    // Queuing-delay detection on the UDP path (see onReceiveRate): the lowest peer RTT seen on the
-    // current UDP channel (the queuing-free baseline) and how many consecutive receive-rate reports
-    // arrived with the RTT substantially above it.
-    MilliSeconds udp_base_rtt_{ 0 };
-    int udp_high_rtt_count_ = 0;
 
     Q_DISABLE_COPY_MOVE(Client)
 };

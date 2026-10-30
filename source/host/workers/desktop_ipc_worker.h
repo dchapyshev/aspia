@@ -51,7 +51,7 @@ public:
 
 public slots:
     // Serialized messages produced by the media/input workers, fanned out to every client.
-    void onVideoData(const QByteArray& buffer, bool is_key_frame);
+    void onVideoData(const QByteArray& buffer);
     void onCursorShapeData(const QByteArray& buffer);
     void onCursorPositionData(const QByteArray& buffer);
     void onScreenListData(const QByteArray& buffer);
@@ -100,7 +100,7 @@ private slots:
     void onIpcConnected();
     void onIpcDisconnected();
     void onIpcErrorOccurred();
-    void onIpcMessageReceived(quint32 ipc_channel_id, const QByteArray& buffer, bool reliable);
+    void onIpcMessageReceived(quint32 ipc_channel_id, const QByteArray& buffer);
     void onClientConfigured();
     void onClientFinished();
     void onPreferredSizeChanged();

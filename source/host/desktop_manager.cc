@@ -590,8 +590,7 @@ void DesktopManager::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopManager::onIpcMessageReceived(
-    quint32 /* ipc_channel_id */, const QByteArray& /* buffer */, bool /* reliable */)
+void DesktopManager::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& /* buffer */)
 {
     // Not used yet.
 }

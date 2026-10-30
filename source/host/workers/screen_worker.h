@@ -92,7 +92,7 @@ public slots:
 
 signals:
     // Serialized messages ready to be sent to clients.
-    void sig_videoData(const QByteArray& buffer, bool is_key_frame);
+    void sig_videoData(const QByteArray& buffer);
     void sig_cursorShapeData(const QByteArray& buffer);
     void sig_cursorPositionData(const QByteArray& buffer);
     void sig_screenListData(const QByteArray& buffer);
@@ -147,6 +147,7 @@ private:
     void encodeScreen(const Frame* frame);
     void encodeCursor(const MouseCursor* cursor);
     void createVideoEncoder();
+    void setCaptureFps(int fps);
     void updateInjectorScreenInfo(const Frame* frame);
 
     ScopedQPointer<InputInjector> input_injector_;
@@ -179,8 +180,9 @@ private:
     bool vp8_supported_ = false;
     bool vp9_supported_ = false;
 
-    proto::video::Encoding video_encoding_ = proto::video::ENCODING_VP8;
+    proto::video::Encoding video_encoding_ = proto::video::ENCODING_VP9;
     qint64 last_bandwidth_ = 0;
+    qint64 tier_bandwidth_ = 0; // The bandwidth the codec and the frame rate limit were chosen from.
 
     int screen_count_ = 0;
     QPoint last_cursor_pos_;

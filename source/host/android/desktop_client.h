@@ -53,7 +53,7 @@ public:
     void releaseKeyboardKeys();
 
     // Forward shared session data (encoded once by the DesktopAgent) to this client's channel.
-    void onVideoData(const QByteArray& buffer, bool is_key_frame);
+    void onVideoData(const QByteArray& buffer);
     void onScreenListData(const QByteArray& buffer);
     void onClipboardData(const QByteArray& buffer);
     void onAudioData(const QByteArray& buffer);

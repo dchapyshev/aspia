@@ -43,7 +43,7 @@ public:
     ~PortableDesktopWorker() final;
 
 public slots:
-    void onVideoData(const QByteArray& buffer, bool is_key_frame);
+    void onVideoData(const QByteArray& buffer);
     void onCursorShapeData(const QByteArray& buffer);
     void onCursorPositionData(const QByteArray& buffer);
     void onScreenListData(const QByteArray& buffer);
@@ -60,7 +60,7 @@ public slots:
     void onUserLockKeyboard(bool enable);
 
 signals:
-    void sig_clientMessage(quint32 client_id, quint32 channel_id, const QByteArray& buffer, bool reliable);
+    void sig_clientMessage(quint32 client_id, quint32 channel_id, const QByteArray& buffer);
 
     // Forwarded from the clients to the input worker.
     void sig_injectKeyEvent(const proto::input::KeyEvent& event);

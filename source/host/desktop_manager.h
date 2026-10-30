@@ -76,7 +76,7 @@ private slots:
 
     // Slots for IpcChannel.
     void onIpcDisconnected();
-    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
 
 private:
     void attach(const Location& location, SessionId session_id);

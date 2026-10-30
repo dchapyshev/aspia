@@ -69,7 +69,7 @@ signals:
 private slots:
     void onIpcNewConnection();
     void onIpcDisconnected();
-    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
 
 private:
     // Ends the session together with the GUI: the host terminates after it.

@@ -21,6 +21,7 @@
 
 #include <QtClassHelperMacros>
 
+#include <atomic>
 #include <memory>
 #include <mutex>
 #include <queue>
@@ -51,6 +52,9 @@ private:
 
     std::queue<std::unique_ptr<proto::audio::Packet>> work_queue_;
     size_t source_pos_ = 0;
+
+    // Bytes of audio in both queues, which is how far the playback lags behind.
+    std::atomic<size_t> queued_bytes_{ 0 };
 
     Q_DISABLE_COPY_MOVE(AudioPlayer)
 };

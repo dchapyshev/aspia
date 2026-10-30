@@ -181,7 +181,7 @@ void PortableUserSession::onClientMessage(quint8 net_channel_id, const QByteArra
         return;
 
     quint32 channel_id = makeUint32(proto::user::CHANNEL_ID_NETWORK, net_channel_id);
-    ipc_channel_->send(channel_id, buffer, /* reliable */ true, /* secure */ true);
+    ipc_channel_->send(channel_id, buffer, /* secure */ true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -252,8 +252,7 @@ void PortableUserSession::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PortableUserSession::onIpcMessageReceived(
-    quint32 channel_id, const QByteArray& buffer, bool /* reliable */)
+void PortableUserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
 {
     quint16 net_channel_id = lowWord(channel_id);
     quint16 ipc_channel_id = highWord(channel_id);
@@ -368,5 +367,5 @@ void PortableUserSession::sendMessage()
     }
 
     ipc_channel_->send(proto::user::CHANNEL_ID_SERVICE,
-        outgoing_message_.serialize<proto::user::ServiceToUser>(), /* reliable */ true, /* secure */ true);
+        outgoing_message_.serialize<proto::user::ServiceToUser>(), /* secure */ true);
 }

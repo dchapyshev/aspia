@@ -32,7 +32,7 @@ endif()
 
 set(ASPIA_VERSION_MAJOR 3)
 set(ASPIA_VERSION_MINOR 2)
-set(ASPIA_VERSION_PATCH 0)
+set(ASPIA_VERSION_PATCH 1)
 
 # On CI installed dir could be outside of vcpkg root
 if ("$ENV{VCPKG_INSTALLED_DIR}" STREQUAL "")
@@ -88,7 +88,6 @@ find_package(Opus CONFIG REQUIRED)
 find_package(protobuf CONFIG REQUIRED)
 find_package(unofficial-libvpx CONFIG REQUIRED)
 find_package(unofficial-libwebm CONFIG REQUIRED)
-find_package(unofficial-enet CONFIG REQUIRED)
 find_package(unofficial-nayuki-qr-code-generator CONFIG REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)

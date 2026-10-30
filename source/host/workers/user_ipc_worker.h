@@ -104,7 +104,7 @@ private slots:
     void onIpcConnected();
     void onIpcDisconnected();
     void onIpcErrorOccurred();
-    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
     void onConnectEvent(const proto::user::ConnectEvent& event);
     void onDisconnectEvent(const proto::user::DisconnectEvent& event);
 

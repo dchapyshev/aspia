@@ -261,7 +261,7 @@ void DesktopAgent::onCaptureScreen()
         message.mutable_packet()->set_error_code(error_code);
         const QByteArray& buffer = outgoing_message_.serialize<proto::video::HostToClient>();
         for (auto* client : std::as_const(clients_))
-            client->onVideoData(buffer, false);
+            client->onVideoData(buffer);
 
         // A permanent error (e.g. the user declined the capture consent) will not recover, so stop the
         // loop instead of resending the error every tick. The others just wait: for the confirmation, for
@@ -504,11 +504,9 @@ void DesktopAgent::encodeScreen(const Frame* frame)
         screen_size->set_height(frame->size().height());
     }
 
-    const bool is_key_frame = packet->flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME;
-
     const QByteArray& buffer = outgoing_message_.serialize<proto::video::HostToClient>();
     for (auto* client : std::as_const(clients_))
-        client->onVideoData(buffer, is_key_frame);
+        client->onVideoData(buffer);
 
     // Recycle the encode output buffer for the next frame.
     video_encoder_->setEncodeBuffer(std::move(*packet->mutable_data()));

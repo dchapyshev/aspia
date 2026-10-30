@@ -63,5 +63,5 @@ void FileClient::onMessage(quint8 channel_id, const QByteArray& buffer)
 
     proto::file_transfer::Reply reply;
     handler_->doRequest(request, &reply);
-    send(proto::peer::CHANNEL_ID_0, serialize(reply), true);
+    send(proto::peer::CHANNEL_ID_0, serialize(reply));
 }

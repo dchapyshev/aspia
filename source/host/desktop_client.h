@@ -71,7 +71,7 @@ protected:
 private slots:
     void onIpcNewConnection();
     void onIpcErrorOccurred();
-    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
     void onIpcDisconnected();
 
 private:
@@ -90,8 +90,6 @@ private:
     proto::desktop::Overflow::State last_state_ = proto::desktop::Overflow::STATE_NONE;
     std::optional<proto::control::Capabilities> capabilities_;
     std::optional<proto::control::Config> config_;
-
-    bool force_reliable_ = false;
 
     QPointer<TaskMgrWorker> task_mgr_worker_;
     QPointer<ToolsWorker> tools_worker_;

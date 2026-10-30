@@ -75,8 +75,7 @@ void FileAgent::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileAgent::onIpcMessageReceived(
-    quint32 /* ipc_channel_id */, const QByteArray& buffer, bool /* reliable */)
+void FileAgent::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
 {
     if (!request_.parse<proto::file_transfer::Request>(buffer))
     {

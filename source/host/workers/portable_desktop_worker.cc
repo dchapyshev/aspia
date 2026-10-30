@@ -38,10 +38,10 @@ PortableDesktopWorker::~PortableDesktopWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PortableDesktopWorker::onVideoData(const QByteArray& buffer, bool is_key_frame)
+void PortableDesktopWorker::onVideoData(const QByteArray& buffer)
 {
     for (const ClientEntry& entry : std::as_const(clients_))
-        entry.client->onVideoData(buffer, is_key_frame);
+        entry.client->onVideoData(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -101,9 +101,9 @@ void PortableDesktopWorker::onClientStarted(quint32 client_id)
     connect(client, &DesktopAgentClient::sig_bandwidthChanged, this, &PortableDesktopWorker::onClientBandwidthChanged);
     connect(client, &DesktopAgentClient::sig_configured, this, &PortableDesktopWorker::onClientConfigured);
     connect(client, &DesktopAgentClient::sig_sendMessage, this,
-            [this, client_id](quint32 channel_id, const QByteArray& buffer, bool reliable)
+            [this, client_id](quint32 channel_id, const QByteArray& buffer)
     {
-        emit sig_clientMessage(client_id, channel_id, buffer, reliable);
+        emit sig_clientMessage(client_id, channel_id, buffer);
     });
 
     LOG(INFO) << "Client started:" << client_id;
@@ -119,7 +119,7 @@ void PortableDesktopWorker::onClientMessage(quint32 client_id, quint32 channel_i
         return;
     }
 
-    clients_[index].client->onMessageReceived(channel_id, buffer, true);
+    clients_[index].client->onMessageReceived(channel_id, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -56,7 +56,7 @@ private slots:
     void onIpcErrorOccurred();
 
     // Slots for IpcChannel.
-    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
     void onIpcDisconnected();
 
 private:

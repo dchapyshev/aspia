@@ -92,7 +92,7 @@ set(THIRD_PARTY_LIBS
     Opus::opus
     unofficial::libwebm::libwebm
     unofficial::libvpx::libvpx
-    unofficial::enet::enet
+    enet
     miniupnpc::miniupnpc
     unofficial::nayuki-qr-code-generator::nayuki-qr-code-generator
     unofficial::sqlite3::sqlite3

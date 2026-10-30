@@ -42,7 +42,7 @@ private slots:
     void onIpcConnected();
     void onIpcDisconnected();
     void onIpcErrorOccurred();
-    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
 
 private:
     IpcChannel* ipc_channel_ = nullptr;

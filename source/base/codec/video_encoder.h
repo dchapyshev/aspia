@@ -59,6 +59,11 @@ public:
     // Each derived class translates the bandwidth into the right knobs for its codec.
     virtual void setBandwidth(qint64 bandwidth) = 0;
 
+    // The rate the frames are captured at. Frames are encoded only when the screen changed, so
+    // this is the most frames a second can bring; the budget of one frame is the bandwidth spread
+    // over that many frames, and a second full of changes costs no more than the bandwidth.
+    virtual void setFrameRate(int fps) = 0;
+
     proto::video::Encoding encoding() const { return encoding_; }
 
     void setKeyFrameRequired(bool enable) { key_frame_required_ = enable; }

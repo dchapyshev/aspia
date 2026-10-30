@@ -67,6 +67,9 @@ constexpr int kMinScreenCaptureFps = 10;
 constexpr int kMaxScreenCaptureFpsHighEnd = 30;
 constexpr int kMaxScreenCaptureFpsLowEnd = 20;
 
+constexpr int kTierUpThresholdPercent = 25;
+constexpr int kTierDownThresholdPercent = 10;
+
 #if defined(Q_OS_LINUX)
 // Right after login the compositor needs a moment to register its screen-cast interface, so every
 // Wayland probe can fail transiently. Retry the probe chain within this window before falling back to
@@ -303,11 +306,12 @@ void ScreenWorker::onStopCapture()
     video_encoder_.reset();
     cursor_encoder_.reset();
     scale_reducer_.reset();
-    video_encoding_ = proto::video::ENCODING_VP8;
+    video_encoding_ = proto::video::ENCODING_VP9;
 
-    capture_scheduler_.setFps(default_fps_);
+    setCaptureFps(default_fps_);
 
     last_bandwidth_ = 0;
+    tier_bandwidth_ = 0;
     pressure_score_ = 0;
     stable_time_ = Seconds::zero();
     cooldown_time_ = Seconds::zero();
@@ -366,20 +370,20 @@ void ScreenWorker::onOverflowStateChanged(proto::desktop::Overflow::State state)
     // The bandwidth estimate arrives separately (onBandwidthChanged); here it only caps the frame
     // rate. When it is not measured yet, use a conservative limit.
     int bandwidth_fps_limit = 20;
-    if (last_bandwidth_ > 0)
+    if (tier_bandwidth_ > 0)
     {
         // Calculate FPS limit based on measured bandwidth.
-        if (last_bandwidth_ < 70 * 1024)         // < 70 KB/s
+        if (tier_bandwidth_ < 70 * 1024)         // < 70 KB/s
             bandwidth_fps_limit = min_fps_;
-        else if (last_bandwidth_ < 150 * 1024)   // < 150 KB/s
+        else if (tier_bandwidth_ < 150 * 1024)   // < 150 KB/s
             bandwidth_fps_limit = 14;
-        else if (last_bandwidth_ < 300 * 1024)   // < 300 KB/s
+        else if (tier_bandwidth_ < 300 * 1024)   // < 300 KB/s
             bandwidth_fps_limit = 16;
-        else if (last_bandwidth_ < 500 * 1024)   // < 500 KB/s
+        else if (tier_bandwidth_ < 500 * 1024)   // < 500 KB/s
             bandwidth_fps_limit = 18;
-        else if (last_bandwidth_ < 1024 * 1024)  // < 1 MB/s
+        else if (tier_bandwidth_ < 1024 * 1024)  // < 1 MB/s
             bandwidth_fps_limit = 20;
-        else if (last_bandwidth_ < 2048 * 1024)  // < 2 MB/s
+        else if (tier_bandwidth_ < 2048 * 1024)  // < 2 MB/s
             bandwidth_fps_limit = 24;
         else
             bandwidth_fps_limit = max_fps_;
@@ -436,7 +440,7 @@ void ScreenWorker::onOverflowStateChanged(proto::desktop::Overflow::State state)
     }
 
     if (current_fps != next_fps)
-        capture_scheduler_.setFps(next_fps);
+        setCaptureFps(next_fps);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -445,18 +449,24 @@ void ScreenWorker::onBandwidthChanged(qint64 bandwidth)
     if (bandwidth <= 0 || bandwidth == last_bandwidth_)
         return;
 
-    // Also read by the FPS governor in onOverflowStateChanged.
     last_bandwidth_ = bandwidth;
+
+    if (tier_bandwidth_ <= 0 ||
+        bandwidth >= tier_bandwidth_ * (100 + kTierUpThresholdPercent) / 100 ||
+        bandwidth <= tier_bandwidth_ * (100 - kTierDownThresholdPercent) / 100)
+    {
+        tier_bandwidth_ = bandwidth;
+    }
 
     proto::video::Encoding desired_encoding = video_encoding_;
     const qint64 kVp9SwitchingThreshold = 1.5 * 1024 * 1024; // 1.5 MB/s
 
-    if (bandwidth < kVp9SwitchingThreshold && vp9_supported_)
+    if (tier_bandwidth_ < kVp9SwitchingThreshold && vp9_supported_)
     {
         // For low bandwidth connections, VP9 provides better compression.
         desired_encoding = proto::video::ENCODING_VP9;
     }
-    else if (bandwidth >= kVp9SwitchingThreshold && vp8_supported_)
+    else if (tier_bandwidth_ >= kVp9SwitchingThreshold && vp8_supported_)
     {
         desired_encoding = proto::video::ENCODING_VP8;
     }
@@ -495,7 +505,7 @@ void ScreenWorker::onPrepare()
     setupLinuxCapture();
 #endif // defined(Q_OS_LINUX)
 
-    capture_scheduler_.setFps(default_fps_);
+    setCaptureFps(default_fps_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -554,7 +564,7 @@ void ScreenWorker::onCaptureScreen()
                 serializer_.newMessage<proto::video::HostToClient>().mutable_packet();
             video_packet->set_error_code(proto::video::ERROR_CODE_TEMPORARY);
 
-            emit sig_videoData(serializer_.serialize<proto::video::HostToClient>(), false);
+            emit sig_videoData(serializer_.serialize<proto::video::HostToClient>());
         }
 
         // The capturer is created asynchronously (on Wayland only after the desktop portal session is
@@ -572,7 +582,7 @@ void ScreenWorker::onCaptureScreen()
             serializer_.newMessage<proto::video::HostToClient>().mutable_packet();
         video_packet->set_error_code(proto::video::ERROR_CODE_PAUSED);
 
-        emit sig_videoData(serializer_.serialize<proto::video::HostToClient>(), false);
+        emit sig_videoData(serializer_.serialize<proto::video::HostToClient>());
 
         capture_timer_->start(capture_scheduler_.nextCaptureDelay());
         return;
@@ -650,7 +660,7 @@ void ScreenWorker::onCaptureScreen()
             serializer_.newMessage<proto::video::HostToClient>().mutable_packet();
         video_packet->set_error_code(error_code);
 
-        emit sig_videoData(serializer_.serialize<proto::video::HostToClient>(), false);
+        emit sig_videoData(serializer_.serialize<proto::video::HostToClient>());
 
 #if defined(Q_OS_LINUX)
         registerCaptureFailure();
@@ -1382,9 +1392,7 @@ void ScreenWorker::encodeScreen(const Frame* frame)
         LOG(INFO) << "Video packet has format:" << *format;
     }
 
-    bool is_key_frame = packet->flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME;
-
-    emit sig_videoData(serializer_.serialize<proto::video::HostToClient>(), is_key_frame);
+    emit sig_videoData(serializer_.serialize<proto::video::HostToClient>());
 
     video_encoder_->setEncodeBuffer(std::move(*message.mutable_packet()->mutable_data()));
 }
@@ -1412,7 +1420,18 @@ void ScreenWorker::createVideoEncoder()
     // the next bandwidth change - sending a high-bitrate burst over a narrow link right after a
     // reconnect, when the encoder is recreated by onConfigure().
     if (video_encoder_)
+    {
         video_encoder_->setBandwidth(last_bandwidth_);
+        video_encoder_->setFrameRate(capture_scheduler_.fps());
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::setCaptureFps(int fps)
+{
+    capture_scheduler_.setFps(fps);
+    if (video_encoder_)
+        video_encoder_->setFrameRate(capture_scheduler_.fps());
 }
 
 //--------------------------------------------------------------------------------------------------

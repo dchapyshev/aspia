@@ -22,6 +22,15 @@
 #include "client/audio_output.h"
 #include "proto/desktop_audio.h"
 
+namespace {
+
+// A stalled network delivers its audio at once, and the playback would stay behind by that much for
+// the rest of the session, so the oldest audio is dropped above this lag.
+const size_t kMaxQueuedBytes =
+    AudioOutput::kSampleRate * AudioOutput::kChannels * AudioOutput::kBytesPerSample / 2; // 500 ms
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 AudioPlayer::AudioPlayer()
 {
@@ -56,7 +65,15 @@ std::unique_ptr<AudioPlayer> AudioPlayer::create()
 void AudioPlayer::addPacket(std::unique_ptr<proto::audio::Packet> packet)
 {
     std::scoped_lock lock(incoming_queue_lock_);
+
+    queued_bytes_ += packet->data(0).size();
     incoming_queue_.emplace(std::move(packet));
+
+    while (queued_bytes_ > kMaxQueuedBytes && incoming_queue_.size() > 1)
+    {
+        queued_bytes_ -= incoming_queue_.front()->data(0).size();
+        incoming_queue_.pop();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -95,6 +112,7 @@ size_t AudioPlayer::onMoreDataRequired(void* data, size_t size)
         }
         else
         {
+            queued_bytes_ -= packet_data.size();
             work_queue_.pop();
             source_pos_ = 0;
 

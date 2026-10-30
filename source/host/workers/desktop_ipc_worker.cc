@@ -48,10 +48,10 @@ DesktopIpcWorker::~DesktopIpcWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopIpcWorker::onVideoData(const QByteArray& buffer, bool is_key_frame)
+void DesktopIpcWorker::onVideoData(const QByteArray& buffer)
 {
     for (auto* client : std::as_const(clients_))
-        client->onVideoData(buffer, is_key_frame);
+        client->onVideoData(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -186,8 +186,7 @@ void DesktopIpcWorker::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopIpcWorker::onIpcMessageReceived(
-    quint32 /* ipc_channel_id */, const QByteArray& buffer, bool /* reliable */)
+void DesktopIpcWorker::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
 {
     proto::desktop::ServiceToAgent message;
     if (!parse(buffer, &message))
@@ -395,9 +394,9 @@ void DesktopIpcWorker::startClient(const QString& ipc_channel_name)
     });
     connect(ipc_channel, &IpcChannel::sig_messageReceived, client, &DesktopAgentClient::onMessageReceived);
     connect(client, &DesktopAgentClient::sig_sendMessage, ipc_channel,
-            [ipc_channel](quint32 channel_id, const QByteArray& buffer, bool reliable)
+            [ipc_channel](quint32 channel_id, const QByteArray& buffer)
     {
-        ipc_channel->send(channel_id, buffer, reliable);
+        ipc_channel->send(channel_id, buffer);
     });
 
     LOG(INFO) << "Starting client...";

@@ -555,7 +555,6 @@ void ServerWorker::startClient(TcpChannel* tcp_channel, const QString& stun_host
     {
         DesktopClient* desktop_client = new DesktopClient(channel.release(), this);
         desktop_client->setFeature(Client::FEATURE_UDP, true);
-        desktop_client->setFeature(Client::FEATURE_BANDWIDTH, true);
 
         // Track the client for the connected-clients list; the agent owns and deletes it.
         connect(desktop_client, &Client::sig_started, this, &ServerWorker::onClientStarted);

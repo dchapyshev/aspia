@@ -82,18 +82,17 @@ public:
     void connectTo(const QString& address, quint16 port);
     void connectTo(qintptr socket, const QString& address, quint16 port);
     void setPeerAddress(const QString& address, quint16 port);
-    void send(quint8 channel_id, const QByteArray& buffer, bool reliable);
+    void send(quint8 channel_id, const QByteArray& buffer);
 
     void setPaused(bool enable);
+
+    // Limits the reliable data in flight. Zero leaves the limit of the protocol.
+    void setWindowSize(qint64 bytes);
 
     void setEncryptor(std::unique_ptr<DatagramEncryptor> encryptor);
     void setDecryptor(std::unique_ptr<DatagramDecryptor> decryptor);
 
     qint64 pendingBytes() const;
-
-    // Smoothed round-trip time of the peer, measured continuously by ENet with its own acks and
-    // pings (even while the session is idle). Returns 0 when not connected.
-    MilliSeconds roundTripTime() const;
 
     Mode mode() const { return mode_; }
     UdpMethod method() const { return method_; }
@@ -102,6 +101,8 @@ public:
     qint64 totalTx() const { return total_tx_; }
     int speedRx();
     int speedTx();
+    int roundTripTime() const;
+    void logStatistics() const;
 
 signals:
     void sig_ready();
@@ -140,6 +141,7 @@ private:
     void onErrorOccurred(const Location& location);
     void onMessageReceived(quint8 channel_id, ScopedENetPacket packet);
     void onReadyCheck();
+    void applyWindowSize();
     void addTxBytes(qint64 bytes_count);
     void addRxBytes(qint64 bytes_count);
     ScopedENetPacket acquirePacket(qint64 size, quint32 flags);
@@ -156,6 +158,7 @@ private:
     quint64 send_counter_ = 0;
     AntiReplayWindow replay_window_;
     qint64 pending_bytes_ = 0;
+    qint64 window_size_ = 0;
 
     std::deque<ScopedENetPacket> packet_pool_;
     std::deque<std::pair<quint8, ScopedENetPacket>> read_pending_;

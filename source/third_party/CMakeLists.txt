@@ -27,4 +27,5 @@ if (LINUX)
     add_subdirectory(wayland-protocols)
 endif()
 
+add_subdirectory(enet)
 add_subdirectory(libvterm)

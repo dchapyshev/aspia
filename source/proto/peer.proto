@@ -30,6 +30,8 @@ enum ChannelId
     CHANNEL_ID_3       = 3; // Depends on session implementation.
     CHANNEL_ID_4       = 4; // Depends on session implementation.
     CHANNEL_ID_5       = 5; // Depends on session implementation.
+    CHANNEL_ID_PROBE   = 252; // The second probe of a train and its ack, apart from the first one.
+    CHANNEL_ID_PADDING = 253; // Filler of the bandwidth tests, dropped by the receiver.
     CHANNEL_ID_CONTROL = 254;
 }
 
@@ -104,9 +106,8 @@ message UdpReply
     uint32 port       = 6;
 }
 
-// One probe of a packet train. The train members are sent back to back, so the spacing of their
-// arrivals at the receiver reflects the bottleneck rate of the path (independent of the RTT, which
-// a single request/response probe would measure instead).
+// One probe of a train. The receiver answers every probe at once, and the sender takes the first
+// answer of the train, so one probe held up by a retransmission does not stand for the path.
 message BandwidthProbe
 {
     uint32 train_id = 1; // Identifies the train this probe belongs to.
@@ -115,13 +116,10 @@ message BandwidthProbe
     bytes payload   = 4;
 }
 
-// The receiver's report for a probe train: how long the train took to arrive and how much of it
-// arrived after the first probe. Bottleneck bandwidth = bytes / delta.
 message BandwidthProbeAck
 {
     uint32 train_id = 1;
-    uint64 delta_us = 2; // Time between the arrival of the first and the last received probe.
-    uint64 bytes    = 3; // Payload bytes received after the first probe.
+    reserved 2, 3;
 }
 
 // Periodic receive-rate report: how many bytes of session traffic actually arrived at the client

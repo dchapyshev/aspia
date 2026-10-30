@@ -238,7 +238,7 @@ void UserIpcWorker::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserIpcWorker::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool /* reliable */)
+void UserIpcWorker::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
 {
     quint16 net_channel_id = lowWord(channel_id);
     quint16 ipc_channel_id = highWord(channel_id);
@@ -399,8 +399,7 @@ void UserIpcWorker::sendServiceMessage()
         return;
 
     quint32 channel_id = makeUint32(proto::user::CHANNEL_ID_SERVICE, 0);
-    ipc_channel_->send(channel_id, outgoing_message_.serialize<proto::user::UserToService>(),
-                       /* reliable */ true, /* secure */ true);
+    ipc_channel_->send(channel_id, outgoing_message_.serialize<proto::user::UserToService>(), /* secure */ true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -410,5 +409,5 @@ void UserIpcWorker::sendNetworkMessage(quint8 net_channel_id, const QByteArray& 
         return;
 
     quint32 channel_id = makeUint32(proto::user::CHANNEL_ID_NETWORK, net_channel_id);
-    ipc_channel_->send(channel_id, buffer, /* reliable */ true, /* secure */ true);
+    ipc_channel_->send(channel_id, buffer, /* secure */ true);
 }

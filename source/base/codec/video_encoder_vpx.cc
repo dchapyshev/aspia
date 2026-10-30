@@ -32,8 +32,6 @@
 
 namespace {
 
-const MilliSeconds kTargetFrameInterval{ 80 };
-
 // Defines the dimension of a macro block. This is used to compute the active map for the encoder.
 const int kMacroBlockSize = 16;
 
@@ -183,6 +181,7 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
         }
 
         is_key_frame = true;
+        pts_ = 0;
     }
 
     if (is_key_frame)
@@ -232,10 +231,11 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
     // Do the actual encoding.
     ret = vpx_codec_encode(codec_.get(),
                            image_.get(),
-                           0, // pts
-                           static_cast<unsigned long>(MicroSeconds(kTargetFrameInterval).count()),
+                           pts_,
+                           static_cast<unsigned long>(frame_duration_us_),
                            flags,
                            VPX_DL_REALTIME);
+    pts_ += frame_duration_us_;
     if (ret != VPX_CODEC_OK)
     {
         LOG(ERROR) << "vpx_codec_encode failed:" << ret;
@@ -285,8 +285,7 @@ void VideoEncoderVpx::setBandwidth(qint64 bandwidth)
     }
     else
     {
-        // Keep ~15% headroom under the measured capacity. libvpx wants kbit/s.
-        const quint64 budget_kbps = static_cast<quint64>(bandwidth) * 8 * 85 / 100 / 1000;
+        const quint64 budget_kbps = static_cast<quint64>(bandwidth) * 8 / 1000;
         target_bitrate_kbps_ = static_cast<quint32>(std::clamp<quint64>(budget_kbps, 100, 16000));
 
         // Loosen the QP ceiling on low-bandwidth links so the encoder can compress aggressively,
@@ -339,6 +338,18 @@ void VideoEncoderVpx::createActiveMap(const QSize& size)
     active_map_.active_map = reinterpret_cast<quint8*>(active_map_buffer_.data());
 
     clearActiveMap();
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoEncoderVpx::setFrameRate(int fps)
+{
+    if (fps <= 0)
+    {
+        LOG(ERROR) << "Invalid frame rate:" << fps;
+        return;
+    }
+
+    frame_duration_us_ = 1'000'000 / fps;
 }
 
 //--------------------------------------------------------------------------------------------------

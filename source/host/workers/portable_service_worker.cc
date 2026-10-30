@@ -226,7 +226,6 @@ void PortableServiceWorker::startClient(
         client_to_start = client;
 
         client->setFeature(Client::FEATURE_UDP, true);
-        client->setFeature(Client::FEATURE_BANDWIDTH, true);
 
         connect(client, &Client::sig_finished, this, &PortableServiceWorker::onClientFinished);
 

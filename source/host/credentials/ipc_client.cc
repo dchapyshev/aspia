@@ -559,7 +559,7 @@ void IpcClient::sendRequest(Reason reason)
     output_.magic = kHeaderMagic;
     output_.message_size = sizeof(output_) - offsetof(Output, screen_type);
     output_.channel_id = 0;
-    output_.flags = kFlagReliable | kFlagSecure;
+    output_.flags = kFlagSecure;
     output_.screen_type = static_cast<uint8_t>(screen_type_);
     output_.reason = static_cast<uint8_t>(reason);
 

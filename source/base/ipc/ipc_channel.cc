@@ -55,8 +55,7 @@ const quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 const quint32 kHeaderMagic = 0x43495341;
 
 // Bit flags carried in the message header's |flags| field.
-const quint32 kFlagReliable = 1;
-const quint32 kFlagSecure = 2;
+const quint32 kFlagSecure = 1;
 
 #if defined(Q_OS_UNIX)
 const char kNamePrefix[] = "/tmp/aspia_";
@@ -261,12 +260,12 @@ void IpcChannel::setPaused(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::send(quint32 channel_id, const QByteArray& buffer, bool reliable, bool secure)
+void IpcChannel::send(quint32 channel_id, const QByteArray& buffer, bool secure)
 {
     const bool schedule_write = io_->write_queue.empty();
 
     // Add the buffer to the queue for sending.
-    io_->write_queue.emplace_back(channel_id, buffer, reliable, secure);
+    io_->write_queue.emplace_back(channel_id, buffer, secure);
 
     if (schedule_write)
         doWriteHeader();
@@ -389,8 +388,7 @@ void IpcChannel::onMessageReceived()
 {
     const quint32 flags = io_->read_header.flags;
 
-    emit sig_messageReceived(
-        io_->read_header.channel_id, io_->read_buffer, (flags & kFlagReliable) != 0);
+    emit sig_messageReceived(io_->read_header.channel_id, io_->read_buffer);
 
     if (flags & kFlagSecure)
         memZero(&io_->read_buffer);
@@ -406,7 +404,7 @@ void IpcChannel::doWriteHeader()
     io_->write_header.magic = kHeaderMagic;
     io_->write_header.message_size = task.data().size();
     io_->write_header.channel_id = task.channelId();
-    io_->write_header.flags = (task.reliable() ? kFlagReliable : 0) | (task.secure() ? kFlagSecure : 0);
+    io_->write_header.flags = task.secure() ? kFlagSecure : 0;
 
     if (!io_->write_header.message_size || io_->write_header.message_size > kMaxMessageSize)
     {

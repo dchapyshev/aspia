@@ -117,7 +117,7 @@ void NetworkWorker::onSendMessage(quint8 channel_id, const QByteArray& buffer)
 
     if (udp_ready_)
     {
-        udp_channel_->send(channel_id, buffer, true);
+        udp_channel_->send(channel_id, buffer);
         return;
     }
 
@@ -231,7 +231,10 @@ void NetworkWorker::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void NetworkWorker::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id != proto::peer::CHANNEL_ID_CONTROL)
+    if (channel_id == proto::peer::CHANNEL_ID_PADDING)
+        return;
+
+    if (channel_id != proto::peer::CHANNEL_ID_CONTROL && channel_id != proto::peer::CHANNEL_ID_PROBE)
     {
         routeMessage(channel_id, buffer);
         return;
@@ -251,7 +254,7 @@ void NetworkWorker::onTcpMessageReceived(quint8 channel_id, const QByteArray& bu
     else if (message.has_gateway_udp_request())
         readGatewayUdpRequest(message.gateway_udp_request());
     else if (message.has_bandwidth_probe())
-        readBandwidthProbe(message.bandwidth_probe(), /* via_udp= */ false);
+        readBandwidthProbe(message.bandwidth_probe(), channel_id, /* via_udp= */ false);
     else if (message.has_udp_switch())
         readUdpSwitch();
     else
@@ -261,7 +264,10 @@ void NetworkWorker::onTcpMessageReceived(quint8 channel_id, const QByteArray& bu
 //--------------------------------------------------------------------------------------------------
 void NetworkWorker::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id != proto::peer::CHANNEL_ID_CONTROL)
+    if (channel_id == proto::peer::CHANNEL_ID_PADDING)
+        return;
+
+    if (channel_id != proto::peer::CHANNEL_ID_CONTROL && channel_id != proto::peer::CHANNEL_ID_PROBE)
     {
         if (udp_switch_pending_)
         {
@@ -294,7 +300,7 @@ void NetworkWorker::onUdpMessageReceived(quint8 channel_id, const QByteArray& bu
             udp_ready_ = true;
         }
 
-        readBandwidthProbe(message.bandwidth_probe(), /* via_udp= */ true);
+        readBandwidthProbe(message.bandwidth_probe(), channel_id, /* via_udp= */ true);
     }
     else
     {
@@ -552,42 +558,16 @@ void NetworkWorker::connectionLost(TcpChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void NetworkWorker::readBandwidthProbe(const proto::peer::BandwidthProbe& probe, bool via_udp)
+void NetworkWorker::readBandwidthProbe(const proto::peer::BandwidthProbe& probe, quint8 channel_id,
+                                       bool via_udp)
 {
-    ProbeTrain& probe_train = via_udp ? udp_probe_train_ : tcp_probe_train_;
+    proto::peer::ClientToHost message;
+    message.mutable_bandwidth_probe_ack()->set_train_id(probe.train_id());
 
-    // First probe of a new train (an unfinished previous train - lost probes on UDP - is simply
-    // superseded).
-    if (!probe_train.active || probe_train.id != probe.train_id())
-    {
-        probe_train.id = probe.train_id();
-        probe_train.active = true;
-        probe_train.bytes = 0;
-        probe_train.first_arrival = Clock::now();
-        return;
-    }
-
-    probe_train.bytes += probe.payload().size();
-
-    // The last probe of the train completes the measurement: report how long the train took to
-    // arrive and how much of it arrived after the first probe. The probes are sent back to back, so
-    // this reflects the bottleneck rate of the path, not the RTT.
-    if (probe.index() + 1 >= probe.count())
-    {
-        proto::peer::ClientToHost message;
-        proto::peer::BandwidthProbeAck* ack = message.mutable_bandwidth_probe_ack();
-        ack->set_train_id(probe_train.id);
-        ack->set_delta_us(static_cast<quint64>(
-            DurationCast<MicroSeconds>(Clock::now() - probe_train.first_arrival).count()));
-        ack->set_bytes(probe_train.bytes);
-
-        probe_train.active = false;
-
-        if (via_udp)
-            udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message), true);
-        else
-            tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
-    }
+    if (via_udp)
+        udp_channel_->send(channel_id, serialize(message));
+    else
+        tcp_channel_->send(channel_id, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

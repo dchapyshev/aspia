@@ -67,7 +67,7 @@ public:
 
     void releaseKeyboardKeys();
 
-    void onVideoData(const QByteArray& buffer, bool is_key_frame);
+    void onVideoData(const QByteArray& buffer);
     void onScreenListData(const QByteArray& buffer);
     void onScreenTypeData(const QByteArray& buffer);
     void onCursorPositionData(const QByteArray& buffer);
@@ -75,10 +75,10 @@ public:
     void onAudioData(const QByteArray& buffer);
 
 public slots:
-    void onMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
+    void onMessageReceived(quint32 channel_id, const QByteArray& buffer);
 
 signals:
-    void sig_sendMessage(quint32 channel_id, const QByteArray& buffer, bool reliable);
+    void sig_sendMessage(quint32 channel_id, const QByteArray& buffer);
     void sig_injectKeyEvent(const proto::input::KeyEvent& event);
     void sig_injectTextEvent(const proto::input::TextEvent& event);
     void sig_injectMouseEvent(const proto::input::MouseEvent& event);
@@ -92,7 +92,7 @@ signals:
 
 private:
     void readSessionMessage(quint8 channel_id, const QByteArray& buffer);
-    void sendSessionMessage(quint8 channel_id, const QByteArray& buffer, bool reliable);
+    void sendSessionMessage(quint8 channel_id, const QByteArray& buffer);
 
     void readKeyEvent(const proto::input::KeyEvent& event);
     void readPreferredSize(const proto::video::PreferredSize& size);

@@ -220,8 +220,7 @@ bool Credentials::sendCredentials(const SecureString& username, const SecureStri
     memZero(&user);
 
     ipc_channel_->send(0, QByteArray(reinterpret_cast<const char*>(&reply),
-                                     static_cast<qsizetype>(sizeof(reply))),
-                       /* reliable */ true, /* secure */ true);
+                                     static_cast<qsizetype>(sizeof(reply))), /* secure */ true);
 
     memZero(&reply, sizeof(reply));
 
@@ -282,7 +281,7 @@ void Credentials::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Credentials::onIpcMessageReceived(quint32 /* channel_id */, const QByteArray& buffer, bool /* reliable */)
+void Credentials::onIpcMessageReceived(quint32 /* channel_id */, const QByteArray& buffer)
 {
     if (buffer.size() != sizeof(Request))
     {

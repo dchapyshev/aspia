@@ -49,15 +49,14 @@ PortableUserWorker::~PortableUserWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PortableUserWorker::onDesktopClientMessage(
-    quint32 client_id, quint32 channel_id, const QByteArray& buffer, bool reliable)
+void PortableUserWorker::onDesktopClientMessage(quint32 client_id, quint32 channel_id, const QByteArray& buffer)
 {
     for (auto* client : std::as_const(clients_))
     {
         if (client->clientId() == client_id)
         {
             if (PortableDesktopClient* desktop_client = dynamic_cast<PortableDesktopClient*>(client))
-                desktop_client->readDesktopMessage(channel_id, buffer, reliable);
+                desktop_client->readDesktopMessage(channel_id, buffer);
             return;
         }
     }
@@ -210,7 +209,6 @@ void PortableUserWorker::startClient(TcpChannel* tcp_channel, const QString& stu
         const quint32 client_id = client->clientId();
 
         client->setFeature(Client::FEATURE_UDP, true);
-        client->setFeature(Client::FEATURE_BANDWIDTH, true);
 
         connect(client, &Client::sig_finished, this, &PortableUserWorker::onClientFinished);
 

@@ -41,16 +41,13 @@ PortableDesktopClient::~PortableDesktopClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PortableDesktopClient::readDesktopMessage(quint32 channel_id, const QByteArray& buffer, bool reliable)
+void PortableDesktopClient::readDesktopMessage(quint32 channel_id, const QByteArray& buffer)
 {
     quint16 net_channel_id = lowWord(channel_id);
     quint16 ipc_channel_id = highWord(channel_id);
 
-    if (force_reliable_)
-        reliable = true;
-
     if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SESSION)
-        send(net_channel_id, buffer, reliable);
+        send(net_channel_id, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -153,42 +150,11 @@ void PortableDesktopClient::onTimer(TimePoint now)
     if (isFinished() || !overflow_detection_enabled_)
         return;
 
-    // Byte thresholds: an absolute backstop that fires regardless of the bandwidth estimate. They
-    // bound the damage when the estimate is too optimistic - an overestimated link would otherwise
-    // be allowed to queue tens of megabytes before the drain-time brake below trips.
-    static const qint64 kCriticalPendingBytes = 1 * 1024 * 1024; // 1 MB
-    static const qint64 kWarningPendingBytes = 512 * 1024; // 512 kB
-
-    // Drain-time thresholds: how long the queued data would take to go out at the estimated link
-    // rate. They trip much earlier than the byte backstop on slow links, where a fixed byte count
-    // would mean seconds of added latency before any throttling starts.
-    static const MilliSeconds kCriticalDrainTime{ 1000 };
-    static const MilliSeconds kWarningDrainTime{ 300 };
-
-    // The excess over the path's normal in-flight window; a healthy long-RTT UDP link would trip
-    // the thresholds constantly on the raw value.
-    proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
-    qint64 pending = excessPendingBytes();
-    const qint64 estimated_bandwidth = bandwidth();
-
-    if (pending > kCriticalPendingBytes)
-        state = proto::desktop::Overflow::STATE_CRITICAL;
-    else if (pending > kWarningPendingBytes)
-        state = proto::desktop::Overflow::STATE_WARNING;
-
-    if (estimated_bandwidth > 0 && state != proto::desktop::Overflow::STATE_CRITICAL)
-    {
-        const MilliSeconds drain_time{ pending * 1000 / estimated_bandwidth };
-
-        if (drain_time > kCriticalDrainTime)
-            state = proto::desktop::Overflow::STATE_CRITICAL;
-        else if (drain_time > kWarningDrainTime && state == proto::desktop::Overflow::STATE_NONE)
-            state = proto::desktop::Overflow::STATE_WARNING;
-    }
+    const proto::desktop::Overflow::State state = overflowState(now);
 
     if (state != last_state_)
     {
-        CLOG(INFO) << "Overflow state:" << state << "pending:" << pending;
+        CLOG(INFO) << "Overflow state:" << state << "pending:" << pendingBytes();
         last_state_ = state;
     }
 
@@ -213,22 +179,5 @@ void PortableDesktopClient::sendDesktopServiceMessage(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void PortableDesktopClient::readFeedback(const proto::control::Feedback& feedback)
 {
-    if (feedback.command_name() == "reliable")
-    {
-        if (feedback.value_case() != proto::control::Feedback::kBoolean)
-        {
-            CLOG(WARNING) << "Feedback 'reliable' expects boolean value";
-            return;
-        }
-
-        if (force_reliable_ != feedback.boolean())
-        {
-            CLOG(INFO) << "Force reliable changed:" << force_reliable_ << "->" << feedback.boolean();
-            force_reliable_ = feedback.boolean();
-        }
-    }
-    else
-    {
-        CLOG(WARNING) << "Unknown feedback command:" << feedback.command_name();
-    }
+    CLOG(WARNING) << "Unknown feedback command:" << feedback.command_name();
 }

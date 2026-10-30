@@ -44,7 +44,7 @@ public:
     ~PortableUserWorker() final;
 
 public slots:
-    void onDesktopClientMessage(quint32 client_id, quint32 channel_id, const QByteArray& buffer, bool reliable);
+    void onDesktopClientMessage(quint32 client_id, quint32 channel_id, const QByteArray& buffer);
 
 signals:
     void sig_desktopClientStarted(quint32 client_id);

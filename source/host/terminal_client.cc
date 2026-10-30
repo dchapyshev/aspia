@@ -436,8 +436,7 @@ void TerminalClient::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TerminalClient::onIpcMessageReceived(
-    quint32 /* ipc_channel_id */, const QByteArray& buffer, bool /* reliable */)
+void TerminalClient::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
 {
     send(proto::peer::CHANNEL_ID_0, buffer);
 }

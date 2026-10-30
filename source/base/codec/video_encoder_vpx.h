@@ -38,6 +38,7 @@ public:
     // VideoEncoder implementation.
     Result encode(const Frame* frame, proto::video::Packet* packet) final;
     void setBandwidth(qint64 bandwidth) final;
+    void setFrameRate(int fps) final;
 
 private:
     friend class VideoEncoderVpxTestPeer;
@@ -57,6 +58,8 @@ private:
     quint32 min_quantizer_ = 10;
     quint32 max_quantizer_ = 30;
     quint32 target_bitrate_kbps_ = 1000;
+    qint64 frame_duration_us_ = 80000;
+    qint64 pts_ = 0;
 
     vpx_codec_enc_cfg_t config_;
     ScopedVpxCodec codec_;

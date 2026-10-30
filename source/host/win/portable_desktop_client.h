@@ -34,7 +34,7 @@ public:
     explicit PortableDesktopClient(TcpChannel* tcp_channel, QObject* parent = nullptr);
     ~PortableDesktopClient() final;
 
-    void readDesktopMessage(quint32 channel_id, const QByteArray& buffer, bool reliable);
+    void readDesktopMessage(quint32 channel_id, const QByteArray& buffer);
 
 public slots:
     void onUserMessage(quint8 channel_id, const QByteArray& buffer);
@@ -58,8 +58,6 @@ private:
     bool overflow_detection_enabled_ = false;
     proto::desktop::Overflow::State last_state_ = proto::desktop::Overflow::STATE_NONE;
     std::optional<proto::control::Config> config_;
-
-    bool force_reliable_ = false;
 
     Q_DISABLE_COPY_MOVE(PortableDesktopClient)
 };
