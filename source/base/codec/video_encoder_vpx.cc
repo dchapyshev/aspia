@@ -230,6 +230,10 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
         packet->set_flags(proto::video::PACKET_FLAG_IS_KEY_FRAME);
         flags |= VPX_EFLAG_FORCE_KF;
     }
+    else if (encoding() == proto::video::ENCODING_VP9 && !use_golden_frame_)
+    {
+        flags |= VP8_EFLAG_NO_REF_GF;
+    }
 
     // From speed 8 VP9 picks the modes of a key frame the fast way and makes it much larger. Key
     // frames are rare, so they are encoded at a lower speed.
@@ -307,11 +311,16 @@ void VideoEncoderVpx::setBandwidth(qint64 bandwidth)
         min_quantizer_ = 10;
         max_quantizer_ = 30;
         target_bitrate_kbps_ = 1000;
+        use_golden_frame_ = true;
     }
     else
     {
         const quint64 budget_kbps = static_cast<quint64>(bandwidth) * 8 / 1000;
         target_bitrate_kbps_ = static_cast<quint32>(std::clamp<quint64>(budget_kbps, 100, 16000));
+
+        // Without the golden reference VP9 spends ~10% less CPU, but its frames grow by 1-3%. Below
+        // 2 MB/s sending the extra bytes takes longer than the CPU saves.
+        use_golden_frame_ = bandwidth < 2 * 1024 * 1024;
 
         // Loosen the QP ceiling on low-bandwidth links so the encoder can compress aggressively,
         // tighten the floor on high-bandwidth links so it can spend bits on quality. The numbers

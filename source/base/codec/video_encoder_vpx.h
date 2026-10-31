@@ -58,6 +58,7 @@ private:
     quint32 min_quantizer_ = 10;
     quint32 max_quantizer_ = 30;
     quint32 target_bitrate_kbps_ = 1000;
+    bool use_golden_frame_ = true;
     qint64 frame_duration_us_ = 80000;
     qint64 pts_ = 0;
 
