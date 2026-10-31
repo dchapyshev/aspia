@@ -284,6 +284,7 @@ void ScreenWorker::onConfigure(const proto::control::Config& config, bool vp8_su
     if (!power_save_blocker_)
         power_save_blocker_ = new PowerSaveBlocker(this);
 
+    sendMetrics();
     capture_timer_->start(MilliSeconds(0));
 }
 
@@ -431,7 +432,10 @@ void ScreenWorker::onOverflowStateChanged(proto::desktop::Overflow::State state)
     }
 
     if (current_fps != next_fps)
+    {
         setCaptureFps(next_fps);
+        sendMetrics();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1400,6 +1404,15 @@ void ScreenWorker::setCaptureFps(int fps)
     capture_scheduler_.setFps(fps);
     if (video_encoder_)
         video_encoder_->setFrameRate(capture_scheduler_.fps());
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::sendMetrics()
+{
+    proto::video::Metrics* metrics =
+        serializer_.newMessage<proto::video::HostToClient>().mutable_metrics();
+    metrics->set_capture_fps(static_cast<quint32>(capture_scheduler_.fps()));
+    emit sig_videoData(serializer_.serialize<proto::video::HostToClient>());
 }
 
 //--------------------------------------------------------------------------------------------------

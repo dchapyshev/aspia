@@ -129,6 +129,7 @@ private:
     void onReceiveRate(const proto::peer::ReceiveRate& rate);
     void checkBandwidth();
     void publishBandwidth(qint64 bandwidth);
+    void sendMetrics();
     void setUdpState(const Location& location, UdpState state);
 
     bool finished_emitted_ = false;

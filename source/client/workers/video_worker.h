@@ -54,7 +54,8 @@ public:
         size_t min_packet = 0;
         size_t max_packet = 0;
         size_t avg_packet = 0;
-        int fps = 0;
+        int received_fps = 0;
+        int capture_fps = 0;
         quint32 capturer_type = 0;
         quint32 encoder_type = 0;
         int cursor_shape_count = 0;

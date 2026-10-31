@@ -193,6 +193,8 @@ void NetworkWorker::onTimer(TimePoint now)
         metrics.udp_method = UdpMethod::DISABLED;
     }
 
+    metrics.bandwidth_estimate = bandwidth_estimate_;
+
     emit sig_metrics(metrics);
 
     const qint64 total = (tcp_channel_ ? tcp_channel_->totalRx() : 0) +
@@ -257,6 +259,8 @@ void NetworkWorker::onTcpMessageReceived(quint8 channel_id, const QByteArray& bu
         readBandwidthProbe(message.bandwidth_probe(), channel_id, /* via_udp= */ false);
     else if (message.has_udp_switch())
         readUdpSwitch();
+    else if (message.has_metrics())
+        bandwidth_estimate_ = static_cast<qint64>(message.metrics().bandwidth());
     else
         LOG(WARNING) << "Unhandled control message";
 }
@@ -301,6 +305,10 @@ void NetworkWorker::onUdpMessageReceived(quint8 channel_id, const QByteArray& bu
         }
 
         readBandwidthProbe(message.bandwidth_probe(), channel_id, /* via_udp= */ true);
+    }
+    else if (message.has_metrics())
+    {
+        bandwidth_estimate_ = static_cast<qint64>(message.metrics().bandwidth());
     }
     else
     {
@@ -534,6 +542,8 @@ void NetworkWorker::connectionLost(TcpChannel::ErrorCode error_code)
 
     udp_ready_ = false;
     held_udp_messages_.clear();
+    bandwidth_estimate_ = 0;
+
     if (udp_channel_)
     {
         udp_channel_->disconnect();

@@ -125,10 +125,17 @@ message PreferredSize
     int32 height = 2;
 }
 
+// Sent by host to client.
+message Metrics
+{
+    uint32 capture_fps = 1;
+}
+
 // Client <- Host (channel 3).
 message HostToClient
 {
-    Packet packet = 1;
+    Packet packet   = 1;
+    Metrics metrics = 2;
 }
 
 // Client -> Host (channel 3).

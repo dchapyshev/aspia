@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>352</width>
-    <height>399</height>
+    <height>450</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,6 +73,11 @@
      </item>
      <item>
       <property name="text">
+       <string notr="true">Bandwidth Estimate</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string notr="true">Video Packet Count</string>
       </property>
      </item>
@@ -98,7 +103,12 @@
      </item>
      <item>
       <property name="text">
-       <string notr="true">FPS</string>
+       <string notr="true">Received FPS</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Capture FPS</string>
       </property>
      </item>
      <item>

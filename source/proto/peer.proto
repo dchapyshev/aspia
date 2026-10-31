@@ -139,6 +139,11 @@ message UdpSwitch
     uint32 dummy = 1; // Always set to 1.
 }
 
+message Metrics
+{
+    uint64 bandwidth = 1; // The bandwidth estimate of the host, bytes per second.
+}
+
 // Use CHANNEL_ID_CONTROL to send.
 message ClientToHost
 {
@@ -156,4 +161,5 @@ message HostToClient
     GatewayUdpRequest gateway_udp_request = 3;
     BandwidthProbe bandwidth_probe        = 4;
     UdpSwitch udp_switch                  = 5;
+    Metrics metrics                       = 6;
 }

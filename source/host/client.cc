@@ -557,6 +557,15 @@ void Client::publishBandwidth(qint64 bandwidth)
 
     published_bandwidth_ = bandwidth;
     onBandwidthChanged(bandwidth);
+    sendMetrics();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::sendMetrics()
+{
+    proto::peer::HostToClient message;
+    message.mutable_metrics()->set_bandwidth(static_cast<quint64>(published_bandwidth_));
+    send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

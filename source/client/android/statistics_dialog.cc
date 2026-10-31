@@ -46,12 +46,14 @@ enum Row
     ROW_TOTAL_UDP,
     ROW_SPEED_UDP,
     ROW_UDP,
+    ROW_BANDWIDTH_ESTIMATE,
     ROW_VIDEO_PACKET_COUNT,
     ROW_VIDEO_PACKET_STATS,
     ROW_AUDIO_PACKET_COUNT,
     ROW_AUDIO_PACKET_STATS,
     ROW_VIDEO_CODEC,
-    ROW_FPS,
+    ROW_RECEIVED_FPS,
+    ROW_CAPTURE_FPS,
     ROW_CLIPBOARD,
     ROW_CURSOR_SHAPE,
     ROW_CURSOR_CACHE_SIZE,
@@ -183,12 +185,14 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
     addRow("Total UDP RX/TX");
     addRow("Speed UDP RX/TX");
     addRow("UDP");
+    addRow("Bandwidth Estimate");
     addRow("Video Packet Count");
     addRow("Video Packet MIN/MAX/AVG");
     addRow("Audio Packet Count");
     addRow("Audio Packet MIN/MAX/AVG");
     addRow("Video Capturer/Codec");
-    addRow("FPS");
+    addRow("Received FPS");
+    addRow("Capture FPS");
     addRow("Clipboard Event Read/Send");
     addRow("Cursor Shape Count/Cache");
     addRow("Cursor Shape Cache Size");
@@ -237,6 +241,8 @@ void StatisticsDialog::onNetworkMetrics(const NetworkWorker::Metrics& metrics)
     set(ROW_SPEED_UDP, Formatter::transferSpeedToString(metrics.speed_udp_rx) + " / " +
         Formatter::transferSpeedToString(metrics.speed_udp_tx));
     set(ROW_UDP, udpMethodToString(metrics.udp_method));
+    set(ROW_BANDWIDTH_ESTIMATE,
+        metrics.bandwidth_estimate ? Formatter::transferSpeedToString(metrics.bandwidth_estimate) : "-");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -250,7 +256,8 @@ void StatisticsDialog::onVideoMetrics(const VideoWorker::Metrics& metrics)
         Formatter::sizeToString(metrics.avg_packet));
     set(ROW_VIDEO_CODEC, capturerToString(metrics.capturer_type) + " / " +
         encoderToString(metrics.encoder_type));
-    set(ROW_FPS, QString::number(metrics.fps));
+    set(ROW_RECEIVED_FPS, QString::number(metrics.received_fps));
+    set(ROW_CAPTURE_FPS, metrics.capture_fps ? QString::number(metrics.capture_fps) : "-");
     set(ROW_CURSOR_SHAPE, QString::number(metrics.cursor_shape_count) + " / " +
         QString::number(metrics.cursor_taken_from_cache));
     set(ROW_CURSOR_CACHE_SIZE, QString::number(metrics.cursor_cached));

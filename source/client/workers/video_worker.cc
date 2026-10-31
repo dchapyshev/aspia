@@ -167,11 +167,11 @@ void VideoWorker::onTimer(TimePoint now)
     if (fps_time_ != TimePoint())
     {
         const MilliSeconds duration = DurationCast<MilliSeconds>(now - fps_time_);
-        metrics_.fps = calculateFps(metrics_.fps, duration, fps_frame_count_);
+        metrics_.received_fps = calculateFps(metrics_.received_fps, duration, fps_frame_count_);
     }
     else
     {
-        metrics_.fps = 0;
+        metrics_.received_fps = 0;
     }
 
     fps_time_ = now;
@@ -192,6 +192,8 @@ void VideoWorker::onVideoMessage(const QByteArray& buffer)
 
     if (message->has_packet())
         decodePacket(message->packet());
+    else if (message->has_metrics())
+        metrics_.capture_fps = static_cast<int>(message->metrics().capture_fps());
 }
 
 //--------------------------------------------------------------------------------------------------

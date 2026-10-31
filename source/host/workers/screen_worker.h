@@ -148,6 +148,7 @@ private:
     void encodeCursor(const MouseCursor* cursor);
     void createVideoEncoder();
     void setCaptureFps(int fps);
+    void sendMetrics();
     void updateInjectorScreenInfo(const Frame* frame);
 
     ScopedQPointer<InputInjector> input_injector_;

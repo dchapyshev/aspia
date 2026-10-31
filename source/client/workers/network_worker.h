@@ -74,6 +74,7 @@ public:
         int speed_udp_rx = 0;
         int speed_udp_tx = 0;
         UdpMethod udp_method {};
+        qint64 bandwidth_estimate = 0;
     };
 
 public slots:
@@ -155,6 +156,8 @@ private:
     // Receive-rate reporting (see onTimer).
     TimePoint receive_rate_time_;
     qint64 receive_rate_last_total_ = 0;
+
+    qint64 bandwidth_estimate_ = 0;
 
     Q_DISABLE_COPY_MOVE(NetworkWorker)
 };
