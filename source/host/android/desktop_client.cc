@@ -130,6 +130,12 @@ void DesktopClient::onMessage(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopClient::onBandwidthChanged(qint64 /* bandwidth */)
+{
+    emit sig_bandwidthChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopClient::handleControl(const QByteArray& buffer)
 {
     proto::control::ClientToHost message;

@@ -50,6 +50,7 @@ public:
     bool isOpusSupported() const { return opus_supported_; }
     bool isAudioEnabled() const { return audio_enabled_; }
     const QSize& preferredSize() const { return preferred_size_; }
+    qint64 bandwidth() const { return publishedBandwidth(); }
     void releaseKeyboardKeys();
 
     // Forward shared session data (encoded once by the DesktopAgent) to this client's channel.
@@ -60,6 +61,7 @@ public:
 
 signals:
     void sig_configured();
+    void sig_bandwidthChanged();
     void sig_keyFrameRequested();
     void sig_preferredSizeChanged();
     void sig_screenListRequested();
@@ -73,6 +75,7 @@ protected:
     // Client implementation.
     void onStart() final;
     void onMessage(quint8 channel_id, const QByteArray& buffer) final;
+    void onBandwidthChanged(qint64 bandwidth) final;
 
 private:
     void handleControl(const QByteArray& buffer);

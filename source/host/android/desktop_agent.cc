@@ -79,6 +79,7 @@ void DesktopAgent::addClient(DesktopClient* client)
     clients_.append(client);
 
     connect(client, &DesktopClient::sig_configured, this, &DesktopAgent::onClientConfigured);
+    connect(client, &DesktopClient::sig_bandwidthChanged, this, &DesktopAgent::onBandwidthChanged);
     connect(client, &DesktopClient::sig_keyFrameRequested, this, &DesktopAgent::onKeyFrameRequested);
     connect(client, &DesktopClient::sig_preferredSizeChanged, this, &DesktopAgent::onPreferredSizeChanged);
     connect(client, &DesktopClient::sig_screenListRequested, this, &DesktopAgent::onScreenListRequested);
@@ -160,6 +161,13 @@ void DesktopAgent::onClientConfigured()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopAgent::onBandwidthChanged()
+{
+    if (video_encoder_)
+        video_encoder_->setBandwidth(minimalBandwidth());
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopAgent::onKeyFrameRequested()
 {
     if (video_encoder_)
@@ -204,6 +212,8 @@ void DesktopAgent::onClientFinished(DesktopClient* client)
     clients_.removeOne(client);
     client->releaseKeyboardKeys();
     client->deleteLater();
+
+    onBandwidthChanged();
 
     audio_enabled_ = isAudioEnabled();
     if (!audio_enabled_ && audio_capturer_)
@@ -365,7 +375,28 @@ void DesktopAgent::createVideoEncoder()
 {
     video_encoder_ = VideoEncoder::create(video_encoding_);
     if (!video_encoder_)
+    {
         LOG(ERROR) << "Unable to create video encoder for encoding:" << video_encoding_;
+        return;
+    }
+
+    video_encoder_->setBandwidth(minimalBandwidth());
+    video_encoder_->setFrameRate(static_cast<int>(Seconds(1) / kCaptureInterval));
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 DesktopAgent::minimalBandwidth() const
+{
+    qint64 minimal_bandwidth = 0;
+
+    for (auto* client : std::as_const(clients_))
+    {
+        const qint64 bandwidth = client->bandwidth();
+        if (bandwidth != 0 && (minimal_bandwidth == 0 || bandwidth < minimal_bandwidth))
+            minimal_bandwidth = bandwidth;
+    }
+
+    return minimal_bandwidth;
 }
 
 //--------------------------------------------------------------------------------------------------

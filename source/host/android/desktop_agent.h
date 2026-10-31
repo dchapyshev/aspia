@@ -69,6 +69,7 @@ public:
 
 private slots:
     void onClientConfigured();
+    void onBandwidthChanged();
     void onKeyFrameRequested();
     void onPreferredSizeChanged();
     void onScreenListRequested();
@@ -91,6 +92,7 @@ private slots:
 
 private:
     void createVideoEncoder();
+    qint64 minimalBandwidth() const;
     bool startCapturer();
     bool isAudioEnabled() const;
     void sendScreenList();
