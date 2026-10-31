@@ -22,6 +22,8 @@
 if (ANDROID)
     # Portable core files this build needs. More are added here as the host is ported to Android.
     list(APPEND SOURCE_HOST
+        bandwidth_controller.cc
+        bandwidth_controller.h
         client.cc
         client.h
         database.cc

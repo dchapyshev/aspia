@@ -240,10 +240,9 @@ void ScreenWorker::onConfigure(const proto::control::Config& config, bool vp8_su
         return;
     }
 
-    vp8_supported_ = vp8_supported;
-    vp9_supported_ = vp9_supported;
+    video_encoding_ = vp9_supported ? proto::video::ENCODING_VP9 : proto::video::ENCODING_VP8;
 
-    LOG(INFO) << "Configuration:" << config << "vp8:" << vp8_supported_ << "vp9:" << vp9_supported_;
+    LOG(INFO) << "Configuration:" << config << "vp8:" << vp8_supported << "vp9:" << vp9_supported;
 
     // The first client that requested a preferred resolution wins. It is applied to the monitors
     // in onCaptureScreen.
@@ -448,29 +447,6 @@ void ScreenWorker::onBandwidthChanged(qint64 bandwidth)
         bandwidth <= tier_bandwidth_ * (100 - kTierDownThresholdPercent) / 100)
     {
         tier_bandwidth_ = bandwidth;
-    }
-
-    proto::video::Encoding desired_encoding = video_encoding_;
-    const qint64 kVp9SwitchingThreshold = 1.5 * 1024 * 1024; // 1.5 MB/s
-
-    if (tier_bandwidth_ < kVp9SwitchingThreshold && vp9_supported_)
-    {
-        // For low bandwidth connections, VP9 provides better compression.
-        desired_encoding = proto::video::ENCODING_VP9;
-    }
-    else if (tier_bandwidth_ >= kVp9SwitchingThreshold && vp8_supported_)
-    {
-        desired_encoding = proto::video::ENCODING_VP8;
-    }
-
-    if (desired_encoding != video_encoding_ && video_encoder_)
-    {
-        LOG(INFO) << "Switching video encoding:" << video_encoding_ << "->" << desired_encoding;
-        video_encoding_ = desired_encoding;
-
-        // The fresh encoder picks the new bandwidth up from |last_bandwidth_| in createVideoEncoder().
-        createVideoEncoder();
-        return;
     }
 
     if (video_encoder_)

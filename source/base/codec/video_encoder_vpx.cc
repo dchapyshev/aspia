@@ -38,9 +38,6 @@ const int kMacroBlockSize = 16;
 // Magic encoder profile numbers for I420 input formats.
 const int kVp9I420ProfileNumber = 0;
 
-// Magic encoder constant for adaptive quantization strategy.
-const int kVp9AqModeCyclicRefresh = 3;
-
 const int kVp9Speed = 9;
 const int kVp9KeyFrameSpeed = 7;
 
@@ -475,10 +472,15 @@ bool VideoEncoderVpx::createVp9Codec(const QSize& size)
 
     setCommonCodecParameters(&config_, size);
 
-    // VP9 supports tile-based parallel encoding. Use half of the available cores,
-    // clamped to [2, 4] range to balance performance and CPU usage.
-    const int cpu_count = std::max(1, QThread::idealThreadCount());
-    const int thread_count = std::clamp(cpu_count / 2, 2, 4);
+    const int cpu_count = QThread::idealThreadCount();
+    const int pixels = size.width() * size.height();
+
+    int thread_count = 1;
+    if (pixels >= 1280 * 720 && cpu_count > 4)
+        thread_count = 4;
+    else if (pixels >= 640 * 360 && cpu_count > 2)
+        thread_count = 2;
+
     config_.g_threads = thread_count;
 
     // Configure VP9 for I420 source frames. Quantizer bounds and target bitrate are owned by
@@ -496,9 +498,8 @@ bool VideoEncoderVpx::createVp9Codec(const QSize& size)
     }
 
     // Set tile columns to match thread count: log2(thread_count).
-    // 2 threads -> 1, 4 threads -> 2.
-    const int tile_columns = (thread_count >= 4) ? 2 : 1;
-    ret = vpx_codec_control(codec_.get(), VP9E_SET_TILE_COLUMNS, tile_columns);
+    // 1 thread -> 0, 2 threads -> 1, 4 threads -> 2.
+    ret = vpx_codec_control(codec_.get(), VP9E_SET_TILE_COLUMNS, thread_count >> 1);
     if (ret != VPX_CODEC_OK)
     {
         LOG(ERROR) << "vpx_codec_control(VP9E_SET_TILE_COLUMNS) failed:" << ret;
@@ -535,14 +536,6 @@ bool VideoEncoderVpx::createVp9Codec(const QSize& size)
     if (ret != VPX_CODEC_OK)
     {
         LOG(ERROR) << "vpx_codec_control(VP9E_SET_NOISE_SENSITIVITY) failed:" << ret;
-        return false;
-    }
-
-    // Set cyclic refresh (aka "top-off") only for lossy encoding.
-    ret = vpx_codec_control(codec_.get(), VP9E_SET_AQ_MODE, kVp9AqModeCyclicRefresh);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "vpx_codec_control(VP9E_SET_AQ_MODE) failed:" << ret;
         return false;
     }
 

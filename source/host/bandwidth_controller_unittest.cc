@@ -25,7 +25,7 @@
 
 namespace {
 
-const qint64 kStartBandwidth = 32 * 1024;
+const qint64 kStartBandwidth = 128 * 1024;
 const qint64 kMinBandwidth = 8 * 1024;
 const qint64 kMaxBandwidth = 4800 * 1024;
 const MilliSeconds kBaseDelay{ 300 };
@@ -125,7 +125,7 @@ qint64 scaled(qint64 bandwidth, double factor)
 void startAtCapacity(BandwidthController* controller, TimePoint* now, Path* path)
 {
     controller->start();
-    for (int i = 0; i < 24; ++i)
+    for (int i = 0; i < 16; ++i)
         probe(controller, now, path);
     ASSERT_NEAR(controller->bandwidth(), scaled(kCapacity, 0.9), kCapacityError);
 }
@@ -233,16 +233,16 @@ TEST(BandwidthControllerTest, ClimbMeasuresTheCapacityByTwoProbes)
     Path path(kCapacity);
     controller.start();
 
-    for (int i = 0; i < 20; ++i)
+    for (int i = 0; i < 12; ++i)
         probe(&controller, &now, &path);
     const qint64 passed = controller.bandwidth();
 
     probe(&controller, &now, &path);
     EXPECT_EQ(controller.bandwidth(), passed);
 
-    // The bandwidth under the capacity drains the queue of 477 ms in a second, the test is over.
+    // The bandwidth under the capacity drains the queue of 283 ms in a second, the test is over.
     probe(&controller, &now, &path);
-    EXPECT_NEAR(controller.bandwidth(), scaled(kCapacity, 0.523), kCapacityError);
+    EXPECT_NEAR(controller.bandwidth(), scaled(kCapacity, 0.717), kCapacityError);
     EXPECT_EQ(controller.paddingDue(now), 0);
 
     probe(&controller, &now, &path);
@@ -258,12 +258,12 @@ TEST(BandwidthControllerTest, RetransmissionInTheFirstQueueIsSkipped)
     Path path(kCapacity);
     controller.start();
 
-    for (int i = 0; i < 20; ++i)
+    for (int i = 0; i < 12; ++i)
         probe(&controller, &now, &path);
 
     probe(&controller, &now, &path, Traffic::PADDED, kRetransmission);
     probe(&controller, &now, &path);
-    EXPECT_NEAR(controller.bandwidth(), scaled(kCapacity, 0.523), kCapacityError);
+    EXPECT_NEAR(controller.bandwidth(), scaled(kCapacity, 0.717), kCapacityError);
 }
 
 //--------------------------------------------------------------------------------------------------

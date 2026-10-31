@@ -26,7 +26,7 @@
 
 namespace {
 
-const qint64 kStartBandwidth = 32 * 1024;
+const qint64 kStartBandwidth = 128 * 1024;
 const qint64 kMinBandwidth = 8 * 1024;
 const qint64 kMaxBandwidth = 4800 * 1024;
 

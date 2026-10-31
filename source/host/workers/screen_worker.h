@@ -177,12 +177,9 @@ private:
     ScreenCapturer::Type preferred_capturer_ = ScreenCapturer::Type::UNKNOWN;
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
 
-    bool vp8_supported_ = false;
-    bool vp9_supported_ = false;
-
     proto::video::Encoding video_encoding_ = proto::video::ENCODING_VP9;
     qint64 last_bandwidth_ = 0;
-    qint64 tier_bandwidth_ = 0; // The bandwidth the codec and the frame rate limit were chosen from.
+    qint64 tier_bandwidth_ = 0; // The bandwidth the frame rate limit was chosen from.
 
     int screen_count_ = 0;
     QPoint last_cursor_pos_;
