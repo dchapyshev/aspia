@@ -20,7 +20,12 @@
       "name": "icu",
       "platform": "linux | osx"
     },
-    "libvpx",
+    {
+      "name": "libvpx",
+      "features": [
+        "realtime"
+      ]
+    },
     "libwebm",
     "libjpeg-turbo",
     "libyuv",
