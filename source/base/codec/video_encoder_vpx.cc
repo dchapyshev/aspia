@@ -41,6 +41,9 @@ const int kVp9I420ProfileNumber = 0;
 // Magic encoder constant for adaptive quantization strategy.
 const int kVp9AqModeCyclicRefresh = 3;
 
+const int kVp9Speed = 9;
+const int kVp9KeyFrameSpeed = 7;
+
 //--------------------------------------------------------------------------------------------------
 void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
 {
@@ -228,6 +231,20 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
         flags |= VPX_EFLAG_FORCE_KF;
     }
 
+    // From speed 8 VP9 picks the modes of a key frame the fast way and makes it much larger. Key
+    // frames are rare, so they are encoded at a lower speed.
+    const bool is_vp9_key_frame = is_key_frame && encoding() == proto::video::ENCODING_VP9;
+    if (is_vp9_key_frame)
+    {
+        ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, kVp9KeyFrameSpeed);
+        if (ret != VPX_CODEC_OK)
+        {
+            LOG(ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed:" << ret;
+            last_size_ = QSize();
+            return Result::TEMPORARY_ERROR;
+        }
+    }
+
     // Do the actual encoding.
     ret = vpx_codec_encode(codec_.get(),
                            image_.get(),
@@ -236,6 +253,14 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
                            flags,
                            VPX_DL_REALTIME);
     pts_ += frame_duration_us_;
+
+    if (is_vp9_key_frame && vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, kVp9Speed) != VPX_CODEC_OK)
+    {
+        LOG(ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed";
+        last_size_ = QSize();
+        return Result::TEMPORARY_ERROR;
+    }
+
     if (ret != VPX_CODEC_OK)
     {
         LOG(ERROR) << "vpx_codec_encode failed:" << ret;
@@ -484,7 +509,7 @@ bool VideoEncoderVpx::createVp9Codec(const QSize& size)
 
     // Request the lowest-CPU usage that VP9 supports, which depends on whether we are encoding
     // lossy or lossless.
-    ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 9);
+    ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, kVp9Speed);
     if (ret != VPX_CODEC_OK)
     {
         LOG(ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed:" << ret;
