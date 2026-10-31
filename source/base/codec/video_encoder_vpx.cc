@@ -454,6 +454,9 @@ bool VideoEncoderVpx::createVp9Codec(const QSize& size)
     config_.rc_max_quantizer = max_quantizer_;
     config_.rc_target_bitrate = target_bitrate_kbps_;
 
+    // On screen content VP9 spends less CPU in CBR than in VBR, with the same size and quality.
+    config_.rc_end_usage = VPX_CBR;
+
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
@@ -481,7 +484,7 @@ bool VideoEncoderVpx::createVp9Codec(const QSize& size)
 
     // Request the lowest-CPU usage that VP9 supports, which depends on whether we are encoding
     // lossy or lossless.
-    ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 6);
+    ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 9);
     if (ret != VPX_CODEC_OK)
     {
         LOG(ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed:" << ret;
