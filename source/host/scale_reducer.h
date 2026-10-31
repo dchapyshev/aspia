@@ -37,6 +37,7 @@ public:
 
     double scaleFactorX() const { return scale_x_; }
     double scaleFactorY() const { return scale_y_; }
+    const QSize& targetSize() const { return target_size_; }
 
 private:
     QRect scaledRect(const QRect& source_rect);

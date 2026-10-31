@@ -22,6 +22,7 @@
 
 #include "base/location.h"
 #include "base/serialization.h"
+#include "base/version_constants.h"
 #include "base/net/udp_channel.h"
 #include "base/threading/worker.h"
 #include "host/udp_attempt.h"
@@ -534,7 +535,9 @@ void Client::checkBandwidth()
             sendDelayProbe();
 
         clearAttempts();
-        emit sig_channelChanged();
+
+        if (version() < kVersion_3_0_34)
+            emit sig_channelChanged();
     }
 
     publishBandwidth(bandwidth_controller_.bandwidth());

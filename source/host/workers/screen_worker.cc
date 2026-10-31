@@ -331,15 +331,7 @@ void ScreenWorker::onSetPaused(bool paused)
 //--------------------------------------------------------------------------------------------------
 void ScreenWorker::onSetPreferredSize(const QSize& size)
 {
-    // Hardware encoders require an even frame size.
-    const QSize even_size(size.width() & ~1, size.height() & ~1);
-    if (preferred_size_ == even_size)
-        return;
-
-    preferred_size_ = even_size;
-
-    if (video_encoder_)
-        video_encoder_->setKeyFrameRequired(true);
+    preferred_size_ = size;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1314,14 +1306,6 @@ void ScreenWorker::encodeScreen(const Frame* frame)
     if (!frame || !video_encoder_)
         return;
 
-    if (frame->constUpdatedRegion().isEmpty())
-    {
-        if (!video_encoder_->isKeyFrameRequired())
-            return;
-
-        *const_cast<Frame*>(frame)->updatedRegion() += QRect(QPoint(0, 0), frame->size());
-    }
-
     if (source_size_ != frame->size())
     {
         // Every time we change the resolution, we have to reset the preferred size.
@@ -1338,6 +1322,14 @@ void ScreenWorker::encodeScreen(const Frame* frame)
     // If we don't have a preferred size, then we use the original frame size.
     if (current_size.isEmpty())
         current_size = source_size_;
+
+    if (frame->constUpdatedRegion().isEmpty())
+    {
+        if (!video_encoder_->isKeyFrameRequired() && current_size == scale_reducer_->targetSize())
+            return;
+
+        *const_cast<Frame*>(frame)->updatedRegion() += QRect(QPoint(0, 0), frame->size());
+    }
 
     const Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);
     if (!scaled_frame)
