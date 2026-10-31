@@ -51,7 +51,7 @@ DesktopAgent::DesktopAgent(QObject* parent)
     : QObject(parent),
       capture_timer_(new QTimer(this)),
       scale_reducer_(std::make_unique<ScaleReducer>(ScaleReducer::Quality::NORMAL)),
-      video_encoding_(proto::video::ENCODING_VP8)
+      video_encoding_(proto::video::ENCODING_VP9)
 {
     LOG(INFO) << "Ctor";
 
@@ -120,10 +120,10 @@ void DesktopAgent::onClientConfigured()
     if (!has_configured)
         return;
 
-    if (vp8_supported)
-        video_encoding_ = proto::video::ENCODING_VP8;
-    else if (vp9_supported)
+    if (vp9_supported)
         video_encoding_ = proto::video::ENCODING_VP9;
+    else if (vp8_supported)
+        video_encoding_ = proto::video::ENCODING_VP8;
     else
     {
         LOG(ERROR) << "No common video encoding among clients";
