@@ -1101,26 +1101,31 @@ Reset the database?</source>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
+        <source>User Name</source>
+        <translation>使用者名稱</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>IP Address</source>
         <translation>IP 位址</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Connect Time</source>
         <translation>連線時間</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Architecture</source>
         <translation>架構</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="159"/>
         <source>Operating System</source>
         <translation>作業系統</translation>
     </message>
@@ -1807,84 +1812,84 @@ Password: %2</source>
         <translation>密碼：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="43"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="45"/>
         <source>Aspia Credentials</source>
         <translation>Aspia 認證</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="45"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="47"/>
         <source>OS Credentials</source>
         <translation>作業系統認證</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
         <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
         <translation>輸入使用者名稱，例如 %1。在網域中的電腦上，這是網域帳戶。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
         <source>For an account of another domain, add the domain, for example %1 or %2.</source>
         <translation>對於其他網域的帳戶，加上網域，例如 %1 或 %2。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="60"/>
         <source>For a local account on a computer in a domain, add %1 before the name, for example %2.</source>
         <translation>對於網域中電腦上的本機帳戶，在名稱前加上 %1，例如 %2。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="64"/>
         <source>Edit Credentials</source>
         <translation>編輯認證</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="64"/>
         <source>Add Credentials</source>
         <translation>新增認證</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="91"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="110"/>
         <source>Name cannot be empty.</source>
         <translation>名稱不能為空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="99"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="118"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名稱太長。名稱長度上限為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="113"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="132"/>
         <source>Invalid user name.</source>
         <translation>使用者名稱無效。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="122"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="141"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>使用者名稱不能為空，且只能包含字母、數字和「_」、「-」、「.」字元。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="131"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="150"/>
         <source>Password cannot be empty.</source>
         <translation>密碼不能為空。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="149"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="168"/>
         <source>Unable to add credentials</source>
         <translation>無法新增認證</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="160"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="179"/>
         <source>Unable to modify credentials</source>
         <translation>無法修改認證</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="190"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="209"/>
         <source>Failed to read the credentials.</source>
         <translation>無法讀取認證。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="204"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="223"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>認證已損壞。請重新輸入。</translation>
     </message>
@@ -5769,7 +5774,7 @@ Credentials imported: %5</source>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="361"/>
+        <location filename="../client/workers/network_worker.cc" line="375"/>
         <source>Failed to connect to the relay server</source>
         <translation>無法連線到中繼伺服器</translation>
     </message>
@@ -6371,77 +6376,92 @@ Credentials imported: %5</source>
         <translation>從</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="51"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="54"/>
         <source>To</source>
         <translation>到</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="78"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="84"/>
         <source>User</source>
         <translation>使用者</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="94"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="100"/>
         <source>Address or computer name of the client</source>
         <translation>用戶端的位址或電腦名稱</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="97"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="103"/>
         <source>Client</source>
         <translation>用戶端</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="113"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="119"/>
         <source>ID, computer name or address of the host</source>
         <translation>主機的 ID、電腦名稱或位址</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="116"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="122"/>
         <source>Host</source>
         <translation>主機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="132"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="138"/>
         <source>Reset filter</source>
         <translation>重設篩選</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="175"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="181"/>
         <source>Previous page</source>
         <translation>上一頁</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="178"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="184"/>
         <source>Previous</source>
         <translation>上一頁</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="196"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="202"/>
         <source>Next page</source>
         <translation>下一頁</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="199"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="205"/>
         <source>Next</source>
         <translation>下一頁</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="210"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="216"/>
         <source>Items per page:</source>
         <translation>每頁項目數：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="94"/>
-        <source>Any</source>
-        <translation>任意</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="99"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="114"/>
         <source>All Session Types</source>
         <translation>所有工作階段類型</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="277"/>
+        <source>Save File</source>
+        <translation>儲存檔案</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="277"/>
+        <source>JSON files (*.json)</source>
+        <translation>JSON 檔案 (*.json)</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="288"/>
+        <source>Could not open file for writing.</source>
+        <translation>無法開啟檔案進行寫入。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="323"/>
+        <source>Unable to write file.</source>
+        <translation>無法寫入檔案。</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="455"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="533"/>
         <source>%n entry(s)</source>
         <translation>
             <numerusform>%n 筆記錄</numerusform>
@@ -6470,46 +6490,46 @@ Credentials imported: %5</source>
 <context>
     <name>RouterClientsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="225"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="226"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="225"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="226"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 檔案 (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="236"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="237"/>
         <source>Could not open file for writing.</source>
         <translation>無法開啟檔案進行寫入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="271"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="273"/>
         <source>Unable to write file.</source>
         <translation>無法寫入檔案。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="291"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="293"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>確定要中斷用戶端「%1」的連線嗎？</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="296"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="298"/>
         <source>Are you sure you want to disconnect %n clients?</source>
         <translation>
             <numerusform>確定要中斷 %n 個用戶端的連線嗎？</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="343"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="345"/>
         <source>Failed to disconnect %n of the selected clients.</source>
         <translation>
             <numerusform>無法中斷所選用戶端中 %n 個的連線。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="499"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="501"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>%n 個用戶端</numerusform>
@@ -6652,41 +6672,41 @@ Credentials imported: %5</source>
         <translation>操作員</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/router_dialog.cc" line="76"/>
+        <location filename="../client/desktop/router_dialog.cc" line="80"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名稱太長。名稱長度上限為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="88"/>
+        <location filename="../client/desktop/router_dialog.cc" line="92"/>
         <source>An invalid router address was entered.</source>
         <translation>輸入的路由器位址無效。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="98"/>
+        <location filename="../client/desktop/router_dialog.cc" line="102"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>使用者名稱不能為空，且只能包含字母、數字和 _、-、. 字元。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="109"/>
+        <location filename="../client/desktop/router_dialog.cc" line="113"/>
         <source>Password cannot be empty.</source>
         <translation>密碼不能為空。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="131"/>
-        <location filename="../client/desktop/router_dialog.cc" line="148"/>
-        <location filename="../client/desktop/router_dialog.cc" line="157"/>
+        <location filename="../client/desktop/router_dialog.cc" line="135"/>
+        <location filename="../client/desktop/router_dialog.cc" line="152"/>
+        <location filename="../client/desktop/router_dialog.cc" line="161"/>
         <source>Failed to save the router.</source>
         <translation>無法儲存路由器。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="177"/>
+        <location filename="../client/desktop/router_dialog.cc" line="181"/>
         <source>Failed to read the router.</source>
         <translation>無法讀取路由器。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="195"/>
+        <location filename="../client/desktop/router_dialog.cc" line="199"/>
         <source>The data of the router is damaged. Enter it again.</source>
         <translation>路由器的資料已損壞。請重新輸入。</translation>
     </message>
@@ -6879,17 +6899,17 @@ Credentials imported: %5</source>
         <translation>新增群組</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="97"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="95"/>
         <source>Failed to get list of groups.</source>
         <translation>無法取得群組清單。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="179"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="177"/>
         <source>Unknown internal error.</source>
         <translation>未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="163"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="161"/>
         <source>Group name cannot be empty.</source>
         <translation>群組名稱不能為空。</translation>
     </message>
@@ -6988,37 +7008,37 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="143"/>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="189"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="187"/>
         <source>Not assigned</source>
         <translation>未指派</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="174"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="172"/>
         <source>Failed to get list of groups.</source>
         <translation>無法取得群組清單。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="248"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="246"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>請同時輸入使用者名稱和密碼，或兩者都留空。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="263"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="261"/>
         <source>Failed to save the credentials.</source>
         <translation>無法儲存認證。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="294"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="292"/>
         <source>Failed to read the list of credentials.</source>
         <translation>無法讀取認證清單。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="340"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="338"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>無法讀取主機的認證。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="345"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="343"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>主機的認證已損壞。請重新輸入。</translation>
     </message>
@@ -7299,13 +7319,13 @@ Credentials imported: %5</source>
     <name>RouterStatusWidget</name>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="198"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="196"/>
         <source>The router is waiting for a two-factor code.</source>
         <translation>路由器正在等待雙重驗證代碼。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="199"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="197"/>
         <source>Enter Code</source>
         <translation>輸入代碼</translation>
     </message>
@@ -7325,12 +7345,12 @@ Credentials imported: %5</source>
         <translation>由於失敗次數過多，雙重驗證已被封鎖。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="203"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="201"/>
         <source>Two-factor authentication has to be set up for this router.</source>
         <translation>必須為此路由器設定雙重驗證。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="204"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="202"/>
         <source>Set Up</source>
         <translation>設定</translation>
     </message>
@@ -7420,163 +7440,173 @@ Credentials imported: %5</source>
         <translation>存取層級：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="89"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="65"/>
+        <source>Email:</source>
+        <translation>電子郵件：</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="99"/>
         <source>Disable User Account</source>
         <translation>停用使用者帳號</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="99"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="109"/>
         <source>Reset two-factor authentication</source>
         <translation>重設雙重驗證</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="107"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="117"/>
         <source>Sessions</source>
         <translation>工作階段</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="123"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="133"/>
         <source>Signed in</source>
         <translation>已登入</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="128"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="138"/>
         <source>Last activity</source>
         <translation>上次活動</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="133"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="143"/>
         <source>Address</source>
         <translation>位址</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="156"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="166"/>
         <source>Sign out</source>
         <translation>登出</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="163"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="173"/>
         <source>Sign out all</source>
         <translation>全部登出</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="340"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="333"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>重設雙重驗證將使此使用者從所有工作階段登出，並要求其在下次登入時重新設定。要繼續嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="395"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="385"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>確定要將此使用者從此工作階段登出嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="420"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="410"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>確定要將此使用者從所有工作階段登出嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="534"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="524"/>
         <source>The passwords you entered do not match.</source>
         <translation>輸入的密碼不相符。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="206"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="202"/>
         <source>Failed to get list of users.</source>
         <translation>無法取得使用者清單。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="236"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="230"/>
         <source>The user was deleted from another console.</source>
         <translation>此使用者已從另一個主控台刪除。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="338"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="331"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
         <translation>重設雙重驗證將使您從所有工作階段登出，並要求您在下次登入時重新設定。要繼續嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="394"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="384"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
         <translation>這是您目前工作階段的權杖。撤銷它將中斷您的連線。要繼續嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="521"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="496"/>
+        <source>The email address is invalid.</source>
+        <translation>電子郵件地址無效。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="511"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>使用者名稱不能為空，且只能包含字母、數字和 _、-、.、@ 字元。不能只由數字組成。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="546"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="536"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>密碼不能超過 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="547"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>輸入的密碼不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="558"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="548"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼必須包含大小寫字母和數字，且長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="562"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
         <source>Do you want to enter a different password?</source>
         <translation>要輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="565"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="555"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="585"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="575"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>建立或修改使用者時發生未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="649"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="637"/>
         <source>The user name you entered already exists.</source>
         <translation>輸入的使用者名稱已存在。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="735"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="719"/>
         <source>Double-click to change</source>
         <translation>按兩下以變更</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="791"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="772"/>
         <source>The token of your current session.</source>
         <translation>您目前工作階段的權杖。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="824"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="805"/>
         <source>Administrator</source>
         <translation>系統管理員</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="828"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="809"/>
         <source>Manager</source>
         <translation>管理者</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="832"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="813"/>
         <source>Operator</source>
         <translation>操作員</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="850"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="831"/>
         <source>Never</source>
         <translation>從不</translation>
     </message>
@@ -7718,37 +7748,37 @@ Credentials imported: %5</source>
         <translation>未指派的主機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="238"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="234"/>
         <source>Failed to get list of spaces.</source>
         <translation>無法取得空間清單。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="265"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="261"/>
         <source>The space was deleted from another console.</source>
         <translation>此空間已從另一個主控台刪除。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="306"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="299"/>
         <source>Failed to get list of users.</source>
         <translation>無法取得使用者清單。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="428"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="418"/>
         <source>The space was changed from another console. The lists are being refreshed - check the changes and save again.</source>
         <translation>此空間已在另一個主控台中變更。正在重新整理清單，請檢查變更後再次儲存。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="534"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="522"/>
         <source>Are you sure you want to remove the host from the space?</source>
         <translation>確定要從空間移除主機嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="917"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="902"/>
         <source>Space name cannot be empty.</source>
         <translation>空間名稱不能為空。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="928"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="913"/>
         <source>A space with the specified name already exists.</source>
         <translation>已存在使用指定名稱的空間。</translation>
     </message>
@@ -9029,7 +9059,7 @@ Credentials imported: %5</source>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="173"/>
+        <location filename="../client/android/statistics_dialog.cc" line="175"/>
         <source>Statistics</source>
         <translation>統計</translation>
     </message>
@@ -9044,7 +9074,7 @@ Credentials imported: %5</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="206"/>
+        <location filename="../client/android/statistics_dialog.cc" line="210"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
@@ -14018,17 +14048,17 @@ Credentials imported: %5</source>
 <context>
     <name>VideoWorker</name>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="46"/>
+        <location filename="../client/workers/video_worker.cc" line="45"/>
         <source>Unable to create the directory for the recording.</source>
         <translation>無法建立錄製檔案的資料夾。</translation>
     </message>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="48"/>
+        <location filename="../client/workers/video_worker.cc" line="47"/>
         <source>Unable to create the file for the recording.</source>
         <translation>無法建立錄製檔案。</translation>
     </message>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="50"/>
+        <location filename="../client/workers/video_worker.cc" line="49"/>
         <source>An error occurred while writing the recording.</source>
         <translation>寫入錄製檔案時發生錯誤。</translation>
     </message>

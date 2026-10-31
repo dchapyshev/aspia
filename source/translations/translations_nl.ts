@@ -1104,26 +1104,31 @@ De database resetten?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
+        <source>User Name</source>
+        <translation>Gebruikersnaam</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>IP Address</source>
         <translation>IP-adres</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Connect Time</source>
         <translation>Verbindingstijd</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Version</source>
         <translation>Versie</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Architecture</source>
         <translation>Architectuur</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="159"/>
         <source>Operating System</source>
         <translation>Besturingssysteem</translation>
     </message>
@@ -1812,47 +1817,47 @@ Wachtwoord: %2</translation>
         <translation>Wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="43"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="45"/>
         <source>Aspia Credentials</source>
         <translation>Aspia-aanmeldgegevens</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="45"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="47"/>
         <source>OS Credentials</source>
         <translation>OS-aanmeldgegevens</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
         <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
         <translation>Voer de gebruikersnaam in, bijvoorbeeld %1. Op een computer in een domein is dit een domeinaccount.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
         <source>For an account of another domain, add the domain, for example %1 or %2.</source>
         <translation>Voeg voor een account van een ander domein het domein toe, bijvoorbeeld %1 of %2.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="60"/>
         <source>For a local account on a computer in a domain, add %1 before the name, for example %2.</source>
         <translation>Voeg voor een lokaal account op een computer in een domein %1 voor de naam toe, bijvoorbeeld %2.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="64"/>
         <source>Edit Credentials</source>
         <translation>Aanmeldgegevens bewerken</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="64"/>
         <source>Add Credentials</source>
         <translation>Aanmeldgegevens toevoegen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="91"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="110"/>
         <source>Name cannot be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="99"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="118"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>De naam is te lang. De maximale lengte van de naam is %n teken.</numerusform>
@@ -1860,37 +1865,37 @@ Wachtwoord: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="113"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="132"/>
         <source>Invalid user name.</source>
         <translation>Ongeldige gebruikersnaam.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="122"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="141"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn en mag alleen letters, cijfers en de tekens &quot;_&quot;, &quot;-&quot;, &quot;.&quot; bevatten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="131"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="150"/>
         <source>Password cannot be empty.</source>
         <translation>Wachtwoord mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="149"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="168"/>
         <source>Unable to add credentials</source>
         <translation>Kan aanmeldgegevens niet toevoegen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="160"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="179"/>
         <source>Unable to modify credentials</source>
         <translation>Kan aanmeldgegevens niet wijzigen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="190"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="209"/>
         <source>Failed to read the credentials.</source>
         <translation>Kan de aanmeldgegevens niet lezen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="204"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="223"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>De aanmeldgegevens zijn beschadigd. Voer ze opnieuw in.</translation>
     </message>
@@ -5796,7 +5801,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="361"/>
+        <location filename="../client/workers/network_worker.cc" line="375"/>
         <source>Failed to connect to the relay server</source>
         <translation>Kan geen verbinding maken met de relayserver</translation>
     </message>
@@ -6398,77 +6403,92 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Van</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="51"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="54"/>
         <source>To</source>
         <translation>Tot en met</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="78"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="84"/>
         <source>User</source>
         <translation>Gebruiker</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="94"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="100"/>
         <source>Address or computer name of the client</source>
         <translation>Adres of computernaam van de client</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="97"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="103"/>
         <source>Client</source>
         <translation>Client</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="113"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="119"/>
         <source>ID, computer name or address of the host</source>
         <translation>ID, computernaam of adres van de host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="116"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="122"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="132"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="138"/>
         <source>Reset filter</source>
         <translation>Filter resetten</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="175"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="181"/>
         <source>Previous page</source>
         <translation>Vorige pagina</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="178"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="184"/>
         <source>Previous</source>
         <translation>Vorige</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="196"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="202"/>
         <source>Next page</source>
         <translation>Volgende pagina</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="199"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="205"/>
         <source>Next</source>
         <translation>Volgende</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="210"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="216"/>
         <source>Items per page:</source>
         <translation>Items per pagina:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="94"/>
-        <source>Any</source>
-        <translation>Onbeperkt</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="99"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="114"/>
         <source>All Session Types</source>
         <translation>Alle sessietypes</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="277"/>
+        <source>Save File</source>
+        <translation>Bestand opslaan</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="277"/>
+        <source>JSON files (*.json)</source>
+        <translation>JSON-bestanden (*.json)</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="288"/>
+        <source>Could not open file for writing.</source>
+        <translation>Kon het bestand niet openen om te schrijven.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="323"/>
+        <source>Unable to write file.</source>
+        <translation>Kan het bestand niet schrijven.</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="455"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="533"/>
         <source>%n entry(s)</source>
         <translation>
             <numerusform>%n vermelding</numerusform>
@@ -6498,32 +6518,32 @@ Aanmeldgegevens geïmporteerd: %5</translation>
 <context>
     <name>RouterClientsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="225"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="226"/>
         <source>Save File</source>
         <translation>Bestand opslaan</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="225"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="226"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-bestanden (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="236"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="237"/>
         <source>Could not open file for writing.</source>
         <translation>Kon het bestand niet openen om te schrijven.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="271"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="273"/>
         <source>Unable to write file.</source>
         <translation>Kan het bestand niet schrijven.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="291"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="293"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>Weet u zeker dat u de verbinding met client &quot;%1&quot; wilt verbreken?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="296"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="298"/>
         <source>Are you sure you want to disconnect %n clients?</source>
         <translation>
             <numerusform>Weet u zeker dat u de verbinding met %n client wilt verbreken?</numerusform>
@@ -6531,7 +6551,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="343"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="345"/>
         <source>Failed to disconnect %n of the selected clients.</source>
         <translation>
             <numerusform>Kan de verbinding met %n van de geselecteerde clients niet verbreken.</numerusform>
@@ -6539,7 +6559,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="499"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="501"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>%n client</numerusform>
@@ -6683,7 +6703,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Operator</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/router_dialog.cc" line="76"/>
+        <location filename="../client/desktop/router_dialog.cc" line="80"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>De naam is te lang. De maximale lengte van de naam is %n teken.</numerusform>
@@ -6691,34 +6711,34 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="88"/>
+        <location filename="../client/desktop/router_dialog.cc" line="92"/>
         <source>An invalid router address was entered.</source>
         <translation>Er is een ongeldig routeradres ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="98"/>
+        <location filename="../client/desktop/router_dialog.cc" line="102"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn en mag alleen letters, cijfers en de tekens _, -, . bevatten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="109"/>
+        <location filename="../client/desktop/router_dialog.cc" line="113"/>
         <source>Password cannot be empty.</source>
         <translation>Wachtwoord mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="131"/>
-        <location filename="../client/desktop/router_dialog.cc" line="148"/>
-        <location filename="../client/desktop/router_dialog.cc" line="157"/>
+        <location filename="../client/desktop/router_dialog.cc" line="135"/>
+        <location filename="../client/desktop/router_dialog.cc" line="152"/>
+        <location filename="../client/desktop/router_dialog.cc" line="161"/>
         <source>Failed to save the router.</source>
         <translation>Kan de router niet opslaan.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="177"/>
+        <location filename="../client/desktop/router_dialog.cc" line="181"/>
         <source>Failed to read the router.</source>
         <translation>Kan de router niet lezen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="195"/>
+        <location filename="../client/desktop/router_dialog.cc" line="199"/>
         <source>The data of the router is damaged. Enter it again.</source>
         <translation>De gegevens van de router zijn beschadigd. Voer ze opnieuw in.</translation>
     </message>
@@ -6912,17 +6932,17 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Groep toevoegen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="97"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="95"/>
         <source>Failed to get list of groups.</source>
         <translation>Kan lijst met groepen niet ophalen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="179"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="177"/>
         <source>Unknown internal error.</source>
         <translation>Onbekende interne fout.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="163"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="161"/>
         <source>Group name cannot be empty.</source>
         <translation>Groepsnaam mag niet leeg zijn.</translation>
     </message>
@@ -7022,37 +7042,37 @@ Aanmeldgegevens geïmporteerd: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="143"/>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="189"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="187"/>
         <source>Not assigned</source>
         <translation>Niet toegewezen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="174"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="172"/>
         <source>Failed to get list of groups.</source>
         <translation>Kan lijst met groepen niet ophalen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="248"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="246"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Voer zowel de gebruikersnaam als het wachtwoord in, of laat beide leeg.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="263"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="261"/>
         <source>Failed to save the credentials.</source>
         <translation>Kan de aanmeldgegevens niet opslaan.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="294"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="292"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Kan de lijst met aanmeldgegevens niet lezen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="340"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="338"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>Kan de aanmeldgegevens van de host niet lezen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="345"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="343"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>De aanmeldgegevens van de host zijn beschadigd. Voer ze opnieuw in.</translation>
     </message>
@@ -7341,13 +7361,13 @@ Aanmeldgegevens geïmporteerd: %5</translation>
     <name>RouterStatusWidget</name>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="198"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="196"/>
         <source>The router is waiting for a two-factor code.</source>
         <translation>De router wacht op een tweefactorcode.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="199"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="197"/>
         <source>Enter Code</source>
         <translation>Code invoeren</translation>
     </message>
@@ -7367,12 +7387,12 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Tweefactorauthenticatie is geblokkeerd na te veel mislukte pogingen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="203"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="201"/>
         <source>Two-factor authentication has to be set up for this router.</source>
         <translation>Voor deze router moet tweefactorauthenticatie worden ingesteld.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="204"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="202"/>
         <source>Set Up</source>
         <translation>Instellen</translation>
     </message>
@@ -7464,92 +7484,102 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Toegangsniveau:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="89"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="65"/>
+        <source>Email:</source>
+        <translation>E-mail:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="99"/>
         <source>Disable User Account</source>
         <translation>Gebruikers account uitschakelen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="99"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="109"/>
         <source>Reset two-factor authentication</source>
         <translation>Tweefactorauthenticatie resetten</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="107"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="117"/>
         <source>Sessions</source>
         <translation>Sessies</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="123"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="133"/>
         <source>Signed in</source>
         <translation>Aangemeld</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="128"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="138"/>
         <source>Last activity</source>
         <translation>Laatste activiteit</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="133"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="143"/>
         <source>Address</source>
         <translation>Adres</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="156"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="166"/>
         <source>Sign out</source>
         <translation>Afmelden</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="163"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="173"/>
         <source>Sign out all</source>
         <translation>Alles afmelden</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="340"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="333"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Als u de tweefactorauthenticatie reset, wordt deze gebruiker bij alle sessies afgemeld en moet deze zich bij de volgende aanmelding opnieuw registreren. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="395"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="385"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>Weet u zeker dat u deze gebruiker bij deze sessie wilt afmelden?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="420"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="410"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>Weet u zeker dat u deze gebruiker bij alle sessies wilt afmelden?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="534"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="524"/>
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="206"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="202"/>
         <source>Failed to get list of users.</source>
         <translation>Kan lijst met gebruikers niet ophalen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="236"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="230"/>
         <source>The user was deleted from another console.</source>
         <translation>De gebruiker is vanuit een andere console verwijderd.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="338"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="331"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
         <translation>Als u de tweefactorauthenticatie reset, wordt u bij alle sessies afgemeld en moet u zich bij de volgende aanmelding opnieuw registreren. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="394"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="384"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
         <translation>Dit is het token van uw huidige sessie. Als u het intrekt, wordt uw verbinding verbroken. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="521"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="496"/>
+        <source>The email address is invalid.</source>
+        <translation>Het e-mailadres is ongeldig.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="511"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>De gebruikersnaam mag niet leeg zijn en mag alleen letters, cijfers en de tekens _, -, ., @ bevatten. De naam mag niet alleen uit cijfers bestaan.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord mag niet korter zijn dan %n teken.</numerusform>
@@ -7557,7 +7587,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="546"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="536"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord mag niet langer zijn dan %n teken.</numerusform>
@@ -7565,12 +7595,12 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="547"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Het ingevoerde wachtwoord voldoet niet aan de beveiligingseisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="558"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="548"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord moet kleine letters, hoofdletters en cijfers bevatten en mag niet korter zijn dan %n teken.</numerusform>
@@ -7578,52 +7608,52 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="562"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
         <source>Do you want to enter a different password?</source>
         <translation>Wilt u een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="565"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="555"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="585"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="575"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Onbekende interne fout bij het maken of wijzigen van een gebruiker.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="649"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="637"/>
         <source>The user name you entered already exists.</source>
         <translation>De ingevoerde gebruikersnaam bestaat al.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="735"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="719"/>
         <source>Double-click to change</source>
         <translation>Dubbelklik om te wijzigen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="791"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="772"/>
         <source>The token of your current session.</source>
         <translation>Het token van uw huidige sessie.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="824"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="805"/>
         <source>Administrator</source>
         <translation>Beheerder</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="828"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="809"/>
         <source>Manager</source>
         <translation>Manager</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="832"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="813"/>
         <source>Operator</source>
         <translation>Operator</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="850"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="831"/>
         <source>Never</source>
         <translation>Nooit</translation>
     </message>
@@ -7766,37 +7796,37 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Niet-toegewezen hosts</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="238"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="234"/>
         <source>Failed to get list of spaces.</source>
         <translation>Kan lijst met ruimten niet ophalen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="265"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="261"/>
         <source>The space was deleted from another console.</source>
         <translation>De ruimte is vanuit een andere console verwijderd.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="306"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="299"/>
         <source>Failed to get list of users.</source>
         <translation>Kan lijst met gebruikers niet ophalen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="428"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="418"/>
         <source>The space was changed from another console. The lists are being refreshed - check the changes and save again.</source>
         <translation>De ruimte is vanuit een andere console gewijzigd. De lijsten worden vernieuwd - controleer de wijzigingen en sla opnieuw op.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="534"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="522"/>
         <source>Are you sure you want to remove the host from the space?</source>
         <translation>Weet u zeker dat u de host uit de ruimte wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="917"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="902"/>
         <source>Space name cannot be empty.</source>
         <translation>Ruimtenaam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="928"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="913"/>
         <source>A space with the specified name already exists.</source>
         <translation>Er bestaat al een ruimte met de opgegeven naam.</translation>
     </message>
@@ -9085,7 +9115,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="173"/>
+        <location filename="../client/android/statistics_dialog.cc" line="175"/>
         <source>Statistics</source>
         <translation>Statistieken</translation>
     </message>
@@ -9100,7 +9130,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Waarde</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="206"/>
+        <location filename="../client/android/statistics_dialog.cc" line="210"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -14080,17 +14110,17 @@ Aanmeldgegevens geïmporteerd: %5</translation>
 <context>
     <name>VideoWorker</name>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="46"/>
+        <location filename="../client/workers/video_worker.cc" line="45"/>
         <source>Unable to create the directory for the recording.</source>
         <translation>Kan de map voor de opname niet maken.</translation>
     </message>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="48"/>
+        <location filename="../client/workers/video_worker.cc" line="47"/>
         <source>Unable to create the file for the recording.</source>
         <translation>Kan het bestand voor de opname niet maken.</translation>
     </message>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="50"/>
+        <location filename="../client/workers/video_worker.cc" line="49"/>
         <source>An error occurred while writing the recording.</source>
         <translation>Er is een fout opgetreden bij het schrijven van de opname.</translation>
     </message>

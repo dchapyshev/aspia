@@ -1104,26 +1104,31 @@ Nollataanko tietokanta?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
+        <source>User Name</source>
+        <translation>Käyttäjänimi</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>IP Address</source>
         <translation>IP-osoite</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Connect Time</source>
         <translation>Yhdistämisaika</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Version</source>
         <translation>Versio</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Architecture</source>
         <translation>Arkkitehtuuri</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="159"/>
         <source>Operating System</source>
         <translation>Käyttöjärjestelmä</translation>
     </message>
@@ -1812,47 +1817,47 @@ Salasana: %2</translation>
         <translation>Salasana:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="43"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="45"/>
         <source>Aspia Credentials</source>
         <translation>Aspia-kirjautumistiedot</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="45"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="47"/>
         <source>OS Credentials</source>
         <translation>Käyttöjärjestelmän kirjautumistiedot</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
         <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
         <translation>Syötä käyttäjänimi, esimerkiksi %1. Toimialueen tietokoneessa tämä on toimialueen tili.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
         <source>For an account of another domain, add the domain, for example %1 or %2.</source>
         <translation>Toisen toimialueen tilille lisää toimialue, esimerkiksi %1 tai %2.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="60"/>
         <source>For a local account on a computer in a domain, add %1 before the name, for example %2.</source>
         <translation>Toimialueen tietokoneen paikalliselle tilille lisää %1 ennen nimeä, esimerkiksi %2.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="64"/>
         <source>Edit Credentials</source>
         <translation>Muokkaa kirjautumistietoja</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="64"/>
         <source>Add Credentials</source>
         <translation>Lisää kirjautumistiedot</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="91"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="110"/>
         <source>Name cannot be empty.</source>
         <translation>Nimi ei voi olla tyhjä.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="99"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="118"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Liian pitkä nimi. Nimen enimmäispituus on %n merkki.</numerusform>
@@ -1860,37 +1865,37 @@ Salasana: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="113"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="132"/>
         <source>Invalid user name.</source>
         <translation>Virheellinen käyttäjänimi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="122"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="141"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Käyttäjänimi ei voi olla tyhjä ja voi sisältää vain kirjaimia, numeroita sekä merkkejä &quot;_&quot;, &quot;-&quot; ja &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="131"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="150"/>
         <source>Password cannot be empty.</source>
         <translation>Salasana ei voi olla tyhjä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="149"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="168"/>
         <source>Unable to add credentials</source>
         <translation>Kirjautumistietoja ei voi lisätä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="160"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="179"/>
         <source>Unable to modify credentials</source>
         <translation>Kirjautumistietoja ei voi muokata</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="190"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="209"/>
         <source>Failed to read the credentials.</source>
         <translation>Kirjautumistietojen lukeminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="204"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="223"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>Kirjautumistiedot ovat vioittuneet. Syötä ne uudelleen.</translation>
     </message>
@@ -5796,7 +5801,7 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="361"/>
+        <location filename="../client/workers/network_worker.cc" line="375"/>
         <source>Failed to connect to the relay server</source>
         <translation>Yhteys välityspalvelimeen epäonnistui</translation>
     </message>
@@ -6398,77 +6403,92 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Alkaen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="51"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="54"/>
         <source>To</source>
         <translation>Asti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="78"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="84"/>
         <source>User</source>
         <translation>Käyttäjä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="94"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="100"/>
         <source>Address or computer name of the client</source>
         <translation>Asiakkaan osoite tai tietokoneen nimi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="97"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="103"/>
         <source>Client</source>
         <translation>Asiakas</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="113"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="119"/>
         <source>ID, computer name or address of the host</source>
         <translation>Isännän ID, tietokoneen nimi tai osoite</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="116"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="122"/>
         <source>Host</source>
         <translation>Isäntä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="132"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="138"/>
         <source>Reset filter</source>
         <translation>Nollaa suodatin</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="175"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="181"/>
         <source>Previous page</source>
         <translation>Edellinen sivu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="178"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="184"/>
         <source>Previous</source>
         <translation>Edellinen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="196"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="202"/>
         <source>Next page</source>
         <translation>Seuraava sivu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="199"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="205"/>
         <source>Next</source>
         <translation>Seuraava</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="210"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="216"/>
         <source>Items per page:</source>
         <translation>Kohteita sivulla:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="94"/>
-        <source>Any</source>
-        <translation>Mikä tahansa</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="99"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="114"/>
         <source>All Session Types</source>
         <translation>Kaikki istuntotyypit</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="277"/>
+        <source>Save File</source>
+        <translation>Tallenna tiedosto</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="277"/>
+        <source>JSON files (*.json)</source>
+        <translation>JSON-tiedostot (*.json)</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="288"/>
+        <source>Could not open file for writing.</source>
+        <translation>Tiedostoa ei voitu avata kirjoittamista varten.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="323"/>
+        <source>Unable to write file.</source>
+        <translation>Tiedostoa ei voi kirjoittaa.</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="455"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="533"/>
         <source>%n entry(s)</source>
         <translation>
             <numerusform>%n merkintä</numerusform>
@@ -6498,32 +6518,32 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>RouterClientsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="225"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="226"/>
         <source>Save File</source>
         <translation>Tallenna tiedosto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="225"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="226"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-tiedostot (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="236"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="237"/>
         <source>Could not open file for writing.</source>
         <translation>Tiedostoa ei voitu avata kirjoittamista varten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="271"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="273"/>
         <source>Unable to write file.</source>
         <translation>Tiedostoa ei voi kirjoittaa.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="291"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="293"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>Haluatko varmasti katkaista asiakkaan &quot;%1&quot; yhteyden?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="296"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="298"/>
         <source>Are you sure you want to disconnect %n clients?</source>
         <translation>
             <numerusform>Haluatko varmasti katkaista %n asiakkaan yhteyden?</numerusform>
@@ -6531,7 +6551,7 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="343"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="345"/>
         <source>Failed to disconnect %n of the selected clients.</source>
         <translation>
             <numerusform>%n valitun asiakkaan yhteyden katkaiseminen epäonnistui.</numerusform>
@@ -6539,7 +6559,7 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="499"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="501"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>%n asiakas</numerusform>
@@ -6683,7 +6703,7 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Operaattori</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/router_dialog.cc" line="76"/>
+        <location filename="../client/desktop/router_dialog.cc" line="80"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Liian pitkä nimi. Nimen enimmäispituus on %n merkki.</numerusform>
@@ -6691,34 +6711,34 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="88"/>
+        <location filename="../client/desktop/router_dialog.cc" line="92"/>
         <source>An invalid router address was entered.</source>
         <translation>Syötetty reitittimen osoite on virheellinen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="98"/>
+        <location filename="../client/desktop/router_dialog.cc" line="102"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Käyttäjänimi ei voi olla tyhjä ja voi sisältää vain kirjaimia, numeroita sekä merkkejä _, - ja .</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="109"/>
+        <location filename="../client/desktop/router_dialog.cc" line="113"/>
         <source>Password cannot be empty.</source>
         <translation>Salasana ei voi olla tyhjä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="131"/>
-        <location filename="../client/desktop/router_dialog.cc" line="148"/>
-        <location filename="../client/desktop/router_dialog.cc" line="157"/>
+        <location filename="../client/desktop/router_dialog.cc" line="135"/>
+        <location filename="../client/desktop/router_dialog.cc" line="152"/>
+        <location filename="../client/desktop/router_dialog.cc" line="161"/>
         <source>Failed to save the router.</source>
         <translation>Reitittimen tallentaminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="177"/>
+        <location filename="../client/desktop/router_dialog.cc" line="181"/>
         <source>Failed to read the router.</source>
         <translation>Reitittimen lukeminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="195"/>
+        <location filename="../client/desktop/router_dialog.cc" line="199"/>
         <source>The data of the router is damaged. Enter it again.</source>
         <translation>Reitittimen tiedot ovat vioittuneet. Syötä ne uudelleen.</translation>
     </message>
@@ -6912,17 +6932,17 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Lisää ryhmä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="97"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="95"/>
         <source>Failed to get list of groups.</source>
         <translation>Ryhmäluettelon noutaminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="179"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="177"/>
         <source>Unknown internal error.</source>
         <translation>Tuntematon sisäinen virhe.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="163"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="161"/>
         <source>Group name cannot be empty.</source>
         <translation>Ryhmän nimi ei voi olla tyhjä.</translation>
     </message>
@@ -7022,37 +7042,37 @@ Tuotuja kirjautumistietoja: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="143"/>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="189"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="187"/>
         <source>Not assigned</source>
         <translation>Ei liitetty</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="174"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="172"/>
         <source>Failed to get list of groups.</source>
         <translation>Ryhmäluettelon noutaminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="248"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="246"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Syötä sekä käyttäjänimi että salasana tai jätä molemmat tyhjiksi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="263"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="261"/>
         <source>Failed to save the credentials.</source>
         <translation>Kirjautumistietojen tallentaminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="294"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="292"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Kirjautumistietoluettelon lukeminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="340"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="338"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>Isännän kirjautumistietojen lukeminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="345"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="343"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>Isännän kirjautumistiedot ovat vioittuneet. Syötä ne uudelleen.</translation>
     </message>
@@ -7341,13 +7361,13 @@ Tuotuja kirjautumistietoja: %5</translation>
     <name>RouterStatusWidget</name>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="198"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="196"/>
         <source>The router is waiting for a two-factor code.</source>
         <translation>Reititin odottaa kaksivaiheisen todennuksen koodia.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="199"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="197"/>
         <source>Enter Code</source>
         <translation>Syötä koodi</translation>
     </message>
@@ -7367,12 +7387,12 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Kaksivaiheinen todennus on estetty liian monen epäonnistuneen yrityksen jälkeen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="203"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="201"/>
         <source>Two-factor authentication has to be set up for this router.</source>
         <translation>Kaksivaiheinen todennus on määritettävä tälle reitittimelle.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="204"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="202"/>
         <source>Set Up</source>
         <translation>Määritä</translation>
     </message>
@@ -7464,92 +7484,102 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Käyttöoikeustaso:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="89"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="65"/>
+        <source>Email:</source>
+        <translation>Sähköposti:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="99"/>
         <source>Disable User Account</source>
         <translation>Poista käyttäjätili käytöstä</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="99"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="109"/>
         <source>Reset two-factor authentication</source>
         <translation>Nollaa kaksivaiheinen todennus</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="107"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="117"/>
         <source>Sessions</source>
         <translation>Istunnot</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="123"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="133"/>
         <source>Signed in</source>
         <translation>Kirjautunut sisään</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="128"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="138"/>
         <source>Last activity</source>
         <translation>Viimeisin toiminta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="133"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="143"/>
         <source>Address</source>
         <translation>Osoite</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="156"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="166"/>
         <source>Sign out</source>
         <translation>Kirjaa ulos</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="163"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="173"/>
         <source>Sign out all</source>
         <translation>Kirjaa ulos kaikista</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="340"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="333"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Kaksivaiheisen todennuksen nollaaminen kirjaa käyttäjän ulos kaikista istunnoista ja pakottaa hänet rekisteröitymään uudelleen seuraavan kirjautumisen yhteydessä. Jatketaanko?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="395"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="385"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>Haluatko varmasti kirjata tämän käyttäjän ulos tästä istunnosta?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="420"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="410"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>Haluatko varmasti kirjata tämän käyttäjän ulos kaikista istunnoista?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="534"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="524"/>
         <source>The passwords you entered do not match.</source>
         <translation>Syöttämäsi salasanat eivät täsmää.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="206"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="202"/>
         <source>Failed to get list of users.</source>
         <translation>Käyttäjäluettelon noutaminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="236"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="230"/>
         <source>The user was deleted from another console.</source>
         <translation>Käyttäjä poistettiin toisesta konsolista.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="338"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="331"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
         <translation>Kaksivaiheisen todennuksen nollaaminen kirjaa sinut ulos kaikista istunnoista ja pakottaa sinut rekisteröitymään uudelleen seuraavan kirjautumisen yhteydessä. Jatketaanko?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="394"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="384"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
         <translation>Tämä on nykyisen istuntosi tunniste. Sen peruminen katkaisee yhteytesi. Jatketaanko?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="521"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="496"/>
+        <source>The email address is invalid.</source>
+        <translation>Sähköpostiosoite on virheellinen.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="511"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>Käyttäjänimi ei voi olla tyhjä ja voi sisältää vain kirjaimia, numeroita sekä merkkejä _, -, . ja @. Se ei voi koostua pelkistä numeroista.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Salasana ei saa olla lyhyempi kuin %n merkki.</numerusform>
@@ -7557,7 +7587,7 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="546"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="536"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>Salasana ei saa olla pidempi kuin %n merkki.</numerusform>
@@ -7565,12 +7595,12 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="547"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Syöttämäsi salasana ei täytä turvallisuusvaatimuksia!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="558"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="548"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Salasanassa on oltava pieniä ja isoja kirjaimia sekä numeroita, eikä se saa olla lyhyempi kuin %n merkki.</numerusform>
@@ -7578,52 +7608,52 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="562"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
         <source>Do you want to enter a different password?</source>
         <translation>Haluatko syöttää toisen salasanan?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="565"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="555"/>
         <source>Warning</source>
         <translation>Varoitus</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="585"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="575"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Tuntematon sisäinen virhe käyttäjää luotaessa tai muokattaessa.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="649"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="637"/>
         <source>The user name you entered already exists.</source>
         <translation>Syöttämäsi käyttäjänimi on jo olemassa.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="735"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="719"/>
         <source>Double-click to change</source>
         <translation>Muuta kaksoisnapsauttamalla</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="791"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="772"/>
         <source>The token of your current session.</source>
         <translation>Nykyisen istuntosi tunniste.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="824"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="805"/>
         <source>Administrator</source>
         <translation>Järjestelmänvalvoja</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="828"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="809"/>
         <source>Manager</source>
         <translation>Hallinnoija</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="832"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="813"/>
         <source>Operator</source>
         <translation>Operaattori</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="850"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="831"/>
         <source>Never</source>
         <translation>Ei koskaan</translation>
     </message>
@@ -7766,37 +7796,37 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Liittämättömät isännät</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="238"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="234"/>
         <source>Failed to get list of spaces.</source>
         <translation>Alueluettelon noutaminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="265"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="261"/>
         <source>The space was deleted from another console.</source>
         <translation>Alue poistettiin toisesta konsolista.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="306"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="299"/>
         <source>Failed to get list of users.</source>
         <translation>Käyttäjäluettelon noutaminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="428"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="418"/>
         <source>The space was changed from another console. The lists are being refreshed - check the changes and save again.</source>
         <translation>Aluetta muutettiin toisesta konsolista. Luetteloita päivitetään - tarkista muutokset ja tallenna uudelleen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="534"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="522"/>
         <source>Are you sure you want to remove the host from the space?</source>
         <translation>Haluatko varmasti poistaa isännän alueesta?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="917"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="902"/>
         <source>Space name cannot be empty.</source>
         <translation>Alueen nimi ei voi olla tyhjä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="928"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="913"/>
         <source>A space with the specified name already exists.</source>
         <translation>Tämänniminen alue on jo olemassa.</translation>
     </message>
@@ -9085,7 +9115,7 @@ Tuotuja kirjautumistietoja: %5</translation>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="173"/>
+        <location filename="../client/android/statistics_dialog.cc" line="175"/>
         <source>Statistics</source>
         <translation>Tilastot</translation>
     </message>
@@ -9100,7 +9130,7 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Arvo</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="206"/>
+        <location filename="../client/android/statistics_dialog.cc" line="210"/>
         <source>Close</source>
         <translation>Sulje</translation>
     </message>
@@ -14080,17 +14110,17 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>VideoWorker</name>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="46"/>
+        <location filename="../client/workers/video_worker.cc" line="45"/>
         <source>Unable to create the directory for the recording.</source>
         <translation>Tallenteen kansiota ei voi luoda.</translation>
     </message>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="48"/>
+        <location filename="../client/workers/video_worker.cc" line="47"/>
         <source>Unable to create the file for the recording.</source>
         <translation>Tallenteen tiedostoa ei voi luoda.</translation>
     </message>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="50"/>
+        <location filename="../client/workers/video_worker.cc" line="49"/>
         <source>An error occurred while writing the recording.</source>
         <translation>Tallenteen kirjoittamisessa tapahtui virhe.</translation>
     </message>

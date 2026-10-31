@@ -1107,26 +1107,31 @@ Reset the database?</source>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
+        <source>User Name</source>
+        <translation>Ім&apos;я користувача</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>IP Address</source>
         <translation>IP-адреса</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Connect Time</source>
         <translation>Час підключення</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Version</source>
         <translation>Версія</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Architecture</source>
         <translation>Архітектура</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
+        <location filename="../client/desktop/management/client_list_model.cc" line="159"/>
         <source>Operating System</source>
         <translation>Операційна система</translation>
     </message>
@@ -1817,47 +1822,47 @@ Password: %2</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="43"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="45"/>
         <source>Aspia Credentials</source>
         <translation>Облікові дані Aspia</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="45"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="47"/>
         <source>OS Credentials</source>
         <translation>Облікові дані ОС</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="54"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
         <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
         <translation>Введіть ім&apos;я користувача, наприклад %1. На комп&apos;ютері в домені це доменний обліковий запис.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
         <source>For an account of another domain, add the domain, for example %1 or %2.</source>
         <translation>Для облікового запису іншого домену вкажіть домен, наприклад %1 або %2.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="60"/>
         <source>For a local account on a computer in a domain, add %1 before the name, for example %2.</source>
         <translation>Для локального облікового запису на комп&apos;ютері в домені додайте %1 перед ім&apos;ям, наприклад %2.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="64"/>
         <source>Edit Credentials</source>
         <translation>Змінити облікові дані</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="64"/>
         <source>Add Credentials</source>
         <translation>Додати облікові дані</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="91"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="110"/>
         <source>Name cannot be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="99"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="118"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені - %n символ.</numerusform>
@@ -1866,37 +1871,37 @@ Password: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="113"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="132"/>
         <source>Invalid user name.</source>
         <translation>Невірне ім&apos;я користувача.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="122"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="141"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і може містити тільки літери, цифри та символи &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="131"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="150"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="149"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="168"/>
         <source>Unable to add credentials</source>
         <translation>Не вдалося додати облікові дані</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="160"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="179"/>
         <source>Unable to modify credentials</source>
         <translation>Не вдалося змінити облікові дані</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="190"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="209"/>
         <source>Failed to read the credentials.</source>
         <translation>Не вдалося прочитати облікові дані.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="204"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="223"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>Облікові дані пошкоджено. Введіть їх знову.</translation>
     </message>
@@ -5823,7 +5828,7 @@ Credentials imported: %5</source>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="361"/>
+        <location filename="../client/workers/network_worker.cc" line="375"/>
         <source>Failed to connect to the relay server</source>
         <translation>не вдалося підключитися до ретранслятора</translation>
     </message>
@@ -6426,77 +6431,92 @@ Credentials imported: %5</source>
         <translation>З</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="51"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="54"/>
         <source>To</source>
         <translation>По</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="78"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="84"/>
         <source>User</source>
         <translation>Користувач</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="94"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="100"/>
         <source>Address or computer name of the client</source>
         <translation>Адреса або ім&apos;я комп&apos;ютера клієнта</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="97"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="103"/>
         <source>Client</source>
         <translation>Клієнт</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="113"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="119"/>
         <source>ID, computer name or address of the host</source>
         <translation>ID, ім&apos;я комп&apos;ютера або адреса хоста</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="116"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="122"/>
         <source>Host</source>
         <translation>Хост</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="132"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="138"/>
         <source>Reset filter</source>
         <translation>Скинути фільтр</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="175"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="181"/>
         <source>Previous page</source>
         <translation>Попередня сторінка</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="178"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="184"/>
         <source>Previous</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="196"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="202"/>
         <source>Next page</source>
         <translation>Наступна сторінка</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="199"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="205"/>
         <source>Next</source>
         <translation>Вперед</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.ui" line="210"/>
+        <location filename="../client/desktop/management/router_access_log_widget.ui" line="216"/>
         <source>Items per page:</source>
         <translation>Елементів на сторінку:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="94"/>
-        <source>Any</source>
-        <translation>Будь-яка</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="99"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="114"/>
         <source>All Session Types</source>
         <translation>Всі типи сесій</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="277"/>
+        <source>Save File</source>
+        <translation>Зберегти файл</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="277"/>
+        <source>JSON files (*.json)</source>
+        <translation>JSON-файли (*.json)</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="288"/>
+        <source>Could not open file for writing.</source>
+        <translation>Не вдалося відкрити файл для запису.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="323"/>
+        <source>Unable to write file.</source>
+        <translation>Не вдалося записати файл.</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="455"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="533"/>
         <source>%n entry(s)</source>
         <translation>
             <numerusform>%n запис</numerusform>
@@ -6527,32 +6547,32 @@ Credentials imported: %5</source>
 <context>
     <name>RouterClientsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="225"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="226"/>
         <source>Save File</source>
         <translation>Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="225"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="226"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-файли (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="236"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="237"/>
         <source>Could not open file for writing.</source>
         <translation>Не вдалося відкрити файл для запису.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="271"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="273"/>
         <source>Unable to write file.</source>
         <translation>Не вдалося записати файл.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="291"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="293"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете відключити клієнта &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="296"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="298"/>
         <source>Are you sure you want to disconnect %n clients?</source>
         <translation>
             <numerusform>Ви впевнені, що хочете відключити %n клієнта?</numerusform>
@@ -6561,7 +6581,7 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="343"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="345"/>
         <source>Failed to disconnect %n of the selected clients.</source>
         <translation>
             <numerusform>Не вдалося відключити %n з вибраних клієнтів.</numerusform>
@@ -6570,7 +6590,7 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="499"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="501"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>%n клієнт</numerusform>
@@ -6715,7 +6735,7 @@ Credentials imported: %5</source>
         <translation>Оператор</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/router_dialog.cc" line="76"/>
+        <location filename="../client/desktop/router_dialog.cc" line="80"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені - %n символ.</numerusform>
@@ -6724,34 +6744,34 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="88"/>
+        <location filename="../client/desktop/router_dialog.cc" line="92"/>
         <source>An invalid router address was entered.</source>
         <translation>Введено недопустиму адресу маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="98"/>
+        <location filename="../client/desktop/router_dialog.cc" line="102"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і може містити тільки літери, цифри та символи _, -, .</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="109"/>
+        <location filename="../client/desktop/router_dialog.cc" line="113"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="131"/>
-        <location filename="../client/desktop/router_dialog.cc" line="148"/>
-        <location filename="../client/desktop/router_dialog.cc" line="157"/>
+        <location filename="../client/desktop/router_dialog.cc" line="135"/>
+        <location filename="../client/desktop/router_dialog.cc" line="152"/>
+        <location filename="../client/desktop/router_dialog.cc" line="161"/>
         <source>Failed to save the router.</source>
         <translation>Не вдалося зберегти налаштування маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="177"/>
+        <location filename="../client/desktop/router_dialog.cc" line="181"/>
         <source>Failed to read the router.</source>
         <translation>Не вдалося прочитати маршрутизатор.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="195"/>
+        <location filename="../client/desktop/router_dialog.cc" line="199"/>
         <source>The data of the router is damaged. Enter it again.</source>
         <translation>Дані маршрутизатора пошкоджено. Введіть їх знову.</translation>
     </message>
@@ -6946,17 +6966,17 @@ Credentials imported: %5</source>
         <translation>Додати групу</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="97"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="95"/>
         <source>Failed to get list of groups.</source>
         <translation>Не вдалося отримати список груп.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="179"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="177"/>
         <source>Unknown internal error.</source>
         <translation>Невідома внутрішня помилка.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="163"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="161"/>
         <source>Group name cannot be empty.</source>
         <translation>Ім&apos;я групи не може бути порожнім.</translation>
     </message>
@@ -7057,37 +7077,37 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="143"/>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="189"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="187"/>
         <source>Not assigned</source>
         <translation>Не призначено</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="174"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="172"/>
         <source>Failed to get list of groups.</source>
         <translation>Не вдалося отримати список груп.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="248"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="246"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Введіть і ім&apos;я користувача, і пароль або залиште обидва поля порожніми.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="263"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="261"/>
         <source>Failed to save the credentials.</source>
         <translation>Не вдалося зберегти облікові дані.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="294"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="292"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Не вдалося прочитати список облікових даних.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="340"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="338"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>Не вдалося прочитати облікові дані хоста.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="345"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="343"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>Облікові дані хоста пошкоджено. Введіть їх знову.</translation>
     </message>
@@ -7384,13 +7404,13 @@ Credentials imported: %5</source>
     <name>RouterStatusWidget</name>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="198"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="196"/>
         <source>The router is waiting for a two-factor code.</source>
         <translation>Маршрутизатор очікує код двофакторної автентифікації.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="199"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="197"/>
         <source>Enter Code</source>
         <translation>Ввести код</translation>
     </message>
@@ -7410,12 +7430,12 @@ Credentials imported: %5</source>
         <translation>Двофакторну автентифікацію заблоковано після занадто великої кількості невдалих спроб.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="203"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="201"/>
         <source>Two-factor authentication has to be set up for this router.</source>
         <translation>Для цього маршрутизатора потрібно налаштувати двофакторну автентифікацію.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="204"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="202"/>
         <source>Set Up</source>
         <translation>Налаштувати</translation>
     </message>
@@ -7509,92 +7529,102 @@ Credentials imported: %5</source>
         <translation>Рівень доступу:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="89"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="65"/>
+        <source>Email:</source>
+        <translation>Електронна пошта:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="99"/>
         <source>Disable User Account</source>
         <translation>Відключити обліковий запис користувача</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="99"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="109"/>
         <source>Reset two-factor authentication</source>
         <translation>Скинути двофакторну автентифікацію</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="107"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="117"/>
         <source>Sessions</source>
         <translation>Сесії</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="123"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="133"/>
         <source>Signed in</source>
         <translation>Виконано вхід</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="128"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="138"/>
         <source>Last activity</source>
         <translation>Остання активність</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="133"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="143"/>
         <source>Address</source>
         <translation>Адреса</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="156"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="166"/>
         <source>Sign out</source>
         <translation>Завершити сеанс</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.ui" line="163"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="173"/>
         <source>Sign out all</source>
         <translation>Завершити всі сеанси</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="340"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="333"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Скидання двофакторної автентифікації призведе до виходу користувача з усіх сеансів і вимагатиме повторного налаштування при наступному вході. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="395"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="385"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>Ви впевнені, що хочете завершити цей сеанс користувача?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="420"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="410"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>Ви впевнені, що хочете завершити всі сеанси цього користувача?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="534"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="524"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введені паролі не збігаються.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="206"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="202"/>
         <source>Failed to get list of users.</source>
         <translation>Не вдалося отримати список користувачів.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="236"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="230"/>
         <source>The user was deleted from another console.</source>
         <translation>Користувача видалено з іншої консолі.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="338"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="331"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
         <translation>Скидання двофакторної автентифікації призведе до вашого виходу з усіх сеансів і вимагатиме повторного налаштування при наступному вході. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="394"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="384"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
         <translation>Це токен вашого поточного сеансу. Його відкликання відключить вас. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="521"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="496"/>
+        <source>The email address is invalid.</source>
+        <translation>Адресу електронної пошти вказано неправильно.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="511"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і може містити тільки літери, цифри та символи _, -, ., @. Воно не може складатися лише з цифр.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не може бути коротшим за %n символ.</numerusform>
@@ -7603,7 +7633,7 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="546"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="536"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>Пароль не може перевищувати %n символ.</numerusform>
@@ -7612,12 +7642,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="547"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введений пароль не відповідає вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="558"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="548"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символ.</numerusform>
@@ -7626,52 +7656,52 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="562"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
         <source>Do you want to enter a different password?</source>
         <translation>Хочете ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="565"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="555"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="585"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="575"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Невідома внутрішня помилка при створенні або зміні користувача.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="649"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="637"/>
         <source>The user name you entered already exists.</source>
         <translation>Введене вами ім&apos;я користувача вже існує.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="735"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="719"/>
         <source>Double-click to change</source>
         <translation>Подвійне клацання для зміни</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="791"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="772"/>
         <source>The token of your current session.</source>
         <translation>Токен вашого поточного сеансу.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="824"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="805"/>
         <source>Administrator</source>
         <translation>Адміністратор</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="828"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="809"/>
         <source>Manager</source>
         <translation>Менеджер</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="832"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="813"/>
         <source>Operator</source>
         <translation>Оператор</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="850"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="831"/>
         <source>Never</source>
         <translation>Ніколи</translation>
     </message>
@@ -7815,37 +7845,37 @@ Credentials imported: %5</source>
         <translation>Непризначені хости</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="238"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="234"/>
         <source>Failed to get list of spaces.</source>
         <translation>Не вдалося отримати список просторів.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="265"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="261"/>
         <source>The space was deleted from another console.</source>
         <translation>Простір видалено з іншої консолі.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="306"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="299"/>
         <source>Failed to get list of users.</source>
         <translation>Не вдалося отримати список користувачів.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="428"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="418"/>
         <source>The space was changed from another console. The lists are being refreshed - check the changes and save again.</source>
         <translation>Простір змінено з іншої консолі. Списки оновлюються - перевірте зміни та збережіть знову.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="534"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="522"/>
         <source>Are you sure you want to remove the host from the space?</source>
         <translation>Ви впевнені, що хочете видалити хост із простору?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="917"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="902"/>
         <source>Space name cannot be empty.</source>
         <translation>Ім&apos;я простору не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="928"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="913"/>
         <source>A space with the specified name already exists.</source>
         <translation>Простір з указаним ім&apos;ям вже існує.</translation>
     </message>
@@ -9142,7 +9172,7 @@ Credentials imported: %5</source>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="173"/>
+        <location filename="../client/android/statistics_dialog.cc" line="175"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
@@ -9157,7 +9187,7 @@ Credentials imported: %5</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="206"/>
+        <location filename="../client/android/statistics_dialog.cc" line="210"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
@@ -14145,17 +14175,17 @@ Credentials imported: %5</source>
 <context>
     <name>VideoWorker</name>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="46"/>
+        <location filename="../client/workers/video_worker.cc" line="45"/>
         <source>Unable to create the directory for the recording.</source>
         <translation>Не вдалося створити каталог для запису екрана.</translation>
     </message>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="48"/>
+        <location filename="../client/workers/video_worker.cc" line="47"/>
         <source>Unable to create the file for the recording.</source>
         <translation>Не вдалося створити файл для запису екрана.</translation>
     </message>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="50"/>
+        <location filename="../client/workers/video_worker.cc" line="49"/>
         <source>An error occurred while writing the recording.</source>
         <translation>Сталася помилка під час запису екрана.</translation>
     </message>
