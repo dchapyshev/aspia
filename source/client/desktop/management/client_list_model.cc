@@ -28,7 +28,7 @@
 
 namespace {
 
-constexpr int kColumnCount = 6;
+constexpr int kColumnCount = 7;
 
 } // namespace
 
@@ -140,6 +140,9 @@ QVariant ClientListModel::headerData(int section, Qt::Orientation orientation, i
         case Column::COMPUTER_NAME:
             return tr("Computer Name");
 
+        case Column::USER_NAME:
+            return tr("User Name");
+
         case Column::IP_ADDRESS:
             return tr("IP Address");
 
@@ -207,6 +210,9 @@ QString ClientListModel::textAt(const proto::router::ClientInfo& client, Column 
         case Column::COMPUTER_NAME:
             return QString::fromStdString(client.computer_name());
 
+        case Column::USER_NAME:
+            return QString::fromStdString(client.user_name());
+
         case Column::IP_ADDRESS:
             return QString::fromStdString(client.ip_address());
 
@@ -248,11 +254,8 @@ void ClientListModel::applySort()
         if (column == Column::CONNECT_TIME)
             return first.timepoint() < second.timepoint();
 
-        if (column == Column::COMPUTER_NAME)
-        {
-            return collator_.compare(QString::fromStdString(first.computer_name()),
-                                     QString::fromStdString(second.computer_name())) < 0;
-        }
+        if (column == Column::COMPUTER_NAME || column == Column::USER_NAME)
+            return collator_.compare(textAt(first, column), textAt(second, column)) < 0;
 
         return textAt(first, column) < textAt(second, column);
     };

@@ -34,6 +34,7 @@ public:
     enum class Column
     {
         COMPUTER_NAME,
+        USER_NAME,
         IP_ADDRESS,
         CONNECT_TIME,
         VERSION,

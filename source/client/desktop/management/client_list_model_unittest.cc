@@ -50,11 +50,12 @@ void recordingMessageHandler(QtMsgType type, const QMessageLogContext& context, 
 
 //--------------------------------------------------------------------------------------------------
 void addClient(proto::router::ClientList* list, qint64 entry_id, const QString& computer_name,
-               qint64 timepoint)
+               const QString& user_name, qint64 timepoint)
 {
     proto::router::ClientInfo* client = list->add_client();
     client->set_entry_id(entry_id);
     client->set_computer_name(computer_name.toStdString());
+    client->set_user_name(user_name.toStdString());
     client->set_ip_address("192.168.0.1");
     client->set_architecture("x86_64");
     client->set_os_name("Windows 11");
@@ -114,9 +115,9 @@ protected:
     {
         proto::router::ClientList list;
 
-        addClient(&list, 1, "host2", 3000);
-        addClient(&list, 2, "host10", 1000);
-        addClient(&list, 3, "alpha", 2000);
+        addClient(&list, 1, "host2", "user10", 3000);
+        addClient(&list, 2, "host10", "user2", 1000);
+        addClient(&list, 3, "alpha", "admin", 2000);
 
         return list;
     }
@@ -145,7 +146,7 @@ private:
 TEST_F(ClientListModelTest, EmptyModelHasItsColumnsAndNoRows)
 {
     EXPECT_EQ(model()->rowCount(), 0);
-    EXPECT_EQ(model()->columnCount(), 6);
+    EXPECT_EQ(model()->columnCount(), 7);
     EXPECT_EQ(model()->clientAt(0), nullptr);
     EXPECT_EQ(model()->rowOf(1), -1);
 }
@@ -155,9 +156,11 @@ TEST_F(ClientListModelTest, HeaderNamesTheColumnOfItsSection)
 {
     EXPECT_EQ(model()->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString(),
               QString("Computer Name"));
-    EXPECT_EQ(model()->headerData(2, Qt::Horizontal, Qt::DisplayRole).toString(),
+    EXPECT_EQ(model()->headerData(1, Qt::Horizontal, Qt::DisplayRole).toString(),
+              QString("User Name"));
+    EXPECT_EQ(model()->headerData(3, Qt::Horizontal, Qt::DisplayRole).toString(),
               QString("Connect Time"));
-    EXPECT_EQ(model()->headerData(5, Qt::Horizontal, Qt::DisplayRole).toString(),
+    EXPECT_EQ(model()->headerData(6, Qt::Horizontal, Qt::DisplayRole).toString(),
               QString("Operating System"));
 
     // A vertical header is not ours to fill, and a section outside the table has no name.
@@ -173,6 +176,7 @@ TEST_F(ClientListModelTest, RowShowsTheFieldsOfItsSession)
     ASSERT_EQ(model()->rowCount(), 3);
 
     EXPECT_EQ(textAt(model(), 0, Column::COMPUTER_NAME), QString("host2"));
+    EXPECT_EQ(textAt(model(), 0, Column::USER_NAME), QString("user10"));
     EXPECT_EQ(textAt(model(), 0, Column::IP_ADDRESS), QString("192.168.0.1"));
     EXPECT_EQ(textAt(model(), 0, Column::ARCHITECTURE), QString("x86_64"));
     EXPECT_EQ(textAt(model(), 0, Column::OS), QString("Windows 11"));
@@ -215,6 +219,16 @@ TEST_F(ClientListModelTest, NameIsSortedTheWayItIsRead)
 
     model()->sort(static_cast<int>(Column::COMPUTER_NAME), Qt::DescendingOrder);
     EXPECT_EQ(rowIds(model()), QList<qint64>({ 2, 1, 3 }));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The name of the user is read by a person as well, so "user2" comes before "user10".
+TEST_F(ClientListModelTest, UserNameIsSortedTheWayItIsRead)
+{
+    model()->setClients(clients());
+
+    model()->sort(static_cast<int>(Column::USER_NAME), Qt::AscendingOrder);
+    EXPECT_EQ(rowIds(model()), QList<qint64>({ 3, 2, 1 }));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -295,5 +309,5 @@ TEST_F(ClientListModelTest, ClearDropsTheRows)
     model()->clear();
 
     EXPECT_EQ(model()->rowCount(), 0);
-    EXPECT_EQ(model()->columnCount(), 6);
+    EXPECT_EQ(model()->columnCount(), 7);
 }

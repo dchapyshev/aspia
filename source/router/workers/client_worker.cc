@@ -436,6 +436,7 @@ void ClientWorker::onClientListRequest(const proto::router::ClientListRequest& r
         item->set_os_name(client->osName());
         item->set_computer_name(client->computerName());
         item->set_architecture(client->architecture());
+        item->set_user_name(client->userName());
     }
 
     session->sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));

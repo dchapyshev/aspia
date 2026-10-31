@@ -55,6 +55,7 @@ message ClientInfo
     string os_name       = 5;
     string computer_name = 6;
     string architecture  = 7;
+    string user_name     = 8;
 }
 
 message RelayRequest

@@ -70,6 +70,7 @@ RouterClientsWidget::RouterClientsWidget(QWidget* parent)
     ui->tree_clients->setSortingEnabled(true);
 
     ui->tree_clients->header()->resizeSection(static_cast<int>(ClientListModel::Column::COMPUTER_NAME), 110);
+    ui->tree_clients->header()->resizeSection(static_cast<int>(ClientListModel::Column::USER_NAME), 110);
     ui->tree_clients->header()->resizeSection(static_cast<int>(ClientListModel::Column::CONNECT_TIME), 130);
 
     ui->tree_clients->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -246,6 +247,7 @@ void RouterClientsWidget::save()
         QJsonObject client_object;
 
         client_object.insert("computer_name", QString::fromStdString(info.computer_name()));
+        client_object.insert("user_name", QString::fromStdString(info.user_name()));
         client_object.insert("operating_system", QString::fromStdString(info.os_name()));
         client_object.insert("ip_address", QString::fromStdString(info.ip_address()));
         client_object.insert("architecture", QString::fromStdString(info.architecture()));
