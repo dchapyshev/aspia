@@ -579,6 +579,131 @@ TEST_F(TwoFactorHandlerTest, ExpiredBlockClosesTheSeriesItPunished)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A login with a code is reported, the enrollment included. A remembered device skips the code, so
+// its logins are not.
+TEST_F(TwoFactorHandlerTest, LoginWithACodeIsReportedToTheOwner)
+{
+    ASSERT_TRUE(execRaw("UPDATE users SET email='admin@example.com'"));
+
+    TwoFactorHandler enrollment;
+    const QByteArray secret = secretFromUri(start(enrollment).challenge.otpauth_uri);
+    ASSERT_FALSE(secret.isEmpty());
+
+    const TwoFactorHandler::Result enrolled = submitCode(enrollment, Totp::code(secret, kNow), kNow);
+    ASSERT_EQ(enrolled.action, TwoFactorHandler::Action::ACCEPT);
+    EXPECT_EQ(enrolled.event, TwoFactorHandler::Event::CODE_ACCEPTED);
+    EXPECT_EQ(enrolled.email, "admin@example.com");
+
+    const qint64 next_step = kNow + Totp::kDefaultStepSec;
+
+    TwoFactorHandler login;
+    ASSERT_EQ(start(login).challenge.mode, proto::router::TWO_FACTOR_MODE_ACTIVE);
+
+    const TwoFactorHandler::Result accepted = submitCode(login, Totp::code(secret, next_step), next_step);
+    ASSERT_EQ(accepted.action, TwoFactorHandler::Action::ACCEPT);
+    EXPECT_EQ(accepted.event, TwoFactorHandler::Event::CODE_ACCEPTED);
+    EXPECT_EQ(accepted.email, "admin@example.com");
+    ASSERT_FALSE(accepted.new_token.empty());
+
+    TwoFactorHandler remembered;
+    ASSERT_EQ(start(remembered).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+
+    const TwoFactorHandler::Result by_token = submitToken(remembered, accepted.new_token);
+    ASSERT_EQ(by_token.action, TwoFactorHandler::Action::ACCEPT);
+    EXPECT_EQ(by_token.event, TwoFactorHandler::Event::NONE);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(TwoFactorHandlerTest, WrongCodeIsReportedToTheOwner)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(execRaw("UPDATE users SET email='admin@example.com'"));
+
+    TwoFactorHandler handler;
+    ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+
+    const TwoFactorHandler::Result refused = submitCode(handler, wrongCode(secret, kNow), kNow);
+    ASSERT_EQ(refused.action, TwoFactorHandler::Action::CLOSE);
+    EXPECT_EQ(refused.event, TwoFactorHandler::Event::WRONG_CODE);
+    EXPECT_EQ(refused.email, "admin@example.com");
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(TwoFactorHandlerTest, WrongCodeOfAUserWithoutAddressIsReportedToNobody)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+
+    TwoFactorHandler handler;
+    ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+
+    const TwoFactorHandler::Result refused = submitCode(handler, wrongCode(secret, kNow), kNow);
+    ASSERT_EQ(refused.action, TwoFactorHandler::Action::CLOSE);
+    EXPECT_EQ(refused.event, TwoFactorHandler::Event::WRONG_CODE);
+    EXPECT_TRUE(refused.email.isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The attempt that starts the block says so. The codes sent while the block runs are not looked at,
+// so they are not reported and a guesser cannot flood the mailbox of the owner.
+TEST_F(TwoFactorHandlerTest, BlockIsReportedOnceByTheAttemptThatStartsIt)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(execRaw("UPDATE users SET email='admin@example.com'"));
+
+    const QString wrong = wrongCode(secret, kNow);
+
+    for (int i = 0; i < TwoFactorHandler::kMaxFailedAttempts; ++i)
+    {
+        TwoFactorHandler attempt;
+        ASSERT_EQ(start(attempt).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+
+        const TwoFactorHandler::Result refused = submitCode(attempt, wrong, kNow);
+        ASSERT_EQ(refused.action, TwoFactorHandler::Action::CLOSE);
+        EXPECT_EQ(refused.event, i == TwoFactorHandler::kMaxFailedAttempts - 1 ?
+                                 TwoFactorHandler::Event::BLOCK_STARTED : TwoFactorHandler::Event::WRONG_CODE);
+    }
+
+    TwoFactorHandler blocked;
+    ASSERT_EQ(start(blocked).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+
+    const TwoFactorHandler::Result refused = submitCode(blocked, wrong, kNow);
+    ASSERT_EQ(refused.action, TwoFactorHandler::Action::CLOSE);
+    EXPECT_EQ(refused.event, TwoFactorHandler::Event::NONE);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A replay came out of the secret and a code of the enrollment confirms a secret just handed out,
+// so neither is a guess to report.
+TEST_F(TwoFactorHandlerTest, ReplayAndEnrollmentAreNotReported)
+{
+    ASSERT_TRUE(execRaw("UPDATE users SET email='admin@example.com'"));
+
+    TwoFactorHandler enrollment;
+    const QByteArray secret = secretFromUri(start(enrollment).challenge.otpauth_uri);
+    ASSERT_FALSE(secret.isEmpty());
+
+    const TwoFactorHandler::Result mistyped = submitCode(enrollment, wrongCode(secret, kNow), kNow);
+    ASSERT_EQ(mistyped.action, TwoFactorHandler::Action::CLOSE);
+    EXPECT_EQ(mistyped.event, TwoFactorHandler::Event::NONE);
+
+    TwoFactorHandler confirmation;
+    ASSERT_EQ(secretFromUri(start(confirmation).challenge.otpauth_uri), secret);
+
+    const QString code = Totp::code(secret, kNow);
+    ASSERT_EQ(submitCode(confirmation, code, kNow).action, TwoFactorHandler::Action::ACCEPT);
+
+    TwoFactorHandler replay;
+    ASSERT_EQ(start(replay).challenge.mode, proto::router::TWO_FACTOR_MODE_ACTIVE);
+
+    const TwoFactorHandler::Result replayed = submitCode(replay, code, kNow);
+    ASSERT_EQ(replayed.action, TwoFactorHandler::Action::CLOSE);
+    EXPECT_EQ(replayed.event, TwoFactorHandler::Event::NONE);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The drift window accepts the previous step, but not after a newer one was already consumed.
 TEST_F(TwoFactorHandlerTest, CodeOfAnAlreadyConsumedStepIsRefused)
 {

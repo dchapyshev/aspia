@@ -51,6 +51,7 @@ TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const Reque
 
     user_otp_secret_ = user.otp_secret;
     user_otp_counter_ = user.otp_counter;
+    user_email_ = user.email;
 
     // A re-opened stage starts clean. The one caller that re-opens it, the rejected-token
     // branch, raises the flag again itself after this returns.
@@ -167,6 +168,7 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
 
         user_otp_secret_ = user.otp_secret;
         user_otp_counter_ = user.otp_counter;
+        user_email_ = user.email;
     }
 
     const QByteArray& secret = enroll ? tentative_otp_secret_ : user_otp_secret_;
@@ -196,7 +198,10 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
     {
         LOG(INFO) << "Invalid TOTP code for user" << caller.name << ". Closing connection";
         if (!enroll)
-            registerFailedAttempt(caller.user_id, now);
+        {
+            result.event = registerFailedAttempt(caller.user_id, now) ? Event::BLOCK_STARTED : Event::WRONG_CODE;
+            result.email = user_email_;
+        }
         markCodeRejected(caller.user_id);
         result.action = Action::CLOSE;
         return result;
@@ -271,6 +276,8 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
     result.action = Action::ACCEPT;
     result.new_token = std::move(new_token);
     result.token_id = new_token_id;
+    result.event = Event::CODE_ACCEPTED;
+    result.email = user_email_;
     return result;
 }
 
@@ -323,7 +330,7 @@ void TwoFactorHandler::markCodeRejected(qint64 user_id)
 
 //--------------------------------------------------------------------------------------------------
 // static
-void TwoFactorHandler::registerFailedAttempt(qint64 user_id, qint64 now)
+bool TwoFactorHandler::registerFailedAttempt(qint64 user_id, qint64 now)
 {
     UserState& state = user_states_[user_id];
 
@@ -337,8 +344,11 @@ void TwoFactorHandler::registerFailedAttempt(qint64 user_id, qint64 now)
 
     ++state.failures;
 
-    if (state.failures >= kMaxFailedAttempts)
-        state.blocked_until = now + DurationCast<Seconds>(kFailedAttemptsBlock).count();
+    if (state.failures < kMaxFailedAttempts)
+        return false;
+
+    state.blocked_until = now + DurationCast<Seconds>(kFailedAttemptsBlock).count();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

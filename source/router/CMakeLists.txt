@@ -29,6 +29,8 @@ list(APPEND SOURCE_ROUTER_CORE
     client_operator.h
     database.cc
     database.h
+    email_messages.cc
+    email_messages.h
     email_queue.cc
     email_queue.h
     host.cc

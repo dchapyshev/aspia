@@ -28,6 +28,7 @@
 #include "base/scoped_qpointer.h"
 #include "base/net/curl_util.h"
 #include "base/threading/worker.h"
+#include "router/email_messages.h"
 #include "router/email_queue.h"
 
 class QSocketNotifier;
@@ -40,7 +41,7 @@ public:
     EmailWorker();
     ~EmailWorker() final;
 
-    void send(const QString& to, const QString& subject, const QString& text);
+    void send(const QString& to, const EmailMessages::Message& message);
 
 protected:
     // Worker implementation.

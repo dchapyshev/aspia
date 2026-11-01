@@ -118,11 +118,11 @@ EmailWorker::~EmailWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void EmailWorker::send(const QString& to, const QString& subject, const QString& text)
+void EmailWorker::send(const QString& to, const EmailMessages::Message& message)
 {
-    post([this, to, subject, text]()
+    post([this, to, message]()
     {
-        doSend(to, subject, text);
+        doSend(to, message.subject, message.text);
     });
 }
 

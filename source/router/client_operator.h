@@ -120,6 +120,7 @@ private:
     // teardown of the session.
     void applyTwoFactorResult(TwoFactorHandler::Result&& result);
     void completeTwoFactor(std::string&& new_token = std::string());
+    void sendTwoFactorEmail(const TwoFactorHandler::Result& result);
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
     void sendConnectionOffer(const proto::router::ConnectionRequest& request);
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);

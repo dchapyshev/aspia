@@ -34,6 +34,7 @@
 #include "router/handlers/user_request_handler.h"
 #include "router/handlers/workspace_request_handler.h"
 #include "router/workers/client_worker.h"
+#include "router/workers/email_worker.h"
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
 
@@ -293,9 +294,12 @@ void ClientOperator::applyTwoFactorResult(TwoFactorHandler::Result&& result)
             // an administrator watches (devices, the OTP state) change with it.
             emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
             completeTwoFactor(std::move(result.new_token));
+            if (two_factor_completed_)
+                sendTwoFactorEmail(result);
             return;
 
         case TwoFactorHandler::Action::CLOSE:
+            sendTwoFactorEmail(result);
             emit sig_finished(session_id_);
             return;
     }
@@ -341,6 +345,42 @@ void ClientOperator::completeTwoFactor(std::string&& new_token)
     login_result->set_new_token(std::move(new_token));
     login_result->set_user_id(userId());
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientOperator::sendTwoFactorEmail(const TwoFactorHandler::Result& result)
+{
+    if (result.event == TwoFactorHandler::Event::NONE || result.email.isEmpty())
+        return;
+
+    EmailWorker* email_worker = CoreApplication::findWorker<EmailWorker>();
+    CHECK(email_worker);
+
+    const QString user_name = QString::fromStdString(userName());
+    const QString client_address = QString::fromStdString(address());
+    const QString computer_name = QString::fromStdString(computerName());
+    const QString os_name = QString::fromStdString(osName());
+
+    switch (result.event)
+    {
+        case TwoFactorHandler::Event::CODE_ACCEPTED:
+            email_worker->send(result.email, EmailMessages::twoFactorPassed(
+                user_name, client_address, computer_name, os_name));
+            break;
+
+        case TwoFactorHandler::Event::WRONG_CODE:
+            email_worker->send(result.email, EmailMessages::wrongTwoFactorCode(
+                user_name, client_address, computer_name, os_name));
+            break;
+
+        case TwoFactorHandler::Event::BLOCK_STARTED:
+            email_worker->send(result.email, EmailMessages::twoFactorBlocked(
+                user_name, client_address, computer_name, os_name, TwoFactorHandler::kFailedAttemptsBlock));
+            break;
+
+        case TwoFactorHandler::Event::NONE:
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

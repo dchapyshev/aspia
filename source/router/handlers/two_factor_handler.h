@@ -20,6 +20,7 @@
 #define ROUTER_HANDLERS_TWO_FACTOR_HANDLER_H
 
 #include <QByteArray>
+#include <QString>
 
 #include <string>
 #include <string_view>
@@ -70,6 +71,14 @@ public:
         CLOSE           // Tear the session down.
     };
 
+    enum class Event
+    {
+        NONE,
+        CODE_ACCEPTED, // ACCEPT with a code, the enrollment included.
+        WRONG_CODE,    // CLOSE on a wrong code of an enrolled user.
+        BLOCK_STARTED  // CLOSE on the wrong code that started the block.
+    };
+
     struct Result
     {
         Action action = Action::CLOSE;
@@ -79,6 +88,10 @@ public:
         // goes out either way, just with nothing for the client to store.
         std::string new_token;
         qint64 token_id = 0;
+
+        // |email| is the address of the owner, empty when there is none.
+        Event event = Event::NONE;
+        QString email;
     };
 
     // Failed attempts a user may make before the router stops verifying their codes at all, and
@@ -119,7 +132,7 @@ private:
     static qint64 blockedSecondsLeft(qint64 user_id, qint64 now);
     static bool isCodeRejected(qint64 user_id);
     static void markCodeRejected(qint64 user_id);
-    static void registerFailedAttempt(qint64 user_id, qint64 now);
+    static bool registerFailedAttempt(qint64 user_id, qint64 now);
     static QByteArray tentativeSecret(qint64 user_id);
     static void dropTentativeSecret(qint64 user_id);
 
@@ -136,6 +149,7 @@ private:
     // an administrator can reset the secret or delete the user while the prompt is open.
     QByteArray user_otp_secret_;
     quint64 user_otp_counter_ = 0;
+    QString user_email_;
 
     // The client already presented a token and was told to go to the code prompt instead.
     bool token_rejected_ = false;
