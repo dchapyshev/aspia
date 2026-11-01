@@ -72,7 +72,9 @@ jobs:
 
           # Need to backup vcpkg executable to prevent it's rebuild/redownload each time. The backup
           # is named after the tool release the vcpkg scripts require, so after a vcpkg update the
-          # old executable is not restored and the toolchain downloads the required one.
+          # old executable is not restored and the toolchain downloads the required one. The checkout
+          # does not clean the submodules, so the executable of an earlier run is removed first.
+          rm -f vcpkg4aspia/vcpkg
           VCPKG_TOOL_TAG=$(sed -n 's/^VCPKG_TOOL_RELEASE_TAG=//p' vcpkg4aspia/scripts/vcpkg-tool-metadata.txt | tr -d '\r')
           VCPKG_BACKUP=$VCPKG_DEFAULT_BINARY_CACHE/vcpkg-$VCPKG_TOOL_TAG.bak
 
