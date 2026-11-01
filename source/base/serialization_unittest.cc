@@ -56,7 +56,7 @@ TEST(serialization_test, parse_invalid_data)
     proto::file_transfer::ListRequest msg;
     QByteArray garbage(100, '\xFF');
     // Should not crash. Lite runtime may or may not reject garbage.
-    msg.ParseFromArray(garbage.data(), garbage.size());
+    (void)msg.ParseFromArray(garbage.data(), garbage.size());
 }
 
 // ============================================================================

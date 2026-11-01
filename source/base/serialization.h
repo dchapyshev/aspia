@@ -85,7 +85,7 @@ public:
             buffer.reserve(target_size);
 
         buffer.resize(target_size);
-        message.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
+        (void)message.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
 
         return buffer;
     }
