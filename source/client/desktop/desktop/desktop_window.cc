@@ -768,11 +768,20 @@ void DesktopWindow::onMouseCursorChanged(std::shared_ptr<MouseCursor> mouse_curs
 
     QImage image(reinterpret_cast<const uchar*>(mouse_cursor->constImage().data()), width, height,
                  mouse_cursor->stride(), QImage::Format::Format_ARGB32);
+    QPoint hotspot(mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY());
 
-    // The cursor is scaled to the current desktop scale inside the widget. The device pixel ratio
-    // of the client screen is applied on top of that by Qt itself.
-    desktop_->setCursorShape(QPixmap::fromImage(image),
-                             QPoint(mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
+    const QPoint& dpi = mouse_cursor->constDpi();
+    if (dpi.x() != MouseCursor::kDefaultDpiX || dpi.y() != MouseCursor::kDefaultDpiY)
+    {
+        const double scale_x = double(MouseCursor::kDefaultDpiX) / double(dpi.x());
+        const double scale_y = double(MouseCursor::kDefaultDpiY) / double(dpi.y());
+
+        image = image.scaled(qMax(qRound(width * scale_x), 1), qMax(qRound(height * scale_y), 1),
+                             Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        hotspot = QPoint(qRound(hotspot.x() * scale_x), qRound(hotspot.y() * scale_y));
+    }
+
+    desktop_->setCursorShape(QPixmap::fromImage(image), hotspot);
 }
 
 //--------------------------------------------------------------------------------------------------

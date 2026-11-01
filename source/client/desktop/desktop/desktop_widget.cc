@@ -21,7 +21,6 @@
 #include <QApplication>
 #include <QPainter>
 #include <QPainterPath>
-#include <QResizeEvent>
 #include <QSvgRenderer>
 #include <QWheelEvent>
 
@@ -270,10 +269,16 @@ void DesktopWidget::drawDesktopFrame(const QList<QRect>& dirty_rects)
 //--------------------------------------------------------------------------------------------------
 void DesktopWidget::setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot)
 {
-    source_cursor_shape_ = std::move(cursor_shape);
-    source_cursor_hotspot_ = hotspot;
+    remote_cursor_shape_ = std::move(cursor_shape);
+    remote_cursor_hotspot_ = hotspot;
 
-    updateCursorShape();
+    if (remote_cursor_shape_.isNull())
+    {
+        setCursor(QCursor(Qt::ArrowCursor));
+        return;
+    }
+
+    setCursor(QCursor(remote_cursor_shape_, hotspot.x(), hotspot.y()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -654,13 +659,6 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWidget::resizeEvent(QResizeEvent* event)
-{
-    updateCursorShape();
-    QWidget::resizeEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopWidget::mouseMoveEvent(QMouseEvent* event)
 {
     doMouseEvent(event->type(), event->buttons(), event->pos());
@@ -730,54 +728,6 @@ void DesktopWidget::executeKeyEvent(quint32 usb_keycode, quint32 flags)
     event.set_flags(flags);
 
     emit sig_keyEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWidget::updateCursorShape()
-{
-    if (source_cursor_shape_.isNull())
-    {
-        remote_cursor_shape_ = QPixmap();
-        remote_cursor_hotspot_ = QPoint();
-        setCursor(QCursor(Qt::ArrowCursor));
-        return;
-    }
-
-    double scale_x = 1.0;
-    double scale_y = 1.0;
-
-    // The desktop frame is rendered scaled to the widget size. The cursor is scaled by the same
-    // factor so it matches the scale of the remote desktop content. The device pixel ratio of the
-    // client screen is applied on top of that by Qt itself.
-    if (frame_.isValid())
-    {
-        const QSize frame_size = frame_.size();
-        QSize widget_size = size();
-
-        if (frame_size.width() > 0 && frame_size.height() > 0)
-        {
-            scale_x = double(widget_size.width()) / double(frame_size.width());
-            scale_y = double(widget_size.height()) / double(frame_size.height());
-        }
-    }
-
-    if (qFuzzyCompare(scale_x, 1.0) && qFuzzyCompare(scale_y, 1.0))
-    {
-        remote_cursor_shape_ = source_cursor_shape_;
-        remote_cursor_hotspot_ = source_cursor_hotspot_;
-    }
-    else
-    {
-        QSize scaled_size(qMax(qRound(double(source_cursor_shape_.width()) * scale_x), 1),
-                          qMax(qRound(double(source_cursor_shape_.height()) * scale_y), 1));
-
-        remote_cursor_shape_ = source_cursor_shape_.scaled(
-            scaled_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        remote_cursor_hotspot_ = QPoint(qRound(double(source_cursor_hotspot_.x()) * scale_x),
-                                        qRound(double(source_cursor_hotspot_.y()) * scale_y));
-    }
-
-    setCursor(QCursor(remote_cursor_shape_, remote_cursor_hotspot_.x(), remote_cursor_hotspot_.y()));
 }
 
 //--------------------------------------------------------------------------------------------------

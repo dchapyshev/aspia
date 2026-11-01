@@ -86,7 +86,6 @@ signals:
 protected:
     // QWidget implementation.
     void paintEvent(QPaintEvent* event) final;
-    void resizeEvent(QResizeEvent* event) final;
     void mouseMoveEvent(QMouseEvent* event) final;
     void mousePressEvent(QMouseEvent* event) final;
     void mouseReleaseEvent(QMouseEvent* event) final;
@@ -99,7 +98,6 @@ protected:
 
 private:
     void executeKeyEvent(quint32 usb_keycode, quint32 flags);
-    void updateCursorShape();
     void enableKeyHooks(bool enable);
     void releaseMouseButtons();
     void releaseKeyboardButtons();
@@ -126,9 +124,6 @@ private:
 
     bool enable_key_sequenses_ = true;
     bool enable_remote_cursor_pos_ = false;
-
-    QPixmap source_cursor_shape_;
-    QPoint source_cursor_hotspot_;
 
     QPixmap remote_cursor_shape_;
     QPoint remote_cursor_pos_;
