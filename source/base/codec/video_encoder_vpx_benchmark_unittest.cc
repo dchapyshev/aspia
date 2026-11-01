@@ -1301,7 +1301,17 @@ void Sampler::run()
             context.ContextFlags = CONTEXT_CONTROL;
 
             if (GetThreadContext(target.handle, &context) && samples_.size() < kMaxSamples)
-                samples_.push_back(context.Rip);
+            {
+                DWORD64 address = 0;
+#if defined(Q_PROCESSOR_X86_64)
+                address = context.Rip;
+#elif defined(Q_PROCESSOR_X86_32)
+                address = context.Eip;
+#elif defined(Q_PROCESSOR_ARM_64)
+                address = context.Pc;
+#endif
+                samples_.push_back(address);
+            }
 
             ResumeThread(target.handle);
         }
