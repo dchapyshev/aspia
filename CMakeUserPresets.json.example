@@ -10,13 +10,13 @@
       "cacheVariables": {
         "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": {
           "type": "FILEPATH",
-          "value": "C:/Qt/6.11.1/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake"
+          "value": "C:/Qt/6.11.2/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake"
         },
-        "QT_HOST_PATH": "C:/Qt/6.11.0/mingw_64",
+        "QT_HOST_PATH": "C:/Qt/6.11.2/mingw_64",
         "QT_QMAKE_EXECUTABLE": {
           "type": "FILEPATH",
           "$comment": "Not used by the build itself. Qt Creator reads it when importing the preset to bind the kit to the Android Qt profile instead of the desktop host Qt.",
-          "value": "C:/Qt/6.11.1/android_arm64_v8a/bin/qmake.bat"
+          "value": "C:/Qt/6.11.2/android_arm64_v8a/bin/qmake.bat"
         },
         "ANDROID_SDK_ROOT": "C:/Android/sdk",
         "ANDROID_NDK_ROOT": "C:/Android/sdk/ndk/27.2.12479018",
