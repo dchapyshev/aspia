@@ -409,8 +409,9 @@ TEST(scale_reducer_test, all_quality_levels_produce_valid_output)
 
 #if defined(Q_OS_WINDOWS)
 // The update that crashed the desktop agent on Windows 7: a GDI frame of 1920x1080 shown at 1614x908
-// and a rectangle that starts inside the screen and reaches its right and bottom edges. The clipped
-// scaling reads past the end of the frame, and the memory of a DIB ends right there.
+// and a rectangle that starts inside the screen and reaches its right and bottom edges. Without
+// clip-limits.diff in the libyuv port the clipped scaling reads past the end of the frame, and the
+// memory of a DIB ends right there.
 TEST(scale_reducer_test, update_at_bottom_of_dib_frame)
 {
     ScopedCreateDC dc(CreateCompatibleDC(nullptr));

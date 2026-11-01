@@ -78,7 +78,6 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
         return source_frame;
 
     QRect target_frame_rect(QPoint(0, 0), target_size);
-    bool whole_frame = false;
 
     if (!target_frame_)
     {
@@ -89,27 +88,8 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
             return nullptr;
         }
 
-        whole_frame = true;
-    }
+        *target_frame_->updatedRegion() += target_frame_rect;
 
-    Region* updated_region = target_frame_->updatedRegion();
-    updated_region->clear();
-
-    for (const auto& rect : source_frame->constUpdatedRegion())
-    {
-        const QRect target_rect = scaledRect(rect).intersected(target_frame_rect);
-
-        // libyuv counts the limits of a clipped scaling from the start of the clip instead of the
-        // frame, and a clip over the last two rows of the target reads past the end of the source.
-        // Such an update is scaled as a whole frame, where the limits hold.
-        if (target_rect.bottom() >= target_frame_rect.bottom() - 1)
-            whole_frame = true;
-
-        *updated_region += target_rect;
-    }
-
-    if (whole_frame)
-    {
         libyuv::ARGBScale(source_frame->frameData(),
                           source_frame->stride(),
                           source_size.width(),
@@ -122,8 +102,14 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
     }
     else
     {
-        for (const QRect& target_rect : target_frame_->constUpdatedRegion())
+        Region* updated_region = target_frame_->updatedRegion();
+        updated_region->clear();
+
+        for (const auto& rect : source_frame->constUpdatedRegion())
         {
+            QRect target_rect = scaledRect(rect);
+            target_rect = target_rect.intersected(target_frame_rect);
+
             libyuv::ARGBScaleClip(source_frame->frameData(),
                                   source_frame->stride(),
                                   source_size.width(),
@@ -137,6 +123,8 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
                                   target_rect.width(),
                                   target_rect.height(),
                                   static_cast<libyuv::FilterMode>(filtering_));
+
+            *updated_region += target_rect;
         }
     }
 
