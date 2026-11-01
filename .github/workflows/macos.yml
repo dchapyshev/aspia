@@ -81,7 +81,9 @@ jobs:
           echo "DEVELOPER_DIR=$DEVELOPER_DIR" >> $GITHUB_ENV
           xcodebuild -version
 
-          export PATH="/Applications/CMake.app/Contents/bin:$PATH"
+          # The runner is not started from a login shell and has no Homebrew in PATH. vcpkg needs
+          # python3 from Homebrew: meson requires a newer one than the system has.
+          export PATH="/Applications/CMake.app/Contents/bin:/opt/homebrew/bin:$PATH"
 
           # Build vcpkg dependencies
           arch -arch ${{ matrix.arch }} cmake --preset ci
