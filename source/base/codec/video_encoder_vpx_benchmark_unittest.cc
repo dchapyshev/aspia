@@ -1,0 +1,1681 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#include <QRect>
+#include <QSize>
+#include <QString>
+#include <QThread>
+
+#include <gtest/gtest.h>
+#include <libyuv/compare.h>
+#include <libyuv/convert.h>
+
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
+#include <dbghelp.h>
+#include <tlhelp32.h>
+#include <timeapi.h>
+#pragma comment(lib, "dbghelp.lib")
+#pragma comment(lib, "winmm.lib")
+#else
+#include <sys/resource.h>
+#endif // defined(Q_OS_WINDOWS)
+
+#include <algorithm>
+#include <atomic>
+#include <cmath>
+#include <cstring>
+#include <iomanip>
+#include <iostream>
+#include <map>
+#include <memory>
+#include <optional>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <vector>
+
+#include "base/time_types.h"
+#include "base/codec/video_decoder_vpx.h"
+#include "base/codec/video_encoder.h"
+#include "base/desktop/frame_aligned.h"
+#include "proto/desktop_video.h"
+
+namespace {
+
+const QSize kScreenSize(1920, 1080);
+const int kFrameRate = 24;
+const int kFramesPerScenario = 240;
+
+// One bandwidth inside each tier of VideoEncoderVpx::setBandwidth().
+const qint64 kBandwidths[] = { 256 * 1024, 768 * 1024, 1536 * 1024, 4096 * 1024 };
+
+const int kTitleHeight = 32;
+const int kTextMargin = 8;
+const int kCellWidth = 9;
+const int kCellHeight = 18;
+const int kGlyphWidth = 8;
+const int kGlyphHeight = 16;
+const int kGlyphCount = 64;
+const int kTextureSize = 256;
+const quint32 kDragWindowSeed = 5;
+
+const quint32 kDesktopColor = 0xFF2D5A88;
+const quint32 kTaskbarColor = 0xFF1E1E1E;
+const quint32 kTitleColor = 0xFFDDDDDD;
+const quint32 kWindowColor = 0xFFFFFFFF;
+const quint32 kTextColor = 0xFF202020;
+
+const QRect kTaskbarRect(0, 1040, 1920, 40);
+const QRect kEditorRect(60, 40, 1100, 960);
+const QRect kDragArea(1200, 40, 700, 540);
+const QSize kDragWindowSize(360, 240);
+const QRect kVideoRect(1240, 620, 640, 360);
+
+// Generator with a fixed seed, so every run encodes exactly the same frames.
+class PseudoRandom
+{
+public:
+    explicit PseudoRandom(quint32 seed)
+        : state_(seed)
+    {
+        // Nothing
+    }
+
+    quint32 next()
+    {
+        state_ ^= state_ << 13;
+        state_ ^= state_ >> 17;
+        state_ ^= state_ << 5;
+        return state_;
+    }
+
+    int range(int min, int max)
+    {
+        return min + static_cast<int>(next() % static_cast<quint32>(max - min + 1));
+    }
+
+private:
+    quint32 state_;
+};
+
+// Synthetic desktop with a text editor, a window that is dragged around and a video player.
+class Screen
+{
+public:
+    Screen();
+
+    Frame* frame() const { return frame_.get(); }
+
+    void typeChar();
+    void scrollEditor();
+    void switchEditorPage();
+    void dragWindow();
+    void playVideo();
+
+private:
+    quint32* pixels(int x, int y) const;
+    void fillRect(const QRect& rect, quint32 color);
+    void drawGlyph(const QPoint& pos, int index);
+    void drawTextLine(const QRect& rect, PseudoRandom* random);
+    void drawWindow(const QRect& rect, quint32 seed);
+    void drawVideo();
+
+    std::unique_ptr<Frame> frame_;
+    PseudoRandom random_;
+    quint8 glyphs_[kGlyphCount][kGlyphHeight];
+    std::vector<quint8> texture_;
+    int type_line_ = 0;
+    int type_column_ = 0;
+    int type_word_left_ = 0;
+    QRect drag_rect_;
+    QPoint drag_step_;
+    int video_frame_ = 0;
+
+    Q_DISABLE_COPY_MOVE(Screen)
+};
+
+struct Scenario
+{
+    const char* name;
+    void (Screen::*step)();
+};
+
+const Scenario kScenarios[] =
+{
+    { "typing", &Screen::typeChar },
+    { "scrolling", &Screen::scrollEditor },
+    { "page_switch", &Screen::switchEditorPage },
+    { "window_drag", &Screen::dragWindow },
+    { "video", &Screen::playVideo }
+};
+
+struct CpuUsage
+{
+    MicroSeconds user_time { 0 };
+    MicroSeconds kernel_time { 0 };
+    quint64 cycles = 0;
+
+    CpuUsage operator-(const CpuUsage& other) const
+    {
+        return { user_time - other.user_time, kernel_time - other.kernel_time, cycles - other.cycles };
+    }
+
+    CpuUsage& operator+=(const CpuUsage& other)
+    {
+        user_time += other.user_time;
+        kernel_time += other.kernel_time;
+        cycles += other.cycles;
+        return *this;
+    }
+};
+
+struct RunResult
+{
+    proto::video::Encoding encoding = proto::video::ENCODING_UNKNOWN;
+    const char* scenario = nullptr;
+    size_t key_frame_bytes = 0;
+    MicroSeconds key_frame_time { 0 };
+    CpuUsage key_frame_cpu;
+    size_t delta_bytes = 0;
+    std::vector<MicroSeconds> delta_times;
+    CpuUsage delta_cpu;
+    std::vector<double> psnr;
+};
+
+struct Totals
+{
+    double bytes = 0;
+    double time_ms = 0;
+    double cpu_ms = 0;
+    double cycles = 0;
+    double psnr = 0;
+
+    Totals& operator+=(const Totals& other)
+    {
+        bytes += other.bytes;
+        time_ms += other.time_ms;
+        cpu_ms += other.cpu_ms;
+        cycles += other.cycles;
+        psnr += other.psnr;
+        return *this;
+    }
+};
+
+struct RatePoint
+{
+    double psnr;
+    double log_bytes;
+};
+
+struct RateDelta
+{
+    double low_psnr;
+    double high_psnr;
+    double rate;
+};
+
+struct SessionStartResult
+{
+    size_t first_key_frame_bytes = 0;
+    double first_key_frame_psnr = 0;
+    size_t second_key_frame_bytes = 0;
+    double second_key_frame_psnr = 0;
+    size_t second_after_key_frame_bytes = 0;
+    double last_frame_psnr = 0;
+    size_t bytes = 0;
+};
+
+struct RateCurve
+{
+    std::vector<RatePoint> vp8;
+    std::vector<RatePoint> vp9;
+    double vp8_cycles = 0;
+    double vp9_cycles = 0;
+
+    void add(proto::video::Encoding encoding, double psnr, double bytes, double cycles)
+    {
+        const bool is_vp8 = encoding == proto::video::ENCODING_VP8;
+        (is_vp8 ? vp8 : vp9).push_back({ psnr, std::log(bytes) });
+        (is_vp8 ? vp8_cycles : vp9_cycles) += cycles;
+    }
+};
+
+//--------------------------------------------------------------------------------------------------
+QRect textArea(const QRect& window)
+{
+    const QRect body = window.adjusted(kTextMargin, kTitleHeight + kTextMargin, -kTextMargin, -kTextMargin);
+    return QRect(body.left(), body.top(), body.width(), body.height() / kCellHeight * kCellHeight);
+}
+
+//--------------------------------------------------------------------------------------------------
+Screen::Screen()
+    : frame_(FrameAligned::create(kScreenSize, 32)),
+      random_(1),
+      drag_rect_(kDragArea.topLeft() + QPoint(20, 20), kDragWindowSize),
+      drag_step_(14, 9)
+{
+    PseudoRandom glyph_random(2);
+    for (int i = 0; i < kGlyphCount; ++i)
+    {
+        for (int row = 0; row < kGlyphHeight; ++row)
+            glyphs_[i][row] = (row < 3 || row > 12) ? 0 : static_cast<quint8>(glyph_random.next() & 0x7E);
+    }
+
+    PseudoRandom texture_random(3);
+    std::vector<quint8> noise(kTextureSize * kTextureSize);
+    for (quint8& value : noise)
+        value = static_cast<quint8>(texture_random.next() >> 24);
+
+    texture_.resize(noise.size());
+    for (int y = 0; y < kTextureSize; ++y)
+    {
+        for (int x = 0; x < kTextureSize; ++x)
+        {
+            int sum = 0;
+            for (int dy = -2; dy <= 2; ++dy)
+            {
+                for (int dx = -2; dx <= 2; ++dx)
+                {
+                    const int index = ((y + dy) & (kTextureSize - 1)) * kTextureSize + ((x + dx) & (kTextureSize - 1));
+                    sum += noise[static_cast<size_t>(index)];
+                }
+            }
+
+            // The blur leaves little contrast, so it is stretched back.
+            texture_[static_cast<size_t>(y * kTextureSize + x)] =
+                static_cast<quint8>(std::clamp((sum / 25 - 128) * 4 + 128, 0, 255));
+        }
+    }
+
+    fillRect(QRect(QPoint(0, 0), kScreenSize), kDesktopColor);
+    fillRect(kTaskbarRect, kTaskbarColor);
+    drawWindow(kEditorRect, 4);
+    drawWindow(drag_rect_, kDragWindowSeed);
+    drawWindow(kVideoRect.adjusted(0, -kTitleHeight, 0, 0), 6);
+    drawVideo();
+
+    type_line_ = textArea(kEditorRect).height() / kCellHeight / 2;
+    *frame_->updatedRegion() += QRect(QPoint(0, 0), kScreenSize);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Screen::typeChar()
+{
+    const QRect text_area = textArea(kEditorRect);
+    const int top = text_area.top() + type_line_ * kCellHeight;
+
+    if (type_column_ == 0)
+    {
+        const QRect line_rect(text_area.left(), top, text_area.width(), kCellHeight);
+        fillRect(line_rect, kWindowColor);
+        *frame_->updatedRegion() += line_rect;
+    }
+
+    const QPoint pos(text_area.left() + type_column_ * kCellWidth, top);
+    if (type_word_left_ == 0)
+    {
+        type_word_left_ = random_.range(2, 9);
+    }
+    else
+    {
+        --type_word_left_;
+        drawGlyph(pos, random_.range(0, kGlyphCount - 1));
+    }
+
+    *frame_->updatedRegion() += QRect(pos, QSize(kCellWidth, kCellHeight));
+
+    if (++type_column_ == text_area.width() / kCellWidth)
+    {
+        type_column_ = 0;
+        type_line_ = (type_line_ + 1) % (text_area.height() / kCellHeight);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Screen::scrollEditor()
+{
+    const QRect text_area = textArea(kEditorRect);
+    const size_t row_size = static_cast<size_t>(text_area.width()) * sizeof(quint32);
+
+    for (int y = text_area.top(); y + kCellHeight <= text_area.bottom(); ++y)
+        memcpy(pixels(text_area.left(), y), pixels(text_area.left(), y + kCellHeight), row_size);
+
+    drawTextLine(QRect(text_area.left(), text_area.bottom() + 1 - kCellHeight, text_area.width(), kCellHeight),
+                 &random_);
+    *frame_->updatedRegion() += text_area;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Screen::switchEditorPage()
+{
+    const QRect text_area = textArea(kEditorRect);
+
+    for (int top = text_area.top(); top < text_area.bottom(); top += kCellHeight)
+        drawTextLine(QRect(text_area.left(), top, text_area.width(), kCellHeight), &random_);
+
+    *frame_->updatedRegion() += text_area;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Screen::dragWindow()
+{
+    const QRect old_rect = drag_rect_;
+    const QRect next_rect = old_rect.translated(drag_step_);
+
+    if (next_rect.left() < kDragArea.left() || next_rect.right() > kDragArea.right())
+        drag_step_.setX(-drag_step_.x());
+    if (next_rect.top() < kDragArea.top() || next_rect.bottom() > kDragArea.bottom())
+        drag_step_.setY(-drag_step_.y());
+
+    drag_rect_ = old_rect.translated(drag_step_);
+
+    fillRect(old_rect, kDesktopColor);
+    drawWindow(drag_rect_, kDragWindowSeed);
+
+    *frame_->updatedRegion() += old_rect;
+    *frame_->updatedRegion() += drag_rect_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Screen::playVideo()
+{
+    ++video_frame_;
+    drawVideo();
+    *frame_->updatedRegion() += kVideoRect;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32* Screen::pixels(int x, int y) const
+{
+    return reinterpret_cast<quint32*>(frame_->frameDataAtPos(x, y));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Screen::fillRect(const QRect& rect, quint32 color)
+{
+    for (int y = rect.top(); y <= rect.bottom(); ++y)
+        std::fill_n(pixels(rect.left(), y), rect.width(), color);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Screen::drawGlyph(const QPoint& pos, int index)
+{
+    fillRect(QRect(pos, QSize(kCellWidth, kCellHeight)), kWindowColor);
+
+    for (int row = 0; row < kGlyphHeight; ++row)
+    {
+        quint32* line = pixels(pos.x(), pos.y() + row);
+
+        for (int column = 0; column < kGlyphWidth; ++column)
+        {
+            if (glyphs_[index][row] & (1 << column))
+                line[column] = kTextColor;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Screen::drawTextLine(const QRect& rect, PseudoRandom* random)
+{
+    fillRect(rect, kWindowColor);
+
+    const int length = random->range(0, rect.width() / kCellWidth);
+    int word_left = random->range(2, 9);
+
+    for (int column = 0; column < length; ++column)
+    {
+        if (word_left == 0)
+        {
+            word_left = random->range(2, 9);
+            continue;
+        }
+
+        --word_left;
+        drawGlyph(QPoint(rect.left() + column * kCellWidth, rect.top()), random->range(0, kGlyphCount - 1));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Screen::drawWindow(const QRect& rect, quint32 seed)
+{
+    fillRect(QRect(rect.left(), rect.top(), rect.width(), kTitleHeight), kTitleColor);
+    fillRect(rect.adjusted(0, kTitleHeight, 0, 0), kWindowColor);
+
+    const QRect text_area = textArea(rect);
+    PseudoRandom random(seed);
+
+    for (int top = text_area.top(); top < text_area.bottom(); top += kCellHeight)
+        drawTextLine(QRect(text_area.left(), top, text_area.width(), kCellHeight), &random);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Screen::drawVideo()
+{
+    const int offset_x = video_frame_ * 3;
+    const int offset_y = video_frame_ * 2;
+    const int brightness = video_frame_ % 48 - 24;
+
+    for (int y = 0; y < kVideoRect.height(); ++y)
+    {
+        quint32* line = pixels(kVideoRect.left(), kVideoRect.top() + y);
+        const quint8* texture_line =
+            &texture_[static_cast<size_t>(((y + offset_y) % kTextureSize) * kTextureSize)];
+
+        for (int x = 0; x < kVideoRect.width(); ++x)
+        {
+            const quint32 value = static_cast<quint32>(
+                std::clamp(texture_line[(x + offset_x) % kTextureSize] + brightness, 0, 255));
+            line[x] = 0xFF000000 | (value << 16) | ((value * 3 / 4 + 32) << 8) | (255 - value);
+        }
+    }
+}
+
+#if defined(Q_OS_WINDOWS)
+//--------------------------------------------------------------------------------------------------
+MicroSeconds fileTimeToMicroSeconds(const FILETIME& time)
+{
+    ULARGE_INTEGER value;
+    value.LowPart = time.dwLowDateTime;
+    value.HighPart = time.dwHighDateTime;
+    return MicroSeconds(static_cast<qint64>(value.QuadPart / 10));
+}
+#else
+//--------------------------------------------------------------------------------------------------
+MicroSeconds timeValToMicroSeconds(const timeval& time)
+{
+    return Seconds(time.tv_sec) + MicroSeconds(time.tv_usec);
+}
+#endif // defined(Q_OS_WINDOWS)
+
+//--------------------------------------------------------------------------------------------------
+// Counts all threads of the process, because libvpx encodes in threads of its own.
+CpuUsage processCpuUsage()
+{
+    CpuUsage usage;
+
+#if defined(Q_OS_WINDOWS)
+    FILETIME creation_time;
+    FILETIME exit_time;
+    FILETIME kernel_time;
+    FILETIME user_time;
+
+    if (GetProcessTimes(GetCurrentProcess(), &creation_time, &exit_time, &kernel_time, &user_time))
+    {
+        usage.user_time = fileTimeToMicroSeconds(user_time);
+        usage.kernel_time = fileTimeToMicroSeconds(kernel_time);
+    }
+
+    ULONG64 cycles = 0;
+    if (QueryProcessCycleTime(GetCurrentProcess(), &cycles))
+        usage.cycles = cycles;
+#else
+    rusage resource_usage;
+    if (getrusage(RUSAGE_SELF, &resource_usage) == 0)
+    {
+        usage.user_time = timeValToMicroSeconds(resource_usage.ru_utime);
+        usage.kernel_time = timeValToMicroSeconds(resource_usage.ru_stime);
+    }
+#endif // defined(Q_OS_WINDOWS)
+
+    return usage;
+}
+
+//--------------------------------------------------------------------------------------------------
+double framePsnr(const Frame& frame, const VideoDecoder::YuvView& decoded, std::vector<quint8>* buffer)
+{
+    const int width = frame.size().width();
+    const int height = frame.size().height();
+    const int uv_width = (width + 1) / 2;
+    const int uv_height = (height + 1) / 2;
+
+    buffer->resize(static_cast<size_t>(width * height + 2 * uv_width * uv_height));
+    quint8* y_data = buffer->data();
+    quint8* u_data = y_data + width * height;
+    quint8* v_data = u_data + uv_width * uv_height;
+
+    libyuv::ARGBToI420(frame.frameData(), frame.stride(),
+                       y_data, width,
+                       u_data, uv_width,
+                       v_data, uv_width,
+                       width, height);
+
+    return libyuv::I420Psnr(y_data, width,
+                            u_data, uv_width,
+                            v_data, uv_width,
+                            decoded.planeData(0), decoded.planeStride(0),
+                            decoded.planeData(1), decoded.planeStride(1),
+                            decoded.planeData(2), decoded.planeStride(2),
+                            width, height);
+}
+
+//--------------------------------------------------------------------------------------------------
+void runScenario(proto::video::Encoding encoding, qint64 bandwidth, const Scenario& scenario, RunResult* result)
+{
+    std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(encoding);
+    ASSERT_NE(encoder, nullptr);
+
+    std::unique_ptr<VideoDecoderVpx> decoder = VideoDecoderVpx::create(encoding);
+    ASSERT_NE(decoder, nullptr);
+
+    encoder->setBandwidth(bandwidth);
+    encoder->setFrameRate(kFrameRate);
+
+    result->encoding = encoding;
+    result->scenario = scenario.name;
+
+    Screen screen;
+    std::vector<quint8> reference;
+
+    for (int i = 0; i <= kFramesPerScenario; ++i)
+    {
+        if (i != 0)
+            (screen.*scenario.step)();
+
+        proto::video::Packet packet;
+
+        const CpuUsage cpu_before = processCpuUsage();
+        const TimePoint start_time = Clock::now();
+        const VideoEncoder::Result encode_result = encoder->encode(screen.frame(), &packet);
+        const MicroSeconds encode_time = DurationCast<MicroSeconds>(Clock::now() - start_time);
+        const CpuUsage cpu = processCpuUsage() - cpu_before;
+
+        ASSERT_EQ(encode_result, VideoEncoder::Result::SUCCESS);
+
+        if (i == 0)
+        {
+            ASSERT_TRUE(packet.flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME);
+            result->key_frame_bytes = packet.data().size();
+            result->key_frame_time = encode_time;
+            result->key_frame_cpu = cpu;
+        }
+        else
+        {
+            result->delta_bytes += packet.data().size();
+            result->delta_times.push_back(encode_time);
+            result->delta_cpu += cpu;
+        }
+
+        ASSERT_EQ(decoder->decode(packet), VideoDecoder::Result::SUCCESS);
+        result->psnr.push_back(framePsnr(*screen.frame(), decoder->frame(), &reference));
+
+        encoder->setEncodeBuffer(std::move(*packet.mutable_data()));
+        *screen.frame()->updatedRegion() = Region();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+const char* encodingName(proto::video::Encoding encoding)
+{
+    return encoding == proto::video::ENCODING_VP8 ? "VP8" : "VP9";
+}
+
+//--------------------------------------------------------------------------------------------------
+double toMilliSeconds(MicroSeconds time)
+{
+    return static_cast<double>(time.count()) / 1000.0;
+}
+
+//--------------------------------------------------------------------------------------------------
+double cpuMilliSeconds(const CpuUsage& usage)
+{
+    return toMilliSeconds(usage.user_time + usage.kernel_time);
+}
+
+//--------------------------------------------------------------------------------------------------
+Totals totals(const RunResult& result)
+{
+    Totals totals;
+    totals.bytes = static_cast<double>(result.key_frame_bytes + result.delta_bytes);
+    totals.time_ms = toMilliSeconds(result.key_frame_time);
+    totals.cpu_ms = cpuMilliSeconds(result.key_frame_cpu) + cpuMilliSeconds(result.delta_cpu);
+    totals.cycles = static_cast<double>(result.key_frame_cpu.cycles + result.delta_cpu.cycles);
+
+    for (MicroSeconds time : result.delta_times)
+        totals.time_ms += toMilliSeconds(time);
+
+    for (double psnr : result.psnr)
+        totals.psnr += psnr;
+    totals.psnr /= static_cast<double>(result.psnr.size());
+
+    return totals;
+}
+
+//--------------------------------------------------------------------------------------------------
+void printValue(double value, int precision)
+{
+    std::cout << std::setw(8) << std::fixed << std::setprecision(precision) << value;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Cycles are counted only on Windows.
+void printCycles(double cycles, int precision)
+{
+    if (cycles > 0)
+        printValue(cycles / 1000000.0, precision);
+    else
+        std::cout << std::setw(8) << "-";
+}
+
+//--------------------------------------------------------------------------------------------------
+void printRatio(double base, double value)
+{
+    if (base > 0)
+        std::cout << std::setw(7) << std::fixed << std::setprecision(2) << value / base << "x";
+    else
+        std::cout << std::setw(8) << "-";
+}
+
+//--------------------------------------------------------------------------------------------------
+void printRun(const RunResult& result)
+{
+    std::vector<MicroSeconds> times = result.delta_times;
+    std::sort(times.begin(), times.end());
+
+    MicroSeconds delta_time(0);
+    for (MicroSeconds time : times)
+        delta_time += time;
+
+    const double frames = static_cast<double>(times.size());
+    const double cpu_ms = cpuMilliSeconds(result.delta_cpu);
+    const double kernel_ms = toMilliSeconds(result.delta_cpu.kernel_time);
+
+    std::cout << std::left << std::setw(13) << result.scenario << std::right << std::setw(8)
+              << encodingName(result.encoding);
+
+    printValue(static_cast<double>(result.key_frame_bytes) / 1024.0, 1);
+    printValue(toMilliSeconds(result.key_frame_time), 2);
+    printCycles(static_cast<double>(result.key_frame_cpu.cycles), 1);
+    printValue(static_cast<double>(result.delta_bytes) / frames, 0);
+    printValue(static_cast<double>(result.delta_bytes) * 8.0 * kFrameRate / frames / 1000.0, 0);
+    printValue(toMilliSeconds(delta_time) / frames, 2);
+    printValue(toMilliSeconds(times[std::min(times.size() - 1, times.size() * 95 / 100)]), 2);
+    printValue(toMilliSeconds(times.back()), 2);
+    printValue(cpu_ms / frames, 2);
+    printValue(cpu_ms / toMilliSeconds(delta_time), 2);
+    printValue(cpu_ms > 0 ? kernel_ms * 100.0 / cpu_ms : 0, 0);
+    printCycles(static_cast<double>(result.delta_cpu.cycles) / frames, 2);
+    printValue(totals(result).psnr, 2);
+    printValue(*std::min_element(result.psnr.begin(), result.psnr.end()), 2);
+    std::cout << std::endl;
+}
+
+//--------------------------------------------------------------------------------------------------
+void printComparison(const char* name, const Totals& vp8, const Totals& vp9)
+{
+    std::cout << std::left << std::setw(13) << name << std::right;
+
+    printValue(vp8.bytes / 1024.0, 0);
+    printValue(vp9.bytes / 1024.0, 0);
+    printRatio(vp8.bytes, vp9.bytes);
+    printValue(vp8.time_ms, 1);
+    printValue(vp9.time_ms, 1);
+    printRatio(vp8.time_ms, vp9.time_ms);
+    printValue(vp8.cpu_ms, 1);
+    printValue(vp9.cpu_ms, 1);
+    printRatio(vp8.cpu_ms, vp9.cpu_ms);
+    printCycles(vp8.cycles, 0);
+    printCycles(vp9.cycles, 0);
+    printRatio(vp8.cycles, vp9.cycles);
+    printValue(vp8.psnr, 2);
+    printValue(vp9.psnr, 2);
+    std::cout << std::endl;
+}
+
+//--------------------------------------------------------------------------------------------------
+void printHeader(const std::vector<const char*>& columns)
+{
+    std::cout << std::left << std::setw(13) << "scenario" << std::right;
+    for (const char* column : columns)
+        std::cout << std::setw(8) << column;
+    std::cout << std::endl;
+}
+
+//--------------------------------------------------------------------------------------------------
+// |results| holds the runs of all scenarios with VP8 followed by the runs with VP9.
+void printBandwidthResults(const std::vector<RunResult>& results)
+{
+    printHeader({ "codec", "key KB", "key ms", "key Mc", "B/frame", "kbit/s", "avg ms", "p95 ms", "max ms", "CPU ms",
+                  "cores", "kern %", "Mc", "PSNR", "PSNRmin" });
+
+    for (size_t i = 0; i < results.size(); ++i)
+    {
+        if (i == std::size(kScenarios))
+            std::cout << std::endl;
+        printRun(results[i]);
+    }
+
+    std::cout << std::endl;
+    printHeader({ "KB VP8", "KB VP9", "ratio", "ms VP8", "ms VP9", "ratio", "CPU VP8", "CPU VP9", "ratio",
+                  "Mc VP8", "Mc VP9", "ratio", "PSNR8", "PSNR9" });
+
+    Totals vp8_total;
+    Totals vp9_total;
+
+    for (size_t i = 0; i < std::size(kScenarios); ++i)
+    {
+        const Totals vp8 = totals(results[i]);
+        const Totals vp9 = totals(results[i + std::size(kScenarios)]);
+
+        printComparison(kScenarios[i].name, vp8, vp9);
+
+        vp8_total += vp8;
+        vp9_total += vp9;
+    }
+
+    vp8_total.psnr /= static_cast<double>(std::size(kScenarios));
+    vp9_total.psnr /= static_cast<double>(std::size(kScenarios));
+
+    printComparison("total", vp8_total, vp9_total);
+    std::cout << std::endl;
+}
+
+//--------------------------------------------------------------------------------------------------
+double deltaPsnr(const RunResult& result)
+{
+    double psnr = 0;
+    for (size_t i = 1; i < result.psnr.size(); ++i)
+        psnr += result.psnr[i];
+    return psnr / static_cast<double>(result.psnr.size() - 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Adds the delta frames of every scenario, of all of them and the key frame to |curves|. The key
+// frame is taken once, since every scenario starts from the same screen.
+void addRatePoints(const std::vector<RunResult>& results, std::vector<RateCurve>* curves)
+{
+    const size_t count = std::size(kScenarios);
+
+    for (size_t first = 0; first < results.size(); first += count)
+    {
+        double total_psnr = 0;
+        double total_bytes = 0;
+        double total_cycles = 0;
+
+        for (size_t i = 0; i < count; ++i)
+        {
+            const RunResult& result = results[first + i];
+            const double psnr = deltaPsnr(result);
+            const double bytes = static_cast<double>(result.delta_bytes);
+            const double cycles = static_cast<double>(result.delta_cpu.cycles);
+
+            (*curves)[i].add(result.encoding, psnr, bytes, cycles);
+
+            total_psnr += psnr;
+            total_bytes += bytes;
+            total_cycles += cycles;
+        }
+
+        const RunResult& key = results[first];
+        (*curves)[count].add(key.encoding, total_psnr / static_cast<double>(count), total_bytes, total_cycles);
+        (*curves)[count + 1].add(key.encoding, key.psnr.front(), static_cast<double>(key.key_frame_bytes),
+                                 static_cast<double>(key.key_frame_cpu.cycles));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// |points| are sorted by PSNR and |psnr| is within their range.
+double interpolateLogBytes(const std::vector<RatePoint>& points, double psnr)
+{
+    for (size_t i = 1; i < points.size(); ++i)
+    {
+        const RatePoint& low = points[i - 1];
+        const RatePoint& high = points[i];
+
+        if (psnr > high.psnr)
+            continue;
+
+        if (high.psnr <= low.psnr)
+            return high.log_bytes;
+
+        return low.log_bytes + (high.log_bytes - low.log_bytes) * (psnr - low.psnr) / (high.psnr - low.psnr);
+    }
+
+    return points.back().log_bytes;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Bjontegaard delta rate with linear interpolation between the points. It is how much the size of
+// |test| differs from the size of |base| at equal PSNR, on average over the PSNR range of both.
+std::optional<RateDelta> bdRate(std::vector<RatePoint> base, std::vector<RatePoint> test)
+{
+    const auto by_psnr = [](const RatePoint& a, const RatePoint& b) { return a.psnr < b.psnr; };
+    std::sort(base.begin(), base.end(), by_psnr);
+    std::sort(test.begin(), test.end(), by_psnr);
+
+    const double low_psnr = std::max(base.front().psnr, test.front().psnr);
+    const double high_psnr = std::min(base.back().psnr, test.back().psnr);
+    if (high_psnr <= low_psnr)
+        return std::nullopt;
+
+    const int kSteps = 1000;
+    double sum = 0;
+
+    for (int i = 0; i <= kSteps; ++i)
+    {
+        const double psnr = low_psnr + (high_psnr - low_psnr) * i / kSteps;
+        sum += interpolateLogBytes(test, psnr) - interpolateLogBytes(base, psnr);
+    }
+
+    return RateDelta { low_psnr, high_psnr, std::exp(sum / (kSteps + 1)) - 1 };
+}
+
+//--------------------------------------------------------------------------------------------------
+void printRateDistortion(const char* name, const RateCurve& curve)
+{
+    const auto by_psnr = [](const RatePoint& a, const RatePoint& b) { return a.psnr < b.psnr; };
+    const auto vp8_range = std::minmax_element(curve.vp8.begin(), curve.vp8.end(), by_psnr);
+    const auto vp9_range = std::minmax_element(curve.vp9.begin(), curve.vp9.end(), by_psnr);
+
+    std::cout << std::left << std::setw(13) << name << std::right;
+
+    printValue(vp8_range.first->psnr, 2);
+    printValue(vp8_range.second->psnr, 2);
+    printValue(vp9_range.first->psnr, 2);
+    printValue(vp9_range.second->psnr, 2);
+
+    const std::optional<RateDelta> delta = bdRate(curve.vp8, curve.vp9);
+    if (delta)
+    {
+        printValue(delta->low_psnr, 2);
+        printValue(delta->high_psnr, 2);
+        std::cout << std::setw(7) << std::showpos << std::setprecision(1) << delta->rate * 100.0 << std::noshowpos
+                  << "%";
+    }
+    else
+    {
+        std::cout << std::setw(8) << "-" << std::setw(8) << "-" << std::setw(8) << "-";
+    }
+
+    printCycles(curve.vp8_cycles, 0);
+    printCycles(curve.vp9_cycles, 0);
+    printRatio(curve.vp8_cycles, curve.vp9_cycles);
+    std::cout << std::endl;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Typing for 5 s with a second key frame asked for at |second_key_frame|. |start_bandwidth| is what
+// the encoder has for the first frame. With |growing| the estimate of the bandwidth starts at
+// 32 KB/s and grows by a fifth every second, the way a session starts. Otherwise it stays at
+// |start_bandwidth|.
+void runKeyFrames(proto::video::Encoding encoding, qint64 start_bandwidth, bool growing, int second_key_frame,
+                  SessionStartResult* result)
+{
+    const qint64 kFirstBandwidth = 32 * 1024;
+    const int kFrameCount = 5 * kFrameRate;
+
+    std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(encoding);
+    ASSERT_NE(encoder, nullptr);
+
+    std::unique_ptr<VideoDecoderVpx> decoder = VideoDecoderVpx::create(encoding);
+    ASSERT_NE(decoder, nullptr);
+
+    encoder->setFrameRate(kFrameRate);
+    encoder->setBandwidth(start_bandwidth);
+
+    Screen screen;
+    std::vector<quint8> reference;
+    qint64 bandwidth = kFirstBandwidth;
+
+    for (int i = 0; i < kFrameCount; ++i)
+    {
+        if (i != 0)
+            screen.typeChar();
+
+        if (growing && i == 1 && start_bandwidth != kFirstBandwidth)
+        {
+            encoder->setBandwidth(bandwidth);
+        }
+        else if (growing && i != 0 && i % kFrameRate == 0)
+        {
+            bandwidth = bandwidth * 6 / 5;
+            encoder->setBandwidth(bandwidth);
+        }
+
+        if (i == second_key_frame)
+            encoder->setKeyFrameRequired(true);
+
+        proto::video::Packet packet;
+        ASSERT_EQ(encoder->encode(screen.frame(), &packet), VideoEncoder::Result::SUCCESS);
+        ASSERT_EQ(decoder->decode(packet), VideoDecoder::Result::SUCCESS);
+
+        const double psnr = framePsnr(*screen.frame(), decoder->frame(), &reference);
+        const size_t bytes = packet.data().size();
+
+        if (i == 0)
+        {
+            result->first_key_frame_bytes = bytes;
+            result->first_key_frame_psnr = psnr;
+        }
+        else if (i == second_key_frame)
+        {
+            result->second_key_frame_bytes = bytes;
+            result->second_key_frame_psnr = psnr;
+        }
+
+        if (i >= second_key_frame && i < second_key_frame + kFrameRate)
+            result->second_after_key_frame_bytes += bytes;
+
+        result->bytes += bytes;
+        result->last_frame_psnr = psnr;
+
+        encoder->setEncodeBuffer(std::move(*packet.mutable_data()));
+        *screen.frame()->updatedRegion() = Region();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Copies a plane into a buffer with a border and fills the border from the edge pixels, the way
+// VP9 puts every source frame into its lookahead (vp9_copy_and_extend_frame).
+void copyAndExtendPlane(const quint8* src, int width, int height, int border, std::vector<quint8>* dst)
+{
+    const int dst_stride = width + 2 * border;
+    dst->resize(static_cast<size_t>(dst_stride * (height + 2 * border)));
+
+    quint8* row = dst->data() + border * dst_stride;
+    for (int y = 0; y < height; ++y)
+    {
+        const quint8* src_row = src + y * width;
+        memset(row, src_row[0], static_cast<size_t>(border));
+        memcpy(row + border, src_row, static_cast<size_t>(width));
+        memset(row + border + width, src_row[width - 1], static_cast<size_t>(border));
+        row += dst_stride;
+    }
+
+    const quint8* first = dst->data() + border * dst_stride;
+    const quint8* last = first + (height - 1) * dst_stride;
+    for (int y = 0; y < border; ++y)
+    {
+        memcpy(dst->data() + y * dst_stride, first, static_cast<size_t>(dst_stride));
+        memcpy(dst->data() + (border + height + y) * dst_stride, last, static_cast<size_t>(dst_stride));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Encodes |kFramesPerScenario| frames after the key frame. With |block| one 16x16 block in the
+// middle of the screen changes in every frame, otherwise nothing changes.
+void runFrameCost(proto::video::Encoding encoding, const QSize& size, bool block, double* cycles, double* time_ms,
+                  double* bytes)
+{
+    std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(encoding);
+    ASSERT_NE(encoder, nullptr);
+
+    encoder->setBandwidth(768 * 1024);
+    encoder->setFrameRate(kFrameRate);
+
+    std::unique_ptr<Frame> frame = FrameAligned::create(size, 32);
+    PseudoRandom random(7);
+    for (int y = 0; y < size.height(); ++y)
+    {
+        quint32* row = reinterpret_cast<quint32*>(frame->frameDataAtPos(0, y));
+        for (int x = 0; x < size.width(); ++x)
+        {
+            const quint32 value = 0xA0 + (random.next() >> 27);
+            row[x] = 0xFF000000 | (value << 16) | (value << 8) | value;
+        }
+    }
+
+    *frame->updatedRegion() += QRect(QPoint(0, 0), size);
+
+    proto::video::Packet key_packet;
+    ASSERT_EQ(encoder->encode(frame.get(), &key_packet), VideoEncoder::Result::SUCCESS);
+    encoder->setEncodeBuffer(std::move(*key_packet.mutable_data()));
+    *frame->updatedRegion() = Region();
+
+    const QRect block_rect(QPoint((size.width() / 2) & ~15, (size.height() / 2) & ~15), QSize(16, 16));
+    MicroSeconds total_time(0);
+    size_t total_bytes = 0;
+
+    const CpuUsage cpu_before = processCpuUsage();
+
+    for (int i = 0; i < kFramesPerScenario; ++i)
+    {
+        if (block)
+        {
+            for (int y = block_rect.top(); y <= block_rect.bottom(); ++y)
+            {
+                quint32* row = reinterpret_cast<quint32*>(frame->frameDataAtPos(block_rect.left(), y));
+                for (int x = 0; x < block_rect.width(); ++x)
+                    row[x] ^= 0x00FFFFFF;
+            }
+
+            *frame->updatedRegion() += block_rect;
+        }
+
+        proto::video::Packet packet;
+
+        const TimePoint start_time = Clock::now();
+        ASSERT_EQ(encoder->encode(frame.get(), &packet), VideoEncoder::Result::SUCCESS);
+        total_time += DurationCast<MicroSeconds>(Clock::now() - start_time);
+
+        total_bytes += packet.data().size();
+        encoder->setEncodeBuffer(std::move(*packet.mutable_data()));
+        *frame->updatedRegion() = Region();
+    }
+
+    const CpuUsage cpu = processCpuUsage() - cpu_before;
+
+    *cycles = static_cast<double>(cpu.cycles) / kFramesPerScenario;
+    *time_ms = toMilliSeconds(total_time) / kFramesPerScenario;
+    *bytes = static_cast<double>(total_bytes) / kFramesPerScenario;
+}
+
+//--------------------------------------------------------------------------------------------------
+void encodeScenario(proto::video::Encoding encoding, qint64 bandwidth, const Scenario& scenario,
+                    std::vector<proto::video::Packet>* packets)
+{
+    std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(encoding);
+    ASSERT_NE(encoder, nullptr);
+
+    encoder->setBandwidth(bandwidth);
+    encoder->setFrameRate(kFrameRate);
+
+    Screen screen;
+
+    for (int i = 0; i <= kFramesPerScenario; ++i)
+    {
+        if (i != 0)
+            (screen.*scenario.step)();
+
+        proto::video::Packet packet;
+        ASSERT_EQ(encoder->encode(screen.frame(), &packet), VideoEncoder::Result::SUCCESS);
+        packets->push_back(std::move(packet));
+
+        *screen.frame()->updatedRegion() = Region();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Decodes |packets| with a new decoder several times and keeps the fastest pass.
+void decodeScenario(proto::video::Encoding encoding, const std::vector<proto::video::Packet>& packets,
+                    RunResult* result)
+{
+    const int kPasses = 3;
+    double best_time_ms = 0;
+
+    for (int pass = 0; pass < kPasses; ++pass)
+    {
+        std::unique_ptr<VideoDecoderVpx> decoder = VideoDecoderVpx::create(encoding);
+        ASSERT_NE(decoder, nullptr);
+
+        RunResult run;
+        run.encoding = encoding;
+        run.scenario = result->scenario;
+
+        for (size_t i = 0; i < packets.size(); ++i)
+        {
+            const CpuUsage cpu_before = processCpuUsage();
+            const TimePoint start_time = Clock::now();
+            const VideoDecoder::Result decode_result = decoder->decode(packets[i]);
+            const MicroSeconds decode_time = DurationCast<MicroSeconds>(Clock::now() - start_time);
+            const CpuUsage cpu = processCpuUsage() - cpu_before;
+
+            ASSERT_EQ(decode_result, VideoDecoder::Result::SUCCESS);
+
+            if (i == 0)
+            {
+                run.key_frame_bytes = packets[i].data().size();
+                run.key_frame_time = decode_time;
+                run.key_frame_cpu = cpu;
+            }
+            else
+            {
+                run.delta_bytes += packets[i].data().size();
+                run.delta_times.push_back(decode_time);
+                run.delta_cpu += cpu;
+            }
+        }
+
+        double time_ms = toMilliSeconds(run.key_frame_time);
+        for (MicroSeconds time : run.delta_times)
+            time_ms += toMilliSeconds(time);
+
+        if (pass == 0 || time_ms < best_time_ms)
+        {
+            best_time_ms = time_ms;
+            *result = std::move(run);
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void printDecodeRun(const RunResult& result)
+{
+    std::vector<MicroSeconds> times = result.delta_times;
+    std::sort(times.begin(), times.end());
+
+    MicroSeconds delta_time(0);
+    for (MicroSeconds time : times)
+        delta_time += time;
+
+    const double frames = static_cast<double>(times.size());
+    const double cpu_ms = cpuMilliSeconds(result.delta_cpu);
+
+    std::cout << std::left << std::setw(13) << result.scenario << std::right << std::setw(8)
+              << encodingName(result.encoding);
+
+    printValue(static_cast<double>(result.key_frame_bytes) / 1024.0, 1);
+    printValue(toMilliSeconds(result.key_frame_time), 2);
+    printCycles(static_cast<double>(result.key_frame_cpu.cycles), 1);
+    printValue(static_cast<double>(result.delta_bytes) / frames, 0);
+    printValue(toMilliSeconds(delta_time) / frames, 3);
+    printValue(toMilliSeconds(times[std::min(times.size() - 1, times.size() * 95 / 100)]), 2);
+    printValue(toMilliSeconds(times.back()), 2);
+    printValue(cpu_ms / frames, 3);
+    printValue(cpu_ms / toMilliSeconds(delta_time), 2);
+    printCycles(static_cast<double>(result.delta_cpu.cycles) / frames, 2);
+    std::cout << std::endl;
+}
+
+//--------------------------------------------------------------------------------------------------
+void printDecodeComparison(const char* name, const Totals& vp8, const Totals& vp9)
+{
+    std::cout << std::left << std::setw(13) << name << std::right;
+
+    printValue(vp8.time_ms, 1);
+    printValue(vp9.time_ms, 1);
+    printRatio(vp8.time_ms, vp9.time_ms);
+    printValue(vp8.cpu_ms, 1);
+    printValue(vp9.cpu_ms, 1);
+    printRatio(vp8.cpu_ms, vp9.cpu_ms);
+    printCycles(vp8.cycles, 0);
+    printCycles(vp9.cycles, 0);
+    printRatio(vp8.cycles, vp9.cycles);
+    std::cout << std::endl;
+}
+
+#if defined(Q_OS_WINDOWS)
+//--------------------------------------------------------------------------------------------------
+// Samples the instruction pointers of the other threads of the process that spent cycles since the
+// previous pass. A thread is suspended only while its context is read, and nothing is allocated then:
+// a suspended thread may hold the heap lock.
+class Sampler
+{
+public:
+    Sampler() { samples_.reserve(kMaxSamples); }
+    ~Sampler() { stop(); }
+
+    void start()
+    {
+        timeBeginPeriod(1);
+        thread_ = std::thread(&Sampler::run, this);
+    }
+
+    void stop()
+    {
+        if (!thread_.joinable())
+            return;
+
+        stopping_ = true;
+        thread_.join();
+        timeEndPeriod(1);
+    }
+
+    // Prints the functions with the most samples.
+    void print(size_t count) const;
+
+private:
+    struct Target
+    {
+        DWORD id;
+        HANDLE handle;
+        ULONG64 cycles;
+    };
+
+    void run();
+    void updateTargets(std::vector<Target>* targets) const;
+
+    static const size_t kMaxSamples = 1 << 22;
+
+    std::vector<DWORD64> samples_;
+    std::atomic<bool> stopping_ { false };
+    std::thread thread_;
+};
+
+//--------------------------------------------------------------------------------------------------
+void Sampler::updateTargets(std::vector<Target>* targets) const
+{
+    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+    if (snapshot == INVALID_HANDLE_VALUE)
+        return;
+
+    THREADENTRY32 entry;
+    entry.dwSize = sizeof(entry);
+
+    for (BOOL ok = Thread32First(snapshot, &entry); ok; ok = Thread32Next(snapshot, &entry))
+    {
+        if (entry.th32OwnerProcessID != GetCurrentProcessId() || entry.th32ThreadID == GetCurrentThreadId())
+            continue;
+
+        const bool known = std::any_of(targets->begin(), targets->end(),
+                                       [&](const Target& target) { return target.id == entry.th32ThreadID; });
+        if (known)
+            continue;
+
+        HANDLE handle = OpenThread(THREAD_SUSPEND_RESUME | THREAD_GET_CONTEXT | THREAD_QUERY_INFORMATION, FALSE,
+                                   entry.th32ThreadID);
+        if (handle)
+            targets->push_back({ entry.th32ThreadID, handle, 0 });
+    }
+
+    CloseHandle(snapshot);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sampler::run()
+{
+    std::vector<Target> targets;
+
+    for (int pass = 0; !stopping_; ++pass)
+    {
+        if (pass % 20 == 0)
+            updateTargets(&targets);
+
+        for (Target& target : targets)
+        {
+            ULONG64 cycles = 0;
+            if (!QueryThreadCycleTime(target.handle, &cycles) || cycles == target.cycles)
+                continue;
+            target.cycles = cycles;
+
+            if (SuspendThread(target.handle) == static_cast<DWORD>(-1))
+                continue;
+
+            CONTEXT context;
+            memset(&context, 0, sizeof(context));
+            context.ContextFlags = CONTEXT_CONTROL;
+
+            if (GetThreadContext(target.handle, &context) && samples_.size() < kMaxSamples)
+                samples_.push_back(context.Rip);
+
+            ResumeThread(target.handle);
+        }
+
+        Sleep(1);
+    }
+
+    for (const Target& target : targets)
+        CloseHandle(target.handle);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sampler::print(size_t count) const
+{
+    HANDLE process = GetCurrentProcess();
+    SymSetOptions(SYMOPT_UNDNAME | SYMOPT_DEFERRED_LOADS);
+    SymInitialize(process, nullptr, TRUE);
+
+    std::unordered_map<DWORD64, std::string> names;
+    std::map<std::string, size_t> counts;
+    std::vector<char> buffer(sizeof(SYMBOL_INFO) + MAX_SYM_NAME);
+
+    for (DWORD64 address : samples_)
+    {
+        auto name = names.find(address);
+        if (name == names.end())
+        {
+            std::fill(buffer.begin(), buffer.end(), 0);
+            SYMBOL_INFO* symbol = reinterpret_cast<SYMBOL_INFO*>(buffer.data());
+            symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+            symbol->MaxNameLen = MAX_SYM_NAME;
+
+            DWORD64 displacement = 0;
+            name = names.emplace(address, SymFromAddr(process, address, &displacement, symbol) ? symbol->Name : "?")
+                       .first;
+        }
+
+        ++counts[name->second];
+    }
+
+    SymCleanup(process);
+
+    std::vector<std::pair<std::string, size_t>> sorted(counts.begin(), counts.end());
+    std::sort(sorted.begin(), sorted.end(), [](const auto& a, const auto& b) { return a.second > b.second; });
+
+    const double total = static_cast<double>(samples_.size());
+    double sum = 0;
+
+    std::cout << "samples: " << samples_.size() << std::endl;
+    for (size_t i = 0; i < std::min(count, sorted.size()); ++i)
+    {
+        sum += static_cast<double>(sorted[i].second);
+        std::cout << std::setw(7) << std::fixed << std::setprecision(1)
+                  << static_cast<double>(sorted[i].second) * 100.0 / total << "%" << std::setw(7)
+                  << sum * 100.0 / total << "%  " << sorted[i].first << std::endl;
+    }
+}
+#endif // defined(Q_OS_WINDOWS)
+
+} // namespace
+
+//--------------------------------------------------------------------------------------------------
+TEST(VideoEncoderVpxTest, DISABLED_ScreenContentBenchmark)
+{
+    const proto::video::Encoding encodings[] = { proto::video::ENCODING_VP8, proto::video::ENCODING_VP9 };
+    std::vector<RateCurve> curves(std::size(kScenarios) + 2);
+
+    std::cout << std::endl
+              << "=== Screen content: " << kScreenSize.width() << "x" << kScreenSize.height() << ", "
+              << kFrameRate << " fps, " << kFramesPerScenario << " delta frames per scenario, "
+              << QThread::idealThreadCount() << " logical CPUs ===" << std::endl
+              << "key: the first frame of a scenario. Other columns are per delta frame. Mc: millions of CPU"
+              << std::endl
+              << "cycles of the process. cores: CPU time / encoding time. PSNR (dB) is over all frames."
+              << std::endl;
+
+    for (qint64 bandwidth : kBandwidths)
+    {
+        std::vector<RunResult> results;
+
+        for (proto::video::Encoding encoding : encodings)
+        {
+            for (const Scenario& scenario : kScenarios)
+            {
+                RunResult result;
+                ASSERT_NO_FATAL_FAILURE(runScenario(encoding, bandwidth, scenario, &result));
+                results.push_back(std::move(result));
+            }
+        }
+
+        std::cout << std::endl << "=== Bandwidth " << bandwidth / 1024 << " KB/s ===" << std::endl << std::endl;
+
+        printBandwidthResults(results);
+        addRatePoints(results, &curves);
+    }
+
+    std::cout << "=== Over all bandwidths: size of VP9 against VP8 at equal PSNR (BD-rate) ===" << std::endl
+              << "Delta frames of each scenario, of all of them and the key frame. PSNR of each codec over the"
+              << std::endl
+              << "bandwidths, their common range and the size difference in it. Mc: cycles over the bandwidths."
+              << std::endl << std::endl;
+
+    printHeader({ "VP8 lo", "VP8 hi", "VP9 lo", "VP9 hi", "from", "to", "BD-rate", "Mc VP8", "Mc VP9", "ratio" });
+
+    for (size_t i = 0; i < std::size(kScenarios); ++i)
+        printRateDistortion(kScenarios[i].name, curves[i]);
+
+    printRateDistortion("total", curves[std::size(kScenarios)]);
+    printRateDistortion("key_frame", curves[std::size(kScenarios) + 1]);
+    std::cout << std::endl;
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(VideoEncoderVpxTest, DISABLED_SessionStartBenchmark)
+{
+    const proto::video::Encoding encodings[] = { proto::video::ENCODING_VP8, proto::video::ENCODING_VP9 };
+    const qint64 start_bandwidths[] = { 0, 32 * 1024 };
+
+    std::cout << std::endl
+              << "=== Session start: " << kScreenSize.width() << "x" << kScreenSize.height() << ", " << kFrameRate
+              << " fps, typing for 5 s, the bandwidth starts at 32 KB/s and grows by a fifth every second ==="
+              << std::endl
+              << "start: the bandwidth the encoder has for the first key frame (0 is unknown). The second key frame"
+              << std::endl
+              << "is requested 0.6 s after the first one. PSNR (dB) of the whole screen." << std::endl << std::endl;
+
+    std::cout << std::left << std::setw(13) << "start KB/s" << std::right;
+    for (const char* column : { "codec", "key1 KB", "key1 dB", "key2 KB", "key2 dB", "last dB", "all KB" })
+        std::cout << std::setw(8) << column;
+    std::cout << std::endl;
+
+    for (qint64 start_bandwidth : start_bandwidths)
+    {
+        for (proto::video::Encoding encoding : encodings)
+        {
+            SessionStartResult result;
+            ASSERT_NO_FATAL_FAILURE(runKeyFrames(encoding, start_bandwidth, true, 14, &result));
+
+            std::cout << std::left << std::setw(13) << start_bandwidth / 1024 << std::right << std::setw(8)
+                      << encodingName(encoding);
+
+            printValue(static_cast<double>(result.first_key_frame_bytes) / 1024.0, 1);
+            printValue(result.first_key_frame_psnr, 2);
+            printValue(static_cast<double>(result.second_key_frame_bytes) / 1024.0, 1);
+            printValue(result.second_key_frame_psnr, 2);
+            printValue(result.last_frame_psnr, 2);
+            printValue(static_cast<double>(result.bytes) / 1024.0, 0);
+            std::cout << std::endl;
+        }
+    }
+
+    std::cout << std::endl;
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(VideoEncoderVpxTest, DISABLED_KeyFrameRequestBenchmark)
+{
+    const proto::video::Encoding encodings[] = { proto::video::ENCODING_VP8, proto::video::ENCODING_VP9 };
+    const int kRequestedKeyFrame = 3 * kFrameRate;
+
+    std::cout << std::endl
+              << "=== Requested key frame: " << kScreenSize.width() << "x" << kScreenSize.height() << ", "
+              << kFrameRate << " fps, typing for 5 s on a steady bandwidth, a key frame is requested at 3 s ==="
+              << std::endl
+              << "key2 budget: the size of the requested key frame in frame budgets (bandwidth / fps). key2 ms: the"
+              << std::endl
+              << "time to send it. 1s KB: what goes out in the second from it. PSNR (dB) of the whole screen."
+              << std::endl << std::endl;
+
+    std::cout << std::left << std::setw(13) << "bw KB/s" << std::right;
+    for (const char* column : { "codec", "key1 KB", "key1 dB", "key2 KB", "key2 dB", "budget", "key2 ms", "1s KB",
+                                "last dB" })
+    {
+        std::cout << std::setw(8) << column;
+    }
+    std::cout << std::endl;
+
+    for (qint64 bandwidth : kBandwidths)
+    {
+        for (proto::video::Encoding encoding : encodings)
+        {
+            SessionStartResult result;
+            ASSERT_NO_FATAL_FAILURE(runKeyFrames(encoding, bandwidth, false, kRequestedKeyFrame, &result));
+
+            const double key_frame_bytes = static_cast<double>(result.second_key_frame_bytes);
+
+            std::cout << std::left << std::setw(13) << bandwidth / 1024 << std::right << std::setw(8)
+                      << encodingName(encoding);
+
+            printValue(static_cast<double>(result.first_key_frame_bytes) / 1024.0, 1);
+            printValue(result.first_key_frame_psnr, 2);
+            printValue(key_frame_bytes / 1024.0, 1);
+            printValue(result.second_key_frame_psnr, 2);
+            printValue(key_frame_bytes * kFrameRate / static_cast<double>(bandwidth), 1);
+            printValue(key_frame_bytes * 1000.0 / static_cast<double>(bandwidth), 0);
+            printValue(static_cast<double>(result.second_after_key_frame_bytes) / 1024.0, 1);
+            printValue(result.last_frame_psnr, 2);
+            std::cout << std::endl;
+        }
+    }
+
+    std::cout << std::endl;
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(VideoEncoderVpxTest, DISABLED_FrameCostBenchmark)
+{
+    const proto::video::Encoding encodings[] = { proto::video::ENCODING_VP8, proto::video::ENCODING_VP9 };
+    const QSize sizes[] = { QSize(1280, 720), QSize(1920, 1080), QSize(2560, 1440) };
+
+    std::cout << std::endl
+              << "=== Frame cost: " << kFramesPerScenario << " frames after the key frame at 768 KB/s ===" << std::endl
+              << "empty: nothing changes. block: one 16x16 block changes. copy: one copy of an I420 frame with a"
+              << std::endl
+              << "border of 160 pixels, the way VP9 puts each source frame into its lookahead. Mc: millions of"
+              << std::endl
+              << "CPU cycles of the process per frame." << std::endl << std::endl;
+
+    std::cout << std::left << std::setw(13) << "size" << std::right;
+    for (const char* column : { "codec", "mode", "Mc", "ms", "B/frame" })
+        std::cout << std::setw(8) << column;
+    std::cout << std::endl;
+
+    for (const QSize& size : sizes)
+    {
+        const QString name = QString("%1x%2").arg(size.width()).arg(size.height());
+
+        for (proto::video::Encoding encoding : encodings)
+        {
+            for (bool block : { false, true })
+            {
+                double cycles = 0;
+                double time_ms = 0;
+                double bytes = 0;
+                ASSERT_NO_FATAL_FAILURE(runFrameCost(encoding, size, block, &cycles, &time_ms, &bytes));
+
+                std::cout << std::left << std::setw(13) << name.toStdString() << std::right << std::setw(8)
+                          << encodingName(encoding) << std::setw(8) << (block ? "block" : "empty");
+                printCycles(cycles, 2);
+                printValue(time_ms, 3);
+                printValue(bytes, 0);
+                std::cout << std::endl;
+            }
+        }
+
+        const int uv_width = size.width() / 2;
+        const int uv_height = size.height() / 2;
+        std::vector<quint8> source(static_cast<size_t>(size.width() * size.height()), 128);
+        std::vector<quint8> y_plane;
+        std::vector<quint8> u_plane;
+        std::vector<quint8> v_plane;
+
+        const CpuUsage cpu_before = processCpuUsage();
+        const TimePoint start_time = Clock::now();
+
+        for (int i = 0; i < kFramesPerScenario; ++i)
+        {
+            copyAndExtendPlane(source.data(), size.width(), size.height(), 160, &y_plane);
+            copyAndExtendPlane(source.data(), uv_width, uv_height, 80, &u_plane);
+            copyAndExtendPlane(source.data(), uv_width, uv_height, 80, &v_plane);
+        }
+
+        const double time_ms = toMilliSeconds(DurationCast<MicroSeconds>(Clock::now() - start_time));
+        const CpuUsage cpu = processCpuUsage() - cpu_before;
+
+        std::cout << std::left << std::setw(13) << name.toStdString() << std::right << std::setw(8) << "-"
+                  << std::setw(8) << "copy";
+        printCycles(static_cast<double>(cpu.cycles) / kFramesPerScenario, 2);
+        printValue(time_ms / kFramesPerScenario, 3);
+        std::cout << std::endl;
+    }
+
+    std::cout << std::endl;
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(VideoDecoderVpxTest, DISABLED_DecodeBenchmark)
+{
+    const proto::video::Encoding encodings[] = { proto::video::ENCODING_VP8, proto::video::ENCODING_VP9 };
+
+    std::cout << std::endl
+              << "=== Decoding: " << kScreenSize.width() << "x" << kScreenSize.height() << ", " << kFrameRate
+              << " fps, " << kFramesPerScenario << " delta frames per scenario, " << QThread::idealThreadCount()
+              << " logical CPUs ===" << std::endl
+              << "The streams of the encoder benchmark, each decoded 3 times, the fastest pass is shown. key: the"
+              << std::endl
+              << "first frame. Other columns are per delta frame. Mc: millions of CPU cycles of the process."
+              << std::endl
+              << "cores: CPU time / decoding time. The comparison sums all frames of a scenario." << std::endl;
+
+    for (qint64 bandwidth : kBandwidths)
+    {
+        std::vector<RunResult> results;
+
+        for (proto::video::Encoding encoding : encodings)
+        {
+            for (const Scenario& scenario : kScenarios)
+            {
+                std::vector<proto::video::Packet> packets;
+                ASSERT_NO_FATAL_FAILURE(encodeScenario(encoding, bandwidth, scenario, &packets));
+
+                RunResult result;
+                result.scenario = scenario.name;
+                ASSERT_NO_FATAL_FAILURE(decodeScenario(encoding, packets, &result));
+                results.push_back(std::move(result));
+            }
+        }
+
+        std::cout << std::endl << "=== Bandwidth " << bandwidth / 1024 << " KB/s ===" << std::endl << std::endl;
+
+        printHeader({ "codec", "key KB", "key ms", "key Mc", "B/frame", "avg ms", "p95 ms", "max ms", "CPU ms",
+                      "cores", "Mc" });
+
+        for (size_t i = 0; i < results.size(); ++i)
+        {
+            if (i == std::size(kScenarios))
+                std::cout << std::endl;
+            printDecodeRun(results[i]);
+        }
+
+        std::cout << std::endl;
+        printHeader({ "ms VP8", "ms VP9", "ratio", "CPU VP8", "CPU VP9", "ratio", "Mc VP8", "Mc VP9", "ratio" });
+
+        Totals vp8_total;
+        Totals vp9_total;
+
+        for (size_t i = 0; i < std::size(kScenarios); ++i)
+        {
+            const Totals vp8 = totals(results[i]);
+            const Totals vp9 = totals(results[i + std::size(kScenarios)]);
+
+            printDecodeComparison(kScenarios[i].name, vp8, vp9);
+
+            vp8_total += vp8;
+            vp9_total += vp9;
+        }
+
+        printDecodeComparison("total", vp8_total, vp9_total);
+    }
+
+    std::cout << std::endl;
+}
+
+#if defined(Q_OS_WINDOWS)
+//--------------------------------------------------------------------------------------------------
+TEST(VideoEncoderVpxTest, DISABLED_ProfileBenchmark)
+{
+    const qint64 bandwidth = 4096 * 1024;
+    const int kRepeats = 3;
+
+    std::cout << std::endl
+              << "=== Profile: VP9, " << kScreenSize.width() << "x" << kScreenSize.height() << ", "
+              << bandwidth / 1024 << " KB/s, each scenario encoded " << kRepeats << " times ===" << std::endl
+              << "Samples of the instruction pointer of all threads of the process that run. Columns: the share"
+              << std::endl
+              << "of the function and the running sum." << std::endl;
+
+    for (const Scenario& scenario : kScenarios)
+    {
+        Sampler sampler;
+        sampler.start();
+
+        for (int i = 0; i < kRepeats; ++i)
+        {
+            std::vector<proto::video::Packet> packets;
+            ASSERT_NO_FATAL_FAILURE(encodeScenario(proto::video::ENCODING_VP9, bandwidth, scenario, &packets));
+        }
+
+        sampler.stop();
+
+        std::cout << std::endl << "=== " << scenario.name << " ===" << std::endl;
+        sampler.print(30);
+    }
+
+    std::cout << std::endl;
+}
+#endif // defined(Q_OS_WINDOWS)
