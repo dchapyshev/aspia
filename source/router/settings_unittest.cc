@@ -51,9 +51,9 @@ protected:
 
 //--------------------------------------------------------------------------------------------------
 // A configuration written before the access log existed keeps the entries for the default period.
-TEST_F(RouterSettingsTest, AccessLogDaysDefaultToNinety)
+TEST_F(RouterSettingsTest, AccessLogDaysDefaultToFortyFive)
 {
-    EXPECT_EQ(Settings().accessLogDays(), 90);
+    EXPECT_EQ(Settings().accessLogDays(), 45);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ TEST_F(RouterSettingsTest, ResetWritesTheDefaultAccessLogDays)
         ASSERT_TRUE(settings.sync());
     }
 
-    EXPECT_EQ(Settings().accessLogDays(), 90);
+    EXPECT_EQ(Settings().accessLogDays(), 45);
 
     QFile file(file_path_);
     ASSERT_TRUE(file.open(QFile::ReadOnly));
@@ -110,7 +110,7 @@ TEST_F(RouterSettingsTest, AccessLogDaysOutOfRangeAreClamped)
 TEST_F(RouterSettingsTest, AccessLogDaysThatAreNotANumberAreTheDefault)
 {
     writeConfig("[router]\naccess_log_days=abc\n");
-    EXPECT_EQ(Settings().accessLogDays(), 90);
+    EXPECT_EQ(Settings().accessLogDays(), 45);
 }
 
 //--------------------------------------------------------------------------------------------------

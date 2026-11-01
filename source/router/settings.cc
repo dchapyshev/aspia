@@ -43,7 +43,7 @@ const QByteArray kWhiteListKey = "white_list"_ba;
 // A semicolon starts a comment in an ini file.
 constexpr auto kWhiteListSeparator = ',';
 
-constexpr quint16 kDefaultAccessLogDays = 90;
+constexpr quint16 kDefaultAccessLogDays = 45;
 
 constexpr quint16 kDefaultSmtpPort = 587;
 constexpr Settings::SmtpSecurity kDefaultSmtpSecurity = Settings::SmtpSecurity::STARTTLS;
