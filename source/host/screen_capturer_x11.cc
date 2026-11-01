@@ -169,6 +169,8 @@ ScreenCapturer::ScreenId ScreenCapturerX11::currentScreen() const
 //--------------------------------------------------------------------------------------------------
 const Frame* ScreenCapturerX11::captureFrame(Error* error)
 {
+    queue_.moveToNextFrame();
+
     // Process XEvents for XDamage and cursor shape tracking.
     display_->processPendingXEvents();
 
