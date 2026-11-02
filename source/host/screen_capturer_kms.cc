@@ -315,11 +315,21 @@ QList<WaylandOutputLayout::Output> queryCompositorOutputs()
 }
 
 //--------------------------------------------------------------------------------------------------
+// The CPU paths read the buffer row by row, so a tiled or compressed layout would come out scrambled.
+bool isLinearLayout(const drmModeFB2* fb)
+{
+    return !(fb->flags & DRM_MODE_FB_MODIFIERS) || fb->modifier == DRM_FORMAT_MOD_LINEAR;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Reads a single-plane scan-out buffer into |dst| (packed BGRA) through a CPU mapping of its exported
 // DMA-BUF. Used when the EGL/GL readback is unavailable: a VM whose 3D acceleration is inactive runs on
 // software GL, which cannot read the hardware scan-out buffer.
 bool readDmaBufCpu(int dmabuf_fd, const drmModeFB2* fb, quint8* dst, int dst_stride)
 {
+    if (!isLinearLayout(fb))
+        return false;
+
     const size_t map_size = fb->offsets[0] + static_cast<size_t>(fb->pitches[0]) * fb->height;
 
     void* map = mmap(nullptr, map_size, PROT_READ, MAP_SHARED, dmabuf_fd, 0);
@@ -347,7 +357,7 @@ bool readDmaBufCpu(int dmabuf_fd, const drmModeFB2* fb, quint8* dst, int dst_str
 // vmwgfx on a software VM), where both the EGL and the DMA-BUF paths are impossible.
 bool readDumbBufferCpu(int drm_fd, const drmModeFB2* fb, quint8* dst, int dst_stride)
 {
-    if (!fb->handles[0])
+    if (!fb->handles[0] || !isLinearLayout(fb))
         return false;
 
     uint64_t map_offset = 0;
@@ -857,9 +867,8 @@ bool ScreenCapturerKms::switchCard(int index)
 
         if (!card.egl->isInitialized())
         {
-            LOG(ERROR) << "EGL/GBM import not available for KMS capture on" << card.path.constData();
-            card.readback = Readback::UNUSABLE;
-            return false;
+            LOG(WARNING) << "EGL/GBM import not available on" << card.path.constData()
+                         << ", trying CPU readback";
         }
     }
 
@@ -915,6 +924,9 @@ bool ScreenCapturerKms::probeReadback()
 
     for (Readback method : kMethods)
     {
+        if (method == Readback::EGL && !card().egl->isInitialized())
+            continue;
+
         const char* name = (method == Readback::EGL)        ? "EGL" :
                            (method == Readback::DMABUF_CPU) ? "CPU DMA-BUF mapping" :
                                                               "CPU dumb-buffer mapping";
