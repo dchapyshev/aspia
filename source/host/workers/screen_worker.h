@@ -179,6 +179,7 @@ private:
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
 
     proto::video::Encoding video_encoding_ = proto::video::ENCODING_VP9;
+    quint32 quality_ = 0;
     qint64 last_bandwidth_ = 0;
     qint64 tier_bandwidth_ = 0; // The bandwidth the frame rate limit was chosen from.
 

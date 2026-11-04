@@ -41,6 +41,18 @@ const int kVp9I420ProfileNumber = 0;
 const int kVp9Speed = 9;
 const int kVp9KeyFrameSpeed = 7;
 
+const quint32 kAutoQuality = 0;
+const quint32 kMaxQuality = 10;
+const quint32 kMinQualityQuantizer = 50;
+const quint32 kMaxQualityQuantizer = 8;
+
+//--------------------------------------------------------------------------------------------------
+quint32 qualityToQuantizer(quint32 quality)
+{
+    return kMinQualityQuantizer -
+        (quality - 1) * (kMinQualityQuantizer - kMaxQualityQuantizer) / (kMaxQuality - 1);
+}
+
 //--------------------------------------------------------------------------------------------------
 void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
 {
@@ -345,6 +357,12 @@ void VideoEncoderVpx::setBandwidth(qint64 bandwidth)
         }
     }
 
+    if (quality_ != kAutoQuality)
+    {
+        min_quantizer_ = qualityToQuantizer(quality_);
+        max_quantizer_ = min_quantizer_;
+    }
+
     if (!codec_.get())
         return;
 
@@ -381,6 +399,12 @@ void VideoEncoderVpx::setFrameRate(int fps)
     }
 
     frame_duration_us_ = 1'000'000 / fps;
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoEncoderVpx::setQuality(quint32 quality)
+{
+    quality_ = std::min(quality, kMaxQuality);
 }
 
 //--------------------------------------------------------------------------------------------------

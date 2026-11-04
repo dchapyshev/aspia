@@ -49,6 +49,7 @@ public:
     bool isVp9Supported() const { return vp9_supported_; }
     bool isOpusSupported() const { return opus_supported_; }
     bool isAudioEnabled() const { return audio_enabled_; }
+    quint32 quality() const { return quality_; }
     const QSize& preferredSize() const { return preferred_size_; }
     qint64 bandwidth() const { return publishedBandwidth(); }
     void releaseKeyboardKeys();
@@ -101,6 +102,7 @@ private:
     bool is_paused_ = false;
 
     QSize preferred_size_;
+    quint32 quality_ = 0;
 
     std::unordered_set<quint32> pressed_keys_;
 

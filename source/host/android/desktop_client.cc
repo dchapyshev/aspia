@@ -193,6 +193,7 @@ void DesktopClient::handleControl(const QByteArray& buffer)
         }
 
         audio_enabled_ = config.audio();
+        quality_ = config.quality();
         configured_ = true;
         emit sig_configured();
     }

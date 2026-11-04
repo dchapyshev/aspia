@@ -39,6 +39,7 @@ public:
     Result encode(const Frame* frame, proto::video::Packet* packet) final;
     void setBandwidth(qint64 bandwidth) final;
     void setFrameRate(int fps) final;
+    void setQuality(quint32 quality) final;
 
 private:
     friend class VideoEncoderVpxTestPeer;
@@ -52,6 +53,7 @@ private:
     void clearActiveMap();
 
     QSize last_size_;
+    quint32 quality_ = 0;
 
     // Defaults match a conservative "unknown bandwidth" tier. setBandwidth() may shift these
     // before each codec (re)creation; createVp{8,9}Codec reads them when initializing config_.

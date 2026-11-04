@@ -380,6 +380,7 @@ void DesktopAgent::createVideoEncoder()
         return;
     }
 
+    video_encoder_->setQuality(minimalQuality());
     video_encoder_->setBandwidth(minimalBandwidth());
     video_encoder_->setFrameRate(static_cast<int>(Seconds(1) / kCaptureInterval));
 }
@@ -397,6 +398,20 @@ qint64 DesktopAgent::minimalBandwidth() const
     }
 
     return minimal_bandwidth;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 DesktopAgent::minimalQuality() const
+{
+    quint32 minimal_quality = std::numeric_limits<quint32>::max();
+
+    for (auto* client : std::as_const(clients_))
+    {
+        if (client->isConfigured())
+            minimal_quality = std::min(minimal_quality, client->quality());
+    }
+
+    return minimal_quality;
 }
 
 //--------------------------------------------------------------------------------------------------

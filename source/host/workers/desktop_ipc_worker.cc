@@ -245,6 +245,7 @@ void DesktopIpcWorker::onClientConfigured()
     proto::control::Config merged_config;
     merged_config.set_effects(true);
     merged_config.set_wallpaper(true);
+    merged_config.set_quality(std::numeric_limits<quint32>::max());
 
     bool has_configured = false;
     bool opus_supported = true;
@@ -274,6 +275,7 @@ void DesktopIpcWorker::onClientConfigured()
         merged_config.set_lock_at_disconnect(merged_config.lock_at_disconnect() || config->lock_at_disconnect());
         merged_config.set_cursor_position(merged_config.cursor_position() || config->cursor_position());
         merged_config.set_cursor_shape(merged_config.cursor_shape() || config->cursor_shape());
+        merged_config.set_quality(std::min(merged_config.quality(), config->quality()));
 
         // The first client that requested a preferred resolution wins; it is carried in the merged
         // config to the screen worker (which itself keeps the first non-empty value).

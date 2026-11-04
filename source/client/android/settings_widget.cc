@@ -434,6 +434,20 @@ void SettingsWidget::buildDesktopSection(QVBoxLayout* layout)
         desktop_config_.set_block_input(checked);
         Database::instance().setDesktopConfig(desktop_config_);
     });
+
+    ComboBox* quality = new ComboBox();
+    quality->setLabel(tr("Quality"));
+    quality->addItem(tr("Automatic"), kAutoQuality);
+    quality->addItem(tr("Low"), kLowQuality);
+    quality->addItem(tr("Medium"), kMediumQuality);
+    quality->addItem(tr("High"), kHighQuality);
+    quality->setCurrentIndex(quality->findData(desktop_config_.quality()));
+    connect(quality, &QComboBox::currentIndexChanged, this, [this, quality](int /* index */)
+    {
+        desktop_config_.set_quality(quality->currentData().toUInt());
+        Database::instance().setDesktopConfig(desktop_config_);
+    });
+    layout->addWidget(quality);
 }
 
 //--------------------------------------------------------------------------------------------------

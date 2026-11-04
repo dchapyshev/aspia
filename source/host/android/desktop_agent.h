@@ -93,6 +93,7 @@ private slots:
 private:
     void createVideoEncoder();
     qint64 minimalBandwidth() const;
+    quint32 minimalQuality() const;
     bool startCapturer();
     bool isAudioEnabled() const;
     void sendScreenList();

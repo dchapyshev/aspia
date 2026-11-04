@@ -34,6 +34,8 @@ class VideoEncoderVpxTestPeer
 {
 public:
     static void dropCodec(VideoEncoderVpx& encoder) { encoder.codec_.reset(); }
+    static quint32 minQuantizer(const VideoEncoderVpx& encoder) { return encoder.min_quantizer_; }
+    static quint32 maxQuantizer(const VideoEncoderVpx& encoder) { return encoder.max_quantizer_; }
 };
 
 namespace {
@@ -109,6 +111,53 @@ void checkRequestedKeyFrameHasFormat(proto::video::Encoding encoding)
 }
 
 } // namespace
+
+//--------------------------------------------------------------------------------------------------
+TEST(VideoEncoderVpxTest, QualityKeepsTheQuantizerAtAnyBandwidth)
+{
+    VideoEncoderVpx encoder(proto::video::ENCODING_VP9);
+    encoder.setQuality(5);
+
+    for (qint64 bandwidth : { qint64(0), qint64(100 * 1024), qint64(10 * 1024 * 1024) })
+    {
+        encoder.setBandwidth(bandwidth);
+        EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 32u);
+        EXPECT_EQ(VideoEncoderVpxTestPeer::maxQuantizer(encoder), 32u);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(VideoEncoderVpxTest, QualityEndsMatchTheBandwidthRange)
+{
+    VideoEncoderVpx encoder(proto::video::ENCODING_VP9);
+
+    encoder.setQuality(1);
+    encoder.setBandwidth(0);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::maxQuantizer(encoder), 50u);
+
+    encoder.setQuality(10);
+    encoder.setBandwidth(0);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 8u);
+
+    encoder.setQuality(11);
+    encoder.setBandwidth(0);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 8u);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(VideoEncoderVpxTest, AutoQualityFollowsTheBandwidth)
+{
+    VideoEncoderVpx encoder(proto::video::ENCODING_VP9);
+    encoder.setQuality(0);
+
+    encoder.setBandwidth(100 * 1024);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 16u);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::maxQuantizer(encoder), 50u);
+
+    encoder.setBandwidth(10 * 1024 * 1024);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 8u);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::maxQuantizer(encoder), 25u);
+}
 
 //--------------------------------------------------------------------------------------------------
 TEST(VideoEncoderVpxTest, Vp8FormatIsResentAfterTemporaryError)

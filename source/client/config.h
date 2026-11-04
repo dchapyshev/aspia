@@ -361,6 +361,11 @@ private:
     bool portable_ = false;
 };
 
+const quint32 kAutoQuality = 0;
+const quint32 kLowQuality = 1;
+const quint32 kMediumQuality = 5;
+const quint32 kHighQuality = 10;
+
 proto::control::Config defaultDesktopConfig();
 
 #endif // CLIENT_CONFIG_H

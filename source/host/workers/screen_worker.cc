@@ -241,6 +241,7 @@ void ScreenWorker::onConfigure(const proto::control::Config& config, bool vp8_su
     }
 
     video_encoding_ = vp9_supported ? proto::video::ENCODING_VP9 : proto::video::ENCODING_VP8;
+    quality_ = config.quality();
 
     LOG(INFO) << "Configuration:" << config << "vp8:" << vp8_supported << "vp9:" << vp9_supported;
 
@@ -307,6 +308,7 @@ void ScreenWorker::onStopCapture()
     cursor_encoder_.reset();
     scale_reducer_.reset();
     video_encoding_ = proto::video::ENCODING_VP9;
+    quality_ = 0;
 
     setCaptureFps(default_fps_);
 
@@ -1393,6 +1395,7 @@ void ScreenWorker::createVideoEncoder()
     // reconnect, when the encoder is recreated by onConfigure().
     if (video_encoder_)
     {
+        video_encoder_->setQuality(quality_);
         video_encoder_->setBandwidth(last_bandwidth_);
         video_encoder_->setFrameRate(capture_scheduler_.fps());
     }

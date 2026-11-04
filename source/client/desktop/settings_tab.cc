@@ -281,6 +281,12 @@ SettingsTab::SettingsTab(QWidget* parent)
         ui->combo_resolution->setCurrentIndex(index);
     }
 
+    ui->combo_quality->addItem(tr("Automatic"), kAutoQuality);
+    ui->combo_quality->addItem(tr("Low"), kLowQuality);
+    ui->combo_quality->addItem(tr("Medium"), kMediumQuality);
+    ui->combo_quality->addItem(tr("High"), kHighQuality);
+    ui->combo_quality->setCurrentIndex(ui->combo_quality->findData(desktop_config.quality()));
+
     ui->checkbox_preferred_size->setChecked(!desktop_config.disable_preferred_size());
 
     ui->checkbox_record_autostart->setChecked(db.isRecordSessionsEnabled());
@@ -369,6 +375,8 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->checkbox_block_remote_input, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->checkbox_send_key_combinations, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->combo_resolution, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &SettingsTab::onDesktopFeatureChanged);
+    connect(ui->combo_quality, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->checkbox_preferred_size, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
 
@@ -955,6 +963,7 @@ void SettingsTab::saveDesktopConfig()
     desktop_config.set_lock_at_disconnect(ui->checkbox_lock_at_disconnect->isChecked());
     desktop_config.set_block_input(ui->checkbox_block_remote_input->isChecked());
     desktop_config.set_disable_preferred_size(!ui->checkbox_preferred_size->isChecked());
+    desktop_config.set_quality(ui->combo_quality->currentData().toUInt());
 
     QSize preferred = ui->combo_resolution->currentData().toSize();
     if (preferred.isValid())
