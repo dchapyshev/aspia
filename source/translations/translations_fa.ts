@@ -2807,32 +2807,32 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWidget</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="633"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="638"/>
         <source>The session was paused by a remote user</source>
         <translation>نشست توسط کاربر راه دور موقتاً متوقف شد</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="636"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="641"/>
         <source>The session is temporarily unavailable</source>
         <translation>نشست موقتاً در دسترس نیست</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="639"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="644"/>
         <source>The session is permanently unavailable</source>
         <translation>نشست برای همیشه در دسترس نیست</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="642"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="647"/>
         <source>Waiting for the remote user to confirm screen capture</source>
         <translation>در انتظار تأیید تصویربرداری از صفحه توسط کاربر راه دور</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="645"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="650"/>
         <source>The remote device screen is locked</source>
         <translation>صفحه‌نمایش دستگاه راه دور قفل است</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="648"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="653"/>
         <source>Error while receiving video stream: %1</source>
         <translation>خطا هنگام دریافت جریان ویدئو: %1</translation>
     </message>
@@ -2840,37 +2840,37 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1123"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1139"/>
         <source>Save File</source>
         <translation>ذخیره فایل</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1124"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1140"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>تصویر PNG (*.png);;تصویر BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1155"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1171"/>
         <source>Could not save image</source>
         <translation>ذخیره تصویر ممکن نیست</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1405"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1424"/>
         <source>Invalid user name or password.</source>
         <translation>نام کاربری یا گذرواژه اشتباه است.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1408"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1427"/>
         <source>The password has expired.</source>
         <translation>گذرواژه منقضی شده است.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1411"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1430"/>
         <source>The account is locked out.</source>
         <translation>حساب کاربری قفل شده است.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1414"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1433"/>
         <source>The account is disabled.</source>
         <translation>حساب کاربری غیرفعال است.</translation>
     </message>
@@ -8228,98 +8228,108 @@ Credentials imported: %5</source>
         <translation>صفحه‌نمایش</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="528"/>
+        <location filename="../client/desktop/settings_tab.ui" line="526"/>
         <source>Preferred resolution:</source>
         <translation>وضوح ترجیحی:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="559"/>
+        <location filename="../client/desktop/settings_tab.ui" line="546"/>
+        <source>Quality:</source>
+        <translation>کیفیت:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="566"/>
+        <source>Scale image to window size on the host side</source>
+        <translation>مقیاس‌بندی تصویر به اندازه پنجره در سمت میزبان</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="582"/>
         <source>Recording</source>
         <translation>ضبط</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="565"/>
+        <location filename="../client/desktop/settings_tab.ui" line="588"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>شروع خودکار ضبط نشست‌ها هنگام اتصال</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="574"/>
+        <location filename="../client/desktop/settings_tab.ui" line="597"/>
         <source>Write path:</source>
         <translation>مسیر نوشتن:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="670"/>
+        <location filename="../client/desktop/settings_tab.ui" line="693"/>
         <source>MCP Connector</source>
         <translation>کانکتور MCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="676"/>
+        <location filename="../client/desktop/settings_tab.ui" line="699"/>
         <source>Allow the use of MCP</source>
         <translation>اجازه به استفاده از MCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="683"/>
+        <location filename="../client/desktop/settings_tab.ui" line="706"/>
         <source>Add this command to the MCP servers of the AI application:</source>
         <translation>این دستور را به سرورهای MCP برنامه هوش مصنوعی اضافه کنید:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="700"/>
+        <location filename="../client/desktop/settings_tab.ui" line="723"/>
         <source>Copy</source>
         <translation>کپی</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="716"/>
+        <location filename="../client/desktop/settings_tab.ui" line="739"/>
         <source>Allowed Session Types</source>
         <translation>انواع نشست مجاز</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="730"/>
+        <location filename="../client/desktop/settings_tab.ui" line="753"/>
         <source>Actions</source>
         <translation>عملیات</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="736"/>
+        <location filename="../client/desktop/settings_tab.ui" line="759"/>
         <source>Confirm actions automatically</source>
         <translation>تأیید خودکار عملیات</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="743"/>
+        <location filename="../client/desktop/settings_tab.ui" line="766"/>
         <source>Allow signing in with saved credentials</source>
         <translation>اجازه به ورود با اطلاعات ورود ذخیره‌شده</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="814"/>
+        <location filename="../client/desktop/settings_tab.ui" line="837"/>
         <location filename="../client/desktop/settings_tab.cc" line="145"/>
         <source>Update</source>
         <translation>به‌روزرسانی</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="820"/>
+        <location filename="../client/desktop/settings_tab.ui" line="843"/>
         <source>Check for updates on startup</source>
         <translation>بررسی به‌روزرسانی‌ها هنگام راه‌اندازی</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="829"/>
+        <location filename="../client/desktop/settings_tab.ui" line="852"/>
         <source>Update channel:</source>
         <translation>کانال به‌روزرسانی:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="843"/>
+        <location filename="../client/desktop/settings_tab.ui" line="866"/>
         <source>Update server:</source>
         <translation>سرور به‌روزرسانی:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="857"/>
+        <location filename="../client/desktop/settings_tab.ui" line="880"/>
         <source>Public key:</source>
         <translation>کلید عمومی:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="875"/>
+        <location filename="../client/desktop/settings_tab.ui" line="898"/>
         <source>Change Update Server...</source>
         <translation>تغییر سرور به‌روزرسانی...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="895"/>
+        <location filename="../client/desktop/settings_tab.ui" line="918"/>
         <source>Check for updates</source>
         <translation>بررسی به‌روزرسانی‌ها</translation>
     </message>
@@ -8399,122 +8409,142 @@ Credentials imported: %5</source>
         <translation>هیچ‌کدام</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="320"/>
+        <location filename="../client/desktop/settings_tab.cc" line="284"/>
+        <source>Automatic</source>
+        <translation>خودکار</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="285"/>
+        <source>Low</source>
+        <translation>پایین</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="286"/>
+        <source>Medium</source>
+        <translation>متوسط</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="287"/>
+        <source>High</source>
+        <translation>بالا</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="328"/>
         <source>Stable</source>
         <translation>پایدار</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="321"/>
+        <location filename="../client/desktop/settings_tab.cc" line="329"/>
         <source>Beta</source>
         <translation>بتا</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="322"/>
+        <location filename="../client/desktop/settings_tab.cc" line="330"/>
         <source>Alpha</source>
         <translation>آلفا</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="452"/>
+        <location filename="../client/desktop/settings_tab.cc" line="463"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>زبان جدید پس از راه‌اندازی مجدد برنامه اعمال خواهد شد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="501"/>
-        <location filename="../client/desktop/settings_tab.cc" line="626"/>
+        <location filename="../client/desktop/settings_tab.cc" line="512"/>
+        <location filename="../client/desktop/settings_tab.cc" line="637"/>
         <source>Choose path</source>
         <translation>انتخاب مسیر</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="654"/>
+        <location filename="../client/desktop/settings_tab.cc" line="665"/>
         <source>The settings will be applied after the application is restarted.</source>
         <translation>تنظیمات پس از راه‌اندازی مجدد برنامه اعمال خواهند شد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="701"/>
+        <location filename="../client/desktop/settings_tab.cc" line="712"/>
         <source>Change Master Password</source>
         <translation>تغییر گذرواژه اصلی</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="703"/>
+        <location filename="../client/desktop/settings_tab.cc" line="714"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>گذرواژه فعلی خود را وارد کرده و گذرواژه جدیدی انتخاب کنید.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="711"/>
+        <location filename="../client/desktop/settings_tab.cc" line="722"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>گذرواژه نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="718"/>
+        <location filename="../client/desktop/settings_tab.cc" line="729"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>گذرواژه واردشده الزامات امنیتی را برآورده نمی‌کند!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="719"/>
+        <location filename="../client/desktop/settings_tab.cc" line="730"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>گذرواژه باید شامل حروف کوچک و بزرگ و اعداد باشد و نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="722"/>
+        <location filename="../client/desktop/settings_tab.cc" line="733"/>
         <source>Do you want to enter a different password?</source>
         <translation>آیا می‌خواهید گذرواژه دیگری وارد کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="735"/>
+        <location filename="../client/desktop/settings_tab.cc" line="746"/>
         <source>Invalid current password.</source>
         <translation>گذرواژه فعلی نامعتبر است.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="739"/>
+        <location filename="../client/desktop/settings_tab.cc" line="750"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>برخی رکوردهای پایگاه داده آسیب دیده‌اند. آنها را اصلاح یا حذف کنید و دوباره تلاش کنید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="743"/>
+        <location filename="../client/desktop/settings_tab.cc" line="754"/>
         <source>Unable to change the password.</source>
         <translation>تغییر گذرواژه ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="776"/>
+        <location filename="../client/desktop/settings_tab.cc" line="787"/>
         <source>Unable to read the proxy settings.</source>
         <translation>خواندن تنظیمات سرور پروکسی ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="890"/>
+        <location filename="../client/desktop/settings_tab.cc" line="901"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>کلید پایگاه داده در این رایانه ذخیره خواهد شد. هر برنامه‌ای که با حساب کاربری شما اجرا شود می‌تواند آن را بخواند، حتی زمانی که برنامه اجرا نمی‌شود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="893"/>
+        <location filename="../client/desktop/settings_tab.cc" line="904"/>
         <source>Do you want to continue?</source>
         <translation>آیا می‌خواهید ادامه دهید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="904"/>
+        <location filename="../client/desktop/settings_tab.cc" line="915"/>
         <source>Unlock Automatically</source>
         <translation>باز کردن خودکار قفل</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="906"/>
+        <location filename="../client/desktop/settings_tab.cc" line="917"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>برای باز کردن خودکار قفل برنامه هنگام راه‌اندازی، گذرواژه اصلی را وارد کنید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="916"/>
+        <location filename="../client/desktop/settings_tab.cc" line="927"/>
         <source>Invalid master password.</source>
         <translation>گذرواژه اصلی نامعتبر است.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="920"/>
+        <location filename="../client/desktop/settings_tab.cc" line="931"/>
         <source>Unable to unlock the database.</source>
         <translation>باز کردن قفل پایگاه داده ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="934"/>
+        <location filename="../client/desktop/settings_tab.cc" line="945"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>فعال‌سازی باز کردن خودکار قفل ممکن نیست.</translation>
     </message>
@@ -8732,71 +8762,96 @@ Credentials imported: %5</source>
         <translation>مسدود کردن ورودی راه دور</translation>
     </message>
     <message>
+        <location filename="../client/android/settings_widget.cc" line="439"/>
+        <source>Quality</source>
+        <translation>کیفیت</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="440"/>
+        <source>Automatic</source>
+        <translation>خودکار</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="441"/>
+        <source>Low</source>
+        <translation>پایین</translation>
+    </message>
+    <message>
         <location filename="../client/android/settings_widget.cc" line="442"/>
+        <source>Medium</source>
+        <translation>متوسط</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="443"/>
+        <source>High</source>
+        <translation>بالا</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="456"/>
         <location filename="../host/android/settings_widget.cc" line="405"/>
         <source>Updates</source>
         <translation>به‌روزرسانی‌ها</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="446"/>
+        <location filename="../client/android/settings_widget.cc" line="460"/>
         <source>Check for updates on startup</source>
         <translation>بررسی به‌روزرسانی‌ها هنگام راه‌اندازی</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="453"/>
+        <location filename="../client/android/settings_widget.cc" line="467"/>
         <location filename="../host/android/settings_widget.cc" line="408"/>
         <source>Update channel</source>
         <translation>کانال به‌روزرسانی</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="454"/>
+        <location filename="../client/android/settings_widget.cc" line="468"/>
         <location filename="../host/android/settings_widget.cc" line="409"/>
         <source>Stable</source>
         <translation>پایدار</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="455"/>
+        <location filename="../client/android/settings_widget.cc" line="469"/>
         <location filename="../host/android/settings_widget.cc" line="410"/>
         <source>Beta</source>
         <translation>بتا</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="456"/>
+        <location filename="../client/android/settings_widget.cc" line="470"/>
         <location filename="../host/android/settings_widget.cc" line="411"/>
         <source>Alpha</source>
         <translation>آلفا</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="467"/>
+        <location filename="../client/android/settings_widget.cc" line="481"/>
         <location filename="../host/android/settings_widget.cc" line="425"/>
         <source>Update server</source>
         <translation>سرور به‌روزرسانی</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="472"/>
+        <location filename="../client/android/settings_widget.cc" line="486"/>
         <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Public key</source>
         <translation>کلید عمومی</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="478"/>
+        <location filename="../client/android/settings_widget.cc" line="492"/>
         <location filename="../host/android/settings_widget.cc" line="436"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>اگر سرور به‌روزرسانی مشخص نشود، سرور پیش‌فرض استفاده می‌شود. اگر کلید عمومی مشخص نشود، کلید داخلی استفاده می‌شود.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="532"/>
+        <location filename="../client/android/settings_widget.cc" line="546"/>
         <location filename="../host/android/settings_widget.cc" line="490"/>
         <source>Check for updates</source>
         <translation>بررسی به‌روزرسانی‌ها</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="556"/>
+        <location filename="../client/android/settings_widget.cc" line="570"/>
         <source>Enable biometric unlock</source>
         <translation>فعال‌سازی باز کردن قفل با بیومتریک</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="557"/>
+        <location filename="../client/android/settings_widget.cc" line="571"/>
         <source>Cancel</source>
         <translation>لغو</translation>
     </message>

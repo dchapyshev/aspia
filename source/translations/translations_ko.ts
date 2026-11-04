@@ -2807,32 +2807,32 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWidget</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="633"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="638"/>
         <source>The session was paused by a remote user</source>
         <translation>원격 사용자가 세션을 일시 중지했습니다</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="636"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="641"/>
         <source>The session is temporarily unavailable</source>
         <translation>세션을 일시적으로 사용할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="639"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="644"/>
         <source>The session is permanently unavailable</source>
         <translation>세션을 영구적으로 사용할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="642"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="647"/>
         <source>Waiting for the remote user to confirm screen capture</source>
         <translation>원격 사용자가 화면 캡처를 확인하기를 기다리는 중</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="645"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="650"/>
         <source>The remote device screen is locked</source>
         <translation>원격 장치 화면이 잠겨 있습니다</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="648"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="653"/>
         <source>Error while receiving video stream: %1</source>
         <translation>비디오 스트림을 수신하는 동안 오류가 발생했습니다: %1</translation>
     </message>
@@ -2991,37 +2991,37 @@ Credentials replaced: %2</source>
         <translation>예</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1123"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1139"/>
         <source>Save File</source>
         <translation>파일 저장</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1124"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1140"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 이미지 (*.png);;BMP 이미지 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1155"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1171"/>
         <source>Could not save image</source>
         <translation>이미지를 저장할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1405"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1424"/>
         <source>Invalid user name or password.</source>
         <translation>사용자 이름 또는 암호가 잘못되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1408"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1427"/>
         <source>The password has expired.</source>
         <translation>암호가 만료되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1411"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1430"/>
         <source>The account is locked out.</source>
         <translation>계정이 잠겨 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1414"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1433"/>
         <source>The account is disabled.</source>
         <translation>계정이 사용 안 함 상태입니다.</translation>
     </message>
@@ -8228,98 +8228,108 @@ Credentials imported: %5</source>
         <translation>화면</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="528"/>
+        <location filename="../client/desktop/settings_tab.ui" line="526"/>
         <source>Preferred resolution:</source>
         <translation>기본 해상도:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="559"/>
+        <location filename="../client/desktop/settings_tab.ui" line="546"/>
+        <source>Quality:</source>
+        <translation>화질:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="566"/>
+        <source>Scale image to window size on the host side</source>
+        <translation>호스트 측에서 이미지를 창 크기에 맞게 조정</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="582"/>
         <source>Recording</source>
         <translation>녹화</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="565"/>
+        <location filename="../client/desktop/settings_tab.ui" line="588"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>연결 시 자동으로 세션 녹화 시작</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="574"/>
+        <location filename="../client/desktop/settings_tab.ui" line="597"/>
         <source>Write path:</source>
         <translation>저장 경로:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="670"/>
+        <location filename="../client/desktop/settings_tab.ui" line="693"/>
         <source>MCP Connector</source>
         <translation>MCP 커넥터</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="676"/>
+        <location filename="../client/desktop/settings_tab.ui" line="699"/>
         <source>Allow the use of MCP</source>
         <translation>MCP 사용 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="683"/>
+        <location filename="../client/desktop/settings_tab.ui" line="706"/>
         <source>Add this command to the MCP servers of the AI application:</source>
         <translation>이 명령을 AI 응용 프로그램의 MCP 서버에 추가하십시오:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="700"/>
+        <location filename="../client/desktop/settings_tab.ui" line="723"/>
         <source>Copy</source>
         <translation>복사</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="716"/>
+        <location filename="../client/desktop/settings_tab.ui" line="739"/>
         <source>Allowed Session Types</source>
         <translation>허용된 세션 유형</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="730"/>
+        <location filename="../client/desktop/settings_tab.ui" line="753"/>
         <source>Actions</source>
         <translation>동작</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="736"/>
+        <location filename="../client/desktop/settings_tab.ui" line="759"/>
         <source>Confirm actions automatically</source>
         <translation>자동으로 동작 승인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="743"/>
+        <location filename="../client/desktop/settings_tab.ui" line="766"/>
         <source>Allow signing in with saved credentials</source>
         <translation>저장된 자격 증명으로 로그인 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="814"/>
+        <location filename="../client/desktop/settings_tab.ui" line="837"/>
         <location filename="../client/desktop/settings_tab.cc" line="145"/>
         <source>Update</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="820"/>
+        <location filename="../client/desktop/settings_tab.ui" line="843"/>
         <source>Check for updates on startup</source>
         <translation>시작할 때 업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="829"/>
+        <location filename="../client/desktop/settings_tab.ui" line="852"/>
         <source>Update channel:</source>
         <translation>업데이트 채널:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="843"/>
+        <location filename="../client/desktop/settings_tab.ui" line="866"/>
         <source>Update server:</source>
         <translation>업데이트 서버:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="857"/>
+        <location filename="../client/desktop/settings_tab.ui" line="880"/>
         <source>Public key:</source>
         <translation>공개 키:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="875"/>
+        <location filename="../client/desktop/settings_tab.ui" line="898"/>
         <source>Change Update Server...</source>
         <translation>업데이트 서버 변경...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="895"/>
+        <location filename="../client/desktop/settings_tab.ui" line="918"/>
         <source>Check for updates</source>
         <translation>업데이트 확인</translation>
     </message>
@@ -8399,122 +8409,142 @@ Credentials imported: %5</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="320"/>
+        <location filename="../client/desktop/settings_tab.cc" line="284"/>
+        <source>Automatic</source>
+        <translation>자동</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="285"/>
+        <source>Low</source>
+        <translation>낮음</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="286"/>
+        <source>Medium</source>
+        <translation>보통</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="287"/>
+        <source>High</source>
+        <translation>높음</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="328"/>
         <source>Stable</source>
         <translation>안정 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="321"/>
+        <location filename="../client/desktop/settings_tab.cc" line="329"/>
         <source>Beta</source>
         <translation>베타 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="322"/>
+        <location filename="../client/desktop/settings_tab.cc" line="330"/>
         <source>Alpha</source>
         <translation>알파 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="452"/>
+        <location filename="../client/desktop/settings_tab.cc" line="463"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>새 언어는 응용 프로그램을 다시 시작한 후에 적용됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="501"/>
-        <location filename="../client/desktop/settings_tab.cc" line="626"/>
+        <location filename="../client/desktop/settings_tab.cc" line="512"/>
+        <location filename="../client/desktop/settings_tab.cc" line="637"/>
         <source>Choose path</source>
         <translation>경로 선택</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="654"/>
+        <location filename="../client/desktop/settings_tab.cc" line="665"/>
         <source>The settings will be applied after the application is restarted.</source>
         <translation>설정은 응용 프로그램을 다시 시작한 후에 적용됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="701"/>
+        <location filename="../client/desktop/settings_tab.cc" line="712"/>
         <source>Change Master Password</source>
         <translation>마스터 암호 변경</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="703"/>
+        <location filename="../client/desktop/settings_tab.cc" line="714"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>현재 암호를 입력하고 새 암호를 선택하십시오.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="711"/>
+        <location filename="../client/desktop/settings_tab.cc" line="722"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="718"/>
+        <location filename="../client/desktop/settings_tab.cc" line="729"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="719"/>
+        <location filename="../client/desktop/settings_tab.cc" line="730"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="722"/>
+        <location filename="../client/desktop/settings_tab.cc" line="733"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="735"/>
+        <location filename="../client/desktop/settings_tab.cc" line="746"/>
         <source>Invalid current password.</source>
         <translation>현재 암호가 잘못되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="739"/>
+        <location filename="../client/desktop/settings_tab.cc" line="750"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>데이터베이스의 일부 레코드가 손상되었습니다. 해당 레코드를 수정하거나 삭제한 후 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="743"/>
+        <location filename="../client/desktop/settings_tab.cc" line="754"/>
         <source>Unable to change the password.</source>
         <translation>암호를 변경할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="776"/>
+        <location filename="../client/desktop/settings_tab.cc" line="787"/>
         <source>Unable to read the proxy settings.</source>
         <translation>프록시 서버 설정을 읽을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="890"/>
+        <location filename="../client/desktop/settings_tab.cc" line="901"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>데이터베이스의 키가 이 컴퓨터에 저장됩니다. 사용자 계정으로 실행되는 모든 프로그램이 응용 프로그램이 실행되고 있지 않을 때에도 이 키를 읽을 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="893"/>
+        <location filename="../client/desktop/settings_tab.cc" line="904"/>
         <source>Do you want to continue?</source>
         <translation>계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="904"/>
+        <location filename="../client/desktop/settings_tab.cc" line="915"/>
         <source>Unlock Automatically</source>
         <translation>자동 잠금 해제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="906"/>
+        <location filename="../client/desktop/settings_tab.cc" line="917"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>시작할 때 응용 프로그램의 잠금을 자동으로 해제하려면 마스터 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="916"/>
+        <location filename="../client/desktop/settings_tab.cc" line="927"/>
         <source>Invalid master password.</source>
         <translation>잘못된 마스터 암호입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="920"/>
+        <location filename="../client/desktop/settings_tab.cc" line="931"/>
         <source>Unable to unlock the database.</source>
         <translation>데이터베이스를 잠금 해제할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="934"/>
+        <location filename="../client/desktop/settings_tab.cc" line="945"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>자동 잠금 해제를 켤 수 없습니다.</translation>
     </message>
@@ -8732,71 +8762,96 @@ Credentials imported: %5</source>
         <translation>원격 입력 차단</translation>
     </message>
     <message>
+        <location filename="../client/android/settings_widget.cc" line="439"/>
+        <source>Quality</source>
+        <translation>화질</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="440"/>
+        <source>Automatic</source>
+        <translation>자동</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="441"/>
+        <source>Low</source>
+        <translation>낮음</translation>
+    </message>
+    <message>
         <location filename="../client/android/settings_widget.cc" line="442"/>
+        <source>Medium</source>
+        <translation>보통</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="443"/>
+        <source>High</source>
+        <translation>높음</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="456"/>
         <location filename="../host/android/settings_widget.cc" line="405"/>
         <source>Updates</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="446"/>
+        <location filename="../client/android/settings_widget.cc" line="460"/>
         <source>Check for updates on startup</source>
         <translation>시작할 때 업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="453"/>
+        <location filename="../client/android/settings_widget.cc" line="467"/>
         <location filename="../host/android/settings_widget.cc" line="408"/>
         <source>Update channel</source>
         <translation>업데이트 채널</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="454"/>
+        <location filename="../client/android/settings_widget.cc" line="468"/>
         <location filename="../host/android/settings_widget.cc" line="409"/>
         <source>Stable</source>
         <translation>안정 버전</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="455"/>
+        <location filename="../client/android/settings_widget.cc" line="469"/>
         <location filename="../host/android/settings_widget.cc" line="410"/>
         <source>Beta</source>
         <translation>베타 버전</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="456"/>
+        <location filename="../client/android/settings_widget.cc" line="470"/>
         <location filename="../host/android/settings_widget.cc" line="411"/>
         <source>Alpha</source>
         <translation>알파 버전</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="467"/>
+        <location filename="../client/android/settings_widget.cc" line="481"/>
         <location filename="../host/android/settings_widget.cc" line="425"/>
         <source>Update server</source>
         <translation>업데이트 서버</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="472"/>
+        <location filename="../client/android/settings_widget.cc" line="486"/>
         <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Public key</source>
         <translation>공개 키</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="478"/>
+        <location filename="../client/android/settings_widget.cc" line="492"/>
         <location filename="../host/android/settings_widget.cc" line="436"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>업데이트 서버를 지정하지 않으면 기본 서버가 사용됩니다. 공개 키를 지정하지 않으면 기본 제공 키가 사용됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="532"/>
+        <location filename="../client/android/settings_widget.cc" line="546"/>
         <location filename="../host/android/settings_widget.cc" line="490"/>
         <source>Check for updates</source>
         <translation>업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="556"/>
+        <location filename="../client/android/settings_widget.cc" line="570"/>
         <source>Enable biometric unlock</source>
         <translation>생체 인식 잠금 해제 사용</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="557"/>
+        <location filename="../client/android/settings_widget.cc" line="571"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>

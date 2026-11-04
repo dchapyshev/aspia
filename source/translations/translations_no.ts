@@ -2818,32 +2818,32 @@ Påloggingsinformasjon erstattet: %2</translation>
 <context>
     <name>DesktopWidget</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="633"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="638"/>
         <source>The session was paused by a remote user</source>
         <translation>Økten ble satt på pause av en ekstern bruker</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="636"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="641"/>
         <source>The session is temporarily unavailable</source>
         <translation>Økten er midlertidig utilgjengelig</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="639"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="644"/>
         <source>The session is permanently unavailable</source>
         <translation>Økten er permanent utilgjengelig</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="642"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="647"/>
         <source>Waiting for the remote user to confirm screen capture</source>
         <translation>Venter på at den eksterne brukeren bekrefter skjermfangst</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="645"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="650"/>
         <source>The remote device screen is locked</source>
         <translation>Skjermen på den eksterne enheten er låst</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="648"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="653"/>
         <source>Error while receiving video stream: %1</source>
         <translation>Feil ved mottak av videostrøm: %1</translation>
     </message>
@@ -2851,37 +2851,37 @@ Påloggingsinformasjon erstattet: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1123"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1139"/>
         <source>Save File</source>
         <translation>Lagre fil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1124"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1140"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-bilde (*.png);;BMP-bilde (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1155"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1171"/>
         <source>Could not save image</source>
         <translation>Kunne ikke lagre bildet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1405"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1424"/>
         <source>Invalid user name or password.</source>
         <translation>Feil brukernavn eller passord.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1408"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1427"/>
         <source>The password has expired.</source>
         <translation>Passordet er utløpt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1411"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1430"/>
         <source>The account is locked out.</source>
         <translation>Kontoen er sperret.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1414"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1433"/>
         <source>The account is disabled.</source>
         <translation>Kontoen er deaktivert.</translation>
     </message>
@@ -8277,98 +8277,108 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Skjerm</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="528"/>
+        <location filename="../client/desktop/settings_tab.ui" line="526"/>
         <source>Preferred resolution:</source>
         <translation>Foretrukket oppløsning:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="559"/>
+        <location filename="../client/desktop/settings_tab.ui" line="546"/>
+        <source>Quality:</source>
+        <translation>Kvalitet:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="566"/>
+        <source>Scale image to window size on the host side</source>
+        <translation>Skaler bildet til vindusstørrelsen på vertssiden</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="582"/>
         <source>Recording</source>
         <translation>Opptak</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="565"/>
+        <location filename="../client/desktop/settings_tab.ui" line="588"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>Start opptak av økter automatisk ved tilkobling</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="574"/>
+        <location filename="../client/desktop/settings_tab.ui" line="597"/>
         <source>Write path:</source>
         <translation>Skrivebane:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="670"/>
+        <location filename="../client/desktop/settings_tab.ui" line="693"/>
         <source>MCP Connector</source>
         <translation>MCP-kobling</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="676"/>
+        <location filename="../client/desktop/settings_tab.ui" line="699"/>
         <source>Allow the use of MCP</source>
         <translation>Tillat bruk av MCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="683"/>
+        <location filename="../client/desktop/settings_tab.ui" line="706"/>
         <source>Add this command to the MCP servers of the AI application:</source>
         <translation>Legg til denne kommandoen i listen over MCP-servere i KI-programmet:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="700"/>
+        <location filename="../client/desktop/settings_tab.ui" line="723"/>
         <source>Copy</source>
         <translation>Kopier</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="716"/>
+        <location filename="../client/desktop/settings_tab.ui" line="739"/>
         <source>Allowed Session Types</source>
         <translation>Tillatte økttyper</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="730"/>
+        <location filename="../client/desktop/settings_tab.ui" line="753"/>
         <source>Actions</source>
         <translation>Handlinger</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="736"/>
+        <location filename="../client/desktop/settings_tab.ui" line="759"/>
         <source>Confirm actions automatically</source>
         <translation>Bekreft handlinger automatisk</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="743"/>
+        <location filename="../client/desktop/settings_tab.ui" line="766"/>
         <source>Allow signing in with saved credentials</source>
         <translation>Tillat pålogging med lagret påloggingsinformasjon</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="814"/>
+        <location filename="../client/desktop/settings_tab.ui" line="837"/>
         <location filename="../client/desktop/settings_tab.cc" line="145"/>
         <source>Update</source>
         <translation>Oppdater</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="820"/>
+        <location filename="../client/desktop/settings_tab.ui" line="843"/>
         <source>Check for updates on startup</source>
         <translation>Se etter oppdateringer ved oppstart</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="829"/>
+        <location filename="../client/desktop/settings_tab.ui" line="852"/>
         <source>Update channel:</source>
         <translation>Oppdateringskanal:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="843"/>
+        <location filename="../client/desktop/settings_tab.ui" line="866"/>
         <source>Update server:</source>
         <translation>Oppdateringsserver:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="857"/>
+        <location filename="../client/desktop/settings_tab.ui" line="880"/>
         <source>Public key:</source>
         <translation>Offentlig nøkkel:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="875"/>
+        <location filename="../client/desktop/settings_tab.ui" line="898"/>
         <source>Change Update Server...</source>
         <translation>Endre oppdateringsserver...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="895"/>
+        <location filename="../client/desktop/settings_tab.ui" line="918"/>
         <source>Check for updates</source>
         <translation>Se etter oppdateringer</translation>
     </message>
@@ -8448,48 +8458,68 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="320"/>
+        <location filename="../client/desktop/settings_tab.cc" line="284"/>
+        <source>Automatic</source>
+        <translation>Automatisk</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="285"/>
+        <source>Low</source>
+        <translation>Lav</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="286"/>
+        <source>Medium</source>
+        <translation>Middels</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="287"/>
+        <source>High</source>
+        <translation>Høy</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="328"/>
         <source>Stable</source>
         <translation>Stabil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="321"/>
+        <location filename="../client/desktop/settings_tab.cc" line="329"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="322"/>
+        <location filename="../client/desktop/settings_tab.cc" line="330"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="452"/>
+        <location filename="../client/desktop/settings_tab.cc" line="463"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Det nye språket tas i bruk etter at programmet er startet på nytt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="501"/>
-        <location filename="../client/desktop/settings_tab.cc" line="626"/>
+        <location filename="../client/desktop/settings_tab.cc" line="512"/>
+        <location filename="../client/desktop/settings_tab.cc" line="637"/>
         <source>Choose path</source>
         <translation>Velg bane</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="654"/>
+        <location filename="../client/desktop/settings_tab.cc" line="665"/>
         <source>The settings will be applied after the application is restarted.</source>
         <translation>Innstillingene tas i bruk etter at programmet er startet på nytt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="701"/>
+        <location filename="../client/desktop/settings_tab.cc" line="712"/>
         <source>Change Master Password</source>
         <translation>Endre hovedpassord</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="703"/>
+        <location filename="../client/desktop/settings_tab.cc" line="714"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Skriv inn gjeldende passord og velg et nytt.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="711"/>
+        <location filename="../client/desktop/settings_tab.cc" line="722"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
@@ -8497,12 +8527,12 @@ Påloggingsinformasjon importert: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="718"/>
+        <location filename="../client/desktop/settings_tab.cc" line="729"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Passordet du skrev inn, oppfyller ikke sikkerhetskravene!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="719"/>
+        <location filename="../client/desktop/settings_tab.cc" line="730"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet må inneholde små og store bokstaver samt tall, og kan ikke være kortere enn %n tegn.</numerusform>
@@ -8510,62 +8540,62 @@ Påloggingsinformasjon importert: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="722"/>
+        <location filename="../client/desktop/settings_tab.cc" line="733"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vil du skrive inn et annet passord?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="735"/>
+        <location filename="../client/desktop/settings_tab.cc" line="746"/>
         <source>Invalid current password.</source>
         <translation>Ugyldig gjeldende passord.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="739"/>
+        <location filename="../client/desktop/settings_tab.cc" line="750"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Enkelte oppføringer i databasen er skadet. Reparer eller slett dem og prøv igjen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="743"/>
+        <location filename="../client/desktop/settings_tab.cc" line="754"/>
         <source>Unable to change the password.</source>
         <translation>Kan ikke endre passordet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="776"/>
+        <location filename="../client/desktop/settings_tab.cc" line="787"/>
         <source>Unable to read the proxy settings.</source>
         <translation>Kan ikke lese proxyserverinnstillingene.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="890"/>
+        <location filename="../client/desktop/settings_tab.cc" line="901"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>Nøkkelen til databasen blir lagret på denne datamaskinen. Alle programmer som kjører under kontoen din, vil kunne lese den, selv når programmet ikke kjører.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="893"/>
+        <location filename="../client/desktop/settings_tab.cc" line="904"/>
         <source>Do you want to continue?</source>
         <translation>Vil du fortsette?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="904"/>
+        <location filename="../client/desktop/settings_tab.cc" line="915"/>
         <source>Unlock Automatically</source>
         <translation>Lås opp automatisk</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="906"/>
+        <location filename="../client/desktop/settings_tab.cc" line="917"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>Skriv inn hovedpassordet for å låse opp programmet automatisk ved oppstart.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="916"/>
+        <location filename="../client/desktop/settings_tab.cc" line="927"/>
         <source>Invalid master password.</source>
         <translation>Ugyldig hovedpassord.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="920"/>
+        <location filename="../client/desktop/settings_tab.cc" line="931"/>
         <source>Unable to unlock the database.</source>
         <translation>Kan ikke låse opp databasen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="934"/>
+        <location filename="../client/desktop/settings_tab.cc" line="945"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>Kan ikke slå på automatisk opplåsing.</translation>
     </message>
@@ -8783,71 +8813,96 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Blokker ekstern inndata</translation>
     </message>
     <message>
+        <location filename="../client/android/settings_widget.cc" line="439"/>
+        <source>Quality</source>
+        <translation>Kvalitet</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="440"/>
+        <source>Automatic</source>
+        <translation>Automatisk</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="441"/>
+        <source>Low</source>
+        <translation>Lav</translation>
+    </message>
+    <message>
         <location filename="../client/android/settings_widget.cc" line="442"/>
+        <source>Medium</source>
+        <translation>Middels</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="443"/>
+        <source>High</source>
+        <translation>Høy</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="456"/>
         <location filename="../host/android/settings_widget.cc" line="405"/>
         <source>Updates</source>
         <translation>Oppdateringer</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="446"/>
+        <location filename="../client/android/settings_widget.cc" line="460"/>
         <source>Check for updates on startup</source>
         <translation>Se etter oppdateringer ved oppstart</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="453"/>
+        <location filename="../client/android/settings_widget.cc" line="467"/>
         <location filename="../host/android/settings_widget.cc" line="408"/>
         <source>Update channel</source>
         <translation>Oppdateringskanal</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="454"/>
+        <location filename="../client/android/settings_widget.cc" line="468"/>
         <location filename="../host/android/settings_widget.cc" line="409"/>
         <source>Stable</source>
         <translation>Stabil</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="455"/>
+        <location filename="../client/android/settings_widget.cc" line="469"/>
         <location filename="../host/android/settings_widget.cc" line="410"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="456"/>
+        <location filename="../client/android/settings_widget.cc" line="470"/>
         <location filename="../host/android/settings_widget.cc" line="411"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="467"/>
+        <location filename="../client/android/settings_widget.cc" line="481"/>
         <location filename="../host/android/settings_widget.cc" line="425"/>
         <source>Update server</source>
         <translation>Oppdateringsserver</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="472"/>
+        <location filename="../client/android/settings_widget.cc" line="486"/>
         <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Public key</source>
         <translation>Offentlig nøkkel</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="478"/>
+        <location filename="../client/android/settings_widget.cc" line="492"/>
         <location filename="../host/android/settings_widget.cc" line="436"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>Hvis oppdateringsserveren ikke er angitt, brukes standardserveren. Hvis den offentlige nøkkelen ikke er angitt, brukes den innebygde nøkkelen.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="532"/>
+        <location filename="../client/android/settings_widget.cc" line="546"/>
         <location filename="../host/android/settings_widget.cc" line="490"/>
         <source>Check for updates</source>
         <translation>Se etter oppdateringer</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="556"/>
+        <location filename="../client/android/settings_widget.cc" line="570"/>
         <source>Enable biometric unlock</source>
         <translation>Aktiver biometrisk opplåsing</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="557"/>
+        <location filename="../client/android/settings_widget.cc" line="571"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
