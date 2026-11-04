@@ -434,5 +434,6 @@ proto::control::Config defaultDesktopConfig()
     config.set_wallpaper(false);
     config.set_block_input(false);
     config.set_lock_at_disconnect(false);
+    config.set_disable_preferred_size(false);
     return config;
 }

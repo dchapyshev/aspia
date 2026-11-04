@@ -67,16 +67,17 @@ message SessionsRequest
 
 message Config
 {
-    Size preferred_resolution = 1;
-    Size preferred_size       = 2;
-    bool audio                = 3;
-    bool cursor_shape         = 4;
-    bool cursor_position      = 5;
-    bool clipboard            = 6;
-    bool effects              = 7;
-    bool wallpaper            = 8;
-    bool block_input          = 9;
-    bool lock_at_disconnect   = 10;
+    Size preferred_resolution   = 1;
+    Size preferred_size         = 2;
+    bool audio                  = 3;
+    bool cursor_shape           = 4;
+    bool cursor_position        = 5;
+    bool clipboard              = 6;
+    bool effects                = 7;
+    bool wallpaper              = 8;
+    bool block_input            = 9;
+    bool lock_at_disconnect     = 10;
+    bool disable_preferred_size = 11;
 }
 
 message Feedback

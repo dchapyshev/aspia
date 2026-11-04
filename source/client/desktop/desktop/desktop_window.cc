@@ -253,6 +253,8 @@ void DesktopWindow::applySettings()
 
     Database& db = Database::instance();
 
+    const bool had_preferred_size = !desktop_config_.disable_preferred_size();
+
     desktop_config_ = db.desktopConfig();
     onDesktopConfigChanged(desktop_config_);
 
@@ -261,6 +263,11 @@ void DesktopWindow::applySettings()
         desktop_->setCursorShape(QPixmap(), QPoint());
 
     desktop_->enableKeyCombinations(db.isSendKeyCombinationsEnabled());
+
+    if (desktop_config_.disable_preferred_size())
+        resize_timer_->stop();
+    else if (!had_preferred_size && !screen_size_.isEmpty())
+        onResizeTimer();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1191,6 +1198,9 @@ void DesktopWindow::onScaleDesktop()
     }
 
     desktop_->resize(source_size.scaled(target_size, Qt::KeepAspectRatio));
+
+    if (desktop_config_.disable_preferred_size())
+        return;
 
     if (resize_timer_->isActive())
     {

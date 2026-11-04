@@ -281,6 +281,8 @@ SettingsTab::SettingsTab(QWidget* parent)
         ui->combo_resolution->setCurrentIndex(index);
     }
 
+    ui->checkbox_preferred_size->setChecked(!desktop_config.disable_preferred_size());
+
     ui->checkbox_record_autostart->setChecked(db.isRecordSessionsEnabled());
     ui->edit_record_dir->setText(db.recordingPath());
 
@@ -368,6 +370,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->checkbox_send_key_combinations, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->combo_resolution, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onDesktopFeatureChanged);
+    connect(ui->checkbox_preferred_size, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
 
     connect(ui->checkbox_record_autostart, &QCheckBox::toggled, this, &SettingsTab::onRecordAutostartChanged);
     connect(ui->edit_record_dir, &QLineEdit::editingFinished, this, &SettingsTab::onRecordingPathChanged);
@@ -951,6 +954,7 @@ void SettingsTab::saveDesktopConfig()
     desktop_config.set_wallpaper(!ui->checkbox_desktop_wallpaper->isChecked());
     desktop_config.set_lock_at_disconnect(ui->checkbox_lock_at_disconnect->isChecked());
     desktop_config.set_block_input(ui->checkbox_block_remote_input->isChecked());
+    desktop_config.set_disable_preferred_size(!ui->checkbox_preferred_size->isChecked());
 
     QSize preferred = ui->combo_resolution->currentData().toSize();
     if (preferred.isValid())

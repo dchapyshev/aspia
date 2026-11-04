@@ -544,6 +544,13 @@
                 </item>
                </layout>
               </item>
+              <item>
+               <widget class="QCheckBox" name="checkbox_preferred_size">
+                <property name="text">
+                 <string>Scale image to window size on the host side</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>

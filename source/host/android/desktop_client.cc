@@ -177,6 +177,12 @@ void DesktopClient::handleControl(const QByteArray& buffer)
     {
         const proto::control::Config& config = message.config();
 
+        if (config.disable_preferred_size() && !preferred_size_.isEmpty())
+        {
+            preferred_size_ = QSize();
+            emit sig_preferredSizeChanged();
+        }
+
         // The initial preferred size arrives in the config; later PreferredSize messages take over.
         if (preferred_size_.isEmpty() && config.has_preferred_size() &&
             config.preferred_size().width() > 0 && config.preferred_size().width() <= kMaxScreenSize &&

@@ -752,7 +752,7 @@ void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType sess
             // the very first frame. Pass the initial preferred size in the config so the host
             // scales the desktop to fit the tab right away, instead of streaming the full
             // resolution until the first resize event.
-            if (!detached)
+            if (!detached && !desktop_config.disable_preferred_size())
             {
                 if (QWidget* content = ui->tabs->currentWidget())
                 {
