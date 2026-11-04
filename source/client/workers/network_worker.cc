@@ -214,7 +214,10 @@ void NetworkWorker::onTimer(TimePoint now)
     rate->set_bytes(static_cast<quint64>(bytes));
     rate->set_interval_ms(static_cast<quint32>(interval.count()));
 
-    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
+    if (udp_ready_ && session_state_->hostVersion() >= kVersion_3_3_0)
+        udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
+    else
+        tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

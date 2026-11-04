@@ -447,6 +447,8 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 
     if (message.has_bandwidth_probe_ack())
         onBandwidthProbeAck(message.bandwidth_probe_ack());
+    else if (message.has_receive_rate())
+        onReceiveRate(message.receive_rate());
     else
         CLOG(WARNING) << "Unhandled control message";
 }

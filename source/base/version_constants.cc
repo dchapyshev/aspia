@@ -23,3 +23,4 @@ const QVersionNumber kMinimumSupportedVersion(3, 0, 0);
 const QVersionNumber kVersion_3_0_0(3, 0, 0);
 const QVersionNumber kVersion_3_0_34(3, 0, 34);
 const QVersionNumber kVersion_3_2_0(3, 2, 0);
+const QVersionNumber kVersion_3_3_0(3, 3, 0);
