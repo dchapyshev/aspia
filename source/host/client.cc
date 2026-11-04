@@ -87,22 +87,11 @@ void Client::start(const QString& stun_host, quint16 stun_port)
     stun_host_ = stun_host;
     stun_port_ = stun_port;
 
-    CLOG(INFO) << "Starting (type:" << tcp_channel_->type() << "stun:" << stun_host << ":"
-               << stun_port << "features:" << features_ << ")";
+    CLOG(INFO) << "Starting (type:" << tcp_channel_->type() << "stun:" << stun_host << ":" << stun_port << ")";
 
     onStart();
 
-    if (features_ & FEATURE_UDP)
-        connectToUdp();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::setFeature(Feature feature, bool enable)
-{
-    if (enable)
-        features_ |= feature;
-    else
-        features_ &= ~feature;
+    connectToUdp();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -678,8 +678,6 @@ void ServiceWorker::startClient(const PendingConfirmation& pending)
         DesktopClient* client = new DesktopClient(tcp_channel, this);
         client_to_start = client;
 
-        client->setFeature(Client::FEATURE_UDP, true);
-
         connect(client, &Client::sig_finished, this, &ServiceWorker::onClientFinished);
 
         connect(client, &Client::sig_started, desktop_manager_, &DesktopManager::onClientStarted);
@@ -720,8 +718,6 @@ void ServiceWorker::startClient(const PendingConfirmation& pending)
     {
         FileClient* client = new FileClient(tcp_channel, user_session_->sessionId(), this);
         client_to_start = client;
-
-        client->setFeature(Client::FEATURE_UDP, true);
 
         connect(client, &Client::sig_finished, this, &ServiceWorker::onClientFinished);
         connect(client, &Client::sig_started, user_session_, &UserSession::onClientStarted);

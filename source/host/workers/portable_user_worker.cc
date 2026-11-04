@@ -208,8 +208,6 @@ void PortableUserWorker::startClient(TcpChannel* tcp_channel, const QString& stu
 
         const quint32 client_id = client->clientId();
 
-        client->setFeature(Client::FEATURE_UDP, true);
-
         connect(client, &Client::sig_finished, this, &PortableUserWorker::onClientFinished);
 
         connect(client, &Client::sig_finished, this, [this, client_id]()
@@ -237,8 +235,6 @@ void PortableUserWorker::startClient(TcpChannel* tcp_channel, const QString& stu
     {
         PortableFileClient* client = new PortableFileClient(tcp_channel, this);
         client_to_start = client;
-
-        client->setFeature(Client::FEATURE_UDP, true);
 
         connect(client, &Client::sig_finished, this, &PortableUserWorker::onClientFinished);
         connect(client, &Client::sig_started, user_session_, &PortableUserSession::onClientStarted);

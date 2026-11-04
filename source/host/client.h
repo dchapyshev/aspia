@@ -52,15 +52,7 @@ public:
     Client(TcpChannel* tcp_channel, QObject* parent);
     virtual ~Client();
 
-    enum Feature
-    {
-        FEATURE_NONE = 0,
-        FEATURE_UDP  = 1
-    };
-    Q_DECLARE_FLAGS(Features, Feature)
-
     void start(const QString& stun_host, quint16 stun_port);
-    void setFeature(Feature feature, bool enable);
 
     // Tears the client down, emitting sig_finished() exactly once. Idempotent: safe to call from any
     // path and any number of times. This is the ONLY place sig_finished() is emitted - never emit that
@@ -133,7 +125,6 @@ private:
     void setUdpState(const Location& location, UdpState state);
 
     bool finished_emitted_ = false;
-    Features features_ = FEATURE_NONE;
     TcpChannel* tcp_channel_ = nullptr;
     UdpState udp_state_ = UdpState::DISCONNECTED;
     ScopedQPointer<UdpChannel> udp_channel_;
@@ -158,7 +149,5 @@ private:
 
     Q_DISABLE_COPY_MOVE(Client)
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Client::Features)
 
 #endif // HOST_CLIENT_H

@@ -554,8 +554,6 @@ void ServerWorker::startClient(TcpChannel* tcp_channel, const QString& stun_host
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP)
     {
         DesktopClient* desktop_client = new DesktopClient(channel.release(), this);
-        desktop_client->setFeature(Client::FEATURE_UDP, true);
-
         // Track the client for the connected-clients list; the agent owns and deletes it.
         connect(desktop_client, &Client::sig_started, this, &ServerWorker::onClientStarted);
         connect(desktop_client, &Client::sig_finished, this, &ServerWorker::onClientFinished);
@@ -572,8 +570,6 @@ void ServerWorker::startClient(TcpChannel* tcp_channel, const QString& stun_host
     }
 
     FileClient* file_client = new FileClient(channel.release(), this);
-    file_client->setFeature(Client::FEATURE_UDP, true);
-
     connect(file_client, &Client::sig_started, this, &ServerWorker::onClientStarted);
     connect(file_client, &Client::sig_finished, this, &ServerWorker::onClientFinished);
 
