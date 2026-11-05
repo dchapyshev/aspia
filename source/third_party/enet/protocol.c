@@ -321,6 +321,8 @@ enet_protocol_remove_sent_reliable_command (ENetPeer * peer, enet_uint16 reliabl
        if (wasSent)
          peer -> reliableDataInTransit -= outgoingCommand -> fragmentLength;
 
+       peer -> acknowledgedBytes += outgoingCommand -> fragmentLength;
+
        -- outgoingCommand -> packet -> referenceCount;
 
        if (outgoingCommand -> packet -> referenceCount == 0)
@@ -1562,6 +1564,9 @@ enet_protocol_check_outgoing_commands (ENetHost * host, ENetPeer * peer, ENetLis
           host -> headerFlags |= ENET_PROTOCOL_HEADER_FLAG_SENT_TIME;
 
           peer -> reliableDataInTransit += outgoingCommand -> fragmentLength;
+
+          if (outgoingCommand -> sendAttempts == 1)
+            peer -> firstSentBytes += outgoingCommand -> fragmentLength;
        }
        else
        {

@@ -36,9 +36,6 @@ public:
 
     virtual void start() = 0;
 
-    // The session traffic moved to another path, whose delay has to be learned anew.
-    virtual void resetPath() = 0;
-
     // Returns true when a probe has to be sent now, a probe interval after the previous one. Only one
     // probe is in flight at a time. The session asks on every slice of the padding before sending
     // it, so the probe waits behind the queue of the path and not behind a slice.
@@ -54,10 +51,6 @@ public:
 
     virtual qint64 bandwidth() const = 0;
     virtual proto::desktop::Overflow::State overflowState(TimePoint now) const = 0;
-
-    // Bytes in flight that fill the path at the bandwidth and build the queue of a step over the
-    // capacity. |path_delay| is the round trip of the path until a probe has measured it.
-    virtual qint64 windowSize(MilliSeconds path_delay) const = 0;
 
 private:
     Q_DISABLE_COPY_MOVE(BandwidthController)

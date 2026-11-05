@@ -102,6 +102,10 @@ public:
     int speedRx();
     int speedTx();
     int roundTripTime() const;
+    int lowestRoundTripTime() const;
+    qint64 transmittedBytes() const;
+    qint64 acknowledgedBytes() const;
+    qint64 inFlightBytes() const;
     void logStatistics() const;
 
 signals:

@@ -311,6 +311,8 @@ typedef struct _ENetPeer
    enet_uint32   mtu;
    enet_uint32   windowSize;
    enet_uint32   reliableDataInTransit;
+   unsigned long long acknowledgedBytes;
+   unsigned long long firstSentBytes;
    enet_uint16   outgoingReliableSequenceNumber;
    ENetList      acknowledgements;
    ENetList      sentReliableCommands;

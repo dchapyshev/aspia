@@ -33,7 +33,6 @@ public:
 
     // BandwidthController implementation.
     void start() final;
-    void resetPath() final;
     bool startProbe(TimePoint now) final;
     void finishProbe(TimePoint now) final;
     void onBytesSent(qint64 bytes) final;
@@ -41,7 +40,6 @@ public:
     void tick(TimePoint now) final;
     qint64 bandwidth() const final { return bandwidth_; }
     proto::desktop::Overflow::State overflowState(TimePoint now) const final;
-    qint64 windowSize(MilliSeconds path_delay) const final;
 
 private:
     void startTest(TimePoint now);
@@ -51,10 +49,7 @@ private:
     void finishTest(double interval, bool steady);
     void setBandwidth(double bandwidth);
 
-    // The bandwidth, and the one before a stall. The window holds the latter until the capacity
-    // is measured.
     qint64 bandwidth_ = 0;
-    qint64 stall_rate_ = 0;
 
     // The rate the path has to carry until the next probe to become the bandwidth, zero between
     // the tests, and the one it had to carry until the probe in flight.

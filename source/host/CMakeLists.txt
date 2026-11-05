@@ -25,6 +25,8 @@ if (ANDROID)
         bandwidth_controller.h
         bandwidth_controller_tcp.cc
         bandwidth_controller_tcp.h
+        bandwidth_controller_udp.cc
+        bandwidth_controller_udp.h
         client.cc
         client.h
         database.cc
@@ -87,6 +89,8 @@ list(APPEND SOURCE_HOST_CORE
     bandwidth_controller.h
     bandwidth_controller_tcp.cc
     bandwidth_controller_tcp.h
+    bandwidth_controller_udp.cc
+    bandwidth_controller_udp.h
     capture_scheduler.cc
     capture_scheduler.h
     chat_client.cc
@@ -163,6 +167,7 @@ list(APPEND SOURCE_HOST
 list(APPEND SOURCE_HOST_TESTS
     audio_silence_detector_unittest.cc
     bandwidth_controller_tcp_unittest.cc
+    bandwidth_controller_udp_unittest.cc
     bandwidth_scenario_unittest.cc
     capture_scheduler_unittest.cc
     database_unittest.cc

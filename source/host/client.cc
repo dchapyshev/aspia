@@ -26,6 +26,7 @@
 #include "base/net/udp_channel.h"
 #include "base/threading/worker.h"
 #include "host/bandwidth_controller_tcp.h"
+#include "host/bandwidth_controller_udp.h"
 #include "host/udp_attempt.h"
 #include "proto/peer.h"
 
@@ -264,6 +265,20 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
 void Client::onSliceTimer()
 {
     const TimePoint now = Clock::now();
+
+    auto* udp_controller = dynamic_cast<BandwidthControllerUdp*>(bandwidth_controller_.get());
+    if (udp_controller)
+    {
+        BandwidthControllerUdp::Counters counters;
+        counters.sent = udp_channel_->totalTx();
+        counters.transmitted = udp_channel_->transmittedBytes();
+        counters.delivered = udp_channel_->acknowledgedBytes();
+        counters.in_flight = udp_channel_->inFlightBytes();
+        counters.round_trip = MilliSeconds(udp_channel_->lowestRoundTripTime());
+
+        udp_controller->onCounters(now, counters);
+        checkBandwidth();
+    }
 
     if (bandwidth_controller_->startProbe(now))
         sendDelayProbe();
@@ -532,7 +547,9 @@ void Client::checkBandwidth()
         tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
 
         setUdpState(FROM_HERE, UdpState::READY);
-        bandwidth_controller_->resetPath();
+
+        bandwidth_controller_ =
+            std::make_unique<BandwidthControllerUdp>(bandwidth_controller_->bandwidth());
 
         if (bandwidth_controller_->startProbe(Clock::now()))
             sendDelayProbe();
@@ -545,10 +562,11 @@ void Client::checkBandwidth()
 
     publishBandwidth(bandwidth_controller_->bandwidth());
 
-    if (udp_channel_)
+    auto* udp_controller = dynamic_cast<BandwidthControllerUdp*>(bandwidth_controller_.get());
+    if (udp_controller)
     {
         udp_channel_->setWindowSize(
-            bandwidth_controller_->windowSize(MilliSeconds(udp_channel_->roundTripTime())));
+            udp_controller->windowSize(MilliSeconds(udp_channel_->roundTripTime())));
     }
 }
 

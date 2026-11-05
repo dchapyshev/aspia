@@ -323,10 +323,6 @@ TEST(BandwidthControllerTcpTest, StandingExcessOfAnIdlePathBecomesTheBase)
     probe(&controller, &now, kBaseDelay + MilliSeconds(200), Traffic::NONE);
     EXPECT_EQ(controller.overflowState(now), proto::desktop::Overflow::STATE_NONE);
     EXPECT_EQ(controller.bandwidth(), kStartBandwidth);
-
-    // The window holds the round trip of the new base delay.
-    EXPECT_EQ(controller.windowSize(MilliSeconds(100)),
-              scaled(scaled(kStartBandwidth, kGrowth), 0.6));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -340,8 +336,6 @@ TEST(BandwidthControllerTcpTest, RetransmittedIdleProbeKeepsTheBase)
     probe(&controller, &now, kBaseDelay + kRetransmission, Traffic::NONE);
     probe(&controller, &now, kBaseDelay, Traffic::NONE);
     EXPECT_EQ(controller.overflowState(now), proto::desktop::Overflow::STATE_NONE);
-    EXPECT_EQ(controller.windowSize(MilliSeconds(100)),
-              scaled(scaled(kStartBandwidth, kGrowth), 0.4));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -553,104 +547,6 @@ TEST(BandwidthControllerTcpTest, OverflowStateCountsAStalledProbe)
               proto::desktop::Overflow::STATE_NONE);
     EXPECT_EQ(controller.overflowState(now + kBaseDelay + MilliSeconds(1100)),
               proto::desktop::Overflow::STATE_CRITICAL);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTcpTest, WindowSizeFollowsTheBandwidthAndDelay)
-{
-    BandwidthControllerTcp controller;
-    TimePoint now = TimePoint() + Hours(1);
-    controller.start();
-
-    // The window holds 100 ms of queue over the delay of the path. Until a probe has measured the
-    // delay, the one of the transport is taken. Under a test the window is that of the test.
-    EXPECT_EQ(controller.windowSize(MilliSeconds(100)), scaled(kStartBandwidth, 0.2));
-
-    probe(&controller, &now, kBaseDelay, Traffic::NONE);
-    EXPECT_EQ(controller.windowSize(MilliSeconds(100)),
-              scaled(scaled(kStartBandwidth, kGrowth), 0.4));
-}
-
-//--------------------------------------------------------------------------------------------------
-// The bandwidth lowered to drain a queue does not shrink the window, or the queue would not drain.
-TEST(BandwidthControllerTcpTest, WindowSizeStaysAtTheCapacityUnderTheDrain)
-{
-    BandwidthControllerTcp controller;
-    TimePoint now = TimePoint() + Hours(1);
-    controller.start();
-
-    probe(&controller, &now, kBaseDelay, Traffic::NONE);
-    probe(&controller, &now, kBaseDelay + MilliSeconds(1200), Traffic::FULL);
-    ASSERT_EQ(controller.bandwidth(), kMinBandwidth);
-
-    const qint64 capacity = std::llround(kStartBandwidth / 2.2);
-    EXPECT_EQ(controller.windowSize(MilliSeconds(100)), scaled(capacity, 0.4));
-}
-
-//--------------------------------------------------------------------------------------------------
-// A stall before the capacity is measured does not shrink the window either.
-TEST(BandwidthControllerTcpTest, WindowSizeStaysAtTheBandwidthUnderAStall)
-{
-    BandwidthControllerTcp controller;
-    TimePoint now = TimePoint() + Hours(1);
-    controller.start();
-    probe(&controller, &now, kBaseDelay, Traffic::NONE);
-
-    controller.onBytesSent(controller.bandwidth());
-    ASSERT_TRUE(controller.startProbe(now));
-    controller.tick(now + kBaseDelay + MilliSeconds(1000));
-    ASSERT_EQ(controller.bandwidth(), kMinBandwidth);
-    EXPECT_EQ(controller.windowSize(MilliSeconds(100)), scaled(kStartBandwidth, 0.4));
-
-    // The late ack measures the capacity, and the window follows it.
-    controller.finishProbe(now + kBaseDelay + MilliSeconds(1480));
-    const qint64 capacity = std::llround(kStartBandwidth / 2.48);
-    EXPECT_NEAR(controller.windowSize(MilliSeconds(100)), scaled(capacity, 0.4), 1);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTcpTest, ResetPathForgetsBaseDelay)
-{
-    BandwidthControllerTcp controller;
-    TimePoint now = TimePoint() + Hours(1);
-    controller.start();
-    probe(&controller, &now, kBaseDelay, Traffic::NONE);
-
-    // The new path is slower. Its delay is not an excess over the delay of the old one.
-    controller.resetPath();
-    probe(&controller, &now, kBaseDelay * 2, Traffic::NONE);
-    probe(&controller, &now, kBaseDelay * 2, Traffic::NONE);
-    probe(&controller, &now, kBaseDelay * 2, Traffic::NONE);
-    EXPECT_EQ(controller.bandwidth(), kStartBandwidth);
-    EXPECT_EQ(controller.overflowState(now), proto::desktop::Overflow::STATE_NONE);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTcpTest, ResetPathStartsFromTheCapacity)
-{
-    BandwidthControllerTcp controller;
-    TimePoint now = TimePoint() + Hours(1);
-    Path path(kCapacity);
-    startAtCapacity(&controller, &now, &path);
-
-    controller.resetPath();
-    EXPECT_NEAR(controller.bandwidth(), kCapacity, kCapacityError);
-    EXPECT_EQ(controller.paddingDue(now), 0);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTcpTest, ResetPathWithoutCapacityStartsOver)
-{
-    BandwidthControllerTcp controller;
-    TimePoint now = TimePoint() + Hours(1);
-    controller.start();
-
-    for (int i = 0; i < 3; ++i)
-        probe(&controller, &now, kBaseDelay);
-    ASSERT_GT(controller.bandwidth(), kStartBandwidth);
-
-    controller.resetPath();
-    EXPECT_EQ(controller.bandwidth(), kStartBandwidth);
 }
 
 //--------------------------------------------------------------------------------------------------

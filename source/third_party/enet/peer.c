@@ -422,6 +422,8 @@ enet_peer_reset (ENetPeer * peer)
     peer -> roundTripTimeVariance = 0;
     peer -> mtu = peer -> host -> mtu;
     peer -> reliableDataInTransit = 0;
+    peer -> acknowledgedBytes = 0;
+    peer -> firstSentBytes = 0;
     peer -> outgoingReliableSequenceNumber = 0;
     peer -> windowSize = ENET_PROTOCOL_MAXIMUM_WINDOW_SIZE;
     peer -> incomingUnsequencedGroup = 0;

@@ -92,33 +92,6 @@ void BandwidthControllerTcp::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthControllerTcp::resetPath()
-{
-    // The queue of the old path does not hold the bandwidth down on the new one.
-    if (bandwidth_)
-        setBandwidth(capacity_ ? capacity_ : kStartBandwidth);
-
-    stall_rate_ = 0;
-    capacity_ = 0;
-    capacity_time_.reset();
-    capacity_test_interval_ = Seconds::zero();
-    test_rate_ = 0;
-    probe_rate_ = 0;
-    queue_ = MilliSeconds::zero();
-    expected_excess_ = MilliSeconds::zero();
-    trusted_time_.reset();
-    trusted_queue_ = MilliSeconds::zero();
-    trusted_bytes_ = 0;
-    suspect_ = false;
-    base_delay_.reset();
-    last_excess_ = MilliSeconds::zero();
-    probe_send_time_.reset();
-    previous_probe_time_.reset();
-    probe_bytes_ = 0;
-    sent_bytes_ = 0;
-}
-
-//--------------------------------------------------------------------------------------------------
 bool BandwidthControllerTcp::startProbe(TimePoint now)
 {
     if (!bandwidth_ || probe_send_time_.has_value())
@@ -296,7 +269,6 @@ void BandwidthControllerTcp::tick(TimePoint now)
     {
         LOG(INFO) << "Probe stalled";
         test_rate_ = 0;
-        stall_rate_ = std::max(stall_rate_, bandwidth_);
         setBandwidth(0);
     }
 }
@@ -320,15 +292,6 @@ proto::desktop::Overflow::State BandwidthControllerTcp::overflowState(TimePoint 
         return proto::desktop::Overflow::STATE_WARNING;
 
     return proto::desktop::Overflow::STATE_NONE;
-}
-
-//--------------------------------------------------------------------------------------------------
-// The window bounds the data in the path, not the drain of the queue, so a bandwidth lowered to
-// drain it does not shrink the window under the rate the path carried.
-qint64 BandwidthControllerTcp::windowSize(MilliSeconds path_delay) const
-{
-    const qint64 rate = std::max({ bandwidth_, test_rate_, capacity_, stall_rate_ });
-    return std::llround(rate * toSeconds(base_delay_.value_or(path_delay) + kCapacityMargin));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -365,7 +328,6 @@ void BandwidthControllerTcp::measureCapacity(double capacity, MilliSeconds queue
                                      kCapacityTestInterval;
 
     capacity_ = std::llround(capacity);
-    stall_rate_ = 0;
     drainQueue(queue, now);
 }
 

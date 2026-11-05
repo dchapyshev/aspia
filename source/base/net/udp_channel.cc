@@ -513,6 +513,42 @@ int UdpChannel::roundTripTime() const
 }
 
 //--------------------------------------------------------------------------------------------------
+int UdpChannel::lowestRoundTripTime() const
+{
+    if (!peer_ || !connected_)
+        return 0;
+
+    return static_cast<int>(std::min(peer_->lastRoundTripTime, peer_->lowestRoundTripTime));
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 UdpChannel::transmittedBytes() const
+{
+    if (!peer_)
+        return 0;
+
+    return static_cast<qint64>(peer_->firstSentBytes);
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 UdpChannel::acknowledgedBytes() const
+{
+    if (!peer_)
+        return 0;
+
+    return static_cast<qint64>(peer_->acknowledgedBytes);
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 UdpChannel::inFlightBytes() const
+{
+    if (!peer_)
+        return 0;
+
+    return static_cast<qint64>(peer_->reliableDataInTransit);
+}
+
+//--------------------------------------------------------------------------------------------------
 void UdpChannel::logStatistics() const
 {
     if (!peer_ || !connected_)
