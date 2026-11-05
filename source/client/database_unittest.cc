@@ -1062,20 +1062,12 @@ TEST_F(DatabaseTest, SearchThatFoundNothingLeavesTheOutputEmpty)
     addRouterHost(router_id, 100500, "user", "secret");
     const qint64 credential_id = addCredential("office", "user", "secret");
 
-    const std::optional<LocalHostConfig> host_record = findLocalHost(db_, entry_id);
-    ASSERT_TRUE(host_record.has_value());
-
     LocalHostConfig host;
     ASSERT_EQ(db_.findLocalHost(entry_id, &host), Database::FindResult::FOUND);
     EXPECT_EQ(db_.findLocalHost(entry_id + 1000, &host), Database::FindResult::NOT_FOUND);
     EXPECT_EQ(host.id(), -1);
     EXPECT_TRUE(host.name().isEmpty());
     EXPECT_TRUE(host.guid().isEmpty());
-
-    ASSERT_EQ(db_.findLocalHostByGuid(host_record->guid(), &host), Database::FindResult::FOUND);
-    EXPECT_EQ(db_.findLocalHostByGuid("no-such-guid", &host), Database::FindResult::NOT_FOUND);
-    EXPECT_EQ(host.id(), -1);
-    EXPECT_TRUE(host.name().isEmpty());
 
     LocalGroupConfig group;
     ASSERT_EQ(db_.findLocalGroup(group_id, &group), Database::FindResult::FOUND);

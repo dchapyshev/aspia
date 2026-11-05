@@ -82,10 +82,6 @@ private slots:
     // longer than the timeout.
     void onApplicationStateChanged(Qt::ApplicationState state);
 
-    // Receives aspia:// links delivered while the application is running. Links that arrive before
-    // the master password gate is passed are remembered and opened after the unlock.
-    void onUrlOpened(const QString& url);
-
 private:
     // The screen is a queue of one: when it frees up, the next record waiting for a code is asked.
     void showNextTwoFactorPrompt();
@@ -128,10 +124,6 @@ private:
     // Opens the chat screen for the given host as a regular page (not full-screen).
     void openChat(const HostConfig& host, bool credentials_saved);
 
-    // Resolves an aspia:// link against the address book and opens the session. If a session is
-    // already active, the link is ignored with a notification.
-    void connectToUrl(const QString& url);
-
     // Returns the dialog, sheet or menu on top of the window, or nullptr when none is shown.
     QWidget* visibleOverlay() const;
 
@@ -153,9 +145,8 @@ private:
     TimePoint background_since_;
     bool relocking_ = false;
 
-    // A link and an offered update that arrived before the master password gate was passed, and
-    // whether the gate has been passed already.
-    QString pending_url_;
+    // An offered update that arrived before the master password gate was passed, and whether the
+    // gate has been passed already.
     UpdateInfo pending_update_;
     bool unlocked_ = false;
 

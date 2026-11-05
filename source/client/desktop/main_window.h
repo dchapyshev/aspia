@@ -58,7 +58,6 @@ public:
 
 public slots:
     void showAndActivate();
-    void connectToUrl(const QString& url);
 
 signals:
     // The state of the window is saved by then, and the window is expected to be destroyed.

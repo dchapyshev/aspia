@@ -19,8 +19,6 @@
 #include "client/desktop/management_tab.h"
 
 #include <QActionGroup>
-#include <QApplication>
-#include <QClipboard>
 #include <QDateTime>
 #include <QEvent>
 #include <QIODevice>
@@ -37,7 +35,6 @@
 #include "base/peer/user.h"
 #include "client/backup.h"
 #include "client/database.h"
-#include "client/host_url.h"
 #include "client/router_controller.h"
 #include "client/settings.h"
 #include "client/desktop/file_dialog.h"
@@ -961,15 +958,6 @@ void ManagementTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
         addProxy(ui->action_chat_connect);
         addProxy(ui->action_system_info_connect);
         menu->addSeparator();
-
-        LocalHostConfig host;
-        Database::instance().findLocalHost(entry_id, &host);
-        if (!host.guid().isEmpty())
-        {
-            addCopyLinkMenu(*menu, host);
-            menu->addSeparator();
-        }
-
         menu->addAction(ui->action_edit_host);
         menu->addAction(ui->action_copy_host);
         menu->addAction(ui->action_delete_host);
@@ -1001,22 +989,6 @@ void ManagementTab::onSearchContextMenu(const QPoint& pos)
     addProxy(ui->action_file_transfer_connect);
     addProxy(ui->action_chat_connect);
     addProxy(ui->action_system_info_connect);
-
-    if (row->type == SearchResultModel::Type::ROUTER)
-    {
-        menu->addSeparator();
-        addCopyLinkMenu(*menu, row->host.routerId(), stringToHostId(row->host.address()));
-    }
-    else
-    {
-        LocalHostConfig host;
-        Database::instance().findLocalHost(row->host.id(), &host);
-        if (!host.guid().isEmpty())
-        {
-            menu->addSeparator();
-            addCopyLinkMenu(*menu, host);
-        }
-    }
 
     // Router hosts have no address-book record to copy or delete.
     if (row->type == SearchResultModel::Type::LOCAL)
@@ -1292,8 +1264,6 @@ void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
     }
     menu->addSeparator();
 
-    addCopyLinkMenu(*menu, router_hosts_widget_->routerId(), router_hosts_widget_->selectedHostId());
-
     const QIcon copy_icon(":/img/copy.svg");
     QAction* copy_row = menu->addAction(copy_icon, tr("Copy Row"));
     QAction* copy_col = menu->addAction(copy_icon, tr("Copy Value"));
@@ -1461,12 +1431,13 @@ void ManagementTab::onRouterGroupContextMenu(const QPoint& pos)
     addProxy(ui->action_file_transfer_connect);
     addProxy(ui->action_chat_connect);
     addProxy(ui->action_system_info_connect);
-    menu->addSeparator();
-    if (ui->action_edit_host->isVisible())
-        menu->addAction(ui->action_edit_host);
 
-    addCopyLinkMenu(*menu, router_group_widget_->routerId(),
-                    router_group_widget_->selectedHost().host_id);
+    if (ui->action_edit_host->isVisible())
+    {
+        menu->addSeparator();
+        menu->addAction(ui->action_edit_host);
+    }
+
     menu->exec(pos);
 }
 
@@ -2248,71 +2219,6 @@ proto::peer::SessionType ManagementTab::defaultSessionType() const
         return proto::peer::SESSION_TYPE_TERMINAL;
     else
         return proto::peer::SESSION_TYPE_UNKNOWN;
-}
-
-//--------------------------------------------------------------------------------------------------
-void ManagementTab::addCopyLinkMenu(QMenu& menu, const LocalHostConfig& host)
-{
-    QMenu* link_menu = menu.addMenu(QIcon(":/img/copy.svg"), tr("Copy Link"));
-
-    const proto::peer::SessionType session_types[] =
-    {
-        proto::peer::SESSION_TYPE_DESKTOP,
-        proto::peer::SESSION_TYPE_TERMINAL,
-        proto::peer::SESSION_TYPE_FILE_TRANSFER,
-        proto::peer::SESSION_TYPE_CHAT,
-        proto::peer::SESSION_TYPE_SYSTEM_INFO
-    };
-
-    for (proto::peer::SessionType session_type : session_types)
-    {
-        link_menu->addAction(sessionIcon(session_type), sessionName(session_type), this,
-                             [this, guid = host.guid(), session_type]()
-        {
-            QString url = HostUrl::stringForEntry(guid, session_type);
-            if (url.isEmpty())
-            {
-                MsgBox::warning(this, tr("Unable to create a link for this host."));
-                return;
-            }
-
-            QApplication::clipboard()->setText(url);
-        });
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ManagementTab::addCopyLinkMenu(QMenu& menu, qint64 router_id, HostId host_id)
-{
-    QMenu* link_menu = menu.addMenu(QIcon(":/img/copy.svg"), tr("Copy Link"));
-
-    const proto::peer::SessionType session_types[] =
-    {
-        proto::peer::SESSION_TYPE_DESKTOP,
-        proto::peer::SESSION_TYPE_TERMINAL,
-        proto::peer::SESSION_TYPE_FILE_TRANSFER,
-        proto::peer::SESSION_TYPE_CHAT,
-        proto::peer::SESSION_TYPE_SYSTEM_INFO
-    };
-
-    for (proto::peer::SessionType session_type : session_types)
-    {
-        link_menu->addAction(sessionIcon(session_type), sessionName(session_type), this,
-                             [this, router_id, host_id, session_type]()
-        {
-            RouterConfig router;
-            Database::instance().findRouter(router_id, &router);
-
-            QString url = HostUrl::stringForRouterHost(router.guid(), host_id, session_type);
-            if (url.isEmpty())
-            {
-                MsgBox::warning(this, tr("Unable to create a link for this host."));
-                return;
-            }
-
-            QApplication::clipboard()->setText(url);
-        });
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

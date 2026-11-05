@@ -18,7 +18,6 @@
 
 package org.aspia.client;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.system.ErrnoException;
 import android.system.Os;
@@ -34,9 +33,6 @@ import org.qtproject.qt.android.bindings.QtActivity;
 // runs the Qt setup.
 public final class ClientActivity extends QtActivity
 {
-    // Registered from the C++ side (Application constructor).
-    private static native void nativeUrlOpened(String url);
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -50,32 +46,6 @@ public final class ClientActivity extends QtActivity
         }
 
         super.onCreate(savedInstanceState);
-    }
-
-    // Delivers aspia:// links opened while the application is already running (launchMode is
-    // singleTop, so the existing instance receives them here instead of a second one starting).
-    @Override
-    public void onNewIntent(Intent intent)
-    {
-        super.onNewIntent(intent);
-        setIntent(intent);
-
-        if (intent == null || !Intent.ACTION_VIEW.equals(intent.getAction()))
-            return;
-
-        String url = intent.getDataString();
-        if (url == null)
-            return;
-
-        try
-        {
-            nativeUrlOpened(url);
-        }
-        catch (UnsatisfiedLinkError e)
-        {
-            // The native side is not up yet. The URL stays in the activity intent (setIntent
-            // above) and is picked up by the startup path.
-        }
     }
 
     // In landscape a phone keyboard goes fullscreen and sends its Shift to the application as key

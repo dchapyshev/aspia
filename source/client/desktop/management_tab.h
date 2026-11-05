@@ -25,7 +25,6 @@
 
 #include <memory>
 
-#include "base/peer/host_id.h"
 #include "client/config.h"
 #include "client/desktop/tab.h"
 #include "client/desktop/management/sidebar.h"
@@ -124,8 +123,6 @@ private:
     void updateActionsState();
     RouterTempHostsWidget* currentTempHostsWidget() const;
     proto::peer::SessionType defaultSessionType() const;
-    void addCopyLinkMenu(QMenu& menu, const LocalHostConfig& host);
-    void addCopyLinkMenu(QMenu& menu, qint64 router_id, HostId host_id);
 
     bool readLocalHost(qint64 entry_id, LocalHostConfig* host);
     bool validateHostForConnect(const HostConfig& host);

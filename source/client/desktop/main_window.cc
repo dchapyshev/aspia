@@ -18,7 +18,6 @@
 
 #include "client/desktop/main_window.h"
 
-#include <QDateTime>
 #include <QDesktopServices>
 #include <QLineEdit>
 #include <QScreen>
@@ -26,7 +25,6 @@
 #include <QSignalBlocker>
 #include <QStyle>
 #include <QTabBar>
-#include <QTimer>
 #include <QToolButton>
 #include <QUrl>
 #include <QWindow>
@@ -37,8 +35,6 @@
 #include "base/peer/host_id.h"
 #include "base/update/update_info.h"
 #include "client/database.h"
-#include "client/host_url.h"
-#include "client/router_controller.h"
 #include "client/settings.h"
 #include "client/system_settings.h"
 #include "client/desktop/app_lock.h"
@@ -66,7 +62,6 @@
 #include "common/desktop/session_type.h"
 #include "common/desktop/update_dialog.h"
 #include "proto/peer.h"
-#include "proto/router_constants.h"
 
 namespace {
 
@@ -265,112 +260,6 @@ void MainWindow::showAndActivate()
     raise();
     activateWindow();
     setFocus();
-}
-
-//--------------------------------------------------------------------------------------------------
-void MainWindow::connectToUrl(const QString& url)
-{
-    LOG(INFO) << "Connect to URL:" << url;
-    showAndActivate();
-
-    HostUrl host_url = HostUrl::fromString(url);
-    if (!host_url.isValid())
-    {
-        MsgBox::warning(this, tr("Invalid link \"%1\".").arg(url));
-        return;
-    }
-
-    Database& db = Database::instance();
-    HostConfig host;
-
-    if (host_url.isRouterHost())
-    {
-        qint64 router_id = -1;
-        QList<RouterConfig> routers;
-        db.routerList(&routers);
-        for (const RouterConfig& router_config : std::as_const(routers))
-        {
-            if (router_config.guid() == host_url.routerGuid())
-            {
-                router_id = router_config.routerId();
-                break;
-            }
-        }
-
-        if (router_id <= 0)
-        {
-            MsgBox::warning(this, tr("The router referenced by the link is not among the saved routers."));
-            return;
-        }
-
-        RouterConfig router;
-        if (db.findRouter(router_id, &router) == Database::FindResult::UNREADABLE)
-        {
-            LOG(ERROR) << "Data of router" << router_id << "could not be read";
-            MsgBox::warning(this, tr("The data of the router is damaged. Edit the router and enter it again."));
-            return;
-        }
-
-        // The record of the host on the router carries the name to show for it, so it is looked
-        // up before the session opens. Without a connected router the session opens unnamed.
-        RouterSession* session = RouterController::session(router_id);
-        if (session)
-        {
-            HostId host_id = host_url.hostId();
-            proto::peer::SessionType session_type = host_url.sessionType();
-
-            session->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize,
-                { this, [this, router_id, host_id, session_type](const RouterHostList& list)
-            {
-                QString name;
-
-                for (const RouterHost& entry : std::as_const(list.hosts))
-                {
-                    if (entry.host_id != host_id)
-                        continue;
-
-                    name = entry.display_name.isEmpty() ? entry.computer_name : entry.display_name;
-                    break;
-                }
-
-                onConnect(HostConfig::forRouterHost(router_id, host_id, name), session_type);
-            } });
-            return;
-        }
-
-        host = HostConfig::forRouterHost(router_id, host_url.hostId(), QString());
-    }
-    else
-    {
-        LocalHostConfig entry;
-        const Database::FindResult host_found = db.findLocalHostByGuid(host_url.hostGuid(), &entry);
-        if (host_found != Database::FindResult::FOUND)
-        {
-            MsgBox::warning(this, host_found == Database::FindResult::UNREADABLE ?
-                tr("The data of the host is damaged. Edit the host and enter it again.") :
-                tr("The host referenced by the link is not among the saved hosts."));
-            return;
-        }
-
-        if (entry.routerId() != 0)
-        {
-            RouterConfig router;
-            const Database::FindResult found = db.findRouter(entry.routerId(), &router);
-            if (found != Database::FindResult::FOUND)
-            {
-                MsgBox::warning(this, found == Database::FindResult::UNREADABLE ?
-                    tr("The data of the router is damaged. Edit the router and enter it again.") :
-                    tr("The router associated with this host has been deleted. "
-                       "Edit the host to select another router or switch to direct connection."));
-                return;
-            }
-        }
-
-        host = HostConfig::forLocalHost(entry);
-        db.setLocalHostConnectTime(entry.id(), QDateTime::currentSecsSinceEpoch());
-    }
-
-    onConnect(host, host_url.sessionType());
 }
 
 //--------------------------------------------------------------------------------------------------

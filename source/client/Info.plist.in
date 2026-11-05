@@ -31,17 +31,6 @@
 	</array>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLName</key>
-			<string>org.aspia.client</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>aspia</string>
-			</array>
-		</dict>
-	</array>
 	<key>CFBundleShortVersionString</key>
 	<string>@ASPIA_VERSION_MAJOR@.@ASPIA_VERSION_MINOR@.@ASPIA_VERSION_PATCH@</string>
 	<key>CFBundleSignature</key>

@@ -35,14 +35,12 @@
 #else
 #include <QCommandLineParser>
 #include <QDir>
-#include <QTimer>
 
 #include <functional>
 
 #include "base/auto_qpointer.h"
 #include "base/crypto/secure_string.h"
 #include "client/database.h"
-#include "client/host_url.h"
 #include "client/master_password.h"
 #include "client/system_settings.h"
 #include "client/desktop/app_lock.h"
@@ -291,34 +289,12 @@ int main(int argc, char* argv[])
     parser.setApplicationDescription(QApplication::translate("Client", "Aspia Client"));
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addPositionalArgument("url",
-        QApplication::translate("Client", "An aspia:// link to connect to a host."), "[url]");
     parser.process(application);
-
-    QString start_url;
-    QStringList positional_arguments = parser.positionalArguments();
-    if (!positional_arguments.isEmpty() && HostUrl::isHostUrl(positional_arguments.front()))
-        start_url = positional_arguments.front();
-
-    // A link can arrive before the main window exists: forwarded by a second instance or
-    // delivered by a URL open event while the master password dialog is still on the screen.
-    // Remember it and open it after the main window is created.
-    auto remember_url = [&start_url](const QString& url) { start_url = url; };
-    QMetaObject::Connection pending_url_connection = QObject::connect(
-        &application, &Application::sig_urlOpened, &application, remember_url);
 
     if (application.isRunning())
     {
-        if (!start_url.isEmpty())
-        {
-            LOG(INFO) << "Another instance is already running, forwarding URL to it";
-            application.openUrl(start_url);
-        }
-        else
-        {
-            LOG(INFO) << "Another instance is already running, activating its window";
-            application.activateWindow();
-        }
+        LOG(INFO) << "Another instance is already running, activating its window";
+        application.activateWindow();
         return 0;
     }
 
@@ -364,12 +340,8 @@ int main(int argc, char* argv[])
     {
         main_window = std::make_unique<MainWindow>();
 
-        QObject::disconnect(pending_url_connection);
-
         QObject::connect(&application, &Application::sig_windowActivated,
                          main_window.get(), &MainWindow::showAndActivate);
-        QObject::connect(&application, &Application::sig_urlOpened,
-                         main_window.get(), &MainWindow::connectToUrl);
         QObject::connect(main_window.get(), &MainWindow::sig_lockRequested, &application, [&]()
         {
             // Until the new window there is no window on the screen, and closing the unlock dialog
@@ -378,8 +350,6 @@ int main(int argc, char* argv[])
             QApplication::setQuitOnLastWindowClosed(false);
 
             main_window.reset();
-            pending_url_connection = QObject::connect(
-                &application, &Application::sig_urlOpened, &application, remember_url);
 
             if (AppLock::unlock(false) != AppLock::Result::UNLOCKED)
             {
@@ -393,16 +363,6 @@ int main(int argc, char* argv[])
 
         main_window->show();
         main_window->activateWindow();
-
-        if (!start_url.isEmpty())
-        {
-            // Start the connection once the event loop is up and the window is shown.
-            QTimer::singleShot(MilliSeconds(0), main_window.get(), [window = main_window.get(), start_url]()
-            {
-                window->connectToUrl(start_url);
-            });
-            start_url.clear();
-        }
     };
 
     create_main_window();

@@ -712,46 +712,6 @@ Database::FindResult Database::findLocalHost(qint64 entry_id, LocalHostConfig* h
 }
 
 //--------------------------------------------------------------------------------------------------
-Database::FindResult Database::findLocalHostByGuid(const QString& guid, LocalHostConfig* host) const
-{
-    CHECK(host);
-    *host = LocalHostConfig();
-
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return FindResult::FAILED;
-    }
-
-    if (guid.isEmpty())
-        return FindResult::NOT_FOUND;
-
-    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
-                        "IFNULL(os_credential_id, 0) "
-                        "FROM local_hosts WHERE guid=?");
-    query.addText(guid);
-
-    const SqlQuery::StepResult step = query.next();
-    if (step == SqlQuery::StepResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return FindResult::FAILED;
-    }
-
-    if (step == SqlQuery::StepResult::DONE)
-        return FindResult::NOT_FOUND;
-
-    if (readLocalHost(query, host) != ReadResult::OK)
-    {
-        LOG(ERROR) << "Unable to read the data of host with guid" << guid;
-        return FindResult::UNREADABLE;
-    }
-
-    return FindResult::FOUND;
-}
-
-//--------------------------------------------------------------------------------------------------
 std::optional<std::pair<QString, SecureString>> Database::localHostCredentials(qint64 entry_id) const
 {
     LocalHostConfig host;
@@ -1150,7 +1110,7 @@ bool Database::modifyRouter(const RouterConfig& router)
         return false;
 
     // The guid is not among the columns. It names the record from the moment it is added, and
-    // the links pointing at it would stop resolving if an edit could change it.
+    // the chat history stored under it would be lost if an edit could change it.
     SqlQuery query(db_, "UPDATE routers SET name=?, session_type=?, data=? WHERE id=?");
     query.addText(router.displayName());
     query.addInt64(static_cast<quint32>(router.sessionType()));

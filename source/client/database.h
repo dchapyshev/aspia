@@ -67,7 +67,6 @@ public:
     bool setLocalHostConnectTime(qint64 entry_id, qint64 connect_time);
     bool setLocalHostOsCredentialId(qint64 entry_id, qint64 credential_id);
     FindResult findLocalHost(qint64 entry_id, LocalHostConfig* host) const;
-    FindResult findLocalHostByGuid(const QString& guid, LocalHostConfig* host) const;
     std::optional<std::pair<QString, SecureString>> localHostCredentials(qint64 entry_id) const;
 
     // Local Search.

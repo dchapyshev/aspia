@@ -1,10 +1,9 @@
 [Desktop Entry]
 Name=Aspia Client
 Name[ru]=Клиент Aspia
-Exec=/usr/bin/aspia_client %u
+Exec=/usr/bin/aspia_client
 Icon=aspia-client
 Type=Application
 Categories=Utility;
 Terminal=false
 StartupWMClass=aspia_client
-MimeType=x-scheme-handler/aspia;

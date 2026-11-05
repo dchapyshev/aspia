@@ -33,10 +33,8 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/host_id.h"
-#include "client/application.h"
 #include "client/config.h"
 #include "client/database.h"
-#include "client/host_url.h"
 #include "client/master_password.h"
 #include "client/router_controller.h"
 #include "client/android/authorization_window.h"
@@ -57,16 +55,12 @@
 #include "common/android/menu.h"
 #include "common/android/message_dialog.h"
 #include "proto/peer.h"
-#include "proto/router_constants.h"
 
 namespace {
 
 // android.view.WindowManager.LayoutParams display cutout modes.
 constexpr int kCutoutModeDefault = 0;
 constexpr int kCutoutModeShortEdges = 1;
-
-// android.content.Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY.
-constexpr int kFlagActivityLaunchedFromHistory = 0x00100000;
 
 // Re-lock the app once it has spent at least this long in the background.
 constexpr Minutes kLockTimeout{ 3 };
@@ -108,30 +102,6 @@ void setDrawIntoCutout(bool enable)
                                 params.object());
         return QVariant();
     });
-}
-
-//--------------------------------------------------------------------------------------------------
-// Returns the aspia:// link the activity was launched with, if any. A relaunch from the recents
-// screen re-delivers the original intent - it must not restart the connection.
-QString startUrlFromIntent()
-{
-    QJniObject activity = QNativeInterface::QAndroidApplication::context();
-    if (!activity.isValid())
-        return QString();
-
-    QJniObject intent = activity.callObjectMethod("getIntent", "()Landroid/content/Intent;");
-    if (!intent.isValid())
-        return QString();
-
-    if (intent.callMethod<jint>("getFlags") & kFlagActivityLaunchedFromHistory)
-        return QString();
-
-    QJniObject data = intent.callObjectMethod("getDataString", "()Ljava/lang/String;");
-    if (!data.isValid())
-        return QString();
-
-    QString url = data.toString();
-    return HostUrl::isHostUrl(url) ? url : QString();
 }
 
 } // namespace
@@ -218,8 +188,6 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 
     connect(GuiApplication::instance(), &QGuiApplication::applicationStateChanged,
             this, &AndroidMainWindow::onApplicationStateChanged);
-    connect(Application::instance(), &Application::sig_urlOpened,
-            this, &AndroidMainWindow::onUrlOpened);
 
     // The gate runs once the event loop is active so the window is laid out and the dialog scrim
     // covers it.
@@ -689,18 +657,6 @@ void AndroidMainWindow::onApplicationStateChanged(Qt::ApplicationState state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::onUrlOpened(const QString& url)
-{
-    if (!unlocked_)
-    {
-        pending_url_ = url;
-        return;
-    }
-
-    connectToUrl(url);
-}
-
-//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::showNextTwoFactorPrompt()
 {
     QList<RouterConfig> routers;
@@ -755,17 +711,6 @@ void AndroidMainWindow::onUnlocked()
         remote->reload();
 
     unlocked_ = true;
-
-    // Open the link that started the application or arrived while the gate was on the screen.
-    QString url = pending_url_.isEmpty() ? startUrlFromIntent() : pending_url_;
-    pending_url_.clear();
-
-    if (!url.isEmpty())
-    {
-        // A link means the user came to connect, so the update waits for the next start.
-        connectToUrl(url);
-        return;
-    }
 
     if (pending_update_.isValid())
     {
@@ -997,113 +942,6 @@ void AndroidMainWindow::openChat(const HostConfig& host, bool credentials_saved)
 
     stack_root_->addWidget(chat_);
     stack_root_->setCurrentWidget(chat_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::connectToUrl(const QString& url)
-{
-    LOG(INFO) << "Connect to URL:" << url;
-
-    HostUrl host_url = HostUrl::fromString(url);
-    if (!host_url.isValid())
-    {
-        MessageDialog::info(this, tr("Connection"), tr("Invalid link."));
-        return;
-    }
-
-    // Only a single session is supported at a time.
-    if (desktop_ || file_transfer_ || chat_)
-    {
-        MessageDialog::info(this, tr("Connection"),
-                            tr("Another session is active. Close it and open the link again."));
-        return;
-    }
-
-    proto::peer::SessionType session_type = host_url.sessionType();
-    if (session_type != proto::peer::SESSION_TYPE_DESKTOP &&
-        session_type != proto::peer::SESSION_TYPE_FILE_TRANSFER &&
-        session_type != proto::peer::SESSION_TYPE_CHAT)
-    {
-        MessageDialog::info(this, tr("Connection"),
-                            tr("The session type from the link is not supported on this device."));
-        return;
-    }
-
-    if (host_url.isRouterHost())
-    {
-        qint64 router_id = -1;
-        QList<RouterConfig> routers;
-        Database::instance().routerList(&routers);
-        for (const RouterConfig& router_config : std::as_const(routers))
-        {
-            if (router_config.guid() == host_url.routerGuid())
-            {
-                router_id = router_config.routerId();
-                break;
-            }
-        }
-
-        if (router_id <= 0)
-        {
-            MessageDialog::info(this, tr("Connection"),
-                tr("The router referenced by the link is not among the saved routers."));
-            return;
-        }
-
-        RouterConfig router;
-        if (Database::instance().findRouter(router_id, &router) == Database::FindResult::UNREADABLE)
-        {
-            LOG(ERROR) << "Data of router" << router_id << "could not be read";
-            MessageDialog::info(this, tr("Connection"),
-                tr("The data of the router is damaged. Edit the router and enter it again."));
-            return;
-        }
-
-        // The record of the host on the router carries the name to show for it, so it is looked
-        // up before the session opens. Without a connected router the session opens unnamed.
-        RouterSession* session = RouterController::session(router_id);
-        if (session)
-        {
-            HostId host_id = host_url.hostId();
-
-            session->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize,
-                { this, [this, router_id, host_id, session_type](const RouterHostList& list)
-            {
-                QString name;
-
-                for (const RouterHost& entry : std::as_const(list.hosts))
-                {
-                    if (entry.host_id != host_id)
-                        continue;
-
-                    name = entry.display_name.isEmpty() ? entry.computer_name : entry.display_name;
-                    break;
-                }
-
-                openSession(HostConfig::forRouterHost(router_id, host_id, name), session_type);
-            } });
-            return;
-        }
-
-        openSession(HostConfig::forRouterHost(router_id, host_url.hostId(), QString()),
-                    session_type);
-    }
-    else
-    {
-        LocalHostConfig entry;
-        const Database::FindResult host_found =
-            Database::instance().findLocalHostByGuid(host_url.hostGuid(), &entry);
-        if (host_found != Database::FindResult::FOUND)
-        {
-            MessageDialog::info(this, tr("Connection"),
-                host_found == Database::FindResult::UNREADABLE ?
-                    tr("The data of the host is damaged. Edit the host and enter it again.") :
-                    tr("The host referenced by the link is not among the saved hosts."));
-            return;
-        }
-
-        openSession(HostConfig::forLocalHost(entry), session_type);
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
