@@ -126,6 +126,7 @@ private:
     void routeMessage(quint8 channel_id, const QByteArray& buffer);
     void tcpChannelReady();
     void connectionLost(TcpChannel::ErrorCode error_code);
+    void closeTcpIfSwitched();
     void readBandwidthProbe(const proto::peer::BandwidthProbe& probe, quint8 channel_id, bool via_udp);
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
     void readStunUdpRequest(const proto::peer::StunUdpRequest& request);
@@ -148,6 +149,7 @@ private:
     const quint32 udp_methods_;
 
     bool udp_switch_pending_ = false;
+    bool udp_switch_confirmed_ = false;
     std::deque<std::pair<quint8, QByteArray>> held_udp_messages_;
 
     // Set once the session is ready; gates the periodic work in onTimer().

@@ -548,6 +548,32 @@ void UdpChannel::close()
         update_timer_id_ = 0;
     }
     notifier_->setEnabled(false);
+
+    if (peer_ && peer_->state == ENET_PEER_STATE_CONNECTED)
+    {
+        const MilliSeconds kDisconnectTimeout{ 200 };
+
+        enet_peer_disconnect(peer_.get(), 0);
+
+        const TimePoint deadline = Clock::now() + kDisconnectTimeout;
+
+        // ENet resends only when the service returns from waiting.
+        while (Clock::now() < deadline)
+        {
+            ENetEvent event;
+            const enet_uint32 wait_time = static_cast<enet_uint32>(kUpdateInterval.count());
+
+            if (enet_host_service(host_.get(), &event, wait_time) < 0 ||
+                event.type == ENET_EVENT_TYPE_DISCONNECT)
+            {
+                break;
+            }
+
+            if (event.type == ENET_EVENT_TYPE_RECEIVE)
+                enet_packet_destroy(event.packet);
+        }
+    }
+
     peer_.reset();
     host_.reset();
     packet_pool_.clear();
@@ -594,7 +620,7 @@ void UdpChannel::processEvents()
                 enet_socket_set_option(host_->socket, ENET_SOCKOPT_SNDBUF, kSocketBufferSize);
                 enet_socket_set_option(host_->socket, ENET_SOCKOPT_RCVBUF, kSocketBufferSize);
 
-                const enet_uint32 kPeerTimeout = 60000;
+                const enet_uint32 kPeerTimeout = 45000;
                 enet_peer_timeout(peer_.get(), ENET_PEER_TIMEOUT_LIMIT, kPeerTimeout, kPeerTimeout);
 
                 // The throttle of ENet shrinks the window for reliable data down to one packet when

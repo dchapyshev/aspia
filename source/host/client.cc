@@ -204,6 +204,12 @@ void Client::onTimer(TimePoint now)
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 {
+    if (udp_state_ == UdpState::READY && !udp_switch_pending_)
+    {
+        CLOG(INFO) << "TCP channel closed:" << error_code;
+        return;
+    }
+
     CLOG(ERROR) << "TCP error:" << error_code;
     CCHECK(tcp_channel_);
     tcp_channel_->disconnect();
@@ -354,6 +360,10 @@ void Client::readUdpSwitch()
         held_udp_messages_.pop_front();
         onMessage(channel_id, buffer);
     }
+
+    proto::peer::HostToClient message;
+    message.mutable_udp_switch()->set_dummy(1);
+    send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

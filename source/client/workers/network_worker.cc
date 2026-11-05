@@ -109,15 +109,15 @@ void NetworkWorker::onSendMessage(quint8 channel_id, const QByteArray& buffer)
         return;
     }
 
-    if (!tcp_channel_)
-    {
-        LOG(ERROR) << "onSendMessage called but channel not initialized";
-        return;
-    }
-
     if (udp_ready_)
     {
         udp_channel_->send(channel_id, buffer);
+        return;
+    }
+
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "Tcp channel not initialized";
         return;
     }
 
@@ -138,6 +138,7 @@ void NetworkWorker::onStop()
     clearAttempts();
 
     udp_ready_ = false;
+    udp_switch_confirmed_ = false;
     held_udp_messages_.clear();
 
     if (relay_peer_)
@@ -206,7 +207,7 @@ void NetworkWorker::onTimer(TimePoint now)
     receive_rate_last_total_ = total;
 
     // An idle interval carries no information about the path capacity.
-    if (bytes <= 0 || interval <= MilliSeconds::zero() || !tcp_channel_)
+    if (bytes <= 0 || interval <= MilliSeconds::zero())
         return;
 
     proto::peer::ClientToHost message;
@@ -216,7 +217,7 @@ void NetworkWorker::onTimer(TimePoint now)
 
     if (udp_ready_ && session_state_->hostVersion() >= kVersion_3_3_0)
         udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
-    else
+    else if (tcp_channel_)
         tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
 }
 
@@ -313,6 +314,11 @@ void NetworkWorker::onUdpMessageReceived(quint8 channel_id, const QByteArray& bu
     {
         bandwidth_estimate_ = static_cast<qint64>(message.metrics().bandwidth());
     }
+    else if (message.has_udp_switch())
+    {
+        udp_switch_confirmed_ = true;
+        closeTcpIfSwitched();
+    }
     else
     {
         LOG(WARNING) << "Unhandled UDP control message";
@@ -403,30 +409,6 @@ void NetworkWorker::onAttemptError(quint32 request_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void NetworkWorker::routeMessage(quint8 channel_id, const QByteArray& buffer)
-{
-    switch (channel_id)
-    {
-        case 0:  emit sig_channel_0(buffer);  break;
-        case 1:  emit sig_channel_1(buffer);  break;
-        case 2:  emit sig_channel_2(buffer);  break;
-        case 3:  emit sig_channel_3(buffer);  break;
-        case 4:  emit sig_channel_4(buffer);  break;
-        case 5:  emit sig_channel_5(buffer);  break;
-        case 6:  emit sig_channel_6(buffer);  break;
-        case 7:  emit sig_channel_7(buffer);  break;
-        case 8:  emit sig_channel_8(buffer);  break;
-        case 9:  emit sig_channel_9(buffer);  break;
-        case 10: emit sig_channel_10(buffer); break;
-        case 11: emit sig_channel_11(buffer); break;
-        case 12: emit sig_channel_12(buffer); break;
-        default:
-            LOG(WARNING) << "Message for unhandled channel" << channel_id;
-            break;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void NetworkWorker::startConnection()
 {
     auto setupAuthenticator = [this](auto* auth)
@@ -513,6 +495,30 @@ void NetworkWorker::startConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
+void NetworkWorker::routeMessage(quint8 channel_id, const QByteArray& buffer)
+{
+    switch (channel_id)
+    {
+        case 0:  emit sig_channel_0(buffer);  break;
+        case 1:  emit sig_channel_1(buffer);  break;
+        case 2:  emit sig_channel_2(buffer);  break;
+        case 3:  emit sig_channel_3(buffer);  break;
+        case 4:  emit sig_channel_4(buffer);  break;
+        case 5:  emit sig_channel_5(buffer);  break;
+        case 6:  emit sig_channel_6(buffer);  break;
+        case 7:  emit sig_channel_7(buffer);  break;
+        case 8:  emit sig_channel_8(buffer);  break;
+        case 9:  emit sig_channel_9(buffer);  break;
+        case 10: emit sig_channel_10(buffer); break;
+        case 11: emit sig_channel_11(buffer); break;
+        case 12: emit sig_channel_12(buffer); break;
+        default:
+            LOG(WARNING) << "Message for unhandled channel" << channel_id;
+            break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void NetworkWorker::tcpChannelReady()
 {
     session_state_->setReconnecting(false);
@@ -544,6 +550,7 @@ void NetworkWorker::connectionLost(TcpChannel::ErrorCode error_code)
     emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
 
     udp_ready_ = false;
+    udp_switch_confirmed_ = false;
     held_udp_messages_.clear();
     bandwidth_estimate_ = 0;
 
@@ -568,6 +575,18 @@ void NetworkWorker::connectionLost(TcpChannel::ErrorCode error_code)
     // Both relay and direct paths are handled the same way. The owner (ClientWindow) observes
     // WAIT_FOR_HOST, destroys this Client and builds a fresh one when ready.
     emit sig_statusChanged(Status::WAIT_FOR_HOST);
+}
+
+//--------------------------------------------------------------------------------------------------
+void NetworkWorker::closeTcpIfSwitched()
+{
+    if (!udp_switch_confirmed_ || udp_switch_pending_ || !tcp_channel_)
+        return;
+
+    LOG(INFO) << "Closing TCP channel";
+
+    tcp_channel_->disconnect();
+    tcp_channel_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -639,6 +658,8 @@ void NetworkWorker::readUdpSwitch()
         held_udp_messages_.pop_front();
         routeMessage(channel_id, buffer);
     }
+
+    closeTcpIfSwitched();
 }
 
 //--------------------------------------------------------------------------------------------------
