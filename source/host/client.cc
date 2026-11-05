@@ -25,6 +25,7 @@
 #include "base/version_constants.h"
 #include "base/net/udp_channel.h"
 #include "base/threading/worker.h"
+#include "host/bandwidth_controller_tcp.h"
 #include "host/udp_attempt.h"
 #include "proto/peer.h"
 
@@ -53,7 +54,8 @@ QByteArray makeBandwidthProbeData(quint32 train_id, quint32 index, quint32 count
 //--------------------------------------------------------------------------------------------------
 Client::Client(TcpChannel* tcp_channel, QObject* parent)
     : QObject(parent),
-      tcp_channel_(tcp_channel)
+      tcp_channel_(tcp_channel),
+      bandwidth_controller_(std::make_unique<BandwidthControllerTcp>())
 {
     CLOG(INFO) << "Ctor";
     CCHECK(tcp_channel_);
@@ -175,13 +177,13 @@ qint64 Client::pendingBytes() const
 //--------------------------------------------------------------------------------------------------
 proto::desktop::Overflow::State Client::overflowState(TimePoint now) const
 {
-    return bandwidth_controller_.overflowState(now);
+    return bandwidth_controller_->overflowState(now);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::send(quint8 channel_id, const QByteArray& buffer)
 {
-    bandwidth_controller_.onBytesSent(buffer.size());
+    bandwidth_controller_->onBytesSent(buffer.size());
 
     if (udp_state_ == UdpState::READY && udp_channel_)
     {
@@ -197,7 +199,7 @@ void Client::onTimer(TimePoint now)
 {
     tcp_channel_->tick(now);
 
-    bandwidth_controller_.tick(now);
+    bandwidth_controller_->tick(now);
     checkBandwidth();
 }
 
@@ -224,11 +226,11 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
     if (!peer_ready_)
     {
         peer_ready_ = true;
-        bandwidth_controller_.start();
+        bandwidth_controller_->start();
         checkBandwidth();
 
         // The first probe goes out before the first frame, so it measures the path and not the queue.
-        if (bandwidth_controller_.startProbe(Clock::now()))
+        if (bandwidth_controller_->startProbe(Clock::now()))
             sendDelayProbe();
     }
 
@@ -263,10 +265,10 @@ void Client::onSliceTimer()
 {
     const TimePoint now = Clock::now();
 
-    if (bandwidth_controller_.startProbe(now))
+    if (bandwidth_controller_->startProbe(now))
         sendDelayProbe();
 
-    const qint64 due = bandwidth_controller_.paddingDue(now);
+    const qint64 due = bandwidth_controller_->paddingDue(now);
     if (due > 0)
         send(proto::peer::CHANNEL_ID_PADDING, QByteArray(static_cast<int>(due), '\0'));
 }
@@ -505,7 +507,7 @@ void Client::onBandwidthProbeAck(const proto::peer::BandwidthProbeAck& ack)
     if (ack.train_id() != delay_probe_train_id_)
         return;
 
-    bandwidth_controller_.finishProbe(Clock::now());
+    bandwidth_controller_->finishProbe(Clock::now());
     checkBandwidth();
 }
 
@@ -518,7 +520,7 @@ void Client::onReceiveRate(const proto::peer::ReceiveRate& /* rate */)
 //--------------------------------------------------------------------------------------------------
 void Client::checkBandwidth()
 {
-    if (!bandwidth_controller_.bandwidth())
+    if (!bandwidth_controller_->bandwidth())
         return;
 
     if (udp_state_ == UdpState::CONNECTED)
@@ -530,9 +532,9 @@ void Client::checkBandwidth()
         tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
 
         setUdpState(FROM_HERE, UdpState::READY);
-        bandwidth_controller_.resetPath();
+        bandwidth_controller_->resetPath();
 
-        if (bandwidth_controller_.startProbe(Clock::now()))
+        if (bandwidth_controller_->startProbe(Clock::now()))
             sendDelayProbe();
 
         clearAttempts();
@@ -541,12 +543,12 @@ void Client::checkBandwidth()
             emit sig_channelChanged();
     }
 
-    publishBandwidth(bandwidth_controller_.bandwidth());
+    publishBandwidth(bandwidth_controller_->bandwidth());
 
     if (udp_channel_)
     {
         udp_channel_->setWindowSize(
-            bandwidth_controller_.windowSize(MilliSeconds(udp_channel_->roundTripTime())));
+            bandwidth_controller_->windowSize(MilliSeconds(udp_channel_->roundTripTime())));
     }
 }
 

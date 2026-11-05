@@ -20,7 +20,7 @@
 // that encodes under the published bandwidth and pads the tests of the regulator. The tests check
 // the bandwidth, its changes, the padding and the queue the user waits on.
 
-#include "host/bandwidth_controller.h"
+#include "host/bandwidth_controller_tcp.h"
 
 #include <gtest/gtest.h>
 
@@ -397,7 +397,7 @@ private:
     qint64 ms_ = 0;
     std::mt19937 random_;
 
-    BandwidthController controller_;
+    BandwidthControllerTcp controller_;
 
     std::deque<Item> queue_;
     double credit_ = 0;

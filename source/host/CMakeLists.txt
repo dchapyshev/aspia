@@ -22,8 +22,9 @@
 if (ANDROID)
     # Portable core files this build needs. More are added here as the host is ported to Android.
     list(APPEND SOURCE_HOST
-        bandwidth_controller.cc
         bandwidth_controller.h
+        bandwidth_controller_tcp.cc
+        bandwidth_controller_tcp.h
         client.cc
         client.h
         database.cc
@@ -83,8 +84,9 @@ list(APPEND SOURCE_HOST_CORE
     audio_capturer.h
     audio_silence_detector.cc
     audio_silence_detector.h
-    bandwidth_controller.cc
     bandwidth_controller.h
+    bandwidth_controller_tcp.cc
+    bandwidth_controller_tcp.h
     capture_scheduler.cc
     capture_scheduler.h
     chat_client.cc
@@ -160,7 +162,7 @@ list(APPEND SOURCE_HOST
 
 list(APPEND SOURCE_HOST_TESTS
     audio_silence_detector_unittest.cc
-    bandwidth_controller_unittest.cc
+    bandwidth_controller_tcp_unittest.cc
     bandwidth_scenario_unittest.cc
     capture_scheduler_unittest.cc
     database_unittest.cc

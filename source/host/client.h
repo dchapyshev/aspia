@@ -143,7 +143,7 @@ private:
 
     quint32 next_train_id_ = 0;
     quint32 delay_probe_train_id_ = 0;
-    BandwidthController bandwidth_controller_;
+    std::unique_ptr<BandwidthController> bandwidth_controller_;
     QTimer* slice_timer_ = nullptr; // Sends the probes and the padding.
     qint64 published_bandwidth_ = 0; // Last estimate handed to onBandwidthChanged().
 

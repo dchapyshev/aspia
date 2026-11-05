@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/bandwidth_controller.h"
+#include "host/bandwidth_controller_tcp.h"
 
 #include <algorithm>
 #include <chrono>
@@ -73,26 +73,26 @@ double toSeconds(TimePoint::duration duration)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-BandwidthController::BandwidthController()
+BandwidthControllerTcp::BandwidthControllerTcp()
 {
     LOG(TRACE) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-BandwidthController::~BandwidthController()
+BandwidthControllerTcp::~BandwidthControllerTcp()
 {
     LOG(TRACE) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthController::start()
+void BandwidthControllerTcp::start()
 {
     bandwidth_ = kStartBandwidth;
     LOG(INFO) << "Start bandwidth:" << (bandwidth_ / 1024) << "kB/s";
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthController::resetPath()
+void BandwidthControllerTcp::resetPath()
 {
     // The queue of the old path does not hold the bandwidth down on the new one.
     if (bandwidth_)
@@ -119,7 +119,7 @@ void BandwidthController::resetPath()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool BandwidthController::startProbe(TimePoint now)
+bool BandwidthControllerTcp::startProbe(TimePoint now)
 {
     if (!bandwidth_ || probe_send_time_.has_value())
         return false;
@@ -148,7 +148,7 @@ bool BandwidthController::startProbe(TimePoint now)
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthController::finishProbe(TimePoint now)
+void BandwidthControllerTcp::finishProbe(TimePoint now)
 {
     if (!probe_send_time_.has_value())
         return;
@@ -249,7 +249,7 @@ void BandwidthController::finishProbe(TimePoint now)
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthController::onBytesSent(qint64 bytes)
+void BandwidthControllerTcp::onBytesSent(qint64 bytes)
 {
     sent_bytes_ += bytes;
 }
@@ -257,7 +257,7 @@ void BandwidthController::onBytesSent(qint64 bytes)
 //--------------------------------------------------------------------------------------------------
 // The slice is bounded so that a late timer does not send the padding as a burst the probe would
 // take for a queue.
-qint64 BandwidthController::paddingDue(TimePoint now) const
+qint64 BandwidthControllerTcp::paddingDue(TimePoint now) const
 {
     if (!test_rate_)
         return 0;
@@ -268,7 +268,7 @@ qint64 BandwidthController::paddingDue(TimePoint now) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthController::tick(TimePoint now)
+void BandwidthControllerTcp::tick(TimePoint now)
 {
     if (!probe_send_time_.has_value())
         return;
@@ -302,7 +302,7 @@ void BandwidthController::tick(TimePoint now)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::desktop::Overflow::State BandwidthController::overflowState(TimePoint now) const
+proto::desktop::Overflow::State BandwidthControllerTcp::overflowState(TimePoint now) const
 {
     MilliSeconds excess = queue_;
     if (probe_send_time_.has_value())
@@ -325,7 +325,7 @@ proto::desktop::Overflow::State BandwidthController::overflowState(TimePoint now
 //--------------------------------------------------------------------------------------------------
 // The window bounds the data in the path, not the drain of the queue, so a bandwidth lowered to
 // drain it does not shrink the window under the rate the path carried.
-qint64 BandwidthController::windowSize(MilliSeconds path_delay) const
+qint64 BandwidthControllerTcp::windowSize(MilliSeconds path_delay) const
 {
     const qint64 rate = std::max({ bandwidth_, test_rate_, capacity_, stall_rate_ });
     return std::llround(rate * toSeconds(base_delay_.value_or(path_delay) + kCapacityMargin));
@@ -335,7 +335,7 @@ qint64 BandwidthController::windowSize(MilliSeconds path_delay) const
 // The test of the interval that starts with the probe. The result of the last test is not in yet,
 // so the next one is the step above it, taken back within a round trip when the probe finds the
 // queue. On a held capacity a test is made now and then.
-void BandwidthController::startTest(TimePoint now)
+void BandwidthControllerTcp::startTest(TimePoint now)
 {
     if (last_excess_ >= kClearExcess || bandwidth_ >= kMaxBandwidth)
         return;
@@ -353,7 +353,7 @@ void BandwidthController::startTest(TimePoint now)
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthController::measureCapacity(double capacity, MilliSeconds queue, TimePoint now)
+void BandwidthControllerTcp::measureCapacity(double capacity, MilliSeconds queue, TimePoint now)
 {
     LOG(INFO) << "Capacity:" << static_cast<qint64>(capacity / 1024) << "kB/s, queue:"
               << queue.count() << "ms";
@@ -371,7 +371,7 @@ void BandwidthController::measureCapacity(double capacity, MilliSeconds queue, T
 
 //--------------------------------------------------------------------------------------------------
 // The bandwidth under the capacity drains the queue in kDrainTime, and the test is over.
-void BandwidthController::drainQueue(MilliSeconds queue, TimePoint now)
+void BandwidthControllerTcp::drainQueue(MilliSeconds queue, TimePoint now)
 {
     capacity_time_ = now;
     test_rate_ = 0;
@@ -379,7 +379,7 @@ void BandwidthController::drainQueue(MilliSeconds queue, TimePoint now)
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthController::trustProbe(TimePoint send_time, MilliSeconds queue)
+void BandwidthControllerTcp::trustProbe(TimePoint send_time, MilliSeconds queue)
 {
     trusted_time_ = send_time;
     trusted_queue_ = queue;
@@ -389,7 +389,7 @@ void BandwidthController::trustProbe(TimePoint send_time, MilliSeconds queue)
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthController::finishTest(double interval, bool steady)
+void BandwidthControllerTcp::finishTest(double interval, bool steady)
 {
     if (probe_rate_)
     {
@@ -410,7 +410,7 @@ void BandwidthController::finishTest(double interval, bool steady)
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthController::setBandwidth(double bandwidth)
+void BandwidthControllerTcp::setBandwidth(double bandwidth)
 {
     const qint64 before = bandwidth_;
     bandwidth_ = std::clamp(static_cast<qint64>(std::llround(bandwidth)), kMinBandwidth,

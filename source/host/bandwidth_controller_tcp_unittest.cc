@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/bandwidth_controller.h"
+#include "host/bandwidth_controller_tcp.h"
 
 #include <gtest/gtest.h>
 
@@ -72,7 +72,7 @@ private:
 };
 
 //--------------------------------------------------------------------------------------------------
-qint64 sendTraffic(BandwidthController* controller, TimePoint now, Traffic traffic)
+qint64 sendTraffic(BandwidthControllerTcp* controller, TimePoint now, Traffic traffic)
 {
     qint64 bytes = 0;
     if (traffic == Traffic::HALF)
@@ -93,7 +93,7 @@ qint64 sendTraffic(BandwidthController* controller, TimePoint now, Traffic traff
 
 //--------------------------------------------------------------------------------------------------
 // A probe goes out at |*now| and is acked |delay| later. Moves |*now| to the next second.
-void probe(BandwidthController* controller, TimePoint* now, MilliSeconds delay,
+void probe(BandwidthControllerTcp* controller, TimePoint* now, MilliSeconds delay,
            Traffic traffic = Traffic::PADDED)
 {
     sendTraffic(controller, *now, traffic);
@@ -104,7 +104,7 @@ void probe(BandwidthController* controller, TimePoint* now, MilliSeconds delay,
 
 //--------------------------------------------------------------------------------------------------
 // A probe over |path|, held |extra| longer by a retransmission.
-void probe(BandwidthController* controller, TimePoint* now, Path* path,
+void probe(BandwidthControllerTcp* controller, TimePoint* now, Path* path,
            Traffic traffic = Traffic::PADDED, MilliSeconds extra = MilliSeconds::zero())
 {
     const qint64 bytes = sendTraffic(controller, *now, traffic);
@@ -122,7 +122,7 @@ qint64 scaled(qint64 bandwidth, double factor)
 //--------------------------------------------------------------------------------------------------
 // Climbs on |path| to its capacity, measures it by the queue of the test over it and holds the
 // bandwidth at 0.9 of it.
-void startAtCapacity(BandwidthController* controller, TimePoint* now, Path* path)
+void startAtCapacity(BandwidthControllerTcp* controller, TimePoint* now, Path* path)
 {
     controller->start();
     for (int i = 0; i < 16; ++i)
@@ -132,7 +132,7 @@ void startAtCapacity(BandwidthController* controller, TimePoint* now, Path* path
 
 //--------------------------------------------------------------------------------------------------
 // Holds the bandwidth until the test over the capacity starts.
-void holdUntilTest(BandwidthController* controller, TimePoint* now, Path* path)
+void holdUntilTest(BandwidthControllerTcp* controller, TimePoint* now, Path* path)
 {
     for (int i = 0; i < 20 && controller->paddingDue(*now) == 0; ++i)
         probe(controller, now, path);
@@ -142,9 +142,9 @@ void holdUntilTest(BandwidthController* controller, TimePoint* now, Path* path)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, NoProbeBeforeStart)
+TEST(BandwidthControllerTcpTest, NoProbeBeforeStart)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     const TimePoint now = TimePoint() + Hours(1);
 
     EXPECT_EQ(controller.bandwidth(), 0);
@@ -157,9 +157,9 @@ TEST(BandwidthControllerTest, NoProbeBeforeStart)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, OneProbeInFlight)
+TEST(BandwidthControllerTcpTest, OneProbeInFlight)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
 
@@ -171,9 +171,9 @@ TEST(BandwidthControllerTest, OneProbeInFlight)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, ClearPathProvesTheNextRate)
+TEST(BandwidthControllerTcpTest, ClearPathProvesTheNextRate)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
 
@@ -189,9 +189,9 @@ TEST(BandwidthControllerTest, ClearPathProvesTheNextRate)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, PaddingFillsTheGapToTheTestRate)
+TEST(BandwidthControllerTcpTest, PaddingFillsTheGapToTheTestRate)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
 
@@ -207,9 +207,9 @@ TEST(BandwidthControllerTest, PaddingFillsTheGapToTheTestRate)
 
 //--------------------------------------------------------------------------------------------------
 // A session that sends no padding and less than the rate under test proves nothing.
-TEST(BandwidthControllerTest, NoGrowthWithoutPadding)
+TEST(BandwidthControllerTcpTest, NoGrowthWithoutPadding)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
 
@@ -226,9 +226,9 @@ TEST(BandwidthControllerTest, NoGrowthWithoutPadding)
 // The climb passes rate after rate until a test over the capacity builds a queue. Without a
 // capacity the first probe in the queue may be held by a retransmission as well, the second one
 // measures it.
-TEST(BandwidthControllerTest, ClimbMeasuresTheCapacityByTwoProbes)
+TEST(BandwidthControllerTcpTest, ClimbMeasuresTheCapacityByTwoProbes)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     Path path(kCapacity);
     controller.start();
@@ -251,9 +251,9 @@ TEST(BandwidthControllerTest, ClimbMeasuresTheCapacityByTwoProbes)
 
 //--------------------------------------------------------------------------------------------------
 // The probes before and after a late one bound the rate of the path, the late one is skipped.
-TEST(BandwidthControllerTest, RetransmissionInTheFirstQueueIsSkipped)
+TEST(BandwidthControllerTcpTest, RetransmissionInTheFirstQueueIsSkipped)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     Path path(kCapacity);
     controller.start();
@@ -267,9 +267,9 @@ TEST(BandwidthControllerTest, RetransmissionInTheFirstQueueIsSkipped)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, RetransmittedProbeIsNotAQueue)
+TEST(BandwidthControllerTcpTest, RetransmittedProbeIsNotAQueue)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
 
@@ -287,9 +287,9 @@ TEST(BandwidthControllerTest, RetransmittedProbeIsNotAQueue)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, LargeExcessIsMeasuredAtOnce)
+TEST(BandwidthControllerTcpTest, LargeExcessIsMeasuredAtOnce)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     const qint64 capacity = std::llround(kStartBandwidth / 2.2);
     Path path(capacity);
@@ -310,9 +310,9 @@ TEST(BandwidthControllerTest, LargeExcessIsMeasuredAtOnce)
 
 //--------------------------------------------------------------------------------------------------
 // An idle session builds no queue, so an excess two probes show alike is the delay of the path.
-TEST(BandwidthControllerTest, StandingExcessOfAnIdlePathBecomesTheBase)
+TEST(BandwidthControllerTcpTest, StandingExcessOfAnIdlePathBecomesTheBase)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
 
@@ -330,9 +330,9 @@ TEST(BandwidthControllerTest, StandingExcessOfAnIdlePathBecomesTheBase)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, RetransmittedIdleProbeKeepsTheBase)
+TEST(BandwidthControllerTcpTest, RetransmittedIdleProbeKeepsTheBase)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
 
@@ -345,9 +345,9 @@ TEST(BandwidthControllerTest, RetransmittedIdleProbeKeepsTheBase)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, NoiseOfTheExcessIsNotAQueue)
+TEST(BandwidthControllerTcpTest, NoiseOfTheExcessIsNotAQueue)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
 
@@ -361,9 +361,9 @@ TEST(BandwidthControllerTest, NoiseOfTheExcessIsNotAQueue)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, BandwidthHoldsUnderTheCapacity)
+TEST(BandwidthControllerTcpTest, BandwidthHoldsUnderTheCapacity)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     Path path(kCapacity);
     startAtCapacity(&controller, &now, &path);
@@ -379,9 +379,9 @@ TEST(BandwidthControllerTest, BandwidthHoldsUnderTheCapacity)
 
 //--------------------------------------------------------------------------------------------------
 // On a path that grew the test over the capacity is padded and passed, and the climb goes on.
-TEST(BandwidthControllerTest, StepOverTheCapacityIsProvedByPadding)
+TEST(BandwidthControllerTcpTest, StepOverTheCapacityIsProvedByPadding)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     Path path(kCapacity);
     startAtCapacity(&controller, &now, &path);
@@ -399,9 +399,9 @@ TEST(BandwidthControllerTest, StepOverTheCapacityIsProvedByPadding)
 //--------------------------------------------------------------------------------------------------
 // The test brought the rate to 1.1 of the capacity, the queue of 100 ms is the one the model
 // foresaw.
-TEST(BandwidthControllerTest, QueueOverTheCapacityIsMeasuredByTheFirstProbe)
+TEST(BandwidthControllerTcpTest, QueueOverTheCapacityIsMeasuredByTheFirstProbe)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     Path path(kCapacity);
     startAtCapacity(&controller, &now, &path);
@@ -419,9 +419,9 @@ TEST(BandwidthControllerTest, QueueOverTheCapacityIsMeasuredByTheFirstProbe)
 //--------------------------------------------------------------------------------------------------
 // A retransmission holds the probe of the test over the capacity. The model drains the queue it
 // foresaw, and the capacity stays.
-TEST(BandwidthControllerTest, RetransmissionOverTheCapacityChangesNothing)
+TEST(BandwidthControllerTcpTest, RetransmissionOverTheCapacityChangesNothing)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     Path path(kCapacity);
     startAtCapacity(&controller, &now, &path);
@@ -440,9 +440,9 @@ TEST(BandwidthControllerTest, RetransmissionOverTheCapacityChangesNothing)
 //--------------------------------------------------------------------------------------------------
 // The path narrows under the held bandwidth. One probe over the model may be late by itself, the
 // second one measures the narrower path.
-TEST(BandwidthControllerTest, NarrowingIsMeasuredByTheSecondProbe)
+TEST(BandwidthControllerTcpTest, NarrowingIsMeasuredByTheSecondProbe)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     Path path(kCapacity);
     startAtCapacity(&controller, &now, &path);
@@ -460,9 +460,9 @@ TEST(BandwidthControllerTest, NarrowingIsMeasuredByTheSecondProbe)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, RetransmissionInTheNarrowingIsSkipped)
+TEST(BandwidthControllerTcpTest, RetransmissionInTheNarrowingIsSkipped)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     Path path(kCapacity);
     startAtCapacity(&controller, &now, &path);
@@ -474,9 +474,9 @@ TEST(BandwidthControllerTest, RetransmissionInTheNarrowingIsSkipped)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, StallLeavesNothingToSend)
+TEST(BandwidthControllerTcpTest, StallLeavesNothingToSend)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
     probe(&controller, &now, kBaseDelay, Traffic::NONE);
@@ -501,9 +501,9 @@ TEST(BandwidthControllerTest, StallLeavesNothingToSend)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, StalledProbeExpires)
+TEST(BandwidthControllerTcpTest, StalledProbeExpires)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     const TimePoint now = TimePoint() + Hours(1);
     controller.start();
 
@@ -519,9 +519,9 @@ TEST(BandwidthControllerTest, StalledProbeExpires)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, OverflowStateFollowsTheQueue)
+TEST(BandwidthControllerTcpTest, OverflowStateFollowsTheQueue)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     Path path(kCapacity);
     startAtCapacity(&controller, &now, &path);
@@ -540,9 +540,9 @@ TEST(BandwidthControllerTest, OverflowStateFollowsTheQueue)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, OverflowStateCountsAStalledProbe)
+TEST(BandwidthControllerTcpTest, OverflowStateCountsAStalledProbe)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
     probe(&controller, &now, kBaseDelay, Traffic::NONE);
@@ -556,9 +556,9 @@ TEST(BandwidthControllerTest, OverflowStateCountsAStalledProbe)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, WindowSizeFollowsTheBandwidthAndDelay)
+TEST(BandwidthControllerTcpTest, WindowSizeFollowsTheBandwidthAndDelay)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
 
@@ -573,9 +573,9 @@ TEST(BandwidthControllerTest, WindowSizeFollowsTheBandwidthAndDelay)
 
 //--------------------------------------------------------------------------------------------------
 // The bandwidth lowered to drain a queue does not shrink the window, or the queue would not drain.
-TEST(BandwidthControllerTest, WindowSizeStaysAtTheCapacityUnderTheDrain)
+TEST(BandwidthControllerTcpTest, WindowSizeStaysAtTheCapacityUnderTheDrain)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
 
@@ -589,9 +589,9 @@ TEST(BandwidthControllerTest, WindowSizeStaysAtTheCapacityUnderTheDrain)
 
 //--------------------------------------------------------------------------------------------------
 // A stall before the capacity is measured does not shrink the window either.
-TEST(BandwidthControllerTest, WindowSizeStaysAtTheBandwidthUnderAStall)
+TEST(BandwidthControllerTcpTest, WindowSizeStaysAtTheBandwidthUnderAStall)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
     probe(&controller, &now, kBaseDelay, Traffic::NONE);
@@ -609,9 +609,9 @@ TEST(BandwidthControllerTest, WindowSizeStaysAtTheBandwidthUnderAStall)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, ResetPathForgetsBaseDelay)
+TEST(BandwidthControllerTcpTest, ResetPathForgetsBaseDelay)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
     probe(&controller, &now, kBaseDelay, Traffic::NONE);
@@ -626,9 +626,9 @@ TEST(BandwidthControllerTest, ResetPathForgetsBaseDelay)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, ResetPathStartsFromTheCapacity)
+TEST(BandwidthControllerTcpTest, ResetPathStartsFromTheCapacity)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     Path path(kCapacity);
     startAtCapacity(&controller, &now, &path);
@@ -639,9 +639,9 @@ TEST(BandwidthControllerTest, ResetPathStartsFromTheCapacity)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, ResetPathWithoutCapacityStartsOver)
+TEST(BandwidthControllerTcpTest, ResetPathWithoutCapacityStartsOver)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
 
@@ -654,9 +654,9 @@ TEST(BandwidthControllerTest, ResetPathWithoutCapacityStartsOver)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerTest, BandwidthStaysWithinBounds)
+TEST(BandwidthControllerTcpTest, BandwidthStaysWithinBounds)
 {
-    BandwidthController controller;
+    BandwidthControllerTcp controller;
     TimePoint now = TimePoint() + Hours(1);
     controller.start();
 
