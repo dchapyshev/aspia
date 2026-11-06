@@ -1017,13 +1017,12 @@ void DesktopWindow::onMouseEvent(const proto::input::MouseEvent& event)
 
         double scale_x = (scaled_size.width() * 100) / static_cast<double>(source_size.width());
         double scale_y = (scaled_size.height() * 100) / static_cast<double>(source_size.height());
-        double scale = std::min(scale_x, scale_y);
 
         proto::input::MouseEvent out_event;
 
         out_event.set_mask(event.mask());
-        out_event.set_x(static_cast<int>(static_cast<double>(pos.x() * 100) / scale));
-        out_event.set_y(static_cast<int>(static_cast<double>(pos.y() * 100) / scale));
+        out_event.set_x(static_cast<int>(static_cast<double>(pos.x() * 100) / scale_x));
+        out_event.set_y(static_cast<int>(static_cast<double>(pos.y() * 100) / scale_y));
 
         // Button and wheel changes must reach the host immediately and in order, so they bypass
         // coalescing. Such an event already carries the latest position, so any queued move is
