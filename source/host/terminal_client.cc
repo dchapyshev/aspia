@@ -23,12 +23,18 @@
 #include <QFileInfo>
 
 #if defined(Q_OS_WINDOWS)
+#include "base/sys_info.h"
+#include "base/win/registry.h"
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
 
 #include <vector>
 
 #include <AclApi.h>
+#include <lmcons.h>
+#include <lmerr.h>
+#include <lmapibuf.h>
+#include <lmjoin.h>
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
 
@@ -195,6 +201,33 @@ bool launchAgentAsUser(const QString& user_name, const QString& agent_path, cons
 #endif // defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 
 #if defined(Q_OS_WINDOWS)
+//--------------------------------------------------------------------------------------------------
+// The domain that the logon screen of Windows uses for a user name typed without one.
+QString defaultLogonDomain()
+{
+    QString domain;
+
+    RegKey key;
+    LONG status = key.open(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+                           KEY_READ | KEY_WOW64_64KEY);
+    if (status == ERROR_SUCCESS && key.readValue("DefaultLogonDomain", &domain) == ERROR_SUCCESS && !domain.isEmpty())
+        return domain;
+
+    wchar_t* join_name = nullptr;
+    NETSETUP_JOIN_STATUS join_status = NetSetupUnknownStatus;
+    if (NetGetJoinInformation(nullptr, &join_name, &join_status) == NERR_Success)
+    {
+        domain = join_status == NetSetupDomainName ? QString::fromWCharArray(join_name) : QString();
+        NetApiBufferFree(join_name);
+
+        if (!domain.isEmpty())
+            return domain;
+    }
+
+    domain = SysInfo::computerName();
+    return domain.isEmpty() ? QString(".") : domain;
+}
+
 //--------------------------------------------------------------------------------------------------
 bool addExplicitAce(HANDLE object, PSID sid, DWORD access, DWORD inheritance)
 {
@@ -536,7 +569,7 @@ bool TerminalClient::launchAgent(
     }
 
 #if defined(Q_OS_WINDOWS)
-    QString domain = ".";
+    QString domain;
     QString account = user_name;
 
     const int separator = user_name.indexOf('\\');
@@ -546,9 +579,13 @@ bool TerminalClient::launchAgent(
         account = user_name.mid(separator + 1);
     }
 
+    if (domain.isEmpty() && !account.contains('@'))
+        domain = defaultLogonDomain();
+
+    // LogonUserW takes a UPN only with a null domain.
     ScopedHandle user_token;
-    if (!LogonUserW(qUtf16Printable(account), qUtf16Printable(domain), qUtf16Printable(password),
-        LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, user_token.recieve()))
+    if (!LogonUserW(qUtf16Printable(account), domain.isEmpty() ? nullptr : qUtf16Printable(domain),
+        qUtf16Printable(password), LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, user_token.recieve()))
     {
         PLOG(WARNING) << "LogonUserW failed";
         return false;
