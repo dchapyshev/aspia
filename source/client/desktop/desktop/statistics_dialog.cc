@@ -83,6 +83,11 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
     ui->setupUi(this);
     ui->tree->resizeColumnToContents(0);
 
+#if defined(Q_OS_MACOS)
+    // On macOS the parent does not keep a dialog above itself, so a click on the session hides it.
+    setWindowFlag(Qt::Tool);
+#endif // defined(Q_OS_MACOS)
+
     update_timer_ = new QTimer(this);
     connect(update_timer_, &QTimer::timeout, this, &StatisticsDialog::sig_metricsRequired);
     update_timer_->start(Seconds(1));
