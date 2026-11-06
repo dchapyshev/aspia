@@ -232,10 +232,10 @@ InputInjectorWin::~InputInjectorWin()
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorWin::setScreenInfo(const QSize& screen_size, const QPoint& offset)
+void InputInjectorWin::setScreenInfo(const QSize& desktop_size, const QPoint& screen_offset)
 {
-    screen_size_ = screen_size;
-    screen_offset_ = offset;
+    desktop_size_ = desktop_size;
+    screen_offset_ = screen_offset;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -335,20 +335,20 @@ void InputInjectorWin::injectMouseEvent(const proto::input::MouseEvent& event)
 {
     switchToInputDesktop();
 
-    if (screen_size_.width() <= 1 || screen_size_.height() <= 1)
-        screen_size_ = QSize(GetSystemMetrics(SM_CXVIRTUALSCREEN), GetSystemMetrics(SM_CYVIRTUALSCREEN));
+    if (desktop_size_.width() <= 1 || desktop_size_.height() <= 1)
+        desktop_size_ = QSize(GetSystemMetrics(SM_CXVIRTUALSCREEN), GetSystemMetrics(SM_CYVIRTUALSCREEN));
 
-    if (screen_size_.width() <= 1 || screen_size_.height() <= 1)
+    if (desktop_size_.width() <= 1 || desktop_size_.height() <= 1)
     {
-        LOG(ERROR) << "Invalid screen size:" << screen_size_;
+        LOG(ERROR) << "Invalid desktop size:" << desktop_size_;
         return;
     }
 
     // Translate the coordinates of the cursor into the coordinates of the virtual screen. The client
     // coordinates are untrusted; clamp them into the screen and compute in 64-bit so the intermediate
     // multiply by 65535 cannot overflow a signed int.
-    const qint64 max_x = screen_size_.width() - 1;
-    const qint64 max_y = screen_size_.height() - 1;
+    const qint64 max_x = desktop_size_.width() - 1;
+    const qint64 max_y = desktop_size_.height() - 1;
 
     const qint64 x = qBound<qint64>(0, static_cast<qint64>(event.x()) + screen_offset_.x(), max_x);
     const qint64 y = qBound<qint64>(0, static_cast<qint64>(event.y()) + screen_offset_.y(), max_y);

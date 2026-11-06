@@ -106,16 +106,12 @@ void InputWorker::onInjectMouseEvent(const proto::input::MouseEvent& event)
     if (is_paused_ || is_mouse_locked_)
         return;
 
-    if (source_size_.isEmpty() || frame_size_.isEmpty())
+    const QSize frame_size(event.frame_width(), event.frame_height());
+    if (screen_size_.isEmpty() || frame_size.isEmpty())
         return;
 
-    // The client reports the frame it sees, which can be older than the one being encoded.
-    const bool has_frame_size = event.frame_width() > 0 && event.frame_height() > 0;
-    const QSize frame_size =
-        has_frame_size ? QSize(event.frame_width(), event.frame_height()) : frame_size_;
-
     const QPoint pos =
-        InputInjector::mapToScreen(QPoint(event.x(), event.y()), frame_size, source_size_);
+        InputInjector::mapToScreen(QPoint(event.x(), event.y()), frame_size, screen_size_);
 
     proto::input::MouseEvent out_event;
     out_event.set_mask(event.mask());
@@ -209,8 +205,8 @@ void InputWorker::onPrepare()
     screen_worker_ = findWorker<ScreenWorker>();
     if (screen_worker_)
     {
-        connect(screen_worker_, &ScreenWorker::sig_frameSizeChanged,
-                this, &InputWorker::onFrameSizeChanged, Qt::QueuedConnection);
+        connect(screen_worker_, &ScreenWorker::sig_screenSizeChanged,
+                this, &InputWorker::onScreenSizeChanged, Qt::QueuedConnection);
         connect(screen_worker_, &ScreenWorker::sig_screenInfoChanged,
                 this, &InputWorker::onScreenInfoChanged, Qt::QueuedConnection);
     }
@@ -241,23 +237,22 @@ void InputWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputWorker::onFrameSizeChanged(const QSize& source_size, const QSize& frame_size)
+void InputWorker::onScreenSizeChanged(const QSize& screen_size)
 {
-    source_size_ = source_size;
-    frame_size_ = frame_size;
+    screen_size_ = screen_size;
 }
 
 //--------------------------------------------------------------------------------------------------
 void InputWorker::onScreenInfoChanged(
-    ScreenCapturer::Type type, const QSize& screen_size, const QPoint& offset)
+    ScreenCapturer::Type type, const QSize& desktop_size, const QPoint& screen_offset)
 {
-    screen_size_ = screen_size;
-    screen_offset_ = offset;
+    desktop_size_ = desktop_size;
+    screen_offset_ = screen_offset;
 
     updateInjectorForCaptureType(type);
 
     if (input_injector_)
-        input_injector_->setScreenInfo(screen_size, offset);
+        input_injector_->setScreenInfo(desktop_size, screen_offset);
 }
 
 //--------------------------------------------------------------------------------------------------

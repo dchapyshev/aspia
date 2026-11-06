@@ -229,10 +229,10 @@ InputInjectorAndroid* InputInjectorAndroid::create(QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorAndroid::setScreenInfo(const QSize& screen_size, const QPoint& offset)
+void InputInjectorAndroid::setScreenInfo(const QSize& desktop_size, const QPoint& screen_offset)
 {
-    screen_size_ = screen_size;
-    screen_offset_ = offset;
+    desktop_size_ = desktop_size;
+    screen_offset_ = screen_offset;
 }
 
 //--------------------------------------------------------------------------------------------------

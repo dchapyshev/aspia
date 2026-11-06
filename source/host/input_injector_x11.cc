@@ -18,7 +18,7 @@
 
 #include "host/input_injector_x11.h"
 
-#include <climits>
+#include <limits>
 #include <vector>
 
 #include "base/logging.h"
@@ -93,12 +93,12 @@ InputInjectorX11* InputInjectorX11::create(QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::setScreenInfo(const QSize& screen_size, const QPoint& offset)
+void InputInjectorX11::setScreenInfo(const QSize& desktop_size, const QPoint& screen_offset)
 {
     // XTest injects in absolute pixel coordinates; the desktop size is only used to clamp untrusted
     // client coordinates.
-    screen_size_ = screen_size;
-    screen_offset_ = offset;
+    desktop_size_ = desktop_size;
+    screen_offset_ = screen_offset;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -187,8 +187,9 @@ void InputInjectorX11::injectMouseEvent(const proto::input::MouseEvent& event)
 {
     // The client coordinates are untrusted; add the offset in 64-bit so the sum cannot overflow a
     // signed int, and clamp the result into the desktop.
-    const qint64 max_x = (screen_size_.width() > 0) ? screen_size_.width() - 1 : INT_MAX;
-    const qint64 max_y = (screen_size_.height() > 0) ? screen_size_.height() - 1 : INT_MAX;
+    const int max_int = std::numeric_limits<int>::max();
+    const qint64 max_x = (desktop_size_.width() > 0) ? desktop_size_.width() - 1 : max_int;
+    const qint64 max_y = (desktop_size_.height() > 0) ? desktop_size_.height() - 1 : max_int;
 
     const QPoint pos(
         static_cast<int>(qBound<qint64>(0, static_cast<qint64>(event.x()) + screen_offset_.x(), max_x)),

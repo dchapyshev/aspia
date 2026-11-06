@@ -229,10 +229,10 @@ void InputInjectorUinput::emitEvent(quint16 type, quint16 code, qint32 value)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorUinput::setScreenInfo(const QSize& screen_size, const QPoint& offset)
+void InputInjectorUinput::setScreenInfo(const QSize& desktop_size, const QPoint& screen_offset)
 {
-    screen_size_ = screen_size;
-    screen_offset_ = offset;
+    desktop_size_ = desktop_size;
+    screen_offset_ = screen_offset;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -297,15 +297,15 @@ void InputInjectorUinput::injectTextEvent(const proto::input::TextEvent& event)
 //--------------------------------------------------------------------------------------------------
 void InputInjectorUinput::injectMouseEvent(const proto::input::MouseEvent& event)
 {
-    // The capturer reports the screen size and this output's offset (via setScreenInfo); the compositor
+    // The capturer reports the desktop size and this output's offset (via setScreenInfo); the compositor
     // maps the absolute range over that area. For KMS the capturer folds in the monitor offset and
     // fractional scale, so a plain affine map is all that is needed here.
-    if (screen_size_.width() > 1 && screen_size_.height() > 1)
+    if (desktop_size_.width() > 1 && desktop_size_.height() > 1)
     {
         // The client coordinates are untrusted; clamp them into the screen and compute in 64-bit so the
         // intermediate multiply by kAbsMax cannot overflow a signed int.
-        const qint64 max_x = screen_size_.width() - 1;
-        const qint64 max_y = screen_size_.height() - 1;
+        const qint64 max_x = desktop_size_.width() - 1;
+        const qint64 max_y = desktop_size_.height() - 1;
 
         const qint64 x = qBound<qint64>(0, static_cast<qint64>(event.x()) + screen_offset_.x(), max_x);
         const qint64 y = qBound<qint64>(0, static_cast<qint64>(event.y()) + screen_offset_.y(), max_y);

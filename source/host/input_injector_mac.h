@@ -34,7 +34,7 @@ public:
     static InputInjectorMac* create(QObject* parent = nullptr);
 
     // InputInjector implementation.
-    void setScreenInfo(const QSize& screen_size, const QPoint& offset) final;
+    void setScreenInfo(const QSize& desktop_size, const QPoint& screen_offset) final;
     void setBlockInput(bool enable) final;
     void injectKeyEvent(const proto::input::KeyEvent& event) final;
     void injectTextEvent(const proto::input::TextEvent& event) final;

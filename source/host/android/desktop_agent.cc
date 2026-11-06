@@ -318,10 +318,7 @@ void DesktopAgent::onInjectMouseEvent(const proto::input::MouseEvent& event)
     if (!input_injector_)
         return;
 
-    const bool has_frame_size = event.frame_width() > 0 && event.frame_height() > 0;
-    const QSize frame_size = has_frame_size ?
-        QSize(event.frame_width(), event.frame_height()) : scale_reducer_->targetSize();
-
+    const QSize frame_size(event.frame_width(), event.frame_height());
     if (source_size_.isEmpty() || frame_size.isEmpty())
         return;
 

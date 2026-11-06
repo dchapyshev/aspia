@@ -165,11 +165,11 @@ InputInjectorMac* InputInjectorMac::create(QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorMac::setScreenInfo(const QSize& /* screen_size */, const QPoint& offset)
+void InputInjectorMac::setScreenInfo(const QSize& /* desktop_size */, const QPoint& screen_offset)
 {
     // macOS event coordinates are absolute global-display points, so only the offset of the captured
     // region relative to the main display is needed.
-    screen_offset_ = offset;
+    screen_offset_ = screen_offset;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -18,7 +18,7 @@
 
 #include "host/input_injector_wayland.h"
 
-#include <climits>
+#include <limits>
 
 #include "base/logging.h"
 #include "common/keycode_converter.h"
@@ -65,10 +65,10 @@ InputInjectorWayland* InputInjectorWayland::create(WaylandCompositorSource* sour
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorWayland::setScreenInfo(const QSize& screen_size, const QPoint& offset)
+void InputInjectorWayland::setScreenInfo(const QSize& desktop_size, const QPoint& screen_offset)
 {
-    screen_size_ = screen_size;
-    screen_offset_ = offset;
+    desktop_size_ = desktop_size;
+    screen_offset_ = screen_offset;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -124,9 +124,10 @@ void InputInjectorWayland::injectMouseEvent(const proto::input::MouseEvent& even
         return;
 
     // The client coordinates are untrusted; add the offset in 64-bit so the sum cannot overflow a
-    // signed int, and clamp the result into the captured screen.
-    const qint64 max_x = (screen_size_.width() > 0) ? screen_size_.width() - 1 : INT_MAX;
-    const qint64 max_y = (screen_size_.height() > 0) ? screen_size_.height() - 1 : INT_MAX;
+    // signed int, and clamp the result into the desktop.
+    const int max_int = std::numeric_limits<int>::max();
+    const qint64 max_x = (desktop_size_.width() > 0) ? desktop_size_.width() - 1 : max_int;
+    const qint64 max_y = (desktop_size_.height() > 0) ? desktop_size_.height() - 1 : max_int;
 
     QPointF pos(qBound<qint64>(0, static_cast<qint64>(event.x()) + screen_offset_.x(), max_x),
                 qBound<qint64>(0, static_cast<qint64>(event.y()) + screen_offset_.y(), max_y));
@@ -135,10 +136,10 @@ void InputInjectorWayland::injectMouseEvent(const proto::input::MouseEvent& even
     // The portal expects pointer coordinates in the stream's logical coordinate space, so on a scaled
     // output (e.g. KDE fractional scaling) the two differ and the coordinates must be rescaled.
     const QSize logical_size = source_->stream().size;
-    if (logical_size.isValid() && screen_size_.width() > 0 && screen_size_.height() > 0)
+    if (logical_size.isValid() && desktop_size_.width() > 0 && desktop_size_.height() > 0)
     {
-        pos.setX(pos.x() * logical_size.width() / screen_size_.width());
-        pos.setY(pos.y() * logical_size.height() / screen_size_.height());
+        pos.setX(pos.x() * logical_size.width() / desktop_size_.width());
+        pos.setY(pos.y() * logical_size.height() / desktop_size_.height());
     }
 
     source_->notifyPointerMotionAbsolute(pos.x(), pos.y());

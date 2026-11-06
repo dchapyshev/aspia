@@ -320,7 +320,7 @@ void ScreenWorker::onStopCapture()
     cooldown_time_ = Seconds::zero();
 
     published_capture_type_ = ScreenCapturer::Type::UNKNOWN;
-    published_screen_size_ = QSize();
+    published_desktop_size_ = QSize();
     published_screen_offset_ = QPoint();
     emit sig_screenInfoChanged(ScreenCapturer::Type::UNKNOWN, QSize(), QPoint());
 }
@@ -1025,7 +1025,7 @@ void ScreenWorker::selectCapturer(ScreenCapturer::Error last_error)
     // A fresh one is created once the first frame reports the new capture type (see
     // updateInjectorScreenInfo). Reset the published values so that first frame is seen as a change.
     published_capture_type_ = ScreenCapturer::Type::UNKNOWN;
-    published_screen_size_ = QSize();
+    published_desktop_size_ = QSize();
     published_screen_offset_ = QPoint();
 
     emit sig_screenInfoChanged(ScreenCapturer::Type::UNKNOWN, QSize(), QPoint());
@@ -1301,6 +1301,7 @@ void ScreenWorker::encodeScreen(const Frame* frame)
 
         source_size_ = frame->size();
         video_encoder_->setKeyFrameRequired(true);
+        emit sig_screenSizeChanged(source_size_);
     }
 
     const QSize current_size = ScaleReducer::fitSize(source_size_, preferred_size_);
@@ -1318,13 +1319,6 @@ void ScreenWorker::encodeScreen(const Frame* frame)
     {
         LOG(ERROR) << "No scaled frame";
         return;
-    }
-
-    if (source_size_ != published_source_size_ || current_size != published_frame_size_)
-    {
-        published_source_size_ = source_size_;
-        published_frame_size_ = current_size;
-        emit sig_frameSizeChanged(source_size_, current_size);
     }
 
     proto::video::HostToClient& message = serializer_.newMessage<proto::video::HostToClient>();
@@ -1427,22 +1421,22 @@ void ScreenWorker::sendMetrics()
 void ScreenWorker::updateInjectorScreenInfo(const Frame* frame)
 {
     const ScreenCapturer::Type type = screen_capturer_->type();
-    const QSize screen_size = screen_capturer_->desktopRect().size();
-    const QPoint offset = frame->topLeft();
+    const QSize desktop_size = screen_capturer_->desktopRect().size();
+    const QPoint screen_offset = frame->topLeft();
 
     // The local injector (Linux Wayland: it shares the capture path) gets the update directly.
     if (input_injector_)
-        input_injector_->setScreenInfo(screen_size, offset);
+        input_injector_->setScreenInfo(desktop_size, screen_offset);
 
     // InputWorker gets the capture backend and geometry through a queued signal; it owns the injector
     // on Windows/macOS and, on Linux, for the X11/uinput backends. Publish only changes - this runs
     // on every captured frame.
-    if (type != published_capture_type_ || screen_size != published_screen_size_ ||
-        offset != published_screen_offset_)
+    if (type != published_capture_type_ || desktop_size != published_desktop_size_ ||
+        screen_offset != published_screen_offset_)
     {
         published_capture_type_ = type;
-        published_screen_size_ = screen_size;
-        published_screen_offset_ = offset;
-        emit sig_screenInfoChanged(type, screen_size, offset);
+        published_desktop_size_ = desktop_size;
+        published_screen_offset_ = screen_offset;
+        emit sig_screenInfoChanged(type, desktop_size, screen_offset);
     }
 }

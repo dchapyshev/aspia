@@ -98,14 +98,15 @@ signals:
     void sig_screenListData(const QByteArray& buffer);
     void sig_screenTypeData(const QByteArray& buffer);
 
-    // Video pipeline state InputWorker needs for scaling client coordinates and clamping them into
-    // the real screen. Emitted only when the values actually change.
-    void sig_frameSizeChanged(const QSize& source_size, const QSize& frame_size);
+    // Size of the captured screen. InputWorker maps the client coordinates onto it.
+    void sig_screenSizeChanged(const QSize& screen_size);
 
-    // Screen geometry plus the active capture backend. On Linux the backend decides which input
-    // injector InputWorker creates (X11/uinput), or whether it delegates to this worker (Wayland,
-    // where the injector is tied to capturer-owned resources). Emitted only when a value changes.
-    void sig_screenInfoChanged(ScreenCapturer::Type type, const QSize& screen_size, const QPoint& offset);
+    // Size of the whole virtual desktop, offset of the captured screen in it and the active capture
+    // backend. On Linux the backend decides which input injector InputWorker creates (X11/uinput), or
+    // whether it delegates to this worker (Wayland, where the injector is tied to capturer-owned
+    // resources). Emitted only when a value changes.
+    void sig_screenInfoChanged(
+        ScreenCapturer::Type type, const QSize& desktop_size, const QPoint& screen_offset);
 
 protected:
     // Worker implementation.
@@ -203,10 +204,8 @@ private:
     bool is_paused_ = false;
     bool is_cursor_position_ = false;
 
-    QSize published_source_size_;
-    QSize published_frame_size_;
     ScreenCapturer::Type published_capture_type_ = ScreenCapturer::Type::UNKNOWN;
-    QSize published_screen_size_;
+    QSize published_desktop_size_;
     QPoint published_screen_offset_;
 
     int pressure_score_ = 0; // 0..100

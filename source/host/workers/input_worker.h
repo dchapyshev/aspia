@@ -37,12 +37,7 @@ class TouchEvent;
 class InputInjector;
 class ScreenWorker;
 
-// Injects the input received from clients into the user session. All input enters here (gating and
-// coordinate scaling), so a busy video pipeline never delays keystrokes and pointer motion. The
-// worker owns the platform injector on Windows and macOS, and on Linux for the X11 and kernel-level
-// (KMS/KWin/wlroots) captures. For the Wayland capture the injector is tied to capturer-owned
-// resources and lives in ScreenWorker, so those events are delegated to it. Which case applies is
-// decided from the capture type reported through ScreenWorker::sig_screenInfoChanged.
+// Injects the input received from clients into the user session.
 class InputWorker final : public Worker
 {
     Q_OBJECT
@@ -69,8 +64,8 @@ protected:
     void onStop() final;
 
 private slots:
-    void onFrameSizeChanged(const QSize& source_size, const QSize& frame_size);
-    void onScreenInfoChanged(ScreenCapturer::Type type, const QSize& screen_size, const QPoint& offset);
+    void onScreenSizeChanged(const QSize& screen_size);
+    void onScreenInfoChanged(ScreenCapturer::Type type, const QSize& desktop_size, const QPoint& screen_offset);
 
 private:
     // Creates the injector matching the capture backend |type|, or releases it when injection is
@@ -95,9 +90,8 @@ private:
     bool is_mouse_locked_ = false;
     bool is_keyboard_locked_ = false;
 
-    QSize source_size_;
-    QSize frame_size_;
     QSize screen_size_;
+    QSize desktop_size_;
     QPoint screen_offset_;
 
     Q_DISABLE_COPY_MOVE(InputWorker)
