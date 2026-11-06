@@ -380,8 +380,11 @@ void VideoWorker::decodePacket(const proto::video::Packet& packet)
         return;
     }
 
-    if (convert_result == YuvConverter::Result::NEW_FRAME)
+    if (convert_result == YuvConverter::Result::NEW_FRAME || reported_screen_size_ != screen_size_)
+    {
+        reported_screen_size_ = screen_size_;
         emit sig_frameChanged(screen_size_, yuv_converter_.frame());
+    }
 
     ++fps_frame_count_;
 

@@ -86,6 +86,16 @@ EncodedStream encodeStream(proto::video::Encoding encoding)
 }
 
 //--------------------------------------------------------------------------------------------------
+proto::video::Packet withScreenSize(const proto::video::Packet& packet, const QSize& screen_size)
+{
+    proto::video::Packet result = packet;
+    proto::video::Size* size = result.mutable_format()->mutable_screen_size();
+    size->set_width(screen_size.width());
+    size->set_height(screen_size.height());
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 class VideoWorkerTest : public testing::Test
 {
 protected:
@@ -97,6 +107,12 @@ protected:
                          [this]() { ++draw_count_; }, Qt::DirectConnection);
         QObject::connect(&worker_, &VideoWorker::sig_sendMessage, &worker_,
                          [this]() { ++send_count_; }, Qt::DirectConnection);
+        QObject::connect(&worker_, &VideoWorker::sig_frameChanged, &worker_,
+                         [this](const QSize& screen_size, SharedFrame /* frame */)
+        {
+            ++frame_changed_count_;
+            reported_screen_size_ = screen_size;
+        }, Qt::DirectConnection);
     }
 
     void decode(const proto::video::Packet& packet)
@@ -107,6 +123,8 @@ protected:
     VideoWorker worker_;
     int draw_count_ = 0;
     int send_count_ = 0;
+    int frame_changed_count_ = 0;
+    QSize reported_screen_size_;
 };
 
 } // namespace
@@ -173,6 +191,33 @@ TEST_F(VideoWorkerTest, LateKeyFrameOfPreviousEncoderDoesNotFreezeVideo)
     decode(udp.requested_key_frame);
     EXPECT_EQ(draw_count_, draw_count + 1);
     EXPECT_EQ(send_count_, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(VideoWorkerTest, NewScreenSizeOfSameFrameSizeIsReported)
+{
+    const EncodedStream stream = encodeStream(proto::video::ENCODING_VP8);
+
+    decode(withScreenSize(stream.key_frame, QSize(1920, 1080)));
+    EXPECT_EQ(frame_changed_count_, 1);
+    EXPECT_EQ(reported_screen_size_, QSize(1920, 1080));
+
+    decode(stream.delta_frame);
+    EXPECT_EQ(frame_changed_count_, 1);
+
+    decode(withScreenSize(stream.requested_key_frame, QSize(1280, 720)));
+    EXPECT_EQ(frame_changed_count_, 2);
+    EXPECT_EQ(reported_screen_size_, QSize(1280, 720));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(VideoWorkerTest, SameScreenSizeIsNotReportedAgain)
+{
+    const EncodedStream stream = encodeStream(proto::video::ENCODING_VP8);
+
+    decode(withScreenSize(stream.key_frame, QSize(1920, 1080)));
+    decode(withScreenSize(stream.requested_key_frame, QSize(1920, 1080)));
+    EXPECT_EQ(frame_changed_count_, 1);
 }
 
 //--------------------------------------------------------------------------------------------------

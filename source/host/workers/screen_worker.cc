@@ -1300,6 +1300,7 @@ void ScreenWorker::encodeScreen(const Frame* frame)
             onSetPreferredSize(QSize());
 
         source_size_ = frame->size();
+        video_encoder_->setKeyFrameRequired(true);
     }
 
     const QSize current_size = ScaleReducer::fitSize(source_size_, preferred_size_);

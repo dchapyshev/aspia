@@ -116,6 +116,7 @@ private:
 
     YuvConverter yuv_converter_;
     QSize screen_size_;
+    QSize reported_screen_size_;
     QList<QRect> dirty_rects_;
 
     // Statistics, emitted once a second through sig_metrics.
