@@ -54,6 +54,8 @@ enum Row
     ROW_VIDEO_CODEC,
     ROW_RECEIVED_FPS,
     ROW_CAPTURE_FPS,
+    ROW_PREFERRED_SIZE,
+    ROW_VIDEO_QUALITY,
     ROW_CLIPBOARD,
     ROW_CURSOR_SHAPE,
     ROW_CURSOR_CACHE_SIZE,
@@ -193,6 +195,8 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
     addRow("Video Capturer/Codec");
     addRow("Received FPS");
     addRow("Capture FPS");
+    addRow("Preferred Size");
+    addRow("Video Quality");
     addRow("Clipboard Event Read/Send");
     addRow("Cursor Shape Count/Cache");
     addRow("Cursor Shape Cache Size");
@@ -258,6 +262,9 @@ void StatisticsDialog::onVideoMetrics(const VideoWorker::Metrics& metrics)
         encoderToString(metrics.encoder_type));
     set(ROW_RECEIVED_FPS, QString::number(metrics.received_fps));
     set(ROW_CAPTURE_FPS, metrics.capture_fps ? QString::number(metrics.capture_fps) : "-");
+    set(ROW_PREFERRED_SIZE, metrics.preferred_size.isEmpty() ? "None" :
+        QString("%1x%2").arg(metrics.preferred_size.width()).arg(metrics.preferred_size.height()));
+    set(ROW_VIDEO_QUALITY, metrics.quality ? QString::number(metrics.quality) : "Auto");
     set(ROW_CURSOR_SHAPE, QString::number(metrics.cursor_shape_count) + " / " +
         QString::number(metrics.cursor_taken_from_cache));
     set(ROW_CURSOR_CACHE_SIZE, QString::number(metrics.cursor_cached));

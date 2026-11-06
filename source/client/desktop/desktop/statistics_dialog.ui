@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>352</width>
-    <height>450</height>
+    <height>501</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -109,6 +109,16 @@
      <item>
       <property name="text">
        <string notr="true">Capture FPS</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Preferred Size</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Video Quality</string>
       </property>
      </item>
      <item>

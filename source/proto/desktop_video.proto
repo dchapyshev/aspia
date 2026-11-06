@@ -128,7 +128,9 @@ message PreferredSize
 // Sent by host to client.
 message Metrics
 {
-    uint32 capture_fps = 1;
+    uint32 capture_fps  = 1;
+    Size preferred_size = 2;
+    uint32 quality      = 3;
 }
 
 // Client <- Host (channel 3).

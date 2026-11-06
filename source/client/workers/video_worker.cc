@@ -193,7 +193,13 @@ void VideoWorker::onVideoMessage(const QByteArray& buffer)
     if (message->has_packet())
         decodePacket(message->packet());
     else if (message->has_metrics())
-        metrics_.capture_fps = static_cast<int>(message->metrics().capture_fps());
+    {
+        const proto::video::Metrics& metrics = message->metrics();
+
+        metrics_.capture_fps = static_cast<int>(metrics.capture_fps());
+        metrics_.preferred_size = QSize(metrics.preferred_size().width(), metrics.preferred_size().height());
+        metrics_.quality = metrics.quality();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

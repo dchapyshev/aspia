@@ -56,6 +56,8 @@ public:
         size_t avg_packet = 0;
         int received_fps = 0;
         int capture_fps = 0;
+        QSize preferred_size;
+        quint32 quality = 0;
         quint32 capturer_type = 0;
         quint32 encoder_type = 0;
         int cursor_shape_count = 0;

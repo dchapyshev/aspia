@@ -149,6 +149,7 @@ void DesktopAgent::onClientConfigured()
 
     onPreferredSizeChanged();
     sendScreenList();
+    sendMetrics();
 
     // Audio capture reuses the screen MediaProjection (obtained asynchronously), so it is started lazily
     // from onCaptureScreen once frames flow; here we only record whether a client wants it.
@@ -194,14 +195,7 @@ void DesktopAgent::onPreferredSizeChanged()
     }
 
     // Hardware encoders require an even frame size.
-    max_size = QSize(max_size.width() & ~1, max_size.height() & ~1);
-    if (preferred_size_ == max_size)
-        return;
-
-    preferred_size_ = max_size;
-
-    if (video_encoder_)
-        video_encoder_->setKeyFrameRequired(true);
+    setPreferredSize(QSize(max_size.width() & ~1, max_size.height() & ~1));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -449,6 +443,20 @@ bool DesktopAgent::isAudioEnabled() const
 
 
 //--------------------------------------------------------------------------------------------------
+void DesktopAgent::setPreferredSize(const QSize& size)
+{
+    if (preferred_size_ == size)
+        return;
+
+    preferred_size_ = size;
+
+    if (video_encoder_)
+        video_encoder_->setKeyFrameRequired(true);
+
+    sendMetrics();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopAgent::sendScreenList()
 {
     if (!screen_capturer_)
@@ -493,6 +501,25 @@ void DesktopAgent::sendScreenList()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopAgent::sendMetrics()
+{
+    proto::video::Metrics* metrics =
+        outgoing_message_.newMessage<proto::video::HostToClient>().mutable_metrics();
+    metrics->set_quality(minimalQuality());
+
+    if (!preferred_size_.isEmpty())
+    {
+        proto::video::Size* preferred_size = metrics->mutable_preferred_size();
+        preferred_size->set_width(preferred_size_.width());
+        preferred_size->set_height(preferred_size_.height());
+    }
+
+    const QByteArray& buffer = outgoing_message_.serialize<proto::video::HostToClient>();
+    for (auto* client : std::as_const(clients_))
+        client->onVideoData(buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopAgent::encodeScreen(const Frame* frame)
 {
     if (!frame || !video_encoder_)
@@ -510,7 +537,7 @@ void DesktopAgent::encodeScreen(const Frame* frame)
     {
         // A resolution change invalidates any preferred size.
         source_size_ = frame->size();
-        preferred_size_ = QSize(0, 0);
+        setPreferredSize(QSize());
     }
 
     QSize current_size = preferred_size_;

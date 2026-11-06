@@ -120,10 +120,13 @@ void StatisticsDialog::onVideoMetrics(const VideoWorker::Metrics& metrics)
         encoderToString(metrics.encoder_type));
     setValue(12, QString::number(metrics.received_fps));
     setValue(13, metrics.capture_fps ? QString::number(metrics.capture_fps) : "-");
-    setValue(18, QString::number(metrics.cursor_shape_count) + " / " +
+    setValue(14, metrics.preferred_size.isEmpty() ? "None" :
+        QString("%1x%2").arg(metrics.preferred_size.width()).arg(metrics.preferred_size.height()));
+    setValue(15, metrics.quality ? QString::number(metrics.quality) : "Auto");
+    setValue(20, QString::number(metrics.cursor_shape_count) + " / " +
         QString::number(metrics.cursor_taken_from_cache));
-    setValue(19, QString::number(metrics.cursor_cached));
-    setValue(20, QString::number(metrics.cursor_pos_count));
+    setValue(21, QString::number(metrics.cursor_cached));
+    setValue(22, QString::number(metrics.cursor_pos_count));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -143,7 +146,7 @@ void StatisticsDialog::setDuration(Seconds duration)
 //--------------------------------------------------------------------------------------------------
 void StatisticsDialog::setClipboardMetrics(int read_clipboard, int send_clipboard)
 {
-    setValue(17, QString::number(read_clipboard) + " / " + QString::number(send_clipboard));
+    setValue(19, QString::number(read_clipboard) + " / " + QString::number(send_clipboard));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -155,20 +158,20 @@ void StatisticsDialog::setMouseMetrics(int send_mouse, int drop_mouse)
     if (total_mouse != 0)
         percentage = (drop_mouse * 100) / total_mouse;
 
-    setValue(14, QString::number(send_mouse) + " / " +
+    setValue(16, QString::number(send_mouse) + " / " +
         QString("%1 (%2 %)").arg(drop_mouse).arg(percentage));
 }
 
 //--------------------------------------------------------------------------------------------------
 void StatisticsDialog::setKeyMetrics(int send_key)
 {
-    setValue(15, QString::number(send_key));
+    setValue(17, QString::number(send_key));
 }
 
 //--------------------------------------------------------------------------------------------------
 void StatisticsDialog::setTextMetrics(int send_text)
 {
-    setValue(16, QString::number(send_text));
+    setValue(18, QString::number(send_text));
 }
 
 //--------------------------------------------------------------------------------------------------

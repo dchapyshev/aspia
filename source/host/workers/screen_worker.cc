@@ -333,7 +333,11 @@ void ScreenWorker::onSetPaused(bool paused)
 //--------------------------------------------------------------------------------------------------
 void ScreenWorker::onSetPreferredSize(const QSize& size)
 {
+    if (preferred_size_ == size)
+        return;
+
     preferred_size_ = size;
+    sendMetrics();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1292,7 +1296,7 @@ void ScreenWorker::encodeScreen(const Frame* frame)
     {
         // Every time we change the resolution, we have to reset the preferred size.
         source_size_ = frame->size();
-        preferred_size_ = QSize(0, 0);
+        onSetPreferredSize(QSize());
     }
 
     QSize current_size = preferred_size_;
@@ -1415,6 +1419,15 @@ void ScreenWorker::sendMetrics()
     proto::video::Metrics* metrics =
         serializer_.newMessage<proto::video::HostToClient>().mutable_metrics();
     metrics->set_capture_fps(static_cast<quint32>(capture_scheduler_.fps()));
+    metrics->set_quality(quality_);
+
+    if (!preferred_size_.isEmpty())
+    {
+        proto::video::Size* preferred_size = metrics->mutable_preferred_size();
+        preferred_size->set_width(preferred_size_.width());
+        preferred_size->set_height(preferred_size_.height());
+    }
+
     emit sig_videoData(serializer_.serialize<proto::video::HostToClient>());
 }
 

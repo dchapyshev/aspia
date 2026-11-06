@@ -96,7 +96,9 @@ private:
     quint32 minimalQuality() const;
     bool startCapturer();
     bool isAudioEnabled() const;
+    void setPreferredSize(const QSize& size);
     void sendScreenList();
+    void sendMetrics();
     void encodeScreen(const Frame* frame);
 
     QTimer* capture_timer_ = nullptr;
