@@ -535,8 +535,10 @@ void DesktopAgent::encodeScreen(const Frame* frame)
     if (source_size_ != frame->size())
     {
         // A resolution change invalidates any preferred size.
+        if (!source_size_.isEmpty())
+            setPreferredSize(QSize());
+
         source_size_ = frame->size();
-        setPreferredSize(QSize());
     }
 
     const QSize current_size = ScaleReducer::fitSize(source_size_, preferred_size_);

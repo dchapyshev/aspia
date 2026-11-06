@@ -303,6 +303,7 @@ void ScreenWorker::onStopCapture()
     screen_count_ = 0;
     preferred_size_ = QSize();
     preferred_resolution_ = QSize();
+    source_size_ = QSize();
 
     video_encoder_.reset();
     cursor_encoder_.reset();
@@ -1295,8 +1296,10 @@ void ScreenWorker::encodeScreen(const Frame* frame)
     if (source_size_ != frame->size())
     {
         // Every time we change the resolution, we have to reset the preferred size.
+        if (!source_size_.isEmpty())
+            onSetPreferredSize(QSize());
+
         source_size_ = frame->size();
-        onSetPreferredSize(QSize());
     }
 
     const QSize current_size = ScaleReducer::fitSize(source_size_, preferred_size_);
