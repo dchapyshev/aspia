@@ -177,6 +177,8 @@ void DesktopClient::handleControl(const QByteArray& buffer)
     {
         const proto::control::Config& config = message.config();
 
+        preferred_size_disabled_ = config.disable_preferred_size();
+
         if (config.disable_preferred_size() && !preferred_size_.isEmpty())
         {
             preferred_size_ = QSize();

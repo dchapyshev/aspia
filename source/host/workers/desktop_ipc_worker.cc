@@ -300,6 +300,8 @@ void DesktopIpcWorker::onClientConfigured()
     emit sig_configure(merged_config, vp8_supported, vp9_supported);
     emit sig_audioEnabled(merged_config.audio() && opus_supported);
     emit sig_blockInput(merged_config.block_input());
+
+    onPreferredSizeChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -342,7 +344,16 @@ void DesktopIpcWorker::onPreferredSizeChanged()
     QList<QSize> sizes;
 
     for (auto* client : std::as_const(clients_))
+    {
+        std::optional<proto::control::Config> config = client->config();
+        if (config.has_value() && config->disable_preferred_size())
+        {
+            emit sig_preferredSizeChanged(QSize());
+            return;
+        }
+
         sizes.emplace_back(client->preferredSize());
+    }
 
     QSize max_size = *std::max_element(sizes.begin(), sizes.end(), [](const QSize& a, const QSize& b)
     {

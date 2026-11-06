@@ -182,6 +182,12 @@ void DesktopAgent::onPreferredSizeChanged()
 
     for (auto* client : std::as_const(clients_))
     {
+        if (client->isPreferredSizeDisabled())
+        {
+            max_size = QSize();
+            break;
+        }
+
         const QSize& size = client->preferredSize();
         if (size.width() * size.height() > max_size.width() * max_size.height())
             max_size = size;
@@ -214,6 +220,7 @@ void DesktopAgent::onClientFinished(DesktopClient* client)
     client->deleteLater();
 
     onBandwidthChanged();
+    onPreferredSizeChanged();
 
     audio_enabled_ = isAudioEnabled();
     if (!audio_enabled_ && audio_capturer_)

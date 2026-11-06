@@ -268,6 +268,8 @@ void PortableDesktopWorker::onClientConfigured()
 
     emit sig_configure(merged_config, vp8_supported, vp9_supported);
     emit sig_audioEnabled(merged_config.audio() && opus_supported);
+
+    onPreferredSizeChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -279,7 +281,16 @@ void PortableDesktopWorker::onPreferredSizeChanged()
     QList<QSize> sizes;
 
     for (const ClientEntry& entry : std::as_const(clients_))
+    {
+        std::optional<proto::control::Config> config = entry.client->config();
+        if (config.has_value() && config->disable_preferred_size())
+        {
+            emit sig_preferredSizeChanged(QSize());
+            return;
+        }
+
         sizes.emplace_back(entry.client->preferredSize());
+    }
 
     QSize max_size = *std::max_element(sizes.begin(), sizes.end(), [](const QSize& a, const QSize& b)
     {

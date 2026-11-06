@@ -51,6 +51,7 @@ public:
     bool isAudioEnabled() const { return audio_enabled_; }
     quint32 quality() const { return quality_; }
     const QSize& preferredSize() const { return preferred_size_; }
+    bool isPreferredSizeDisabled() const { return preferred_size_disabled_; }
     qint64 bandwidth() const { return publishedBandwidth(); }
     void releaseKeyboardKeys();
 
@@ -102,6 +103,7 @@ private:
     bool is_paused_ = false;
 
     QSize preferred_size_;
+    bool preferred_size_disabled_ = false;
     quint32 quality_ = 0;
 
     std::unordered_set<quint32> pressed_keys_;
