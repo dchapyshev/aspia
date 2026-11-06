@@ -1316,6 +1316,19 @@ TEST_F(DatabaseTest, SessionOptionsAreOnUntilChosen)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The application closes without a question until the user turns it on.
+TEST_F(DatabaseTest, CloseConfirmationIsOffUntilChosen)
+{
+    EXPECT_FALSE(db_.isConfirmCloseEnabled());
+
+    ASSERT_TRUE(db_.setConfirmCloseEnabled(true));
+    EXPECT_TRUE(db_.isConfirmCloseEnabled());
+
+    ASSERT_TRUE(db_.setConfirmCloseEnabled(false));
+    EXPECT_FALSE(db_.isConfirmCloseEnabled());
+}
+
+//--------------------------------------------------------------------------------------------------
 // Until the user chooses one, no proxy is used; a choice is kept with all its fields.
 TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
 {

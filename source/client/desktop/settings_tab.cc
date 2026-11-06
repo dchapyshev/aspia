@@ -191,6 +191,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     }
 
     ui->edit_display_name->setText(db.displayName());
+    ui->checkbox_confirm_close->setChecked(db.isConfirmCloseEnabled());
 
     ui->checkbox_backup_on_startup->setChecked(db.isBackupOnStartupEnabled());
     ui->edit_backup_dir->setText(db.backupPath());
@@ -343,6 +344,7 @@ SettingsTab::SettingsTab(QWidget* parent)
             this, &SettingsTab::onThemeChanged);
     connect(ui->edit_display_name, &QLineEdit::editingFinished,
             this, &SettingsTab::onDisplayNameChanged);
+    connect(ui->checkbox_confirm_close, &QCheckBox::toggled, this, &SettingsTab::onConfirmCloseChanged);
     connect(ui->checkbox_backup_on_startup, &QCheckBox::toggled, this, &SettingsTab::onBackupOnStartupChanged);
     connect(ui->edit_backup_dir, &QLineEdit::editingFinished, this, &SettingsTab::onBackupPathChanged);
     connect(ui->button_select_backup_dir, &QPushButton::clicked, this, &SettingsTab::onSelectBackupPath);
@@ -479,6 +481,13 @@ void SettingsTab::onDisplayNameChanged()
 {
     LOG(INFO) << "[ACTION] Display name changed";
     Database::instance().setDisplayName(ui->edit_display_name->text());
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onConfirmCloseChanged()
+{
+    LOG(INFO) << "[ACTION] Confirm close changed";
+    Database::instance().setConfirmCloseEnabled(ui->checkbox_confirm_close->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------

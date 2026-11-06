@@ -56,6 +56,7 @@ private slots:
     void onLanguageChanged();
     void onThemeChanged();
     void onDisplayNameChanged();
+    void onConfirmCloseChanged();
     void onBackupOnStartupChanged();
     void onBackupPathChanged();
     void onSelectBackupPath();

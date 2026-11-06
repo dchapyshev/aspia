@@ -18,6 +18,7 @@
 
 #include "client/desktop/main_window.h"
 
+#include <QCloseEvent>
 #include <QDesktopServices>
 #include <QLineEdit>
 #include <QScreen>
@@ -219,6 +220,11 @@ MainWindow::MainWindow(QWidget* parent)
             this, &MainWindow::onAfterThemeChanged);
     onAfterThemeChanged();
 
+    connect(GuiApplication::instance(), &GuiApplication::aboutToQuit, this, [this]()
+    {
+        session_ending_ = true;
+    });
+
     // Hide dynamic menus until a tab populates them.
     ui->menu_edit->menuAction()->setVisible(false);
     ui->menu_session_type->menuAction()->setVisible(false);
@@ -263,9 +269,17 @@ void MainWindow::showAndActivate()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::closeEvent(QCloseEvent* /* event */)
+void MainWindow::closeEvent(QCloseEvent* event)
 {
     LOG(INFO) << "Close event detected";
+
+    if (!session_ending_ && Database::instance().isConfirmCloseEnabled() &&
+        MsgBox::question(this, tr("Are you sure you want to close the application?")) != MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Closing the application rejected";
+        event->ignore();
+        return;
+    }
 
     saveWindowState();
     QApplication::quit();

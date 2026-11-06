@@ -126,6 +126,9 @@ public:
     QString displayName() const;
     bool setDisplayName(const QString& name);
 
+    bool isConfirmCloseEnabled() const;
+    bool setConfirmCloseEnabled(bool enable);
+
     bool isCheckUpdatesEnabled() const;
     bool setCheckUpdatesEnabled(bool enable);
 

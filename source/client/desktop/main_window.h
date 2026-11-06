@@ -134,6 +134,7 @@ private:
 
     McpController* mcp_controller_ = nullptr;
     QString window_title_;
+    bool session_ending_ = false;
 
     Q_DISABLE_COPY_MOVE(MainWindow)
 };

@@ -47,6 +47,7 @@ const int kMaxRouterHostsToCheck = 10;
 const qint64 kRouterHostRecheckInterval = 7 * 24 * 60 * 60;
 
 constexpr auto kSettingDisplayName   = "display_name";
+constexpr auto kSettingConfirmClose  = "confirm_close";
 constexpr auto kSettingCheckUpdates  = "check_updates";
 constexpr auto kSettingUpdateChannel = "update_channel";
 constexpr auto kSettingBackupEnabled = "backup_on_startup";
@@ -1898,6 +1899,18 @@ QString Database::displayName() const
 bool Database::setDisplayName(const QString& name)
 {
     return writeSetting(kSettingDisplayName, name);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::isConfirmCloseEnabled() const
+{
+    return readSetting(kSettingConfirmClose) == "1";
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setConfirmCloseEnabled(bool enable)
+{
+    return writeSetting(kSettingConfirmClose, enable ? "1" : "0");
 }
 
 //--------------------------------------------------------------------------------------------------
