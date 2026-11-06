@@ -123,6 +123,39 @@ bool scaleWithoutAccessViolation(ScaleReducer* reducer, const Frame* frame, cons
 // Unit Tests
 //--------------------------------------------------------------------------------------------------
 
+TEST(scale_reducer_test, fit_size_no_preference)
+{
+    EXPECT_EQ(ScaleReducer::fitSize(QSize(1920, 1080), QSize()), QSize(1920, 1080));
+    EXPECT_EQ(ScaleReducer::fitSize(QSize(1920, 1080), QSize(0, 100)), QSize(1920, 1080));
+}
+
+TEST(scale_reducer_test, fit_size_never_upscales)
+{
+    EXPECT_EQ(ScaleReducer::fitSize(QSize(1920, 1080), QSize(1925, 1082)), QSize(1920, 1080));
+    EXPECT_EQ(ScaleReducer::fitSize(QSize(1920, 1080), QSize(3840, 2160)), QSize(1920, 1080));
+    EXPECT_EQ(ScaleReducer::fitSize(QSize(1920, 1080), QSize(5000, 1200)), QSize(1920, 1080));
+}
+
+TEST(scale_reducer_test, fit_size_keeps_source_proportions)
+{
+    EXPECT_EQ(ScaleReducer::fitSize(QSize(1920, 1080), QSize(1600, 800)), QSize(1422, 800));
+    EXPECT_EQ(ScaleReducer::fitSize(QSize(1920, 1080), QSize(1000, 800)), QSize(1000, 562));
+    EXPECT_EQ(ScaleReducer::fitSize(QSize(1920, 1080), QSize(2000, 800)), QSize(1422, 800));
+}
+
+TEST(scale_reducer_test, fit_size_keeps_window_size)
+{
+    EXPECT_EQ(ScaleReducer::fitSize(QSize(1920, 1080), QSize(1422, 800)), QSize(1422, 800));
+
+    // A window of 947x532 at a device pixel ratio of 1.5.
+    EXPECT_EQ(ScaleReducer::fitSize(QSize(1920, 1080), QSize(1421, 798)), QSize(1421, 798));
+}
+
+TEST(scale_reducer_test, fit_size_side_scaled_to_zero)
+{
+    EXPECT_EQ(ScaleReducer::fitSize(QSize(1920, 1080), QSize(1, 100)), QSize(1920, 1080));
+}
+
 TEST(scale_reducer_test, same_size_returns_source)
 {
     ScaleReducer reducer(ScaleReducer::Quality::HIGH);

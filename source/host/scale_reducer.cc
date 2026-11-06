@@ -48,6 +48,32 @@ ScaleReducer::~ScaleReducer()
 }
 
 //--------------------------------------------------------------------------------------------------
+// static
+QSize ScaleReducer::fitSize(const QSize& source_size, const QSize& preferred_size)
+{
+    if (preferred_size.isEmpty())
+        return source_size;
+
+    // A size that already has the proportions of the source loses a few pixels when fitted again. It
+    // stays as is, otherwise the client has to stretch the frame back.
+    static const int kMaxRoundingError = 8;
+
+    const QSize fitted_size = source_size.scaled(preferred_size, Qt::KeepAspectRatio);
+    const bool same_proportions =
+        std::abs(fitted_size.width() - preferred_size.width()) <= kMaxRoundingError &&
+        std::abs(fitted_size.height() - preferred_size.height()) <= kMaxRoundingError;
+
+    const QSize result = same_proportions ? preferred_size : fitted_size;
+    if (result.isEmpty() || result.width() > source_size.width() ||
+        result.height() > source_size.height())
+    {
+        return source_size;
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& target_size)
 {
     DCHECK(source_frame);

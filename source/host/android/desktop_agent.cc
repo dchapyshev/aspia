@@ -194,8 +194,7 @@ void DesktopAgent::onPreferredSizeChanged()
             max_size = size;
     }
 
-    // Hardware encoders require an even frame size.
-    setPreferredSize(QSize(max_size.width() & ~1, max_size.height() & ~1));
+    setPreferredSize(max_size);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -540,13 +539,7 @@ void DesktopAgent::encodeScreen(const Frame* frame)
         setPreferredSize(QSize());
     }
 
-    QSize current_size = preferred_size_;
-
-    // Never upscale past the source, and fall back to the source size when no preference is set.
-    if (current_size.width() > source_size_.width() || current_size.height() > source_size_.height())
-        current_size = source_size_;
-    if (current_size.isEmpty())
-        current_size = source_size_;
+    const QSize current_size = ScaleReducer::fitSize(source_size_, preferred_size_);
 
     const Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);
     if (!scaled_frame)

@@ -1299,15 +1299,7 @@ void ScreenWorker::encodeScreen(const Frame* frame)
         onSetPreferredSize(QSize());
     }
 
-    QSize current_size = preferred_size_;
-
-    // If the preferred size is larger than the original, then we use the original size.
-    if (current_size.width() > source_size_.width() || current_size.height() > source_size_.height())
-        current_size = source_size_;
-
-    // If we don't have a preferred size, then we use the original frame size.
-    if (current_size.isEmpty())
-        current_size = source_size_;
+    const QSize current_size = ScaleReducer::fitSize(source_size_, preferred_size_);
 
     if (frame->constUpdatedRegion().isEmpty())
     {

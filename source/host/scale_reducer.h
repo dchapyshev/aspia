@@ -33,6 +33,8 @@ public:
     explicit ScaleReducer(Quality quality);
     ~ScaleReducer();
 
+    static QSize fitSize(const QSize& source_size, const QSize& preferred_size);
+
     const Frame* scaleFrame(const Frame* source_frame, const QSize& target_size);
 
     double scaleFactorX() const { return scale_x_; }
