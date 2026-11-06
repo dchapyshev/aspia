@@ -11,6 +11,9 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -29,6 +32,9 @@
       <number>6</number>
      </property>
      <property name="rightMargin">
+      <number>6</number>
+     </property>
+     <property name="bottomMargin">
       <number>6</number>
      </property>
      <item>
@@ -169,6 +175,9 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="layout_pagination">
+     <property name="topMargin">
+      <number>6</number>
+     </property>
      <property name="rightMargin">
       <number>6</number>
      </property>
