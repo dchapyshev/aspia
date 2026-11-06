@@ -167,6 +167,21 @@ QString udpMethodToString(UdpMethod method)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+QString sizeToString(const QSize& size)
+{
+    return QString("%1x%2").arg(size.width()).arg(size.height());
+}
+
+//--------------------------------------------------------------------------------------------------
+QString preferredSizeToString(const QSize& preferred_size, const QSize& frame_size)
+{
+    QString result = preferred_size.isEmpty() ? "None" : sizeToString(preferred_size);
+    if (!frame_size.isEmpty())
+        result += " / " + sizeToString(frame_size);
+    return result;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -195,7 +210,7 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
     addRow("Video Capturer/Codec");
     addRow("Received FPS");
     addRow("Capture FPS");
-    addRow("Preferred Size");
+    addRow("Preferred/Frame Size");
     addRow("Video Quality");
     addRow("Clipboard Event Read/Send");
     addRow("Cursor Shape Count/Cache");
@@ -262,8 +277,7 @@ void StatisticsDialog::onVideoMetrics(const VideoWorker::Metrics& metrics)
         encoderToString(metrics.encoder_type));
     set(ROW_RECEIVED_FPS, QString::number(metrics.received_fps));
     set(ROW_CAPTURE_FPS, metrics.capture_fps ? QString::number(metrics.capture_fps) : "-");
-    set(ROW_PREFERRED_SIZE, metrics.preferred_size.isEmpty() ? "None" :
-        QString("%1x%2").arg(metrics.preferred_size.width()).arg(metrics.preferred_size.height()));
+    set(ROW_PREFERRED_SIZE, preferredSizeToString(metrics.preferred_size, metrics.frame_size));
     set(ROW_VIDEO_QUALITY, metrics.quality ? QString::number(metrics.quality) : "Auto");
     set(ROW_CURSOR_SHAPE, QString::number(metrics.cursor_shape_count) + " / " +
         QString::number(metrics.cursor_taken_from_cache));

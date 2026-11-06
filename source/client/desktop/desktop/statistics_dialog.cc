@@ -71,6 +71,21 @@ QString udpMethodToString(UdpMethod method)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+QString sizeToString(const QSize& size)
+{
+    return QString("%1x%2").arg(size.width()).arg(size.height());
+}
+
+//--------------------------------------------------------------------------------------------------
+QString preferredSizeToString(const QSize& preferred_size, const QSize& frame_size)
+{
+    QString result = preferred_size.isEmpty() ? "None" : sizeToString(preferred_size);
+    if (!frame_size.isEmpty())
+        result += " / " + sizeToString(frame_size);
+    return result;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -125,8 +140,7 @@ void StatisticsDialog::onVideoMetrics(const VideoWorker::Metrics& metrics)
         encoderToString(metrics.encoder_type));
     setValue(12, QString::number(metrics.received_fps));
     setValue(13, metrics.capture_fps ? QString::number(metrics.capture_fps) : "-");
-    setValue(14, metrics.preferred_size.isEmpty() ? "None" :
-        QString("%1x%2").arg(metrics.preferred_size.width()).arg(metrics.preferred_size.height()));
+    setValue(14, preferredSizeToString(metrics.preferred_size, metrics.frame_size));
     setValue(15, metrics.quality ? QString::number(metrics.quality) : "Auto");
     setValue(20, QString::number(metrics.cursor_shape_count) + " / " +
         QString::number(metrics.cursor_taken_from_cache));

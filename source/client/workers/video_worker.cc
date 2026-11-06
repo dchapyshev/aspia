@@ -328,6 +328,7 @@ void VideoWorker::decodePacket(const proto::video::Packet& packet)
         }
 
         metrics_.capturer_type = static_cast<quint32>(format.capturer_type());
+        metrics_.frame_size = video_size;
         screen_size_ = screen_size;
 
         metrics_.encoder_type = static_cast<quint32>(encoding_);
