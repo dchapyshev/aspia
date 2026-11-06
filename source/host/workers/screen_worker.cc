@@ -1320,15 +1320,11 @@ void ScreenWorker::encodeScreen(const Frame* frame)
         return;
     }
 
-    // Publish the scale factors to InputWorker when they change; it maps client coordinates back
-    // into the real screen with them.
-    const double scale_x = scale_reducer_->scaleFactorX();
-    const double scale_y = scale_reducer_->scaleFactorY();
-    if (scale_x != published_scale_x_ || scale_y != published_scale_y_)
+    if (source_size_ != published_source_size_ || current_size != published_frame_size_)
     {
-        published_scale_x_ = scale_x;
-        published_scale_y_ = scale_y;
-        emit sig_scaleFactorChanged(scale_x, scale_y);
+        published_source_size_ = source_size_;
+        published_frame_size_ = current_size;
+        emit sig_frameSizeChanged(source_size_, current_size);
     }
 
     proto::video::HostToClient& message = serializer_.newMessage<proto::video::HostToClient>();

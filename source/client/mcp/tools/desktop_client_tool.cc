@@ -141,6 +141,8 @@ void sendMouse(McpController::DesktopWindow* window, const QPoint& point, const 
     proto::input::MouseEvent event;
     event.set_x(point.x() * frame_size.width() / picture_size.width());
     event.set_y(point.y() * frame_size.height() / picture_size.height());
+    event.set_frame_width(frame_size.width());
+    event.set_frame_height(frame_size.height());
     event.set_mask(mask);
     window->mcpSendMouseEvent(event);
 }

@@ -100,7 +100,7 @@ signals:
 
     // Video pipeline state InputWorker needs for scaling client coordinates and clamping them into
     // the real screen. Emitted only when the values actually change.
-    void sig_scaleFactorChanged(double scale_x, double scale_y);
+    void sig_frameSizeChanged(const QSize& source_size, const QSize& frame_size);
 
     // Screen geometry plus the active capture backend. On Linux the backend decides which input
     // injector InputWorker creates (X11/uinput), or whether it delegates to this worker (Wayland,
@@ -203,9 +203,8 @@ private:
     bool is_paused_ = false;
     bool is_cursor_position_ = false;
 
-    // Last values published to InputWorker (sig_scaleFactorChanged / sig_screenInfoChanged).
-    double published_scale_x_ = 0.0;
-    double published_scale_y_ = 0.0;
+    QSize published_source_size_;
+    QSize published_frame_size_;
     ScreenCapturer::Type published_capture_type_ = ScreenCapturer::Type::UNKNOWN;
     QSize published_screen_size_;
     QPoint published_screen_offset_;

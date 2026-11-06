@@ -57,6 +57,8 @@ public:
 
     Type type() const { return type_; }
 
+    static QPoint mapToScreen(const QPoint& position, const QSize& frame_size, const QSize& screen_size);
+
     virtual void setScreenInfo(const QSize& screen_size, const QPoint& offset) = 0;
     virtual void setBlockInput(bool enable) = 0;
     virtual void injectKeyEvent(const proto::input::KeyEvent& event) = 0;

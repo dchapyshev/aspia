@@ -318,16 +318,20 @@ void DesktopAgent::onInjectMouseEvent(const proto::input::MouseEvent& event)
     if (!input_injector_)
         return;
 
-    // The client's pointer position is in the scaled video space; map it back to the source screen.
-    const double scale_x = scale_reducer_->scaleFactorX();
-    const double scale_y = scale_reducer_->scaleFactorY();
-    if (scale_x <= 0.0 || scale_y <= 0.0)
+    const bool has_frame_size = event.frame_width() > 0 && event.frame_height() > 0;
+    const QSize frame_size = has_frame_size ?
+        QSize(event.frame_width(), event.frame_height()) : scale_reducer_->targetSize();
+
+    if (source_size_.isEmpty() || frame_size.isEmpty())
         return;
+
+    const QPoint pos =
+        InputInjector::mapToScreen(QPoint(event.x(), event.y()), frame_size, source_size_);
 
     proto::input::MouseEvent out_event;
     out_event.set_mask(event.mask());
-    out_event.set_x(static_cast<int>(static_cast<double>(event.x()) * 100.0 / scale_x));
-    out_event.set_y(static_cast<int>(static_cast<double>(event.y()) * 100.0 / scale_y));
+    out_event.set_x(pos.x());
+    out_event.set_y(pos.y());
 
     input_injector_->injectMouseEvent(out_event);
 }

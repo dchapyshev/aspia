@@ -61,6 +61,10 @@ message MouseEvent
     uint32 mask = 1; // Button mask.
     int32 x = 2;     // x position.
     int32 y = 3;     // y position.
+
+    // Size of the frame the position belongs to. Zero if the client does not report it.
+    int32 frame_width  = 4;
+    int32 frame_height = 5;
 }
 
 message TouchEventPoint

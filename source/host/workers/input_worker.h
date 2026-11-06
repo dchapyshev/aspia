@@ -69,7 +69,7 @@ protected:
     void onStop() final;
 
 private slots:
-    void onScaleFactorChanged(double scale_x, double scale_y);
+    void onFrameSizeChanged(const QSize& source_size, const QSize& frame_size);
     void onScreenInfoChanged(ScreenCapturer::Type type, const QSize& screen_size, const QPoint& offset);
 
 private:
@@ -95,10 +95,8 @@ private:
     bool is_mouse_locked_ = false;
     bool is_keyboard_locked_ = false;
 
-    // Video pipeline state published by ScreenWorker; zero until the first encoded frame, mouse
-    // events are dropped meanwhile (there is nothing to map them onto yet).
-    double scale_x_ = 0.0;
-    double scale_y_ = 0.0;
+    QSize source_size_;
+    QSize frame_size_;
     QSize screen_size_;
     QPoint screen_offset_;
 

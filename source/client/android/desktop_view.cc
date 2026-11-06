@@ -676,6 +676,8 @@ void DesktopView::sendMouse(quint32 mask)
     proto::input::MouseEvent event;
     event.set_x(qRound(cursor_pos_.x()));
     event.set_y(qRound(cursor_pos_.y()));
+    event.set_frame_width(image_.width());
+    event.set_frame_height(image_.height());
     event.set_mask(mask);
 
     emit sig_mouseEvent(event);
@@ -701,6 +703,8 @@ void DesktopView::sendWheel(int steps)
     proto::input::MouseEvent event;
     event.set_x(qRound(cursor_pos_.x()));
     event.set_y(qRound(cursor_pos_.y()));
+    event.set_frame_width(image_.width());
+    event.set_frame_height(image_.height());
     event.set_mask(wheel);
 
     const int count = qAbs(steps);

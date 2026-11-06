@@ -18,8 +18,6 @@
 
 #include "host/workers/input_worker.h"
 
-#include <climits>
-
 #include "base/logging.h"
 #include "base/threading/worker.h"
 #include "host/input_injector.h"
@@ -108,19 +106,21 @@ void InputWorker::onInjectMouseEvent(const proto::input::MouseEvent& event)
     if (is_paused_ || is_mouse_locked_)
         return;
 
-    if (scale_x_ <= 0.0 || scale_y_ <= 0.0)
+    if (source_size_.isEmpty() || frame_size_.isEmpty())
         return;
 
-    // The client coordinates are untrusted: multiply in double (the int multiply overflows for values
-    // beyond ~21.4M) and clamp back into int range before the narrowing cast, which is undefined for
-    // out-of-range values. The injectors clamp the result into the actual screen.
-    int pos_x = int(qBound<double>(INT_MIN, double(event.x()) * 100 / scale_x_, INT_MAX));
-    int pos_y = int(qBound<double>(INT_MIN, double(event.y()) * 100 / scale_y_, INT_MAX));
+    // The client reports the frame it sees, which can be older than the one being encoded.
+    const bool has_frame_size = event.frame_width() > 0 && event.frame_height() > 0;
+    const QSize frame_size =
+        has_frame_size ? QSize(event.frame_width(), event.frame_height()) : frame_size_;
+
+    const QPoint pos =
+        InputInjector::mapToScreen(QPoint(event.x(), event.y()), frame_size, source_size_);
 
     proto::input::MouseEvent out_event;
     out_event.set_mask(event.mask());
-    out_event.set_x(pos_x);
-    out_event.set_y(pos_y);
+    out_event.set_x(pos.x());
+    out_event.set_y(pos.y());
 
     if (input_injector_)
     {
@@ -209,8 +209,8 @@ void InputWorker::onPrepare()
     screen_worker_ = findWorker<ScreenWorker>();
     if (screen_worker_)
     {
-        connect(screen_worker_, &ScreenWorker::sig_scaleFactorChanged,
-                this, &InputWorker::onScaleFactorChanged, Qt::QueuedConnection);
+        connect(screen_worker_, &ScreenWorker::sig_frameSizeChanged,
+                this, &InputWorker::onFrameSizeChanged, Qt::QueuedConnection);
         connect(screen_worker_, &ScreenWorker::sig_screenInfoChanged,
                 this, &InputWorker::onScreenInfoChanged, Qt::QueuedConnection);
     }
@@ -241,10 +241,10 @@ void InputWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputWorker::onScaleFactorChanged(double scale_x, double scale_y)
+void InputWorker::onFrameSizeChanged(const QSize& source_size, const QSize& frame_size)
 {
-    scale_x_ = scale_x;
-    scale_y_ = scale_y;
+    source_size_ = source_size;
+    frame_size_ = frame_size;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -35,6 +35,7 @@ if (ANDROID)
         host_storage.h
         host_user_list.cc
         host_user_list.h
+        input_injector.cc
         input_injector.h
         router_config_provider.cc
         router_config_provider.h
@@ -123,6 +124,7 @@ list(APPEND SOURCE_HOST_CORE
     host_user_list.h
     host_utils.cc
     host_utils.h
+    input_injector.cc
     input_injector.h
     license_reader.cc
     license_reader.h
@@ -173,6 +175,7 @@ list(APPEND SOURCE_HOST_TESTS
     database_unittest.cc
     host_storage_unittest.cc
     host_user_list_unittest.cc
+    input_injector_unittest.cc
     router_manager_unittest.cc
     scale_reducer_unittest.cc
     screen_capturer_helper_unittest.cc

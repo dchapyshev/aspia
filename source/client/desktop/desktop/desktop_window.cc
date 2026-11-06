@@ -72,6 +72,15 @@ const quint32 kWheelMask =
 const MilliSeconds kMouseFlushInterval{ 20 }; // 50Hz
 
 //--------------------------------------------------------------------------------------------------
+int toFramePosition(int position, int widget_size, int frame_size)
+{
+    if (widget_size <= 1)
+        return 0;
+
+    return static_cast<int>(static_cast<double>(position) * (frame_size - 1) / (widget_size - 1));
+}
+
+//--------------------------------------------------------------------------------------------------
 QSize scaledSize(const QSize& source_size, int scale)
 {
     if (scale == -1)
@@ -1015,17 +1024,16 @@ void DesktopWindow::onMouseEvent(const proto::input::MouseEvent& event)
 
     if (desktop_->hasFrame())
     {
-        const QSize source_size = desktop_->frameSize();
-        QSize scaled_size = desktop_->size();
-
-        double scale_x = (scaled_size.width() * 100) / static_cast<double>(source_size.width());
-        double scale_y = (scaled_size.height() * 100) / static_cast<double>(source_size.height());
+        const QSize frame_size = desktop_->frameSize();
+        const QSize widget_size = desktop_->size();
 
         proto::input::MouseEvent out_event;
 
         out_event.set_mask(event.mask());
-        out_event.set_x(static_cast<int>(static_cast<double>(pos.x() * 100) / scale_x));
-        out_event.set_y(static_cast<int>(static_cast<double>(pos.y() * 100) / scale_y));
+        out_event.set_x(toFramePosition(pos.x(), widget_size.width(), frame_size.width()));
+        out_event.set_y(toFramePosition(pos.y(), widget_size.height(), frame_size.height()));
+        out_event.set_frame_width(frame_size.width());
+        out_event.set_frame_height(frame_size.height());
 
         // Button and wheel changes must reach the host immediately and in order, so they bypass
         // coalescing. Such an event already carries the latest position, so any queued move is
