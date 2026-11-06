@@ -479,6 +479,9 @@ bool DesktopWindow::eventFilter(QObject* object, QEvent* event)
 {
     if (object == desktop_)
     {
+        if (event->type() == QEvent::DevicePixelRatioChange)
+            onScaleDesktop();
+
         if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease)
         {
             QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
@@ -504,7 +507,9 @@ bool DesktopWindow::eventFilter(QObject* object, QEvent* event)
             wheel_angle_ += wheel_event->angleDelta();
 
             const int step = QWheelEvent::DefaultDeltasPerStep;
-            const QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPosition().toPoint());
+            QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPosition().toPoint());
+            pos.setX(std::clamp(pos.x(), 0, desktop_->width() - 1));
+            pos.setY(std::clamp(pos.y(), 0, desktop_->height() - 1));
 
             if (wheel_angle_.y() >= step || wheel_angle_.y() <= -step)
             {
@@ -799,10 +804,8 @@ void DesktopWindow::onCursorPositionChanged(const proto::cursor::Position& posit
 
     const QSize frame_size = desktop_->frameSize();
 
-    int pos_x = int(double(desktop_->width()) * double(position.x()) / double(frame_size.width()));
-    int pos_y = int(double(desktop_->height()) * double(position.y()) / double(frame_size.height()));
-
-    desktop_->setCursorPosition(QPoint(pos_x, pos_y));
+    desktop_->setCursorPosition(QPointF(double(position.x()) / double(frame_size.width()),
+                                        double(position.y()) / double(frame_size.height())));
     desktop_->update();
 }
 

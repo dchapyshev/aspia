@@ -282,21 +282,10 @@ void DesktopWidget::setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWidget::setCursorPosition(const QPoint& cursor_position)
+void DesktopWidget::setCursorPosition(const QPointF& relative_position)
 {
-    remote_cursor_pos_ = cursor_position;
-
-    QSize widget_size = size();
-
-    if (remote_cursor_pos_.x() < 0)
-        remote_cursor_pos_.setX(0);
-    else if (remote_cursor_pos_.x() > widget_size.width())
-        remote_cursor_pos_.setX(widget_size.width());
-
-    if (remote_cursor_pos_.y() < 0)
-        remote_cursor_pos_.setY(0);
-    else if (remote_cursor_pos_.y() > widget_size.height())
-        remote_cursor_pos_.setY(widget_size.height());
+    remote_cursor_pos_ = QPointF(std::clamp(relative_position.x(), 0.0, 1.0),
+                                 std::clamp(relative_position.y(), 0.0, 1.0));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -556,9 +545,12 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
 
             if (enable_remote_cursor_pos_)
             {
+                const QPoint cursor_pos(int(remote_cursor_pos_.x() * width()),
+                                        int(remote_cursor_pos_.y() * height()));
+
                 if (!remote_cursor_shape_.isNull())
                 {
-                    painter.drawPixmap(QRect(remote_cursor_pos_ - remote_cursor_hotspot_,
+                    painter.drawPixmap(QRect(cursor_pos - remote_cursor_hotspot_,
                                               remote_cursor_shape_.size()),
                                         remote_cursor_shape_,
                                         remote_cursor_shape_.rect());
@@ -567,7 +559,7 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
                 {
                     painter.setBrush(QBrush(Qt::black));
                     painter.setPen(QPen(Qt::white));
-                    painter.drawEllipse(remote_cursor_pos_, 3, 3);
+                    painter.drawEllipse(cursor_pos, 3, 3);
                 }
             }
         }

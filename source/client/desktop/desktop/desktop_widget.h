@@ -59,7 +59,7 @@ public:
     void setDesktopFrameError(proto::video::ErrorCode error_code);
     void drawDesktopFrame(const QList<QRect>& dirty_rects);
     void setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot);
-    void setCursorPosition(const QPoint& cursor_position);
+    void setCursorPosition(const QPointF& relative_position);
 
     void doMouseEvent(QEvent::Type event_type,
                       const Qt::MouseButtons& buttons,
@@ -126,7 +126,7 @@ private:
     bool enable_remote_cursor_pos_ = false;
 
     QPixmap remote_cursor_shape_;
-    QPoint remote_cursor_pos_;
+    QPointF remote_cursor_pos_;
     QPoint remote_cursor_hotspot_;
 
     QPoint prev_pos_;
