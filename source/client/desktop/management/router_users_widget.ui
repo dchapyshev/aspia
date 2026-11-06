@@ -53,6 +53,9 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="layout_users_pagination">
+     <property name="spacing">
+      <number>6</number>
+     </property>
      <property name="topMargin">
       <number>6</number>
      </property>

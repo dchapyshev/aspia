@@ -44,6 +44,9 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="layout_hosts_pagination">
+     <property name="spacing">
+      <number>6</number>
+     </property>
      <property name="topMargin">
       <number>6</number>
      </property>

@@ -89,6 +89,7 @@ RouterTempHostsWidget::RouterTempHostsWidget(bool portable, QWidget* parent)
 
     QHBoxLayout* pagination_layout = new QHBoxLayout();
     pagination_layout->setContentsMargins(0, 6, 0, 6);
+    pagination_layout->setSpacing(6);
     pagination_layout->addWidget(button_prev_);
     pagination_layout->addWidget(combo_page_);
     pagination_layout->addWidget(button_next_);

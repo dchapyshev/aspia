@@ -34,7 +34,6 @@
 #include <QLineEdit>
 #include <QMenu>
 #include <QMouseEvent>
-#include <QPushButton>
 #include <QRegularExpressionValidator>
 #include <QSaveFile>
 #include <QSignalBlocker>
@@ -167,7 +166,7 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
 
     connect(ui->combo_filter_workspace, &QComboBox::currentIndexChanged,
             this, &RouterHostsWidget::onFilterChanged);
-    connect(ui->button_filter_reset, &QPushButton::clicked, this, &RouterHostsWidget::onFilterReset);
+    connect(ui->button_filter_reset, &QToolButton::clicked, this, &RouterHostsWidget::onFilterReset);
 
     RouterController& controller = RouterController::instance();
     connect(&controller, &RouterController::sig_hostsChanged, this, [this](qint64 router_id)

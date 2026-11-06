@@ -28,6 +28,9 @@
    </property>
    <item>
     <layout class="QHBoxLayout" name="layout_hosts_filter">
+     <property name="spacing">
+      <number>6</number>
+     </property>
      <property name="topMargin">
       <number>6</number>
      </property>
@@ -147,7 +150,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="button_filter_reset">
+      <widget class="IconTextButton" name="button_filter_reset">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -189,6 +192,9 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="layout_hosts_pagination">
+     <property name="spacing">
+      <number>6</number>
+     </property>
      <property name="topMargin">
       <number>6</number>
      </property>

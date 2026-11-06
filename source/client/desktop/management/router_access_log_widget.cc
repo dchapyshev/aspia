@@ -38,6 +38,7 @@
 #include "client/router_controller.h"
 #include "client/desktop/file_dialog.h"
 #include "client/desktop/management/ui_router_access_log_widget.h"
+#include "common/desktop/date_edit.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/session_type.h"
 #include "proto/peer.h"
@@ -97,7 +98,7 @@ RouterAccessLogWidget::RouterAccessLogWidget(QWidget* parent)
     connect(ui->button_next, &QToolButton::clicked, this, &RouterAccessLogWidget::onNextClicked);
 
     // A bound of the period is set only while its box is checked.
-    const std::pair<QCheckBox*, QDateEdit*> kBounds[] =
+    const std::pair<QCheckBox*, DateEdit*> kBounds[] =
     {
         { ui->check_filter_from, ui->date_filter_from },
         { ui->check_filter_to, ui->date_filter_to }
@@ -105,10 +106,13 @@ RouterAccessLogWidget::RouterAccessLogWidget(QWidget* parent)
 
     for (const auto& [check, edit] : kBounds)
     {
-        edit->setDate(QDate::currentDate());
-        connect(check, &QCheckBox::toggled, edit, &QDateEdit::setEnabled);
+        // The macOS style hands the layout a box narrower than the check box, and the date field
+        // lands on the label.
+        check->setAttribute(Qt::WA_LayoutUsesWidgetRect);
+
+        connect(check, &QCheckBox::toggled, edit, &DateEdit::setEnabled);
         connect(check, &QCheckBox::toggled, this, &RouterAccessLogWidget::onFilterChanged);
-        connect(edit, &QDateEdit::dateChanged, this, &RouterAccessLogWidget::onFilterChanged);
+        connect(edit, &DateEdit::sig_dateChanged, this, &RouterAccessLogWidget::onFilterChanged);
     }
 
     ui->combo_filter_session_type->addItem(QIcon(":/img/unknown.svg"), tr("All Session Types"),
@@ -144,7 +148,7 @@ RouterAccessLogWidget::RouterAccessLogWidget(QWidget* parent)
         connect(edit, &QLineEdit::textChanged, filter_timer_, qOverload<>(&QTimer::start));
     }
 
-    connect(ui->button_filter_reset, &QPushButton::clicked, this, &RouterAccessLogWidget::onFilterReset);
+    connect(ui->button_filter_reset, &QToolButton::clicked, this, &RouterAccessLogWidget::onFilterReset);
 
     updatePagination();
     updateCountLabel();

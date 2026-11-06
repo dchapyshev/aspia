@@ -36,6 +36,8 @@ collect_sources(SOURCE_COMMON_DESKTOP
     credentials_dialog.cc
     credentials_dialog.h
     credentials_dialog.ui
+    date_edit.cc
+    date_edit.h
     dialog_button_box.cc
     dialog_button_box.h
     elevate_util.cc

@@ -60,6 +60,12 @@ const int kMaxPendingConnections = 25;
 const MilliSeconds kConnectTimeout{ 1000 };
 const MilliSeconds kDisconnectTimeout{ 1000 };
 const MilliSeconds kReconnectInterval{ 500 };
+
+#if defined(Q_OS_MACOS)
+// The style lets the text of a line edit start at the bezel.
+const int kLineEditTextPadding = 4;
+#endif // defined(Q_OS_MACOS)
+
 const int kReconnectTryCount = 3;
 const MilliSeconds kReadTimeout{ 1500 };
 const MilliSeconds kWriteTimeout{ 1500 };
@@ -154,6 +160,55 @@ public:
         centered.rect.adjust(0, margin, 0, -margin);
 
         QProxyStyle::drawControl(element, &centered, painter, widget);
+    }
+
+    QRect subElementRect(SubElement element, const QStyleOption* option, const QWidget* widget) const final
+    {
+        QRect rect = QProxyStyle::subElementRect(element, option, widget);
+
+        // The style cuts more from the bottom of a combo box than from its top, so in a row the box
+        // sits below the middle of the other controls.
+        if (element == QStyle::SE_ComboBoxLayoutItem)
+        {
+            const int inset = (rect.top() - option->rect.top() + option->rect.bottom() - rect.bottom()) / 2;
+            rect.setTop(option->rect.top() + inset);
+            rect.setBottom(option->rect.bottom() - inset);
+        }
+        else if (element == QStyle::SE_LineEditContents)
+        {
+            rect.adjust(kLineEditTextPadding, 0, -kLineEditTextPadding, 0);
+        }
+
+        return rect;
+    }
+
+    QSize sizeFromContents(
+        ContentsType type, const QStyleOption* option, const QSize& size, const QWidget* widget) const final
+    {
+        QSize result = QProxyStyle::sizeFromContents(type, option, size, widget);
+
+        if (type == QStyle::CT_LineEdit)
+            result.rwidth() += 2 * kLineEditTextPadding;
+
+        return result;
+    }
+
+    QRect subControlRect(
+        ComplexControl control, const QStyleOptionComplex* option, SubControl sub, const QWidget* widget) const final
+    {
+        QRect rect = QProxyStyle::subControlRect(control, option, sub, widget);
+
+        // The style keeps the text of a combo box away from the bottom of the bezel for a shadow the
+        // bezel no longer has, so the text sits above the middle of it. The bezel is centered in the
+        // widget.
+        if (control == QStyle::CC_ComboBox && sub == QStyle::SC_ComboBoxEditField)
+        {
+            const QStyleOptionComboBox* combo = qstyleoption_cast<const QStyleOptionComboBox*>(option);
+            if (combo && !combo->editable)
+                rect.translate(0, option->rect.center().y() - rect.center().y());
+        }
+
+        return rect;
     }
 #endif // defined(Q_OS_MACOS)
 

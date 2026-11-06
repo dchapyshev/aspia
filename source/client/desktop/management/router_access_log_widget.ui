@@ -28,6 +28,9 @@
    </property>
    <item>
     <layout class="QHBoxLayout" name="layout_filter">
+     <property name="spacing">
+      <number>6</number>
+     </property>
      <property name="topMargin">
       <number>6</number>
      </property>
@@ -45,12 +48,15 @@
       </widget>
      </item>
      <item>
-      <widget class="QDateEdit" name="date_filter_from">
+      <widget class="DateEdit" name="date_filter_from">
        <property name="enabled">
         <bool>false</bool>
        </property>
-       <property name="calendarPopup">
-        <bool>true</bool>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
       </widget>
      </item>
@@ -62,12 +68,15 @@
       </widget>
      </item>
      <item>
-      <widget class="QDateEdit" name="date_filter_to">
+      <widget class="DateEdit" name="date_filter_to">
        <property name="enabled">
         <bool>false</bool>
        </property>
-       <property name="calendarPopup">
-        <bool>true</bool>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
       </widget>
      </item>
@@ -133,7 +142,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="button_filter_reset">
+      <widget class="IconTextButton" name="button_filter_reset">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -175,6 +184,9 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="layout_pagination">
+     <property name="spacing">
+      <number>6</number>
+     </property>
      <property name="topMargin">
       <number>6</number>
      </property>
@@ -254,6 +266,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>DateEdit</class>
+   <extends>QLineEdit</extends>
+   <header>common/desktop/date_edit.h</header>
+  </customwidget>
   <customwidget>
    <class>IconTextButton</class>
    <extends>QToolButton</extends>

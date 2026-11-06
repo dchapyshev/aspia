@@ -56,7 +56,8 @@ QSize IconTextButton::sizeHint() const
     int text_w = fm.horizontalAdvance(text());
     int icon_w = iconSize().width();
     int icon_h = iconSize().height();
-    int w = text_w + icon_w + kIconTextGap + kIconTextHPadding * 2;
+    int gap = text().isEmpty() ? 0 : kIconTextGap;
+    int w = text_w + icon_w + gap + kIconTextHPadding * 2;
     int h = qMax(fm.height(), icon_h) + kIconTextHPadding;
     return QSize(w, h);
 }
@@ -79,7 +80,8 @@ void IconTextButton::paintEvent(QPaintEvent* /* event */)
     int text_w = fm.horizontalAdvance(btn_text);
     int icon_w = iconSize().width();
     int icon_h = iconSize().height();
-    int total_w = text_w + icon_w + kIconTextGap;
+    int gap = btn_text.isEmpty() ? 0 : kIconTextGap;
+    int total_w = text_w + icon_w + gap;
     int x = (width() - total_w) / 2;
     int y_offset = 0;
 
@@ -107,13 +109,13 @@ void IconTextButton::paintEvent(QPaintEvent* /* event */)
     {
         p.setPen(text_color);
         p.drawText(x, text_baseline, btn_text);
-        x += text_w + kIconTextGap;
+        x += text_w + gap;
         p.drawPixmap(x, icon_y, pix);
     }
     else
     {
         p.drawPixmap(x, icon_y, pix);
-        x += icon_w + kIconTextGap;
+        x += icon_w + gap;
         p.setPen(text_color);
         p.drawText(x, text_baseline, btn_text);
     }
