@@ -32,9 +32,8 @@ std::unique_ptr<VideoEncoder> VideoEncoder::create(proto::video::Encoding encodi
 {
     switch (encoding)
     {
-        case proto::video::ENCODING_VP8:
         case proto::video::ENCODING_VP9:
-            return std::make_unique<VideoEncoderVpx>(encoding);
+            return std::make_unique<VideoEncoderVpx>();
 
         default:
             LOG(ERROR) << "Unsupported video encoding:" << encoding;

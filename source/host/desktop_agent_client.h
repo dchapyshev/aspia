@@ -60,7 +60,6 @@ public:
     qint64 bandwidth() const { return bandwidth_; }
     std::optional<proto::control::Config> config() const { return config_; }
 
-    bool isVp8Supported() const { return vp8_supported_; }
     bool isVp9Supported() const { return vp9_supported_; }
     bool isOpusSupported() const { return opus_supported_; }
     bool isFileClipboardSupported() const { return file_clipboard_supported_; }
@@ -107,7 +106,6 @@ private:
     proto::desktop::Overflow::State overflow_state_ = proto::desktop::Overflow::STATE_NONE;
     std::optional<proto::control::Config> config_;
 
-    bool vp8_supported_ = false;
     bool vp9_supported_ = false;
     bool opus_supported_ = false;
     bool file_clipboard_supported_ = false;

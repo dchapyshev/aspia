@@ -32,7 +32,7 @@
 class VideoEncoderVpx final : public VideoEncoder
 {
 public:
-    explicit VideoEncoderVpx(proto::video::Encoding encoding);
+    VideoEncoderVpx();
     ~VideoEncoderVpx() final = default;
 
     // VideoEncoder implementation.
@@ -45,7 +45,6 @@ private:
     friend class VideoEncoderVpxTestPeer;
 
     void createActiveMap(const QSize& size);
-    bool createVp8Codec(const QSize& size);
     bool createVp9Codec(const QSize& size);
     void prepareImageAndActiveMap(
         bool is_key_frame, const Frame* frame, proto::video::Packet* packet);
@@ -56,7 +55,7 @@ private:
     quint32 quality_ = 0;
 
     // Defaults match a conservative "unknown bandwidth" tier. setBandwidth() may shift these
-    // before each codec (re)creation; createVp{8,9}Codec reads them when initializing config_.
+    // before each codec (re)creation; createVp9Codec reads them when initializing config_.
     quint32 min_quantizer_ = 10;
     quint32 max_quantizer_ = 30;
     quint32 target_bitrate_kbps_ = 1000;

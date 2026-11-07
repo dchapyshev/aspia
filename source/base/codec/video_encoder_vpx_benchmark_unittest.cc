@@ -38,13 +38,11 @@
 
 #include <algorithm>
 #include <atomic>
-#include <cmath>
 #include <cstring>
 #include <iomanip>
 #include <iostream>
 #include <map>
 #include <memory>
-#include <optional>
 #include <string>
 #include <thread>
 #include <unordered_map>
@@ -57,6 +55,8 @@
 #include "proto/desktop_video.h"
 
 namespace {
+
+const proto::video::Encoding kEncoding = proto::video::ENCODING_VP9;
 
 const QSize kScreenSize(1920, 1080);
 const int kFrameRate = 24;
@@ -187,7 +187,6 @@ struct CpuUsage
 
 struct RunResult
 {
-    proto::video::Encoding encoding = proto::video::ENCODING_UNKNOWN;
     const char* scenario = nullptr;
     size_t key_frame_bytes = 0;
     MicroSeconds key_frame_time { 0 };
@@ -217,19 +216,6 @@ struct Totals
     }
 };
 
-struct RatePoint
-{
-    double psnr;
-    double log_bytes;
-};
-
-struct RateDelta
-{
-    double low_psnr;
-    double high_psnr;
-    double rate;
-};
-
 struct SessionStartResult
 {
     size_t first_key_frame_bytes = 0;
@@ -239,21 +225,6 @@ struct SessionStartResult
     size_t second_after_key_frame_bytes = 0;
     double last_frame_psnr = 0;
     size_t bytes = 0;
-};
-
-struct RateCurve
-{
-    std::vector<RatePoint> vp8;
-    std::vector<RatePoint> vp9;
-    double vp8_cycles = 0;
-    double vp9_cycles = 0;
-
-    void add(proto::video::Encoding encoding, double psnr, double bytes, double cycles)
-    {
-        const bool is_vp8 = encoding == proto::video::ENCODING_VP8;
-        (is_vp8 ? vp8 : vp9).push_back({ psnr, std::log(bytes) });
-        (is_vp8 ? vp8_cycles : vp9_cycles) += cycles;
-    }
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -565,18 +536,17 @@ double framePsnr(const Frame& frame, const VideoDecoder::YuvView& decoded, std::
 }
 
 //--------------------------------------------------------------------------------------------------
-void runScenario(proto::video::Encoding encoding, qint64 bandwidth, const Scenario& scenario, RunResult* result)
+void runScenario(qint64 bandwidth, const Scenario& scenario, RunResult* result)
 {
-    std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(encoding);
+    std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(kEncoding);
     ASSERT_NE(encoder, nullptr);
 
-    std::unique_ptr<VideoDecoderVpx> decoder = VideoDecoderVpx::create(encoding);
+    std::unique_ptr<VideoDecoderVpx> decoder = VideoDecoderVpx::create(kEncoding);
     ASSERT_NE(decoder, nullptr);
 
     encoder->setBandwidth(bandwidth);
     encoder->setFrameRate(kFrameRate);
 
-    result->encoding = encoding;
     result->scenario = scenario.name;
 
     Screen screen;
@@ -617,12 +587,6 @@ void runScenario(proto::video::Encoding encoding, qint64 bandwidth, const Scenar
         encoder->setEncodeBuffer(std::move(*packet.mutable_data()));
         *screen.frame()->updatedRegion() = Region();
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-const char* encodingName(proto::video::Encoding encoding)
-{
-    return encoding == proto::video::ENCODING_VP8 ? "VP8" : "VP9";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -695,8 +659,7 @@ void printRun(const RunResult& result)
     const double cpu_ms = cpuMilliSeconds(result.delta_cpu);
     const double kernel_ms = toMilliSeconds(result.delta_cpu.kernel_time);
 
-    std::cout << std::left << std::setw(13) << result.scenario << std::right << std::setw(8)
-              << encodingName(result.encoding);
+    std::cout << std::left << std::setw(13) << result.scenario << std::right;
 
     printValue(static_cast<double>(result.key_frame_bytes) / 1024.0, 1);
     printValue(toMilliSeconds(result.key_frame_time), 2);
@@ -716,28 +679,6 @@ void printRun(const RunResult& result)
 }
 
 //--------------------------------------------------------------------------------------------------
-void printComparison(const char* name, const Totals& vp8, const Totals& vp9)
-{
-    std::cout << std::left << std::setw(13) << name << std::right;
-
-    printValue(vp8.bytes / 1024.0, 0);
-    printValue(vp9.bytes / 1024.0, 0);
-    printRatio(vp8.bytes, vp9.bytes);
-    printValue(vp8.time_ms, 1);
-    printValue(vp9.time_ms, 1);
-    printRatio(vp8.time_ms, vp9.time_ms);
-    printValue(vp8.cpu_ms, 1);
-    printValue(vp9.cpu_ms, 1);
-    printRatio(vp8.cpu_ms, vp9.cpu_ms);
-    printCycles(vp8.cycles, 0);
-    printCycles(vp9.cycles, 0);
-    printRatio(vp8.cycles, vp9.cycles);
-    printValue(vp8.psnr, 2);
-    printValue(vp9.psnr, 2);
-    std::cout << std::endl;
-}
-
-//--------------------------------------------------------------------------------------------------
 void printHeader(const std::vector<const char*>& columns)
 {
     std::cout << std::left << std::setw(13) << "scenario" << std::right;
@@ -747,164 +688,35 @@ void printHeader(const std::vector<const char*>& columns)
 }
 
 //--------------------------------------------------------------------------------------------------
-// |results| holds the runs of all scenarios with VP8 followed by the runs with VP9.
-void printBandwidthResults(const std::vector<RunResult>& results)
+void printTotals(const char* name, const Totals& totals)
 {
-    printHeader({ "codec", "key KB", "key ms", "key Mc", "B/frame", "kbit/s", "avg ms", "p95 ms", "max ms", "CPU ms",
-                  "cores", "kern %", "Mc", "PSNR", "PSNRmin" });
+    std::cout << std::left << std::setw(13) << name << std::right;
+
+    printValue(totals.bytes / 1024.0, 0);
+    printValue(totals.time_ms, 1);
+    printValue(totals.cpu_ms, 1);
+    printCycles(totals.cycles, 0);
+    printValue(totals.psnr, 2);
+    std::cout << std::endl;
+}
+
+//--------------------------------------------------------------------------------------------------
+// |results| holds one entry per scenario.
+void printTotalsTable(const std::vector<Totals>& results)
+{
+    printHeader({ "KB", "ms", "CPU ms", "Mc", "PSNR" });
+
+    Totals total;
 
     for (size_t i = 0; i < results.size(); ++i)
     {
-        if (i == std::size(kScenarios))
-            std::cout << std::endl;
-        printRun(results[i]);
+        printTotals(kScenarios[i].name, results[i]);
+        total += results[i];
     }
 
-    std::cout << std::endl;
-    printHeader({ "KB VP8", "KB VP9", "ratio", "ms VP8", "ms VP9", "ratio", "CPU VP8", "CPU VP9", "ratio",
-                  "Mc VP8", "Mc VP9", "ratio", "PSNR8", "PSNR9" });
+    total.psnr /= static_cast<double>(results.size());
 
-    Totals vp8_total;
-    Totals vp9_total;
-
-    for (size_t i = 0; i < std::size(kScenarios); ++i)
-    {
-        const Totals vp8 = totals(results[i]);
-        const Totals vp9 = totals(results[i + std::size(kScenarios)]);
-
-        printComparison(kScenarios[i].name, vp8, vp9);
-
-        vp8_total += vp8;
-        vp9_total += vp9;
-    }
-
-    vp8_total.psnr /= static_cast<double>(std::size(kScenarios));
-    vp9_total.psnr /= static_cast<double>(std::size(kScenarios));
-
-    printComparison("total", vp8_total, vp9_total);
-    std::cout << std::endl;
-}
-
-//--------------------------------------------------------------------------------------------------
-double deltaPsnr(const RunResult& result)
-{
-    double psnr = 0;
-    for (size_t i = 1; i < result.psnr.size(); ++i)
-        psnr += result.psnr[i];
-    return psnr / static_cast<double>(result.psnr.size() - 1);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Adds the delta frames of every scenario, of all of them and the key frame to |curves|. The key
-// frame is taken once, since every scenario starts from the same screen.
-void addRatePoints(const std::vector<RunResult>& results, std::vector<RateCurve>* curves)
-{
-    const size_t count = std::size(kScenarios);
-
-    for (size_t first = 0; first < results.size(); first += count)
-    {
-        double total_psnr = 0;
-        double total_bytes = 0;
-        double total_cycles = 0;
-
-        for (size_t i = 0; i < count; ++i)
-        {
-            const RunResult& result = results[first + i];
-            const double psnr = deltaPsnr(result);
-            const double bytes = static_cast<double>(result.delta_bytes);
-            const double cycles = static_cast<double>(result.delta_cpu.cycles);
-
-            (*curves)[i].add(result.encoding, psnr, bytes, cycles);
-
-            total_psnr += psnr;
-            total_bytes += bytes;
-            total_cycles += cycles;
-        }
-
-        const RunResult& key = results[first];
-        (*curves)[count].add(key.encoding, total_psnr / static_cast<double>(count), total_bytes, total_cycles);
-        (*curves)[count + 1].add(key.encoding, key.psnr.front(), static_cast<double>(key.key_frame_bytes),
-                                 static_cast<double>(key.key_frame_cpu.cycles));
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-// |points| are sorted by PSNR and |psnr| is within their range.
-double interpolateLogBytes(const std::vector<RatePoint>& points, double psnr)
-{
-    for (size_t i = 1; i < points.size(); ++i)
-    {
-        const RatePoint& low = points[i - 1];
-        const RatePoint& high = points[i];
-
-        if (psnr > high.psnr)
-            continue;
-
-        if (high.psnr <= low.psnr)
-            return high.log_bytes;
-
-        return low.log_bytes + (high.log_bytes - low.log_bytes) * (psnr - low.psnr) / (high.psnr - low.psnr);
-    }
-
-    return points.back().log_bytes;
-}
-
-//--------------------------------------------------------------------------------------------------
-// Bjontegaard delta rate with linear interpolation between the points. It is how much the size of
-// |test| differs from the size of |base| at equal PSNR, on average over the PSNR range of both.
-std::optional<RateDelta> bdRate(std::vector<RatePoint> base, std::vector<RatePoint> test)
-{
-    const auto by_psnr = [](const RatePoint& a, const RatePoint& b) { return a.psnr < b.psnr; };
-    std::sort(base.begin(), base.end(), by_psnr);
-    std::sort(test.begin(), test.end(), by_psnr);
-
-    const double low_psnr = std::max(base.front().psnr, test.front().psnr);
-    const double high_psnr = std::min(base.back().psnr, test.back().psnr);
-    if (high_psnr <= low_psnr)
-        return std::nullopt;
-
-    const int kSteps = 1000;
-    double sum = 0;
-
-    for (int i = 0; i <= kSteps; ++i)
-    {
-        const double psnr = low_psnr + (high_psnr - low_psnr) * i / kSteps;
-        sum += interpolateLogBytes(test, psnr) - interpolateLogBytes(base, psnr);
-    }
-
-    return RateDelta { low_psnr, high_psnr, std::exp(sum / (kSteps + 1)) - 1 };
-}
-
-//--------------------------------------------------------------------------------------------------
-void printRateDistortion(const char* name, const RateCurve& curve)
-{
-    const auto by_psnr = [](const RatePoint& a, const RatePoint& b) { return a.psnr < b.psnr; };
-    const auto vp8_range = std::minmax_element(curve.vp8.begin(), curve.vp8.end(), by_psnr);
-    const auto vp9_range = std::minmax_element(curve.vp9.begin(), curve.vp9.end(), by_psnr);
-
-    std::cout << std::left << std::setw(13) << name << std::right;
-
-    printValue(vp8_range.first->psnr, 2);
-    printValue(vp8_range.second->psnr, 2);
-    printValue(vp9_range.first->psnr, 2);
-    printValue(vp9_range.second->psnr, 2);
-
-    const std::optional<RateDelta> delta = bdRate(curve.vp8, curve.vp9);
-    if (delta)
-    {
-        printValue(delta->low_psnr, 2);
-        printValue(delta->high_psnr, 2);
-        std::cout << std::setw(7) << std::showpos << std::setprecision(1) << delta->rate * 100.0 << std::noshowpos
-                  << "%";
-    }
-    else
-    {
-        std::cout << std::setw(8) << "-" << std::setw(8) << "-" << std::setw(8) << "-";
-    }
-
-    printCycles(curve.vp8_cycles, 0);
-    printCycles(curve.vp9_cycles, 0);
-    printRatio(curve.vp8_cycles, curve.vp9_cycles);
+    printTotals("total", total);
     std::cout << std::endl;
 }
 
@@ -913,16 +725,15 @@ void printRateDistortion(const char* name, const RateCurve& curve)
 // the encoder has for the first frame. With |growing| the estimate of the bandwidth starts at
 // 32 KB/s and grows by a fifth every second, the way a session starts. Otherwise it stays at
 // |start_bandwidth|.
-void runKeyFrames(proto::video::Encoding encoding, qint64 start_bandwidth, bool growing, int second_key_frame,
-                  SessionStartResult* result)
+void runKeyFrames(qint64 start_bandwidth, bool growing, int second_key_frame, SessionStartResult* result)
 {
     const qint64 kFirstBandwidth = 32 * 1024;
     const int kFrameCount = 5 * kFrameRate;
 
-    std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(encoding);
+    std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(kEncoding);
     ASSERT_NE(encoder, nullptr);
 
-    std::unique_ptr<VideoDecoderVpx> decoder = VideoDecoderVpx::create(encoding);
+    std::unique_ptr<VideoDecoderVpx> decoder = VideoDecoderVpx::create(kEncoding);
     ASSERT_NE(decoder, nullptr);
 
     encoder->setFrameRate(kFrameRate);
@@ -1009,10 +820,9 @@ void copyAndExtendPlane(const quint8* src, int width, int height, int border, st
 //--------------------------------------------------------------------------------------------------
 // Encodes |kFramesPerScenario| frames after the key frame. With |block| one 16x16 block in the
 // middle of the screen changes in every frame, otherwise nothing changes.
-void runFrameCost(proto::video::Encoding encoding, const QSize& size, bool block, double* cycles, double* time_ms,
-                  double* bytes)
+void runFrameCost(const QSize& size, bool block, double* cycles, double* time_ms, double* bytes)
 {
-    std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(encoding);
+    std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(kEncoding);
     ASSERT_NE(encoder, nullptr);
 
     encoder->setBandwidth(768 * 1024);
@@ -1076,10 +886,9 @@ void runFrameCost(proto::video::Encoding encoding, const QSize& size, bool block
 }
 
 //--------------------------------------------------------------------------------------------------
-void encodeScenario(proto::video::Encoding encoding, qint64 bandwidth, const Scenario& scenario,
-                    std::vector<proto::video::Packet>* packets)
+void encodeScenario(qint64 bandwidth, const Scenario& scenario, std::vector<proto::video::Packet>* packets)
 {
-    std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(encoding);
+    std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(kEncoding);
     ASSERT_NE(encoder, nullptr);
 
     encoder->setBandwidth(bandwidth);
@@ -1102,19 +911,17 @@ void encodeScenario(proto::video::Encoding encoding, qint64 bandwidth, const Sce
 
 //--------------------------------------------------------------------------------------------------
 // Decodes |packets| with a new decoder several times and keeps the fastest pass.
-void decodeScenario(proto::video::Encoding encoding, const std::vector<proto::video::Packet>& packets,
-                    RunResult* result)
+void decodeScenario(const std::vector<proto::video::Packet>& packets, RunResult* result)
 {
     const int kPasses = 3;
     double best_time_ms = 0;
 
     for (int pass = 0; pass < kPasses; ++pass)
     {
-        std::unique_ptr<VideoDecoderVpx> decoder = VideoDecoderVpx::create(encoding);
+        std::unique_ptr<VideoDecoderVpx> decoder = VideoDecoderVpx::create(kEncoding);
         ASSERT_NE(decoder, nullptr);
 
         RunResult run;
-        run.encoding = encoding;
         run.scenario = result->scenario;
 
         for (size_t i = 0; i < packets.size(); ++i)
@@ -1166,8 +973,7 @@ void printDecodeRun(const RunResult& result)
     const double frames = static_cast<double>(times.size());
     const double cpu_ms = cpuMilliSeconds(result.delta_cpu);
 
-    std::cout << std::left << std::setw(13) << result.scenario << std::right << std::setw(8)
-              << encodingName(result.encoding);
+    std::cout << std::left << std::setw(13) << result.scenario << std::right;
 
     printValue(static_cast<double>(result.key_frame_bytes) / 1024.0, 1);
     printValue(toMilliSeconds(result.key_frame_time), 2);
@@ -1183,19 +989,13 @@ void printDecodeRun(const RunResult& result)
 }
 
 //--------------------------------------------------------------------------------------------------
-void printDecodeComparison(const char* name, const Totals& vp8, const Totals& vp9)
+void printDecodeTotals(const char* name, const Totals& totals)
 {
     std::cout << std::left << std::setw(13) << name << std::right;
 
-    printValue(vp8.time_ms, 1);
-    printValue(vp9.time_ms, 1);
-    printRatio(vp8.time_ms, vp9.time_ms);
-    printValue(vp8.cpu_ms, 1);
-    printValue(vp9.cpu_ms, 1);
-    printRatio(vp8.cpu_ms, vp9.cpu_ms);
-    printCycles(vp8.cycles, 0);
-    printCycles(vp9.cycles, 0);
-    printRatio(vp8.cycles, vp9.cycles);
+    printValue(totals.time_ms, 1);
+    printValue(totals.cpu_ms, 1);
+    printCycles(totals.cycles, 0);
     std::cout << std::endl;
 }
 
@@ -1376,8 +1176,7 @@ void Sampler::print(size_t count) const
 //--------------------------------------------------------------------------------------------------
 TEST(VideoEncoderVpxTest, DISABLED_ScreenContentBenchmark)
 {
-    const proto::video::Encoding encodings[] = { proto::video::ENCODING_VP8, proto::video::ENCODING_VP9 };
-    std::vector<RateCurve> curves(std::size(kScenarios) + 2);
+    std::vector<Totals> all_bandwidths(std::size(kScenarios));
 
     std::cout << std::endl
               << "=== Screen content: " << kScreenSize.width() << "x" << kScreenSize.height() << ", "
@@ -1392,42 +1191,42 @@ TEST(VideoEncoderVpxTest, DISABLED_ScreenContentBenchmark)
     {
         std::vector<RunResult> results;
 
-        for (proto::video::Encoding encoding : encodings)
+        for (const Scenario& scenario : kScenarios)
         {
-            for (const Scenario& scenario : kScenarios)
-            {
-                RunResult result;
-                ASSERT_NO_FATAL_FAILURE(runScenario(encoding, bandwidth, scenario, &result));
-                results.push_back(std::move(result));
-            }
+            RunResult result;
+            ASSERT_NO_FATAL_FAILURE(runScenario(bandwidth, scenario, &result));
+            results.push_back(std::move(result));
         }
 
         std::cout << std::endl << "=== Bandwidth " << bandwidth / 1024 << " KB/s ===" << std::endl << std::endl;
 
-        printBandwidthResults(results);
-        addRatePoints(results, &curves);
+        printHeader({ "key KB", "key ms", "key Mc", "B/frame", "kbit/s", "avg ms", "p95 ms", "max ms", "CPU ms",
+                      "cores", "kern %", "Mc", "PSNR", "PSNRmin" });
+
+        std::vector<Totals> scenario_totals;
+
+        for (size_t i = 0; i < results.size(); ++i)
+        {
+            printRun(results[i]);
+
+            scenario_totals.push_back(totals(results[i]));
+            all_bandwidths[i] += scenario_totals[i];
+        }
+
+        std::cout << std::endl;
+        printTotalsTable(scenario_totals);
     }
 
-    std::cout << "=== Over all bandwidths: size of VP9 against VP8 at equal PSNR (BD-rate) ===" << std::endl
-              << "Delta frames of each scenario, of all of them and the key frame. PSNR of each codec over the"
-              << std::endl
-              << "bandwidths, their common range and the size difference in it. Mc: cycles over the bandwidths."
-              << std::endl << std::endl;
+    for (Totals& total : all_bandwidths)
+        total.psnr /= static_cast<double>(std::size(kBandwidths));
 
-    printHeader({ "VP8 lo", "VP8 hi", "VP9 lo", "VP9 hi", "from", "to", "BD-rate", "Mc VP8", "Mc VP9", "ratio" });
-
-    for (size_t i = 0; i < std::size(kScenarios); ++i)
-        printRateDistortion(kScenarios[i].name, curves[i]);
-
-    printRateDistortion("total", curves[std::size(kScenarios)]);
-    printRateDistortion("key_frame", curves[std::size(kScenarios) + 1]);
-    std::cout << std::endl;
+    std::cout << "=== Over all bandwidths ===" << std::endl << std::endl;
+    printTotalsTable(all_bandwidths);
 }
 
 //--------------------------------------------------------------------------------------------------
 TEST(VideoEncoderVpxTest, DISABLED_SessionStartBenchmark)
 {
-    const proto::video::Encoding encodings[] = { proto::video::ENCODING_VP8, proto::video::ENCODING_VP9 };
     const qint64 start_bandwidths[] = { 0, 32 * 1024 };
 
     std::cout << std::endl
@@ -1439,28 +1238,24 @@ TEST(VideoEncoderVpxTest, DISABLED_SessionStartBenchmark)
               << "is requested 0.6 s after the first one. PSNR (dB) of the whole screen." << std::endl << std::endl;
 
     std::cout << std::left << std::setw(13) << "start KB/s" << std::right;
-    for (const char* column : { "codec", "key1 KB", "key1 dB", "key2 KB", "key2 dB", "last dB", "all KB" })
+    for (const char* column : { "key1 KB", "key1 dB", "key2 KB", "key2 dB", "last dB", "all KB" })
         std::cout << std::setw(8) << column;
     std::cout << std::endl;
 
     for (qint64 start_bandwidth : start_bandwidths)
     {
-        for (proto::video::Encoding encoding : encodings)
-        {
-            SessionStartResult result;
-            ASSERT_NO_FATAL_FAILURE(runKeyFrames(encoding, start_bandwidth, true, 14, &result));
+        SessionStartResult result;
+        ASSERT_NO_FATAL_FAILURE(runKeyFrames(start_bandwidth, true, 14, &result));
 
-            std::cout << std::left << std::setw(13) << start_bandwidth / 1024 << std::right << std::setw(8)
-                      << encodingName(encoding);
+        std::cout << std::left << std::setw(13) << start_bandwidth / 1024 << std::right;
 
-            printValue(static_cast<double>(result.first_key_frame_bytes) / 1024.0, 1);
-            printValue(result.first_key_frame_psnr, 2);
-            printValue(static_cast<double>(result.second_key_frame_bytes) / 1024.0, 1);
-            printValue(result.second_key_frame_psnr, 2);
-            printValue(result.last_frame_psnr, 2);
-            printValue(static_cast<double>(result.bytes) / 1024.0, 0);
-            std::cout << std::endl;
-        }
+        printValue(static_cast<double>(result.first_key_frame_bytes) / 1024.0, 1);
+        printValue(result.first_key_frame_psnr, 2);
+        printValue(static_cast<double>(result.second_key_frame_bytes) / 1024.0, 1);
+        printValue(result.second_key_frame_psnr, 2);
+        printValue(result.last_frame_psnr, 2);
+        printValue(static_cast<double>(result.bytes) / 1024.0, 0);
+        std::cout << std::endl;
     }
 
     std::cout << std::endl;
@@ -1469,7 +1264,6 @@ TEST(VideoEncoderVpxTest, DISABLED_SessionStartBenchmark)
 //--------------------------------------------------------------------------------------------------
 TEST(VideoEncoderVpxTest, DISABLED_KeyFrameRequestBenchmark)
 {
-    const proto::video::Encoding encodings[] = { proto::video::ENCODING_VP8, proto::video::ENCODING_VP9 };
     const int kRequestedKeyFrame = 3 * kFrameRate;
 
     std::cout << std::endl
@@ -1482,35 +1276,28 @@ TEST(VideoEncoderVpxTest, DISABLED_KeyFrameRequestBenchmark)
               << std::endl << std::endl;
 
     std::cout << std::left << std::setw(13) << "bw KB/s" << std::right;
-    for (const char* column : { "codec", "key1 KB", "key1 dB", "key2 KB", "key2 dB", "budget", "key2 ms", "1s KB",
-                                "last dB" })
-    {
+    for (const char* column : { "key1 KB", "key1 dB", "key2 KB", "key2 dB", "budget", "key2 ms", "1s KB", "last dB" })
         std::cout << std::setw(8) << column;
-    }
     std::cout << std::endl;
 
     for (qint64 bandwidth : kBandwidths)
     {
-        for (proto::video::Encoding encoding : encodings)
-        {
-            SessionStartResult result;
-            ASSERT_NO_FATAL_FAILURE(runKeyFrames(encoding, bandwidth, false, kRequestedKeyFrame, &result));
+        SessionStartResult result;
+        ASSERT_NO_FATAL_FAILURE(runKeyFrames(bandwidth, false, kRequestedKeyFrame, &result));
 
-            const double key_frame_bytes = static_cast<double>(result.second_key_frame_bytes);
+        const double key_frame_bytes = static_cast<double>(result.second_key_frame_bytes);
 
-            std::cout << std::left << std::setw(13) << bandwidth / 1024 << std::right << std::setw(8)
-                      << encodingName(encoding);
+        std::cout << std::left << std::setw(13) << bandwidth / 1024 << std::right;
 
-            printValue(static_cast<double>(result.first_key_frame_bytes) / 1024.0, 1);
-            printValue(result.first_key_frame_psnr, 2);
-            printValue(key_frame_bytes / 1024.0, 1);
-            printValue(result.second_key_frame_psnr, 2);
-            printValue(key_frame_bytes * kFrameRate / static_cast<double>(bandwidth), 1);
-            printValue(key_frame_bytes * 1000.0 / static_cast<double>(bandwidth), 0);
-            printValue(static_cast<double>(result.second_after_key_frame_bytes) / 1024.0, 1);
-            printValue(result.last_frame_psnr, 2);
-            std::cout << std::endl;
-        }
+        printValue(static_cast<double>(result.first_key_frame_bytes) / 1024.0, 1);
+        printValue(result.first_key_frame_psnr, 2);
+        printValue(key_frame_bytes / 1024.0, 1);
+        printValue(result.second_key_frame_psnr, 2);
+        printValue(key_frame_bytes * kFrameRate / static_cast<double>(bandwidth), 1);
+        printValue(key_frame_bytes * 1000.0 / static_cast<double>(bandwidth), 0);
+        printValue(static_cast<double>(result.second_after_key_frame_bytes) / 1024.0, 1);
+        printValue(result.last_frame_psnr, 2);
+        std::cout << std::endl;
     }
 
     std::cout << std::endl;
@@ -1519,7 +1306,6 @@ TEST(VideoEncoderVpxTest, DISABLED_KeyFrameRequestBenchmark)
 //--------------------------------------------------------------------------------------------------
 TEST(VideoEncoderVpxTest, DISABLED_FrameCostBenchmark)
 {
-    const proto::video::Encoding encodings[] = { proto::video::ENCODING_VP8, proto::video::ENCODING_VP9 };
     const QSize sizes[] = { QSize(1280, 720), QSize(1920, 1080), QSize(2560, 1440) };
 
     std::cout << std::endl
@@ -1531,7 +1317,7 @@ TEST(VideoEncoderVpxTest, DISABLED_FrameCostBenchmark)
               << "CPU cycles of the process per frame." << std::endl << std::endl;
 
     std::cout << std::left << std::setw(13) << "size" << std::right;
-    for (const char* column : { "codec", "mode", "Mc", "ms", "B/frame" })
+    for (const char* column : { "mode", "Mc", "ms", "B/frame" })
         std::cout << std::setw(8) << column;
     std::cout << std::endl;
 
@@ -1539,22 +1325,19 @@ TEST(VideoEncoderVpxTest, DISABLED_FrameCostBenchmark)
     {
         const QString name = QString("%1x%2").arg(size.width()).arg(size.height());
 
-        for (proto::video::Encoding encoding : encodings)
+        for (bool block : { false, true })
         {
-            for (bool block : { false, true })
-            {
-                double cycles = 0;
-                double time_ms = 0;
-                double bytes = 0;
-                ASSERT_NO_FATAL_FAILURE(runFrameCost(encoding, size, block, &cycles, &time_ms, &bytes));
+            double cycles = 0;
+            double time_ms = 0;
+            double bytes = 0;
+            ASSERT_NO_FATAL_FAILURE(runFrameCost(size, block, &cycles, &time_ms, &bytes));
 
-                std::cout << std::left << std::setw(13) << name.toStdString() << std::right << std::setw(8)
-                          << encodingName(encoding) << std::setw(8) << (block ? "block" : "empty");
-                printCycles(cycles, 2);
-                printValue(time_ms, 3);
-                printValue(bytes, 0);
-                std::cout << std::endl;
-            }
+            std::cout << std::left << std::setw(13) << name.toStdString() << std::right << std::setw(8)
+                      << (block ? "block" : "empty");
+            printCycles(cycles, 2);
+            printValue(time_ms, 3);
+            printValue(bytes, 0);
+            std::cout << std::endl;
         }
 
         const int uv_width = size.width() / 2;
@@ -1577,8 +1360,7 @@ TEST(VideoEncoderVpxTest, DISABLED_FrameCostBenchmark)
         const double time_ms = toMilliSeconds(DurationCast<MicroSeconds>(Clock::now() - start_time));
         const CpuUsage cpu = processCpuUsage() - cpu_before;
 
-        std::cout << std::left << std::setw(13) << name.toStdString() << std::right << std::setw(8) << "-"
-                  << std::setw(8) << "copy";
+        std::cout << std::left << std::setw(13) << name.toStdString() << std::right << std::setw(8) << "copy";
         printCycles(static_cast<double>(cpu.cycles) / kFramesPerScenario, 2);
         printValue(time_ms / kFramesPerScenario, 3);
         std::cout << std::endl;
@@ -1590,8 +1372,6 @@ TEST(VideoEncoderVpxTest, DISABLED_FrameCostBenchmark)
 //--------------------------------------------------------------------------------------------------
 TEST(VideoDecoderVpxTest, DISABLED_DecodeBenchmark)
 {
-    const proto::video::Encoding encodings[] = { proto::video::ENCODING_VP8, proto::video::ENCODING_VP9 };
-
     std::cout << std::endl
               << "=== Decoding: " << kScreenSize.width() << "x" << kScreenSize.height() << ", " << kFrameRate
               << " fps, " << kFramesPerScenario << " delta frames per scenario, " << QThread::idealThreadCount()
@@ -1600,56 +1380,44 @@ TEST(VideoDecoderVpxTest, DISABLED_DecodeBenchmark)
               << std::endl
               << "first frame. Other columns are per delta frame. Mc: millions of CPU cycles of the process."
               << std::endl
-              << "cores: CPU time / decoding time. The comparison sums all frames of a scenario." << std::endl;
+              << "cores: CPU time / decoding time. The last table sums all frames of a scenario." << std::endl;
 
     for (qint64 bandwidth : kBandwidths)
     {
         std::vector<RunResult> results;
 
-        for (proto::video::Encoding encoding : encodings)
+        for (const Scenario& scenario : kScenarios)
         {
-            for (const Scenario& scenario : kScenarios)
-            {
-                std::vector<proto::video::Packet> packets;
-                ASSERT_NO_FATAL_FAILURE(encodeScenario(encoding, bandwidth, scenario, &packets));
+            std::vector<proto::video::Packet> packets;
+            ASSERT_NO_FATAL_FAILURE(encodeScenario(bandwidth, scenario, &packets));
 
-                RunResult result;
-                result.scenario = scenario.name;
-                ASSERT_NO_FATAL_FAILURE(decodeScenario(encoding, packets, &result));
-                results.push_back(std::move(result));
-            }
+            RunResult result;
+            result.scenario = scenario.name;
+            ASSERT_NO_FATAL_FAILURE(decodeScenario(packets, &result));
+            results.push_back(std::move(result));
         }
 
         std::cout << std::endl << "=== Bandwidth " << bandwidth / 1024 << " KB/s ===" << std::endl << std::endl;
 
-        printHeader({ "codec", "key KB", "key ms", "key Mc", "B/frame", "avg ms", "p95 ms", "max ms", "CPU ms",
-                      "cores", "Mc" });
+        printHeader({ "key KB", "key ms", "key Mc", "B/frame", "avg ms", "p95 ms", "max ms", "CPU ms", "cores", "Mc" });
 
-        for (size_t i = 0; i < results.size(); ++i)
-        {
-            if (i == std::size(kScenarios))
-                std::cout << std::endl;
-            printDecodeRun(results[i]);
-        }
+        for (const RunResult& result : results)
+            printDecodeRun(result);
 
         std::cout << std::endl;
-        printHeader({ "ms VP8", "ms VP9", "ratio", "CPU VP8", "CPU VP9", "ratio", "Mc VP8", "Mc VP9", "ratio" });
+        printHeader({ "ms", "CPU ms", "Mc" });
 
-        Totals vp8_total;
-        Totals vp9_total;
+        Totals total;
 
-        for (size_t i = 0; i < std::size(kScenarios); ++i)
+        for (const RunResult& result : results)
         {
-            const Totals vp8 = totals(results[i]);
-            const Totals vp9 = totals(results[i + std::size(kScenarios)]);
+            const Totals run = totals(result);
 
-            printDecodeComparison(kScenarios[i].name, vp8, vp9);
-
-            vp8_total += vp8;
-            vp9_total += vp9;
+            printDecodeTotals(result.scenario, run);
+            total += run;
         }
 
-        printDecodeComparison("total", vp8_total, vp9_total);
+        printDecodeTotals("total", total);
     }
 
     std::cout << std::endl;
@@ -1677,7 +1445,7 @@ TEST(VideoEncoderVpxTest, DISABLED_ProfileBenchmark)
         for (int i = 0; i < kRepeats; ++i)
         {
             std::vector<proto::video::Packet> packets;
-            ASSERT_NO_FATAL_FAILURE(encodeScenario(proto::video::ENCODING_VP9, bandwidth, scenario, &packets));
+            ASSERT_NO_FATAL_FAILURE(encodeScenario(bandwidth, scenario, &packets));
         }
 
         sampler.stop();

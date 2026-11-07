@@ -41,7 +41,7 @@ public:
         SUCCESS,         // Packet was produced and is ready to send.
         TEMPORARY_ERROR, // Recoverable failure (transient driver/codec hiccup); retry next frame.
         PERMANENT_ERROR, // Encoder cannot proceed (e.g. the codec cannot be created for this
-                         // frame size); the caller should fall back to another encoding.
+                         // frame size); the caller should create a new encoder.
     };
     Q_ENUM(Result)
 

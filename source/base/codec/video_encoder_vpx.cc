@@ -54,7 +54,7 @@ quint32 qualityToQuantizer(quint32 quality)
 }
 
 //--------------------------------------------------------------------------------------------------
-void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
+void setCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
@@ -152,8 +152,8 @@ QRect alignRect(const QRect& rect)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-VideoEncoderVpx::VideoEncoderVpx(proto::video::Encoding encoding)
-    : VideoEncoder(encoding)
+VideoEncoderVpx::VideoEncoderVpx()
+    : VideoEncoder(proto::video::ENCODING_VP9)
 {
     memset(&config_, 0, sizeof(config_));
     memset(&active_map_, 0, sizeof(active_map_));
@@ -173,23 +173,10 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
         createImage(last_size_, &image_, &image_buffer_);
         createActiveMap(last_size_);
 
-        if (encoding() == proto::video::ENCODING_VP8)
+        if (!createVp9Codec(last_size_))
         {
-            if (!createVp8Codec(last_size_))
-            {
-                LOG(ERROR) << "Unable to create VP8 codec";
-                return Result::PERMANENT_ERROR;
-            }
-        }
-        else
-        {
-            DCHECK_EQ(encoding(), proto::video::ENCODING_VP9);
-
-            if (!createVp9Codec(last_size_))
-            {
-                LOG(ERROR) << "Unable to create VP9 codec";
-                return Result::PERMANENT_ERROR;
-            }
+            LOG(ERROR) << "Unable to create VP9 codec";
+            return Result::PERMANENT_ERROR;
         }
 
         is_key_frame = true;
@@ -239,15 +226,14 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
         packet->set_flags(proto::video::PACKET_FLAG_IS_KEY_FRAME);
         flags |= VPX_EFLAG_FORCE_KF;
     }
-    else if (encoding() == proto::video::ENCODING_VP9 && !use_golden_frame_)
+    else if (!use_golden_frame_)
     {
         flags |= VP8_EFLAG_NO_REF_GF;
     }
 
     // From speed 8 VP9 picks the modes of a key frame the fast way and makes it much larger. Key
     // frames are rare, so they are encoded at a lower speed.
-    const bool is_vp9_key_frame = is_key_frame && encoding() == proto::video::ENCODING_VP9;
-    if (is_vp9_key_frame)
+    if (is_key_frame)
     {
         ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, kVp9KeyFrameSpeed);
         if (ret != VPX_CODEC_OK)
@@ -267,7 +253,7 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
                            VPX_DL_REALTIME);
     pts_ += frame_duration_us_;
 
-    if (is_vp9_key_frame && vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, kVp9Speed) != VPX_CODEC_OK)
+    if (is_key_frame && vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, kVp9Speed) != VPX_CODEC_OK)
     {
         LOG(ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed";
         last_size_ = QSize();
@@ -333,7 +319,7 @@ void VideoEncoderVpx::setBandwidth(qint64 bandwidth)
 
         // Loosen the QP ceiling on low-bandwidth links so the encoder can compress aggressively,
         // tighten the floor on high-bandwidth links so it can spend bits on quality. The numbers
-        // are picked to keep VP8/VP9 within their useful QP range (10..50 for floor, 25..50 for
+        // are picked to keep VP9 within its useful QP range (10..50 for floor, 25..50 for
         // ceiling) at every tier.
         if (bandwidth < 300 * 1024) // < 300 KB/s
         {
@@ -408,78 +394,6 @@ void VideoEncoderVpx::setQuality(quint32 quality)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderVpx::createVp8Codec(const QSize& size)
-{
-    codec_.reset(new vpx_codec_ctx_t());
-
-    // Configure the encoder.
-    vpx_codec_iface_t* algo = vpx_codec_vp8_cx();
-
-    vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config_, 0);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "vpx_codec_enc_config_default failed:" << ret;
-        return false;
-    }
-
-    setCommonCodecParameters(&config_, size);
-
-    // VP8 does not scale well beyond 2 threads (token partitions limit parallelism).
-    const int cpu_count = std::max(1, QThread::idealThreadCount());
-    config_.g_threads = std::min(cpu_count, 2);
-
-    // Value of 2 means using the real time profile. This is basically a redundant option since we
-    // explicitly select real time mode when doing encoding.
-    config_.g_profile = 2;
-
-    // Quantizer bounds and target bitrate are owned by setBandwidth() - read whatever it
-    // last computed (or the unknown-bandwidth defaults if it was never called).
-    config_.rc_min_quantizer = min_quantizer_;
-    config_.rc_max_quantizer = max_quantizer_;
-    config_.rc_target_bitrate = target_bitrate_kbps_;
-
-    ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "vpx_codec_enc_init failed:" << ret;
-        return false;
-    }
-
-    // Value of 16 will have the smallest CPU load. This turns off subpixel motion search.
-    ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 16);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed:" << ret;
-        return false;
-    }
-
-    ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed:" << ret;
-        return false;
-    }
-
-    // Use the lowest level of noise sensitivity so as to spend less time on motion estimation and
-    // inter-prediction mode.
-    ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "vpx_codec_control(VP8E_SET_NOISE_SENSITIVITY) failed:" << ret;
-        return false;
-    }
-
-    ret = vpx_codec_control(codec_.get(), VP8E_SET_TOKEN_PARTITIONS, 3);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "vpx_codec_control(VP8E_SET_TOKEN_PARTITIONS) failed:" << ret;
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
 bool VideoEncoderVpx::createVp9Codec(const QSize& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
@@ -494,7 +408,7 @@ bool VideoEncoderVpx::createVp9Codec(const QSize& size)
         return false;
     }
 
-    setCommonCodecParameters(&config_, size);
+    setCodecParameters(&config_, size);
 
     const int cpu_count = QThread::idealThreadCount();
     const int pixels = size.width() * size.height();
@@ -575,19 +489,19 @@ void VideoEncoderVpx::prepareImageAndActiveMap(
 
     if (!is_key_frame)
     {
-        const int padding = ((encoding() == proto::video::ENCODING_VP9) ? 8 : 3);
+        static const int kPadding = 8;
 
         for (const auto& rect : frame->constUpdatedRegion())
         {
             // Pad each rectangle to avoid the block-artefact filters in libvpx from introducing
-            // artefacts; VP9 includes up to 8px either side, and VP8 up to 3px, so unchanged
-            // pixels up to that far out may still be affected by the changes in the updated
-            // region, and so must be listed in the active map. After padding we align each
+            // artefacts; VP9 includes up to 8px either side, so unchanged pixels up to that far
+            // out may still be affected by the changes in the updated region, and so must be
+            // listed in the active map. After padding we align each
             // rectangle to 16x16 active-map macroblocks. This implicitly ensures all rects have
             // even top-left coords, which is is required by ARGBToI420().
             QRect rect_with_padding =
-                QRect(QPoint(rect.left() - padding, rect.top() - padding),
-                      QPoint(rect.right() + padding, rect.bottom() + padding));
+                QRect(QPoint(rect.left() - kPadding, rect.top() - kPadding),
+                      QPoint(rect.right() + kPadding, rect.bottom() + kPadding));
 
             updated_region += alignRect(rect_with_padding);
         }

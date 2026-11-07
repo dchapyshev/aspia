@@ -119,8 +119,6 @@ private:
     // Connected desktop clients (owned by ServerWorker). Encoded frames are broadcast to all of them.
     QList<DesktopClient*> clients_;
 
-    proto::video::Encoding video_encoding_;
-
     QSize source_size_;
     QSize preferred_size_;
 

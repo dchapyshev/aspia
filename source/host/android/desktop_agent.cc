@@ -50,8 +50,7 @@ const MilliSeconds kCaptureInterval{ 33 };
 DesktopAgent::DesktopAgent(QObject* parent)
     : QObject(parent),
       capture_timer_(new QTimer(this)),
-      scale_reducer_(std::make_unique<ScaleReducer>(ScaleReducer::Quality::NORMAL)),
-      video_encoding_(proto::video::ENCODING_VP9)
+      scale_reducer_(std::make_unique<ScaleReducer>(ScaleReducer::Quality::NORMAL))
 {
     LOG(INFO) << "Ctor";
 
@@ -101,7 +100,6 @@ void DesktopAgent::addClient(DesktopClient* client)
 void DesktopAgent::onClientConfigured()
 {
     bool has_configured = false;
-    bool vp8_supported = true;
     bool vp9_supported = true;
 
     // A codec is usable only if every configured client can decode it.
@@ -112,8 +110,6 @@ void DesktopAgent::onClientConfigured()
 
         has_configured = true;
 
-        if (!client->isVp8Supported())
-            vp8_supported = false;
         if (!client->isVp9Supported())
             vp9_supported = false;
     }
@@ -121,11 +117,7 @@ void DesktopAgent::onClientConfigured()
     if (!has_configured)
         return;
 
-    if (vp9_supported)
-        video_encoding_ = proto::video::ENCODING_VP9;
-    else if (vp8_supported)
-        video_encoding_ = proto::video::ENCODING_VP8;
-    else
+    if (!vp9_supported)
     {
         LOG(ERROR) << "No common video encoding among clients";
         return;
@@ -374,10 +366,10 @@ void DesktopAgent::onAudioPacket(const QByteArray& packet)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::createVideoEncoder()
 {
-    video_encoder_ = VideoEncoder::create(video_encoding_);
+    video_encoder_ = VideoEncoder::create(proto::video::ENCODING_VP9);
     if (!video_encoder_)
     {
-        LOG(ERROR) << "Unable to create video encoder for encoding:" << video_encoding_;
+        LOG(ERROR) << "Unable to create video encoder";
         return;
     }
 
@@ -557,9 +549,8 @@ void DesktopAgent::encodeScreen(const Frame* frame)
     const VideoEncoder::Result result = video_encoder_->encode(scaled_frame, packet);
     if (result == VideoEncoder::Result::PERMANENT_ERROR)
     {
-        // The encoder cannot handle this frame size. Fall back to VP8.
-        LOG(ERROR) << "Permanent encoder failure for" << video_encoding_ << "- falling back to VP8";
-        video_encoding_ = proto::video::ENCODING_VP8;
+        // The encoder cannot handle this frame size. A new one tries again with the next frame.
+        LOG(ERROR) << "Permanent encoder failure";
         createVideoEncoder();
         return;
     }

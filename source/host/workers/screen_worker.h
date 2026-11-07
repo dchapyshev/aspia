@@ -78,7 +78,7 @@ public:
 public slots:
     // Applies the configuration merged over all connected clients and (re)starts capturing. Codec
     // flags carry the capability intersection of the clients.
-    void onConfigure(const proto::control::Config& config, bool vp8_supported, bool vp9_supported);
+    void onConfigure(const proto::control::Config& config, bool vp9_supported);
 
     // Stops capturing (the last client disconnected).
     void onStopCapture();
@@ -179,7 +179,6 @@ private:
     ScreenCapturer::Type preferred_capturer_ = ScreenCapturer::Type::UNKNOWN;
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
 
-    proto::video::Encoding video_encoding_ = proto::video::ENCODING_VP9;
     quint32 quality_ = 0;
     qint64 last_bandwidth_ = 0;
     qint64 tier_bandwidth_ = 0; // The bandwidth the frame rate limit was chosen from.

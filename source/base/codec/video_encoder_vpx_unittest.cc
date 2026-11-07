@@ -58,10 +58,59 @@ bool isKeyFrame(const proto::video::Packet& packet)
     return packet.flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME;
 }
 
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
-void checkFormatIsResentAfterTemporaryError(proto::video::Encoding encoding)
+TEST(VideoEncoderVpxTest, QualityKeepsTheQuantizerAtAnyBandwidth)
 {
-    VideoEncoderVpx encoder(encoding);
+    VideoEncoderVpx encoder;
+    encoder.setQuality(5);
+
+    for (qint64 bandwidth : { qint64(0), qint64(100 * 1024), qint64(10 * 1024 * 1024) })
+    {
+        encoder.setBandwidth(bandwidth);
+        EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 32u);
+        EXPECT_EQ(VideoEncoderVpxTestPeer::maxQuantizer(encoder), 32u);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(VideoEncoderVpxTest, QualityEndsMatchTheBandwidthRange)
+{
+    VideoEncoderVpx encoder;
+
+    encoder.setQuality(1);
+    encoder.setBandwidth(0);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::maxQuantizer(encoder), 50u);
+
+    encoder.setQuality(10);
+    encoder.setBandwidth(0);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 8u);
+
+    encoder.setQuality(11);
+    encoder.setBandwidth(0);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 8u);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(VideoEncoderVpxTest, AutoQualityFollowsTheBandwidth)
+{
+    VideoEncoderVpx encoder;
+    encoder.setQuality(0);
+
+    encoder.setBandwidth(100 * 1024);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 16u);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::maxQuantizer(encoder), 50u);
+
+    encoder.setBandwidth(10 * 1024 * 1024);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 8u);
+    EXPECT_EQ(VideoEncoderVpxTestPeer::maxQuantizer(encoder), 25u);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(VideoEncoderVpxTest, FormatIsResentAfterTemporaryError)
+{
+    VideoEncoderVpx encoder;
     std::unique_ptr<Frame> frame = makeFrame(0x40);
     proto::video::Packet packet;
 
@@ -84,13 +133,13 @@ void checkFormatIsResentAfterTemporaryError(proto::video::Encoding encoding)
     EXPECT_EQ(packet.format().video_rect().width(), kFrameSize.width());
     EXPECT_EQ(packet.format().video_rect().height(), kFrameSize.height());
     EXPECT_TRUE(isKeyFrame(packet));
-    EXPECT_EQ(packet.encoding(), encoding);
+    EXPECT_EQ(packet.encoding(), proto::video::ENCODING_VP9);
 }
 
 //--------------------------------------------------------------------------------------------------
-void checkRequestedKeyFrameHasFormat(proto::video::Encoding encoding)
+TEST(VideoEncoderVpxTest, RequestedKeyFrameHasFormat)
 {
-    VideoEncoderVpx encoder(encoding);
+    VideoEncoderVpx encoder;
     std::unique_ptr<Frame> frame = makeFrame(0x40);
     proto::video::Packet packet;
 
@@ -108,77 +157,4 @@ void checkRequestedKeyFrameHasFormat(proto::video::Encoding encoding)
     ASSERT_TRUE(packet.has_format());
     EXPECT_EQ(packet.format().video_rect().width(), kFrameSize.width());
     EXPECT_EQ(packet.format().video_rect().height(), kFrameSize.height());
-}
-
-} // namespace
-
-//--------------------------------------------------------------------------------------------------
-TEST(VideoEncoderVpxTest, QualityKeepsTheQuantizerAtAnyBandwidth)
-{
-    VideoEncoderVpx encoder(proto::video::ENCODING_VP9);
-    encoder.setQuality(5);
-
-    for (qint64 bandwidth : { qint64(0), qint64(100 * 1024), qint64(10 * 1024 * 1024) })
-    {
-        encoder.setBandwidth(bandwidth);
-        EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 32u);
-        EXPECT_EQ(VideoEncoderVpxTestPeer::maxQuantizer(encoder), 32u);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(VideoEncoderVpxTest, QualityEndsMatchTheBandwidthRange)
-{
-    VideoEncoderVpx encoder(proto::video::ENCODING_VP9);
-
-    encoder.setQuality(1);
-    encoder.setBandwidth(0);
-    EXPECT_EQ(VideoEncoderVpxTestPeer::maxQuantizer(encoder), 50u);
-
-    encoder.setQuality(10);
-    encoder.setBandwidth(0);
-    EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 8u);
-
-    encoder.setQuality(11);
-    encoder.setBandwidth(0);
-    EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 8u);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(VideoEncoderVpxTest, AutoQualityFollowsTheBandwidth)
-{
-    VideoEncoderVpx encoder(proto::video::ENCODING_VP9);
-    encoder.setQuality(0);
-
-    encoder.setBandwidth(100 * 1024);
-    EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 16u);
-    EXPECT_EQ(VideoEncoderVpxTestPeer::maxQuantizer(encoder), 50u);
-
-    encoder.setBandwidth(10 * 1024 * 1024);
-    EXPECT_EQ(VideoEncoderVpxTestPeer::minQuantizer(encoder), 8u);
-    EXPECT_EQ(VideoEncoderVpxTestPeer::maxQuantizer(encoder), 25u);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(VideoEncoderVpxTest, Vp8FormatIsResentAfterTemporaryError)
-{
-    checkFormatIsResentAfterTemporaryError(proto::video::ENCODING_VP8);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(VideoEncoderVpxTest, Vp9FormatIsResentAfterTemporaryError)
-{
-    checkFormatIsResentAfterTemporaryError(proto::video::ENCODING_VP9);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(VideoEncoderVpxTest, Vp8RequestedKeyFrameHasFormat)
-{
-    checkRequestedKeyFrameHasFormat(proto::video::ENCODING_VP8);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(VideoEncoderVpxTest, Vp9RequestedKeyFrameHasFormat)
-{
-    checkRequestedKeyFrameHasFormat(proto::video::ENCODING_VP9);
 }

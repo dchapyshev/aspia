@@ -249,7 +249,6 @@ void DesktopIpcWorker::onClientConfigured()
 
     bool has_configured = false;
     bool opus_supported = true;
-    bool vp8_supported = true;
     bool vp9_supported = true;
 
     for (auto* client : std::as_const(clients_))
@@ -261,8 +260,6 @@ void DesktopIpcWorker::onClientConfigured()
         has_configured = true;
 
         // If at least one client does not support a codec, it must be disabled.
-        if (!client->isVp8Supported())
-            vp8_supported = false;
         if (!client->isVp9Supported())
             vp9_supported = false;
         if (!client->isOpusSupported())
@@ -292,12 +289,12 @@ void DesktopIpcWorker::onClientConfigured()
     if (!has_configured)
         return;
 
-    LOG(INFO) << "Merged configuration:" << merged_config << "vp8:" << vp8_supported
-              << "vp9:" << vp9_supported << "opus:" << opus_supported;
+    LOG(INFO) << "Merged configuration:" << merged_config << "vp9:" << vp9_supported
+              << "opus:" << opus_supported;
 
     is_lock_at_disconnect_ = merged_config.lock_at_disconnect();
 
-    emit sig_configure(merged_config, vp8_supported, vp9_supported);
+    emit sig_configure(merged_config, vp9_supported);
     emit sig_audioEnabled(merged_config.audio() && opus_supported);
     emit sig_blockInput(merged_config.block_input());
 

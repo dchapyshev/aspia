@@ -18,7 +18,9 @@
 
 #include "client/workers/video_worker.h"
 
+#include "base/codec/video_decoder.h"
 #include "base/codec/video_encoder_vpx.h"
+#include "base/codec/webm_video_encoder.h"
 #include "base/desktop/frame_aligned.h"
 
 #include <gtest/gtest.h>
@@ -61,9 +63,9 @@ std::unique_ptr<Frame> makeFrame(int pixels_value)
 }
 
 //--------------------------------------------------------------------------------------------------
-EncodedStream encodeStream(proto::video::Encoding encoding)
+EncodedStream encodeStream()
 {
-    VideoEncoderVpx encoder(encoding);
+    VideoEncoderVpx encoder;
     EncodedStream stream;
 
     std::unique_ptr<Frame> first = makeFrame(0x40);
@@ -81,6 +83,32 @@ EncodedStream encodeStream(proto::video::Encoding encoding)
               VideoEncoder::Result::SUCCESS);
     EXPECT_TRUE(stream.requested_key_frame.has_format());
     EXPECT_TRUE(stream.requested_key_frame.flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME);
+
+    return stream;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Hosts of older versions may still send VP8. Here only the encoder of recordings makes it: it takes
+// decoded frames and gives a key frame only when it starts, a second encoder makes the requested one.
+EncodedStream encodeVp8Stream()
+{
+    const EncodedStream source = encodeStream();
+    std::unique_ptr<VideoDecoder> decoder = VideoDecoder::create(proto::video::ENCODING_VP9);
+    EncodedStream stream;
+
+    WebmVideoEncoder encoder;
+    EXPECT_EQ(decoder->decode(source.key_frame), VideoDecoder::Result::SUCCESS);
+    EXPECT_TRUE(encoder.encode(decoder->frame(), &stream.key_frame));
+    EXPECT_TRUE(stream.key_frame.has_format());
+
+    EXPECT_EQ(decoder->decode(source.delta_frame), VideoDecoder::Result::SUCCESS);
+    EXPECT_TRUE(encoder.encode(decoder->frame(), &stream.delta_frame));
+    EXPECT_FALSE(stream.delta_frame.has_format());
+
+    WebmVideoEncoder second_encoder;
+    EXPECT_EQ(decoder->decode(source.requested_key_frame), VideoDecoder::Result::SUCCESS);
+    EXPECT_TRUE(second_encoder.encode(decoder->frame(), &stream.requested_key_frame));
+    EXPECT_TRUE(stream.requested_key_frame.has_format());
 
     return stream;
 }
@@ -132,8 +160,8 @@ protected:
 //--------------------------------------------------------------------------------------------------
 TEST_F(VideoWorkerTest, LatePacketOfPreviousEncoderIsIgnored)
 {
-    const EncodedStream vp8 = encodeStream(proto::video::ENCODING_VP8);
-    const EncodedStream vp9 = encodeStream(proto::video::ENCODING_VP9);
+    const EncodedStream vp8 = encodeVp8Stream();
+    const EncodedStream vp9 = encodeStream();
 
     // After the switch from TCP to UDP the host already sends VP8, while a VP9 packet sent earlier
     // over TCP arrives between them.
@@ -148,8 +176,8 @@ TEST_F(VideoWorkerTest, LatePacketOfPreviousEncoderIsIgnored)
 //--------------------------------------------------------------------------------------------------
 TEST_F(VideoWorkerTest, NewEncoderSwitchesDecoder)
 {
-    const EncodedStream vp8 = encodeStream(proto::video::ENCODING_VP8);
-    const EncodedStream vp9 = encodeStream(proto::video::ENCODING_VP9);
+    const EncodedStream vp8 = encodeVp8Stream();
+    const EncodedStream vp9 = encodeStream();
 
     decode(vp8.key_frame);
     decode(vp9.key_frame);
@@ -162,9 +190,9 @@ TEST_F(VideoWorkerTest, NewEncoderSwitchesDecoder)
 //--------------------------------------------------------------------------------------------------
 TEST_F(VideoWorkerTest, LateKeyFrameOfPreviousEncoderDoesNotFreezeVideo)
 {
-    const EncodedStream initial = encodeStream(proto::video::ENCODING_VP8);
-    const EncodedStream tcp = encodeStream(proto::video::ENCODING_VP9);
-    const EncodedStream udp = encodeStream(proto::video::ENCODING_VP8);
+    const EncodedStream initial = encodeVp8Stream();
+    const EncodedStream tcp = encodeStream();
+    const EncodedStream udp = encodeVp8Stream();
 
     // The host switched to VP9 over TCP shortly before it moved to UDP and to VP8. The first VP9
     // packets were still on the way over TCP and arrive after the key frame of the new VP8 encoder.
@@ -196,7 +224,7 @@ TEST_F(VideoWorkerTest, LateKeyFrameOfPreviousEncoderDoesNotFreezeVideo)
 //--------------------------------------------------------------------------------------------------
 TEST_F(VideoWorkerTest, NewScreenSizeOfSameFrameSizeIsReported)
 {
-    const EncodedStream stream = encodeStream(proto::video::ENCODING_VP8);
+    const EncodedStream stream = encodeStream();
 
     decode(withScreenSize(stream.key_frame, QSize(1920, 1080)));
     EXPECT_EQ(frame_changed_count_, 1);
@@ -213,7 +241,7 @@ TEST_F(VideoWorkerTest, NewScreenSizeOfSameFrameSizeIsReported)
 //--------------------------------------------------------------------------------------------------
 TEST_F(VideoWorkerTest, SameScreenSizeIsNotReportedAgain)
 {
-    const EncodedStream stream = encodeStream(proto::video::ENCODING_VP8);
+    const EncodedStream stream = encodeStream();
 
     decode(withScreenSize(stream.key_frame, QSize(1920, 1080)));
     decode(withScreenSize(stream.requested_key_frame, QSize(1920, 1080)));
@@ -223,7 +251,7 @@ TEST_F(VideoWorkerTest, SameScreenSizeIsNotReportedAgain)
 //--------------------------------------------------------------------------------------------------
 TEST_F(VideoWorkerTest, PacketsBeforeFirstFormatDoNotRequestKeyFrame)
 {
-    const EncodedStream stream = encodeStream(proto::video::ENCODING_VP8);
+    const EncodedStream stream = encodeStream();
 
     // A client that joins a running session gets the packets of the current encoder until the host
     // creates a new encoder for its configuration.

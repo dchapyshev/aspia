@@ -222,7 +222,6 @@ void PortableDesktopWorker::onClientConfigured()
 
     bool has_configured = false;
     bool opus_supported = true;
-    bool vp8_supported = true;
     bool vp9_supported = true;
 
     for (const ClientEntry& entry : std::as_const(clients_))
@@ -234,8 +233,6 @@ void PortableDesktopWorker::onClientConfigured()
         has_configured = true;
 
         // If at least one client does not support a codec, it must be disabled.
-        if (!entry.client->isVp8Supported())
-            vp8_supported = false;
         if (!entry.client->isVp9Supported())
             vp9_supported = false;
         if (!entry.client->isOpusSupported())
@@ -263,10 +260,10 @@ void PortableDesktopWorker::onClientConfigured()
     if (!has_configured)
         return;
 
-    LOG(INFO) << "Merged configuration:" << merged_config << "vp8:" << vp8_supported
-              << "vp9:" << vp9_supported << "opus:" << opus_supported;
+    LOG(INFO) << "Merged configuration:" << merged_config << "vp9:" << vp9_supported
+              << "opus:" << opus_supported;
 
-    emit sig_configure(merged_config, vp8_supported, vp9_supported);
+    emit sig_configure(merged_config, vp9_supported);
     emit sig_audioEnabled(merged_config.audio() && opus_supported);
 
     onPreferredSizeChanged();

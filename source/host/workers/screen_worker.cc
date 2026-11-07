@@ -231,19 +231,18 @@ void ScreenWorker::releaseAllInput()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenWorker::onConfigure(const proto::control::Config& config, bool vp8_supported, bool vp9_supported)
+void ScreenWorker::onConfigure(const proto::control::Config& config, bool vp9_supported)
 {
-    if (!vp8_supported && !vp9_supported)
+    if (!vp9_supported)
     {
         LOG(ERROR) << "No supported video encodings";
         CoreApplication::quit();
         return;
     }
 
-    video_encoding_ = vp9_supported ? proto::video::ENCODING_VP9 : proto::video::ENCODING_VP8;
     quality_ = config.quality();
 
-    LOG(INFO) << "Configuration:" << config << "vp8:" << vp8_supported << "vp9:" << vp9_supported;
+    LOG(INFO) << "Configuration:" << config;
 
     // The first client that requested a preferred resolution wins. It is applied to the monitors
     // in onCaptureScreen.
@@ -308,7 +307,6 @@ void ScreenWorker::onStopCapture()
     video_encoder_.reset();
     cursor_encoder_.reset();
     scale_reducer_.reset();
-    video_encoding_ = proto::video::ENCODING_VP9;
     quality_ = 0;
 
     setCaptureFps(default_fps_);
@@ -1328,9 +1326,8 @@ void ScreenWorker::encodeScreen(const Frame* frame)
     const VideoEncoder::Result encode_result = video_encoder_->encode(scaled_frame, packet);
     if (encode_result == VideoEncoder::Result::PERMANENT_ERROR)
     {
-        // The encoder cannot handle this frame size - fall back to VP8.
-        LOG(ERROR) << "Permanent encoder failure for" << video_encoding_ << "- falling back to VP8";
-        video_encoding_ = proto::video::ENCODING_VP8;
+        // The encoder cannot handle this frame size. A new one tries again with the next frame.
+        LOG(ERROR) << "Permanent encoder failure";
         createVideoEncoder();
         return;
     }
@@ -1377,7 +1374,7 @@ void ScreenWorker::encodeCursor(const MouseCursor* cursor)
 //--------------------------------------------------------------------------------------------------
 void ScreenWorker::createVideoEncoder()
 {
-    video_encoder_ = VideoEncoder::create(video_encoding_);
+    video_encoder_ = VideoEncoder::create(proto::video::ENCODING_VP9);
 
     // Seed the fresh encoder with the last measured bandwidth so it starts at the right quality
     // tier immediately. Without this it would come up at its built-in defaults and only correct on

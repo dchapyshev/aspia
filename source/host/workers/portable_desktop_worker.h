@@ -74,7 +74,7 @@ signals:
     void sig_preferredSizeChanged(const QSize& size);
 
     // Result of merging the configuration over all clients.
-    void sig_configure(const proto::control::Config& config, bool vp8_supported, bool vp9_supported);
+    void sig_configure(const proto::control::Config& config, bool vp9_supported);
 
     // Derived from the merged configuration, targeting the audio worker.
     void sig_audioEnabled(bool enable);
