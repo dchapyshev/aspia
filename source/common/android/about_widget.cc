@@ -58,12 +58,17 @@ const char* kThirdParty[] =
     "curl &copy; 1996-2022 Daniel Stenberg, and many contributors; CURL License",
     "enet &copy; 2002-2024 Lee Salzman; MIT License",
     "libvpx &copy; 2010, The WebM Project authors; BSD 3-Clause License",
+    "libwebm &copy; 2010, Google Inc.; BSD 3-Clause License",
     "libyuv &copy; 2011 The LibYuv Project Authors; BSD 3-Clause License",
+    "miniupnpc &copy; 2005-2025 Thomas Bernard; BSD 3-Clause License",
+    "nayuki-qr-code-generator &copy; 2022 Project Nayuki; MIT License",
+    "oboe &copy; 2016 The Android Open Source Project; Apache License 2.0",
     "openssl &copy; 1998-2018 The OpenSSL Project; OpenSSL License",
     "opus &copy; 2001-2011 Xiph.Org, Skype Limited, Octasic, Jean-Marc Valin, Timothy B. Terriberry,"
         " CSIRO, Gregory Maxwell, Mark Borgerding, Erik de Castro Lopo; BSD License",
     "protobuf &copy; 2014 Google Inc.; BSD 3-Clause License",
     "qt &copy; 2015 The Qt Company Ltd.; GNU General Public License 3.0",
+    "sqlite; Public Domain",
     "zstd &copy; 2016 Yann Collet, Facebook, Inc.; BSD License"
 };
 
