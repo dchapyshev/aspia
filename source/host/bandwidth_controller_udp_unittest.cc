@@ -65,6 +65,8 @@ struct Path
     double loss = 0;
     int noise_scale = 0;
     int noise_phase = 0;
+    int wake_ms = 0;            // The way back is this late after it was silent for 100 ms.
+    int timer_jitter_ms = 10;   // The slice timer fires this much earlier or later.
 };
 
 enum class Content { IDLE, VIDEO };
@@ -173,8 +175,16 @@ private:
         acknowledge();
         encode();
 
-        if (ms_ % 100 == 0)
+        if (ms_ >= next_slice_ms_)
+        {
             slice();
+
+            // A repeating timer keeps its schedule, only each timeout moves around it.
+            const int jitter = path_.timer_jitter_ms;
+            slice_index_ += 1;
+            next_slice_ms_ = (slice_index_ + 1) * 100 +
+                std::uniform_int_distribution<int>(-jitter, jitter)(timer_random_);
+        }
         if (ms_ % 1000 == 0)
             tick();
 
@@ -408,11 +418,20 @@ private:
         if (ms_ % 2 != 0)
             return;
 
+        if (pending_acks_.empty())
+            return;
+
+        double arrival = (ms_ + path_.delay_ms) / 1000.0;
+        if (path_.wake_ms > 0 && ms_ - last_backward_ms_ >= 100)
+            arrival += path_.wake_ms / 1000.0;
+        last_backward_ms_ = ms_;
+        last_backward_arrival_ = std::max(last_backward_arrival_, arrival);
+
         for (const Packet& packet : pending_acks_)
         {
             if (ms_ < outage_end_)
                 continue;
-            backward_.push_back({ ms_ / 1000.0 + path_.delay_ms / 1000.0, packet.command, packet.echo_ms });
+            backward_.push_back({ last_backward_arrival_, packet.command, packet.echo_ms });
         }
         pending_acks_.clear();
     }
@@ -515,6 +534,9 @@ private:
     double queue_bytes_;
 
     qint64 ms_ = 0;
+    qint64 next_slice_ms_ = 100;
+    qint64 slice_index_ = 0;
+    std::mt19937 timer_random_{ 2 };
     qint64 published_;
     qint64 window_ = 16 * 1024;
     qint64 outage_end_ = 0;
@@ -548,6 +570,8 @@ private:
     qint64 lowest_round_trip_ = 500;
     qint64 round_trip_epoch_ = 0;
     qint64 last_receive_ms_ = 0;
+    qint64 last_backward_ms_ = 0;
+    double last_backward_arrival_ = 0;
 
     qint64 min_bandwidth_ = kStartBandwidth;
     qint64 max_bandwidth_ = kStartBandwidth;
@@ -582,6 +606,45 @@ TEST(BandwidthControllerUdpTest, StartFindsTheCapacity)
     EXPECT_GE(stand.minBandwidth(), kCapacityApp * 6 / 10) << stand.trace();
     EXPECT_LE(stand.maxBandwidth(), kCapacityApp * 12 / 10) << stand.trace();
     EXPECT_LE(stand.frameDelay(0.95), MilliSeconds(500)) << stand.trace();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Nothing but the tests of the regulator carries data, and the way back may sleep while idle.
+TEST(BandwidthControllerUdpTest, StartWhileIdleFindsTheCapacity)
+{
+    const qint64 capacities[] = { 100 * 1024, 300 * 1024, kCapacity, 5 * 1024 * 1024 };
+
+    for (qint64 capacity : capacities)
+    {
+        for (int wake_ms : { 0, 50 })
+        {
+            SCOPED_TRACE(testing::Message() << "capacity " << capacity / 1024 << " wake "
+                                            << wake_ms);
+
+            Path path;
+            path.capacity = capacity;
+            path.wake_ms = wake_ms;
+
+            Stand stand(path, Content::IDLE);
+            stand.run(Seconds(10));
+
+            const qint64 capacity_app = capacity * kFragment / (kFragment + kWireOverhead);
+            EXPECT_GE(stand.bandwidth(), capacity_app * 7 / 10) << stand.trace();
+            EXPECT_LE(stand.bandwidth(), capacity_app * 12 / 10) << stand.trace();
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(BandwidthControllerUdpTest, StartWhileIdleOnLanReachesTheCeiling)
+{
+    Path path;
+    path.capacity = 100 * 1024 * 1024;
+    path.delay_ms = 1;
+
+    Stand stand(path, Content::IDLE);
+    stand.run(Seconds(15));
+    EXPECT_GE(stand.bandwidth(), kMaxBandwidth * 9 / 10) << stand.trace();
 }
 
 //--------------------------------------------------------------------------------------------------

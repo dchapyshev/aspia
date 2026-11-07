@@ -72,6 +72,7 @@ private:
 
     void addCounters(TimePoint now, const Counters& counters);
     const Sample& countersAt(int slices_ago) const;
+    const Sample& countersOfSlice(int slice) const;
     void updateRoundTrip(TimePoint now, MilliSeconds round_trip);
     void updateDeliveryRate();
     void addRateSample(double rate, double seconds);
@@ -79,7 +80,7 @@ private:
     void updatePeakRate(TimePoint now);
     void runRateTest(TimePoint now, qint64 data_bytes);
     void finishRateTest(TimePoint now);
-    void startRateTest(TimePoint now);
+    void startRateTest();
     void applyRateTestResult(double rate, bool passed);
     double usableRate() const;
     qint64 standingQueueBytes() const;
@@ -121,8 +122,12 @@ private:
     int test_slices_left_ = 0;
     int recent_rate_failures_ = 0;
     bool test_retried_ = false;
-    std::optional<TimePoint> test_measure_start_;
-    std::optional<TimePoint> test_result_time_;
+
+    // The slices whose counters were taken after the first and after the last portion of the
+    // padding left. The test waits for the delivery of the last portion.
+    int test_first_slice_ = 0;
+    std::optional<int> test_last_slice_;
+
     std::optional<TimePoint> next_test_time_;
     Seconds test_interval_{ 0 };
 

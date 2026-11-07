@@ -220,6 +220,12 @@ const BandwidthControllerUdp::Sample& BandwidthControllerUdp::countersAt(int sli
 }
 
 //--------------------------------------------------------------------------------------------------
+const BandwidthControllerUdp::Sample& BandwidthControllerUdp::countersOfSlice(int slice) const
+{
+    return countersAt(counters_history_size_ - 1 - slice);
+}
+
+//--------------------------------------------------------------------------------------------------
 void BandwidthControllerUdp::updateRoundTrip(TimePoint now, MilliSeconds round_trip)
 {
     if (round_trip <= MilliSeconds::zero())
@@ -363,19 +369,15 @@ void BandwidthControllerUdp::runRateTest(TimePoint now, qint64 data_bytes)
         --test_slices_left_;
 
         if (test_slices_left_ == 0)
-        {
-            const double round_trip = toSeconds(min_round_trip_.value_or(MilliSeconds::zero()));
-            const auto shift = kPaddingSlice * slicesOf(round_trip);
-
-            test_measure_start_ = *test_measure_start_ + shift;
-            test_result_time_ = now + kPaddingSlice + shift;
-        }
+            test_last_slice_ = counters_history_size_;
         return;
     }
 
-    if (test_result_time_.has_value())
+    if (test_last_slice_.has_value())
     {
-        if (now < *test_result_time_)
+        const bool delivered = countersAt(0).delivered >= countersOfSlice(*test_last_slice_).sent;
+        const bool expired = counters_history_size_ - test_first_slice_ >= kCountersHistorySize;
+        if (!delivered && !expired)
             return;
 
         finishRateTest(now);
@@ -388,25 +390,38 @@ void BandwidthControllerUdp::runRateTest(TimePoint now, qint64 data_bytes)
     if (now < *next_test_time_ || queued > 0 || delivery_rate_ >= kMaxBandwidth)
         return;
 
-    startRateTest(now);
+    startRateTest();
 }
 
 //--------------------------------------------------------------------------------------------------
+// The portions after the first one are measured by the slices that saw them leave and delivered.
+// The timer and the delay of the acknowledgements move both ends of the delivery alike.
 void BandwidthControllerUdp::finishRateTest(TimePoint now)
 {
-    test_result_time_.reset();
+    const Sample& first = countersOfSlice(test_first_slice_);
+    const Sample& last = countersOfSlice(*test_last_slice_);
+    test_last_slice_.reset();
 
-    int first = std::min(counters_history_size_, kCountersHistorySize) - 1;
-    while (first > 0 && countersAt(first).time < *test_measure_start_)
-        --first;
+    std::optional<TimePoint> first_delivered;
+    std::optional<TimePoint> last_delivered;
+    for (int slice = test_first_slice_; slice < counters_history_size_ && !last_delivered; ++slice)
+    {
+        const Sample& sample = countersOfSlice(slice);
+        if (!first_delivered && sample.delivered >= first.sent)
+            first_delivered = sample.time;
+        if (sample.delivered >= last.sent)
+            last_delivered = sample.time;
+    }
 
     double got = 0;
-    const Sample& start = countersAt(first);
-    const Sample& last = countersAt(0);
-    if (last.time > start.time)
+    if (first_delivered.has_value())
     {
-        const double delivered = static_cast<double>(last.delivered - start.delivered);
-        got = delivered / toSeconds(last.time - start.time);
+        const qint64 delivered = std::min(countersAt(0).delivered, last.sent) - first.sent;
+        const double delivered_seconds =
+            toSeconds(last_delivered.value_or(countersAt(0).time) - *first_delivered);
+        const double seconds = std::max(toSeconds(last.time - first.time), delivered_seconds);
+        if (seconds > 0)
+            got = static_cast<double>(delivered) / seconds;
     }
 
     const double result = std::min(got, test_rate_);
@@ -442,7 +457,7 @@ void BandwidthControllerUdp::finishRateTest(TimePoint now)
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthControllerUdp::startRateTest(TimePoint now)
+void BandwidthControllerUdp::startRateTest()
 {
     const double round_trip = toSeconds(min_round_trip_.value_or(MilliSeconds::zero()));
     const double slice = toSeconds(kPaddingSlice);
@@ -450,7 +465,9 @@ void BandwidthControllerUdp::startRateTest(TimePoint now)
     test_base_rate_ = usableRate();
     test_rate_ = std::min<double>(test_base_rate_ * test_gain_, kMaxBandwidth);
     test_slices_left_ = std::max(kMinTestSlices, slicesOf(2 * round_trip + slice) + 1);
-    test_measure_start_ = now + kPaddingSlice;
+
+    // The first portion leaves after the counters of the next slice, the slice after it has them.
+    test_first_slice_ = counters_history_size_ + 1;
 }
 
 //--------------------------------------------------------------------------------------------------
