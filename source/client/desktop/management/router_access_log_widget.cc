@@ -70,6 +70,7 @@ RouterAccessLogWidget::RouterAccessLogWidget(QWidget* parent)
 
     QHeaderView* header = ui->tree_log->header();
     header->resizeSection(static_cast<int>(AccessLogListModel::Column::TIME), 130);
+    header->resizeSection(static_cast<int>(AccessLogListModel::Column::SESSION_TYPE), 145);
     header->resizeSection(static_cast<int>(AccessLogListModel::Column::CLIENT_COMPUTER_NAME), 160);
     header->resizeSection(static_cast<int>(AccessLogListModel::Column::HOST_COMPUTER_NAME), 160);
     header->setSectionHidden(static_cast<int>(AccessLogListModel::Column::CLIENT_VERSION), true);
