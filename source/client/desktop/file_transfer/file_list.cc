@@ -72,6 +72,7 @@ FileList::FileList(QWidget* parent)
     setModel(model_);
     setStyle(new TreeViewProxyStyle(style()));
     setItemDelegate(new FileItemDelegate(this));
+    header()->setSortIndicator(0, Qt::AscendingOrder);
 
     connect(model_, &FileListModel::sig_nameChangeRequest, this, &FileList::sig_nameChangeRequest);
     connect(model_, &FileListModel::sig_createFolderRequest, this, &FileList::sig_createFolderRequest);
