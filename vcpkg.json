@@ -7,7 +7,7 @@
       "name": "curl",
       "default-features": false,
       "features": [
-        "openssl",
+        "ssl",
         {
           "name": "sspi",
           "platform": "windows & !uwp"

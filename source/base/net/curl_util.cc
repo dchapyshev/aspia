@@ -158,10 +158,10 @@ ScopedCURL::ScopedCURL()
     curl_easy_setopt(curl_, CURLOPT_CAINFO, bundle_path.constData());
     curl_easy_setopt(curl_, CURLOPT_PROXY_CAINFO, bundle_path.constData());
 #elif defined(Q_OS_WINDOWS)
-    // The OpenSSL backend of curl knows no roots on Windows by itself, this makes it read the ROOT and CA
-    // stores of the system. The Schannel backend reads them anyway and ignores the option.
-    curl_easy_setopt(curl_, CURLOPT_SSL_OPTIONS, static_cast<long>(CURLSSLOPT_NATIVE_CA));
-    curl_easy_setopt(curl_, CURLOPT_PROXY_SSL_OPTIONS, static_cast<long>(CURLSSLOPT_NATIVE_CA));
+    // Windows verifies the chain itself and fetches a root it does not have yet from Windows Update.
+    // A revocation server that cannot be reached does not fail the connection.
+    curl_easy_setopt(curl_, CURLOPT_SSL_OPTIONS, static_cast<long>(CURLSSLOPT_REVOKE_BEST_EFFORT));
+    curl_easy_setopt(curl_, CURLOPT_PROXY_SSL_OPTIONS, static_cast<long>(CURLSSLOPT_REVOKE_BEST_EFFORT));
 #endif // defined(Q_OS_ANDROID)
 }
 
