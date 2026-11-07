@@ -18,9 +18,7 @@
 
 #include "client/workers/video_worker.h"
 
-#include "base/codec/video_decoder.h"
 #include "base/codec/video_encoder_vpx.h"
-#include "base/codec/webm_video_encoder.h"
 #include "base/desktop/frame_aligned.h"
 
 #include <gtest/gtest.h>
@@ -88,29 +86,13 @@ EncodedStream encodeStream()
 }
 
 //--------------------------------------------------------------------------------------------------
-// Hosts of older versions may still send VP8. Here only the encoder of recordings makes it: it takes
-// decoded frames and gives a key frame only when it starts, a second encoder makes the requested one.
-EncodedStream encodeVp8Stream()
+// The same packet from an encoder of another encoding. Such packets are dropped before decoding, so
+// their data does not matter.
+proto::video::Packet withOtherEncoding(const proto::video::Packet& packet)
 {
-    const EncodedStream source = encodeStream();
-    std::unique_ptr<VideoDecoder> decoder = VideoDecoder::create(proto::video::ENCODING_VP9);
-    EncodedStream stream;
-
-    WebmVideoEncoder encoder;
-    EXPECT_EQ(decoder->decode(source.key_frame), VideoDecoder::Result::SUCCESS);
-    EXPECT_TRUE(encoder.encode(decoder->frame(), &stream.key_frame));
-    EXPECT_TRUE(stream.key_frame.has_format());
-
-    EXPECT_EQ(decoder->decode(source.delta_frame), VideoDecoder::Result::SUCCESS);
-    EXPECT_TRUE(encoder.encode(decoder->frame(), &stream.delta_frame));
-    EXPECT_FALSE(stream.delta_frame.has_format());
-
-    WebmVideoEncoder second_encoder;
-    EXPECT_EQ(decoder->decode(source.requested_key_frame), VideoDecoder::Result::SUCCESS);
-    EXPECT_TRUE(second_encoder.encode(decoder->frame(), &stream.requested_key_frame));
-    EXPECT_TRUE(stream.requested_key_frame.has_format());
-
-    return stream;
+    proto::video::Packet result = packet;
+    result.set_encoding(proto::video::ENCODING_VP8);
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -160,63 +142,46 @@ protected:
 //--------------------------------------------------------------------------------------------------
 TEST_F(VideoWorkerTest, LatePacketOfPreviousEncoderIsIgnored)
 {
-    const EncodedStream vp8 = encodeVp8Stream();
-    const EncodedStream vp9 = encodeStream();
+    const EncodedStream stream = encodeStream();
 
-    // After the switch from TCP to UDP the host already sends VP8, while a VP9 packet sent earlier
-    // over TCP arrives between them.
-    decode(vp8.key_frame);
-    decode(vp9.delta_frame);
-    decode(vp8.delta_frame);
+    // After the switch from TCP to UDP an older host already sends VP9, while a VP8 packet sent
+    // earlier over TCP arrives between them.
+    decode(stream.key_frame);
+    decode(withOtherEncoding(stream.delta_frame));
+    decode(stream.delta_frame);
 
     EXPECT_EQ(draw_count_, 2);
     EXPECT_EQ(send_count_, 0);
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST_F(VideoWorkerTest, NewEncoderSwitchesDecoder)
-{
-    const EncodedStream vp8 = encodeVp8Stream();
-    const EncodedStream vp9 = encodeStream();
-
-    decode(vp8.key_frame);
-    decode(vp9.key_frame);
-    decode(vp9.delta_frame);
-
-    EXPECT_EQ(draw_count_, 3);
-    EXPECT_EQ(send_count_, 0);
-}
-
-//--------------------------------------------------------------------------------------------------
 TEST_F(VideoWorkerTest, LateKeyFrameOfPreviousEncoderDoesNotFreezeVideo)
 {
-    const EncodedStream initial = encodeVp8Stream();
-    const EncodedStream tcp = encodeStream();
-    const EncodedStream udp = encodeVp8Stream();
+    const EncodedStream stream = encodeStream();
+    const proto::video::Packet new_encoder_packet = withOtherEncoding(stream.delta_frame);
 
-    // The host switched to VP9 over TCP shortly before it moved to UDP and to VP8. The first VP9
-    // packets were still on the way over TCP and arrive after the key frame of the new VP8 encoder.
-    decode(initial.key_frame);
-    decode(udp.key_frame);
-    decode(tcp.key_frame);
-    decode(tcp.delta_frame);
+    // An older host switched encodings shortly before it moved to UDP and to another encoding. The
+    // first packets of the old encoder were still on the way over TCP and arrive after the key frame
+    // of the new one, so the decoder is left with the old encoding.
+    decode(stream.key_frame);
+    decode(stream.delta_frame);
 
     const int draw_count = draw_count_;
 
-    decode(udp.delta_frame);
+    decode(new_encoder_packet);
     EXPECT_EQ(send_count_, 0);
 
     for (int i = 0; i < 100 && send_count_ == 0; ++i)
-        decode(udp.delta_frame);
+        decode(new_encoder_packet);
     EXPECT_EQ(send_count_, 1);
     EXPECT_EQ(draw_count_, draw_count);
 
     // The requested key frame is still on the way.
     for (int i = 0; i < 100; ++i)
-        decode(udp.delta_frame);
+        decode(new_encoder_packet);
     EXPECT_EQ(send_count_, 1);
 
-    decode(udp.requested_key_frame);
+    decode(stream.requested_key_frame);
     EXPECT_EQ(draw_count_, draw_count + 1);
     EXPECT_EQ(send_count_, 1);
 }

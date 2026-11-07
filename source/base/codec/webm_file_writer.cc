@@ -68,15 +68,10 @@ void WebmFileWriter::addVideoPacket(const proto::video::Packet& packet)
     {
         close();
 
-        switch (packet.encoding())
+        if (packet.encoding() != proto::video::ENCODING_VP9)
         {
-            case proto::video::ENCODING_VP8:
-            case proto::video::ENCODING_VP9:
-                break;
-
-            default:
-                LOG(ERROR) << "Not supported video encoding";
-                return;
+            LOG(ERROR) << "Not supported video encoding";
+            return;
         }
 
         last_video_encoding_ = packet.encoding();
@@ -95,13 +90,9 @@ void WebmFileWriter::addVideoPacket(const proto::video::Packet& packet)
             return;
         }
 
-        const char* video_codec_id = mkvmuxer::Tracks::kVp8CodecId;
-        if (packet.encoding() == proto::video::ENCODING_VP9)
-            video_codec_id = mkvmuxer::Tracks::kVp9CodecId;
-
         if (!addVideoTrack(packet.format().video_rect().width(),
                            packet.format().video_rect().height(),
-                           video_codec_id))
+                           mkvmuxer::Tracks::kVp9CodecId))
         {
             last_error_ = Error::WRITE_FILE;
             return;

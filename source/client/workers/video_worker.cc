@@ -20,8 +20,6 @@
 
 #include <QTimer>
 
-#include <limits>
-
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/codec/cursor_decoder.h"
@@ -35,6 +33,7 @@
 namespace {
 
 const int kMaxDirtyRects = 1024;
+const Seconds kMaxRecordingFrameInterval{ 1 };
 
 //--------------------------------------------------------------------------------------------------
 QString recordingErrorText(WebmFileWriter::Error error)
@@ -103,6 +102,7 @@ void VideoWorker::onSetRecording(bool enable, const QString& file_path, const QS
         LOG(INFO) << "Recording enabled:" << file_path;
         writer_ = std::make_unique<WebmFileWriter>(file_path, computer_name);
         encoder_ = std::make_unique<WebmVideoEncoder>();
+        has_new_frame_ = true;
         encode_timer_->start();
     }
     else
@@ -238,14 +238,19 @@ void VideoWorker::onAudioMessage(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void VideoWorker::onEncodeTimer()
 {
-    // Re-encode the latest decoded frame directly from its YUV form. The decoder holds the frame
-    // until the next decode(); both run on this thread, so the view is valid here without a copy.
     if (!writer_ || !encoder_ || !decoder_ || !decoder_->frame().isValid())
+        return;
+
+    const TimePoint now = Clock::now();
+    if (!has_new_frame_ && now - last_encode_time_ < kMaxRecordingFrameInterval)
         return;
 
     proto::video::Packet packet;
     if (!encoder_->encode(decoder_->frame(), &packet))
         return;
+
+    has_new_frame_ = false;
+    last_encode_time_ = now;
 
     writer_->addVideoPacket(packet);
 
@@ -353,6 +358,8 @@ void VideoWorker::decodePacket(const proto::video::Packet& packet)
         sendKeyFrameRequest();
         return;
     }
+
+    has_new_frame_ = true;
 
     const int rect_count = packet.dirty_rect_size();
 

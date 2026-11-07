@@ -18,6 +18,8 @@
 
 #include "base/codec/video_encoder_vpx.h"
 
+#include "base/codec/video_decoder.h"
+#include "base/codec/webm_video_encoder.h"
 #include "base/desktop/frame_aligned.h"
 #include "proto/desktop_video.h"
 
@@ -157,4 +159,32 @@ TEST(VideoEncoderVpxTest, RequestedKeyFrameHasFormat)
     ASSERT_TRUE(packet.has_format());
     EXPECT_EQ(packet.format().video_rect().width(), kFrameSize.width());
     EXPECT_EQ(packet.format().video_rect().height(), kFrameSize.height());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(WebmVideoEncoderTest, FramesAreDecodable)
+{
+    VideoEncoderVpx source_encoder;
+    std::unique_ptr<VideoDecoder> source_decoder = VideoDecoder::create(proto::video::ENCODING_VP9);
+    std::unique_ptr<VideoDecoder> decoder = VideoDecoder::create(proto::video::ENCODING_VP9);
+    WebmVideoEncoder encoder;
+    bool is_first_frame = true;
+
+    for (int pixels_value : { 0x40, 0x80, 0xC0 })
+    {
+        std::unique_ptr<Frame> frame = makeFrame(pixels_value);
+
+        proto::video::Packet source_packet;
+        ASSERT_EQ(source_encoder.encode(frame.get(), &source_packet), VideoEncoder::Result::SUCCESS);
+        ASSERT_EQ(source_decoder->decode(source_packet), VideoDecoder::Result::SUCCESS);
+
+        proto::video::Packet packet;
+        ASSERT_TRUE(encoder.encode(source_decoder->frame(), &packet));
+        EXPECT_EQ(packet.encoding(), proto::video::ENCODING_VP9);
+        EXPECT_EQ(packet.has_format(), is_first_frame);
+        EXPECT_FALSE(packet.data().empty());
+        ASSERT_EQ(decoder->decode(packet), VideoDecoder::Result::SUCCESS);
+
+        is_first_frame = false;
+    }
 }

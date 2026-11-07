@@ -48,11 +48,14 @@ void setCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
     config->kf_min_dist = 10000;
     config->kf_max_dist = 10000;
 
-    // Using 2 threads gives a great boost in performance for most systems with
-    // adequate processing power. NB: Going to multiple threads on low end
-    // windows systems can really hurt performance.
-    // http://crbug.com/99179
-    config->g_threads = (QThread::idealThreadCount() + 1) / 2;
+    const int cpu_count = QThread::idealThreadCount();
+    const int pixels = size.width() * size.height();
+
+    config->g_threads = 1;
+    if (pixels >= 1280 * 720 && cpu_count > 4)
+        config->g_threads = 4;
+    else if (pixels >= 640 * 360 && cpu_count > 2)
+        config->g_threads = 2;
 
     // Do not drop any frames at encoder.
     config->rc_dropframe_thresh = 0;
@@ -83,7 +86,7 @@ bool WebmVideoEncoder::encode(const VideoDecoder::YuvView& frame, proto::video::
 {
     DCHECK(packet);
 
-    packet->set_encoding(proto::video::ENCODING_VP8);
+    packet->set_encoding(proto::video::ENCODING_VP9);
 
     if (last_frame_size_ != frame.size())
     {
@@ -165,7 +168,7 @@ bool WebmVideoEncoder::createCodec()
     codec_.reset(new vpx_codec_ctx_t());
 
     // Configure the encoder.
-    vpx_codec_iface_t* algo = vpx_codec_vp8_cx();
+    vpx_codec_iface_t* algo = vpx_codec_vp9_cx();
 
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
@@ -176,9 +179,8 @@ bool WebmVideoEncoder::createCodec()
 
     setCodecParameters(&config_, last_frame_size_);
 
-    // Value of 2 means using the real time profile. This is basically a redundant option since we
-    // explicitly select real time mode when doing encoding.
-    config_.g_profile = 2;
+    // Profile 0 is for I420 source frames.
+    config_.g_profile = 0;
 
     // To enable remoting to be highly interactive and allow the target bitrate to be met, we relax
     // the max quantizer. The quality will get topped-off in subsequent frames.
@@ -196,27 +198,44 @@ bool WebmVideoEncoder::createCodec()
         return false;
     }
 
-    // Value of 16 will have the smallest CPU load. This turns off subpixel motion search.
-    ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 16);
+    // Set tile columns to match thread count: log2(thread_count).
+    // 1 thread -> 0, 2 threads -> 1, 4 threads -> 2.
+    ret = vpx_codec_control(codec_.get(), VP9E_SET_TILE_COLUMNS, static_cast<int>(config_.g_threads >> 1));
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(ERROR) << "vpx_codec_control(VP9E_SET_TILE_COLUMNS) failed:" << ret;
+        return false;
+    }
+
+    // Enable row-based multithreading for additional parallelism within tile columns.
+    ret = vpx_codec_control(codec_.get(), VP9E_SET_ROW_MT, 1);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(ERROR) << "vpx_codec_control(VP9E_SET_ROW_MT) failed:" << ret;
+        return false;
+    }
+
+    // Value of 9 will have the smallest CPU load.
+    ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 9);
     if (ret != VPX_CODEC_OK)
     {
         LOG(ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed:" << ret;
         return false;
     }
 
-    ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
+    ret = vpx_codec_control(codec_.get(), VP9E_SET_TUNE_CONTENT, VP9E_CONTENT_SCREEN);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(ERROR) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed:" << ret;
+        LOG(ERROR) << "vpx_codec_control(VP9E_SET_TUNE_CONTENT) failed:" << ret;
         return false;
     }
 
     // Use the lowest level of noise sensitivity so as to spend less time on motion estimation and
     // inter-prediction mode.
-    ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
+    ret = vpx_codec_control(codec_.get(), VP9E_SET_NOISE_SENSITIVITY, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(ERROR) << "vpx_codec_control(VP8E_SET_NOISE_SENSITIVITY) failed";
+        LOG(ERROR) << "vpx_codec_control(VP9E_SET_NOISE_SENSITIVITY) failed:" << ret;
         return false;
     }
 

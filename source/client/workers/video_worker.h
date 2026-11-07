@@ -126,11 +126,13 @@ private:
     TimePoint fps_time_;
 
     // Recording state. The writer owns the output file and muxes the encoded video and audio; the
-    // encoder re-encodes decoded frames to VP8. Both are created only while recording is on and the
-    // timer samples the latest decoded frame at a fixed cadence.
+    // encoder re-encodes decoded frames to VP9. Both are created only while recording is on and the
+    // timer samples the latest decoded frame at a fixed cadence, skipping most unchanged ones.
     std::unique_ptr<WebmFileWriter> writer_;
     std::unique_ptr<WebmVideoEncoder> encoder_;
     ScopedQPointer<QTimer> encode_timer_;
+    bool has_new_frame_ = false;
+    TimePoint last_encode_time_;
 
     Q_DISABLE_COPY_MOVE(VideoWorker)
 };
