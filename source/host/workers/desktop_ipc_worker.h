@@ -37,7 +37,7 @@ class DesktopAgentClient;
 class IpcChannel;
 
 // Runs the I/O side of the desktop agent: the control IPC channel to the service and the connected
-// clients (protocol state, capability negotiation, config merge, overflow aggregation). Messages
+// clients (protocol state, capability negotiation, config merge, backlog aggregation). Messages
 // coming from the clients are forwarded to the media/input workers through signals; the serialized
 // media they produce is fanned out to the clients through the on*Data slots. Owns nothing that
 // captures or injects - only the wire.
@@ -87,14 +87,13 @@ signals:
     // The last client disconnected: capture must stop.
     void sig_stopCapture();
 
-    void sig_overflowStateChanged(proto::desktop::Overflow::State state);
+    void sig_backlogChanged(qint64 bytes);
     void sig_bandwidthChanged(qint64 bandwidth);
 
 protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
-    void onTimer(TimePoint now) final;
 
 private slots:
     void onIpcConnected();
@@ -105,12 +104,14 @@ private slots:
     void onClientFinished();
     void onPreferredSizeChanged();
     void onClientBandwidthChanged();
+    void onClientBacklogChanged();
 
 private:
     void startClient(const QString& ipc_channel_name);
     void lastClientFinished();
     void connectToService();
     qint64 minimalBandwidth() const;
+    qint64 maximalBacklog() const;
 
     ScopedQPointer<IpcChannel> ipc_channel_;
     QList<DesktopAgentClient*> clients_;

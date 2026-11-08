@@ -70,6 +70,9 @@ constexpr int kMaxScreenCaptureFpsLowEnd = 20;
 constexpr int kTierUpThresholdPercent = 25;
 constexpr int kTierDownThresholdPercent = 10;
 
+// The frames wait while the host holds this much of the publication not sent once yet.
+constexpr double kBacklogBudget = 0.25;
+
 #if defined(Q_OS_LINUX)
 // Right after login the compositor needs a moment to register its screen-cast interface, so every
 // Wayland probe can fail transiently. Retry the probe chain within this window before falling back to
@@ -162,6 +165,24 @@ int minCaptureFps()
 
     LOG(INFO) << "Minimum FPS specified by environment variable";
     return min_fps;
+}
+
+//--------------------------------------------------------------------------------------------------
+int frameRateLimit(qint64 bandwidth, int min_fps, int max_fps)
+{
+    if (bandwidth < 70 * 1024)
+        return min_fps;
+    if (bandwidth < 150 * 1024)
+        return 14;
+    if (bandwidth < 300 * 1024)
+        return 16;
+    if (bandwidth < 500 * 1024)
+        return 18;
+    if (bandwidth < 1024 * 1024)
+        return 20;
+    if (bandwidth < 2048 * 1024)
+        return 24;
+    return max_fps;
 }
 
 } // namespace
@@ -313,9 +334,7 @@ void ScreenWorker::onStopCapture()
 
     last_bandwidth_ = 0;
     tier_bandwidth_ = 0;
-    pressure_score_ = 0;
-    stable_time_ = Seconds::zero();
-    cooldown_time_ = Seconds::zero();
+    backlog_bytes_ = 0;
 
     published_capture_type_ = ScreenCapturer::Type::UNKNOWN;
     published_desktop_size_ = QSize();
@@ -362,85 +381,9 @@ void ScreenWorker::onKeyFrameRequested()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenWorker::onOverflowStateChanged(proto::desktop::Overflow::State state)
+void ScreenWorker::onBacklogChanged(qint64 bytes)
 {
-    // The bandwidth estimate arrives separately (onBandwidthChanged); here it only caps the frame
-    // rate. When it is not measured yet, use a conservative limit.
-    int bandwidth_fps_limit = 20;
-    if (tier_bandwidth_ > 0)
-    {
-        // Calculate FPS limit based on measured bandwidth.
-        if (tier_bandwidth_ < 70 * 1024)         // < 70 KB/s
-            bandwidth_fps_limit = min_fps_;
-        else if (tier_bandwidth_ < 150 * 1024)   // < 150 KB/s
-            bandwidth_fps_limit = 14;
-        else if (tier_bandwidth_ < 300 * 1024)   // < 300 KB/s
-            bandwidth_fps_limit = 16;
-        else if (tier_bandwidth_ < 500 * 1024)   // < 500 KB/s
-            bandwidth_fps_limit = 18;
-        else if (tier_bandwidth_ < 1024 * 1024)  // < 1 MB/s
-            bandwidth_fps_limit = 20;
-        else if (tier_bandwidth_ < 2048 * 1024)  // < 2 MB/s
-            bandwidth_fps_limit = 24;
-        else
-            bandwidth_fps_limit = max_fps_;
-    }
-
-    int effective_max_fps = std::min(max_fps_, bandwidth_fps_limit);
-
-    int current_fps = capture_scheduler_.fps();
-    int next_fps = current_fps;
-
-    // If the current FPS exceeds the bandwidth limit, reduce immediately.
-    if (current_fps > effective_max_fps)
-    {
-        next_fps = effective_max_fps;
-    }
-    else if (state == proto::desktop::Overflow::STATE_CRITICAL)
-    {
-        pressure_score_ = std::min(100, pressure_score_ + 20);
-        stable_time_ = Seconds::zero();
-        cooldown_time_ = Seconds(15);
-
-        next_fps = std::max(min_fps_, std::min(current_fps - 3, default_fps_));
-    }
-    else if (state == proto::desktop::Overflow::STATE_WARNING)
-    {
-        pressure_score_ = std::min(100, pressure_score_ + 8);
-        stable_time_ = Seconds::zero();
-
-        next_fps = std::max(min_fps_, std::min(current_fps - 2, default_fps_));
-    }
-    else
-    {
-        pressure_score_ = std::max(0, pressure_score_ - 3);
-        ++stable_time_;
-        if (cooldown_time_ > Seconds::zero())
-            --cooldown_time_;
-
-        if (stable_time_ >= Seconds(15) && cooldown_time_ == Seconds::zero())
-        {
-            int max_fps = effective_max_fps;
-
-            if (pressure_score_ >= 80)
-                max_fps = min_fps_;
-            else if (pressure_score_ >= 60)
-                max_fps = 18;
-            else if (pressure_score_ >= 40)
-                max_fps = 20;
-            else if (pressure_score_ >= 20)
-                max_fps = 22;
-
-            if (current_fps < std::min(max_fps, effective_max_fps))
-                next_fps = current_fps + 1;
-        }
-    }
-
-    if (current_fps != next_fps)
-    {
-        setCaptureFps(next_fps);
-        sendMetrics();
-    }
+    backlog_bytes_ = bytes;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -456,6 +399,13 @@ void ScreenWorker::onBandwidthChanged(qint64 bandwidth)
         bandwidth <= tier_bandwidth_ * (100 - kTierDownThresholdPercent) / 100)
     {
         tier_bandwidth_ = bandwidth;
+
+        const int fps = std::min(max_fps_, frameRateLimit(bandwidth, min_fps_, max_fps_));
+        if (fps != capture_scheduler_.fps())
+        {
+            setCaptureFps(fps);
+            sendMetrics();
+        }
     }
 
     if (video_encoder_)
@@ -561,6 +511,14 @@ void ScreenWorker::onCaptureScreen()
 
         emit sig_videoData(serializer_.serialize<proto::video::HostToClient>());
 
+        capture_timer_->start(capture_scheduler_.nextCaptureDelay());
+        return;
+    }
+
+    // A frame on top of a backlog of the host is late by the time it leaves, whatever holds it.
+    if (last_bandwidth_ > 0 &&
+        static_cast<double>(backlog_bytes_) > static_cast<double>(last_bandwidth_) * kBacklogBudget)
+    {
         capture_timer_->start(capture_scheduler_.nextCaptureDelay());
         return;
     }

@@ -79,8 +79,8 @@ int runDesktopAgent(CoreApplication& application)
                      screen_worker, &ScreenWorker::onSetPreferredSize, Qt::QueuedConnection);
     QObject::connect(ipc_worker, &DesktopIpcWorker::sig_configure, screen_worker, &ScreenWorker::onConfigure,
                      Qt::QueuedConnection);
-    QObject::connect(ipc_worker, &DesktopIpcWorker::sig_overflowStateChanged,
-                     screen_worker, &ScreenWorker::onOverflowStateChanged, Qt::QueuedConnection);
+    QObject::connect(ipc_worker, &DesktopIpcWorker::sig_backlogChanged,
+                     screen_worker, &ScreenWorker::onBacklogChanged, Qt::QueuedConnection);
     QObject::connect(ipc_worker, &DesktopIpcWorker::sig_bandwidthChanged,
                      screen_worker, &ScreenWorker::onBandwidthChanged, Qt::QueuedConnection);
     QObject::connect(ipc_worker, &DesktopIpcWorker::sig_stopCapture, screen_worker, &ScreenWorker::onStopCapture,

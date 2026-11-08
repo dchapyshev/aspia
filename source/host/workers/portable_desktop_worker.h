@@ -87,19 +87,19 @@ signals:
     // The last client disconnected: capture must stop.
     void sig_stopCapture();
 
-    void sig_overflowStateChanged(proto::desktop::Overflow::State state);
+    void sig_backlogChanged(qint64 bytes);
     void sig_bandwidthChanged(qint64 bandwidth);
 
 protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
-    void onTimer(TimePoint now) final;
 
 private slots:
     void onClientConfigured();
     void onPreferredSizeChanged();
     void onClientBandwidthChanged();
+    void onClientBacklogChanged();
 
 private:
     struct ClientEntry
@@ -111,6 +111,7 @@ private:
     qsizetype indexOfClient(quint32 client_id) const;
     void lastClientFinished();
     qint64 minimalBandwidth() const;
+    qint64 maximalBacklog() const;
 
     QList<ClientEntry> clients_;
 

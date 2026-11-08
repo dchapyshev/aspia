@@ -143,7 +143,7 @@ void DesktopAgentClient::onMessageReceived(quint32 channel_id, const QByteArray&
 
         if (message.has_overflow())
         {
-            readOverflow(message.overflow().state());
+            readOverflow(message.overflow());
         }
         else if (message.has_bandwidth_change())
         {
@@ -379,13 +379,16 @@ void DesktopAgentClient::readPowerControl(const proto::power::Control& control)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readOverflow(proto::desktop::Overflow::State state)
+void DesktopAgentClient::readOverflow(const proto::desktop::Overflow& overflow)
 {
-    if (state == overflow_state_)
-        return;
+    if (overflow.state() != overflow_state_)
+    {
+        CLOG(INFO) << "Overflow state changed from" << overflow_state_ << "to" << overflow.state();
+        overflow_state_ = overflow.state();
+    }
 
-    CLOG(INFO) << "Overflow state changed from" << overflow_state_ << "to" << state;
-    overflow_state_ = state;
+    backlog_bytes_ = overflow.backlog_bytes();
+    emit sig_backlogChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

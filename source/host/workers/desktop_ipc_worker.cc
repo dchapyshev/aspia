@@ -36,7 +36,7 @@
 
 //--------------------------------------------------------------------------------------------------
 DesktopIpcWorker::DesktopIpcWorker()
-    : Worker(Thread::AsioDispatcher, Seconds(1))
+    : Worker(Thread::AsioDispatcher)
 {
     LOG(INFO) << "Ctor";
 }
@@ -108,23 +108,6 @@ void DesktopIpcWorker::onStop()
     clients_.clear();
 
     ipc_channel_.reset();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopIpcWorker::onTimer(TimePoint /* now */)
-{
-    if (clients_.isEmpty())
-        return;
-
-    proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
-
-    for (auto* client : std::as_const(clients_))
-    {
-        if (client->overflowState() > state)
-            state = client->overflowState();
-    }
-
-    emit sig_overflowStateChanged(state);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -367,6 +350,12 @@ void DesktopIpcWorker::onClientBandwidthChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopIpcWorker::onClientBacklogChanged()
+{
+    emit sig_backlogChanged(maximalBacklog());
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopIpcWorker::startClient(const QString& ipc_channel_name)
 {
     DesktopAgentClient* client = new DesktopAgentClient(this);
@@ -380,6 +369,7 @@ void DesktopIpcWorker::startClient(const QString& ipc_channel_name)
     connect(client, &DesktopAgentClient::sig_preferredSizeChanged, this, &DesktopIpcWorker::onPreferredSizeChanged);
     connect(client, &DesktopAgentClient::sig_keyFrameRequested, this, &DesktopIpcWorker::sig_keyFrameRequested);
     connect(client, &DesktopAgentClient::sig_bandwidthChanged, this, &DesktopIpcWorker::onClientBandwidthChanged);
+    connect(client, &DesktopAgentClient::sig_backlogChanged, this, &DesktopIpcWorker::onClientBacklogChanged);
     connect(client, &DesktopAgentClient::sig_configured, this, &DesktopIpcWorker::onClientConfigured);
     connect(client, &DesktopAgentClient::sig_finished, this, &DesktopIpcWorker::onClientFinished);
 
@@ -458,4 +448,15 @@ qint64 DesktopIpcWorker::minimalBandwidth() const
     }
 
     return minimal_bandwidth != std::numeric_limits<qint64>::max() ? minimal_bandwidth : 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 DesktopIpcWorker::maximalBacklog() const
+{
+    qint64 maximal_backlog = 0;
+
+    for (auto* client : std::as_const(clients_))
+        maximal_backlog = std::max(maximal_backlog, client->backlog());
+
+    return maximal_backlog;
 }

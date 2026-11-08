@@ -26,7 +26,7 @@
 
 //--------------------------------------------------------------------------------------------------
 PortableDesktopWorker::PortableDesktopWorker()
-    : Worker(Thread::AsioDispatcher, Seconds(1))
+    : Worker(Thread::AsioDispatcher)
 {
     LOG(TRACE) << "Ctor";
 }
@@ -99,6 +99,7 @@ void PortableDesktopWorker::onClientStarted(quint32 client_id)
     connect(client, &DesktopAgentClient::sig_preferredSizeChanged, this, &PortableDesktopWorker::onPreferredSizeChanged);
     connect(client, &DesktopAgentClient::sig_keyFrameRequested, this, &PortableDesktopWorker::sig_keyFrameRequested);
     connect(client, &DesktopAgentClient::sig_bandwidthChanged, this, &PortableDesktopWorker::onClientBandwidthChanged);
+    connect(client, &DesktopAgentClient::sig_backlogChanged, this, &PortableDesktopWorker::onClientBacklogChanged);
     connect(client, &DesktopAgentClient::sig_configured, this, &PortableDesktopWorker::onClientConfigured);
     connect(client, &DesktopAgentClient::sig_sendMessage, this,
             [this, client_id](quint32 channel_id, const QByteArray& buffer)
@@ -196,23 +197,6 @@ void PortableDesktopWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PortableDesktopWorker::onTimer(TimePoint /* now */)
-{
-    if (clients_.isEmpty())
-        return;
-
-    proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
-
-    for (const ClientEntry& entry : std::as_const(clients_))
-    {
-        if (entry.client->overflowState() > state)
-            state = entry.client->overflowState();
-    }
-
-    emit sig_overflowStateChanged(state);
-}
-
-//--------------------------------------------------------------------------------------------------
 void PortableDesktopWorker::onClientConfigured()
 {
     proto::control::Config merged_config;
@@ -304,6 +288,12 @@ void PortableDesktopWorker::onClientBandwidthChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void PortableDesktopWorker::onClientBacklogChanged()
+{
+    emit sig_backlogChanged(maximalBacklog());
+}
+
+//--------------------------------------------------------------------------------------------------
 qsizetype PortableDesktopWorker::indexOfClient(quint32 client_id) const
 {
     for (qsizetype i = 0; i < clients_.size(); ++i)
@@ -337,4 +327,15 @@ qint64 PortableDesktopWorker::minimalBandwidth() const
     }
 
     return minimal_bandwidth != std::numeric_limits<qint64>::max() ? minimal_bandwidth : 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 PortableDesktopWorker::maximalBacklog() const
+{
+    qint64 maximal_backlog = 0;
+
+    for (const ClientEntry& entry : std::as_const(clients_))
+        maximal_backlog = std::max(maximal_backlog, entry.client->backlog());
+
+    return maximal_backlog;
 }

@@ -58,6 +58,7 @@ public:
     proto::desktop::Overflow::State overflowState() const { return overflow_state_; }
     const QSize& preferredSize() const { return preferred_size_; }
     qint64 bandwidth() const { return bandwidth_; }
+    qint64 backlog() const { return backlog_bytes_; }
     std::optional<proto::control::Config> config() const { return config_; }
 
     bool isVp9Supported() const { return vp9_supported_; }
@@ -86,6 +87,7 @@ signals:
     void sig_preferredSizeChanged(const QSize& size);
     void sig_keyFrameRequested();
     void sig_bandwidthChanged();
+    void sig_backlogChanged();
     void sig_configured();
     void sig_finished();
 
@@ -100,7 +102,7 @@ private:
     void readCapabilities(const proto::control::Capabilities& capabilities);
     void readConfig(const proto::control::Config& config);
     void readPowerControl(const proto::power::Control& control);
-    void readOverflow(proto::desktop::Overflow::State state);
+    void readOverflow(const proto::desktop::Overflow& overflow);
     void sendCapabilities();
 
     proto::desktop::Overflow::State overflow_state_ = proto::desktop::Overflow::STATE_NONE;
@@ -112,6 +114,7 @@ private:
 
     QSize preferred_size_;
     qint64 bandwidth_ = 0;
+    qint64 backlog_bytes_ = 0;
 
     bool is_video_paused_ = false;
     bool is_audio_paused_ = false;

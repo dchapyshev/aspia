@@ -87,7 +87,7 @@ public slots:
     void onSetPreferredSize(const QSize& size);
     void onSelectScreen(const proto::screen::Screen& screen);
     void onKeyFrameRequested();
-    void onOverflowStateChanged(proto::desktop::Overflow::State state);
+    void onBacklogChanged(qint64 bytes);
     void onBandwidthChanged(qint64 bandwidth);
 
 signals:
@@ -182,6 +182,7 @@ private:
     quint32 quality_ = 0;
     qint64 last_bandwidth_ = 0;
     qint64 tier_bandwidth_ = 0; // The bandwidth the frame rate limit was chosen from.
+    qint64 backlog_bytes_ = 0;
 
     int screen_count_ = 0;
     QPoint last_cursor_pos_;
@@ -206,10 +207,6 @@ private:
     ScreenCapturer::Type published_capture_type_ = ScreenCapturer::Type::UNKNOWN;
     QSize published_desktop_size_;
     QPoint published_screen_offset_;
-
-    int pressure_score_ = 0; // 0..100
-    Seconds stable_time_{ 0 };
-    Seconds cooldown_time_{ 0 };
 
     int default_fps_ = 0;
     int min_fps_ = 0;

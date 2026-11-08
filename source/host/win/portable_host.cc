@@ -478,8 +478,8 @@ int launchUserMode(int& argc, char* argv[])
                      screen_worker, &ScreenWorker::onSetPreferredSize, Qt::QueuedConnection);
     QObject::connect(desktop_worker, &PortableDesktopWorker::sig_configure,
                      screen_worker, &ScreenWorker::onConfigure, Qt::QueuedConnection);
-    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_overflowStateChanged,
-                     screen_worker, &ScreenWorker::onOverflowStateChanged, Qt::QueuedConnection);
+    QObject::connect(desktop_worker, &PortableDesktopWorker::sig_backlogChanged,
+                     screen_worker, &ScreenWorker::onBacklogChanged, Qt::QueuedConnection);
     QObject::connect(desktop_worker, &PortableDesktopWorker::sig_bandwidthChanged,
                      screen_worker, &ScreenWorker::onBandwidthChanged, Qt::QueuedConnection);
     QObject::connect(desktop_worker, &PortableDesktopWorker::sig_stopCapture,
