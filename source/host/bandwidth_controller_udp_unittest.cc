@@ -18,7 +18,7 @@
 
 // The regulator on a modelled ENet path: fragments, a window, retransmissions by the timeout and by
 // the later acknowledgements, a drop tail queue at the bottleneck, a delay of the path after it, and
-// an encoder under the published bandwidth.
+// an encoder under the published bandwidth that holds its frames while the host has a backlog.
 
 #include "host/bandwidth_controller_udp.h"
 
@@ -38,6 +38,11 @@ const qint64 kFragment = 1172;
 const qint64 kWireOverhead = 60;
 const qint64 kMinBandwidth = 8 * 1024;
 const qint64 kMaxBandwidth = 4800 * 1024;
+
+// Of the regulator, the budgets below follow from them.
+const qint64 kMaxWindow = 512 * 1024;
+const double kPublishedShare = 1 / 1.15;
+const double kBacklogBudget = 0.25; // Seconds of the publication the agent lets the host hold.
 const qint64 kStartBandwidth = 128 * 1024;
 const qint64 kKeyFrame = 497 * 1024;
 const qint64 kStartKeyFrame = 290 * 1024;
@@ -51,6 +56,36 @@ const int kMeasuredNoise[] =
     2, 78, 1, 3, 4, 3, 2, 4, 3, 8, 3, 2, 2, 6, 4, 34, 179, 145, 1, 9, 2, 2, 2, 21, 33, 2, 1, 2, 95,
     2, 7, 1, 5, 4, 1, 3, 19, 0, 5, 3, 131, 74, 4, 2, 19, 1, 5, 5, 2, 2, 3, 4, 39, 68, 90, 0, 7, 5, 5,
     22, 26, 2
+};
+
+// The same numbers from the same seed on every platform.
+class Random
+{
+public:
+    explicit Random(quint32 seed) : engine_(seed) {}
+
+    // In [0, 1).
+    double uniform() { return static_cast<double>(engine_() & 0xFFFFFFFF) / 4294967296.0; }
+
+    int integer(int min, int max)
+    {
+        return min + static_cast<int>(uniform() * (max - min + 1));
+    }
+
+    bool chance(double probability) { return uniform() < probability; }
+
+    // With the mean of 1.
+    double lognormal(double cv)
+    {
+        const double sigma = std::sqrt(std::log(1 + cv * cv));
+        const double radius = std::sqrt(-2 * std::log(1 - uniform()));
+        const double normal = radius * std::cos(2 * kPi * uniform());
+        return std::exp(sigma * normal - sigma * sigma / 2);
+    }
+
+private:
+    static constexpr double kPi = 3.14159265358979323846;
+    std::mt19937 engine_;
 };
 
 // The measured path of the session, in bytes of the network and of the application.
@@ -67,6 +102,7 @@ struct Path
     int noise_phase = 0;
     int wake_ms = 0;            // The way back is this late after it was silent for 100 ms.
     int timer_jitter_ms = 10;   // The slice timer fires this much earlier or later.
+    quint32 seed = 1;
 };
 
 enum class Content { IDLE, VIDEO };
@@ -78,7 +114,8 @@ public:
         : path_(path),
           content_(content),
           fill_(fill),
-          random_(1),
+          random_(path.seed),
+          timer_random_(path.seed + 1000),
           controller_(kStartBandwidth),
           queue_bytes_(path.capacity * path.queue_ms / 1000),
           published_(controller_.bandwidth())
@@ -182,8 +219,7 @@ private:
             // A repeating timer keeps its schedule, only each timeout moves around it.
             const int jitter = path_.timer_jitter_ms;
             slice_index_ += 1;
-            next_slice_ms_ = (slice_index_ + 1) * 100 +
-                std::uniform_int_distribution<int>(-jitter, jitter)(timer_random_);
+            next_slice_ms_ = (slice_index_ + 1) * 100 + timer_random_.integer(-jitter, jitter);
         }
         if (ms_ % 1000 == 0)
             tick();
@@ -205,6 +241,9 @@ private:
         const TimePoint now = TimePoint() + MilliSeconds(ms_);
         controller_.onCounters(now, counters);
         published_ = controller_.bandwidth();
+
+        // The session sets the window on every slice, before the padding of a test leaves.
+        window_ = controller_.windowSize(MilliSeconds(round_trip_));
 
         if (controller_.startProbe(now))
         {
@@ -247,6 +286,9 @@ private:
             return;
         }
 
+        if (static_cast<double>(sent_ - transmitted_) > static_cast<double>(published_) * kBacklogBudget)
+            return;
+
         if (key_frame_)
         {
             key_frame_ = false;
@@ -261,11 +303,8 @@ private:
             return;
         }
 
-        const double cv = 0.5;
-        const double sigma = std::sqrt(std::log(1 + cv * cv));
-        std::lognormal_distribution<double> variation(-sigma * sigma / 2, sigma);
-
-        const double frame = static_cast<double>(published_) * fill_ / kFrameRate * variation(random_);
+        const double frame =
+            static_cast<double>(published_) * fill_ / kFrameRate * random_.lognormal(0.5);
         sendFrame(std::max<qint64>(std::llround(frame), 100));
     }
 
@@ -359,7 +398,7 @@ private:
         if (ms_ < outage_end_)
             return;
 
-        if (path_.loss > 0 && std::bernoulli_distribution(path_.loss)(random_))
+        if (path_.loss > 0 && random_.chance(path_.loss))
             return;
 
         const double now = ms_ / 1000.0;
@@ -529,14 +568,14 @@ private:
     Path path_;
     Content content_;
     double fill_;
-    std::mt19937 random_;
+    Random random_;
+    Random timer_random_;
     BandwidthControllerUdp controller_;
     double queue_bytes_;
 
     qint64 ms_ = 0;
     qint64 next_slice_ms_ = 100;
     qint64 slice_index_ = 0;
-    std::mt19937 timer_random_{ 2 };
     qint64 published_;
     qint64 window_ = 16 * 1024;
     qint64 outage_end_ = 0;
@@ -580,7 +619,23 @@ private:
     std::string trace_;
 };
 
+// Every scenario runs with a number of seeds.
+const quint32 kSeeds = 30;
+
+class BandwidthControllerUdpStandTest : public testing::TestWithParam<quint32>
+{
+protected:
+    Path seededPath() const
+    {
+        Path path;
+        path.seed = GetParam();
+        return path;
+    }
+};
+
 } // namespace
+
+INSTANTIATE_TEST_SUITE_P(Seeds, BandwidthControllerUdpStandTest, testing::Range(1u, kSeeds + 1));
 
 //--------------------------------------------------------------------------------------------------
 TEST(BandwidthControllerUdpTest, ProbeIsSentEverySecond)
@@ -594,23 +649,27 @@ TEST(BandwidthControllerUdpTest, ProbeIsSentEverySecond)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerUdpTest, StartFindsTheCapacity)
+TEST_P(BandwidthControllerUdpStandTest, StartFindsTheCapacity)
 {
-    Stand stand({});
-
+    Stand stand(seededPath());
     stand.run(Seconds(30));
-    EXPECT_GE(stand.bandwidth(), kCapacityApp * 7 / 10) << stand.trace();
 
     stand.resetMetrics();
+    stand.run(Seconds(5));
+    EXPECT_GE(stand.meanBandwidth(), std::llround(kCapacityApp * kPublishedShare * 6 / 7)) << stand.trace();
+
+    // The publication follows the estimate alone, a sample of ten slices is within one of them.
+    stand.resetMetrics();
     stand.run(Seconds(120));
-    EXPECT_GE(stand.minBandwidth(), kCapacityApp * 6 / 10) << stand.trace();
+    const double floor = kPublishedShare * 10 / 11;
+    EXPECT_GE(stand.minBandwidth(), std::llround(kCapacityApp * floor)) << stand.trace();
     EXPECT_LE(stand.maxBandwidth(), kCapacityApp * 12 / 10) << stand.trace();
     EXPECT_LE(stand.frameDelay(0.95), MilliSeconds(500)) << stand.trace();
 }
 
 //--------------------------------------------------------------------------------------------------
 // Nothing but the tests of the regulator carries data, and the way back may sleep while idle.
-TEST(BandwidthControllerUdpTest, StartWhileIdleFindsTheCapacity)
+TEST_P(BandwidthControllerUdpStandTest, StartWhileIdleFindsTheCapacity)
 {
     const qint64 capacities[] = { 100 * 1024, 300 * 1024, kCapacity, 5 * 1024 * 1024 };
 
@@ -621,24 +680,28 @@ TEST(BandwidthControllerUdpTest, StartWhileIdleFindsTheCapacity)
             SCOPED_TRACE(testing::Message() << "capacity " << capacity / 1024 << " wake "
                                             << wake_ms);
 
-            Path path;
+            Path path = seededPath();
             path.capacity = capacity;
             path.wake_ms = wake_ms;
 
             Stand stand(path, Content::IDLE);
             stand.run(Seconds(10));
+            stand.resetMetrics();
+            stand.run(Seconds(3));
 
+            // A period of six intervals measures the path within a slice of its time.
             const qint64 capacity_app = capacity * kFragment / (kFragment + kWireOverhead);
-            EXPECT_GE(stand.bandwidth(), capacity_app * 7 / 10) << stand.trace();
-            EXPECT_LE(stand.bandwidth(), capacity_app * 12 / 10) << stand.trace();
+            const double floor = kPublishedShare * 6 / 7;
+            EXPECT_GE(stand.meanBandwidth(), std::llround(capacity_app * floor)) << stand.trace();
+            EXPECT_LE(stand.maxBandwidth(), capacity_app * 12 / 10) << stand.trace();
         }
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerUdpTest, StartWhileIdleOnLanReachesTheCeiling)
+TEST_P(BandwidthControllerUdpStandTest, StartWhileIdleOnLanReachesTheCeiling)
 {
-    Path path;
+    Path path = seededPath();
     path.capacity = 100 * 1024 * 1024;
     path.delay_ms = 1;
 
@@ -648,9 +711,9 @@ TEST(BandwidthControllerUdpTest, StartWhileIdleOnLanReachesTheCeiling)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerUdpTest, LanReachesTheCeiling)
+TEST_P(BandwidthControllerUdpStandTest, LanReachesTheCeiling)
 {
-    Path path;
+    Path path = seededPath();
     path.capacity = 100 * 1024 * 1024;
     path.delay_ms = 1;
 
@@ -660,13 +723,13 @@ TEST(BandwidthControllerUdpTest, LanReachesTheCeiling)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerUdpTest, NoiseOfTheDelayWhileIdle)
+TEST_P(BandwidthControllerUdpStandTest, NoiseOfTheDelayWhileIdle)
 {
     for (int scale : { 1, 2 })
     {
         SCOPED_TRACE(testing::Message() << "scale " << scale);
 
-        Stand stand({});
+        Stand stand(seededPath());
         stand.run(Seconds(60));
         const qint64 before = stand.bandwidth();
 
@@ -676,17 +739,17 @@ TEST(BandwidthControllerUdpTest, NoiseOfTheDelayWhileIdle)
         stand.resetMetrics();
         stand.run(Seconds(600));
 
-        // A test that meets the noise holds a queue for a moment, the estimate stays.
-        EXPECT_LE(stand.shareBelow(before * 7 / 10), 0.01) << stand.trace();
-        EXPECT_GT(stand.minBandwidth(), kCapacityApp / 2) << stand.trace();
-        EXPECT_GE(stand.meanBandwidth(), before * 9 / 10) << stand.trace();
+        // A delay does not move the publication, only a probe that measures less than the estimate.
+        EXPECT_EQ(stand.shareBelow(before * 7 / 10), 0) << stand.trace();
+        EXPECT_GT(stand.minBandwidth(), before * 8 / 10) << stand.trace();
+        EXPECT_GE(stand.meanBandwidth(), before * 95 / 100) << stand.trace();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerUdpTest, KeyFrameKeepsTheBandwidth)
+TEST_P(BandwidthControllerUdpStandTest, KeyFrameKeepsTheBandwidth)
 {
-    Stand stand({});
+    Stand stand(seededPath());
     stand.run(Seconds(60));
     const qint64 before = stand.bandwidth();
 
@@ -700,13 +763,15 @@ TEST(BandwidthControllerUdpTest, KeyFrameKeepsTheBandwidth)
         stand.run(Seconds(10));
     }
 
-    EXPECT_GE(stand.minBandwidth(), before * 7 / 10) << stand.trace();
+    // A key frame is a queue of the host and of the path, neither moves the publication.
+    EXPECT_GE(stand.minBandwidth(), before * 9 / 10) << stand.trace();
+    EXPECT_GE(stand.meanBandwidth(), before * 95 / 100) << stand.trace();
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerUdpTest, FirstKeyFrameMeasuresThePath)
+TEST_P(BandwidthControllerUdpStandTest, FirstKeyFrameMeasuresThePath)
 {
-    Stand stand({}, Content::IDLE);
+    Stand stand(seededPath(), Content::IDLE);
     stand.run(Seconds(5));
     stand.resetMetrics();
 
@@ -718,13 +783,13 @@ TEST(BandwidthControllerUdpTest, FirstKeyFrameMeasuresThePath)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerUdpTest, NoiseOfTheDelayUnderVideo)
+TEST_P(BandwidthControllerUdpStandTest, NoiseOfTheDelayUnderVideo)
 {
     for (int scale : { 1, 2 })
     {
         SCOPED_TRACE(testing::Message() << "scale " << scale);
 
-        Path path;
+        Path path = seededPath();
         Stand stand(path);
         stand.run(Seconds(60));
 
@@ -732,38 +797,45 @@ TEST(BandwidthControllerUdpTest, NoiseOfTheDelayUnderVideo)
         stand.resetMetrics();
         stand.run(Seconds(600));
 
-        EXPECT_GT(stand.minBandwidth(), kMinBandwidth) << stand.trace();
-        EXPECT_LE(stand.shareBelow(kCapacityApp / 2), scale == 1 ? 0.02 : 0.1) << stand.trace();
+        EXPECT_GT(stand.minBandwidth(), kCapacityApp / 2) << stand.trace();
+        EXPECT_LE(stand.shareBelow(kCapacityApp * 7 / 10), scale == 1 ? 0.01 : 0.05) << stand.trace();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerUdpTest, NarrowingUnderVideo)
+TEST_P(BandwidthControllerUdpStandTest, NarrowingUnderVideo)
 {
     for (int divider : { 2, 5, 20 })
     {
         SCOPED_TRACE(testing::Message() << "divider " << divider);
 
         // The rate control fills the target, a session under the capacity shows nothing.
-        Stand stand({}, Content::VIDEO, 1.0);
+        Stand stand(seededPath(), Content::VIDEO, 1.0);
         stand.run(Seconds(60));
 
         const qint64 capacity = kCapacity / divider;
         stand.setCapacity(capacity);
-        stand.run(Seconds(20));
+
+        // The window, what the encoder sends until the floor, and the overflow of the bottleneck sent
+        // again, at worst twice.
+        const qint64 overflow = kMaxWindow - kCapacity * 250 / 1000;
+        const qint64 pipe = kMaxWindow + std::llround(kCapacityApp * kPublishedShare * kBacklogBudget) +
+                            2 * overflow;
+        const Seconds drain(pipe / capacity + 4);
+        stand.run(std::max(drain, Seconds(20)));
 
         EXPECT_LE(stand.bandwidth(), capacity) << stand.trace();
         stand.resetMetrics();
         stand.run(Seconds(60));
-        EXPECT_GE(stand.minBandwidth(), capacity * 4 / 10) << stand.trace();
+        EXPECT_GE(stand.minBandwidth(), capacity * 7 / 10) << stand.trace();
         EXPECT_LE(stand.maxBandwidth(), capacity * 13 / 10) << stand.trace();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerUdpTest, NarrowingWhileIdleIsFoundByTheNextVideo)
+TEST_P(BandwidthControllerUdpStandTest, NarrowingWhileIdleIsFoundByTheNextVideo)
 {
-    Stand stand({});
+    Stand stand(seededPath());
     stand.run(Seconds(60));
 
     stand.setContent(Content::IDLE);
@@ -782,9 +854,9 @@ TEST(BandwidthControllerUdpTest, NarrowingWhileIdleIsFoundByTheNextVideo)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerUdpTest, WideningIsFound)
+TEST_P(BandwidthControllerUdpStandTest, WideningIsFound)
 {
-    Stand stand({});
+    Stand stand(seededPath());
     stand.run(Seconds(60));
 
     const qint64 capacity = kCapacity * 3;
@@ -796,7 +868,7 @@ TEST(BandwidthControllerUdpTest, WideningIsFound)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerUdpTest, LossIsNotCongestion)
+TEST_P(BandwidthControllerUdpStandTest, LossIsNotCongestion)
 {
     for (double loss : { 0.03, 0.1 })
     {
@@ -804,7 +876,7 @@ TEST(BandwidthControllerUdpTest, LossIsNotCongestion)
         {
             SCOPED_TRACE(testing::Message() << "loss " << loss << " delay " << delay_ms);
 
-            Path path;
+            Path path = seededPath();
             path.loss = loss;
             path.delay_ms = delay_ms;
 
@@ -819,14 +891,16 @@ TEST(BandwidthControllerUdpTest, LossIsNotCongestion)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(BandwidthControllerUdpTest, OutageRecoversAtOnce)
+TEST_P(BandwidthControllerUdpStandTest, OutageRecoversAtOnce)
 {
-    Stand stand({});
+    Stand stand(seededPath());
     stand.run(Seconds(60));
     const qint64 before = stand.bandwidth();
 
     stand.outage(Seconds(3));
     stand.run(Seconds(10));
 
-    EXPECT_GE(stand.bandwidth(), before * 7 / 10) << stand.trace();
+    stand.resetMetrics();
+    stand.run(Seconds(5));
+    EXPECT_GE(stand.meanBandwidth(), before * 9 / 10) << stand.trace();
 }

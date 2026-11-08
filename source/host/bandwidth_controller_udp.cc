@@ -29,51 +29,50 @@ const qint64 kMinBandwidth = 8 * 1024;
 const qint64 kMaxBandwidth = 4800 * 1024;
 
 // The share of the estimate that is published, the rate control of the encoder overshoots by the
-// rest. The queue leaves in the drain time.
+// rest. The queue is bounded by the window and by the agent, not by the publication.
 const double kBandwidthShare = 1.0 / 1.15;
-const double kQueueDrainTime = 1.0;
 
-// A delay of the path moves the acknowledgements, so it changes the mean over the busy time by no
-// more than its share of that time. At twice the measured delay of 201 ms this stays in the share
-// of the estimate that is not published.
-const double kRateAveragingTime = 4.0;
-
-// The slices of a standing queue that give the bound of a falling rate, and the rate under the
-// estimate that sets it. A delay of the path under 400 ms does not reach it in that time.
-const int kRecentRateSlices = 20;
-const double kRecentRateMargin = 1.25;
-
-// A publication down does not wait for the tick when it is this far under the published bandwidth.
-const double kFastDecreaseShare = 0.9;
+// A delay of the path up to this much is not a queue. The estimate is the highest of this many
+// periods, one delay does not make two of them low.
+const MilliSeconds kDelayTolerance{ 200 };
+const int kRateSamples = 3;
 
 // The excess at which the agent lowers the frame rate.
 const MilliSeconds kWarningQueue{ 300 };
 const MilliSeconds kCriticalQueue{ 1000 };
 
-// The session sends a probe this often, only for the acknowledgement it brings after a frame.
-const MilliSeconds kProbeInterval{ 950 };
+// A publication down does not wait for the tick when it is this far under the published bandwidth.
+const double kFastDecreaseShare = 0.9;
 
-// A window holds a round trip of the rate twice, so that half of the time is enough to send it.
+// The session sends a delay probe this often, only for the acknowledgement it brings after a frame.
+const MilliSeconds kDelayProbeInterval{ 950 };
+
+// A window holds two round trips of the rate, or one and the delay tolerance.
 const qint64 kMaxWindow = 512 * 1024;
-const MilliSeconds kWindowMargin{ 100 };
 
-// The lowest round trip is forgotten by this time and the peak by this one.
-const Seconds kRoundTripPeriod{ 10 };
-const Seconds kPeakPeriod{ 60 };
+// The lowest round trip is forgotten by twice this time. It outlasts the drain after a narrowing,
+// or that queue is kept as the path.
+const Seconds kRoundTripPeriod{ 30 };
 
-// The rate of a test over the estimate. The first is for a rate that goes on growing.
+// A busy period shorter than this is not measured, its ends are known to a slice.
+const int kMinPeriodSlices = 5;
+
+// A probe pads the slices to the estimate times the gain. While the rate grows the probe is short,
+// a short period is only measured low. A probe that holds pays its queue with the frames under
+// video, so it is small, and on a still screen it is long enough to empty a bucket of the path.
 const double kGrowingGain = 1.5;
-const double kHoldingGain = 1.25;
-const int kMinTestSlices = 4;
+const int kGrowingProbeSlices = 5;
+const double kVideoGain = 1.25;
+const int kVideoProbeSlices = 5;
+const double kIdleGain = 1.25;
+const int kIdleProbeSlices = 20;
+const double kVideoShare = 0.25;
 
-// When the next test is made.
-const Seconds kFirstTestDelay{ 1 };
-const Seconds kRepeatedTestDelay{ 2 };
-const Seconds kTestInterval{ 10 };
-const Seconds kMaxTestInterval{ 60 };
-
-// A bound that failed this many tests in a row replaces the estimate.
-const int kRecentRateFailures = 2;
+// When the next probe is made, and how long a probe waits for its bytes.
+const Seconds kFirstProbeDelay{ 1 };
+const Seconds kProbeInterval{ 10 };
+const Seconds kMaxProbeInterval{ 60 };
+const Seconds kProbeTimeout{ 10 };
 
 //--------------------------------------------------------------------------------------------------
 double toSeconds(TimePoint::duration duration)
@@ -81,21 +80,12 @@ double toSeconds(TimePoint::duration duration)
     return std::chrono::duration<double>(duration).count();
 }
 
-//--------------------------------------------------------------------------------------------------
-int slicesOf(double seconds)
-{
-    const double slice = toSeconds(BandwidthController::kPaddingSlice);
-    return static_cast<int>(std::floor(seconds / slice));
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 BandwidthControllerUdp::BandwidthControllerUdp(qint64 bandwidth)
-    : delivery_rate_(static_cast<double>(bandwidth)),
-      peak_rate_(static_cast<double>(bandwidth)),
-      test_gain_(kGrowingGain),
-      test_interval_(kTestInterval),
+    : capacity_(static_cast<double>(bandwidth)),
+      probe_interval_(kProbeInterval),
       bandwidth_(bandwidth)
 {
     LOG(TRACE) << "Ctor";
@@ -116,10 +106,10 @@ void BandwidthControllerUdp::start()
 //--------------------------------------------------------------------------------------------------
 bool BandwidthControllerUdp::startProbe(TimePoint now)
 {
-    if (last_probe_time_.has_value() && now - *last_probe_time_ < kProbeInterval)
+    if (last_delay_probe_time_.has_value() && now - *last_delay_probe_time_ < kDelayProbeInterval)
         return false;
 
-    last_probe_time_ = now;
+    last_delay_probe_time_ = now;
     return true;
 }
 
@@ -150,7 +140,7 @@ void BandwidthControllerUdp::tick(TimePoint /* now */)
 //--------------------------------------------------------------------------------------------------
 proto::desktop::Overflow::State BandwidthControllerUdp::overflowState(TimePoint /* now */) const
 {
-    const double seconds = standingQueueBytes() / std::max(usableRate(), 1.0);
+    const double seconds = standingQueueBytes() / std::max(capacity_, 1.0);
 
     if (seconds >= toSeconds(kCriticalQueue))
         return proto::desktop::Overflow::STATE_CRITICAL;
@@ -163,27 +153,24 @@ proto::desktop::Overflow::State BandwidthControllerUdp::overflowState(TimePoint 
 //--------------------------------------------------------------------------------------------------
 void BandwidthControllerUdp::onCounters(TimePoint now, const Counters& counters)
 {
-    const qint64 data_bytes = slice_bytes_ - padding_due_;
+    const qint64 slice_bytes = slice_bytes_;
+    data_history_[data_history_size_++ % kPeriodSlices] = slice_bytes_ - padding_due_;
     slice_bytes_ = 0;
     padding_due_ = 0;
 
     updateRoundTrip(now, counters.round_trip);
-    addCounters(now, counters);
+    addSnapshot(now, counters);
 
-    const qint64 backlog = counters.sent - counters.transmitted;
-    queued_slices_ = backlog > 0 ? queued_slices_ + 1 : 0;
-
+    // What is in flight above a round trip of the estimate stands in the path.
     const double round_trip = toSeconds(min_round_trip_.value_or(MilliSeconds::zero()));
-    const double path_bytes = usableRate() * round_trip;
-    const double in_path = std::max(static_cast<double>(counters.in_flight) - path_bytes, 0.0);
+    const double in_path = std::max(static_cast<double>(counters.in_flight) - capacity_ * round_trip, 0.0);
+    const qint64 backlog = counters.sent - counters.transmitted;
 
     queue_history_[queue_history_size_ % kQueueHistorySize] = backlog + std::llround(in_path);
     ++queue_history_size_;
 
-    updateDeliveryRate();
-    updateRecentRate();
-    updatePeakRate(now);
-    runRateTest(now, data_bytes);
+    sampleRate(now);
+    runProbe(now, counters, slice_bytes);
 
     const qint64 target = calculateBandwidth();
     if (target < bandwidth_ * kFastDecreaseShare)
@@ -194,35 +181,52 @@ void BandwidthControllerUdp::onCounters(TimePoint now, const Counters& counters)
 qint64 BandwidthControllerUdp::windowSize(MilliSeconds path_delay) const
 {
     const double round_trip = toSeconds(min_round_trip_.value_or(path_delay));
-    const double seconds = std::max(2 * round_trip, round_trip + toSeconds(kWindowMargin));
-    const double top = std::max({ peak_rate_, test_rate_, delivery_rate_ });
+    const double seconds = std::max(2 * round_trip, round_trip + toSeconds(kDelayTolerance));
+    const double top = std::max(capacity_, probe_rate_);
 
     return std::min(std::llround(top * seconds), kMaxWindow);
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthControllerUdp::addCounters(TimePoint now, const Counters& counters)
+void BandwidthControllerUdp::addSnapshot(TimePoint now, const Counters& counters)
 {
-    Sample& sample = counters_history_[counters_history_size_ % kCountersHistorySize];
+    Snapshot& snapshot = snapshots_[snapshot_count_ % kSnapshotHistorySize];
 
-    sample.time = now;
-    sample.sent = counters.sent;
-    sample.transmitted = counters.transmitted;
-    sample.delivered = counters.delivered;
+    snapshot.time = now;
+    snapshot.sent = counters.sent;
+    snapshot.transmitted = counters.transmitted;
+    snapshot.delivered = counters.delivered;
+    snapshot.in_flight = counters.in_flight;
 
-    ++counters_history_size_;
+    // Loaded while a probe pads, when the host queued or when the estimate's worth of bytes left in
+    // the interval and over the last slices. Busy also while a round trip and a slice of the estimate
+    // were in flight, which only keeps a period going, a delay alone holds bytes in flight as well.
+    snapshot.loaded = false;
+    snapshot.busy = false;
+    if (snapshot_count_ > 0)
+    {
+        const Snapshot& previous = this->snapshot(snapshot_count_ - 1);
+        const Snapshot& earlier = this->snapshot(std::max(snapshot_count_ - kMinPeriodSlices, 0));
+        const double left = static_cast<double>(counters.transmitted - previous.transmitted);
+        const double left_lately = static_cast<double>(counters.transmitted - earlier.transmitted);
+        const double round_trip = toSeconds(min_round_trip_.value_or(MilliSeconds::zero()));
+        const bool probing = probe_slices_left_ > 0 ||
+                             (probe_end_byte_.has_value() && counters.delivered < *probe_end_byte_);
+        snapshot.loaded = probing || counters.sent > counters.transmitted ||
+                          previous.sent > previous.transmitted ||
+                          (left >= capacity_ * toSeconds(now - previous.time) &&
+                           left_lately >= capacity_ * toSeconds(now - earlier.time));
+        snapshot.busy = snapshot.loaded || static_cast<double>(previous.in_flight) >
+                                           capacity_ * (round_trip + toSeconds(kPaddingSlice));
+    }
+
+    ++snapshot_count_;
 }
 
 //--------------------------------------------------------------------------------------------------
-const BandwidthControllerUdp::Sample& BandwidthControllerUdp::countersAt(int slices_ago) const
+const BandwidthControllerUdp::Snapshot& BandwidthControllerUdp::snapshot(int index) const
 {
-    return counters_history_[(counters_history_size_ - 1 - slices_ago) % kCountersHistorySize];
-}
-
-//--------------------------------------------------------------------------------------------------
-const BandwidthControllerUdp::Sample& BandwidthControllerUdp::countersOfSlice(int slice) const
-{
-    return countersAt(counters_history_size_ - 1 - slice);
+    return snapshots_[index % kSnapshotHistorySize];
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -251,255 +255,189 @@ void BandwidthControllerUdp::updateRoundTrip(TimePoint now, MilliSeconds round_t
 }
 
 //--------------------------------------------------------------------------------------------------
-// A slice is busy when all that went out by its end was queued at its start, so the queue did not
-// run out in it. The acknowledgements of the slice come a round trip later. The delivery after the
-// last busy slice belongs to it too, without it the busy time misses the burst after a delay.
-void BandwidthControllerUdp::updateDeliveryRate()
+// The bytes of a whole busy period over its time are the rate of the path, and the ends known to a
+// slice only lower that. The highest of the last samples is the estimate, a delay only lowers
+// samples too, and the estimate holds while nothing measures the path.
+void BandwidthControllerUdp::sampleRate(TimePoint /* now */)
 {
-    const double round_trip = toSeconds(min_round_trip_.value_or(MilliSeconds::zero()));
-    const int shift = std::min(slicesOf(round_trip), kRecentRateSlices);
-
-    if (counters_history_size_ < shift + 2 || counters_history_size_ < 2)
+    const int index = snapshot_count_ - 1;
+    if (index < 1)
         return;
 
-    const Sample& start = countersAt(shift + 1);
-    const Sample& end = countersAt(shift);
-    const Sample& previous = countersAt(1);
-    const Sample& last = countersAt(0);
-
-    const double seconds = toSeconds(last.time - previous.time);
-    const qint64 delivered = last.delivered - previous.delivered;
-
-    if (seconds <= 0)
-        return;
-
-    if (start.sent > start.transmitted && end.transmitted < start.sent)
+    const Snapshot& last = snapshot(index);
+    if (last.busy && (period_start_.has_value() || last.loaded))
     {
-        last_busy_byte_ = std::max(last_busy_byte_, end.transmitted);
-        addRateSample(delivered / seconds, seconds);
-    }
-    else if (previous.delivered < last_busy_byte_)
-    {
-        if (last.delivered < last_busy_byte_)
+        if (!period_start_.has_value())
         {
-            addRateSample(delivered / seconds, seconds);
+            period_start_ = index - 1;
+            period_sampled_ = index - 1;
         }
-        else
+        else if (index - period_sampled_ >= kPeriodSlices &&
+                 index - *period_start_ >= 2 * kPeriodSlices)
         {
-            const double bytes = static_cast<double>(last_busy_byte_ - previous.delivered);
-            const double part = seconds * bytes / static_cast<double>(delivered);
-            addRateSample(bytes / part, part);
+            addSample(snapshot(period_sampled_), last, 0);
+            period_sampled_ = index;
         }
     }
+    else if (period_start_.has_value())
+    {
+        // A period that ends a round trip and a slice after the padding of a probe kept its pace,
+        // so the rate the probe left at is the rate of the period, its end known to a slice only
+        // lowers it.
+        double floor = 0;
+        const double round_trip = toSeconds(min_round_trip_.value_or(MilliSeconds::zero()));
+        if (probe_end_byte_.has_value() && probe_end_time_.has_value() &&
+            snapshot(index - 1).delivered >= *probe_end_byte_ &&
+            toSeconds(snapshot(index - 1).time - *probe_end_time_) <=
+                round_trip + toSeconds(kPaddingSlice))
+        {
+            const double seconds = toSeconds(*probe_end_time_ - *probe_start_time_ + kPaddingSlice);
+            floor = std::min(probe_bytes_sent_ / seconds, probe_rate_);
+        }
+        if (index - 1 - period_sampled_ >= kMinPeriodSlices)
+            addSample(snapshot(period_sampled_), snapshot(index - 1), floor);
+        period_start_.reset();
+    }
+
+    if (!rate_samples_.empty())
+    {
+        const double rate = *std::max_element(rate_samples_.begin(), rate_samples_.end());
+        capacity_ = std::clamp<double>(rate, kMinBandwidth, kMaxBandwidth);
+        capacity_measured_ = true;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthControllerUdp::addRateSample(double rate, double seconds)
+void BandwidthControllerUdp::addSample(const Snapshot& from, const Snapshot& to, double floor)
 {
-    busy_time_ += seconds;
-
-    if (!delivery_rate_measured_)
-    {
-        delivery_rate_measured_ = true;
-        delivery_rate_ = rate;
-    }
-    else
-    {
-        const double weight = busy_time_ < kRateAveragingTime ?
-            seconds / busy_time_ : 1 - std::exp(-seconds / kRateAveragingTime);
-        delivery_rate_ += weight * (rate - delivery_rate_);
-    }
-
-    delivery_rate_ = std::clamp<double>(delivery_rate_, kMinBandwidth, kMaxBandwidth);
-}
-
-//--------------------------------------------------------------------------------------------------
-void BandwidthControllerUdp::updateRecentRate()
-{
-    if (queued_slices_ < kRecentRateSlices || counters_history_size_ <= kRecentRateSlices)
+    const double seconds = toSeconds(to.time - from.time);
+    const qint64 bytes = to.delivered - from.delivered;
+    if (seconds <= 0 || bytes <= 0)
         return;
 
-    const Sample& first = countersAt(kRecentRateSlices);
-    const Sample& last = countersAt(0);
-
-    const double delivered = static_cast<double>(last.delivered - first.delivered);
-    const double measured = delivered / toSeconds(last.time - first.time);
-
-    if (measured >= delivery_rate_ / kRecentRateMargin)
-    {
-        recent_rate_.reset();
-        recent_rate_failures_ = 0;
-        return;
-    }
-
-    if (!recent_rate_.has_value())
-    {
-        next_test_time_ = last.time;
-        test_gain_ = kHoldingGain;
-    }
-
-    recent_rate_ = std::max<double>(measured, kMinBandwidth);
+    const double rate = std::max(bytes / seconds, floor);
+    if (rate_samples_.size() == kRateSamples)
+        rate_samples_.pop_front();
+    rate_samples_.push_back(rate);
 }
 
 //--------------------------------------------------------------------------------------------------
-void BandwidthControllerUdp::updatePeakRate(TimePoint now)
+// The padding tops up what left since the probe began to its rate, whatever the timer did.
+void BandwidthControllerUdp::runProbe(TimePoint now, const Counters& counters, qint64 slice_bytes)
 {
-    if (delivery_rate_ >= peak_rate_ || !peak_rate_time_.has_value() ||
-        now - *peak_rate_time_ > kPeakPeriod)
-    {
-        peak_rate_ = delivery_rate_;
-        peak_rate_time_ = now;
-    }
+    const bool queued = counters.sent > counters.transmitted || standingQueueBytes() > 0;
 
-    if (delivery_rate_ < 0.9 * peak_rate_ && test_interval_ > kTestInterval)
+    if (probe_slices_left_ > 0)
     {
-        test_interval_ = kTestInterval;
-        next_test_time_ = std::min(next_test_time_.value_or(now + kTestInterval),
-                                   now + kTestInterval);
-    }
-}
+        probe_bytes_sent_ += slice_bytes;
+        probe_queued_ = probe_queued_ || standingQueueBytes() > 0;
 
-//--------------------------------------------------------------------------------------------------
-void BandwidthControllerUdp::runRateTest(TimePoint now, qint64 data_bytes)
-{
-    if (test_slices_left_ > 0)
-    {
-        const double slice = toSeconds(kPaddingSlice);
-        padding_due_ = std::max<qint64>(std::llround(test_rate_ * slice) - data_bytes, 0);
-        --test_slices_left_;
+        const double elapsed = toSeconds(now - *probe_start_time_) + toSeconds(kPaddingSlice);
+        padding_due_ = std::max<qint64>(std::llround(probe_rate_ * elapsed) - probe_bytes_sent_, 0);
+        padding_due_ = std::min(padding_due_, freeWindow(counters));
+        --probe_slices_left_;
 
-        if (test_slices_left_ == 0)
-            test_last_slice_ = counters_history_size_;
+        if (probe_slices_left_ == 0)
+        {
+            probe_bytes_sent_ += padding_due_;
+            probe_end_byte_ = counters.sent + padding_due_;
+            probe_end_time_ = now;
+        }
         return;
     }
 
-    if (test_last_slice_.has_value())
+    if (probe_end_byte_.has_value())
     {
-        const bool delivered = countersAt(0).delivered >= countersOfSlice(*test_last_slice_).sent;
-        const bool expired = counters_history_size_ - test_first_slice_ >= kCountersHistorySize;
-        if (!delivered && !expired)
+        probe_queued_ = probe_queued_ || standingQueueBytes() > 0;
+
+        // The probe is measured by the busy period it made, so it is over when that period is.
+        const bool delivered = counters.delivered >= *probe_end_byte_ && !queued &&
+                               !period_start_.has_value();
+        if (!delivered && now - *probe_end_time_ < kProbeTimeout)
             return;
 
-        finishRateTest(now);
+        // A probe at the ceiling that left no queue was taken by the path.
+        if (delivered && !probe_queued_ && probe_rate_ >= kMaxBandwidth)
+        {
+            rate_samples_.assign(kRateSamples, kMaxBandwidth);
+            capacity_ = kMaxBandwidth;
+            capacity_measured_ = true;
+        }
+
+        // A period is measured within a slice of its time at either end, a rise under that is not
+        // one.
+        probe_resolution_ = 1.0 + 1.0 / (probe_slices_ + 1);
+        finishProbe(now, delivered && capacity_ > probe_base_ * probe_resolution_);
     }
 
-    if (!next_test_time_.has_value())
-        next_test_time_ = now + kFirstTestDelay;
+    if (!next_probe_time_.has_value())
+        next_probe_time_ = now + kFirstProbeDelay;
 
-    const qint64 queued = countersAt(0).sent - countersAt(0).transmitted;
-    if (now < *next_test_time_ || queued > 0 || delivery_rate_ >= kMaxBandwidth)
+    // A probe that found no room proved it for the estimate of its time, not for a lower one.
+    if (capacity_ * kVideoGain < probed_rate_)
+    {
+        probed_rate_ = 0;
+        next_probe_time_ = now;
+        probe_interval_ = kProbeInterval;
+    }
+
+    // A probe over a queue measures the queue.
+    if (now < *next_probe_time_ || queued || capacity_ >= kMaxBandwidth)
         return;
 
-    startRateTest();
+    const double round_trip = toSeconds(min_round_trip_.value_or(MilliSeconds::zero()));
+
+    probe_base_ = capacity_;
+    qint64 data_bytes = 0;
+    for (qint64 bytes : data_history_)
+        data_bytes += bytes;
+    const bool video = static_cast<double>(data_bytes) >=
+                       kVideoShare * static_cast<double>(bandwidth_) * kPeriodSlices * toSeconds(kPaddingSlice);
+
+    const double gain = probe_growing_ ? kGrowingGain : video ? kVideoGain : kIdleGain;
+    const int slices = probe_growing_ ? kGrowingProbeSlices :
+                       video ? kVideoProbeSlices : kIdleProbeSlices;
+
+    probe_rate_ = std::min<double>(capacity_ * gain, kMaxBandwidth);
+    probe_slices_ = slices + static_cast<int>(std::ceil(round_trip / toSeconds(kPaddingSlice)));
+    probe_slices_left_ = probe_slices_;
+    probe_start_time_ = now;
+    probe_bytes_sent_ = 0;
+    probe_queued_ = false;
+
+    padding_due_ = std::min(std::llround(probe_rate_ * toSeconds(kPaddingSlice)), freeWindow(counters));
+    --probe_slices_left_;
 }
 
 //--------------------------------------------------------------------------------------------------
-// The portions after the first one are measured by the slices that saw them leave and delivered.
-// The timer and the delay of the acknowledgements move both ends of the delivery alike.
-void BandwidthControllerUdp::finishRateTest(TimePoint now)
+// The padding of a probe stops at the window, past it the probe would only queue on the host.
+qint64 BandwidthControllerUdp::freeWindow(const Counters& counters) const
 {
-    const Sample& first = countersOfSlice(test_first_slice_);
-    const Sample& last = countersOfSlice(*test_last_slice_);
-    test_last_slice_.reset();
+    const qint64 window = windowSize(min_round_trip_.value_or(MilliSeconds::zero()));
+    return std::max<qint64>(window - counters.in_flight - (counters.sent - counters.transmitted), 0);
+}
 
-    std::optional<TimePoint> first_delivered;
-    std::optional<TimePoint> last_delivered;
-    for (int slice = test_first_slice_; slice < counters_history_size_ && !last_delivered; ++slice)
-    {
-        const Sample& sample = countersOfSlice(slice);
-        if (!first_delivered && sample.delivered >= first.sent)
-            first_delivered = sample.time;
-        if (sample.delivered >= last.sent)
-            last_delivered = sample.time;
-    }
+//--------------------------------------------------------------------------------------------------
+void BandwidthControllerUdp::finishProbe(TimePoint now, bool raised)
+{
+    const double probe_rate = probe_rate_;
+    probe_rate_ = 0;
+    probe_end_byte_.reset();
+    probe_end_time_.reset();
+    probe_start_time_.reset();
 
-    double got = 0;
-    if (first_delivered.has_value())
+    probe_growing_ = raised;
+    if (raised)
     {
-        const qint64 delivered = std::min(countersAt(0).delivered, last.sent) - first.sent;
-        const double delivered_seconds =
-            toSeconds(last_delivered.value_or(countersAt(0).time) - *first_delivered);
-        const double seconds = std::max(toSeconds(last.time - first.time), delivered_seconds);
-        if (seconds > 0)
-            got = static_cast<double>(delivered) / seconds;
-    }
-
-    const double result = std::min(got, test_rate_);
-    const bool passed = result >= test_base_rate_ * (1 + (test_gain_ - 1) / 2);
-
-    test_rate_ = 0;
-    applyRateTestResult(result, passed);
-
-    if (passed)
-    {
-        next_test_time_ = now;
-        test_gain_ = kGrowingGain;
-        test_interval_ = kTestInterval;
-        test_retried_ = false;
-    }
-    else if (recent_rate_.has_value())
-    {
-        next_test_time_ = now + kRepeatedTestDelay;
-        test_gain_ = kHoldingGain;
-    }
-    else if (!test_retried_)
-    {
-        test_retried_ = true;
-        next_test_time_ = now + kRepeatedTestDelay;
+        next_probe_time_ = now;
+        probe_interval_ = kProbeInterval;
     }
     else
     {
-        test_retried_ = false;
-        next_test_time_ = now + test_interval_;
-        test_interval_ = std::min(test_interval_ * 2, kMaxTestInterval);
-        test_gain_ = kHoldingGain;
+        probed_rate_ = std::max(probe_rate / probe_resolution_, probed_rate_);
+        next_probe_time_ = now + probe_interval_;
+        probe_interval_ = std::min(probe_interval_ * 2, kMaxProbeInterval);
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void BandwidthControllerUdp::startRateTest()
-{
-    const double round_trip = toSeconds(min_round_trip_.value_or(MilliSeconds::zero()));
-    const double slice = toSeconds(kPaddingSlice);
-
-    test_base_rate_ = usableRate();
-    test_rate_ = std::min<double>(test_base_rate_ * test_gain_, kMaxBandwidth);
-    test_slices_left_ = std::max(kMinTestSlices, slicesOf(2 * round_trip + slice) + 1);
-
-    // The first portion leaves after the counters of the next slice, the slice after it has them.
-    test_first_slice_ = counters_history_size_ + 1;
-}
-
-//--------------------------------------------------------------------------------------------------
-void BandwidthControllerUdp::applyRateTestResult(double rate, bool passed)
-{
-    if (recent_rate_.has_value())
-    {
-        if (passed)
-        {
-            recent_rate_failures_ = 0;
-            recent_rate_ = rate;
-            if (*recent_rate_ >= delivery_rate_)
-                recent_rate_.reset();
-        }
-        else if (++recent_rate_failures_ >= kRecentRateFailures)
-        {
-            recent_rate_failures_ = 0;
-            delivery_rate_ = *recent_rate_;
-            recent_rate_.reset();
-        }
-    }
-    else if (rate > delivery_rate_)
-    {
-        delivery_rate_ = rate;
-        delivery_rate_measured_ = true;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-double BandwidthControllerUdp::usableRate() const
-{
-    return recent_rate_.has_value() ? std::min(delivery_rate_, *recent_rate_) : delivery_rate_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -514,13 +452,12 @@ qint64 BandwidthControllerUdp::standingQueueBytes() const
 //--------------------------------------------------------------------------------------------------
 qint64 BandwidthControllerUdp::calculateBandwidth() const
 {
-    if (!delivery_rate_measured_)
-        return std::llround(delivery_rate_);
+    if (!capacity_measured_)
+        return std::llround(capacity_);
 
-    const double share = usableRate() >= kMaxBandwidth ? 1 : kBandwidthShare;
-    const double target = share * usableRate() - standingQueueBytes() / kQueueDrainTime;
+    const double share = capacity_ >= kMaxBandwidth ? 1 : kBandwidthShare;
 
-    return std::clamp<qint64>(std::llround(target), kMinBandwidth, kMaxBandwidth);
+    return std::clamp<qint64>(std::llround(share * capacity_), kMinBandwidth, kMaxBandwidth);
 }
 
 //--------------------------------------------------------------------------------------------------
