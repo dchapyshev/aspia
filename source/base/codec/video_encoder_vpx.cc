@@ -477,6 +477,15 @@ bool VideoEncoderVpx::createVp9Codec(const QSize& size)
         return false;
     }
 
+    // The loop filter takes a low contrast edge of the screen for a block artefact and smears it
+    // over a dozen pixels.
+    ret = vpx_codec_control(codec_.get(), VP9E_SET_DISABLE_LOOPFILTER, 2);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(ERROR) << "vpx_codec_control(VP9E_SET_DISABLE_LOOPFILTER) failed:" << ret;
+        return false;
+    }
+
     return true;
 }
 
