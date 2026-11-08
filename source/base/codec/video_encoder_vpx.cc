@@ -73,13 +73,13 @@ void setCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
     config->kf_min_dist = 10000;
     config->kf_max_dist = 10000;
 
-    // Do not drop any frames at encoder.
     config->rc_dropframe_thresh = 0;
-
-    // We do not want variations in bandwidth.
-    config->rc_end_usage = VPX_VBR;
-    config->rc_undershoot_pct = 100;
-    config->rc_overshoot_pct = 15;
+    config->rc_end_usage = VPX_CBR;
+    config->rc_undershoot_pct = 50;
+    config->rc_overshoot_pct = 50;
+    config->rc_buf_sz = 1000;
+    config->rc_buf_initial_sz = 500;
+    config->rc_buf_optimal_sz = 600;
 }
 
 //--------------------------------------------------------------------------------------------------
