@@ -40,7 +40,7 @@
 #define FMUL_FUNC FMUL_C
 #endif
 #define EWMAAndMaxPower_FUNC EWMAAndMaxPower_SSE
-#elif defined(Q_PROCESSOR_ARM) && defined(USE_NEON)
+#elif defined(Q_PROCESSOR_ARM_64)
 #include <arm_neon.h>
 #define FMAC_FUNC FMAC_NEON
 #define FMUL_FUNC FMUL_NEON
@@ -194,7 +194,7 @@ std::pair<float, float> EWMAAndMaxPower_SSE(
 }
 #endif
 
-#if defined(Q_PROCESSOR_ARM) && defined(USE_NEON)
+#if defined(Q_PROCESSOR_ARM_64)
 //--------------------------------------------------------------------------------------------------
 void FMAC_NEON(const float src[], float scale, int len, float dest[])
 {

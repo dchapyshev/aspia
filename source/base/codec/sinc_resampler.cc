@@ -98,7 +98,7 @@
 #if defined(Q_PROCESSOR_X86)
 #include <xmmintrin.h>
 #define CONVOLVE_FUNC Convolve_SSE
-#elif defined(Q_PROCESSOR_ARM) && defined(USE_NEON)
+#elif defined(Q_PROCESSOR_ARM_64)
 #include <arm_neon.h>
 #define CONVOLVE_FUNC Convolve_NEON
 #else
@@ -432,7 +432,7 @@ float SincResampler::Convolve_SSE(const float* input_ptr, const float* k1,
 
     return result;
 }
-#elif defined(Q_PROCESSOR_ARM) && defined(USE_NEON)
+#elif defined(Q_PROCESSOR_ARM_64)
 //--------------------------------------------------------------------------------------------------
 float SincResampler::Convolve_NEON(const float* input_ptr, const float* k1,
                                    const float* k2,

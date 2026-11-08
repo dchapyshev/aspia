@@ -107,7 +107,7 @@ private:
     static float Convolve_SSE(const float* input_ptr, const float* k1,
                               const float* k2,
                               double kernel_interpolation_factor);
-#elif defined(Q_PROCESSOR_ARM) && defined(USE_NEON)
+#elif defined(Q_PROCESSOR_ARM_64)
     static float Convolve_NEON(const float* input_ptr, const float* k1,
                                const float* k2,
                                double kernel_interpolation_factor);
