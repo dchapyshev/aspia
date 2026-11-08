@@ -46,6 +46,9 @@ const quint32 kMaxQuality = 10;
 const quint32 kMinQualityQuantizer = 50;
 const quint32 kMaxQualityQuantizer = 8;
 
+// Changes on less than 1/20 of the picture do not make the screen busy.
+const qint64 kBusyAreaDivisor = 20;
+
 //--------------------------------------------------------------------------------------------------
 quint32 qualityToQuantizer(quint32 quality)
 {
@@ -192,7 +195,7 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
 
     // Convert the updated capture data ready for encode.
     // Update active map based on updated region.
-    prepareImageAndActiveMap(is_key_frame, frame, packet);
+    const bool is_top_off_frame = prepareImageAndActiveMap(is_key_frame, frame, packet);
 
     // Apply active map to the encoder.
     vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
@@ -267,6 +270,18 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
         return Result::TEMPORARY_ERROR;
     }
 
+    int quantizer = 0;
+    ret = vpx_codec_control(codec_.get(), VP8E_GET_LAST_QUANTIZER_64, &quantizer);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(ERROR) << "vpx_codec_control(VP8E_GET_LAST_QUANTIZER_64) failed:" << ret;
+        top_off_region_.clear();
+    }
+    else if (is_top_off_frame)
+    {
+        checkTopOff(static_cast<quint32>(quantizer), is_key_frame);
+    }
+
     // Read the encoded data.
     vpx_codec_iter_t iter = nullptr;
 
@@ -300,6 +315,8 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
 //--------------------------------------------------------------------------------------------------
 void VideoEncoderVpx::setBandwidth(qint64 bandwidth)
 {
+    const quint32 previous_min_quantizer = min_quantizer_;
+
     if (bandwidth <= 0)
     {
         // Bandwidth is not measured yet - fall back to the conservative defaults.
@@ -352,6 +369,14 @@ void VideoEncoderVpx::setBandwidth(qint64 bandwidth)
     if (!codec_.get())
         return;
 
+    // The whole picture was encoded above the new floor.
+    if (min_quantizer_ < previous_min_quantizer)
+    {
+        top_off_region_ = QRect(QPoint(0, 0), last_size_);
+        top_off_quantizer_ = max_quantizer_;
+        top_off_stalled_frames_ = 0;
+    }
+
     config_.rc_min_quantizer = min_quantizer_;
     config_.rc_max_quantizer = max_quantizer_;
     config_.rc_target_bitrate = target_bitrate_kbps_;
@@ -391,6 +416,12 @@ void VideoEncoderVpx::setFrameRate(int fps)
 void VideoEncoderVpx::setQuality(quint32 quality)
 {
     quality_ = std::min(quality, kMaxQuality);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool VideoEncoderVpx::isTopOffRequired() const
+{
+    return !top_off_region_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -490,7 +521,7 @@ bool VideoEncoderVpx::createVp9Codec(const QSize& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoEncoderVpx::prepareImageAndActiveMap(
+bool VideoEncoderVpx::prepareImageAndActiveMap(
     bool is_key_frame, const Frame* frame, proto::video::Packet* packet)
 {
     QRect image_rect(QPoint(0, 0), QSize(static_cast<int>(image_->w), static_cast<int>(image_->h)));
@@ -525,13 +556,12 @@ void VideoEncoderVpx::prepareImageAndActiveMap(
         updated_region = image_rect;
     }
 
-    clearActiveMap();
-
     const int y_stride = image_->stride[0];
     const int uv_stride = image_->stride[1];
     quint8* y_data = image_->planes[0];
     quint8* u_data = image_->planes[1];
     quint8* v_data = image_->planes[2];
+    qint64 updated_area = 0;
 
     for (const auto& rect : updated_region)
     {
@@ -548,13 +578,66 @@ void VideoEncoderVpx::prepareImageAndActiveMap(
                            width,
                            height);
 
+        updated_area += static_cast<qint64>(width) * height;
+    }
+
+    const qint64 image_area = static_cast<qint64>(image_rect.width()) * image_rect.height();
+    const bool is_top_off_frame = is_key_frame || updated_area * kBusyAreaDivisor < image_area;
+
+    // Small changes keep the stall count, or a screen that always has them would never stop.
+    if (is_key_frame || !is_top_off_frame || top_off_region_.isEmpty())
+    {
+        top_off_quantizer_ = max_quantizer_;
+        top_off_stalled_frames_ = 0;
+    }
+
+    if (is_key_frame)
+        top_off_region_ = image_rect;
+    else
+        top_off_region_ += updated_region;
+
+    const Region& active_region = is_top_off_frame ? top_off_region_ : updated_region;
+
+    clearActiveMap();
+
+    for (const auto& rect : active_region)
+    {
         addRectToActiveMap(rect);
 
         proto::video::Rect* dirty_rect = packet->add_dirty_rect();
         dirty_rect->set_x(rect.x());
         dirty_rect->set_y(rect.y());
-        dirty_rect->set_width(width);
-        dirty_rect->set_height(height);
+        dirty_rect->set_width(rect.width());
+        dirty_rect->set_height(rect.height());
+    }
+
+    return is_top_off_frame;
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoEncoderVpx::checkTopOff(quint32 quantizer, bool is_key_frame)
+{
+    if (quantizer <= min_quantizer_)
+    {
+        top_off_region_.clear();
+        return;
+    }
+
+    // A key frame and the frames at the ceiling pay for earlier bits, so they are not counted.
+    if (is_key_frame)
+        return;
+
+    const qint64 stalled_frames_limit = MicroSeconds(Seconds(1)).count() / frame_duration_us_;
+
+    if (quantizer < top_off_quantizer_)
+    {
+        top_off_quantizer_ = quantizer;
+        top_off_stalled_frames_ = 0;
+    }
+    else if (quantizer < max_quantizer_ && ++top_off_stalled_frames_ >= stalled_frames_limit)
+    {
+        LOG(INFO) << "Top-off stopped at quantizer" << quantizer;
+        top_off_region_.clear();
     }
 }
 

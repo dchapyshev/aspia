@@ -77,7 +77,6 @@ QSize ScaleReducer::fitSize(const QSize& source_size, const QSize& preferred_siz
 const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& target_size)
 {
     DCHECK(source_frame);
-    DCHECK(!source_frame->constUpdatedRegion().isEmpty());
 
     const QSize& source_size = source_frame->size();
     if (source_size.width() == 0 || source_size.height() == 0)

@@ -21,6 +21,7 @@
 
 #include "base/codec/scoped_vpx_codec.h"
 #include "base/codec/video_encoder.h"
+#include "base/desktop/region.h"
 
 #include <QByteArray>
 #include <QSize>
@@ -40,22 +41,21 @@ public:
     void setBandwidth(qint64 bandwidth) final;
     void setFrameRate(int fps) final;
     void setQuality(quint32 quality) final;
+    bool isTopOffRequired() const final;
 
 private:
     friend class VideoEncoderVpxTestPeer;
 
     void createActiveMap(const QSize& size);
     bool createVp9Codec(const QSize& size);
-    void prepareImageAndActiveMap(
-        bool is_key_frame, const Frame* frame, proto::video::Packet* packet);
+    bool prepareImageAndActiveMap(bool is_key_frame, const Frame* frame, proto::video::Packet* packet);
+    void checkTopOff(quint32 quantizer, bool is_key_frame);
     void addRectToActiveMap(const QRect& rect);
     void clearActiveMap();
 
     QSize last_size_;
     quint32 quality_ = 0;
 
-    // Defaults match a conservative "unknown bandwidth" tier. setBandwidth() may shift these
-    // before each codec (re)creation; createVp9Codec reads them when initializing config_.
     quint32 min_quantizer_ = 10;
     quint32 max_quantizer_ = 30;
     quint32 target_bitrate_kbps_ = 1000;
@@ -68,6 +68,10 @@ private:
 
     QByteArray active_map_buffer_;
     vpx_active_map_t active_map_;
+
+    Region top_off_region_;
+    quint32 top_off_quantizer_ = 0;
+    qint64 top_off_stalled_frames_ = 0;
 
     std::unique_ptr<vpx_image_t> image_;
     QByteArray image_buffer_;

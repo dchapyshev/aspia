@@ -223,7 +223,9 @@ struct SessionStartResult
     size_t second_key_frame_bytes = 0;
     double second_key_frame_psnr = 0;
     size_t second_after_key_frame_bytes = 0;
+    double typed_frame_psnr = 0;
     double last_frame_psnr = 0;
+    size_t pause_bytes = 0;
     size_t bytes = 0;
 };
 
@@ -721,14 +723,15 @@ void printTotalsTable(const std::vector<Totals>& results)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Typing for 5 s with a second key frame asked for at |second_key_frame|. |start_bandwidth| is what
-// the encoder has for the first frame. With |growing| the estimate of the bandwidth starts at
-// 32 KB/s and grows by a fifth every second, the way a session starts. Otherwise it stays at
-// |start_bandwidth|.
+// Typing for 5 s with a second key frame asked for at |second_key_frame|, then 2 s without changes.
+// |start_bandwidth| is what the encoder has for the first frame. With |growing| the estimate of the
+// bandwidth starts at 32 KB/s and grows by a fifth every second, the way a session starts.
+// Otherwise it stays at |start_bandwidth|.
 void runKeyFrames(qint64 start_bandwidth, bool growing, int second_key_frame, SessionStartResult* result)
 {
     const qint64 kFirstBandwidth = 32 * 1024;
-    const int kFrameCount = 5 * kFrameRate;
+    const int kTypingFrames = 5 * kFrameRate;
+    const int kFrameCount = kTypingFrames + 2 * kFrameRate;
 
     std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(kEncoding);
     ASSERT_NE(encoder, nullptr);
@@ -745,7 +748,7 @@ void runKeyFrames(qint64 start_bandwidth, bool growing, int second_key_frame, Se
 
     for (int i = 0; i < kFrameCount; ++i)
     {
-        if (i != 0)
+        if (i != 0 && i < kTypingFrames)
             screen.typeChar();
 
         if (growing && i == 1 && start_bandwidth != kFirstBandwidth)
@@ -781,6 +784,11 @@ void runKeyFrames(qint64 start_bandwidth, bool growing, int second_key_frame, Se
 
         if (i >= second_key_frame && i < second_key_frame + kFrameRate)
             result->second_after_key_frame_bytes += bytes;
+
+        if (i == kTypingFrames - 1)
+            result->typed_frame_psnr = psnr;
+        else if (i >= kTypingFrames)
+            result->pause_bytes += bytes;
 
         result->bytes += bytes;
         result->last_frame_psnr = psnr;
@@ -818,8 +826,8 @@ void copyAndExtendPlane(const quint8* src, int width, int height, int border, st
 }
 
 //--------------------------------------------------------------------------------------------------
-// Encodes |kFramesPerScenario| frames after the key frame. With |block| one 16x16 block in the
-// middle of the screen changes in every frame, otherwise nothing changes.
+// Encodes |kFramesPerScenario| frames after the key frame and its top-off. With |block| one 16x16
+// block in the middle of the screen changes in every frame, otherwise nothing changes.
 void runFrameCost(const QSize& size, bool block, double* cycles, double* time_ms, double* bytes)
 {
     std::unique_ptr<VideoEncoder> encoder = VideoEncoder::create(kEncoding);
@@ -846,6 +854,13 @@ void runFrameCost(const QSize& size, bool block, double* cycles, double* time_ms
     ASSERT_EQ(encoder->encode(frame.get(), &key_packet), VideoEncoder::Result::SUCCESS);
     encoder->setEncodeBuffer(std::move(*key_packet.mutable_data()));
     *frame->updatedRegion() = Region();
+
+    while (encoder->isTopOffRequired())
+    {
+        proto::video::Packet packet;
+        ASSERT_EQ(encoder->encode(frame.get(), &packet), VideoEncoder::Result::SUCCESS);
+        encoder->setEncodeBuffer(std::move(*packet.mutable_data()));
+    }
 
     const QRect block_rect(QPoint((size.width() / 2) & ~15, (size.height() / 2) & ~15), QSize(16, 16));
     MicroSeconds total_time(0);
@@ -1231,14 +1246,17 @@ TEST(VideoEncoderVpxTest, DISABLED_SessionStartBenchmark)
 
     std::cout << std::endl
               << "=== Session start: " << kScreenSize.width() << "x" << kScreenSize.height() << ", " << kFrameRate
-              << " fps, typing for 5 s, the bandwidth starts at 32 KB/s and grows by a fifth every second ==="
-              << std::endl
+              << " fps, typing for 5 s and a pause of 2 s, the bandwidth starts at 32 KB/s and grows by a fifth"
+              << " every second ===" << std::endl
               << "start: the bandwidth the encoder has for the first key frame (0 is unknown). The second key frame"
               << std::endl
-              << "is requested 0.6 s after the first one. PSNR (dB) of the whole screen." << std::endl << std::endl;
+              << "is requested 0.6 s after the first one. type dB: the end of typing, last dB: the end of the pause."
+              << std::endl
+              << "idle KB: what goes out in the pause. PSNR (dB) of the whole screen." << std::endl << std::endl;
 
     std::cout << std::left << std::setw(13) << "start KB/s" << std::right;
-    for (const char* column : { "key1 KB", "key1 dB", "key2 KB", "key2 dB", "last dB", "all KB" })
+    for (const char* column : { "key1 KB", "key1 dB", "key2 KB", "key2 dB", "type dB", "last dB", "idle KB",
+                                "all KB" })
         std::cout << std::setw(8) << column;
     std::cout << std::endl;
 
@@ -1253,7 +1271,9 @@ TEST(VideoEncoderVpxTest, DISABLED_SessionStartBenchmark)
         printValue(result.first_key_frame_psnr, 2);
         printValue(static_cast<double>(result.second_key_frame_bytes) / 1024.0, 1);
         printValue(result.second_key_frame_psnr, 2);
+        printValue(result.typed_frame_psnr, 2);
         printValue(result.last_frame_psnr, 2);
+        printValue(static_cast<double>(result.pause_bytes) / 1024.0, 0);
         printValue(static_cast<double>(result.bytes) / 1024.0, 0);
         std::cout << std::endl;
     }
@@ -1268,15 +1288,18 @@ TEST(VideoEncoderVpxTest, DISABLED_KeyFrameRequestBenchmark)
 
     std::cout << std::endl
               << "=== Requested key frame: " << kScreenSize.width() << "x" << kScreenSize.height() << ", "
-              << kFrameRate << " fps, typing for 5 s on a steady bandwidth, a key frame is requested at 3 s ==="
+              << kFrameRate << " fps, typing for 5 s and a pause of 2 s on a steady bandwidth, a key frame is"
+              << " requested at 3 s ==="
               << std::endl
               << "key2 budget: the size of the requested key frame in frame budgets (bandwidth / fps). key2 ms: the"
               << std::endl
-              << "time to send it. 1s KB: what goes out in the second from it. PSNR (dB) of the whole screen."
-              << std::endl << std::endl;
+              << "time to send it. 1s KB: what goes out in the second from it. type dB: the end of typing, last dB:"
+              << std::endl
+              << "the end of the pause. PSNR (dB) of the whole screen." << std::endl << std::endl;
 
     std::cout << std::left << std::setw(13) << "bw KB/s" << std::right;
-    for (const char* column : { "key1 KB", "key1 dB", "key2 KB", "key2 dB", "budget", "key2 ms", "1s KB", "last dB" })
+    for (const char* column :
+         { "key1 KB", "key1 dB", "key2 KB", "key2 dB", "budget", "key2 ms", "1s KB", "type dB", "last dB" })
         std::cout << std::setw(8) << column;
     std::cout << std::endl;
 
@@ -1296,6 +1319,7 @@ TEST(VideoEncoderVpxTest, DISABLED_KeyFrameRequestBenchmark)
         printValue(key_frame_bytes * kFrameRate / static_cast<double>(bandwidth), 1);
         printValue(key_frame_bytes * 1000.0 / static_cast<double>(bandwidth), 0);
         printValue(static_cast<double>(result.second_after_key_frame_bytes) / 1024.0, 1);
+        printValue(result.typed_frame_psnr, 2);
         printValue(result.last_frame_psnr, 2);
         std::cout << std::endl;
     }
@@ -1309,7 +1333,8 @@ TEST(VideoEncoderVpxTest, DISABLED_FrameCostBenchmark)
     const QSize sizes[] = { QSize(1280, 720), QSize(1920, 1080), QSize(2560, 1440) };
 
     std::cout << std::endl
-              << "=== Frame cost: " << kFramesPerScenario << " frames after the key frame at 768 KB/s ===" << std::endl
+              << "=== Frame cost: " << kFramesPerScenario
+              << " frames after the key frame and its top-off at 768 KB/s ===" << std::endl
               << "empty: nothing changes. block: one 16x16 block changes. copy: one copy of an I420 frame with a"
               << std::endl
               << "border of 160 pixels, the way VP9 puts each source frame into its lookahead. Mc: millions of"

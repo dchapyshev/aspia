@@ -519,10 +519,10 @@ void DesktopAgent::encodeScreen(const Frame* frame)
 
     if (frame->constUpdatedRegion().isEmpty())
     {
-        if (!video_encoder_->isKeyFrameRequired())
+        if (video_encoder_->isKeyFrameRequired())
+            *const_cast<Frame*>(frame)->updatedRegion() += QRect(QPoint(0, 0), frame->size());
+        else if (!video_encoder_->isTopOffRequired())
             return;
-
-        *const_cast<Frame*>(frame)->updatedRegion() += QRect(QPoint(0, 0), frame->size());
     }
 
     if (source_size_ != frame->size())

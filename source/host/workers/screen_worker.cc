@@ -1264,10 +1264,10 @@ void ScreenWorker::encodeScreen(const Frame* frame)
 
     if (frame->constUpdatedRegion().isEmpty())
     {
-        if (!video_encoder_->isKeyFrameRequired() && current_size == scale_reducer_->targetSize())
+        if (video_encoder_->isKeyFrameRequired() || current_size != scale_reducer_->targetSize())
+            *const_cast<Frame*>(frame)->updatedRegion() += QRect(QPoint(0, 0), frame->size());
+        else if (!video_encoder_->isTopOffRequired())
             return;
-
-        *const_cast<Frame*>(frame)->updatedRegion() += QRect(QPoint(0, 0), frame->size());
     }
 
     const Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);

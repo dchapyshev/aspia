@@ -66,6 +66,8 @@ public:
 
     virtual void setQuality(quint32 quality) = 0;
 
+    virtual bool isTopOffRequired() const = 0;
+
     proto::video::Encoding encoding() const { return encoding_; }
 
     void setKeyFrameRequired(bool enable) { key_frame_required_ = enable; }
