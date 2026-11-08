@@ -19,6 +19,7 @@
 #include "host/screen_capturer_x11.h"
 
 #include "base/logging.h"
+#include "base/desktop/differ.h"
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/linux/x11_headers.h"
@@ -204,6 +205,8 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
     Frame* result = captureFrameImpl();
     if (!result)
     {
+        differ_.reset();
+
         // A single failure here is usually transient (for example XShmGetImage racing a resolution
         // change), so report it as temporary and let the capturer retry. A long streak means the
         // capturer is broken for good (dead SHM segment); escalate to PERMANENT, which is the only
@@ -711,7 +714,19 @@ Frame* ScreenCapturerX11::captureFrameImpl()
         if (!x_server_pixel_buffer_.captureRect(selected_monitor_rect_, frame))
             return nullptr;
 
-        *updated_region = Region(selected_monitor_rect_);
+        const Frame* previous = queue_.previousFrame();
+        if (use_damage_ || !differ_ || !previous || previous->size() != frame->size())
+        {
+            if (!use_damage_)
+                differ_ = std::make_unique<Differ>(frame->size(), frame->stride());
+
+            *updated_region = Region(selected_monitor_rect_);
+        }
+        else
+        {
+            differ_->calcDirtyRegion(previous->frameData(), frame->frameData(), updated_region);
+            updated_region->translate(selected_monitor_rect_.left(), selected_monitor_rect_.top());
+        }
     }
 
     return frame;

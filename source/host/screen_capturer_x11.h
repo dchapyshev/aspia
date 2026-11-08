@@ -28,6 +28,8 @@
 
 #include "base/linux/x11_headers.h"
 
+class Differ;
+
 class ScreenCapturerX11 final
     : public ScreenCapturer,
       public SharedXDisplay::XEventHandler
@@ -129,6 +131,7 @@ private:
     // to escalate a persistent failure to Error::PERMANENT, which makes the owner recreate the capturer.
     int consecutive_failures_ = 0;
 
+    std::unique_ptr<Differ> differ_;
     std::unique_ptr<XAtomCache> atom_cache_;
     std::unique_ptr<MouseCursor> mouse_cursor_;
 
