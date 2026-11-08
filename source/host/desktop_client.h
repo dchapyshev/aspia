@@ -67,6 +67,7 @@ protected:
     void onMessage(quint8 channel_id, const QByteArray& buffer) final;
     void onBandwidthChanged(qint64 bandwidth) final;
     void onTimer(TimePoint now) final;
+    void onSlice(TimePoint now) final;
 
 private slots:
     void onIpcNewConnection();

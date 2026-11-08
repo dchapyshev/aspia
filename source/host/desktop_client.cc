@@ -322,12 +322,15 @@ void DesktopClient::onTimer(TimePoint now)
         packet->set_error_code(proto::video::ERROR_CODE_TEMPORARY);
         send(proto::desktop::CHANNEL_ID_VIDEO, serialize(message));
     }
+}
 
-    if (!overflow_detection_enabled_)
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::onSlice(TimePoint now)
+{
+    if (!overflow_detection_enabled_ || isFinished())
         return;
 
     const proto::desktop::Overflow::State state = overflowState(now);
-
     if (state != last_state_)
     {
         CLOG(INFO) << "Overflow state:" << state << "pending:" << pendingBytes();
@@ -337,6 +340,7 @@ void DesktopClient::onTimer(TimePoint now)
     proto::desktop::ServiceToAgentClient message;
     proto::desktop::Overflow* overflow = message.mutable_overflow();
     overflow->set_state(state);
+    overflow->set_backlog_bytes(pendingBytes());
     sendIpcServiceMessage(serialize(message));
 }
 

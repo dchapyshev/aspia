@@ -94,6 +94,7 @@ protected:
     virtual void onMessage(quint8 channel_id, const QByteArray& buffer) = 0;
     virtual void onBandwidthChanged(qint64 bandwidth) { /* Nothing */ };
     virtual void onTimer(TimePoint now);
+    virtual void onSlice(TimePoint /* now */) { /* Nothing */ }
 
     bool isFinished() const { return finished_emitted_; }
     qint64 publishedBandwidth() const { return published_bandwidth_; }

@@ -286,6 +286,8 @@ void Client::onSliceTimer()
     const qint64 due = bandwidth_controller_->paddingDue(now);
     if (due > 0)
         send(proto::peer::CHANNEL_ID_PADDING, QByteArray(static_cast<int>(due), '\0'));
+
+    onSlice(now);
 }
 
 //--------------------------------------------------------------------------------------------------
