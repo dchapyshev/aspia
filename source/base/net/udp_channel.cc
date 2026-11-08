@@ -405,15 +405,12 @@ void UdpChannel::send(quint8 channel_id, const QByteArray& buffer)
         return;
     }
 
-    pending_bytes_ += packet->dataLength;
     addTxBytes(packet->dataLength);
 
     packet->userData = this;
     packet->freeCallback = [](ENetPacket* packet)
     {
-        UdpChannel* self = reinterpret_cast<UdpChannel*>(packet->userData);
-        self->pending_bytes_ -= packet->dataLength;
-        self->releasePacket(packet);
+        reinterpret_cast<UdpChannel*>(packet->userData)->releasePacket(packet);
     };
 
     if (enet_peer_send(peer_.get(), channel_id, packet.get()) != 0)
@@ -474,7 +471,7 @@ void UdpChannel::setDecryptor(std::unique_ptr<DatagramDecryptor> decryptor)
 //--------------------------------------------------------------------------------------------------
 qint64 UdpChannel::pendingBytes() const
 {
-    return pending_bytes_;
+    return total_tx_ - transmittedBytes();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -555,7 +552,7 @@ void UdpChannel::logStatistics() const
         return;
 
     CLOG(INFO) << "RTT:" << peer_->roundTripTime << "+-" << peer_->roundTripTimeVariance
-               << "ms in transit:" << peer_->reliableDataInTransit << "pending:" << pending_bytes_
+               << "ms in transit:" << peer_->reliableDataInTransit << "pending:" << pendingBytes()
                << "window:" << peer_->windowSize << "sent:" << peer_->packetsSent << "lost:"
                << peer_->packetsLost << "throttle:" << peer_->packetThrottle;
 }

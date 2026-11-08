@@ -161,7 +161,6 @@ private:
 
     quint64 send_counter_ = 0;
     AntiReplayWindow replay_window_;
-    qint64 pending_bytes_ = 0;
     qint64 window_size_ = 0;
 
     std::deque<ScopedENetPacket> packet_pool_;
