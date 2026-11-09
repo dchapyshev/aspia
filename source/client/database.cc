@@ -55,8 +55,6 @@ constexpr auto kSettingBackupPath    = "backup_path";
 constexpr auto kSettingBackupKeep    = "backup_retention";
 constexpr auto kSettingLockTimeout   = "lock_timeout";
 constexpr auto kSettingDesktopConfig = "desktop_config";
-constexpr auto kSettingRecordEnabled = "record_sessions";
-constexpr auto kSettingRecordPath    = "recording_path";
 constexpr auto kSettingUdpMethods    = "udp_methods";
 constexpr auto kSettingProxy         = "proxy";
 constexpr auto kSettingMcpEnabled    = "mcp_enabled";
@@ -2025,33 +2023,6 @@ proto::control::Config Database::desktopConfig() const
 bool Database::setDesktopConfig(const proto::control::Config& config)
 {
     return writeSetting(kSettingDesktopConfig, QString::fromLatin1(serialize(config).toBase64()));
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::isRecordSessionsEnabled() const
-{
-    return readSetting(kSettingRecordEnabled) == "1";
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setRecordSessionsEnabled(bool enable)
-{
-    return writeSetting(kSettingRecordEnabled, enable ? "1" : "0");
-}
-
-//--------------------------------------------------------------------------------------------------
-QString Database::recordingPath() const
-{
-    QString value = readSetting(kSettingRecordPath);
-    if (value.isEmpty())
-        value = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Aspia";
-    return value;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setRecordingPath(const QString& path)
-{
-    return writeSetting(kSettingRecordPath, path);
 }
 
 //--------------------------------------------------------------------------------------------------

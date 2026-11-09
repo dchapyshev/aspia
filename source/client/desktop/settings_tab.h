@@ -66,8 +66,6 @@ private slots:
     void onLockTimeoutChanged();
     void onAutoUnlockChanged();
     void onDesktopFeatureChanged();
-    void onRecordAutostartChanged();
-    void onRecordingPathChanged();
     void onSelectRecordingPath();
     void onMcpEnabledChanged();
     void onMcpAutoConfirmChanged();

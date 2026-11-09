@@ -224,7 +224,7 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
         QString file_path;
 
         if (enable)
-            file_path = Database::instance().recordingPath();
+            file_path = recordingPath(desktop_config_);
 
         onRecordingChanged(enable, file_path);
     });
@@ -763,7 +763,7 @@ void DesktopWindow::onFrameChanged(const QSize& screen_size, SharedFrame frame)
 
         // If the parameters indicate that it is necessary to record the connection session, then we
         // start recording.
-        if (Database::instance().isRecordSessionsEnabled())
+        if (desktop_config_.record_sessions())
         {
             LOG(INFO) << "Auto-recording enabled";
             toolbar_->startRecording(true);

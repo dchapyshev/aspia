@@ -150,12 +150,6 @@ public:
     proto::control::Config desktopConfig() const;
     bool setDesktopConfig(const proto::control::Config& config);
 
-    bool isRecordSessionsEnabled() const;
-    bool setRecordSessionsEnabled(bool enable);
-
-    QString recordingPath() const;
-    bool setRecordingPath(const QString& path);
-
     quint32 udpMethods() const;
     bool setUdpMethods(quint32 methods);
 

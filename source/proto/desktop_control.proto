@@ -80,6 +80,8 @@ message Config
     bool disable_preferred_size   = 11;
     uint32 quality                = 12;
     bool disable_key_combinations = 13;
+    bool record_sessions          = 14;
+    string recording_path         = 15;
 }
 
 message Feedback

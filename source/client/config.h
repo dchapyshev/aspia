@@ -368,4 +368,7 @@ const quint32 kHighQuality = 10;
 
 proto::control::Config defaultDesktopConfig();
 
+// The directory chosen in |config|, or the default one when none is chosen.
+QString recordingPath(const proto::control::Config& config);
+
 #endif // CLIENT_CONFIG_H

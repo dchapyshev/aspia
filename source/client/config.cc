@@ -18,6 +18,8 @@
 
 #include "client/config.h"
 
+#include <QStandardPaths>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
@@ -437,5 +439,15 @@ proto::control::Config defaultDesktopConfig()
     config.set_disable_preferred_size(false);
     config.set_quality(kAutoQuality);
     config.set_disable_key_combinations(false);
+    config.set_record_sessions(false);
     return config;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString recordingPath(const proto::control::Config& config)
+{
+    QString path = QString::fromStdString(config.recording_path());
+    if (path.isEmpty())
+        path = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Aspia";
+    return path;
 }

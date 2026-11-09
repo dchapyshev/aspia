@@ -290,8 +290,8 @@ SettingsTab::SettingsTab(QWidget* parent)
 
     ui->checkbox_preferred_size->setChecked(!desktop_config.disable_preferred_size());
 
-    ui->checkbox_record_autostart->setChecked(db.isRecordSessionsEnabled());
-    ui->edit_record_dir->setText(db.recordingPath());
+    ui->checkbox_record_autostart->setChecked(desktop_config.record_sessions());
+    ui->edit_record_dir->setText(recordingPath(desktop_config));
 
     // MCP page.
     ui->checkbox_mcp_enabled->setChecked(db.isMcpEnabled());
@@ -382,8 +382,8 @@ SettingsTab::SettingsTab(QWidget* parent)
             this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->checkbox_preferred_size, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
 
-    connect(ui->checkbox_record_autostart, &QCheckBox::toggled, this, &SettingsTab::onRecordAutostartChanged);
-    connect(ui->edit_record_dir, &QLineEdit::editingFinished, this, &SettingsTab::onRecordingPathChanged);
+    connect(ui->checkbox_record_autostart, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
+    connect(ui->edit_record_dir, &QLineEdit::editingFinished, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->button_select_record_dir, &QPushButton::clicked, this, &SettingsTab::onSelectRecordingPath);
 
     connect(ui->checkbox_mcp_enabled, &QCheckBox::toggled, this, &SettingsTab::onMcpEnabledChanged);
@@ -624,20 +624,6 @@ void SettingsTab::onDesktopFeatureChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::onRecordAutostartChanged()
-{
-    LOG(INFO) << "[ACTION] Record autostart changed";
-    Database::instance().setRecordSessionsEnabled(ui->checkbox_record_autostart->isChecked());
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onRecordingPathChanged()
-{
-    LOG(INFO) << "[ACTION] Recording path changed";
-    Database::instance().setRecordingPath(ui->edit_record_dir->text());
-}
-
-//--------------------------------------------------------------------------------------------------
 void SettingsTab::onSelectRecordingPath()
 {
     LOG(INFO) << "[ACTION] Select recording path";
@@ -654,7 +640,7 @@ void SettingsTab::onSelectRecordingPath()
 
     LOG(INFO) << "[ACTION] Recording path selected:" << path;
     ui->edit_record_dir->setText(path);
-    Database::instance().setRecordingPath(path);
+    onDesktopFeatureChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -974,6 +960,8 @@ void SettingsTab::saveDesktopConfig()
     desktop_config.set_disable_preferred_size(!ui->checkbox_preferred_size->isChecked());
     desktop_config.set_quality(ui->combo_quality->currentData().toUInt());
     desktop_config.set_disable_key_combinations(!ui->checkbox_send_key_combinations->isChecked());
+    desktop_config.set_record_sessions(ui->checkbox_record_autostart->isChecked());
+    desktop_config.set_recording_path(ui->edit_record_dir->text().toStdString());
 
     QSize preferred = ui->combo_resolution->currentData().toSize();
     if (preferred.isValid())

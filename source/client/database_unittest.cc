@@ -1285,16 +1285,17 @@ TEST_F(DatabaseTest, DesktopConfigIsKept)
 // Sessions are not recorded until the user turns it on; the directory always has a value.
 TEST_F(DatabaseTest, SessionRecordingIsOffUntilChosen)
 {
-    EXPECT_FALSE(db_.isRecordSessionsEnabled());
-    EXPECT_FALSE(db_.recordingPath().isEmpty());
+    proto::control::Config config = db_.desktopConfig();
+    EXPECT_FALSE(config.record_sessions());
+    EXPECT_FALSE(recordingPath(config).isEmpty());
 
-    ASSERT_TRUE(db_.setRecordSessionsEnabled(true));
-    ASSERT_TRUE(db_.setRecordingPath("/records"));
-    EXPECT_TRUE(db_.isRecordSessionsEnabled());
-    EXPECT_EQ(db_.recordingPath(), "/records");
+    config.set_record_sessions(true);
+    config.set_recording_path("/records");
+    ASSERT_TRUE(db_.setDesktopConfig(config));
 
-    ASSERT_TRUE(db_.setRecordSessionsEnabled(false));
-    EXPECT_FALSE(db_.isRecordSessionsEnabled());
+    config = db_.desktopConfig();
+    EXPECT_TRUE(config.record_sessions());
+    EXPECT_EQ(recordingPath(config), "/records");
 }
 
 //--------------------------------------------------------------------------------------------------
