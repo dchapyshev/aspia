@@ -81,6 +81,31 @@ const struct
     { "pause", Qt::Key_Pause }
 };
 
+// The keys of the numeric keypad have the same Qt key codes as the keys of the main keyboard.
+const struct
+{
+    const char* name;
+    quint32 usb_keycode;
+} kNumpadKeys[] =
+{
+    { "numpad0", 0x070062 },
+    { "numpad1", 0x070059 },
+    { "numpad2", 0x07005a },
+    { "numpad3", 0x07005b },
+    { "numpad4", 0x07005c },
+    { "numpad5", 0x07005d },
+    { "numpad6", 0x07005e },
+    { "numpad7", 0x07005f },
+    { "numpad8", 0x070060 },
+    { "numpad9", 0x070061 },
+    { "numpaddecimal", 0x070063 },
+    { "numpadadd", 0x070057 },
+    { "numpadsubtract", 0x070056 },
+    { "numpadmultiply", 0x070055 },
+    { "numpaddivide", 0x070054 },
+    { "numpadenter", 0x070058 }
+};
+
 //--------------------------------------------------------------------------------------------------
 QSize pictureSize(const QSize& frame_size)
 {
@@ -167,6 +192,12 @@ quint32 keyUsbKeycode(const QString& name)
     {
         if (name == QLatin1String(key.name))
             return KeycodeConverter::qtKeycodeToUsbKeycode(key.qt_keycode);
+    }
+
+    for (const auto& key : kNumpadKeys)
+    {
+        if (name == QLatin1String(key.name))
+            return key.usb_keycode;
     }
 
     return KeycodeConverter::invalidUsbKeycode();
@@ -265,8 +296,11 @@ QJsonObject DesktopClientTool::definition() const
                                        "ctrl+shift+escape, win+e or enter. The modifiers are ctrl, shift, alt and "
                                        "win (also meta, super or cmd). The keys are a character of the US layout, "
                                        "f1 to f24, escape, tab, backspace, enter, insert, delete, home, end, left, "
-                                       "up, right, down, pageup, pagedown, space, printscreen and pause. A modifier "
-                                       "alone, for example win, is pressed as a key." } };
+                                       "up, right, down, pageup, pagedown, space, printscreen and pause. The keys of "
+                                       "the numeric keypad are numpad0 to numpad9, numpaddecimal, numpadadd, "
+                                       "numpadsubtract, numpadmultiply, numpaddivide and numpadenter. Num Lock on the "
+                                       "remote computer follows Num Lock of this computer. A modifier alone, for "
+                                       "example win, is pressed as a key." } };
 
     QJsonObject screen_id{ { "type", "integer" },
                            { "description", "Id of a monitor from list_screens for select_screen." } };
