@@ -37,7 +37,8 @@
         "local-android-arm64"
       ],
       "cacheVariables": {
-        "ASPIA_GOOGLE_PLAY": "ON"
+        "ASPIA_GOOGLE_PLAY": "ON",
+        "QT_ANDROID_SIGN_AAB": "ON"
       }
     }
   ],
