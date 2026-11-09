@@ -39,6 +39,12 @@
       "cacheVariables": {
         "ASPIA_GOOGLE_PLAY": "ON",
         "QT_ANDROID_SIGN_AAB": "ON"
+      },
+      "environment": {
+        "QT_ANDROID_KEYSTORE_PATH": "C:/Android/play-upload.keystore",
+        "QT_ANDROID_KEYSTORE_ALIAS": "upload",
+        "QT_ANDROID_KEYSTORE_STORE_PASS": "password",
+        "QT_ANDROID_KEYSTORE_KEY_PASS": "password"
       }
     }
   ],

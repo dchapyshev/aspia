@@ -34,8 +34,9 @@
 
 #if defined(Q_OS_ANDROID)
 #include <QCoreApplication>
-#include <QJniEnvironment>
 #include <QJniObject>
+
+#include "common/android/granted_folders.h"
 #endif // defined(Q_OS_ANDROID)
 
 namespace {
@@ -43,8 +44,8 @@ namespace {
 #if defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------
-// Builds the drive list shown for the local Android device: the user storages and a few quick
-// folders, instead of the raw POSIX mount points reported by QStorageInfo.
+// The drive list of the local Android device is the folders the user granted. The usual folders of
+// the internal storage are marked by their type.
 void addAndroidDrives(proto::file_transfer::DriveList* drive_list)
 {
     QJniObject ext_dir = QJniObject::callStaticObjectMethod(
@@ -55,48 +56,6 @@ void addAndroidDrives(proto::file_transfer::DriveList* drive_list)
         internal_path = ext_dir.callObjectMethod(
             "getAbsolutePath", "()Ljava/lang/String;").toString();
     }
-
-    if (!internal_path.isEmpty())
-    {
-        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
-        item->set_type(proto::file_transfer::DriveList::Item::TYPE_INTERNAL_STORAGE);
-        item->set_path(internal_path.toStdString());
-    }
-
-    // Removable storage: the second and later entries of getExternalFilesDirs point at SD cards. The
-    // returned path is the app sandbox on that volume, so trim it back to the volume root.
-    QJniObject context = QNativeInterface::QAndroidApplication::context();
-    if (context.isValid())
-    {
-        QJniObject dirs = context.callObjectMethod(
-            "getExternalFilesDirs", "(Ljava/lang/String;)[Ljava/io/File;", nullptr);
-        if (dirs.isValid())
-        {
-            QJniEnvironment env;
-            jobjectArray array = dirs.object<jobjectArray>();
-            const jsize count = env->GetArrayLength(array);
-
-            for (jsize i = 1; i < count; ++i)
-            {
-                QJniObject dir = QJniObject::fromLocalRef(env->GetObjectArrayElement(array, i));
-                if (!dir.isValid())
-                    continue;
-
-                const QString path = dir.callObjectMethod(
-                    "getAbsolutePath", "()Ljava/lang/String;").toString();
-                const int android_index = path.indexOf("/Android/");
-                if (android_index <= 0)
-                    continue;
-
-                proto::file_transfer::DriveList::Item* item = drive_list->add_item();
-                item->set_type(proto::file_transfer::DriveList::Item::TYPE_SD_CARD);
-                item->set_path(path.left(android_index).toStdString());
-            }
-        }
-    }
-
-    if (internal_path.isEmpty())
-        return;
 
     const struct
     {
@@ -110,15 +69,20 @@ void addAndroidDrives(proto::file_transfer::DriveList* drive_list)
         { "/Documents", proto::file_transfer::DriveList::Item::TYPE_DOCUMENTS_FOLDER },
     };
 
-    for (const auto& folder : kQuickFolders)
+    const QList<GrantedFolders::Folder> folders = GrantedFolders::list();
+    for (const GrantedFolders::Folder& folder : folders)
     {
-        const QString path = internal_path + folder.sub_path;
-        if (!QDir(path).exists())
+        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
+        item->set_path(folder.path.toStdString());
+
+        if (internal_path.isEmpty())
             continue;
 
-        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
-        item->set_type(folder.type);
-        item->set_path(path.toStdString());
+        for (const auto& quick_folder : kQuickFolders)
+        {
+            if (folder.path == internal_path + quick_folder.sub_path)
+                item->set_type(quick_folder.type);
+        }
     }
 }
 
@@ -239,6 +203,18 @@ void addDesktopDrives(proto::file_transfer::DriveList* drive_list)
 
 #endif // defined(Q_OS_ANDROID)
 
+//--------------------------------------------------------------------------------------------------
+// The name the file engine opens |path| by. A path inside a granted folder is reached through the
+// document provider of the folder, other paths are used as they are.
+QString accessPath(const QString& path)
+{
+#if defined(Q_OS_ANDROID)
+    return GrantedFolders::accessPath(path);
+#else
+    return path;
+#endif // defined(Q_OS_ANDROID)
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -336,14 +312,16 @@ void FileRequestHandler::doFileListRequest(
     const proto::file_transfer::ListRequest& request, proto::file_transfer::Reply* reply)
 {
     QString path = QString::fromStdString(request.path());
-    if (!QFileInfo::exists(path))
+    const QString access_path = accessPath(path);
+
+    if (!QFileInfo::exists(access_path))
     {
         LOG(WARNING) << "Requested directory not exists:" << path;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_NOT_FOUND);
         return;
     }
 
-    QFileInfo dir_info(path);
+    QFileInfo dir_info(access_path);
     if (!dir_info.isDir())
     {
         LOG(WARNING) << "Requested directory is not directory:" << path;
@@ -353,7 +331,7 @@ void FileRequestHandler::doFileListRequest(
 
     proto::file_transfer::List* file_list = reply->mutable_file_list();
 
-    for (FileEnumerator enumerator(path); !enumerator.isAtEnd(); enumerator.advance())
+    for (FileEnumerator enumerator(access_path); !enumerator.isAtEnd(); enumerator.advance())
     {
         const FileEnumerator::FileInfo& file_info = enumerator.fileInfo();
         proto::file_transfer::List::Item* item = file_list->add_item();
@@ -372,14 +350,16 @@ void FileRequestHandler::doCreateDirectoryRequest(
 {
     QString directory_path = QString::fromStdString(request.path());
 
-    if (QFileInfo::exists(directory_path))
+    if (QFileInfo::exists(accessPath(directory_path)))
     {
         LOG(WARNING) << "Directory already exists:" << directory_path;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS);
         return;
     }
 
-    if (!QDir().mkdir(directory_path))
+    // A document provider creates a directory only inside its parent directory.
+    QFileInfo directory_info(QDir::cleanPath(directory_path));
+    if (!QDir(accessPath(directory_info.path())).mkdir(directory_info.fileName()))
     {
         LOG(WARNING) << "Unable to create directory:" << directory_path;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
@@ -403,21 +383,24 @@ void FileRequestHandler::doRenameRequest(
         return;
     }
 
-    if (!QFileInfo::exists(old_name))
+    const QString old_access_path = accessPath(old_name);
+    const QString new_access_path = accessPath(new_name);
+
+    if (!QFileInfo::exists(old_access_path))
     {
         LOG(WARNING) << "File being renamed does not exist or cannot be accessed:" << old_name;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_NOT_FOUND);
         return;
     }
 
-    if (QFileInfo::exists(new_name))
+    if (QFileInfo::exists(new_access_path))
     {
         LOG(WARNING) << "File with the new name already exists:" << new_name;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS);
         return;
     }
 
-    if (!QFile::rename(old_name, new_name))
+    if (!QFile::rename(old_access_path, new_access_path))
     {
         LOG(WARNING) << "Failed to rename file from" << old_name << "to" << new_name;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
@@ -433,9 +416,10 @@ void FileRequestHandler::doRemoveRequest(
     const proto::file_transfer::RemoveRequest& request, proto::file_transfer::Reply* reply)
 {
     QString path = QString::fromStdString(request.path());
+    const QString access_path = accessPath(path);
 
-    QFileInfo path_info(path);
-    if (!path_info.exists(path))
+    QFileInfo path_info(access_path);
+    if (!path_info.exists(access_path))
     {
         LOG(WARNING) << "Path to be deleted was not found or could not be accessed:" << path;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_NOT_FOUND);
@@ -444,7 +428,9 @@ void FileRequestHandler::doRemoveRequest(
 
     if (path_info.isDir())
     {
-        if (!QDir().rmdir(path))
+        // A document provider removes a directory only through its parent directory.
+        QFileInfo directory_info(QDir::cleanPath(path));
+        if (!QDir(accessPath(directory_info.path())).rmdir(directory_info.fileName()))
         {
             LOG(WARNING) << "Unable to remove direcotry:" << path;
             reply->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
@@ -456,9 +442,9 @@ void FileRequestHandler::doRemoveRequest(
         QFile::Permissions permissions = path_info.permissions();
         permissions |= QFile::WriteGroup | QFile::WriteOther | QFile::WriteUser | QFile::WriteOwner;
 
-        QFile::setPermissions(path, permissions);
+        QFile::setPermissions(access_path, permissions);
 
-        if (!QFile::remove(path))
+        if (!QFile::remove(access_path))
         {
             LOG(WARNING) << "Unable to remove file:" << path;
             reply->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
@@ -473,7 +459,7 @@ void FileRequestHandler::doRemoveRequest(
 void FileRequestHandler::doDownloadRequest(
     const proto::file_transfer::DownloadRequest& request, proto::file_transfer::Reply* reply)
 {
-    packetizer_ = FilePacketizer::create(QString::fromStdString(request.path()));
+    packetizer_ = FilePacketizer::create(accessPath(QString::fromStdString(request.path())));
     if (!packetizer_)
     {
         LOG(WARNING) << "Unable to open file:" << request.path();
@@ -490,12 +476,13 @@ void FileRequestHandler::doUploadRequest(
     const proto::file_transfer::UploadRequest& request, proto::file_transfer::Reply* reply)
 {
     QString file_path = QString::fromStdString(request.path());
+    const QString access_path = accessPath(file_path);
 
     do
     {
         if (!request.overwrite())
         {
-            if (QFileInfo::exists(file_path))
+            if (QFileInfo::exists(access_path))
             {
                 LOG(WARNING) << "File already exists:" << file_path;
                 reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS);
@@ -503,10 +490,10 @@ void FileRequestHandler::doUploadRequest(
             }
         }
 
-        depacketizer_ = FileDepacketizer::create(file_path, request.overwrite());
+        depacketizer_ = FileDepacketizer::create(access_path, request.overwrite());
         if (!depacketizer_)
         {
-            if (!request.overwrite() && QFileInfo::exists(file_path))
+            if (!request.overwrite() && QFileInfo::exists(access_path))
             {
                 LOG(WARNING) << "File already exists:" << file_path;
                 reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS);

@@ -40,27 +40,6 @@ const char kInputServiceClass[] = "org/aspia/host/InputService";
 const char kMenuClass[] = "org/aspia/host/FloatingMenu";
 const char kActivityClass[] = "org/aspia/host/HostActivity";
 
-//--------------------------------------------------------------------------------------------------
-// Opens "All files access" of the app in the settings of the system.
-void openStorageSettings(const QJniObject& context)
-{
-    QJniObject package_name = context.callObjectMethod("getPackageName", "()Ljava/lang/String;");
-    QJniObject uri = QJniObject::callStaticObjectMethod(
-        "android/net/Uri", "parse", "(Ljava/lang/String;)Landroid/net/Uri;",
-        QJniObject::fromString("package:" + package_name.toString()).object<jstring>());
-
-    QJniObject intent("android/content/Intent", "(Ljava/lang/String;Landroid/net/Uri;)V",
-        QJniObject::fromString("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION")
-            .object<jstring>(),
-        uri.object());
-
-    const jint flag_new_task = QJniObject::getStaticField<jint>(
-        "android/content/Intent", "FLAG_ACTIVITY_NEW_TASK");
-    intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", flag_new_task);
-
-    context.callMethod<void>("startActivity", "(Landroid/content/Intent;)V", intent.object());
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -92,7 +71,6 @@ PermissionsWidget::PermissionsWidget(QWidget* parent)
         // The names the settings of Android use, so the user finds them there.
         { Permission::ACCESSIBILITY, tr("Accessibility service") },
         { Permission::OVERLAY, tr("Display over other apps") },
-        { Permission::STORAGE, tr("All files access") },
         { Permission::NOTIFICATIONS, tr("Notifications") }
     };
 
@@ -189,10 +167,6 @@ bool PermissionsWidget::isGranted(Permission permission)
             return QJniObject::callStaticMethod<jboolean>(
                 kMenuClass, "canDraw", "(Landroid/content/Context;)Z", context.object());
 
-        case Permission::STORAGE:
-            return QJniObject::callStaticMethod<jboolean>(
-                "android/os/Environment", "isExternalStorageManager", "()Z");
-
         case Permission::NOTIFICATIONS:
             return QJniObject::callStaticMethod<jboolean>(
                 kActivityClass, "areNotificationsEnabled", "(Landroid/content/Context;)Z",
@@ -234,10 +208,6 @@ void PermissionsWidget::openSettings(Permission permission)
             case Permission::OVERLAY:
                 QJniObject::callStaticMethod<void>(kMenuClass, "openPermissionSettings",
                     "(Landroid/content/Context;)V", context.object());
-                break;
-
-            case Permission::STORAGE:
-                openStorageSettings(context);
                 break;
 
             case Permission::NOTIFICATIONS:

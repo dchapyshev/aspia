@@ -19,6 +19,8 @@
 #include "client/android/settings_widget.h"
 
 #include <QDialog>
+#include <QFileDialog>
+#include <QHBoxLayout>
 #include <QPointer>
 #include <QSignalBlocker>
 #include <QStackedWidget>
@@ -39,9 +41,11 @@
 #include "common/android/about_widget.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
+#include "common/android/granted_folders.h"
 #include "common/android/icon_button.h"
 #include "common/android/label.h"
 #include "common/android/line_edit.h"
+#include "common/android/message_dialog.h"
 #include "common/android/scroll_area.h"
 #include "common/android/switch.h"
 #include "common/android/update_widget.h"
@@ -90,8 +94,8 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     // default so they do not linger in this widget.
     button_credentials_->hide();
     button_about_->hide();
-    connect(button_credentials_, &IconButton::clicked, this, &SettingsWidget::showCredentials);
-    connect(button_about_, &IconButton::clicked, this, &SettingsWidget::showAbout);
+    connect(button_credentials_, &IconButton::clicked, this, &SettingsWidget::onShowCredentials);
+    connect(button_about_, &IconButton::clicked, this, &SettingsWidget::onShowAbout);
 
     connect(credentials_page_, &CredentialsWidget::sig_titleChanged,
             this, &SettingsWidget::onCredentialsTitleChanged);
@@ -159,7 +163,7 @@ void SettingsWidget::resetToSettings()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::showUpdate()
+void SettingsWidget::onShowUpdate()
 {
     // The button does not take the focus, so a field still being edited is saved here first.
     if (QWidget* widget = focusWidget())
@@ -195,7 +199,7 @@ void SettingsWidget::onMasterPasswordChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::showCredentials()
+void SettingsWidget::onShowCredentials()
 {
     credentials_page_->reload();
     stack_->setCurrentWidget(credentials_page_);
@@ -204,11 +208,28 @@ void SettingsWidget::showCredentials()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::showAbout()
+void SettingsWidget::onShowAbout()
 {
     stack_->setCurrentWidget(about_page_);
     emit sig_titleChanged(tr("About"), true);
     emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onAddFolder()
+{
+    const QUrl url = QFileDialog::getExistingDirectoryUrl(this, tr("Add folder"));
+    if (url.isEmpty())
+        return;
+
+    if (!GrantedFolders::add(url.toString(QUrl::FullyEncoded)))
+    {
+        MessageDialog::info(this, tr("File Transfer"),
+            tr("This folder cannot be added. Choose a folder in the internal storage or on the SD card."));
+        return;
+    }
+
+    buildSettings();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -257,6 +278,7 @@ void SettingsWidget::buildSettings()
     buildSecuritySection(layout);
     buildUdpSection(layout);
     buildDesktopSection(layout);
+    buildFileTransferSection(layout);
 #if !defined(ASPIA_GOOGLE_PLAY)
     buildUpdateSection(layout);
 #endif // !defined(ASPIA_GOOGLE_PLAY)
@@ -453,6 +475,39 @@ void SettingsWidget::buildDesktopSection(QVBoxLayout* layout)
 }
 
 //--------------------------------------------------------------------------------------------------
+void SettingsWidget::buildFileTransferSection(QVBoxLayout* layout)
+{
+    addSectionHeader(layout, tr("File Transfer"));
+
+    const QList<GrantedFolders::Folder> folders = GrantedFolders::list();
+    for (const GrantedFolders::Folder& folder : folders)
+    {
+        Label* path = new Label(folder.path);
+        path->setWordWrap(true);
+
+        IconButton* remove = new IconButton(":/img/material/delete.svg");
+        connect(remove, &IconButton::clicked, this, [this, folder]()
+        {
+            removeFolder(folder.path, folder.uri);
+        });
+
+        QHBoxLayout* row = new QHBoxLayout();
+        row->addWidget(path, 1);
+        row->addWidget(remove);
+        layout->addLayout(row);
+    }
+
+    Button* add = new Button(tr("Add folder"), Button::Role::FILLED);
+    connect(add, &Button::clicked, this, &SettingsWidget::onAddFolder);
+    layout->addWidget(add);
+
+    Label* hint = new Label(tr("Files can be transferred only in the folders added here."),
+                            Label::Role::CAPTION);
+    hint->setWordWrap(true);
+    layout->addWidget(hint);
+}
+
+//--------------------------------------------------------------------------------------------------
 void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
 {
     addSectionHeader(layout, tr("Updates"));
@@ -546,7 +601,7 @@ void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
     });
 
     Button* check = new Button(tr("Check for updates"), Button::Role::FILLED);
-    connect(check, &Button::clicked, this, &SettingsWidget::showUpdate);
+    connect(check, &Button::clicked, this, &SettingsWidget::onShowUpdate);
     layout->addWidget(check);
 }
 
@@ -578,4 +633,17 @@ bool SettingsWidget::setBiometricEnabled(bool enable)
         return false;
 
     return db.setBiometricBlob(BiometricGate::pack(*blob));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::removeFolder(const QString& path, const QString& uri)
+{
+    if (!MessageDialog::confirm(this, tr("File Transfer"),
+            tr("Remove the folder %1 from file transfer?").arg(path), tr("Remove")))
+    {
+        return;
+    }
+
+    GrantedFolders::remove(uri);
+    buildSettings();
 }

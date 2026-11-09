@@ -41,6 +41,8 @@ collect_sources(SOURCE_COMMON_ANDROID
     expandable_panel.h
     floating_action_button.cc
     floating_action_button.h
+    granted_folders.cc
+    granted_folders.h
     icon_button.cc
     icon_button.h
     keyboard_inset.cc

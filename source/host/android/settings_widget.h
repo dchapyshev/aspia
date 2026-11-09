@@ -70,11 +70,18 @@ signals:
     // Emitted after the password protection of the settings is enabled or disabled.
     void sig_passwordProtectionChanged();
 
+private slots:
+    void onShowAbout();
+    void onShowUsers();
+    void onShowUserEditor(qint64 entry_id);
+    void onShowUpdate();
+    void onEnableProtection();
+    void onChangePassword();
+    void onDisableProtection();
+    void onImport();
+    void onAddFolder();
+
 private:
-    void showAbout();
-    void showUsers();
-    void showUserEditor(qint64 entry_id);
-    void showUpdate();
     bool isAboutPage() const;
     bool isUsersPage() const;
     bool isEditorPage() const;
@@ -86,23 +93,21 @@ private:
     void buildInterfaceSection(QVBoxLayout* layout);
     void buildSecuritySection(QVBoxLayout* layout);
     void buildRouterSection(QVBoxLayout* layout);
+    void buildFileTransferSection(QVBoxLayout* layout);
     void buildUpdateSection(QVBoxLayout* layout);
 
-    void onEnableProtection();
-    void onChangePassword();
-    void onDisableProtection();
-    void onImport();
+    void removeFolder(const QString& path, const QString& uri);
 
-    QStackedWidget* stack_;
-    ScrollArea* settings_page_;
-    AboutWidget* about_page_;
-    UpdateWidget* update_page_;
-    UsersWidget* users_page_;
-    UserEditorWidget* editor_page_;
-    IconButton* about_button_;
-    IconButton* import_button_;
-    IconButton* add_user_button_;
-    IconButton* save_button_;
+    QStackedWidget* stack_ = nullptr;
+    ScrollArea* settings_page_ = nullptr;
+    AboutWidget* about_page_ = nullptr;
+    UpdateWidget* update_page_ = nullptr;
+    UsersWidget* users_page_ = nullptr;
+    UserEditorWidget* editor_page_ = nullptr;
+    IconButton* about_button_ = nullptr;
+    IconButton* import_button_ = nullptr;
+    IconButton* add_user_button_ = nullptr;
+    IconButton* save_button_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(SettingsWidget)
 };

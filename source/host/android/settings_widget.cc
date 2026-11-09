@@ -20,6 +20,7 @@
 
 #include <QByteArray>
 #include <QFileDialog>
+#include <QHBoxLayout>
 #include <QStackedWidget>
 #include <QUrl>
 #include <QVBoxLayout>
@@ -34,6 +35,7 @@
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
 #include "common/android/controls.h"
+#include "common/android/granted_folders.h"
 #include "common/android/icon_button.h"
 #include "common/android/label.h"
 #include "common/android/line_edit.h"
@@ -92,21 +94,21 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     // The sub-page actions live in the app bar; AppBar::setActions() reparents and shows them. Hidden
     // by default so they do not linger in this widget.
     about_button_->hide();
-    connect(about_button_, &IconButton::clicked, this, &SettingsWidget::showAbout);
+    connect(about_button_, &IconButton::clicked, this, &SettingsWidget::onShowAbout);
 
     import_button_->hide();
     connect(import_button_, &IconButton::clicked, this, &SettingsWidget::onImport);
 
     add_user_button_->hide();
-    connect(add_user_button_, &IconButton::clicked, this, [this]() { showUserEditor(0); });
+    connect(add_user_button_, &IconButton::clicked, this, [this]() { onShowUserEditor(0); });
 
     save_button_->hide();
     connect(save_button_, &IconButton::clicked, this, [this]() { editor_page_->save(); });
 
-    connect(users_page_, &UsersWidget::sig_editUser, this, &SettingsWidget::showUserEditor);
+    connect(users_page_, &UsersWidget::sig_editUser, this, &SettingsWidget::onShowUserEditor);
 
     // A saved user returns to the (reloaded) list.
-    connect(editor_page_, &UserEditorWidget::sig_saved, this, &SettingsWidget::showUsers);
+    connect(editor_page_, &UserEditorWidget::sig_saved, this, &SettingsWidget::onShowUsers);
     connect(editor_page_, &UserEditorWidget::sig_saved, this, &SettingsWidget::sig_usersChanged);
 
     buildSettings();
@@ -145,7 +147,7 @@ void SettingsWidget::goBack()
     // The user editor is opened from the user list, so it returns there rather than to the settings.
     if (isEditorPage())
     {
-        showUsers();
+        onShowUsers();
         return;
     }
 
@@ -164,7 +166,7 @@ void SettingsWidget::resetToSettings()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::showAbout()
+void SettingsWidget::onShowAbout()
 {
     stack_->setCurrentWidget(about_page_);
     emit sig_titleChanged(tr("About"), true);
@@ -172,7 +174,7 @@ void SettingsWidget::showAbout()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::showUsers()
+void SettingsWidget::onShowUsers()
 {
     users_page_->reload();
     stack_->setCurrentWidget(users_page_);
@@ -181,7 +183,7 @@ void SettingsWidget::showUsers()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::showUserEditor(qint64 entry_id)
+void SettingsWidget::onShowUserEditor(qint64 entry_id)
 {
     editor_page_->load(entry_id);
     stack_->setCurrentWidget(editor_page_);
@@ -190,7 +192,7 @@ void SettingsWidget::showUserEditor(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::showUpdate()
+void SettingsWidget::onShowUpdate()
 {
     // The button does not take the focus, so a field still being edited is saved here first.
     if (QWidget* widget = focusWidget())
@@ -202,6 +204,88 @@ void SettingsWidget::showUpdate()
     stack_->setCurrentWidget(update_page_);
     emit sig_titleChanged(tr("Update"), true);
     emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onEnableProtection()
+{
+    std::optional<SecureString> password = PasswordDialog::create(this);
+    if (!password)
+        return;
+
+    if (!Database::instance().setPassword(*password))
+    {
+        MessageDialog::info(this, tr("Error"), tr("An error occurred while processing the password."));
+        return;
+    }
+
+    buildSettings();
+    emit sig_passwordProtectionChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onChangePassword()
+{
+    // Confirm the current password before setting a new one.
+    if (!PasswordDialog::verify(this))
+        return;
+
+    std::optional<SecureString> password = PasswordDialog::create(this);
+    if (!password)
+        return;
+
+    if (!Database::instance().setPassword(*password))
+    {
+        MessageDialog::info(this, tr("Error"), tr("An error occurred while processing the password."));
+        return;
+    }
+
+    buildSettings();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onDisableProtection()
+{
+    if (!PasswordDialog::verify(this))
+        return;
+
+    Database::instance().clearPassword();
+    buildSettings();
+    emit sig_passwordProtectionChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onImport()
+{
+    QString path = QFileDialog::getOpenFileName(
+        this, tr("Import"), QString(), tr("JSON files (*.json)"));
+    if (path.isEmpty())
+        return;
+
+    // SettingsUtil shows its own confirmation and result dialogs; refresh the UI on success.
+    if (SettingsUtil::importFromFile(path, false, this))
+    {
+        buildSettings();
+        users_page_->reload();
+        emit sig_routerSettingsChanged();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onAddFolder()
+{
+    const QUrl url = QFileDialog::getExistingDirectoryUrl(this, tr("Add folder"));
+    if (url.isEmpty())
+        return;
+
+    if (!GrantedFolders::add(url.toString(QUrl::FullyEncoded)))
+    {
+        MessageDialog::info(this, tr("File Transfer"),
+            tr("This folder cannot be added. Choose a folder in the internal storage or on the SD card."));
+        return;
+    }
+
+    buildSettings();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -240,6 +324,7 @@ void SettingsWidget::buildSettings()
     buildInterfaceSection(layout);
     buildSecuritySection(layout);
     buildRouterSection(layout);
+    buildFileTransferSection(layout);
 #if !defined(ASPIA_GOOGLE_PLAY)
     buildUpdateSection(layout);
 #endif // !defined(ASPIA_GOOGLE_PLAY)
@@ -285,7 +370,7 @@ void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
     addSectionHeader(layout, tr("Security"));
 
     Button* manage = new Button(tr("Manage users"), Button::Role::FILLED);
-    connect(manage, &Button::clicked, this, &SettingsWidget::showUsers);
+    connect(manage, &Button::clicked, this, &SettingsWidget::onShowUsers);
     layout->addWidget(manage);
 
     switch (Database::instance().passwordProtectionState())
@@ -402,6 +487,39 @@ void SettingsWidget::buildRouterSection(QVBoxLayout* layout)
 }
 
 //--------------------------------------------------------------------------------------------------
+void SettingsWidget::buildFileTransferSection(QVBoxLayout* layout)
+{
+    addSectionHeader(layout, tr("File Transfer"));
+
+    const QList<GrantedFolders::Folder> folders = GrantedFolders::list();
+    for (const GrantedFolders::Folder& folder : folders)
+    {
+        Label* path = new Label(folder.path);
+        path->setWordWrap(true);
+
+        IconButton* remove = new IconButton(":/img/material/delete.svg");
+        connect(remove, &IconButton::clicked, this, [this, folder]()
+        {
+            removeFolder(folder.path, folder.uri);
+        });
+
+        QHBoxLayout* row = new QHBoxLayout();
+        row->addWidget(path, 1);
+        row->addWidget(remove);
+        layout->addLayout(row);
+    }
+
+    Button* add = new Button(tr("Add folder"), Button::Role::FILLED);
+    connect(add, &Button::clicked, this, &SettingsWidget::onAddFolder);
+    layout->addWidget(add);
+
+    Label* hint = new Label(tr("Files can be transferred only in the folders added here."),
+                            Label::Role::CAPTION);
+    hint->setWordWrap(true);
+    layout->addWidget(hint);
+}
+
+//--------------------------------------------------------------------------------------------------
 void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
 {
     addSectionHeader(layout, tr("Updates"));
@@ -490,71 +608,19 @@ void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
     });
 
     Button* check = new Button(tr("Check for updates"), Button::Role::FILLED);
-    connect(check, &Button::clicked, this, &SettingsWidget::showUpdate);
+    connect(check, &Button::clicked, this, &SettingsWidget::onShowUpdate);
     layout->addWidget(check);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::onEnableProtection()
+void SettingsWidget::removeFolder(const QString& path, const QString& uri)
 {
-    std::optional<SecureString> password = PasswordDialog::create(this);
-    if (!password)
-        return;
-
-    if (!Database::instance().setPassword(*password))
+    if (!MessageDialog::confirm(this, tr("File Transfer"),
+            tr("Remove the folder %1 from file transfer?").arg(path), tr("Remove")))
     {
-        MessageDialog::info(this, tr("Error"), tr("An error occurred while processing the password."));
         return;
     }
 
+    GrantedFolders::remove(uri);
     buildSettings();
-    emit sig_passwordProtectionChanged();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsWidget::onChangePassword()
-{
-    // Confirm the current password before setting a new one.
-    if (!PasswordDialog::verify(this))
-        return;
-
-    std::optional<SecureString> password = PasswordDialog::create(this);
-    if (!password)
-        return;
-
-    if (!Database::instance().setPassword(*password))
-    {
-        MessageDialog::info(this, tr("Error"), tr("An error occurred while processing the password."));
-        return;
-    }
-
-    buildSettings();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsWidget::onDisableProtection()
-{
-    if (!PasswordDialog::verify(this))
-        return;
-
-    Database::instance().clearPassword();
-    buildSettings();
-    emit sig_passwordProtectionChanged();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsWidget::onImport()
-{
-    QString path = QFileDialog::getOpenFileName(
-        this, tr("Import"), QString(), tr("JSON files (*.json)"));
-    if (path.isEmpty())
-        return;
-
-    // SettingsUtil shows its own confirmation and result dialogs; refresh the UI on success.
-    if (SettingsUtil::importFromFile(path, false, this))
-    {
-        buildSettings();
-        users_page_->reload();
-        emit sig_routerSettingsChanged();
-    }
 }

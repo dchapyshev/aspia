@@ -90,9 +90,6 @@ private:
     // Drops the credentials kept for a host of a router after the host refused them.
     void forgetHostCredentials();
 
-    // Prompts for the all-files-access permission needed to browse this device's storage.
-    void ensureStoragePermission();
-
     void start();
     void fetchConnectionOffer();
     void requestConnectionOffer(RouterSession* session);

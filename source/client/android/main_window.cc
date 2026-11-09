@@ -736,7 +736,7 @@ void AndroidMainWindow::showUpdatePrompt(const UpdateInfo& update_info)
 
     SettingsWidget* settings = qobject_cast<SettingsWidget*>(stack_content_->widget(SECTION_SETTINGS));
     if (settings)
-        settings->showUpdate();
+        settings->onShowUpdate();
 }
 
 //--------------------------------------------------------------------------------------------------

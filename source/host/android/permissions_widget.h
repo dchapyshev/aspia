@@ -43,7 +43,6 @@ private:
     {
         ACCESSIBILITY,
         OVERLAY,
-        STORAGE,
         NOTIFICATIONS
     };
 

@@ -57,8 +57,9 @@ public:
     // Returns to the settings page without animation, used when the tab is left.
     void resetToSettings();
 
+public slots:
     // Opens the update page and starts a check on it.
-    void showUpdate();
+    void onShowUpdate();
 
 signals:
     // Requests the host bar to show |title| with a back button (a sub-page) or the default state.
@@ -71,10 +72,11 @@ private slots:
     void onCredentialsTitleChanged(const QString& title);
     void onCredentialsActionsChanged();
     void onMasterPasswordChanged();
+    void onShowCredentials();
+    void onShowAbout();
+    void onAddFolder();
 
 private:
-    void showCredentials();
-    void showAbout();
     void showMasterPassword();
     bool isCredentialsPage() const;
     bool isAboutPage() const;
@@ -89,20 +91,23 @@ private:
     void buildSecuritySection(QVBoxLayout* layout);
     void buildUdpSection(QVBoxLayout* layout);
     void buildDesktopSection(QVBoxLayout* layout);
+    void buildFileTransferSection(QVBoxLayout* layout);
     void buildUpdateSection(QVBoxLayout* layout);
 
     // Enables or disables biometric unlock, returning whether the requested state was reached so the
     // caller can revert the switch on cancellation or failure.
     bool setBiometricEnabled(bool enable);
 
-    QStackedWidget* stack_;
-    ScrollArea* settings_page_;
-    CredentialsWidget* credentials_page_;
-    AboutWidget* about_page_;
-    UpdateWidget* update_page_;
-    MasterPasswordWidget* master_password_page_;
-    IconButton* button_credentials_;
-    IconButton* button_about_;
+    void removeFolder(const QString& path, const QString& uri);
+
+    QStackedWidget* stack_ = nullptr;
+    ScrollArea* settings_page_ = nullptr;
+    CredentialsWidget* credentials_page_ = nullptr;
+    AboutWidget* about_page_ = nullptr;
+    UpdateWidget* update_page_ = nullptr;
+    MasterPasswordWidget* master_password_page_ = nullptr;
+    IconButton* button_credentials_ = nullptr;
+    IconButton* button_about_ = nullptr;
 
     Settings settings_;
     proto::control::Config desktop_config_;

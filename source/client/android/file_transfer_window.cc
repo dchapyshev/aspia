@@ -42,11 +42,6 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 
-#if defined(Q_OS_ANDROID)
-#include <QCoreApplication>
-#include <QJniObject>
-#endif // defined(Q_OS_ANDROID)
-
 //--------------------------------------------------------------------------------------------------
 FileTransferWindow::FileTransferWindow(const HostConfig& host, bool credentials_saved, QWidget* parent)
     : QWidget(parent),
@@ -100,9 +95,6 @@ FileTransferWindow::FileTransferWindow(const HostConfig& host, bool credentials_
 
     applyLayout();
     start();
-
-    // Deferred so the prompt's dialog has a visible parent once the window is on screen.
-    QMetaObject::invokeMethod(this, &FileTransferWindow::ensureStoragePermission, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -254,43 +246,6 @@ void FileTransferWindow::forgetHostCredentials()
 
     if (!Database::instance().removeRouterHost(host_.routerId(), host_id))
         LOG(ERROR) << "Unable to remove credentials of host" << host_id;
-}
-
-//--------------------------------------------------------------------------------------------------
-void FileTransferWindow::ensureStoragePermission()
-{
-#if defined(Q_OS_ANDROID)
-    if (QJniObject::callStaticMethod<jboolean>(
-            "android/os/Environment", "isExternalStorageManager", "()Z"))
-    {
-        return;
-    }
-
-    if (!MessageDialog::confirm(this, tr("File Transfer"),
-            tr("To browse files on this device, allow access to all files on the next screen."),
-            tr("Allow")))
-    {
-        return;
-    }
-
-    QJniObject context = QNativeInterface::QAndroidApplication::context();
-    if (!context.isValid())
-        return;
-
-    const QString package = context.callObjectMethod(
-        "getPackageName", "()Ljava/lang/String;").toString();
-    QJniObject uri = QJniObject::callStaticObjectMethod(
-        "android/net/Uri", "parse", "(Ljava/lang/String;)Landroid/net/Uri;",
-        QJniObject::fromString("package:" + package).object<jstring>());
-
-    QJniObject intent("android/content/Intent", "(Ljava/lang/String;Landroid/net/Uri;)V",
-        QJniObject::fromString("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION").object<jstring>(),
-        uri.object());
-
-    // FLAG_ACTIVITY_NEW_TASK, required to start an activity from a non-activity context.
-    intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", 0x10000000);
-    context.callMethod<void>("startActivity", "(Landroid/content/Intent;)V", intent.object());
-#endif // defined(Q_OS_ANDROID)
 }
 
 //--------------------------------------------------------------------------------------------------
