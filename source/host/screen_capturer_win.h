@@ -19,6 +19,8 @@
 #ifndef HOST_SCREEN_CAPTURER_WIN_H
 #define HOST_SCREEN_CAPTURER_WIN_H
 
+#include <optional>
+
 #include "base/win/scoped_hdc.h"
 #include "base/win/scoped_thread_desktop.h"
 #include "host/screen_capturer.h"
@@ -48,6 +50,9 @@ protected:
 
 private:
     void checkScreenType(const wchar_t* desktop_name);
+    void checkInputDevices();
+    void enableMouseKeys();
+    void restoreMouseKeys();
 
     ScopedThreadDesktop desktop_;
     ScopedGetDC desktop_dc_;
@@ -57,6 +62,9 @@ private:
     std::unique_ptr<MouseCursor> mouse_cursor_;
     CURSORINFO curr_cursor_info_;
     CURSORINFO prev_cursor_info_;
+
+    int input_devices_check_countdown_ = 0;
+    std::optional<DWORD> mouse_keys_flags_;
 };
 
 #endif // HOST_SCREEN_CAPTURER_WIN_H

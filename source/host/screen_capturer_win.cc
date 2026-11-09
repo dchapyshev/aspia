@@ -47,6 +47,34 @@ constexpr quint32 kPixelRgbaTransparent = RGBA(0,    0,    0,    0);
 
 constexpr quint32 kPixelRgbWhite = RGB(0xFF, 0xFF, 0xFF);
 
+// About 3 seconds at 30 frames per second.
+constexpr int kInputDevicesCheckInterval = 90;
+
+//--------------------------------------------------------------------------------------------------
+bool hasInputDevices()
+{
+    std::array<RAWINPUTDEVICELIST, 64> devices;
+    UINT size = static_cast<UINT>(devices.size());
+
+    const UINT count = GetRawInputDeviceList(devices.data(), &size, sizeof(RAWINPUTDEVICELIST));
+    if (count == static_cast<UINT>(-1))
+    {
+        if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
+            return true;
+
+        PLOG(ERROR) << "GetRawInputDeviceList failed";
+        return true;
+    }
+
+    for (UINT i = 0; i < count; ++i)
+    {
+        if (devices[i].dwType == RIM_TYPEMOUSE || devices[i].dwType == RIM_TYPEKEYBOARD)
+            return true;
+    }
+
+    return false;
+}
+
 //--------------------------------------------------------------------------------------------------
 bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 {
@@ -277,6 +305,7 @@ ScreenCapturerWin::ScreenCapturerWin(Type type, QObject* parent)
 ScreenCapturerWin::~ScreenCapturerWin()
 {
     LOG(INFO) << "Dtor";
+    restoreMouseKeys();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -512,6 +541,8 @@ ScreenCapturer::ScreenId ScreenCapturerWin::currentScreen() const
 //--------------------------------------------------------------------------------------------------
 const MouseCursor* ScreenCapturerWin::captureCursor()
 {
+    checkInputDevices();
+
     if (!desktop_dc_.isValid())
     {
         desktop_dc_.getDC(nullptr);
@@ -604,4 +635,90 @@ void ScreenCapturerWin::checkScreenType(const wchar_t* desktop_name)
     {
         LOG(INFO) << "Screen type not changed:" << last_screen_type_;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenCapturerWin::checkInputDevices()
+{
+    if (input_devices_check_countdown_ > 0)
+    {
+        --input_devices_check_countdown_;
+        return;
+    }
+
+    input_devices_check_countdown_ = kInputDevicesCheckInterval;
+
+    const bool has_input_devices = hasInputDevices();
+
+    if (!has_input_devices && !mouse_keys_flags_.has_value())
+        enableMouseKeys();
+    else if (has_input_devices && mouse_keys_flags_.has_value())
+        restoreMouseKeys();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenCapturerWin::enableMouseKeys()
+{
+    MOUSEKEYS mouse_keys;
+    memset(&mouse_keys, 0, sizeof(mouse_keys));
+    mouse_keys.cbSize = sizeof(mouse_keys);
+
+    if (!SystemParametersInfoW(SPI_GETMOUSEKEYS, sizeof(mouse_keys), &mouse_keys, 0))
+    {
+        PLOG(ERROR) << "SystemParametersInfoW(SPI_GETMOUSEKEYS) failed";
+        return;
+    }
+
+    const DWORD flags = mouse_keys.dwFlags;
+
+    if (!(flags & MKF_MOUSEKEYSON))
+    {
+        mouse_keys.dwFlags |= MKF_MOUSEKEYSON | MKF_AVAILABLE;
+
+        // Not saved to the user profile, so the change does not outlive the logon session.
+        if (!SystemParametersInfoW(SPI_SETMOUSEKEYS, sizeof(mouse_keys), &mouse_keys, 0))
+        {
+            PLOG(ERROR) << "SystemParametersInfoW(SPI_SETMOUSEKEYS) failed";
+            return;
+        }
+
+        LOG(INFO) << "No mouse and keyboard attached. Mouse Keys turned on";
+    }
+
+    mouse_keys_flags_ = flags;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenCapturerWin::restoreMouseKeys()
+{
+    if (!mouse_keys_flags_.has_value())
+        return;
+
+    if (*mouse_keys_flags_ & MKF_MOUSEKEYSON)
+    {
+        mouse_keys_flags_.reset();
+        return;
+    }
+
+    MOUSEKEYS mouse_keys;
+    memset(&mouse_keys, 0, sizeof(mouse_keys));
+    mouse_keys.cbSize = sizeof(mouse_keys);
+
+    if (!SystemParametersInfoW(SPI_GETMOUSEKEYS, sizeof(mouse_keys), &mouse_keys, 0))
+    {
+        PLOG(ERROR) << "SystemParametersInfoW(SPI_GETMOUSEKEYS) failed";
+        return;
+    }
+
+    const DWORD changed_flags = MKF_MOUSEKEYSON | MKF_AVAILABLE;
+    mouse_keys.dwFlags = (mouse_keys.dwFlags & ~changed_flags) | (*mouse_keys_flags_ & changed_flags);
+
+    if (!SystemParametersInfoW(SPI_SETMOUSEKEYS, sizeof(mouse_keys), &mouse_keys, 0))
+    {
+        PLOG(ERROR) << "SystemParametersInfoW(SPI_SETMOUSEKEYS) failed";
+        return;
+    }
+
+    LOG(INFO) << "Mouse Keys restored";
+    mouse_keys_flags_.reset();
 }
