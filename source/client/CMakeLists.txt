@@ -31,6 +31,10 @@ list(APPEND SOURCE_CLIENT_CORE
     backup.h
     database.cc
     database.h
+    database_credentials.cc
+    database_local_hosts.cc
+    database_routers.cc
+    database_settings.cc
     config.cc
     config.h
     credential_file.cc
