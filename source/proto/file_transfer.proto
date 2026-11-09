@@ -43,6 +43,7 @@ message DriveList
             TYPE_CAMERA_FOLDER    = 12;
             TYPE_INTERNAL_STORAGE = 13;
             TYPE_SD_CARD          = 14;
+            TYPE_FOLDER           = 15;
         }
 
         Type type   = 1;
