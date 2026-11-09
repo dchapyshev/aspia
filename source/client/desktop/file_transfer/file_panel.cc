@@ -535,6 +535,13 @@ void FilePanel::toParentFolder()
     if (ui->action_up->isEnabled())
     {
         QString parent_path = parentPath(ui->address_bar->currentPath());
+
+        // A granted folder of an Android host is a drive whose parent lies on no drive and cannot be
+        // opened, so the way up from it leads to the drive list.
+        AddressBarModel* model = static_cast<AddressBarModel*>(ui->address_bar->model());
+        if (!model->isOnDrive(parent_path))
+            parent_path = AddressBarModel::computerPath();
+
         ui->address_bar->setCurrentPath(parent_path);
     }
 }

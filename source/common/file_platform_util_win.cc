@@ -159,6 +159,15 @@ QIcon FilePlatformUtil::driveIcon(proto::file_transfer::DriveList::Item::Type ty
         case proto::file_transfer::DriveList::Item::TYPE_DOCUMENTS_FOLDER:
             return knownFolderIcon(FOLDERID_Documents);
 
+        case proto::file_transfer::DriveList::Item::TYPE_CAMERA_FOLDER:
+            return knownFolderIcon(FOLDERID_CameraRoll);
+
+        case proto::file_transfer::DriveList::Item::TYPE_SD_CARD:
+            return stockIcon(SIID_DRIVEREMOVE);
+
+        case proto::file_transfer::DriveList::Item::TYPE_FOLDER:
+            return stockIcon(SIID_FOLDER);
+
         default:
             return stockIcon(SIID_DRIVEFIXED);
     }

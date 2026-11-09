@@ -39,6 +39,9 @@ public:
     static bool add(const QString& uri);
     static void remove(const QString& uri);
 
+    // Returns true when |path| lies inside a granted folder and has no "." and ".." names in it.
+    static bool contains(const QString& path);
+
     // The name the file engine opens |path| by. A path inside a granted folder is reached through the
     // document provider of the folder, other paths are returned as they are.
     static QString accessPath(const QString& path);

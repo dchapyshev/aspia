@@ -39,6 +39,7 @@ public:
 
     bool isComputerPath(const QString& path) const;
     bool isDrivePath(const QString& path) const;
+    bool isOnDrive(const QString& path) const;
 
     QModelIndex computerIndex() const;
     QModelIndex currentFolderIndex() const;

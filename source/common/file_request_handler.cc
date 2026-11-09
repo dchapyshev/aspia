@@ -73,6 +73,7 @@ void addAndroidDrives(proto::file_transfer::DriveList* drive_list)
     for (const GrantedFolders::Folder& folder : folders)
     {
         proto::file_transfer::DriveList::Item* item = drive_list->add_item();
+        item->set_type(proto::file_transfer::DriveList::Item::TYPE_FOLDER);
         item->set_path(folder.path.toStdString());
 
         if (internal_path.isEmpty())
@@ -84,6 +85,47 @@ void addAndroidDrives(proto::file_transfer::DriveList* drive_list)
                 item->set_type(quick_folder.type);
         }
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Returns true when every path of |request| lies inside a granted folder.
+bool isGrantedRequest(const proto::file_transfer::Request& request)
+{
+    QStringList paths;
+
+    if (request.has_file_list_request())
+    {
+        paths.append(QString::fromStdString(request.file_list_request().path()));
+    }
+    else if (request.has_create_directory_request())
+    {
+        paths.append(QString::fromStdString(request.create_directory_request().path()));
+    }
+    else if (request.has_rename_request())
+    {
+        paths.append(QString::fromStdString(request.rename_request().old_name()));
+        paths.append(QString::fromStdString(request.rename_request().new_name()));
+    }
+    else if (request.has_remove_request())
+    {
+        paths.append(QString::fromStdString(request.remove_request().path()));
+    }
+    else if (request.has_download_request())
+    {
+        paths.append(QString::fromStdString(request.download_request().path()));
+    }
+    else if (request.has_upload_request())
+    {
+        paths.append(QString::fromStdString(request.upload_request().path()));
+    }
+
+    for (const QString& path : std::as_const(paths))
+    {
+        if (!GrantedFolders::contains(path))
+            return false;
+    }
+
+    return true;
 }
 
 #else // defined(Q_OS_ANDROID)
@@ -247,6 +289,15 @@ void FileRequestHandler::doRequest(
 {
     // The reply always mirrors the request id back to the sender.
     reply->set_request_id(request.request_id());
+
+#if defined(Q_OS_ANDROID)
+    if (!isGrantedRequest(request))
+    {
+        LOG(WARNING) << "Request for a path outside the granted folders";
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
+        return;
+    }
+#endif // defined(Q_OS_ANDROID)
 
     if (request.has_drive_list_request())
     {

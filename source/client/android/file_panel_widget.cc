@@ -18,6 +18,7 @@
 
 #include "client/android/file_panel_widget.h"
 
+#include <QDir>
 #include <QHBoxLayout>
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
@@ -81,6 +82,9 @@ const char* driveIconPath(proto::file_transfer::DriveList::Item::Type type)
 
         case proto::file_transfer::DriveList::Item::TYPE_SD_CARD:
             return ":/img/sd.svg";
+
+        case proto::file_transfer::DriveList::Item::TYPE_FOLDER:
+            return ":/img/folder.svg";
 
         default:
             return ":/img/hdd.svg";
@@ -200,6 +204,10 @@ void FilePanelWidget::onDriveList(
 
             case proto::file_transfer::DriveList::Item::TYPE_DOCUMENTS_FOLDER:
                 name = tr("Documents");
+                break;
+
+            case proto::file_transfer::DriveList::Item::TYPE_FOLDER:
+                name = QDir::cleanPath(path).section('/', -1);
                 break;
 
             default:

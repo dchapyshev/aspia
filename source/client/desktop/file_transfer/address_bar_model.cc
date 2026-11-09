@@ -18,6 +18,8 @@
 
 #include "client/desktop/file_transfer/address_bar_model.h"
 
+#include <QDir>
+
 #include "base/logging.h"
 #include "common/file_platform_util.h"
 
@@ -96,6 +98,22 @@ void AddressBarModel::setDriveList(const proto::file_transfer::DriveList& list)
 
             case proto::file_transfer::DriveList::Item::TYPE_PICTURES_FOLDER:
                 drive.name = tr("Pictures");
+                break;
+
+            case proto::file_transfer::DriveList::Item::TYPE_CAMERA_FOLDER:
+                drive.name = tr("Camera");
+                break;
+
+            case proto::file_transfer::DriveList::Item::TYPE_INTERNAL_STORAGE:
+                drive.name = tr("Internal Storage");
+                break;
+
+            case proto::file_transfer::DriveList::Item::TYPE_SD_CARD:
+                drive.name = tr("SD Card");
+                break;
+
+            case proto::file_transfer::DriveList::Item::TYPE_FOLDER:
+                drive.name = QDir::cleanPath(QString::fromStdString(item.path())).section('/', -1);
                 break;
 
             default:
@@ -178,6 +196,20 @@ bool AddressBarModel::isDrivePath(const QString& path) const
     for (const auto& drive : drives_)
     {
         if (normalized_path.compare(drive.path, Qt::CaseInsensitive) == 0)
+            return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AddressBarModel::isOnDrive(const QString& path) const
+{
+    QString normalized_path = normalizePath(path);
+
+    for (const auto& drive : drives_)
+    {
+        if (normalized_path.startsWith(drive.path, Qt::CaseInsensitive))
             return true;
     }
 
@@ -361,7 +393,9 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
                         drive.type == proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER ||
                         drive.type == proto::file_transfer::DriveList::Item::TYPE_DOWNLOAD_FOLDER ||
                         drive.type == proto::file_transfer::DriveList::Item::TYPE_DOCUMENTS_FOLDER ||
-                        drive.type == proto::file_transfer::DriveList::Item::TYPE_PICTURES_FOLDER)
+                        drive.type == proto::file_transfer::DriveList::Item::TYPE_PICTURES_FOLDER ||
+                        drive.type == proto::file_transfer::DriveList::Item::TYPE_CAMERA_FOLDER ||
+                        drive.type == proto::file_transfer::DriveList::Item::TYPE_FOLDER)
                     {
                         return drive.name;
                     }
@@ -482,6 +516,18 @@ QString AddressBarModel::typeToString(proto::file_transfer::DriveList::Item::Typ
 
         case proto::file_transfer::DriveList::Item::TYPE_ROOT_DIRECTORY:
             return tr("Root Directory");
+
+        case proto::file_transfer::DriveList::Item::TYPE_CAMERA_FOLDER:
+            return tr("Camera Folder");
+
+        case proto::file_transfer::DriveList::Item::TYPE_INTERNAL_STORAGE:
+            return tr("Internal Storage");
+
+        case proto::file_transfer::DriveList::Item::TYPE_SD_CARD:
+            return tr("SD Card");
+
+        case proto::file_transfer::DriveList::Item::TYPE_FOLDER:
+            return tr("Folder");
 
         default:
             return tr("Unknown Drive");

@@ -154,6 +154,18 @@ QIcon FilePlatformUtil::driveIcon(proto::file_transfer::DriveList::Item::Type ty
             icon_name = QStringLiteral(":/img/folder.svg");
             break;
 
+        case proto::file_transfer::DriveList::Item::TYPE_CAMERA_FOLDER:
+            icon_name = ":/img/folder-camera.svg";
+            break;
+
+        case proto::file_transfer::DriveList::Item::TYPE_SD_CARD:
+            icon_name = ":/img/sd.svg";
+            break;
+
+        case proto::file_transfer::DriveList::Item::TYPE_FOLDER:
+            icon_name = ":/img/folder.svg";
+            break;
+
         case proto::file_transfer::DriveList::Item::TYPE_REMOTE:
         case proto::file_transfer::DriveList::Item::TYPE_CDROM:
         case proto::file_transfer::DriveList::Item::TYPE_RAM:

@@ -49,6 +49,24 @@ QJniObject parseUri(const QString& uri)
         "(Ljava/lang/String;)Landroid/net/Uri;", QJniObject::fromString(uri).object<jstring>());
 }
 
+//--------------------------------------------------------------------------------------------------
+// The granted folder |path| lies in. A folder granted inside another granted folder is the closer one.
+const GrantedFolders::Folder* findFolder(const QList<GrantedFolders::Folder>& folders, const QString& path)
+{
+    const GrantedFolders::Folder* folder = nullptr;
+
+    for (const GrantedFolders::Folder& candidate : folders)
+    {
+        if (candidate.path != path && !path.startsWith(candidate.path + '/'))
+            continue;
+
+        if (!folder || candidate.path.size() > folder->path.size())
+            folder = &candidate;
+    }
+
+    return folder;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -171,21 +189,22 @@ void GrantedFolders::remove(const QString& uri)
 
 //--------------------------------------------------------------------------------------------------
 // static
+bool GrantedFolders::contains(const QString& path)
+{
+    const QStringList names = path.split('/', Qt::SkipEmptyParts);
+    if (names.contains(".") || names.contains(".."))
+        return false;
+
+    return findFolder(list(), path) != nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 QString GrantedFolders::accessPath(const QString& path)
 {
     const QList<Folder> folders = list();
-    const Folder* folder = nullptr;
 
-    for (const Folder& candidate : folders)
-    {
-        if (candidate.path != path && !path.startsWith(candidate.path + '/'))
-            continue;
-
-        // A folder granted inside another granted folder is the closer one.
-        if (!folder || candidate.path.size() > folder->path.size())
-            folder = &candidate;
-    }
-
+    const Folder* folder = findFolder(folders, path);
     if (!folder)
         return path;
 

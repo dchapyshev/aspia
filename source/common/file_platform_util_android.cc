@@ -128,6 +128,7 @@ QIcon FilePlatformUtil::driveIcon(proto::file_transfer::DriveList::Item::Type ty
             return QIcon(":/img/desktop.svg");
 
         case proto::file_transfer::DriveList::Item::TYPE_ROOT_DIRECTORY:
+        case proto::file_transfer::DriveList::Item::TYPE_FOLDER:
             return QIcon(":/img/folder.svg");
 
         case proto::file_transfer::DriveList::Item::TYPE_DOWNLOAD_FOLDER:
