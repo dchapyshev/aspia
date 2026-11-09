@@ -170,6 +170,7 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     connect(nav_bar_, &BottomNavigationBar::sig_currentChanged,
             this, &AndroidMainWindow::onSectionChanged);
 
+#if !defined(ASPIA_GOOGLE_PLAY)
     connect(GuiApplication::findWorker<UpdateWorker>(), &UpdateWorker::sig_updateAvailable,
             this, [this](const UpdateInfo& update_info)
     {
@@ -183,6 +184,7 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 
         showUpdatePrompt(update_info);
     }, Qt::QueuedConnection);
+#endif // !defined(ASPIA_GOOGLE_PLAY)
 
     onSectionChanged(nav_bar_->currentIndex());
 

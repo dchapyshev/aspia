@@ -240,7 +240,9 @@ void SettingsWidget::buildSettings()
     buildInterfaceSection(layout);
     buildSecuritySection(layout);
     buildRouterSection(layout);
+#if !defined(ASPIA_GOOGLE_PLAY)
     buildUpdateSection(layout);
+#endif // !defined(ASPIA_GOOGLE_PLAY)
     layout->addStretch();
 
     // setWidget() deletes the previously set content widget.

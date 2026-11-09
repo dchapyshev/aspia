@@ -76,7 +76,10 @@ Application::Application(int& argc, char* argv[])
     setTheme(settings.theme());
 
     addWorker(std::make_unique<RouterWorker>());
+
+#if !defined(ASPIA_GOOGLE_PLAY)
     addWorker(std::make_unique<UpdateWorker>());
+#endif // !defined(ASPIA_GOOGLE_PLAY)
 
 #if !defined(Q_OS_ANDROID)
     if (Database::instance().isMcpEnabled())
