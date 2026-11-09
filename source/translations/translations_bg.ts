@@ -29,117 +29,117 @@
         <translation>Затваряне</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="104"/>
+        <location filename="../common/desktop/about_dialog.cc" line="113"/>
         <source>Version: %1 (%2)</source>
         <translation>Версия: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="109"/>
+        <location filename="../common/desktop/about_dialog.cc" line="118"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia е свободен софтуер, разпространяван под лиценза GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="110"/>
+        <location filename="../common/desktop/about_dialog.cc" line="119"/>
         <source>You can get a copy of license here:</source>
         <translation>Можете да получите копие на лиценза тук:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="115"/>
+        <location filename="../common/desktop/about_dialog.cc" line="124"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Можете да получите и превод на лиценза GNU GPL тук:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="119"/>
+        <location filename="../common/desktop/about_dialog.cc" line="128"/>
         <source>Links</source>
         <translation>Връзки</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="120"/>
+        <location filename="../common/desktop/about_dialog.cc" line="129"/>
         <source>Home page:</source>
         <translation>Начална страница:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="121"/>
+        <location filename="../common/desktop/about_dialog.cc" line="130"/>
         <source>GitHub page:</source>
         <translation>Страница в GitHub:</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="124"/>
+        <location filename="../common/desktop/about_dialog.cc" line="133"/>
         <source>Developers</source>
         <translation>Разработчици</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="126"/>
+        <location filename="../common/desktop/about_dialog.cc" line="135"/>
         <source>Translators</source>
         <translation>Преводачи</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="128"/>
+        <location filename="../common/desktop/about_dialog.cc" line="137"/>
         <source>Third-party components</source>
         <translation>Компоненти на трети страни</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="130"/>
+        <location filename="../common/desktop/about_dialog.cc" line="139"/>
         <source>Graphics and images</source>
         <translation>Графики и изображения</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="131"/>
+        <location filename="../common/desktop/about_dialog.cc" line="140"/>
         <source>Icons by %1</source>
         <translation>Икони от %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="158"/>
+        <location filename="../common/desktop/about_dialog.cc" line="167"/>
         <source>Application</source>
         <translation>Приложение</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="159"/>
+        <location filename="../common/desktop/about_dialog.cc" line="168"/>
         <source>Path: %1</source>
         <translation>Път: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="160"/>
+        <location filename="../common/desktop/about_dialog.cc" line="169"/>
         <source>Logging directory: %1</source>
         <translation>Папка на регистрационните файлове: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="162"/>
+        <location filename="../common/desktop/about_dialog.cc" line="171"/>
         <source>Logging file: %1</source>
         <translation>Регистрационен файл: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="167"/>
+        <location filename="../common/desktop/about_dialog.cc" line="176"/>
         <source>Build Information</source>
         <translation>Информация за компилацията</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="168"/>
+        <location filename="../common/desktop/about_dialog.cc" line="177"/>
         <source>Git branch: %1</source>
         <translation>Клон на Git: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="170"/>
+        <location filename="../common/desktop/about_dialog.cc" line="179"/>
         <source>Git commit: %1</source>
         <translation>Къмит на Git: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="175"/>
+        <location filename="../common/desktop/about_dialog.cc" line="184"/>
         <source>Compilation</source>
         <translation>Компилация</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="176"/>
+        <location filename="../common/desktop/about_dialog.cc" line="185"/>
         <source>Compilation date: %1</source>
         <translation>Дата на компилиране: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="177"/>
+        <location filename="../common/desktop/about_dialog.cc" line="186"/>
         <source>Compilation time: %1</source>
         <translation>Час на компилиране: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="206"/>
+        <location filename="../common/desktop/about_dialog.cc" line="215"/>
         <source>Version Information</source>
         <translation>Информация за версиите</translation>
     </message>
@@ -147,69 +147,69 @@
 <context>
     <name>AboutWidget</name>
     <message>
-        <location filename="../common/android/about_widget.cc" line="131"/>
-        <location filename="../common/android/about_widget.cc" line="135"/>
-        <location filename="../common/android/about_widget.cc" line="139"/>
+        <location filename="../common/android/about_widget.cc" line="136"/>
+        <location filename="../common/android/about_widget.cc" line="140"/>
+        <location filename="../common/android/about_widget.cc" line="144"/>
         <source>Logs</source>
         <translation>Регистрационни файлове</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="131"/>
+        <location filename="../common/android/about_widget.cc" line="136"/>
         <source>The logs are saved to &quot;%1&quot;.</source>
         <translation>Регистрационните файлове са запазени в &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="135"/>
+        <location filename="../common/android/about_widget.cc" line="140"/>
         <source>There are no logs to save.</source>
         <translation>Няма регистрационни файлове за запазване.</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="139"/>
+        <location filename="../common/android/about_widget.cc" line="144"/>
         <source>Unable to save the logs.</source>
         <translation>Неуспешно запазване на регистрационните файлове.</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="148"/>
+        <location filename="../common/android/about_widget.cc" line="153"/>
         <source>Version: %1 (%2)</source>
         <translation>Версия: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="151"/>
+        <location filename="../common/android/about_widget.cc" line="156"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia е свободен софтуер, разпространяван под лиценза GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="152"/>
+        <location filename="../common/android/about_widget.cc" line="157"/>
         <source>You can get a copy of license here:</source>
         <translation>Можете да получите копие на лиценза тук:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="155"/>
+        <location filename="../common/android/about_widget.cc" line="160"/>
         <source>Links</source>
         <translation>Връзки</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="155"/>
+        <location filename="../common/android/about_widget.cc" line="160"/>
         <source>Home page:</source>
         <translation>Начална страница:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="155"/>
+        <location filename="../common/android/about_widget.cc" line="160"/>
         <source>GitHub page:</source>
         <translation>Страница в GitHub:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="162"/>
+        <location filename="../common/android/about_widget.cc" line="167"/>
         <source>Developers</source>
         <translation>Разработчици</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="163"/>
+        <location filename="../common/android/about_widget.cc" line="168"/>
         <source>Translators</source>
         <translation>Преводачи</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="164"/>
+        <location filename="../common/android/about_widget.cc" line="169"/>
         <source>Third-party components</source>
         <translation>Компоненти на трети страни</translation>
     </message>
@@ -283,98 +283,125 @@
 <context>
     <name>AddressBarModel</name>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="82"/>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="469"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="84"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="503"/>
         <source>Home Folder</source>
         <translation>Домашна папка</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="86"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="88"/>
         <source>Desktop</source>
         <translation>Работен плот</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="90"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="92"/>
         <source>Downloads</source>
         <translation>Изтегляния</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="94"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="96"/>
         <source>Documents</source>
         <translation>Документи</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="98"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="100"/>
         <source>Pictures</source>
         <translation>Картини</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="302"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="104"/>
+        <source>Camera</source>
+        <translation>Камера</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="108"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="524"/>
+        <source>Internal Storage</source>
+        <translation>Вътрешно хранилище</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="112"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="527"/>
+        <source>SD Card</source>
+        <translation>SD карта</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="334"/>
         <source>Computer</source>
         <translation>Компютър</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="417"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="451"/>
         <source>Name</source>
         <translation>Име</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="420"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="454"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="454"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="488"/>
         <source>Optical Drive</source>
         <translation>Оптично устройство</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="457"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="491"/>
         <source>Removable Drive</source>
         <translation>Сменяемо устройство</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="460"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="494"/>
         <source>Fixed Drive</source>
         <translation>Локален диск</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="463"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="497"/>
         <source>Network Drive</source>
         <translation>Мрежово устройство</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="466"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="500"/>
         <source>RAM Drive</source>
         <translation>RAM диск</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="472"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="506"/>
         <source>Desktop Folder</source>
         <translation>Папка на работния плот</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="475"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="509"/>
         <source>Downloads Folder</source>
         <translation>Папка с изтегляния</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="478"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="512"/>
         <source>Documents Folder</source>
         <translation>Папка с документи</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="481"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="515"/>
         <source>Pictures Folder</source>
         <translation>Папка с картини</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="484"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="518"/>
         <source>Root Directory</source>
         <translation>Коренна папка</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="487"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="521"/>
+        <source>Camera Folder</source>
+        <translation>Папка на камерата</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="530"/>
+        <source>Folder</source>
+        <translation>Папка</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="533"/>
         <source>Unknown Drive</source>
         <translation>Неизвестно устройство</translation>
     </message>
@@ -383,29 +410,29 @@
     <name>AndroidMainWindow</name>
     <message>
         <location filename="../client/android/main_window.cc" line="145"/>
-        <location filename="../client/android/main_window.cc" line="318"/>
-        <location filename="../client/android/main_window.cc" line="366"/>
+        <location filename="../client/android/main_window.cc" line="320"/>
+        <location filename="../client/android/main_window.cc" line="368"/>
         <source>Local</source>
         <translation>Локални</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="146"/>
-        <location filename="../client/android/main_window.cc" line="322"/>
-        <location filename="../client/android/main_window.cc" line="386"/>
+        <location filename="../client/android/main_window.cc" line="324"/>
+        <location filename="../client/android/main_window.cc" line="388"/>
         <source>Remote</source>
         <translation>Отдалечени</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="147"/>
-        <location filename="../client/android/main_window.cc" line="326"/>
-        <location filename="../client/android/main_window.cc" line="376"/>
+        <location filename="../client/android/main_window.cc" line="328"/>
+        <location filename="../client/android/main_window.cc" line="378"/>
         <source>Routers</source>
         <translation>Рутери</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="148"/>
-        <location filename="../client/android/main_window.cc" line="330"/>
-        <location filename="../client/android/main_window.cc" line="396"/>
+        <location filename="../client/android/main_window.cc" line="332"/>
+        <location filename="../client/android/main_window.cc" line="398"/>
         <location filename="../host/android/main_window.cc" line="84"/>
         <location filename="../host/android/main_window.cc" line="100"/>
         <location filename="../host/android/main_window.cc" line="390"/>
@@ -413,8 +440,8 @@
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="487"/>
-        <location filename="../client/android/main_window.cc" line="774"/>
+        <location filename="../client/android/main_window.cc" line="489"/>
+        <location filename="../client/android/main_window.cc" line="776"/>
         <location filename="../host/android/main_window.cc" line="83"/>
         <location filename="../host/android/main_window.cc" line="99"/>
         <location filename="../host/android/main_window.cc" line="388"/>
@@ -422,37 +449,37 @@
         <translation>Връзка</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="488"/>
+        <location filename="../client/android/main_window.cc" line="490"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>Данните на хоста са повредени. Редактирайте хоста и ги въведете отново.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="610"/>
+        <location filename="../client/android/main_window.cc" line="612"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Двуфакторно удостоверяване - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="727"/>
+        <location filename="../client/android/main_window.cc" line="729"/>
         <source>Update</source>
         <translation>Актуализиране</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="728"/>
+        <location filename="../client/android/main_window.cc" line="730"/>
         <source>Version %1 is available.</source>
         <translation>Налична е версия %1.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="728"/>
+        <location filename="../client/android/main_window.cc" line="730"/>
         <source>Open</source>
         <translation>Отваряне</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="776"/>
+        <location filename="../client/android/main_window.cc" line="778"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Данните на рутера са повредени. Редактирайте рутера и ги въведете отново.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="777"/>
+        <location filename="../client/android/main_window.cc" line="779"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Рутерът, свързан с този хост, е изтрит. Редактирайте хоста, за да изберете друг рутер, или превключете на директна връзка.</translation>
     </message>
@@ -2780,32 +2807,32 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWidget</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="635"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="627"/>
         <source>The session was paused by a remote user</source>
         <translation>Сесията е поставена на пауза от отдалечения потребител</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="638"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="630"/>
         <source>The session is temporarily unavailable</source>
         <translation>Сесията е временно недостъпна</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="641"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="633"/>
         <source>The session is permanently unavailable</source>
         <translation>Сесията е трайно недостъпна</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="644"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="636"/>
         <source>Waiting for the remote user to confirm screen capture</source>
         <translation>Изчакване на отдалечения потребител да потвърди заснемането на екрана</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="647"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="639"/>
         <source>The remote device screen is locked</source>
         <translation>Екранът на отдалеченото устройство е заключен</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="650"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="642"/>
         <source>Error while receiving video stream: %1</source>
         <translation>Грешка при получаване на видеопотока: %1</translation>
     </message>
@@ -2964,37 +2991,37 @@ Credentials replaced: %2</source>
         <translation>Версията на хоста е по-нова от тази на клиента. Актуализирайте приложението.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1138"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1149"/>
         <source>Save File</source>
         <translation>Запазване на файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1139"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1170"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1181"/>
         <source>Could not save image</source>
         <translation>Неуспешно запазване на изображението</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1423"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1434"/>
         <source>Invalid user name or password.</source>
         <translation>Грешно потребителско име или парола.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1426"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1437"/>
         <source>The password has expired.</source>
         <translation>Паролата е изтекла.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1429"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1440"/>
         <source>The account is locked out.</source>
         <translation>Акаунтът е заключен.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1432"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1443"/>
         <source>The account is disabled.</source>
         <translation>Акаунтът е изключен.</translation>
     </message>
@@ -3319,116 +3346,116 @@ Credentials replaced: %2</source>
 <context>
     <name>FilePanelWidget</name>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="155"/>
+        <location filename="../client/android/file_panel_widget.cc" line="159"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Неуспешно получаване на списъка с дискове: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="174"/>
+        <location filename="../client/android/file_panel_widget.cc" line="178"/>
         <source>Home Folder</source>
         <translation>Домашна папка</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="178"/>
+        <location filename="../client/android/file_panel_widget.cc" line="182"/>
         <source>Desktop</source>
         <translation>Работен плот</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="182"/>
+        <location filename="../client/android/file_panel_widget.cc" line="186"/>
         <source>Internal Storage</source>
         <translation>Вътрешно хранилище</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="186"/>
+        <location filename="../client/android/file_panel_widget.cc" line="190"/>
         <source>SD Card</source>
         <translation>SD карта</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="190"/>
+        <location filename="../client/android/file_panel_widget.cc" line="194"/>
         <source>Downloads</source>
         <translation>Изтегляния</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="194"/>
+        <location filename="../client/android/file_panel_widget.cc" line="198"/>
         <source>Camera</source>
         <translation>Камера</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="198"/>
+        <location filename="../client/android/file_panel_widget.cc" line="202"/>
         <source>Pictures</source>
         <translation>Картини</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="202"/>
+        <location filename="../client/android/file_panel_widget.cc" line="206"/>
         <source>Documents</source>
         <translation>Документи</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="231"/>
+        <location filename="../client/android/file_panel_widget.cc" line="239"/>
         <source>Failed to get list of files: %1</source>
         <translation>Неуспешно получаване на списъка с файлове: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="274"/>
+        <location filename="../client/android/file_panel_widget.cc" line="282"/>
         <source>Failed to create directory: %1</source>
         <translation>Неуспешно създаване на папка: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="343"/>
+        <location filename="../client/android/file_panel_widget.cc" line="351"/>
         <source>Create Folder</source>
         <translation>Създаване на папка</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="346"/>
+        <location filename="../client/android/file_panel_widget.cc" line="354"/>
         <source>Folder name</source>
         <translation>Име на папката</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="349"/>
+        <location filename="../client/android/file_panel_widget.cc" line="357"/>
         <source>Cancel</source>
         <translation>Отказ</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="350"/>
+        <location filename="../client/android/file_panel_widget.cc" line="358"/>
         <source>Create</source>
         <translation>Създаване</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="363"/>
+        <location filename="../client/android/file_panel_widget.cc" line="371"/>
         <source>Name contains invalid characters.</source>
         <translation>Името съдържа невалидни знаци.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="389"/>
-        <location filename="../client/android/file_panel_widget.cc" line="389"/>
-        <location filename="../client/android/file_panel_widget.cc" line="517"/>
-        <location filename="../client/android/file_panel_widget.cc" line="528"/>
-        <location filename="../client/android/file_panel_widget.cc" line="529"/>
+        <location filename="../client/android/file_panel_widget.cc" line="397"/>
+        <location filename="../client/android/file_panel_widget.cc" line="397"/>
+        <location filename="../client/android/file_panel_widget.cc" line="525"/>
+        <location filename="../client/android/file_panel_widget.cc" line="536"/>
+        <location filename="../client/android/file_panel_widget.cc" line="537"/>
         <source>Delete</source>
         <translation>Изтриване</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="389"/>
+        <location filename="../client/android/file_panel_widget.cc" line="397"/>
         <source>Delete the selected items?</source>
         <translation>Да се изтрият ли избраните елементи?</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="514"/>
+        <location filename="../client/android/file_panel_widget.cc" line="522"/>
         <source>Upload</source>
         <translation>Качване</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="514"/>
+        <location filename="../client/android/file_panel_widget.cc" line="522"/>
         <source>Download</source>
         <translation>Изтегляне</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="529"/>
+        <location filename="../client/android/file_panel_widget.cc" line="537"/>
         <source>Delete &quot;%1&quot;?</source>
         <translation>Да се изтрие ли &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="544"/>
+        <location filename="../client/android/file_panel_widget.cc" line="552"/>
         <source>Error</source>
         <translation>Грешка</translation>
     </message>
@@ -3649,87 +3676,76 @@ Credentials replaced: %2</source>
 <context>
     <name>FileTransferWindow</name>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="62"/>
-        <location filename="../client/android/file_transfer_window.cc" line="187"/>
-        <location filename="../client/android/file_transfer_window.cc" line="269"/>
-        <location filename="../client/android/file_transfer_window.cc" line="462"/>
-        <location filename="../client/android/file_transfer_window.cc" line="473"/>
+        <location filename="../client/android/file_transfer_window.cc" line="57"/>
+        <location filename="../client/android/file_transfer_window.cc" line="179"/>
+        <location filename="../client/android/file_transfer_window.cc" line="417"/>
+        <location filename="../client/android/file_transfer_window.cc" line="428"/>
         <source>File Transfer</source>
         <translation>Прехвърляне на файлове</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="67"/>
-        <location filename="../client/android/file_transfer_window.cc" line="80"/>
+        <location filename="../client/android/file_transfer_window.cc" line="62"/>
+        <location filename="../client/android/file_transfer_window.cc" line="75"/>
         <source>This Device</source>
         <translation>Това устройство</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="146"/>
+        <location filename="../client/android/file_transfer_window.cc" line="138"/>
         <source>Connecting to host %1...</source>
         <translation>Свързване с хоста %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="166"/>
+        <location filename="../client/android/file_transfer_window.cc" line="158"/>
         <source>The connection to the host has been lost.</source>
         <translation>Връзката с хоста е загубена.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="176"/>
+        <location filename="../client/android/file_transfer_window.cc" line="168"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Версията на хоста е по-нова от тази на клиента. Актуализирайте приложението.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="188"/>
+        <location filename="../client/android/file_transfer_window.cc" line="180"/>
         <source>There is no logged in user on the host. The session is unavailable.</source>
         <translation>На хоста няма влязъл в системата потребител. Сесията е недостъпна.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="270"/>
-        <source>To browse files on this device, allow access to all files on the next screen.</source>
-        <translation>За да разглеждате файловете на това устройство, разрешете достъпа до всички файлове на следващия екран.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/file_transfer_window.cc" line="271"/>
-        <source>Allow</source>
-        <translation>Разрешаване</translation>
-    </message>
-    <message>
-        <location filename="../client/android/file_transfer_window.cc" line="307"/>
+        <location filename="../client/android/file_transfer_window.cc" line="262"/>
         <source>Connecting...</source>
         <translation>Свързване...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="330"/>
+        <location filename="../client/android/file_transfer_window.cc" line="285"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>Данните на рутера са повредени. Редактирайте рутера и ги въведете отново.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="331"/>
+        <location filename="../client/android/file_transfer_window.cc" line="286"/>
         <source>The specified router is unavailable.</source>
         <translation>Посоченият рутер е недостъпен.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="337"/>
+        <location filename="../client/android/file_transfer_window.cc" line="292"/>
         <source>Connecting to router...</source>
         <translation>Свързване с рутера...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="358"/>
+        <location filename="../client/android/file_transfer_window.cc" line="313"/>
         <source>Requesting connection to the host...</source>
         <translation>Заявяване на връзка с хоста...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="370"/>
+        <location filename="../client/android/file_transfer_window.cc" line="325"/>
         <source>Error requesting connection via router.</source>
         <translation>Грешка при заявяване на връзка чрез рутера.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="463"/>
+        <location filename="../client/android/file_transfer_window.cc" line="418"/>
         <source>Open a destination folder on the other side first.</source>
         <translation>Първо отворете папка местоназначение от другата страна.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="516"/>
+        <location filename="../client/android/file_transfer_window.cc" line="471"/>
         <source>Deleting</source>
         <translation>Изтриване</translation>
     </message>
@@ -5981,42 +5997,37 @@ Credentials imported: %5</source>
 <context>
     <name>PermissionsWidget</name>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="80"/>
+        <location filename="../host/android/permissions_widget.cc" line="59"/>
         <source>The following permissions are required for the app to work. Grant them in the system settings.</source>
         <translation>За работата на приложението са необходими следните разрешения. Предоставете ги в системните настройки.</translation>
     </message>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="93"/>
+        <location filename="../host/android/permissions_widget.cc" line="72"/>
         <source>Accessibility service</source>
         <translation>Услуга за достъпност</translation>
     </message>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="94"/>
+        <location filename="../host/android/permissions_widget.cc" line="73"/>
         <source>Display over other apps</source>
         <translation>Показване върху други приложения</translation>
     </message>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="95"/>
-        <source>All files access</source>
-        <translation>Достъп до всички файлове</translation>
-    </message>
-    <message>
-        <location filename="../host/android/permissions_widget.cc" line="96"/>
+        <location filename="../host/android/permissions_widget.cc" line="74"/>
         <source>Notifications</source>
         <translation>Известия</translation>
     </message>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="108"/>
+        <location filename="../host/android/permissions_widget.cc" line="86"/>
         <source>Open</source>
         <translation>Отваряне</translation>
     </message>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="109"/>
+        <location filename="../host/android/permissions_widget.cc" line="87"/>
         <source>Granted</source>
         <translation>Предоставено</translation>
     </message>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="125"/>
+        <location filename="../host/android/permissions_widget.cc" line="103"/>
         <source>The service is turned on, but Android has stopped it. Turn it off and on again.</source>
         <translation>Услугата е включена, но Android я е спрял. Изключете я и я включете отново.</translation>
     </message>
@@ -6387,32 +6398,32 @@ Credentials imported: %5</source>
         <translation>Елементи на страница:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="118"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="119"/>
         <source>All Session Types</source>
         <translation>Всички типове сесии</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="281"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="282"/>
         <source>Save File</source>
         <translation>Запазване на файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="281"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="282"/>
         <source>JSON files (*.json)</source>
         <translation>JSON файлове (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="292"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="293"/>
         <source>Could not open file for writing.</source>
         <translation>Неуспешно отваряне на файла за запис.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="327"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="328"/>
         <source>Unable to write file.</source>
         <translation>Неуспешно записване на файла.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="537"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="538"/>
         <source>%n entry(s)</source>
         <translation>
             <numerusform>%n запис</numerusform>
@@ -8602,314 +8613,356 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="173"/>
-        <location filename="../host/android/settings_widget.cc" line="203"/>
+        <location filename="../client/android/settings_widget.cc" line="177"/>
+        <location filename="../host/android/settings_widget.cc" line="205"/>
         <source>Update</source>
         <translation>Актуализиране</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="202"/>
+        <location filename="../client/android/settings_widget.cc" line="206"/>
         <source>Credentials</source>
         <translation>Идентификационни данни</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="210"/>
-        <location filename="../host/android/settings_widget.cc" line="170"/>
+        <location filename="../client/android/settings_widget.cc" line="214"/>
+        <location filename="../host/android/settings_widget.cc" line="172"/>
         <source>About</source>
         <translation>Относно</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="289"/>
-        <location filename="../host/android/settings_widget.cc" line="262"/>
+        <location filename="../client/android/settings_widget.cc" line="313"/>
+        <location filename="../host/android/settings_widget.cc" line="349"/>
         <source>Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="292"/>
-        <location filename="../host/android/settings_widget.cc" line="267"/>
+        <location filename="../client/android/settings_widget.cc" line="316"/>
+        <location filename="../host/android/settings_widget.cc" line="354"/>
         <source>Theme</source>
         <translation>Тема</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="305"/>
+        <location filename="../client/android/settings_widget.cc" line="329"/>
         <source>Display name when connected</source>
         <translation>Показвано име при свързване</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="317"/>
-        <location filename="../host/android/settings_widget.cc" line="283"/>
+        <location filename="../client/android/settings_widget.cc" line="341"/>
+        <location filename="../host/android/settings_widget.cc" line="370"/>
         <source>Security</source>
         <translation>Защита</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="219"/>
-        <location filename="../client/android/settings_widget.cc" line="319"/>
+        <location filename="../client/android/settings_widget.cc" line="240"/>
+        <location filename="../client/android/settings_widget.cc" line="343"/>
         <source>Change Master Password</source>
         <translation>Промяна на главната парола</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="327"/>
+        <location filename="../client/android/settings_widget.cc" line="221"/>
+        <location filename="../client/android/settings_widget.cc" line="500"/>
+        <location filename="../host/android/settings_widget.cc" line="277"/>
+        <location filename="../host/android/settings_widget.cc" line="512"/>
+        <source>Add folder</source>
+        <translation>Добавяне на папка</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="227"/>
+        <location filename="../client/android/settings_widget.cc" line="480"/>
+        <location filename="../client/android/settings_widget.cc" line="641"/>
+        <location filename="../host/android/settings_widget.cc" line="283"/>
+        <location filename="../host/android/settings_widget.cc" line="492"/>
+        <location filename="../host/android/settings_widget.cc" line="618"/>
+        <source>File Transfer</source>
+        <translation>Прехвърляне на файлове</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="228"/>
+        <location filename="../host/android/settings_widget.cc" line="284"/>
+        <source>This folder cannot be added. Choose a folder in the internal storage or on the SD card.</source>
+        <translation>Тази папка не може да бъде добавена. Изберете папка във вътрешното хранилище или на SD картата.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="351"/>
         <source>Unlock with biometrics</source>
         <translation>Отключване с биометрия</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="352"/>
+        <location filename="../client/android/settings_widget.cc" line="376"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>Настройте пръстов отпечатък в системните настройки, за да използвате тази функция.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="354"/>
+        <location filename="../client/android/settings_widget.cc" line="378"/>
         <source>Biometrics are not available on this device.</source>
         <translation>Биометрията не е налична на това устройство.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="365"/>
+        <location filename="../client/android/settings_widget.cc" line="389"/>
         <source>UDP Connections</source>
         <translation>UDP връзки</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="379"/>
+        <location filename="../client/android/settings_widget.cc" line="403"/>
         <source>Allow direct connections</source>
         <translation>Разрешаване на директни връзки</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="380"/>
+        <location filename="../client/android/settings_widget.cc" line="404"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Разрешаване на UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="381"/>
+        <location filename="../client/android/settings_widget.cc" line="405"/>
         <source>Allow PCP protocol</source>
         <translation>Разрешаване на протокола PCP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="382"/>
+        <location filename="../client/android/settings_widget.cc" line="406"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Разрешаване на протокола NAT-PMP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="383"/>
+        <location filename="../client/android/settings_widget.cc" line="407"/>
         <source>Allow UPnP protocol</source>
         <translation>Разрешаване на протокола UPnP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="389"/>
+        <location filename="../client/android/settings_widget.cc" line="413"/>
         <source>Remote Desktop</source>
         <translation>Отдалечен работен плот</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="391"/>
+        <location filename="../client/android/settings_widget.cc" line="415"/>
         <source>Enable audio</source>
         <translation>Включване на звука</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="396"/>
+        <location filename="../client/android/settings_widget.cc" line="420"/>
         <source>Enable clipboard</source>
         <translation>Включване на клипборда</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../client/android/settings_widget.cc" line="425"/>
         <source>Show shape of remote cursor</source>
         <translation>Показване на формата на отдалечения курсор</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="407"/>
+        <location filename="../client/android/settings_widget.cc" line="431"/>
         <source>Show position of remote cursor</source>
         <translation>Показване на позицията на отдалечения курсор</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="413"/>
+        <location filename="../client/android/settings_widget.cc" line="437"/>
         <source>Disable desktop effects</source>
         <translation>Изключване на ефектите на работния плот</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="419"/>
+        <location filename="../client/android/settings_widget.cc" line="443"/>
         <source>Disable desktop wallpaper</source>
         <translation>Изключване на тапета на работния плот</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="425"/>
+        <location filename="../client/android/settings_widget.cc" line="449"/>
         <source>Lock computer at disconnect</source>
         <translation>Заключване на компютъра при прекъсване на връзката</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="431"/>
+        <location filename="../client/android/settings_widget.cc" line="455"/>
         <source>Block remote input</source>
         <translation>Блокиране на отдалечения вход</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="439"/>
+        <location filename="../client/android/settings_widget.cc" line="463"/>
         <source>Quality</source>
         <translation>Качество</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="440"/>
+        <location filename="../client/android/settings_widget.cc" line="464"/>
         <source>Automatic</source>
         <translation>Автоматично</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="441"/>
+        <location filename="../client/android/settings_widget.cc" line="465"/>
         <source>Low</source>
         <translation>Ниско</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="442"/>
+        <location filename="../client/android/settings_widget.cc" line="466"/>
         <source>Medium</source>
         <translation>Средно</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="443"/>
+        <location filename="../client/android/settings_widget.cc" line="467"/>
         <source>High</source>
         <translation>Високо</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="456"/>
-        <location filename="../host/android/settings_widget.cc" line="405"/>
+        <location filename="../client/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="516"/>
+        <source>Files can be transferred only in the folders added here.</source>
+        <translation>Файловете могат да се прехвърлят само в добавените тук папки.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="513"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>Updates</source>
         <translation>Актуализации</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="460"/>
+        <location filename="../client/android/settings_widget.cc" line="517"/>
         <source>Check for updates on startup</source>
         <translation>Проверка за актуализации при стартиране</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="467"/>
-        <location filename="../host/android/settings_widget.cc" line="408"/>
+        <location filename="../client/android/settings_widget.cc" line="524"/>
+        <location filename="../host/android/settings_widget.cc" line="528"/>
         <source>Update channel</source>
         <translation>Канал за актуализации</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="468"/>
-        <location filename="../host/android/settings_widget.cc" line="409"/>
+        <location filename="../client/android/settings_widget.cc" line="525"/>
+        <location filename="../host/android/settings_widget.cc" line="529"/>
         <source>Stable</source>
         <translation>Стабилен</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="469"/>
-        <location filename="../host/android/settings_widget.cc" line="410"/>
+        <location filename="../client/android/settings_widget.cc" line="526"/>
+        <location filename="../host/android/settings_widget.cc" line="530"/>
         <source>Beta</source>
         <translation>Бета</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="470"/>
-        <location filename="../host/android/settings_widget.cc" line="411"/>
+        <location filename="../client/android/settings_widget.cc" line="527"/>
+        <location filename="../host/android/settings_widget.cc" line="531"/>
         <source>Alpha</source>
         <translation>Алфа</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="481"/>
-        <location filename="../host/android/settings_widget.cc" line="425"/>
+        <location filename="../client/android/settings_widget.cc" line="538"/>
+        <location filename="../host/android/settings_widget.cc" line="545"/>
         <source>Update server</source>
         <translation>Сървър за актуализации</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="486"/>
-        <location filename="../host/android/settings_widget.cc" line="430"/>
+        <location filename="../client/android/settings_widget.cc" line="543"/>
+        <location filename="../host/android/settings_widget.cc" line="550"/>
         <source>Public key</source>
         <translation>Публичен ключ</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="492"/>
-        <location filename="../host/android/settings_widget.cc" line="436"/>
+        <location filename="../client/android/settings_widget.cc" line="549"/>
+        <location filename="../host/android/settings_widget.cc" line="556"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>Ако не е посочен сървър за актуализации, се използва сървърът по подразбиране. Ако не е посочен публичен ключ, се използва вграденият ключ.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="546"/>
-        <location filename="../host/android/settings_widget.cc" line="490"/>
+        <location filename="../client/android/settings_widget.cc" line="603"/>
+        <location filename="../host/android/settings_widget.cc" line="610"/>
         <source>Check for updates</source>
         <translation>Проверка за актуализации</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="570"/>
+        <location filename="../client/android/settings_widget.cc" line="627"/>
         <source>Enable biometric unlock</source>
         <translation>Включване на отключването с биометрия</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="571"/>
+        <location filename="../client/android/settings_widget.cc" line="628"/>
         <source>Cancel</source>
         <translation>Отказ</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="179"/>
+        <location filename="../client/android/settings_widget.cc" line="642"/>
+        <location filename="../host/android/settings_widget.cc" line="619"/>
+        <source>Remove the folder %1 from file transfer?</source>
+        <translation>Да се премахне ли папката %1 от прехвърлянето на файлове?</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="642"/>
+        <location filename="../host/android/settings_widget.cc" line="619"/>
+        <source>Remove</source>
+        <translation>Премахване</translation>
+    </message>
+    <message>
+        <location filename="../host/android/settings_widget.cc" line="181"/>
         <source>Users</source>
         <translation>Потребители</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="188"/>
+        <location filename="../host/android/settings_widget.cc" line="190"/>
         <source>Edit User</source>
         <translation>Редактиране на потребител</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="188"/>
+        <location filename="../host/android/settings_widget.cc" line="190"/>
         <source>Add User</source>
         <translation>Добавяне на потребител</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="285"/>
+        <location filename="../host/android/settings_widget.cc" line="372"/>
         <source>Manage users</source>
         <translation>Управление на потребителите</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="293"/>
+        <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>Change password</source>
         <translation>Промяна на паролата</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="297"/>
+        <location filename="../host/android/settings_widget.cc" line="384"/>
         <source>Disable password protection</source>
         <translation>Изключване на защитата с парола</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="306"/>
+        <location filename="../host/android/settings_widget.cc" line="393"/>
         <source>Enable password protection</source>
         <translation>Включване на защитата с парола</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="321"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
         <source>Router</source>
         <translation>Рутер</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="326"/>
+        <location filename="../host/android/settings_widget.cc" line="413"/>
         <source>Enable the use of a router</source>
         <translation>Включване на използването на рутер</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="331"/>
+        <location filename="../host/android/settings_widget.cc" line="418"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="337"/>
+        <location filename="../host/android/settings_widget.cc" line="424"/>
         <source>Public Key</source>
         <translation>Публичен ключ</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="342"/>
+        <location filename="../host/android/settings_widget.cc" line="429"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Необходим е рутер за свързване с компютър, когато няма директна връзка (заобикаляне на NAT). Aspia не предоставя публичен рутер, но можете да инсталирате свой собствен. Можете да изтеглите рутера от &lt;a href=&quot;https://aspia.org&quot;&gt;официалния уебсайт&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="504"/>
-        <location filename="../host/android/settings_widget.cc" line="525"/>
+        <location filename="../host/android/settings_widget.cc" line="218"/>
+        <location filename="../host/android/settings_widget.cc" line="239"/>
         <source>Error</source>
         <translation>Грешка</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="504"/>
-        <location filename="../host/android/settings_widget.cc" line="525"/>
+        <location filename="../host/android/settings_widget.cc" line="218"/>
+        <location filename="../host/android/settings_widget.cc" line="239"/>
         <source>An error occurred while processing the password.</source>
         <translation>Възникна грешка при обработка на паролата.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="547"/>
+        <location filename="../host/android/settings_widget.cc" line="261"/>
         <source>Import</source>
         <translation>Импортиране</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="547"/>
+        <location filename="../host/android/settings_widget.cc" line="261"/>
         <source>JSON files (*.json)</source>
         <translation>JSON файлове (*.json)</translation>
     </message>
@@ -9095,7 +9148,7 @@ Credentials imported: %5</source>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="177"/>
+        <location filename="../client/android/statistics_dialog.cc" line="192"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
@@ -9110,7 +9163,7 @@ Credentials imported: %5</source>
         <translation>Стойност</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="214"/>
+        <location filename="../client/android/statistics_dialog.cc" line="229"/>
         <source>Close</source>
         <translation>Затваряне</translation>
     </message>
@@ -14090,17 +14143,17 @@ Credentials imported: %5</source>
 <context>
     <name>VideoWorker</name>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="45"/>
+        <location filename="../client/workers/video_worker.cc" line="44"/>
         <source>Unable to create the directory for the recording.</source>
         <translation>Неуспешно създаване на папката за записа.</translation>
     </message>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="47"/>
+        <location filename="../client/workers/video_worker.cc" line="46"/>
         <source>Unable to create the file for the recording.</source>
         <translation>Неуспешно създаване на файла за записа.</translation>
     </message>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="49"/>
+        <location filename="../client/workers/video_worker.cc" line="48"/>
         <source>An error occurred while writing the recording.</source>
         <translation>Възникна грешка по време на записа.</translation>
     </message>

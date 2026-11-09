@@ -29,117 +29,117 @@
         <translation>關閉</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="104"/>
+        <location filename="../common/desktop/about_dialog.cc" line="113"/>
         <source>Version: %1 (%2)</source>
         <translation>版本：%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="109"/>
+        <location filename="../common/desktop/about_dialog.cc" line="118"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia 是依 GNU General Public License 3 發布的自由軟體。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="110"/>
+        <location filename="../common/desktop/about_dialog.cc" line="119"/>
         <source>You can get a copy of license here:</source>
         <translation>您可以在這裡取得授權副本：</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="115"/>
+        <location filename="../common/desktop/about_dialog.cc" line="124"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>您也可以在這裡取得 GNU GPL 授權的翻譯：</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="119"/>
+        <location filename="../common/desktop/about_dialog.cc" line="128"/>
         <source>Links</source>
         <translation>連結</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="120"/>
+        <location filename="../common/desktop/about_dialog.cc" line="129"/>
         <source>Home page:</source>
         <translation>首頁：</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="121"/>
+        <location filename="../common/desktop/about_dialog.cc" line="130"/>
         <source>GitHub page:</source>
         <translation>GitHub 頁面：</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="124"/>
+        <location filename="../common/desktop/about_dialog.cc" line="133"/>
         <source>Developers</source>
         <translation>開發人員</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="126"/>
+        <location filename="../common/desktop/about_dialog.cc" line="135"/>
         <source>Translators</source>
         <translation>翻譯人員</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="128"/>
+        <location filename="../common/desktop/about_dialog.cc" line="137"/>
         <source>Third-party components</source>
         <translation>第三方元件</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="130"/>
+        <location filename="../common/desktop/about_dialog.cc" line="139"/>
         <source>Graphics and images</source>
         <translation>圖形與影像</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="131"/>
+        <location filename="../common/desktop/about_dialog.cc" line="140"/>
         <source>Icons by %1</source>
         <translation>圖示由 %1 提供</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="158"/>
+        <location filename="../common/desktop/about_dialog.cc" line="167"/>
         <source>Application</source>
         <translation>應用程式</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="159"/>
+        <location filename="../common/desktop/about_dialog.cc" line="168"/>
         <source>Path: %1</source>
         <translation>路徑：%1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="160"/>
+        <location filename="../common/desktop/about_dialog.cc" line="169"/>
         <source>Logging directory: %1</source>
         <translation>記錄資料夾：%1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="162"/>
+        <location filename="../common/desktop/about_dialog.cc" line="171"/>
         <source>Logging file: %1</source>
         <translation>記錄檔：%1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="167"/>
+        <location filename="../common/desktop/about_dialog.cc" line="176"/>
         <source>Build Information</source>
         <translation>組建資訊</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="168"/>
+        <location filename="../common/desktop/about_dialog.cc" line="177"/>
         <source>Git branch: %1</source>
         <translation>Git 分支：%1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="170"/>
+        <location filename="../common/desktop/about_dialog.cc" line="179"/>
         <source>Git commit: %1</source>
         <translation>Git 提交：%1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="175"/>
+        <location filename="../common/desktop/about_dialog.cc" line="184"/>
         <source>Compilation</source>
         <translation>編譯</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="176"/>
+        <location filename="../common/desktop/about_dialog.cc" line="185"/>
         <source>Compilation date: %1</source>
         <translation>編譯日期：%1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="177"/>
+        <location filename="../common/desktop/about_dialog.cc" line="186"/>
         <source>Compilation time: %1</source>
         <translation>編譯時間：%1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/about_dialog.cc" line="206"/>
+        <location filename="../common/desktop/about_dialog.cc" line="215"/>
         <source>Version Information</source>
         <translation>版本資訊</translation>
     </message>
@@ -147,69 +147,69 @@
 <context>
     <name>AboutWidget</name>
     <message>
-        <location filename="../common/android/about_widget.cc" line="131"/>
-        <location filename="../common/android/about_widget.cc" line="135"/>
-        <location filename="../common/android/about_widget.cc" line="139"/>
+        <location filename="../common/android/about_widget.cc" line="136"/>
+        <location filename="../common/android/about_widget.cc" line="140"/>
+        <location filename="../common/android/about_widget.cc" line="144"/>
         <source>Logs</source>
         <translation>記錄檔</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="131"/>
+        <location filename="../common/android/about_widget.cc" line="136"/>
         <source>The logs are saved to &quot;%1&quot;.</source>
         <translation>記錄檔已儲存至「%1」。</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="135"/>
+        <location filename="../common/android/about_widget.cc" line="140"/>
         <source>There are no logs to save.</source>
         <translation>沒有可儲存的記錄檔。</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="139"/>
+        <location filename="../common/android/about_widget.cc" line="144"/>
         <source>Unable to save the logs.</source>
         <translation>無法儲存記錄檔。</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="148"/>
+        <location filename="../common/android/about_widget.cc" line="153"/>
         <source>Version: %1 (%2)</source>
         <translation>版本：%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="151"/>
+        <location filename="../common/android/about_widget.cc" line="156"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia 是依 GNU General Public License 3 發布的自由軟體。</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="152"/>
+        <location filename="../common/android/about_widget.cc" line="157"/>
         <source>You can get a copy of license here:</source>
         <translation>您可以在這裡取得授權副本：</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="155"/>
+        <location filename="../common/android/about_widget.cc" line="160"/>
         <source>Links</source>
         <translation>連結</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="155"/>
+        <location filename="../common/android/about_widget.cc" line="160"/>
         <source>Home page:</source>
         <translation>首頁：</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="155"/>
+        <location filename="../common/android/about_widget.cc" line="160"/>
         <source>GitHub page:</source>
         <translation>GitHub 頁面：</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="162"/>
+        <location filename="../common/android/about_widget.cc" line="167"/>
         <source>Developers</source>
         <translation>開發人員</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="163"/>
+        <location filename="../common/android/about_widget.cc" line="168"/>
         <source>Translators</source>
         <translation>翻譯人員</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="164"/>
+        <location filename="../common/android/about_widget.cc" line="169"/>
         <source>Third-party components</source>
         <translation>第三方元件</translation>
     </message>
@@ -283,98 +283,125 @@
 <context>
     <name>AddressBarModel</name>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="82"/>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="469"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="84"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="503"/>
         <source>Home Folder</source>
         <translation>主資料夾</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="86"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="88"/>
         <source>Desktop</source>
         <translation>桌面</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="90"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="92"/>
         <source>Downloads</source>
         <translation>下載</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="94"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="96"/>
         <source>Documents</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="98"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="100"/>
         <source>Pictures</source>
         <translation>圖片</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="302"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="104"/>
+        <source>Camera</source>
+        <translation>相機</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="108"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="524"/>
+        <source>Internal Storage</source>
+        <translation>內部儲存空間</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="112"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="527"/>
+        <source>SD Card</source>
+        <translation>SD 卡</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="334"/>
         <source>Computer</source>
         <translation>電腦</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="417"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="451"/>
         <source>Name</source>
         <translation>名稱</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="420"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="454"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="454"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="488"/>
         <source>Optical Drive</source>
         <translation>光碟機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="457"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="491"/>
         <source>Removable Drive</source>
         <translation>卸除式磁碟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="460"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="494"/>
         <source>Fixed Drive</source>
         <translation>本機磁碟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="463"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="497"/>
         <source>Network Drive</source>
         <translation>網路磁碟機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="466"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="500"/>
         <source>RAM Drive</source>
         <translation>RAM 磁碟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="472"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="506"/>
         <source>Desktop Folder</source>
         <translation>桌面資料夾</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="475"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="509"/>
         <source>Downloads Folder</source>
         <translation>下載資料夾</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="478"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="512"/>
         <source>Documents Folder</source>
         <translation>文件資料夾</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="481"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="515"/>
         <source>Pictures Folder</source>
         <translation>圖片資料夾</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="484"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="518"/>
         <source>Root Directory</source>
         <translation>根目錄</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="487"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="521"/>
+        <source>Camera Folder</source>
+        <translation>相機資料夾</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="530"/>
+        <source>Folder</source>
+        <translation>資料夾</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="533"/>
         <source>Unknown Drive</source>
         <translation>未知磁碟</translation>
     </message>
@@ -383,29 +410,29 @@
     <name>AndroidMainWindow</name>
     <message>
         <location filename="../client/android/main_window.cc" line="145"/>
-        <location filename="../client/android/main_window.cc" line="318"/>
-        <location filename="../client/android/main_window.cc" line="366"/>
+        <location filename="../client/android/main_window.cc" line="320"/>
+        <location filename="../client/android/main_window.cc" line="368"/>
         <source>Local</source>
         <translation>本機</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="146"/>
-        <location filename="../client/android/main_window.cc" line="322"/>
-        <location filename="../client/android/main_window.cc" line="386"/>
+        <location filename="../client/android/main_window.cc" line="324"/>
+        <location filename="../client/android/main_window.cc" line="388"/>
         <source>Remote</source>
         <translation>遠端</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="147"/>
-        <location filename="../client/android/main_window.cc" line="326"/>
-        <location filename="../client/android/main_window.cc" line="376"/>
+        <location filename="../client/android/main_window.cc" line="328"/>
+        <location filename="../client/android/main_window.cc" line="378"/>
         <source>Routers</source>
         <translation>路由器</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="148"/>
-        <location filename="../client/android/main_window.cc" line="330"/>
-        <location filename="../client/android/main_window.cc" line="396"/>
+        <location filename="../client/android/main_window.cc" line="332"/>
+        <location filename="../client/android/main_window.cc" line="398"/>
         <location filename="../host/android/main_window.cc" line="84"/>
         <location filename="../host/android/main_window.cc" line="100"/>
         <location filename="../host/android/main_window.cc" line="390"/>
@@ -413,38 +440,38 @@
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="727"/>
+        <location filename="../client/android/main_window.cc" line="729"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="728"/>
+        <location filename="../client/android/main_window.cc" line="730"/>
         <source>Version %1 is available.</source>
         <translation>版本 %1 已可使用。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="777"/>
+        <location filename="../client/android/main_window.cc" line="779"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>與此主機關聯的路由器已被刪除。請編輯主機以選擇其他路由器，或改用直接連線。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="610"/>
+        <location filename="../client/android/main_window.cc" line="612"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>雙重驗證 - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="488"/>
+        <location filename="../client/android/main_window.cc" line="490"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>主機的資料已損壞。請編輯主機並重新輸入。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="776"/>
+        <location filename="../client/android/main_window.cc" line="778"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>路由器的資料已損壞。請編輯路由器並重新輸入。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="487"/>
-        <location filename="../client/android/main_window.cc" line="774"/>
+        <location filename="../client/android/main_window.cc" line="489"/>
+        <location filename="../client/android/main_window.cc" line="776"/>
         <location filename="../host/android/main_window.cc" line="83"/>
         <location filename="../host/android/main_window.cc" line="99"/>
         <location filename="../host/android/main_window.cc" line="388"/>
@@ -457,7 +484,7 @@
         <translation>權限</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="728"/>
+        <location filename="../client/android/main_window.cc" line="730"/>
         <source>Open</source>
         <translation>開啟</translation>
     </message>
@@ -2769,32 +2796,32 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWidget</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="635"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="627"/>
         <source>The session was paused by a remote user</source>
         <translation>工作階段已被遠端使用者暫停</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="638"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="630"/>
         <source>The session is temporarily unavailable</source>
         <translation>工作階段暫時無法使用</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="641"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="633"/>
         <source>The session is permanently unavailable</source>
         <translation>工作階段永久無法使用</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="644"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="636"/>
         <source>Waiting for the remote user to confirm screen capture</source>
         <translation>正在等待遠端使用者確認螢幕擷取</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="647"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="639"/>
         <source>The remote device screen is locked</source>
         <translation>遠端裝置的螢幕已鎖定</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="650"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="642"/>
         <source>Error while receiving video stream: %1</source>
         <translation>接收視訊串流時發生錯誤：%1</translation>
     </message>
@@ -2802,37 +2829,37 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1138"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1149"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1139"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1170"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1181"/>
         <source>Could not save image</source>
         <translation>無法儲存影像</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1423"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1434"/>
         <source>Invalid user name or password.</source>
         <translation>使用者名稱或密碼錯誤。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1426"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1437"/>
         <source>The password has expired.</source>
         <translation>密碼已過期。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1429"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1440"/>
         <source>The account is locked out.</source>
         <translation>帳戶已遭鎖定。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1432"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1443"/>
         <source>The account is disabled.</source>
         <translation>帳戶已停用。</translation>
     </message>
@@ -3308,116 +3335,116 @@ Credentials replaced: %2</source>
 <context>
     <name>FilePanelWidget</name>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="155"/>
+        <location filename="../client/android/file_panel_widget.cc" line="159"/>
         <source>Failed to get list of drives: %1</source>
         <translation>無法取得磁碟清單：%1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="174"/>
+        <location filename="../client/android/file_panel_widget.cc" line="178"/>
         <source>Home Folder</source>
         <translation>主資料夾</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="178"/>
+        <location filename="../client/android/file_panel_widget.cc" line="182"/>
         <source>Desktop</source>
         <translation>桌面</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="182"/>
+        <location filename="../client/android/file_panel_widget.cc" line="186"/>
         <source>Internal Storage</source>
         <translation>內部儲存空間</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="186"/>
+        <location filename="../client/android/file_panel_widget.cc" line="190"/>
         <source>SD Card</source>
         <translation>SD 卡</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="190"/>
+        <location filename="../client/android/file_panel_widget.cc" line="194"/>
         <source>Downloads</source>
         <translation>下載</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="194"/>
+        <location filename="../client/android/file_panel_widget.cc" line="198"/>
         <source>Camera</source>
         <translation>相機</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="198"/>
+        <location filename="../client/android/file_panel_widget.cc" line="202"/>
         <source>Pictures</source>
         <translation>圖片</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="202"/>
+        <location filename="../client/android/file_panel_widget.cc" line="206"/>
         <source>Documents</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="231"/>
+        <location filename="../client/android/file_panel_widget.cc" line="239"/>
         <source>Failed to get list of files: %1</source>
         <translation>無法取得檔案清單：%1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="274"/>
+        <location filename="../client/android/file_panel_widget.cc" line="282"/>
         <source>Failed to create directory: %1</source>
         <translation>無法建立資料夾：%1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="343"/>
+        <location filename="../client/android/file_panel_widget.cc" line="351"/>
         <source>Create Folder</source>
         <translation>建立資料夾</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="346"/>
+        <location filename="../client/android/file_panel_widget.cc" line="354"/>
         <source>Folder name</source>
         <translation>資料夾名稱</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="349"/>
+        <location filename="../client/android/file_panel_widget.cc" line="357"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="350"/>
+        <location filename="../client/android/file_panel_widget.cc" line="358"/>
         <source>Create</source>
         <translation>建立</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="363"/>
+        <location filename="../client/android/file_panel_widget.cc" line="371"/>
         <source>Name contains invalid characters.</source>
         <translation>名稱包含無效字元。</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="389"/>
-        <location filename="../client/android/file_panel_widget.cc" line="389"/>
-        <location filename="../client/android/file_panel_widget.cc" line="517"/>
-        <location filename="../client/android/file_panel_widget.cc" line="528"/>
-        <location filename="../client/android/file_panel_widget.cc" line="529"/>
+        <location filename="../client/android/file_panel_widget.cc" line="397"/>
+        <location filename="../client/android/file_panel_widget.cc" line="397"/>
+        <location filename="../client/android/file_panel_widget.cc" line="525"/>
+        <location filename="../client/android/file_panel_widget.cc" line="536"/>
+        <location filename="../client/android/file_panel_widget.cc" line="537"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="389"/>
+        <location filename="../client/android/file_panel_widget.cc" line="397"/>
         <source>Delete the selected items?</source>
         <translation>要刪除選擇的項目嗎？</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="514"/>
+        <location filename="../client/android/file_panel_widget.cc" line="522"/>
         <source>Upload</source>
         <translation>上傳</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="514"/>
+        <location filename="../client/android/file_panel_widget.cc" line="522"/>
         <source>Download</source>
         <translation>下載</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="529"/>
+        <location filename="../client/android/file_panel_widget.cc" line="537"/>
         <source>Delete &quot;%1&quot;?</source>
         <translation>要刪除「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="544"/>
+        <location filename="../client/android/file_panel_widget.cc" line="552"/>
         <source>Error</source>
         <translation>錯誤</translation>
     </message>
@@ -3653,87 +3680,76 @@ Credentials replaced: %2</source>
         <translation>工作階段錯誤：%1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="62"/>
-        <location filename="../client/android/file_transfer_window.cc" line="187"/>
-        <location filename="../client/android/file_transfer_window.cc" line="269"/>
-        <location filename="../client/android/file_transfer_window.cc" line="462"/>
-        <location filename="../client/android/file_transfer_window.cc" line="473"/>
+        <location filename="../client/android/file_transfer_window.cc" line="57"/>
+        <location filename="../client/android/file_transfer_window.cc" line="179"/>
+        <location filename="../client/android/file_transfer_window.cc" line="417"/>
+        <location filename="../client/android/file_transfer_window.cc" line="428"/>
         <source>File Transfer</source>
         <translation>檔案傳輸</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="67"/>
-        <location filename="../client/android/file_transfer_window.cc" line="80"/>
+        <location filename="../client/android/file_transfer_window.cc" line="62"/>
+        <location filename="../client/android/file_transfer_window.cc" line="75"/>
         <source>This Device</source>
         <translation>此裝置</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="270"/>
-        <source>To browse files on this device, allow access to all files on the next screen.</source>
-        <translation>若要瀏覽此裝置上的檔案，請在下一個畫面允許存取所有檔案。</translation>
-    </message>
-    <message>
-        <location filename="../client/android/file_transfer_window.cc" line="271"/>
-        <source>Allow</source>
-        <translation>允許</translation>
-    </message>
-    <message>
-        <location filename="../client/android/file_transfer_window.cc" line="146"/>
+        <location filename="../client/android/file_transfer_window.cc" line="138"/>
         <source>Connecting to host %1...</source>
         <translation>正在連線到主機 %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="166"/>
+        <location filename="../client/android/file_transfer_window.cc" line="158"/>
         <source>The connection to the host has been lost.</source>
         <translation>與主機的連線已中斷。</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="330"/>
+        <location filename="../client/android/file_transfer_window.cc" line="285"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>路由器的資料已損壞。請編輯路由器並重新輸入。</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="331"/>
+        <location filename="../client/android/file_transfer_window.cc" line="286"/>
         <source>The specified router is unavailable.</source>
         <translation>指定的路由器無法使用。</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="370"/>
+        <location filename="../client/android/file_transfer_window.cc" line="325"/>
         <source>Error requesting connection via router.</source>
         <translation>透過路由器要求連線時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="176"/>
+        <location filename="../client/android/file_transfer_window.cc" line="168"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>主機版本比用戶端新。請更新應用程式。</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="188"/>
+        <location filename="../client/android/file_transfer_window.cc" line="180"/>
         <source>There is no logged in user on the host. The session is unavailable.</source>
         <translation>主機上沒有已登入的使用者。工作階段無法使用。</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="307"/>
+        <location filename="../client/android/file_transfer_window.cc" line="262"/>
         <source>Connecting...</source>
         <translation>正在連線...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="337"/>
+        <location filename="../client/android/file_transfer_window.cc" line="292"/>
         <source>Connecting to router...</source>
         <translation>正在連線到路由器...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="358"/>
+        <location filename="../client/android/file_transfer_window.cc" line="313"/>
         <source>Requesting connection to the host...</source>
         <translation>正在要求連線到主機...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="463"/>
+        <location filename="../client/android/file_transfer_window.cc" line="418"/>
         <source>Open a destination folder on the other side first.</source>
         <translation>請先在另一側開啟目的地資料夾。</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="516"/>
+        <location filename="../client/android/file_transfer_window.cc" line="471"/>
         <source>Deleting</source>
         <translation>正在刪除</translation>
     </message>
@@ -5954,42 +5970,37 @@ Credentials imported: %5</source>
 <context>
     <name>PermissionsWidget</name>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="80"/>
+        <location filename="../host/android/permissions_widget.cc" line="59"/>
         <source>The following permissions are required for the app to work. Grant them in the system settings.</source>
         <translation>應用程式需要下列權限才能運作。請在系統設定中授予這些權限。</translation>
     </message>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="93"/>
+        <location filename="../host/android/permissions_widget.cc" line="72"/>
         <source>Accessibility service</source>
         <translation>無障礙服務</translation>
     </message>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="94"/>
+        <location filename="../host/android/permissions_widget.cc" line="73"/>
         <source>Display over other apps</source>
         <translation>顯示在其他應用程式上層</translation>
     </message>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="95"/>
-        <source>All files access</source>
-        <translation>所有檔案存取權</translation>
-    </message>
-    <message>
-        <location filename="../host/android/permissions_widget.cc" line="96"/>
+        <location filename="../host/android/permissions_widget.cc" line="74"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="108"/>
+        <location filename="../host/android/permissions_widget.cc" line="86"/>
         <source>Open</source>
         <translation>開啟</translation>
     </message>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="109"/>
+        <location filename="../host/android/permissions_widget.cc" line="87"/>
         <source>Granted</source>
         <translation>已授予</translation>
     </message>
     <message>
-        <location filename="../host/android/permissions_widget.cc" line="125"/>
+        <location filename="../host/android/permissions_widget.cc" line="103"/>
         <source>The service is turned on, but Android has stopped it. Turn it off and on again.</source>
         <translation>服務已開啟，但 Android 已將其停止。請將其關閉後重新開啟。</translation>
     </message>
@@ -6360,32 +6371,32 @@ Credentials imported: %5</source>
         <translation>每頁項目數：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="118"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="119"/>
         <source>All Session Types</source>
         <translation>所有工作階段類型</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="281"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="282"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="281"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="282"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 檔案 (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="292"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="293"/>
         <source>Could not open file for writing.</source>
         <translation>無法開啟檔案進行寫入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="327"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="328"/>
         <source>Unable to write file.</source>
         <translation>無法寫入檔案。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="537"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="538"/>
         <source>%n entry(s)</source>
         <translation>
             <numerusform>%n 筆記錄</numerusform>
@@ -8551,314 +8562,356 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="173"/>
-        <location filename="../host/android/settings_widget.cc" line="203"/>
+        <location filename="../client/android/settings_widget.cc" line="177"/>
+        <location filename="../host/android/settings_widget.cc" line="205"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="202"/>
+        <location filename="../client/android/settings_widget.cc" line="206"/>
         <source>Credentials</source>
         <translation>認證</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="210"/>
-        <location filename="../host/android/settings_widget.cc" line="170"/>
+        <location filename="../client/android/settings_widget.cc" line="214"/>
+        <location filename="../host/android/settings_widget.cc" line="172"/>
         <source>About</source>
         <translation>關於</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="289"/>
-        <location filename="../host/android/settings_widget.cc" line="262"/>
+        <location filename="../client/android/settings_widget.cc" line="313"/>
+        <location filename="../host/android/settings_widget.cc" line="349"/>
         <source>Interface</source>
         <translation>介面</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="292"/>
-        <location filename="../host/android/settings_widget.cc" line="267"/>
+        <location filename="../client/android/settings_widget.cc" line="316"/>
+        <location filename="../host/android/settings_widget.cc" line="354"/>
         <source>Theme</source>
         <translation>佈景主題</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="305"/>
+        <location filename="../client/android/settings_widget.cc" line="329"/>
         <source>Display name when connected</source>
         <translation>連線時的顯示名稱</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="317"/>
-        <location filename="../host/android/settings_widget.cc" line="283"/>
+        <location filename="../client/android/settings_widget.cc" line="341"/>
+        <location filename="../host/android/settings_widget.cc" line="370"/>
         <source>Security</source>
         <translation>安全性</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="219"/>
-        <location filename="../client/android/settings_widget.cc" line="319"/>
+        <location filename="../client/android/settings_widget.cc" line="240"/>
+        <location filename="../client/android/settings_widget.cc" line="343"/>
         <source>Change Master Password</source>
         <translation>變更主密碼</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="327"/>
+        <location filename="../client/android/settings_widget.cc" line="221"/>
+        <location filename="../client/android/settings_widget.cc" line="500"/>
+        <location filename="../host/android/settings_widget.cc" line="277"/>
+        <location filename="../host/android/settings_widget.cc" line="512"/>
+        <source>Add folder</source>
+        <translation>新增資料夾</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="227"/>
+        <location filename="../client/android/settings_widget.cc" line="480"/>
+        <location filename="../client/android/settings_widget.cc" line="641"/>
+        <location filename="../host/android/settings_widget.cc" line="283"/>
+        <location filename="../host/android/settings_widget.cc" line="492"/>
+        <location filename="../host/android/settings_widget.cc" line="618"/>
+        <source>File Transfer</source>
+        <translation>檔案傳輸</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="228"/>
+        <location filename="../host/android/settings_widget.cc" line="284"/>
+        <source>This folder cannot be added. Choose a folder in the internal storage or on the SD card.</source>
+        <translation>無法新增此資料夾。請選擇內部儲存空間或 SD 卡中的資料夾。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="351"/>
         <source>Unlock with biometrics</source>
         <translation>使用生物辨識解除鎖定</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="352"/>
+        <location filename="../client/android/settings_widget.cc" line="376"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>請在系統設定中設定指紋，才能使用此功能。</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="354"/>
+        <location filename="../client/android/settings_widget.cc" line="378"/>
         <source>Biometrics are not available on this device.</source>
         <translation>此裝置不支援生物辨識。</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="365"/>
+        <location filename="../client/android/settings_widget.cc" line="389"/>
         <source>UDP Connections</source>
         <translation>UDP 連線</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="379"/>
+        <location filename="../client/android/settings_widget.cc" line="403"/>
         <source>Allow direct connections</source>
         <translation>允許直接連線</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="380"/>
+        <location filename="../client/android/settings_widget.cc" line="404"/>
         <source>Allow UDP Hole Punching</source>
         <translation>允許 UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="381"/>
+        <location filename="../client/android/settings_widget.cc" line="405"/>
         <source>Allow PCP protocol</source>
         <translation>允許 PCP 通訊協定</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="382"/>
+        <location filename="../client/android/settings_widget.cc" line="406"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>允許 NAT-PMP 通訊協定</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="383"/>
+        <location filename="../client/android/settings_widget.cc" line="407"/>
         <source>Allow UPnP protocol</source>
         <translation>允許 UPnP 通訊協定</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="389"/>
+        <location filename="../client/android/settings_widget.cc" line="413"/>
         <source>Remote Desktop</source>
         <translation>遠端桌面</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="391"/>
+        <location filename="../client/android/settings_widget.cc" line="415"/>
         <source>Enable audio</source>
         <translation>啟用音訊</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="396"/>
+        <location filename="../client/android/settings_widget.cc" line="420"/>
         <source>Enable clipboard</source>
         <translation>啟用剪貼簿</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../client/android/settings_widget.cc" line="425"/>
         <source>Show shape of remote cursor</source>
         <translation>顯示遠端游標的形狀</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="407"/>
+        <location filename="../client/android/settings_widget.cc" line="431"/>
         <source>Show position of remote cursor</source>
         <translation>顯示遠端游標的位置</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="413"/>
+        <location filename="../client/android/settings_widget.cc" line="437"/>
         <source>Disable desktop effects</source>
         <translation>停用桌面效果</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="419"/>
+        <location filename="../client/android/settings_widget.cc" line="443"/>
         <source>Disable desktop wallpaper</source>
         <translation>停用桌面背景</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="425"/>
+        <location filename="../client/android/settings_widget.cc" line="449"/>
         <source>Lock computer at disconnect</source>
         <translation>中斷連線時鎖定電腦</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="431"/>
+        <location filename="../client/android/settings_widget.cc" line="455"/>
         <source>Block remote input</source>
         <translation>封鎖遠端輸入</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="439"/>
+        <location filename="../client/android/settings_widget.cc" line="463"/>
         <source>Quality</source>
         <translation>畫質</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="440"/>
+        <location filename="../client/android/settings_widget.cc" line="464"/>
         <source>Automatic</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="441"/>
+        <location filename="../client/android/settings_widget.cc" line="465"/>
         <source>Low</source>
         <translation>低</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="442"/>
+        <location filename="../client/android/settings_widget.cc" line="466"/>
         <source>Medium</source>
         <translation>中</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="443"/>
+        <location filename="../client/android/settings_widget.cc" line="467"/>
         <source>High</source>
         <translation>高</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="456"/>
-        <location filename="../host/android/settings_widget.cc" line="405"/>
+        <location filename="../client/android/settings_widget.cc" line="504"/>
+        <location filename="../host/android/settings_widget.cc" line="516"/>
+        <source>Files can be transferred only in the folders added here.</source>
+        <translation>只能在此處新增的資料夾中傳輸檔案。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="513"/>
+        <location filename="../host/android/settings_widget.cc" line="525"/>
         <source>Updates</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="460"/>
+        <location filename="../client/android/settings_widget.cc" line="517"/>
         <source>Check for updates on startup</source>
         <translation>啟動時檢查更新</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="467"/>
-        <location filename="../host/android/settings_widget.cc" line="408"/>
+        <location filename="../client/android/settings_widget.cc" line="524"/>
+        <location filename="../host/android/settings_widget.cc" line="528"/>
         <source>Update channel</source>
         <translation>更新頻道</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="468"/>
-        <location filename="../host/android/settings_widget.cc" line="409"/>
+        <location filename="../client/android/settings_widget.cc" line="525"/>
+        <location filename="../host/android/settings_widget.cc" line="529"/>
         <source>Stable</source>
         <translation>穩定版</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="469"/>
-        <location filename="../host/android/settings_widget.cc" line="410"/>
+        <location filename="../client/android/settings_widget.cc" line="526"/>
+        <location filename="../host/android/settings_widget.cc" line="530"/>
         <source>Beta</source>
         <translation>測試版</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="470"/>
-        <location filename="../host/android/settings_widget.cc" line="411"/>
+        <location filename="../client/android/settings_widget.cc" line="527"/>
+        <location filename="../host/android/settings_widget.cc" line="531"/>
         <source>Alpha</source>
         <translation>早期測試版</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="481"/>
-        <location filename="../host/android/settings_widget.cc" line="425"/>
+        <location filename="../client/android/settings_widget.cc" line="538"/>
+        <location filename="../host/android/settings_widget.cc" line="545"/>
         <source>Update server</source>
         <translation>更新伺服器</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="486"/>
-        <location filename="../host/android/settings_widget.cc" line="430"/>
+        <location filename="../client/android/settings_widget.cc" line="543"/>
+        <location filename="../host/android/settings_widget.cc" line="550"/>
         <source>Public key</source>
         <translation>公開金鑰</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="492"/>
-        <location filename="../host/android/settings_widget.cc" line="436"/>
+        <location filename="../client/android/settings_widget.cc" line="549"/>
+        <location filename="../host/android/settings_widget.cc" line="556"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>如果未指定更新伺服器，則使用預設伺服器。如果未指定公開金鑰，則使用內建公開金鑰。</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="546"/>
-        <location filename="../host/android/settings_widget.cc" line="490"/>
+        <location filename="../client/android/settings_widget.cc" line="603"/>
+        <location filename="../host/android/settings_widget.cc" line="610"/>
         <source>Check for updates</source>
         <translation>檢查更新</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="570"/>
+        <location filename="../client/android/settings_widget.cc" line="627"/>
         <source>Enable biometric unlock</source>
         <translation>啟用生物辨識解鎖</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="571"/>
+        <location filename="../client/android/settings_widget.cc" line="628"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="179"/>
+        <location filename="../client/android/settings_widget.cc" line="642"/>
+        <location filename="../host/android/settings_widget.cc" line="619"/>
+        <source>Remove the folder %1 from file transfer?</source>
+        <translation>要從檔案傳輸中移除資料夾 %1 嗎？</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="642"/>
+        <location filename="../host/android/settings_widget.cc" line="619"/>
+        <source>Remove</source>
+        <translation>移除</translation>
+    </message>
+    <message>
+        <location filename="../host/android/settings_widget.cc" line="181"/>
         <source>Users</source>
         <translation>使用者</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="188"/>
+        <location filename="../host/android/settings_widget.cc" line="190"/>
         <source>Edit User</source>
         <translation>編輯使用者</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="188"/>
+        <location filename="../host/android/settings_widget.cc" line="190"/>
         <source>Add User</source>
         <translation>新增使用者</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="285"/>
+        <location filename="../host/android/settings_widget.cc" line="372"/>
         <source>Manage users</source>
         <translation>管理使用者</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="293"/>
+        <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>Change password</source>
         <translation>變更密碼</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="297"/>
+        <location filename="../host/android/settings_widget.cc" line="384"/>
         <source>Disable password protection</source>
         <translation>停用密碼保護</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="306"/>
+        <location filename="../host/android/settings_widget.cc" line="393"/>
         <source>Enable password protection</source>
         <translation>啟用密碼保護</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="321"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
         <source>Router</source>
         <translation>路由器</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="326"/>
+        <location filename="../host/android/settings_widget.cc" line="413"/>
         <source>Enable the use of a router</source>
         <translation>啟用路由器的使用</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="331"/>
+        <location filename="../host/android/settings_widget.cc" line="418"/>
         <source>Address</source>
         <translation>位址</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="337"/>
+        <location filename="../host/android/settings_widget.cc" line="424"/>
         <source>Public Key</source>
         <translation>公開金鑰</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="342"/>
+        <location filename="../host/android/settings_widget.cc" line="429"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>當無法直接連線（繞過 NAT）到電腦時，就需要透過路由器進行連接。Aspia 不提供公共路由，但您可以自行搭建。您可從&lt;a href=&quot;https://aspia.org&quot;&gt;官網&lt;/a&gt;下載路由器。</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="504"/>
-        <location filename="../host/android/settings_widget.cc" line="525"/>
+        <location filename="../host/android/settings_widget.cc" line="218"/>
+        <location filename="../host/android/settings_widget.cc" line="239"/>
         <source>Error</source>
         <translation>錯誤</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="504"/>
-        <location filename="../host/android/settings_widget.cc" line="525"/>
+        <location filename="../host/android/settings_widget.cc" line="218"/>
+        <location filename="../host/android/settings_widget.cc" line="239"/>
         <source>An error occurred while processing the password.</source>
         <translation>處理密碼時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="547"/>
+        <location filename="../host/android/settings_widget.cc" line="261"/>
         <source>Import</source>
         <translation>匯入</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="547"/>
+        <location filename="../host/android/settings_widget.cc" line="261"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 檔案 (*.json)</translation>
     </message>
@@ -9039,7 +9092,7 @@ Credentials imported: %5</source>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="177"/>
+        <location filename="../client/android/statistics_dialog.cc" line="192"/>
         <source>Statistics</source>
         <translation>統計</translation>
     </message>
@@ -9054,7 +9107,7 @@ Credentials imported: %5</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="214"/>
+        <location filename="../client/android/statistics_dialog.cc" line="229"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
@@ -14028,17 +14081,17 @@ Credentials imported: %5</source>
 <context>
     <name>VideoWorker</name>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="45"/>
+        <location filename="../client/workers/video_worker.cc" line="44"/>
         <source>Unable to create the directory for the recording.</source>
         <translation>無法建立錄製檔案的資料夾。</translation>
     </message>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="47"/>
+        <location filename="../client/workers/video_worker.cc" line="46"/>
         <source>Unable to create the file for the recording.</source>
         <translation>無法建立錄製檔案。</translation>
     </message>
     <message>
-        <location filename="../client/workers/video_worker.cc" line="49"/>
+        <location filename="../client/workers/video_worker.cc" line="48"/>
         <source>An error occurred while writing the recording.</source>
         <translation>寫入錄製檔案時發生錯誤。</translation>
     </message>
