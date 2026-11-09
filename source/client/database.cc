@@ -57,7 +57,6 @@ constexpr auto kSettingLockTimeout   = "lock_timeout";
 constexpr auto kSettingDesktopConfig = "desktop_config";
 constexpr auto kSettingRecordEnabled = "record_sessions";
 constexpr auto kSettingRecordPath    = "recording_path";
-constexpr auto kSettingKeyCombos     = "send_key_combinations";
 constexpr auto kSettingUdpMethods    = "udp_methods";
 constexpr auto kSettingProxy         = "proxy";
 constexpr auto kSettingMcpEnabled    = "mcp_enabled";
@@ -2053,21 +2052,6 @@ QString Database::recordingPath() const
 bool Database::setRecordingPath(const QString& path)
 {
     return writeSetting(kSettingRecordPath, path);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::isSendKeyCombinationsEnabled() const
-{
-    QString value = readSetting(kSettingKeyCombos);
-    if (value.isEmpty())
-        return true;
-    return value == "1";
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setSendKeyCombinationsEnabled(bool enable)
-{
-    return writeSetting(kSettingKeyCombos, enable ? "1" : "0");
 }
 
 //--------------------------------------------------------------------------------------------------

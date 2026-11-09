@@ -436,5 +436,6 @@ proto::control::Config defaultDesktopConfig()
     config.set_lock_at_disconnect(false);
     config.set_disable_preferred_size(false);
     config.set_quality(kAutoQuality);
+    config.set_disable_key_combinations(false);
     return config;
 }

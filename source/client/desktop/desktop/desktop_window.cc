@@ -139,8 +139,7 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
     mouse_timer_->setTimerType(Qt::PreciseTimer);
     connect(mouse_timer_, &QTimer::timeout, this, &DesktopWindow::onMouseFlushTimer);
 
-    Database& db = Database::instance();
-    desktop_->enableKeyCombinations(db.isSendKeyCombinationsEnabled());
+    desktop_->enableKeyCombinations(!desktop_config_.disable_key_combinations());
     desktop_->enableRemoteCursorPosition(desktop_config_.cursor_position());
 
     connect(toolbar_, &DesktopToolBar::sig_keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
@@ -260,18 +259,16 @@ void DesktopWindow::applySettings()
 {
     LOG(INFO) << "Apply client settings";
 
-    Database& db = Database::instance();
-
     const bool had_preferred_size = !desktop_config_.disable_preferred_size();
 
-    desktop_config_ = db.desktopConfig();
+    desktop_config_ = Database::instance().desktopConfig();
     onDesktopConfigChanged(desktop_config_);
 
     desktop_->enableRemoteCursorPosition(desktop_config_.cursor_position());
     if (!desktop_config_.cursor_shape())
         desktop_->setCursorShape(QPixmap(), QPoint());
 
-    desktop_->enableKeyCombinations(db.isSendKeyCombinationsEnabled());
+    desktop_->enableKeyCombinations(!desktop_config_.disable_key_combinations());
 
     if (desktop_config_.disable_preferred_size())
         resize_timer_->stop();

@@ -261,7 +261,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->checkbox_desktop_wallpaper->setChecked(!desktop_config.wallpaper());
     ui->checkbox_lock_at_disconnect->setChecked(desktop_config.lock_at_disconnect());
     ui->checkbox_block_remote_input->setChecked(desktop_config.block_input());
-    ui->checkbox_send_key_combinations->setChecked(db.isSendKeyCombinationsEnabled());
+    ui->checkbox_send_key_combinations->setChecked(!desktop_config.disable_key_combinations());
 
     ui->combo_resolution->addItem(tr("None"), QSize());
     const QList<QSize> resolutions = availableResolutions();
@@ -973,6 +973,7 @@ void SettingsTab::saveDesktopConfig()
     desktop_config.set_block_input(ui->checkbox_block_remote_input->isChecked());
     desktop_config.set_disable_preferred_size(!ui->checkbox_preferred_size->isChecked());
     desktop_config.set_quality(ui->combo_quality->currentData().toUInt());
+    desktop_config.set_disable_key_combinations(!ui->checkbox_send_key_combinations->isChecked());
 
     QSize preferred = ui->combo_resolution->currentData().toSize();
     if (preferred.isValid())
@@ -982,7 +983,5 @@ void SettingsTab::saveDesktopConfig()
         resolution->set_height(preferred.height());
     }
 
-    Database& db = Database::instance();
-    db.setDesktopConfig(desktop_config);
-    db.setSendKeyCombinationsEnabled(ui->checkbox_send_key_combinations->isChecked());
+    Database::instance().setDesktopConfig(desktop_config);
 }

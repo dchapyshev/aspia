@@ -1266,6 +1266,7 @@ TEST_F(DatabaseTest, DesktopConfigIsKept)
     proto::control::Config config = defaultDesktopConfig();
     config.set_audio(false);
     config.set_block_input(true);
+    config.set_disable_key_combinations(true);
     config.mutable_preferred_resolution()->set_width(1920);
     config.mutable_preferred_resolution()->set_height(1080);
 
@@ -1297,17 +1298,13 @@ TEST_F(DatabaseTest, SessionRecordingIsOffUntilChosen)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Until the user changes them, key combinations are sent and every UDP method is allowed; a change
-// is kept.
+// Until the user changes them, every UDP method is allowed; a change is kept.
 TEST_F(DatabaseTest, SessionOptionsAreOnUntilChosen)
 {
-    EXPECT_TRUE(db_.isSendKeyCombinationsEnabled());
     EXPECT_EQ(db_.udpMethods(), static_cast<quint32>(UDP_METHOD_ALL));
 
-    ASSERT_TRUE(db_.setSendKeyCombinationsEnabled(false));
     ASSERT_TRUE(db_.setUdpMethods(UDP_METHOD_DIRECT | UDP_METHOD_UPNP));
 
-    EXPECT_FALSE(db_.isSendKeyCombinationsEnabled());
     EXPECT_EQ(db_.udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT | UDP_METHOD_UPNP));
 
     // No method at all is a choice too, not a missing value.

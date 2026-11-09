@@ -156,9 +156,6 @@ public:
     QString recordingPath() const;
     bool setRecordingPath(const QString& path);
 
-    bool isSendKeyCombinationsEnabled() const;
-    bool setSendKeyCombinationsEnabled(bool enable);
-
     quint32 udpMethods() const;
     bool setUdpMethods(quint32 methods);
 
