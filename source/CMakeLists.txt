@@ -222,6 +222,17 @@ if (WIN32 AND CMAKE_SIZEOF_VOID_P EQUAL 4)
     message(STATUS "Host-only build")
 endif()
 
+option(ASPIA_GOOGLE_PLAY "Build the Android applications for Google Play" OFF)
+
+if (ASPIA_GOOGLE_PLAY)
+    if (NOT ANDROID)
+        message(FATAL_ERROR "ASPIA_GOOGLE_PLAY is supported only for Android")
+    endif()
+
+    add_definitions(-DASPIA_GOOGLE_PLAY)
+    message(STATUS "Google Play build")
+endif()
+
 add_subdirectory(tools)
 add_subdirectory(base)
 add_subdirectory(common)

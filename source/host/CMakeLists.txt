@@ -79,6 +79,10 @@ if (ANDROID)
         QT_ANDROID_VERSION_NAME "${ASPIA_VERSION_MAJOR}.${ASPIA_VERSION_MINOR}.${ASPIA_VERSION_PATCH}.${GIT_COMMIT_COUNT}"
         QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android/packaging")
 
+    if (NOT ASPIA_GOOGLE_PLAY)
+        qt_add_android_permission(aspia_host NAME android.permission.REQUEST_INSTALL_PACKAGES)
+    endif()
+
     return()
 endif()
 

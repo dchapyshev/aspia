@@ -30,6 +30,15 @@
         "QT_ANDROID_KEYSTORE_STORE_PASS": "password",
         "QT_ANDROID_KEYSTORE_KEY_PASS": "password"
       }
+    },
+    {
+      "name": "local-android-arm64-play",
+      "inherits": [
+        "local-android-arm64"
+      ],
+      "cacheVariables": {
+        "ASPIA_GOOGLE_PLAY": "ON"
+      }
     }
   ],
   "buildPresets": [
@@ -38,6 +47,13 @@
       "configurePreset": "local-android-arm64",
       "targets": [
         "apk"
+      ]
+    },
+    {
+      "name": "local-android-arm64-play-aab",
+      "configurePreset": "local-android-arm64-play",
+      "targets": [
+        "aab"
       ]
     }
   ]
