@@ -135,7 +135,7 @@ SettingsTab::SettingsTab(QWidget* parent)
         button->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
         button->setCheckable(true);
         button->setAutoRaise(true);
-        button->setFixedSize(96, 64);
+        button->setFixedSize(120, 64);
         category_group_->addButton(button, id);
         // Insert before the trailing spacer (last item in layout).
         layout->insertWidget(layout->count() - 1, button, 0, Qt::AlignHCenter);
