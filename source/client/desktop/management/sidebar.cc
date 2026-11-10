@@ -47,7 +47,6 @@
 #include "client/database.h"
 #include "client/router_controller.h"
 #include "client/settings.h"
-#include "client/desktop/router_dialog.h"
 #include "client/desktop/management/local_group_dialog.h"
 #include "client/desktop/management/local_group_widget.h"
 #include "common/desktop/credentials_dialog.h"
@@ -862,73 +861,6 @@ void Sidebar::onRemoveGroup()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::onAddRouter()
-{
-    LOG(INFO) << "[ACTION] Add router";
-
-    AutoQPointer<RouterDialog> dialog(new RouterDialog(-1, this));
-    if (dialog->exec() != QDialog::Accepted)
-    {
-        LOG(INFO) << "[ACTION] Rejected by user";
-        return;
-    }
-
-    emit sig_routersChanged();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::onEditRouter()
-{
-    SidebarItem* item = currentItem();
-    if (!item || item->itemType() != SidebarItem::ROUTER)
-        return;
-
-    qint64 router_id = static_cast<SidebarRouter*>(item)->routerId();
-    LOG(INFO) << "[ACTION] Edit router" << router_id;
-
-    AutoQPointer<RouterDialog> dialog(new RouterDialog(router_id, this));
-    if (dialog->exec() != QDialog::Accepted)
-    {
-        LOG(INFO) << "[ACTION] Rejected by user";
-        return;
-    }
-
-    emit sig_routersChanged();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::onRemoveRouter()
-{
-    SidebarItem* item = currentItem();
-    if (!item || item->itemType() != SidebarItem::ROUTER)
-        return;
-
-    SidebarRouter* router_item = static_cast<SidebarRouter*>(item);
-    qint64 router_id = router_item->routerId();
-    LOG(INFO) << "[ACTION] Delete router" << router_id;
-
-    Database& db = Database::instance();
-    RouterConfig existing;
-    const Database::FindResult found = db.findRouter(router_id, &existing);
-    if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
-    {
-        LOG(ERROR) << "Router not found for id:" << router_id;
-        return;
-    }
-
-    QString message = tr("Are you sure you want to delete router \"%1\"?").arg(existing.displayLabel());
-    if (MsgBox::question(this, message) == MsgBox::No)
-    {
-        LOG(INFO) << "Action is rejected by user";
-        return;
-    }
-
-    db.removeRouter(router_id);
-    Settings().removeRouterExpanded(router_id);
-    emit sig_routersChanged();
-}
-
-//--------------------------------------------------------------------------------------------------
 bool Sidebar::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == tree_widget_)
@@ -944,9 +876,7 @@ bool Sidebar::eventFilter(QObject* watched, QEvent* event)
                 case Qt::Key_Delete:
                 {
                     SidebarItem* item = currentItem();
-                    if (item && item->itemType() == SidebarItem::ROUTER)
-                        onRemoveRouter();
-                    else
+                    if (!item || item->itemType() != SidebarItem::ROUTER)
                         emit sig_removeGroup();
                     return true;
                 }
@@ -954,9 +884,7 @@ bool Sidebar::eventFilter(QObject* watched, QEvent* event)
                 case Qt::Key_F2:
                 {
                     SidebarItem* item = currentItem();
-                    if (item && item->itemType() == SidebarItem::ROUTER)
-                        onEditRouter();
-                    else
+                    if (!item || item->itemType() != SidebarItem::ROUTER)
                         emit sig_editGroup();
                     return true;
                 }

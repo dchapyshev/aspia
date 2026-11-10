@@ -70,6 +70,9 @@ public:
     proto::router::SessionType sessionType() const { return session_type_; }
     void setSessionType(proto::router::SessionType type) { session_type_ = type; }
 
+    bool isDefault() const { return is_default_; }
+    void setDefault(bool value) { is_default_ = value; }
+
     const QString& guid() const { return guid_; }
     void setGuid(const QString& value) { guid_ = value; }
 
@@ -105,6 +108,7 @@ public:
 private:
     qint64 router_id_ = -1;
     proto::router::SessionType session_type_;
+    bool is_default_ = false;
     QString guid_;
     QString display_name_;
     QString address_;

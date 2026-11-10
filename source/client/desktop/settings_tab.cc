@@ -27,6 +27,7 @@
 #include <QEvent>
 #include <QFileDialog>
 #include <QGuiApplication>
+#include <QHeaderView>
 #include <QInputDialog>
 #include <QPalette>
 #include <QPointer>
@@ -36,6 +37,7 @@
 #include <QSignalBlocker>
 #include <QSpinBox>
 #include <QToolButton>
+#include <QTreeWidget>
 #include <QVBoxLayout>
 
 #include "base/auto_qpointer.h"
@@ -51,6 +53,7 @@
 #include "client/mcp/mcp_worker.h"
 #include "client/settings.h"
 #include "client/system_settings.h"
+#include "client/desktop/router_dialog.h"
 #include "client/desktop/ui_settings_tab.h"
 #include "client/desktop/update_server_dialog.h"
 #include "common/desktop/credentials_dialog.h"
@@ -60,6 +63,7 @@
 #include "common/desktop/update_dialog.h"
 #include "proto/desktop_control.h"
 #include "proto/peer.h"
+#include "proto/router.h"
 
 namespace {
 
@@ -139,6 +143,7 @@ SettingsTab::SettingsTab(QWidget* parent)
 
     int button_id = 0;
     add_button(button_id++, ":/img/gear.svg", tr("General"));
+    add_button(button_id++, ":/img/stack.svg", tr("Routers"));
     add_button(button_id++, ":/img/dashboard-layout.svg", tr("Profiles"));
     add_button(button_id++, ":/img/ai.svg", "MCP");
     add_button(button_id++, ":/img/restart.svg", tr("Update"));
@@ -159,12 +164,13 @@ SettingsTab::SettingsTab(QWidget* parent)
         outer->addStretch(1);
     };
     center(ui->layout_general_outer, ui->page_general_content, kMaxContentWidth);
+    center(ui->layout_routers_outer, ui->page_routers_content, kMaxContentWidth);
     center(ui->layout_desktop_outer, ui->page_desktop_content, kMaxContentWidth);
     center(ui->layout_mcp_outer, ui->page_mcp_content, kMaxContentWidth);
     center(ui->layout_update_outer, ui->page_update_content, kMaxContentWidth);
 
     // A scroll area fills the page with the window color, the pane of the tab has the base one.
-    for (QScrollArea* page : { ui->page_general, ui->page_desktop, ui->page_mcp, ui->page_update })
+    for (QScrollArea* page : { ui->page_general, ui->page_routers, ui->page_desktop, ui->page_mcp, ui->page_update })
     {
         page->viewport()->setAutoFillBackground(false);
         page->widget()->setAutoFillBackground(false);
@@ -242,6 +248,15 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->edit_proxy_username->setText(proxy_settings.user);
     ui->edit_proxy_password->setPassword(proxy_settings.password);
     updateProxyFields();
+
+    // Routers page.
+    QHeaderView* routers_header = ui->tree_routers->header();
+    routers_header->resizeSection(0, 200);
+    routers_header->resizeSection(1, 200);
+    routers_header->resizeSection(2, 150);
+    routers_header->resizeSection(3, 150);
+
+    reloadRouters(-1);
 
     // Profiles page.
     ui->combo_resolution->addItem(tr("None"), QSize());
@@ -325,6 +340,12 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->button_change_master_password, &QPushButton::clicked,
             this, &SettingsTab::onChangeMasterPassword);
 
+    connect(ui->tree_routers, &QTreeWidget::currentItemChanged, this, &SettingsTab::onCurrentRouterChanged);
+    connect(ui->tree_routers, &QTreeWidget::itemDoubleClicked, this, &SettingsTab::onEditRouter);
+    connect(ui->button_add_router, &QPushButton::clicked, this, &SettingsTab::onAddRouter);
+    connect(ui->button_edit_router, &QPushButton::clicked, this, &SettingsTab::onEditRouter);
+    connect(ui->button_delete_router, &QPushButton::clicked, this, &SettingsTab::onDeleteRouter);
+
     connect(ui->combo_profile, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onProfileChanged);
     connect(ui->button_add_profile, &QPushButton::clicked, this, &SettingsTab::onAddProfile);
@@ -394,7 +415,8 @@ void SettingsTab::restoreState(const QByteArray& /* state */)
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::activate()
 {
-    // Nothing
+    QTreeWidgetItem* item = ui->tree_routers->currentItem();
+    reloadRouters(item ? item->data(0, Qt::UserRole).toLongLong() : -1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -563,6 +585,79 @@ void SettingsTab::onAutoUnlockChanged()
     if (auto_unlock)
         ui->combo_lock_timeout->setCurrentIndex(ui->combo_lock_timeout->findData(0));
     ui->combo_lock_timeout->setEnabled(!auto_unlock);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onCurrentRouterChanged()
+{
+    const bool selected = ui->tree_routers->currentItem() != nullptr;
+    ui->button_edit_router->setEnabled(selected);
+    ui->button_delete_router->setEnabled(selected);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onAddRouter()
+{
+    LOG(INFO) << "[ACTION] Add router";
+
+    AutoQPointer<RouterDialog> dialog(new RouterDialog(-1, this));
+    if (dialog->exec() != QDialog::Accepted)
+    {
+        LOG(INFO) << "[ACTION] Rejected by user";
+        return;
+    }
+
+    reloadRouters(-1);
+    emit sig_routersChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onEditRouter()
+{
+    QTreeWidgetItem* item = ui->tree_routers->currentItem();
+    if (!item)
+        return;
+
+    const qint64 router_id = item->data(0, Qt::UserRole).toLongLong();
+    LOG(INFO) << "[ACTION] Edit router" << router_id;
+
+    AutoQPointer<RouterDialog> dialog(new RouterDialog(router_id, this));
+    if (dialog->exec() != QDialog::Accepted)
+    {
+        LOG(INFO) << "[ACTION] Rejected by user";
+        return;
+    }
+
+    reloadRouters(router_id);
+    emit sig_routersChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onDeleteRouter()
+{
+    QTreeWidgetItem* item = ui->tree_routers->currentItem();
+    if (!item)
+        return;
+
+    const qint64 router_id = item->data(0, Qt::UserRole).toLongLong();
+    LOG(INFO) << "[ACTION] Delete router" << router_id;
+
+    QString message = tr("Are you sure you want to delete router \"%1\"?").arg(item->text(0));
+    if (MsgBox::question(this, message) == MsgBox::No)
+    {
+        LOG(INFO) << "Action is rejected by user";
+        return;
+    }
+
+    if (!Database::instance().removeRouter(router_id))
+    {
+        MsgBox::warning(this, tr("Unable to delete router."));
+        return;
+    }
+
+    Settings().removeRouterExpanded(router_id);
+    reloadRouters(-1);
+    emit sig_routersChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -980,6 +1075,45 @@ bool SettingsTab::enableAutoUnlock()
 
     LOG(INFO) << "Auto unlock turned on";
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::reloadRouters(qint64 router_id)
+{
+    QList<RouterConfig> routers;
+    if (Database::instance().routerList(&routers) == Database::ReadResult::FAILED)
+        MsgBox::warning(this, tr("Failed to read the list of routers."));
+
+    QTreeWidget* tree = ui->tree_routers;
+    tree->clear();
+
+    const QIcon icon(":/img/stack.svg");
+
+    for (const RouterConfig& router : std::as_const(routers))
+    {
+        QString access_level;
+
+        if (router.sessionType() == proto::router::SESSION_TYPE_ADMIN)
+            access_level = tr("Administrator");
+        else if (router.sessionType() == proto::router::SESSION_TYPE_MANAGER)
+            access_level = tr("Manager");
+        else if (router.sessionType() == proto::router::SESSION_TYPE_OPERATOR)
+            access_level = tr("Operator");
+
+        QTreeWidgetItem* item = new QTreeWidgetItem(tree);
+        item->setData(0, Qt::UserRole, router.routerId());
+        item->setIcon(0, icon);
+        item->setText(0, router.displayLabel());
+        item->setText(1, router.address());
+        item->setText(2, router.username());
+        item->setText(3, access_level);
+        item->setText(4, router.isDefault() ? tr("Yes") : QString());
+
+        if (router.routerId() == router_id)
+            tree->setCurrentItem(item);
+    }
+
+    onCurrentRouterChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

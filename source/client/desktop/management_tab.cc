@@ -132,8 +132,6 @@ ManagementTab::ManagementTab(QWidget* parent)
     ui->action_export_book->setProperty(Tab::kMenuOnlyProperty, true);
     ui->action_import_book->setProperty(Tab::kMenuOnlyProperty, true);
     ui->action_online_check->setProperty(Tab::kMenuOnlyProperty, true);
-    ui->action_add_router->setProperty(Tab::kMenuOnlyProperty, true);
-    ui->action_delete_router->setProperty(Tab::kMenuOnlyProperty, true);
 
     // Create content widgets.
     local_group_widget_ = new LocalGroupWidget(this);
@@ -249,12 +247,8 @@ ManagementTab::ManagementTab(QWidget* parent)
     connect(ui->action_add_group, &QAction::triggered, this, &ManagementTab::onAddGroupAction);
     connect(ui->action_edit_group, &QAction::triggered, this, &ManagementTab::onEditGroupAction);
     connect(ui->action_delete_group, &QAction::triggered, this, &ManagementTab::onDeleteGroupAction);
-    connect(ui->action_add_router, &QAction::triggered, ui->sidebar, &Sidebar::onAddRouter);
-    connect(ui->action_edit_router, &QAction::triggered, ui->sidebar, &Sidebar::onEditRouter);
-    connect(ui->action_delete_router, &QAction::triggered, ui->sidebar, &Sidebar::onRemoveRouter);
     connect(ui->action_change_router_password, &QAction::triggered, this, &ManagementTab::onChangeRouterPassword);
     connect(ui->action_clear_router_events, &QAction::triggered, this, &ManagementTab::onClearRouterEvents);
-    connect(ui->sidebar, &Sidebar::sig_routersChanged, this, &ManagementTab::reloadRouters);
     connect(ui->sidebar, &Sidebar::sig_routerHostMoved, this, [this](qint64 /* router_id */)
     {
         if (current_content_ == router_group_widget_)
@@ -287,10 +281,6 @@ ManagementTab::ManagementTab(QWidget* parent)
         ui->action_save, ui->action_export_book, ui->action_import_book
     });
     addActions(ActionRole::EDIT, { ui->action_add_user, ui->action_edit_user, ui->action_delete_user });
-    addActions(ActionRole::EDIT,
-    {
-        ui->action_add_router, ui->action_edit_router, ui->action_delete_router
-    });
     addActions(ActionRole::EDIT,
     {
         ui->action_add_workspace, ui->action_edit_workspace, ui->action_delete_workspace
@@ -727,8 +717,6 @@ void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& p
         if (!item || item->itemType() != SidebarItem::ROUTER)
             return;
 
-        menu->addAction(ui->action_edit_router);
-        menu->addAction(ui->action_delete_router);
         menu->addAction(ui->action_clear_router_events);
 
         auto* router_item = static_cast<SidebarRouter*>(item);
@@ -2010,9 +1998,6 @@ void ManagementTab::updateActionsState()
     ui->action_delete_group->setVisible(false);
     ui->action_edit_group->setVisible(false);
 
-    ui->action_add_router->setVisible(true);
-    ui->action_edit_router->setVisible(false);
-    ui->action_delete_router->setVisible(false);
     ui->action_change_router_password->setVisible(false);
     ui->action_clear_router_events->setVisible(false);
 
@@ -2150,8 +2135,6 @@ void ManagementTab::updateActionsState()
 
     if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER)
     {
-        ui->action_edit_router->setVisible(true);
-        ui->action_delete_router->setVisible(true);
         ui->action_clear_router_events->setVisible(true);
 
         SidebarRouter* router = static_cast<SidebarRouter*>(sidebar_item);

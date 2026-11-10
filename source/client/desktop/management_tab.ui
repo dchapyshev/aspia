@@ -74,33 +74,6 @@
     <string>Edit Group</string>
    </property>
   </action>
-  <action name="action_add_router">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/router-add.svg</normaloff>:/img/router-add.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Add Router</string>
-   </property>
-  </action>
-  <action name="action_edit_router">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/router-edit.svg</normaloff>:/img/router-edit.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Edit Router</string>
-   </property>
-  </action>
-  <action name="action_delete_router">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/router-delete.svg</normaloff>:/img/router-delete.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Delete Router</string>
-   </property>
-  </action>
   <action name="action_change_router_password">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">

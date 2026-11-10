@@ -46,6 +46,7 @@ Database::ReadResult readRouter(const SqlQuery& query, RouterConfig* router)
     router->setSessionType(static_cast<proto::router::SessionType>(query.columnInt64(2)));
 #endif
     router->setGuid(query.columnText(4));
+    router->setDefault(query.columnInt64(5) != 0);
 
     if (!router->setEncryptedData(query.columnBlob(3)))
     {
@@ -88,7 +89,7 @@ Database::ReadResult Database::routerList(QList<RouterConfig>* routers) const
         return ReadResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT id, name, session_type, data, guid FROM routers");
+    SqlQuery query(db_, "SELECT id, name, session_type, data, guid, is_default FROM routers");
 
     ReadResult result = ReadResult::OK;
 
@@ -142,8 +143,9 @@ bool Database::addRouter(RouterConfig& router)
     if (router.guid().isEmpty())
         router.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
-    SqlQuery query(db_, "INSERT INTO routers (id, name, session_type, data, guid) "
-                        "VALUES (NULL, ?, ?, ?, ?)");
+    SqlQuery query(db_,
+        "INSERT INTO routers (id, name, session_type, data, guid, is_default) "
+        "VALUES (NULL, ?, ?, ?, ?, NOT EXISTS (SELECT 1 FROM routers WHERE is_default<>0))");
     query.addText(router.displayName());
     query.addInt64(static_cast<quint32>(router.sessionType()));
     query.addBlob(*encrypted_data);
@@ -235,7 +237,7 @@ Database::FindResult Database::findRouter(qint64 router_id, RouterConfig* router
         return FindResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT id, name, session_type, data, guid FROM routers WHERE id=?");
+    SqlQuery query(db_, "SELECT id, name, session_type, data, guid, is_default FROM routers WHERE id=?");
     query.addInt64(router_id);
 
     const SqlQuery::StepResult step = query.next();
@@ -255,6 +257,35 @@ Database::FindResult Database::findRouter(qint64 router_id, RouterConfig* router
     }
 
     return FindResult::FOUND;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setDefaultRouter(qint64 router_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    // Only one router is the default one, so the mark is taken from every other row.
+    SqlQuery query(db_, "UPDATE routers SET is_default=(id=?) WHERE EXISTS (SELECT 1 FROM routers WHERE id=?)");
+    query.addInt64(router_id);
+    query.addInt64(router_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    if (db_.changes() == 0)
+    {
+        LOG(ERROR) << "Router" << router_id << "not found";
+        return false;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -585,6 +616,19 @@ bool Database::setRouterHostProfileId(qint64 router_id, HostId host_id, qint64 p
     query.addInt64(profile_id);
 
     if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::ensureDefaultRouter()
+{
+    if (!db_.exec("UPDATE routers SET is_default=1 WHERE id=(SELECT MIN(id) FROM routers) AND "
+                  "NOT EXISTS (SELECT 1 FROM routers WHERE is_default<>0)"))
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;

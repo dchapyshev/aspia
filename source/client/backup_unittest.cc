@@ -901,6 +901,68 @@ TEST_F(BackupTest, FileNamingOneRouterTwiceIsNotImported)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST_F(BackupTest, DefaultRouterStaysTheDefaultOneThroughTheFile)
+{
+    addRouter(source_, "first", "first.example.com");
+    const qint64 second = addRouter(source_, "second", "second.example.com");
+    ASSERT_TRUE(source_.setDefaultRouter(second));
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+
+    const QList<RouterConfig> routers = routerList(target_);
+    ASSERT_EQ(routers.size(), 2);
+
+    for (const RouterConfig& router : routers)
+        EXPECT_EQ(router.isDefault(), router.displayName() == "second");
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(BackupTest, FileWithoutADefaultRouterGetsOne)
+{
+    addRouter(source_, "first", "first.example.com");
+    addRouter(source_, "second", "second.example.com");
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        for (proto::storage::BackupFile::Router& router : *data->mutable_routers())
+            router.set_is_default(false);
+    });
+
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+
+    int default_count = 0;
+    for (const RouterConfig& router : routerList(target_))
+    {
+        if (router.isDefault())
+            ++default_count;
+    }
+
+    EXPECT_EQ(default_count, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(BackupTest, FileWithTwoDefaultRoutersIsNotImported)
+{
+    addRouter(source_, "first", "first.example.com");
+    addRouter(source_, "second", "second.example.com");
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->routers_size(), 2);
+        data->mutable_routers(0)->set_is_default(true);
+        data->mutable_routers(1)->set_is_default(true);
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(routerList(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
 // A temporary id is handed out again once the host holding it is gone, so credentials saved under
 // one say nothing about the host wearing it now. The address book does not keep such a row, and a
 // file carrying one is not a file this application wrote.

@@ -47,6 +47,7 @@ public:
 signals:
     void sig_desktopConfigChanged();
     void sig_lockTimeoutChanged();
+    void sig_routersChanged();
 
 protected:
     // QWidget implementation.
@@ -65,6 +66,10 @@ private slots:
     void onProxyChanged();
     void onLockTimeoutChanged();
     void onAutoUnlockChanged();
+    void onCurrentRouterChanged();
+    void onAddRouter();
+    void onEditRouter();
+    void onDeleteRouter();
     void onProfileChanged();
     void onAddProfile();
     void onRenameProfile();
@@ -87,6 +92,7 @@ private:
     void updateProxyFields();
     void applyCategoryStyle();
     bool enableAutoUnlock();
+    void reloadRouters(qint64 router_id);
     void reloadProfiles(qint64 profile_id);
     void showProfile();
     ProfileConfig profileFromUi() const;

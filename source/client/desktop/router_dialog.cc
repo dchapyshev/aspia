@@ -135,6 +135,8 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
             showError(tr("Failed to save the router."));
             return;
         }
+
+        router_id_ = data.routerId();
     }
     else
     {
@@ -163,17 +165,35 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
+    if (ui->checkbox_default->isChecked() && !db.setDefaultRouter(router_id_))
+    {
+        LOG(ERROR) << "Failed to change the default router";
+        showError(tr("Failed to save the router."));
+        return;
+    }
+
     accept();
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterDialog::onLoadData()
 {
+    Database& db = Database::instance();
+    QCheckBox* checkbox_default = ui->checkbox_default;
+
     if (router_id_ == -1)
+    {
+        QList<RouterConfig> routers;
+        if (db.routerList(&routers) != Database::ReadResult::FAILED && routers.isEmpty())
+        {
+            checkbox_default->setChecked(true);
+            checkbox_default->setEnabled(false);
+        }
         return;
+    }
 
     RouterConfig router;
-    const Database::FindResult found = Database::instance().findRouter(router_id_, &router);
+    const Database::FindResult found = db.findRouter(router_id_, &router);
 
     if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
     {
@@ -192,6 +212,8 @@ void RouterDialog::onLoadData()
 
     ui->edit_username->setText(router.username());
     ui->edit_password->setPassword(router.password());
+    checkbox_default->setChecked(router.isDefault());
+    checkbox_default->setEnabled(!router.isDefault());
 
     if (found == Database::FindResult::UNREADABLE)
     {

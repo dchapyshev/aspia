@@ -486,6 +486,12 @@ void MainWindow::onSettings()
         app_lock_->setTimeout(Database::instance().lockTimeout());
     });
 
+    connect(settings_tab, &SettingsTab::sig_routersChanged, this, [this]()
+    {
+        if (ManagementTab* management_tab = managementTab())
+            management_tab->reloadRouters();
+    });
+
     connect(settings_tab, &SettingsTab::sig_desktopConfigChanged, this, [this]()
     {
         for (int i = 0; i < ui->tabs->count(); ++i)

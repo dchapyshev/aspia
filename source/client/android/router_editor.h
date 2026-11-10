@@ -24,6 +24,7 @@
 class Button;
 class Label;
 class LineEdit;
+class Switch;
 
 // Full-screen editor for a router. On save the router is written to the local database; the delete
 // action is shown only when editing an existing router.
@@ -57,6 +58,7 @@ private:
     LineEdit* edit_address_ = nullptr;
     LineEdit* edit_username_ = nullptr;
     LineEdit* edit_password_ = nullptr;
+    Switch* switch_default_ = nullptr;
     Label* label_error_ = nullptr;
     Button* button_delete_ = nullptr;
     qint64 router_id_ = -1;

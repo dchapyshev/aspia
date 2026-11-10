@@ -71,9 +71,6 @@ public slots:
     void onAddGroup();
     void onEditGroup();
     void onRemoveGroup();
-    void onAddRouter();
-    void onEditRouter();
-    void onRemoveRouter();
 
 protected:
     // QObject implementation.
@@ -83,7 +80,6 @@ signals:
     void sig_switchContent(SidebarItem::Type type);
     void sig_contextMenu(SidebarItem::Type type, const QPoint& pos);
     void sig_itemDropped();
-    void sig_routersChanged();
     void sig_routerHostMoved(qint64 router_id);
     void sig_routerGroupMoved(qint64 router_id);
     void sig_addGroup();

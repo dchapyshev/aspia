@@ -65,6 +65,7 @@ void buildRouter(const RouterConfig& router, BackupRouter* out)
     out->set_session_type(static_cast<quint32>(router.sessionType()));
     out->set_username(router.username().toStdString());
     out->set_guid(router.guid().toStdString());
+    out->set_is_default(router.isDefault());
 
     const SecureByteArray password = router.password().toUtf8();
     out->set_password(password.constData(), static_cast<size_t>(password.size()));
@@ -305,6 +306,7 @@ void buildRouters(
         config.setPassword(toSecureString(router.password()));
         config.setSessionType(static_cast<proto::router::SessionType>(router.session_type()));
         config.setGuid(QString::fromStdString(router.guid()));
+        config.setDefault(router.is_default());
 
         router_links->insert(config.guid(), config.routerId());
         routers->append(config);
@@ -471,6 +473,7 @@ bool isValidGuid(const QString& guid)
 bool hasValidRouters(const BackupContent& content)
 {
     QSet<QString> guids;
+    bool has_default = false;
 
     for (const BackupRouter& router : content.routers())
     {
@@ -492,6 +495,14 @@ bool hasValidRouters(const BackupContent& content)
             return false;
 
         guids.insert(guid);
+
+        if (router.is_default())
+        {
+            if (has_default)
+                return false;
+
+            has_default = true;
+        }
     }
 
     return true;
