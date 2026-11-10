@@ -67,7 +67,6 @@ void backupOnStartup()
     switch (AutoBackup::run(db, directory, db.backupRetention()))
     {
         case Backup::Result::SUCCESS:
-        case Backup::Result::NOTHING_EXPORTED:
             break;
 
         case Backup::Result::FILE_ERROR:

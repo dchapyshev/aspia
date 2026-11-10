@@ -51,6 +51,7 @@ private slots:
 
 private:
     bool loadCredentials(qint64 selected_credential_id);
+    bool loadProfiles(qint64 selected_profile_id);
     void showError(const QString& message);
 
     Switch* switch_saved_credentials_ = nullptr;
@@ -58,6 +59,7 @@ private:
     LineEdit* edit_password_ = nullptr;
     Label* label_note_ = nullptr;
     ComboBox* combo_credential_ = nullptr;
+    ComboBox* combo_profile_ = nullptr;
     Label* label_error_ = nullptr;
     qint64 router_id_ = 0;
     HostId host_id_ = kInvalidHostId;

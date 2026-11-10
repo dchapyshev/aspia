@@ -636,25 +636,19 @@ void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType sess
         return;
     }
 
-    // For sessions launched from another session (e.g. file transfer started from a desktop
-    // session), inherit the tabbed/detached mode of the parent tab. Otherwise (ManagementTab or
-    // direct call) fall back to the global "open sessions in tabs" setting.
     Tab* parent_tab = qobject_cast<Tab*>(sender());
     bool detached = (parent_tab && parent_tab->tabType() == Tab::Type::SESSION) ?
         parent_tab->isDetached() : !ui->action_sessions_in_tabs->isChecked();
 
+    const ProfileConfig profile = Database::instance().hostProfile(host);
     ClientWindow* client_window = nullptr;
 
     switch (session_type)
     {
         case proto::peer::SESSION_TYPE_DESKTOP:
         {
-            proto::control::Config desktop_config = Database::instance().desktopConfig();
+            proto::control::Config desktop_config = profile.desktopConfig();
 
-            // When the session opens in a tab, its visible area is bounded by the main window from
-            // the very first frame. Pass the initial preferred size in the config so the host
-            // scales the desktop to fit the tab right away, instead of streaming the full
-            // resolution until the first resize event.
             if (!detached && !desktop_config.disable_preferred_size())
             {
                 if (QWidget* content = ui->tabs->currentWidget())
@@ -699,20 +693,14 @@ void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType sess
     QIcon icon = sessionIcon(session_type);
 
     client_window->setWindowIcon(icon);
-
-    // Parent the session window to us so that the authorization dialog shown by connectToHost is
-    // transient to the main window. The session tab takes ownership right after.
     client_window->setParent(this);
 
-    // Authorization rejected by the user - discard the window without creating a tab.
-    if (!client_window->connectToHost(host, display_name))
+    if (!client_window->connectToHost(host, profile, display_name))
     {
         client_window->deleteLater();
         return;
     }
 
-    // The tab is created immediately; the connection progress is displayed by the status overlay
-    // inside the session window.
     ClientTab* client_tab = new ClientTab(client_window);
     addTab(client_tab, computer_name, icon);
 

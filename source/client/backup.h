@@ -40,7 +40,6 @@ public:
         UNSUPPORTED_VERSION,
         WRONG_PASSWORD,
         UNREADABLE_RECORD,
-        NOTHING_EXPORTED,
         NOTHING_IMPORTED,
         INTERNAL_ERROR,
     };
@@ -53,10 +52,11 @@ public:
         int local_hosts = 0;
         int router_hosts = 0;
         int credentials = 0;
+        int profiles = 0;
 
         int total() const
         {
-            return routers + local_groups + local_hosts + router_hosts + credentials;
+            return routers + local_groups + local_hosts + router_hosts + credentials + profiles;
         }
     };
 

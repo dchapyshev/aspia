@@ -30,7 +30,6 @@
 #include "base/auto_qpointer.h"
 #include "base/build_config.h"
 #include "base/gui_application.h"
-#include "base/net/udp_channel.h"
 #include "client/database.h"
 #include "client/master_password.h"
 #include "client/system_settings.h"
@@ -38,6 +37,7 @@
 #include "client/android/credentials_widget.h"
 #include "client/android/master_password_dialog.h"
 #include "client/android/master_password_widget.h"
+#include "client/android/profiles_widget.h"
 #include "common/android/about_widget.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
@@ -82,13 +82,12 @@ SettingsWidget::SettingsWidget(QWidget* parent)
       stack_(new QStackedWidget(this)),
       settings_page_(new ScrollArea()),
       credentials_page_(new CredentialsWidget()),
+      profiles_page_(new ProfilesWidget()),
       about_page_(new AboutWidget()),
       update_page_(new UpdateWidget(kClientUpdatePackage)),
       master_password_page_(new MasterPasswordWidget()),
       button_credentials_(new IconButton(":/img/material/key.svg", this)),
-      button_about_(new IconButton(":/img/material/info.svg", this)),
-      desktop_config_(Database::instance().desktopConfig()),
-      udp_methods_(Database::instance().udpMethods())
+      button_about_(new IconButton(":/img/material/info.svg", this))
 {
     // The actions live in the app bar; AppBar::setActions() reparents and shows them. Hidden by
     // default so they do not linger in this widget.
@@ -101,6 +100,9 @@ SettingsWidget::SettingsWidget(QWidget* parent)
             this, &SettingsWidget::onCredentialsTitleChanged);
     connect(credentials_page_, &CredentialsWidget::sig_appBarActionsChanged,
             this, &SettingsWidget::onCredentialsActionsChanged);
+    connect(profiles_page_, &ProfilesWidget::sig_titleChanged, this, &SettingsWidget::onProfilesTitleChanged);
+    connect(profiles_page_, &ProfilesWidget::sig_appBarActionsChanged,
+            this, &SettingsWidget::onProfilesActionsChanged);
     connect(master_password_page_, &MasterPasswordWidget::sig_finished,
             this, &SettingsWidget::onMasterPasswordChanged);
 
@@ -108,6 +110,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
     stack_->addWidget(settings_page_);
     stack_->addWidget(credentials_page_);
+    stack_->addWidget(profiles_page_);
     stack_->addWidget(about_page_);
     stack_->addWidget(update_page_);
     stack_->addWidget(master_password_page_);
@@ -125,6 +128,8 @@ QList<QWidget*> SettingsWidget::appBarActions() const
 {
     if (isCredentialsPage())
         return credentials_page_->appBarActions();
+    if (isProfilesPage())
+        return profiles_page_->appBarActions();
     if (isAboutPage())
         return about_page_->appBarActions();
     if (isUpdatePage() || isMasterPasswordPage())
@@ -143,8 +148,17 @@ void SettingsWidget::goBack()
         return;
     }
 
-    if (!isCredentialsPage() && !isAboutPage() && !isUpdatePage() && !isMasterPasswordPage())
+    if (isProfilesPage() && !profiles_page_->isListPage())
+    {
+        profiles_page_->goBack();
         return;
+    }
+
+    if (!isCredentialsPage() && !isProfilesPage() && !isAboutPage() && !isUpdatePage() &&
+        !isMasterPasswordPage())
+    {
+        return;
+    }
 
     master_password_page_->clear();
     stack_->setCurrentWidget(settings_page_);
@@ -157,6 +171,8 @@ void SettingsWidget::resetToSettings()
 {
     if (!credentials_page_->isListPage())
         credentials_page_->goBack();
+    if (!profiles_page_->isListPage())
+        profiles_page_->goBack();
 
     master_password_page_->clear();
     stack_->setCurrentWidget(settings_page_);
@@ -193,6 +209,20 @@ void SettingsWidget::onCredentialsActionsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void SettingsWidget::onProfilesTitleChanged(const QString& title)
+{
+    if (isProfilesPage())
+        emit sig_titleChanged(title, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onProfilesActionsChanged()
+{
+    if (isProfilesPage())
+        emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
 void SettingsWidget::onMasterPasswordChanged()
 {
     goBack();
@@ -204,6 +234,15 @@ void SettingsWidget::onShowCredentials()
     credentials_page_->reload();
     stack_->setCurrentWidget(credentials_page_);
     emit sig_titleChanged(tr("Credentials"), true);
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onShowProfiles()
+{
+    profiles_page_->reload();
+    stack_->setCurrentWidget(profiles_page_);
+    emit sig_titleChanged(tr("Profiles"), true);
     emit sig_appBarActionsChanged();
 }
 
@@ -248,6 +287,12 @@ bool SettingsWidget::isCredentialsPage() const
 }
 
 //--------------------------------------------------------------------------------------------------
+bool SettingsWidget::isProfilesPage() const
+{
+    return stack_->currentWidget() == profiles_page_;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool SettingsWidget::isAboutPage() const
 {
     return stack_->currentWidget() == about_page_;
@@ -276,8 +321,7 @@ void SettingsWidget::buildSettings()
 
     buildInterfaceSection(layout);
     buildSecuritySection(layout);
-    buildUdpSection(layout);
-    buildDesktopSection(layout);
+    buildProfilesSection(layout);
     buildFileTransferSection(layout);
 #if !defined(ASPIA_GOOGLE_PLAY)
     buildUpdateSection(layout);
@@ -384,94 +428,13 @@ void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::buildUdpSection(QVBoxLayout* layout)
+void SettingsWidget::buildProfilesSection(QVBoxLayout* layout)
 {
-    addSectionHeader(layout, tr("UDP Connections"));
+    addSectionHeader(layout, tr("Profiles"));
 
-    const auto add_flag = [this, layout](const QString& text, quint32 flag)
-    {
-        addBoolSetting(layout, text, (udp_methods_ & flag) != 0, [this, flag](bool checked)
-        {
-            if (checked)
-                udp_methods_ |= flag;
-            else
-                udp_methods_ &= ~flag;
-            Database::instance().setUdpMethods(udp_methods_);
-        });
-    };
-
-    add_flag(tr("Allow direct connections"), UDP_METHOD_DIRECT);
-    add_flag(tr("Allow UDP Hole Punching"), UDP_METHOD_HOLE_PUNCHING);
-    add_flag(tr("Allow PCP protocol"), UDP_METHOD_PCP);
-    add_flag(tr("Allow NAT-PMP protocol"), UDP_METHOD_NAT_PMP);
-    add_flag(tr("Allow UPnP protocol"), UDP_METHOD_UPNP);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsWidget::buildDesktopSection(QVBoxLayout* layout)
-{
-    addSectionHeader(layout, tr("Remote Desktop"));
-
-    addBoolSetting(layout, tr("Enable audio"), desktop_config_.audio(), [this](bool checked)
-    {
-        desktop_config_.set_audio(checked);
-        Database::instance().setDesktopConfig(desktop_config_);
-    });
-    addBoolSetting(layout, tr("Enable clipboard"), desktop_config_.clipboard(), [this](bool checked)
-    {
-        desktop_config_.set_clipboard(checked);
-        Database::instance().setDesktopConfig(desktop_config_);
-    });
-    addBoolSetting(layout, tr("Show shape of remote cursor"), desktop_config_.cursor_shape(),
-                   [this](bool checked)
-    {
-        desktop_config_.set_cursor_shape(checked);
-        Database::instance().setDesktopConfig(desktop_config_);
-    });
-    addBoolSetting(layout, tr("Show position of remote cursor"), desktop_config_.cursor_position(),
-                   [this](bool checked)
-    {
-        desktop_config_.set_cursor_position(checked);
-        Database::instance().setDesktopConfig(desktop_config_);
-    });
-    addBoolSetting(layout, tr("Disable desktop effects"), !desktop_config_.effects(),
-                   [this](bool checked)
-    {
-        desktop_config_.set_effects(!checked);
-        Database::instance().setDesktopConfig(desktop_config_);
-    });
-    addBoolSetting(layout, tr("Disable desktop wallpaper"), !desktop_config_.wallpaper(),
-                   [this](bool checked)
-    {
-        desktop_config_.set_wallpaper(!checked);
-        Database::instance().setDesktopConfig(desktop_config_);
-    });
-    addBoolSetting(layout, tr("Lock computer at disconnect"), desktop_config_.lock_at_disconnect(),
-                   [this](bool checked)
-    {
-        desktop_config_.set_lock_at_disconnect(checked);
-        Database::instance().setDesktopConfig(desktop_config_);
-    });
-    addBoolSetting(layout, tr("Block remote input"), desktop_config_.block_input(),
-                   [this](bool checked)
-    {
-        desktop_config_.set_block_input(checked);
-        Database::instance().setDesktopConfig(desktop_config_);
-    });
-
-    ComboBox* quality = new ComboBox();
-    quality->setLabel(tr("Quality"));
-    quality->addItem(tr("Automatic"), kAutoQuality);
-    quality->addItem(tr("Low"), kLowQuality);
-    quality->addItem(tr("Medium"), kMediumQuality);
-    quality->addItem(tr("High"), kHighQuality);
-    quality->setCurrentIndex(quality->findData(desktop_config_.quality()));
-    connect(quality, &QComboBox::currentIndexChanged, this, [this, quality](int /* index */)
-    {
-        desktop_config_.set_quality(quality->currentData().toUInt());
-        Database::instance().setDesktopConfig(desktop_config_);
-    });
-    layout->addWidget(quality);
+    Button* manage = new Button(tr("Manage Profiles"), Button::Role::FILLED);
+    connect(manage, &Button::clicked, this, &SettingsWidget::onShowProfiles);
+    layout->addWidget(manage);
 }
 
 //--------------------------------------------------------------------------------------------------

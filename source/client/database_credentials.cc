@@ -195,22 +195,6 @@ bool Database::removeCredential(qint64 credential_id)
         return false;
     }
 
-    SqlTransaction transaction(db_);
-    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
-    {
-        LOG(ERROR) << "Unable to begin transaction";
-        return false;
-    }
-
-    SqlQuery orphans(db_, "DELETE FROM router_hosts WHERE credential_id=? AND data=X''");
-    orphans.addInt64(credential_id);
-
-    if (!orphans.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return false;
-    }
-
     SqlQuery query(db_, "DELETE FROM credentials WHERE id=?");
     query.addInt64(credential_id);
 
@@ -220,7 +204,7 @@ bool Database::removeCredential(qint64 credential_id)
         return false;
     }
 
-    return transaction.commit();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

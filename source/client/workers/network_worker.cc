@@ -46,9 +46,9 @@ static const size_t kMaxUdpAttempts = 16;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-NetworkWorker::NetworkWorker()
+NetworkWorker::NetworkWorker(quint32 udp_methods)
     : Worker(Thread::AsioDispatcher, kReceiveRateInterval),
-      udp_methods_(Database::instance().udpMethods())
+      udp_methods_(udp_methods)
 {
     LOG(INFO) << "Ctor";
 }

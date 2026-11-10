@@ -184,8 +184,7 @@ bool RouterConfig::setEncryptedData(const QByteArray& blob)
 bool RouterHostConfig::isValid() const
 {
     return router_id_ > 0 && host_id_ != kInvalidHostId && !isTempHostId(host_id_) &&
-           username_.isEmpty() == password_.isEmpty() &&
-           (!username_.isEmpty() || credential_id_ > 0);
+           username_.isEmpty() == password_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -336,6 +335,36 @@ bool CredentialConfig::setEncryptedData(const QByteArray& blob)
     memZero(data.mutable_username());
     memZero(data.mutable_password());
 
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ProfileConfig::isValid() const
+{
+    if (isDefault())
+        return name_.isEmpty();
+
+    return !name_.isEmpty() && name_.length() <= kMaxNameLength;
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray ProfileConfig::serializedData() const
+{
+    proto::storage::ProfileData data;
+    data.mutable_desktop()->CopyFrom(desktop_config_);
+    data.set_udp_methods(udp_methods_);
+    return serialize(data);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ProfileConfig::setSerializedData(const QByteArray& data)
+{
+    proto::storage::ProfileData profile;
+    if (!parse(data, &profile))
+        return false;
+
+    desktop_config_ = profile.desktop();
+    udp_methods_ = profile.udp_methods();
     return true;
 }
 

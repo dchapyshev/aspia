@@ -22,11 +22,8 @@
 
 #include "base/build_config.h"
 #include "base/logging.h"
-#include "base/serialization.h"
-#include "base/net/udp_channel.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
-#include "proto/desktop_control.h"
 #include "proto/peer.h"
 
 namespace {
@@ -39,8 +36,6 @@ constexpr auto kSettingBackupEnabled = "backup_on_startup";
 constexpr auto kSettingBackupPath    = "backup_path";
 constexpr auto kSettingBackupKeep    = "backup_retention";
 constexpr auto kSettingLockTimeout   = "lock_timeout";
-constexpr auto kSettingDesktopConfig = "desktop_config";
-constexpr auto kSettingUdpMethods    = "udp_methods";
 constexpr auto kSettingProxy         = "proxy";
 constexpr auto kSettingMcpEnabled    = "mcp_enabled";
 constexpr auto kSettingMcpConfirm    = "mcp_auto_confirm";
@@ -170,44 +165,6 @@ Minutes Database::lockTimeout() const
 bool Database::setLockTimeout(Minutes timeout)
 {
     return writeSetting(kSettingLockTimeout, QString::number(timeout.count()));
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::control::Config Database::desktopConfig() const
-{
-    bool found = false;
-    const QString value = readSetting(kSettingDesktopConfig, &found);
-    if (found)
-    {
-        proto::control::Config config;
-        if (parse(QByteArray::fromBase64(value.toLatin1()), &config))
-            return config;
-    }
-
-    return defaultDesktopConfig();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setDesktopConfig(const proto::control::Config& config)
-{
-    return writeSetting(kSettingDesktopConfig, QString::fromLatin1(serialize(config).toBase64()));
-}
-
-//--------------------------------------------------------------------------------------------------
-quint32 Database::udpMethods() const
-{
-    bool ok = false;
-    const quint32 value = readSetting(kSettingUdpMethods).toUInt(&ok);
-    if (!ok)
-        return UDP_METHOD_ALL;
-
-    return value;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setUdpMethods(quint32 methods)
-{
-    return writeSetting(kSettingUdpMethods, QString::number(methods));
 }
 
 //--------------------------------------------------------------------------------------------------

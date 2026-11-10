@@ -21,6 +21,7 @@
 
 #include <memory>
 
+#include "client/config.h"
 #include "client/desktop/tab.h"
 
 namespace Ui {
@@ -62,9 +63,12 @@ private slots:
     void onSelectBackupPath();
     void onBackupRetentionChanged();
     void onProxyChanged();
-    void onUdpMethodsChanged();
     void onLockTimeoutChanged();
     void onAutoUnlockChanged();
+    void onProfileChanged();
+    void onAddProfile();
+    void onRenameProfile();
+    void onDeleteProfile();
     void onDesktopFeatureChanged();
     void onSelectRecordingPath();
     void onMcpEnabledChanged();
@@ -83,7 +87,11 @@ private:
     void updateProxyFields();
     void applyCategoryStyle();
     bool enableAutoUnlock();
-    void saveDesktopConfig();
+    void reloadProfiles(qint64 profile_id);
+    void showProfile();
+    ProfileConfig profileFromUi() const;
+    QString askProfileName(const QString& title, const QString& name, int own_index);
+    void saveProfile();
 
     std::unique_ptr<Ui::SettingsTab> ui;
     QButtonGroup* category_group_ = nullptr;

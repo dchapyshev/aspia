@@ -35,6 +35,7 @@ class SessionState
 {
 public:
     SessionState(const HostConfig& host,
+                 const ProfileConfig& profile,
                  proto::peer::SessionType session_type,
                  const QString& display_name);
     ~SessionState() = default;
@@ -67,12 +68,16 @@ public:
     void setReconnecting(bool enable);
     bool isReconnecting() const;
 
+    void setProfile(const ProfileConfig& profile);
+    ProfileConfig profile() const;
+
 private:
     const HostConfig host_;
     const proto::peer::SessionType session_type_;
     const QString display_name_;
 
     mutable std::mutex lock_;
+    ProfileConfig profile_;
     QVersionNumber router_version_;
     QVersionNumber host_version_;
     proto::router::ConnectionOffer connection_offer_;

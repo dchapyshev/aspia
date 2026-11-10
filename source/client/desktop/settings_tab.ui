@@ -302,50 +302,6 @@
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="groupbox_udp">
-             <property name="title">
-              <string>UDP Connections</string>
-             </property>
-             <layout class="QVBoxLayout" name="layout_udp">
-              <item>
-               <widget class="QCheckBox" name="checkbox_udp_direct">
-                <property name="text">
-                 <string>Allow direct connections</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkbox_udp_hole_punching">
-                <property name="text">
-                 <string>Allow UDP Hole Punching</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkbox_udp_pcp">
-                <property name="text">
-                 <string>Allow PCP protocol</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkbox_udp_natpmp">
-                <property name="text">
-                 <string>Allow NAT-PMP protocol</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkbox_udp_upnp">
-                <property name="text">
-                 <string>Allow UPnP protocol</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
             <widget class="QGroupBox" name="groupbox_security">
              <property name="title">
               <string>Security</string>
@@ -438,6 +394,59 @@
             <number>0</number>
            </property>
            <item>
+            <layout class="QHBoxLayout" name="layout_profile">
+             <item>
+              <widget class="QComboBox" name="combo_profile">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="button_add_profile">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Add...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="button_rename_profile">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Rename...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="button_delete_profile">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Delete</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
             <widget class="QGroupBox" name="groupbox_features">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -446,7 +455,7 @@
               </sizepolicy>
              </property>
              <property name="title">
-              <string>Features</string>
+              <string>Desktop Features</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_2">
               <item>
@@ -524,7 +533,7 @@
               </sizepolicy>
              </property>
              <property name="title">
-              <string>Screen</string>
+              <string>Desktop Screen</string>
              </property>
              <layout class="QGridLayout" name="layout_screen">
               <item row="0" column="0">
@@ -586,7 +595,7 @@
               </sizepolicy>
              </property>
              <property name="title">
-              <string>Recording</string>
+              <string>Desktop Recording</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_recording">
               <item>
@@ -629,6 +638,50 @@
                  </widget>
                 </item>
                </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupbox_udp">
+             <property name="title">
+              <string>UDP Connections</string>
+             </property>
+             <layout class="QVBoxLayout" name="layout_udp">
+              <item>
+               <widget class="QCheckBox" name="checkbox_udp_direct">
+                <property name="text">
+                 <string>Allow direct connections</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkbox_udp_hole_punching">
+                <property name="text">
+                 <string>Allow UDP Hole Punching</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkbox_udp_pcp">
+                <property name="text">
+                 <string>Allow PCP protocol</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkbox_udp_natpmp">
+                <property name="text">
+                 <string>Allow NAT-PMP protocol</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkbox_udp_upnp">
+                <property name="text">
+                 <string>Allow UPnP protocol</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>

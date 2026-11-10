@@ -118,7 +118,7 @@ ClientWindow::~ClientWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
+bool ClientWindow::connectToHost(HostConfig host, const ProfileConfig& profile, const QString& display_name)
 {
     LOG(INFO) << "Connecting to host";
     setClientTitle(host, session_type_);
@@ -139,7 +139,7 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
             return false;
     }
 
-    startConnection(host, display_name);
+    startConnection(host, profile, display_name);
     return true;
 }
 
@@ -484,10 +484,12 @@ void ClientWindow::forgetRefusedCredentials()
         return;
     }
 
-    const HostId host_id = stringToHostId(host.address());
+    RouterHostConfig router_host;
+    router_host.setRouterId(host.routerId());
+    router_host.setHostId(stringToHostId(host.address()));
 
-    if (!Database::instance().removeRouterHost(host.routerId(), host_id))
-        LOG(ERROR) << "Unable to remove credentials of host" << host_id;
+    if (!Database::instance().modifyRouterHost(router_host))
+        LOG(ERROR) << "Unable to remove credentials of host" << router_host.hostId();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -543,7 +545,8 @@ void ClientWindow::askCredentialsAgain()
     HostConfig host = session_state_->host();
 
     // Stored credentials are changed in the host editor, not here.
-    if (storedCredentials(host).has_value())
+    const std::optional<std::pair<QString, SecureString>> stored = storedCredentials(host);
+    if (stored.has_value() && !stored->first.isEmpty())
         return;
 
     if (host.username().startsWith(u'#'))
@@ -553,11 +556,11 @@ void ClientWindow::askCredentialsAgain()
     if (!askCredentials(&host))
         return;
 
-    startConnection(host, session_state_->displayName());
+    startConnection(host, session_state_->profile(), session_state_->displayName());
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::startConnection(HostConfig host, const QString& display_name)
+void ClientWindow::startConnection(HostConfig host, const ProfileConfig& profile, const QString& display_name)
 {
     // When connecting with a one-time password, the username must be in the following format: #host_id.
     if (host.username().isEmpty())
@@ -566,7 +569,7 @@ void ClientWindow::startConnection(HostConfig host, const QString& display_name)
         host.setUsername(u"#" + host.address());
     }
 
-    session_state_ = std::make_shared<SessionState>(host, session_type_, display_name);
+    session_state_ = std::make_shared<SessionState>(host, profile, session_type_, display_name);
 
     LOG(INFO) << "Start client";
     if (session_state_->isConnectionByHostId())
@@ -618,9 +621,6 @@ void ClientWindow::fetchConnectionOffer()
         if (offer.error_code() == proto::router::kErrorHostOffline &&
             session_state_->isReconnecting())
         {
-            // Host is offline - wait a few seconds and try again. Client's internal
-            // timeout_timer will eventually flip isAutoReconnect to false;
-            // fetchConnectionOffer() guards on that.
             QTimer::singleShot(kReconnectRetryDelay, this, &ClientWindow::fetchConnectionOffer);
             return;
         }
@@ -639,7 +639,8 @@ void ClientWindow::startNewSession()
     worker_manager_.reset();
     worker_manager_ = std::make_unique<WorkerManager>();
 
-    std::unique_ptr<NetworkWorker> network_worker = std::make_unique<NetworkWorker>();
+    std::unique_ptr<NetworkWorker> network_worker =
+        std::make_unique<NetworkWorker>(session_state_->profile().udpMethods());
     network_worker_ = network_worker.get();
     worker_manager_->add(std::move(network_worker));
 

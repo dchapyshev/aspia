@@ -27,6 +27,7 @@
 #include <QEvent>
 #include <QFileDialog>
 #include <QGuiApplication>
+#include <QInputDialog>
 #include <QPalette>
 #include <QPointer>
 #include <QPushButton>
@@ -36,8 +37,6 @@
 #include <QSpinBox>
 #include <QToolButton>
 #include <QVBoxLayout>
-
-#include <algorithm>
 
 #include "base/auto_qpointer.h"
 #include "base/build_config.h"
@@ -140,7 +139,7 @@ SettingsTab::SettingsTab(QWidget* parent)
 
     int button_id = 0;
     add_button(button_id++, ":/img/gear.svg", tr("General"));
-    add_button(button_id++, ":/img/workstation.svg", tr("Desktop"));
+    add_button(button_id++, ":/img/dashboard-layout.svg", tr("Profiles"));
     add_button(button_id++, ":/img/ai.svg", "MCP");
     add_button(button_id++, ":/img/restart.svg", tr("Update"));
 
@@ -244,54 +243,18 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->edit_proxy_password->setPassword(proxy_settings.password);
     updateProxyFields();
 
-    const quint32 udp_methods = db.udpMethods();
-    ui->checkbox_udp_direct->setChecked(udp_methods & UDP_METHOD_DIRECT);
-    ui->checkbox_udp_hole_punching->setChecked(udp_methods & UDP_METHOD_HOLE_PUNCHING);
-    ui->checkbox_udp_pcp->setChecked(udp_methods & UDP_METHOD_PCP);
-    ui->checkbox_udp_natpmp->setChecked(udp_methods & UDP_METHOD_NAT_PMP);
-    ui->checkbox_udp_upnp->setChecked(udp_methods & UDP_METHOD_UPNP);
-
-    // Desktop page.
-    proto::control::Config desktop_config = db.desktopConfig();
-    ui->checkbox_audio->setChecked(desktop_config.audio());
-    ui->checkbox_clipboard->setChecked(desktop_config.clipboard());
-    ui->checkbox_cursor_shape->setChecked(desktop_config.cursor_shape());
-    ui->checkbox_enable_cursor_pos->setChecked(desktop_config.cursor_position());
-    ui->checkbox_desktop_effects->setChecked(!desktop_config.effects());
-    ui->checkbox_desktop_wallpaper->setChecked(!desktop_config.wallpaper());
-    ui->checkbox_lock_at_disconnect->setChecked(desktop_config.lock_at_disconnect());
-    ui->checkbox_block_remote_input->setChecked(desktop_config.block_input());
-    ui->checkbox_send_key_combinations->setChecked(!desktop_config.disable_key_combinations());
-
+    // Profiles page.
     ui->combo_resolution->addItem(tr("None"), QSize());
     const QList<QSize> resolutions = availableResolutions();
     for (const QSize& resolution : std::as_const(resolutions))
         ui->combo_resolution->addItem(QString("%1x%2").arg(resolution.width()).arg(resolution.height()), resolution);
 
-    QSize preferred(desktop_config.preferred_resolution().width(),
-                    desktop_config.preferred_resolution().height());
-    if (!preferred.isEmpty())
-    {
-        int index = ui->combo_resolution->findData(preferred);
-        if (index < 0)
-        {
-            ui->combo_resolution->addItem(
-                QString("%1x%2").arg(preferred.width()).arg(preferred.height()), preferred);
-            index = ui->combo_resolution->count() - 1;
-        }
-        ui->combo_resolution->setCurrentIndex(index);
-    }
-
     ui->combo_quality->addItem(tr("Automatic"), kAutoQuality);
     ui->combo_quality->addItem(tr("Low"), kLowQuality);
     ui->combo_quality->addItem(tr("Medium"), kMediumQuality);
     ui->combo_quality->addItem(tr("High"), kHighQuality);
-    ui->combo_quality->setCurrentIndex(ui->combo_quality->findData(desktop_config.quality()));
 
-    ui->checkbox_preferred_size->setChecked(!desktop_config.disable_preferred_size());
-
-    ui->checkbox_record_autostart->setChecked(desktop_config.record_sessions());
-    ui->edit_record_dir->setText(recordingPath(desktop_config));
+    reloadProfiles(0);
 
     // MCP page.
     ui->checkbox_mcp_enabled->setChecked(db.isMcpEnabled());
@@ -356,16 +319,17 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->spinbox_proxy_port, &QSpinBox::editingFinished, this, &SettingsTab::onProxyChanged);
     connect(ui->edit_proxy_username, &QLineEdit::editingFinished, this, &SettingsTab::onProxyChanged);
     connect(ui->edit_proxy_password, &QLineEdit::editingFinished, this, &SettingsTab::onProxyChanged);
-    connect(ui->checkbox_udp_direct, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
-    connect(ui->checkbox_udp_hole_punching, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
-    connect(ui->checkbox_udp_pcp, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
-    connect(ui->checkbox_udp_natpmp, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
-    connect(ui->checkbox_udp_upnp, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
     connect(ui->combo_lock_timeout, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onLockTimeoutChanged);
     connect(ui->checkbox_auto_unlock, &QCheckBox::toggled, this, &SettingsTab::onAutoUnlockChanged);
     connect(ui->button_change_master_password, &QPushButton::clicked,
             this, &SettingsTab::onChangeMasterPassword);
+
+    connect(ui->combo_profile, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &SettingsTab::onProfileChanged);
+    connect(ui->button_add_profile, &QPushButton::clicked, this, &SettingsTab::onAddProfile);
+    connect(ui->button_rename_profile, &QPushButton::clicked, this, &SettingsTab::onRenameProfile);
+    connect(ui->button_delete_profile, &QPushButton::clicked, this, &SettingsTab::onDeleteProfile);
 
     connect(ui->checkbox_audio, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->checkbox_clipboard, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
@@ -385,6 +349,12 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->checkbox_record_autostart, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->edit_record_dir, &QLineEdit::editingFinished, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->button_select_record_dir, &QPushButton::clicked, this, &SettingsTab::onSelectRecordingPath);
+
+    connect(ui->checkbox_udp_direct, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
+    connect(ui->checkbox_udp_hole_punching, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
+    connect(ui->checkbox_udp_pcp, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
+    connect(ui->checkbox_udp_natpmp, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
+    connect(ui->checkbox_udp_upnp, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
 
     connect(ui->checkbox_mcp_enabled, &QCheckBox::toggled, this, &SettingsTab::onMcpEnabledChanged);
     connect(ui->checkbox_mcp_auto_confirm, &QCheckBox::toggled, this, &SettingsTab::onMcpAutoConfirmChanged);
@@ -567,26 +537,6 @@ void SettingsTab::onProxyChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::onUdpMethodsChanged()
-{
-    LOG(INFO) << "[ACTION] UDP methods changed";
-
-    quint32 methods = 0;
-    if (ui->checkbox_udp_direct->isChecked())
-        methods |= UDP_METHOD_DIRECT;
-    if (ui->checkbox_udp_hole_punching->isChecked())
-        methods |= UDP_METHOD_HOLE_PUNCHING;
-    if (ui->checkbox_udp_pcp->isChecked())
-        methods |= UDP_METHOD_PCP;
-    if (ui->checkbox_udp_natpmp->isChecked())
-        methods |= UDP_METHOD_NAT_PMP;
-    if (ui->checkbox_udp_upnp->isChecked())
-        methods |= UDP_METHOD_UPNP;
-
-    Database::instance().setUdpMethods(methods);
-}
-
-//--------------------------------------------------------------------------------------------------
 void SettingsTab::onLockTimeoutChanged()
 {
     LOG(INFO) << "[ACTION] Lock timeout changed";
@@ -616,11 +566,98 @@ void SettingsTab::onAutoUnlockChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void SettingsTab::onProfileChanged()
+{
+    LOG(INFO) << "[ACTION] Profile changed:" << ui->combo_profile->currentData().toLongLong();
+    showProfile();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onAddProfile()
+{
+    LOG(INFO) << "[ACTION] Add profile";
+
+    const QString name = askProfileName(tr("Add Profile"), QString(), -1);
+    if (name.isEmpty())
+        return;
+
+    // A new profile starts with the parameters of the one shown.
+    ProfileConfig profile = profileFromUi();
+    profile.setName(name);
+
+    if (!Database::instance().addProfile(profile))
+    {
+        MsgBox::warning(this, tr("Unable to add profile."));
+        return;
+    }
+
+    reloadProfiles(profile.id());
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onRenameProfile()
+{
+    LOG(INFO) << "[ACTION] Rename profile";
+
+    const qint64 profile_id = ui->combo_profile->currentData().toLongLong();
+    if (profile_id <= 0)
+        return;
+
+    Database& db = Database::instance();
+
+    ProfileConfig profile;
+    if (db.findProfile(profile_id, &profile) != Database::FindResult::FOUND)
+    {
+        MsgBox::warning(this, tr("Failed to read the profile."));
+        return;
+    }
+
+    const QString name = askProfileName(tr("Rename Profile"), profile.name(), ui->combo_profile->currentIndex());
+    if (name.isEmpty())
+        return;
+
+    profile.setName(name);
+
+    if (!db.modifyProfile(profile))
+    {
+        MsgBox::warning(this, tr("Unable to rename profile."));
+        return;
+    }
+
+    reloadProfiles(profile_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onDeleteProfile()
+{
+    LOG(INFO) << "[ACTION] Delete profile";
+
+    const qint64 profile_id = ui->combo_profile->currentData().toLongLong();
+    if (profile_id <= 0)
+        return;
+
+    if (MsgBox::question(this,
+            tr("Are you sure you want to delete profile \"%1\"?").arg(ui->combo_profile->currentText()),
+            MsgBox::Yes | MsgBox::No) != MsgBox::Yes)
+    {
+        return;
+    }
+
+    if (!Database::instance().removeProfile(profile_id))
+    {
+        MsgBox::warning(this, tr("Unable to delete profile."));
+        return;
+    }
+
+    reloadProfiles(0);
+    emit sig_desktopConfigChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
 void SettingsTab::onDesktopFeatureChanged()
 {
     LOG(INFO) << "[ACTION] Desktop feature changed";
-    saveDesktopConfig();
-    emit sig_desktopConfigChanged();
+    saveProfile();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -946,7 +983,117 @@ bool SettingsTab::enableAutoUnlock()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::saveDesktopConfig()
+void SettingsTab::reloadProfiles(qint64 profile_id)
+{
+    QList<ProfileConfig> profiles;
+    if (Database::instance().profileList(&profiles) == Database::ReadResult::FAILED)
+        MsgBox::warning(this, tr("Failed to read the list of profiles."));
+
+    {
+        QSignalBlocker blocker(ui->combo_profile);
+
+        const QIcon icon(":/img/dashboard-layout.svg");
+
+        ui->combo_profile->clear();
+        for (const ProfileConfig& profile : std::as_const(profiles))
+        {
+            ui->combo_profile->addItem(icon,
+                                       profile.isDefault() ? tr("Default") : profile.name(),
+                                       profile.isDefault() ? qint64(0) : profile.id());
+        }
+
+        const int index = ui->combo_profile->findData(profile_id);
+        ui->combo_profile->setCurrentIndex(index >= 0 ? index : 0);
+    }
+
+    showProfile();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::showProfile()
+{
+    Database& db = Database::instance();
+    const qint64 profile_id = ui->combo_profile->currentData().toLongLong();
+
+    proto::control::Config desktop_config;
+    quint32 udp_methods = 0;
+
+    if (profile_id <= 0)
+    {
+        const ProfileConfig profile = db.defaultProfile();
+        desktop_config = profile.desktopConfig();
+        udp_methods = profile.udpMethods();
+    }
+    else
+    {
+        ProfileConfig profile;
+        const Database::FindResult result = db.findProfile(profile_id, &profile);
+        if (result == Database::FindResult::FOUND)
+        {
+            desktop_config = profile.desktopConfig();
+            udp_methods = profile.udpMethods();
+        }
+        else
+        {
+            desktop_config = defaultDesktopConfig();
+            udp_methods = UDP_METHOD_ALL;
+
+            if (result == Database::FindResult::UNREADABLE)
+                MsgBox::warning(this, tr("The profile is damaged. Fix or delete it."));
+            else
+                MsgBox::warning(this, tr("Failed to read the profile."));
+        }
+    }
+
+    ui->button_rename_profile->setEnabled(profile_id > 0);
+    ui->button_delete_profile->setEnabled(profile_id > 0);
+
+    const QList<QWidget*> controls = ui->page_desktop_content->findChildren<QWidget*>();
+    std::vector<QSignalBlocker> blockers;
+    blockers.reserve(static_cast<size_t>(controls.size()));
+    for (QWidget* control : controls)
+        blockers.emplace_back(control);
+
+    ui->checkbox_audio->setChecked(desktop_config.audio());
+    ui->checkbox_clipboard->setChecked(desktop_config.clipboard());
+    ui->checkbox_cursor_shape->setChecked(desktop_config.cursor_shape());
+    ui->checkbox_enable_cursor_pos->setChecked(desktop_config.cursor_position());
+    ui->checkbox_desktop_effects->setChecked(!desktop_config.effects());
+    ui->checkbox_desktop_wallpaper->setChecked(!desktop_config.wallpaper());
+    ui->checkbox_lock_at_disconnect->setChecked(desktop_config.lock_at_disconnect());
+    ui->checkbox_block_remote_input->setChecked(desktop_config.block_input());
+    ui->checkbox_send_key_combinations->setChecked(!desktop_config.disable_key_combinations());
+
+    QSize preferred(desktop_config.preferred_resolution().width(),
+                    desktop_config.preferred_resolution().height());
+    int resolution_index = 0;
+    if (!preferred.isEmpty())
+    {
+        resolution_index = ui->combo_resolution->findData(preferred);
+        if (resolution_index < 0)
+        {
+            ui->combo_resolution->addItem(
+                QString("%1x%2").arg(preferred.width()).arg(preferred.height()), preferred);
+            resolution_index = ui->combo_resolution->count() - 1;
+        }
+    }
+    ui->combo_resolution->setCurrentIndex(resolution_index);
+
+    ui->combo_quality->setCurrentIndex(ui->combo_quality->findData(desktop_config.quality()));
+    ui->checkbox_preferred_size->setChecked(!desktop_config.disable_preferred_size());
+
+    ui->checkbox_record_autostart->setChecked(desktop_config.record_sessions());
+    ui->edit_record_dir->setText(recordingPath(desktop_config));
+
+    ui->checkbox_udp_direct->setChecked(udp_methods & UDP_METHOD_DIRECT);
+    ui->checkbox_udp_hole_punching->setChecked(udp_methods & UDP_METHOD_HOLE_PUNCHING);
+    ui->checkbox_udp_pcp->setChecked(udp_methods & UDP_METHOD_PCP);
+    ui->checkbox_udp_natpmp->setChecked(udp_methods & UDP_METHOD_NAT_PMP);
+    ui->checkbox_udp_upnp->setChecked(udp_methods & UDP_METHOD_UPNP);
+}
+
+//--------------------------------------------------------------------------------------------------
+ProfileConfig SettingsTab::profileFromUi() const
 {
     proto::control::Config desktop_config;
     desktop_config.set_audio(ui->checkbox_audio->isChecked());
@@ -971,5 +1118,98 @@ void SettingsTab::saveDesktopConfig()
         resolution->set_height(preferred.height());
     }
 
-    Database::instance().setDesktopConfig(desktop_config);
+    quint32 udp_methods = 0;
+    if (ui->checkbox_udp_direct->isChecked())
+        udp_methods |= UDP_METHOD_DIRECT;
+    if (ui->checkbox_udp_hole_punching->isChecked())
+        udp_methods |= UDP_METHOD_HOLE_PUNCHING;
+    if (ui->checkbox_udp_pcp->isChecked())
+        udp_methods |= UDP_METHOD_PCP;
+    if (ui->checkbox_udp_natpmp->isChecked())
+        udp_methods |= UDP_METHOD_NAT_PMP;
+    if (ui->checkbox_udp_upnp->isChecked())
+        udp_methods |= UDP_METHOD_UPNP;
+
+    ProfileConfig profile;
+    profile.setDesktopConfig(desktop_config);
+    profile.setUdpMethods(udp_methods);
+    return profile;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SettingsTab::askProfileName(const QString& title, const QString& name, int own_index)
+{
+    AutoQPointer<QInputDialog> dialog(new QInputDialog(this));
+    dialog->setWindowTitle(title);
+    dialog->setLabelText(tr("Name:"));
+    dialog->setTextValue(name);
+
+    for (;;)
+    {
+        if (dialog->exec() != QDialog::Accepted)
+            return QString();
+
+        const QString value = dialog->textValue().trimmed();
+        if (value.isEmpty())
+        {
+            MsgBox::warning(dialog, tr("Name cannot be empty."));
+            continue;
+        }
+
+        if (value.length() > ProfileConfig::kMaxNameLength)
+        {
+            MsgBox::warning(dialog,
+                tr("Too long name. The maximum length of the name is %n characters.",
+                   "", ProfileConfig::kMaxNameLength));
+            continue;
+        }
+
+        bool exists = false;
+        for (int i = 0; i < ui->combo_profile->count(); ++i)
+        {
+            if (i != own_index && ui->combo_profile->itemText(i).compare(value, Qt::CaseInsensitive) == 0)
+            {
+                exists = true;
+                break;
+            }
+        }
+
+        if (exists)
+        {
+            MsgBox::warning(dialog, tr("A profile with this name already exists."));
+            continue;
+        }
+
+        return value;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::saveProfile()
+{
+    Database& db = Database::instance();
+    const qint64 profile_id = ui->combo_profile->currentData().toLongLong();
+
+    ProfileConfig profile = profileFromUi();
+
+    if (profile_id <= 0)
+    {
+        ProfileConfig default_profile = db.defaultProfile();
+        default_profile.setDesktopConfig(profile.desktopConfig());
+        default_profile.setUdpMethods(profile.udpMethods());
+        profile = default_profile;
+    }
+    else
+    {
+        profile.setId(profile_id);
+        profile.setName(ui->combo_profile->currentText());
+    }
+
+    if (!db.modifyProfile(profile))
+    {
+        MsgBox::warning(this, tr("Unable to save profile."));
+        return;
+    }
+
+    emit sig_desktopConfigChanged();
 }

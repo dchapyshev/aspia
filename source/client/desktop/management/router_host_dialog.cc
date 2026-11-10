@@ -75,7 +75,11 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const RouterHost& host, QWi
     // saved under it would be sent to a host the user never gave it to. Such a host is edited like
     // any other, it just has nowhere to keep credentials.
     if (isTempHostId(host_.host_id))
+    {
         setCredentialsEnabled(false);
+        ui->label_profile->setEnabled(false);
+        ui->combo_profile->setEnabled(false);
+    }
 
     connect(ui->checkbox_saved_credentials, &QCheckBox::toggled, this, &RouterHostDialog::onSavedCredentialsToggled);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterHostDialog::onButtonBoxClicked);
@@ -83,7 +87,8 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const RouterHost& host, QWi
 
     int label_width = 0;
     for (const QLabel* label : { ui->label_workspace, ui->label_group, ui->label_display_name,
-                                 ui->label_username, ui->label_password, ui->label_credential })
+                                 ui->label_username, ui->label_password, ui->label_credential,
+                                 ui->label_profile })
     {
         label_width = std::max(label_width, label->sizeHint().width());
     }
@@ -262,6 +267,12 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
+    if (!saveProfile())
+    {
+        MsgBox::warning(this, tr("Failed to save the profile."));
+        return;
+    }
+
     if (session->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
     {
         LOG(INFO) << "[ACTION] Edit host accepted, credentials saved";
@@ -277,11 +288,33 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void RouterHostDialog::onLoadData()
 {
+    Database& db = Database::instance();
+
+    QList<ProfileConfig> profiles;
+    const Database::ReadResult profiles_result = db.profileList(&profiles);
+    if (profiles_result == Database::ReadResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the list of profiles";
+        MsgBox::warning(this, tr("Failed to read the list of profiles."));
+        reject();
+        return;
+    }
+
+    if (profiles_result == Database::ReadResult::INCOMPLETE)
+        LOG(ERROR) << "Unable to read some of the profiles";
+
+    const QIcon profile_icon(":/img/dashboard-layout.svg");
+
+    for (const ProfileConfig& profile : std::as_const(profiles))
+    {
+        ui->combo_profile->addItem(profile_icon,
+                                   profile.isDefault() ? tr("Default") : profile.name(),
+                                   QVariant::fromValue<qint64>(profile.isDefault() ? 0 : profile.id()));
+    }
+
     // A temporary host keeps no credentials, so there is nothing to read for it.
     if (isTempHostId(host_.host_id))
         return;
-
-    Database& db = Database::instance();
 
     QList<CredentialConfig> saved_credentials;
     const Database::ReadResult credentials_result = db.credentialList(
@@ -323,6 +356,9 @@ void RouterHostDialog::onLoadData()
             ui->combo_credential->setCurrentIndex(ui->combo_credential->findData(
                 QVariant::fromValue(credentials.credentialId())));
         }
+
+        ui->combo_profile->setCurrentIndex(
+            ui->combo_profile->findData(QVariant::fromValue(credentials.profileId())));
     }
 
     // Nothing to share until a record of credentials is added. A record that did not open is
@@ -335,6 +371,8 @@ void RouterHostDialog::onLoadData()
     {
         LOG(ERROR) << "Unable to read the credentials of host" << host_.host_id;
         setCredentialsEnabled(false);
+        ui->label_profile->setEnabled(false);
+        ui->combo_profile->setEnabled(false);
         MsgBox::warning(this, tr("Failed to read the credentials of the host."));
     }
     else if (credentials_found == Database::FindResult::UNREADABLE)
@@ -406,21 +444,8 @@ bool RouterHostDialog::saveCredentials()
 
     const bool row_exists = stored_found != Database::FindResult::NOT_FOUND;
 
-    // Remembered by neither a pair nor a record of credentials, the host has no row.
-    if (username.isEmpty() && credential_id <= 0)
-    {
-        // The form of a record that did not open comes up empty, and left that way it says
-        // nothing about the row: the user came to edit the host, not to drop credentials they
-        // were never shown.
-        if (stored_found == Database::FindResult::UNREADABLE)
-            return true;
-
-        if (db.removeRouterHost(router_id_, host_.host_id))
-            return true;
-
-        LOG(ERROR) << "Unable to remove credentials of host" << host_.host_id;
-        return false;
-    }
+    if (username.isEmpty() && credential_id <= 0 && stored_found != Database::FindResult::FOUND)
+        return true;
 
     RouterHostConfig credentials;
     credentials.setRouterId(router_id_);
@@ -440,6 +465,16 @@ bool RouterHostDialog::saveCredentials()
         LOG(ERROR) << "Unable to save credentials of host" << host_.host_id;
 
     return saved;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterHostDialog::saveProfile()
+{
+    if (!credentials_loaded_)
+        return true;
+
+    return Database::instance().setRouterHostProfileId(
+        router_id_, host_.host_id, ui->combo_profile->currentData().toLongLong());
 }
 
 //--------------------------------------------------------------------------------------------------

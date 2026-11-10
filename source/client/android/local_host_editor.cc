@@ -56,6 +56,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
       edit_username_(new LineEdit()),
       edit_password_(new LineEdit()),
       combo_credential_(new ComboBox()),
+      combo_profile_(new ComboBox()),
       edit_comment_(new TextArea()),
       label_error_(new Label(QString(), Label::Role::CAPTION))
 {
@@ -66,6 +67,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
     edit_password_->setLabel(tr("Password"));
     edit_password_->setEchoMode(QLineEdit::Password);
     combo_credential_->setLabel(tr("Credentials"));
+    combo_profile_->setLabel(tr("Profile"));
     edit_comment_->setLabel(tr("Comment"));
 
     // A fixed hex keeps the error color readable on both light and dark surfaces and survives the
@@ -93,6 +95,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
     form_layout->addWidget(edit_username_);
     form_layout->addWidget(edit_password_);
     form_layout->addWidget(combo_credential_);
+    form_layout->addWidget(combo_profile_);
     form_layout->addWidget(edit_comment_);
     form_layout->addWidget(save);
     form_layout->addWidget(button_delete_);
@@ -133,7 +136,8 @@ void LocalHostEditor::prepareForAdd(qint64 group_id)
     const bool routers_loaded = loadRouters(0);
     onRouterChanged();
     const bool credentials_loaded = loadCredentials(0);
-    lists_loaded_ = routers_loaded && credentials_loaded;
+    const bool profiles_loaded = loadProfiles(0);
+    lists_loaded_ = routers_loaded && credentials_loaded && profiles_loaded;
 
     edit_name_->setFocus();
 }
@@ -163,7 +167,8 @@ bool LocalHostEditor::prepareForEdit(qint64 host_id)
     const bool routers_loaded = loadRouters(host.routerId());
     onRouterChanged();
     const bool credentials_loaded = loadCredentials(host.credentialId());
-    lists_loaded_ = routers_loaded && credentials_loaded;
+    const bool profiles_loaded = loadProfiles(host.profileId());
+    lists_loaded_ = routers_loaded && credentials_loaded && profiles_loaded;
 
     edit_name_->setFocus();
 
@@ -174,70 +179,6 @@ bool LocalHostEditor::prepareForEdit(qint64 host_id)
             showError(tr("The data of the host is damaged. Enter it again."));
     }
 
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool LocalHostEditor::loadRouters(qint64 selected_router_id)
-{
-    combo_router_->clear();
-    combo_router_->addItem(tr("Without Router"), QVariant::fromValue<qint64>(0));
-
-    QList<RouterConfig> routers;
-    const Database::ReadResult result = Database::instance().routerList(&routers);
-    if (result == Database::ReadResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to read the list of routers";
-        showError(tr("Failed to read data from the local database."));
-        return false;
-    }
-
-    if (result == Database::ReadResult::INCOMPLETE)
-        LOG(ERROR) << "Unable to read some of the routers";
-
-    for (const RouterConfig& router : std::as_const(routers))
-        combo_router_->addItem(router.displayLabel(), QVariant::fromValue(router.routerId()));
-
-    const int index = combo_router_->findData(QVariant::fromValue(selected_router_id));
-    combo_router_->setCurrentIndex(index >= 0 ? index : 0);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool LocalHostEditor::loadCredentials(qint64 selected_credential_id)
-{
-    combo_credential_->clear();
-
-    QList<CredentialConfig> credentials;
-    const Database::ReadResult result = Database::instance().credentialList(
-        &credentials, CredentialConfig::Type::ASPIA);
-    if (result == Database::ReadResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to read the list of credentials";
-        showError(tr("Failed to read data from the local database."));
-        return false;
-    }
-
-    if (result == Database::ReadResult::INCOMPLETE)
-        LOG(ERROR) << "Unable to read some of the credentials";
-
-    const QIcon icon = GuiApplication::svgIcon(":/img/keys.svg");
-    const QIcon unread_icon = GuiApplication::svgIcon(":/img/key-corrupted.svg");
-
-    for (const CredentialConfig& credential : std::as_const(credentials))
-    {
-        combo_credential_->addItem(credential.isValid() ? icon : unread_icon,
-                                   credential.displayName(),
-                                   QVariant::fromValue(credential.id()));
-    }
-
-    const int index = combo_credential_->findData(QVariant::fromValue(selected_credential_id));
-    combo_credential_->setCurrentIndex(index >= 0 ? index : 0);
-
-    // Nothing to share until a record of credentials is added.
-    switch_saved_credentials_->setEnabled(!credentials.isEmpty());
-    switch_saved_credentials_->setChecked(index >= 0);
-    onSavedCredentialsToggled(switch_saved_credentials_->isChecked());
     return true;
 }
 
@@ -346,6 +287,7 @@ void LocalHostEditor::onSaveClicked()
     data.setCredentialId(switch_saved_credentials_->isChecked() ? combo_credential_->currentData().toLongLong() : 0);
     data.setUsername(username);
     data.setPassword(SecureString(password));
+    data.setProfileId(combo_profile_->currentData().toLongLong());
     data.setComment(edit_comment_->text());
 
     Database& db = Database::instance();
@@ -375,6 +317,101 @@ void LocalHostEditor::onDeleteClicked()
     }
 
     emit sig_accepted();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalHostEditor::loadRouters(qint64 selected_router_id)
+{
+    combo_router_->clear();
+    combo_router_->addItem(tr("Without Router"), QVariant::fromValue<qint64>(0));
+
+    QList<RouterConfig> routers;
+    const Database::ReadResult result = Database::instance().routerList(&routers);
+    if (result == Database::ReadResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the list of routers";
+        showError(tr("Failed to read data from the local database."));
+        return false;
+    }
+
+    if (result == Database::ReadResult::INCOMPLETE)
+        LOG(ERROR) << "Unable to read some of the routers";
+
+    for (const RouterConfig& router : std::as_const(routers))
+        combo_router_->addItem(router.displayLabel(), QVariant::fromValue(router.routerId()));
+
+    const int index = combo_router_->findData(QVariant::fromValue(selected_router_id));
+    combo_router_->setCurrentIndex(index >= 0 ? index : 0);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalHostEditor::loadCredentials(qint64 selected_credential_id)
+{
+    combo_credential_->clear();
+
+    QList<CredentialConfig> credentials;
+    const Database::ReadResult result = Database::instance().credentialList(
+        &credentials, CredentialConfig::Type::ASPIA);
+    if (result == Database::ReadResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the list of credentials";
+        showError(tr("Failed to read data from the local database."));
+        return false;
+    }
+
+    if (result == Database::ReadResult::INCOMPLETE)
+        LOG(ERROR) << "Unable to read some of the credentials";
+
+    const QIcon icon = GuiApplication::svgIcon(":/img/keys.svg");
+    const QIcon unread_icon = GuiApplication::svgIcon(":/img/key-corrupted.svg");
+
+    for (const CredentialConfig& credential : std::as_const(credentials))
+    {
+        combo_credential_->addItem(credential.isValid() ? icon : unread_icon,
+                                   credential.displayName(),
+                                   QVariant::fromValue(credential.id()));
+    }
+
+    const int index = combo_credential_->findData(QVariant::fromValue(selected_credential_id));
+    combo_credential_->setCurrentIndex(index >= 0 ? index : 0);
+
+    // Nothing to share until a record of credentials is added.
+    switch_saved_credentials_->setEnabled(!credentials.isEmpty());
+    switch_saved_credentials_->setChecked(index >= 0);
+    onSavedCredentialsToggled(switch_saved_credentials_->isChecked());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalHostEditor::loadProfiles(qint64 selected_profile_id)
+{
+    combo_profile_->clear();
+
+    QList<ProfileConfig> profiles;
+    const Database::ReadResult result = Database::instance().profileList(&profiles);
+    if (result == Database::ReadResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the list of profiles";
+        showError(tr("Failed to read data from the local database."));
+        return false;
+    }
+
+    if (result == Database::ReadResult::INCOMPLETE)
+        LOG(ERROR) << "Unable to read some of the profiles";
+
+    const QIcon icon = GuiApplication::svgIcon(":/img/dashboard-layout.svg");
+
+    for (const ProfileConfig& profile : std::as_const(profiles))
+    {
+        combo_profile_->addItem(icon,
+                                profile.isDefault() ? tr("Default") : profile.name(),
+                                QVariant::fromValue<qint64>(profile.isDefault() ? 0 : profile.id()));
+    }
+
+    const int index = combo_profile_->findData(QVariant::fromValue(selected_profile_id));
+    combo_profile_->setCurrentIndex(index >= 0 ? index : 0);
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -163,12 +163,19 @@ TEST_F(AutoBackupTest, FilesThatAreNotBackupsStay)
 //--------------------------------------------------------------------------------------------------
 TEST_F(AutoBackupTest, FailedBackupRemovesNothing)
 {
-    // An empty database has nothing to save.
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    ASSERT_TRUE(db_.addLocalHost(host));
+
     const QString expired = nameOfDaysAgo(400);
     createFile(expired);
 
+    // With another key the sealed columns of the book do not open, so no file is written.
+    DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
+
     EXPECT_EQ(AutoBackup::run(db_, backupDir(), AutoBackup::Retention::ONE_WEEK),
-              Backup::Result::NOTHING_EXPORTED);
+              Backup::Result::UNREADABLE_RECORD);
 
     EXPECT_EQ(files(), QStringList{ expired });
 }

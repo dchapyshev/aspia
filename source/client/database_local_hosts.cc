@@ -40,6 +40,7 @@ Database::ReadResult readLocalHost(const SqlQuery& query, LocalHostConfig* host)
     host->setGuid(query.columnText(9));
     host->setCredentialId(query.columnInt64(10));
     host->setOsCredentialId(query.columnInt64(11));
+    host->setProfileId(query.columnInt64(12));
 
     if (!host->setEncryptedData(query.columnBlob(5)))
     {
@@ -108,7 +109,7 @@ Database::ReadResult Database::localHostList(qint64 group_id, QList<LocalHostCon
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
-                        "IFNULL(os_credential_id, 0) "
+                        "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
                         "FROM local_hosts WHERE group_id IS NULLIF(?, 0) ORDER BY casefold(name)");
     query.addInt64(group_id);
 
@@ -151,7 +152,7 @@ Database::ReadResult Database::allLocalHosts(QList<LocalHostConfig>* hosts) cons
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
-                        "IFNULL(os_credential_id, 0) "
+                        "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
                         "FROM local_hosts");
 
     ReadResult result = ReadResult::OK;
@@ -207,8 +208,10 @@ bool Database::addLocalHost(LocalHostConfig& host)
         host.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
     SqlQuery query(db_, "INSERT INTO local_hosts (id, group_id, router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid, credential_id, os_credential_id) "
-                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), NULLIF(?, 0))");
+                        "create_time, modify_time, connect_time, guid, credential_id, os_credential_id, "
+                        "profile_id) "
+                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), NULLIF(?, 0), "
+                        "NULLIF(?, 0))");
     query.addInt64(host.groupId());
     query.addInt64(host.routerId());
     query.addText(host.name());
@@ -220,6 +223,7 @@ bool Database::addLocalHost(LocalHostConfig& host)
     query.addText(host.guid());
     query.addInt64(host.credentialId());
     query.addInt64(host.osCredentialId());
+    query.addInt64(host.profileId());
 
     if (!query.exec())
     {
@@ -253,7 +257,8 @@ bool Database::modifyLocalHost(LocalHostConfig& host)
     host.setModifyTime(QDateTime::currentSecsSinceEpoch());
 
     SqlQuery query(db_, "UPDATE local_hosts SET group_id=NULLIF(?, 0), router_id=?, name=?, comment=?, "
-                        "data=?, modify_time=?, credential_id=NULLIF(?, 0) WHERE id=?");
+                        "data=?, modify_time=?, credential_id=NULLIF(?, 0), profile_id=NULLIF(?, 0) "
+                        "WHERE id=?");
     query.addInt64(host.groupId());
     query.addInt64(host.routerId());
     query.addText(host.name());
@@ -261,6 +266,7 @@ bool Database::modifyLocalHost(LocalHostConfig& host)
     query.addBlob(*encrypted_data);
     query.addInt64(host.modifyTime());
     query.addInt64(host.credentialId());
+    query.addInt64(host.profileId());
     query.addInt64(host.id());
 
     if (!query.exec())
@@ -380,7 +386,7 @@ Database::FindResult Database::findLocalHost(qint64 entry_id, LocalHostConfig* h
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
-                        "IFNULL(os_credential_id, 0) "
+                        "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
                         "FROM local_hosts WHERE id=?");
     query.addInt64(entry_id);
 
@@ -435,7 +441,7 @@ Database::ReadResult Database::searchLocalHosts(
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
-                        "IFNULL(os_credential_id, 0) "
+                        "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
                         "FROM local_hosts ORDER BY casefold(name)");
 
     ReadResult result = ReadResult::OK;

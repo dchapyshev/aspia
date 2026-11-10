@@ -28,14 +28,11 @@
 #include "base/crypto/secure_string.h"
 #include "base/net/proxy_settings.h"
 #include "base/peer/host_id.h"
+#include "proto/desktop_control.h"
 
 namespace proto::router {
 enum SessionType : int;
 } // namespace proto::router
-
-namespace proto::control {
-class Config;
-} // namespace proto::control
 
 // Every field but the device token is held as plain text. The key that would decrypt them sits
 // in memory anyway for as long as the address book is unlocked, so keeping the ciphertext next
@@ -135,6 +132,9 @@ public:
     qint64 osCredentialId() const { return os_credential_id_; }
     void setOsCredentialId(qint64 id) { os_credential_id_ = id; }
 
+    qint64 profileId() const { return profile_id_; }
+    void setProfileId(qint64 id) { profile_id_ = id; }
+
     const QString& username() const { return username_; }
     void setUsername(const QString& value) { username_ = value; }
 
@@ -150,6 +150,7 @@ private:
     HostId host_id_ = kInvalidHostId;
     qint64 credential_id_ = 0;
     qint64 os_credential_id_ = 0;
+    qint64 profile_id_ = 0;
     QString username_;
     SecureString password_;
 };
@@ -180,6 +181,9 @@ public:
 
     qint64 osCredentialId() const { return os_credential_id_; }
     void setOsCredentialId(qint64 id) { os_credential_id_ = id; }
+
+    qint64 profileId() const { return profile_id_; }
+    void setProfileId(qint64 id) { profile_id_ = id; }
 
     const QString& guid() const { return guid_; }
     void setGuid(const QString& value) { guid_ = value; }
@@ -218,6 +222,7 @@ private:
     qint64 router_id_ = 0;
     qint64 credential_id_ = 0;
     qint64 os_credential_id_ = 0;
+    qint64 profile_id_ = 0;
     QString guid_;
     qint64 create_time_ = 0;
     qint64 modify_time_ = 0;
@@ -303,6 +308,45 @@ private:
     QString display_name_;
     QString username_;
     SecureString password_;
+};
+
+class ProfileConfig final
+{
+public:
+    ProfileConfig() = default;
+
+    static constexpr int kMaxNameLength = 64;
+
+    static constexpr char kDefaultGuid[] = "00000000-0000-0000-0000-000000000000";
+
+    bool isValid() const;
+    bool isDefault() const { return guid_ == kDefaultGuid; }
+
+    qint64 id() const { return id_; }
+    void setId(qint64 id) { id_ = id; }
+
+    const QString& guid() const { return guid_; }
+    void setGuid(const QString& value) { guid_ = value; }
+
+    const QString& name() const { return name_; }
+    void setName(const QString& value) { name_ = value; }
+
+    const proto::control::Config& desktopConfig() const { return desktop_config_; }
+    void setDesktopConfig(const proto::control::Config& config) { desktop_config_ = config; }
+
+    quint32 udpMethods() const { return udp_methods_; }
+    void setUdpMethods(quint32 methods) { udp_methods_ = methods; }
+
+    // The data column for database I/O.
+    QByteArray serializedData() const;
+    bool setSerializedData(const QByteArray& data);
+
+private:
+    qint64 id_ = -1;
+    QString guid_;
+    QString name_;
+    proto::control::Config desktop_config_;
+    quint32 udp_methods_ = 0;
 };
 
 class ProxyConfig final

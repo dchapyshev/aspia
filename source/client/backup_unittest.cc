@@ -32,6 +32,7 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
+#include "base/net/udp_channel.h"
 #include "base/peer/host_id.h"
 #include "base/sql/sql_database.h"
 #include "client/database.h"
@@ -267,6 +268,26 @@ protected:
         QList<CredentialConfig> credentials;
         EXPECT_EQ(db.credentialList(&credentials), Database::ReadResult::OK);
         return credentials;
+    }
+
+    static qint64 addProfile(Database& db, const QString& name)
+    {
+        ProfileConfig profile;
+        profile.setName(name);
+        profile.setDesktopConfig(defaultDesktopConfig());
+
+        EXPECT_TRUE(db.addProfile(profile));
+        return profile.id();
+    }
+
+    // The profiles the user made, the default one left out.
+    static QList<ProfileConfig> profileList(Database& db)
+    {
+        QList<ProfileConfig> profiles;
+        EXPECT_EQ(db.profileList(&profiles), Database::ReadResult::OK);
+        EXPECT_TRUE(!profiles.isEmpty() && profiles.front().isDefault());
+        profiles.removeFirst();
+        return profiles;
     }
 
     static QStringList hostNames(Database& db)
@@ -909,17 +930,20 @@ TEST_F(BackupTest, SavedCredentialsOfATemporaryHostAreNotImported)
 }
 
 //--------------------------------------------------------------------------------------------------
-// An address book with nothing to write leaves no file behind, and the caller is told why instead
-// of being handed a failure it can make nothing of.
-TEST_F(BackupTest, EmptyBookIsNotWrittenToAFile)
+// A fresh address book is not empty: it has its default profile, and that is what its file carries.
+TEST_F(BackupTest, FreshBookExportsItsDefaultProfile)
 {
-    EXPECT_EQ(exportBook(), Backup::Result::NOTHING_EXPORTED);
-    EXPECT_FALSE(QFile::exists(backupPath()));
-
-    addGroup(source_, "group", 0);
-
-    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    Backup::Report exported;
+    ASSERT_EQ(exportBook(&exported), Backup::Result::SUCCESS);
     EXPECT_TRUE(QFile::exists(backupPath()));
+    EXPECT_EQ(exported.profiles, 1);
+    EXPECT_EQ(exported.total(), 1);
+
+    Backup::Report imported;
+    ASSERT_EQ(importBook(&imported), Backup::Result::SUCCESS);
+    EXPECT_EQ(imported.profiles, 1);
+    EXPECT_EQ(imported.total(), 1);
+    EXPECT_TRUE(profileList(target_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1087,6 +1111,7 @@ TEST_F(BackupTest, ImportReplacesTheWholeBook)
     addRoutedHost(target_, "own host", own_group, own_router, "100500");
     addRouterHost(target_, own_router, 100500, "user", "secret");
     addCredential(target_, "own credential", "user", "secret");
+    addProfile(target_, "own profile");
 
     Backup::Report report;
     ASSERT_EQ(importBook(&report), Backup::Result::SUCCESS);
@@ -1099,6 +1124,7 @@ TEST_F(BackupTest, ImportReplacesTheWholeBook)
     EXPECT_TRUE(routerList(target_).isEmpty());
     EXPECT_TRUE(allRouterHosts(target_).isEmpty());
     EXPECT_TRUE(credentialList(target_).isEmpty());
+    EXPECT_TRUE(profileList(target_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1506,4 +1532,179 @@ TEST_F(BackupTest, BookWithALinkedRouterHostThatDoesNotOpenIsNotExported)
     }
 
     EXPECT_EQ(exportBook(), Backup::Result::UNREADABLE_RECORD);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A profile comes back with its guid, its name and every parameter it was written with.
+TEST_F(BackupTest, ProfileKeepsItsParametersThroughTheFile)
+{
+    proto::control::Config desktop_config = defaultDesktopConfig();
+    desktop_config.set_audio(false);
+    desktop_config.set_disable_key_combinations(true);
+    desktop_config.set_record_sessions(true);
+    desktop_config.set_recording_path("/records");
+
+    ProfileConfig profile;
+    profile.setName("office");
+    profile.setUdpMethods(0);
+    profile.setDesktopConfig(desktop_config);
+    ASSERT_TRUE(source_.addProfile(profile));
+
+    ProfileConfig default_profile = source_.defaultProfile();
+    default_profile.setUdpMethods(UDP_METHOD_DIRECT);
+    ASSERT_TRUE(source_.modifyProfile(default_profile));
+
+    Backup::Report exported;
+    ASSERT_EQ(exportBook(&exported), Backup::Result::SUCCESS);
+    EXPECT_EQ(exported.profiles, 2);
+    EXPECT_EQ(exported.total(), 2);
+
+    Backup::Report imported;
+    ASSERT_EQ(importBook(&imported), Backup::Result::SUCCESS);
+    EXPECT_EQ(imported.profiles, 2);
+
+    const QList<ProfileConfig> profiles = profileList(target_);
+    ASSERT_EQ(profiles.size(), 1);
+    EXPECT_EQ(profiles.front().guid(), profile.guid());
+    EXPECT_EQ(profiles.front().name(), QString("office"));
+    EXPECT_EQ(profiles.front().udpMethods(), 0u);
+    EXPECT_EQ(serialize(profiles.front().desktopConfig()), serialize(desktop_config));
+
+    EXPECT_EQ(target_.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A file of an older version has no default profile, so the address book ends up with the built-in
+// one, and the profiles the user made are replaced like the rest of the book.
+TEST_F(BackupTest, FileWithoutADefaultProfileLeavesTheBuiltInOne)
+{
+    addProfile(source_, "office");
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        for (int i = 0; i < data->profiles_size(); ++i)
+        {
+            if (data->profiles(i).guid() == ProfileConfig::kDefaultGuid)
+            {
+                data->mutable_profiles()->DeleteSubrange(i, 1);
+                break;
+            }
+        }
+        ASSERT_EQ(data->profiles_size(), 1);
+    });
+
+    ProfileConfig default_profile = target_.defaultProfile();
+    default_profile.setUdpMethods(UDP_METHOD_UPNP);
+    ASSERT_TRUE(target_.modifyProfile(default_profile));
+    addProfile(target_, "home");
+
+    Backup::Report imported;
+    ASSERT_EQ(importBook(&imported), Backup::Result::SUCCESS);
+    EXPECT_EQ(imported.profiles, 1);
+
+    EXPECT_GT(target_.defaultProfile().id(), 0);
+    EXPECT_EQ(target_.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_ALL));
+
+    const QList<ProfileConfig> profiles = profileList(target_);
+    ASSERT_EQ(profiles.size(), 1);
+    EXPECT_EQ(profiles.front().name(), QString("office"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A profile of the file is a record the address book would take: a name and a guid of its own.
+TEST_F(BackupTest, FileWithABrokenProfileIsNotImported)
+{
+    addProfile(source_, "office");
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->profiles_size(), 2);
+        ASSERT_EQ(data->profiles(1).name(), "office");
+        data->mutable_profiles(1)->clear_name();
+    });
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        data->mutable_profiles(0)->set_guid("not a guid");
+    });
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        *data->add_profiles() = data->profiles(0);
+    });
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+
+    EXPECT_TRUE(profileList(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The profile chosen for a host travels by guid, also for a host of a router without credentials.
+TEST_F(BackupTest, HostsKeepTheirProfilesThroughTheFile)
+{
+    const qint64 profile_id = addProfile(source_, "office");
+    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+
+    LocalHostConfig local_host;
+    local_host.setName("host");
+    local_host.setAddress("192.168.0.1");
+    local_host.setProfileId(profile_id);
+    ASSERT_TRUE(source_.addLocalHost(local_host));
+
+    ASSERT_TRUE(source_.setRouterHostProfileId(router_id, 100500, profile_id));
+
+    Backup::Report exported;
+    ASSERT_EQ(exportBook(&exported), Backup::Result::SUCCESS);
+    EXPECT_EQ(exported.router_hosts, 1);
+
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+
+    const QList<ProfileConfig> profiles = profileList(target_);
+    ASSERT_EQ(profiles.size(), 1);
+
+    const QList<LocalHostConfig> local_hosts = allLocalHosts(target_);
+    ASSERT_EQ(local_hosts.size(), 1);
+    EXPECT_EQ(local_hosts.front().profileId(), profiles.front().id());
+
+    const QList<RouterHostConfig> router_hosts = allRouterHosts(target_);
+    ASSERT_EQ(router_hosts.size(), 1);
+    EXPECT_EQ(router_hosts.front().profileId(), profiles.front().id());
+    EXPECT_TRUE(router_hosts.front().username().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The profile of a host is one the file carries, or none.
+TEST_F(BackupTest, FileWhereAHostNamesAProfileItDoesNotCarryIsNotImported)
+{
+    const qint64 profile_id = addProfile(source_, "office");
+    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+
+    LocalHostConfig local_host;
+    local_host.setName("host");
+    local_host.setAddress("192.168.0.1");
+    ASSERT_TRUE(source_.addLocalHost(local_host));
+
+    ASSERT_TRUE(source_.setRouterHostProfileId(router_id, 100500, profile_id));
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        data->mutable_local_hosts(0)->set_profile_guid("6f1d2c3b-4a59-4e8f-9a0b-1c2d3e4f5a6b");
+    });
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        data->mutable_router_hosts(0)->set_profile_guid("6f1d2c3b-4a59-4e8f-9a0b-1c2d3e4f5a6b");
+    });
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+
+    EXPECT_TRUE(allLocalHosts(target_).isEmpty());
+    EXPECT_TRUE(allRouterHosts(target_).isEmpty());
 }

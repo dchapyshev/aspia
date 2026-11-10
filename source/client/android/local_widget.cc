@@ -374,11 +374,17 @@ void LocalWidget::onImport()
         return;
     }
 
-    MessageDialog::info(this, tr("Restore from Backup"),
-        tr("Routers imported: %1\nGroups imported: %2\nHosts imported: %3\n"
-           "Saved passwords imported: %4\nCredentials imported: %5")
-            .arg(report.routers).arg(report.local_groups)
-            .arg(report.local_hosts).arg(report.router_hosts).arg(report.credentials));
+    const QStringList lines =
+    {
+        tr("Routers imported: %1").arg(report.routers),
+        tr("Router hosts imported: %1").arg(report.router_hosts),
+        tr("Local groups imported: %1").arg(report.local_groups),
+        tr("Local hosts imported: %1").arg(report.local_hosts),
+        tr("Credentials imported: %1").arg(report.credentials),
+        tr("Profiles imported: %1").arg(report.profiles)
+    };
+
+    MessageDialog::info(this, tr("Restore from Backup"), lines.join('\n'));
 
     RouterController::instance().reload();
     reload();
@@ -399,10 +405,6 @@ void LocalWidget::onExport()
     switch (Backup::exportToFile(Database::instance(), path, &report))
     {
         case Backup::Result::SUCCESS:
-            break;
-
-        case Backup::Result::NOTHING_EXPORTED:
-            message = tr("There is nothing to save.");
             break;
 
         case Backup::Result::FILE_ERROR:

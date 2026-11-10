@@ -58,6 +58,7 @@ private slots:
 private:
     bool loadRouters(qint64 selected_router_id);
     bool loadCredentials(qint64 selected_credential_id);
+    bool loadProfiles(qint64 selected_profile_id);
     void showError(const QString& message);
 
     ComboBox* combo_router_ = nullptr;
@@ -67,6 +68,7 @@ private:
     LineEdit* edit_username_ = nullptr;
     LineEdit* edit_password_ = nullptr;
     ComboBox* combo_credential_ = nullptr;
+    ComboBox* combo_profile_ = nullptr;
     TextArea* edit_comment_ = nullptr;
     Label* label_error_ = nullptr;
     Button* button_delete_ = nullptr;

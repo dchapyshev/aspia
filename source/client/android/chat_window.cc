@@ -442,10 +442,12 @@ void ChatWindow::forgetHostCredentials()
         return;
     }
 
-    const HostId host_id = stringToHostId(host_.address());
+    RouterHostConfig router_host;
+    router_host.setRouterId(host_.routerId());
+    router_host.setHostId(stringToHostId(host_.address()));
 
-    if (!Database::instance().removeRouterHost(host_.routerId(), host_id))
-        LOG(ERROR) << "Unable to remove credentials of host" << host_id;
+    if (!Database::instance().modifyRouterHost(router_host))
+        LOG(ERROR) << "Unable to remove credentials of host" << router_host.hostId();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -456,8 +458,9 @@ void ChatWindow::start()
     if (host_.username().isEmpty())
         host_.setUsername(u"#" + host_.address());
 
+    Database& db = Database::instance();
     session_state_ = std::make_shared<SessionState>(
-        host_, proto::peer::SESSION_TYPE_CHAT, Database::instance().displayName());
+        host_, db.hostProfile(host_), proto::peer::SESSION_TYPE_CHAT, db.displayName());
 
     history_id_ = chatHistoryId(*session_state_);
     loadHistory();
@@ -539,7 +542,8 @@ void ChatWindow::startNewSession()
     worker_manager_.reset();
     worker_manager_ = std::make_unique<WorkerManager>();
 
-    std::unique_ptr<NetworkWorker> network_worker = std::make_unique<NetworkWorker>();
+    std::unique_ptr<NetworkWorker> network_worker =
+        std::make_unique<NetworkWorker>(session_state_->profile().udpMethods());
     network_worker_ = network_worker.get();
     worker_manager_->add(std::move(network_worker));
 

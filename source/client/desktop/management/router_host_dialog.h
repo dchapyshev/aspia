@@ -56,6 +56,7 @@ private:
     qint64 currentWorkspaceId() const;
     void fetchGroups();
     bool saveCredentials();
+    bool saveProfile();
     void setCredentialsEnabled(bool enable);
 
     std::unique_ptr<Ui::RouterHostDialog> ui;

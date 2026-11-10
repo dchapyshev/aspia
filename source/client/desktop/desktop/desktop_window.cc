@@ -261,7 +261,10 @@ void DesktopWindow::applySettings()
 
     const bool had_preferred_size = !desktop_config_.disable_preferred_size();
 
-    desktop_config_ = Database::instance().desktopConfig();
+    const ProfileConfig profile = Database::instance().hostProfile(sessionState()->host());
+    sessionState()->setProfile(profile);
+
+    desktop_config_ = profile.desktopConfig();
     onDesktopConfigChanged(desktop_config_);
 
     desktop_->enableRemoteCursorPosition(desktop_config_.cursor_position());

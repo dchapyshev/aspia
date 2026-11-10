@@ -48,7 +48,7 @@ class NetworkWorker final : public Worker
     Q_OBJECT
 
 public:
-    NetworkWorker();
+    explicit NetworkWorker(quint32 udp_methods);
     ~NetworkWorker() final;
 
     enum class Status

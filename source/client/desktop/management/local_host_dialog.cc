@@ -76,7 +76,7 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     int label_width = 0;
     for (const QLabel* label : { ui->label_group, ui->label_name, ui->label_router,
                                  ui->label_address, ui->label_username, ui->label_password,
-                                 ui->label_credential })
+                                 ui->label_credential, ui->label_profile })
     {
         label_width = std::max(label_width, label->sizeHint().width());
     }
@@ -235,6 +235,7 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
         ui->checkbox_saved_credentials->isChecked() ? ui->combo_credential->currentData().toLongLong() : 0);
     host.setUsername(username);
     host.setPassword(password);
+    host.setProfileId(ui->combo_profile->currentData().toLongLong());
     host.setComment(ui->edit_comment->toPlainText());
 
     Database& db = Database::instance();
@@ -315,6 +316,28 @@ void LocalHostDialog::onLoadData()
                                       QVariant::fromValue(credential.id()));
     }
 
+    QList<ProfileConfig> profiles;
+    const Database::ReadResult profiles_result = db.profileList(&profiles);
+    if (profiles_result == Database::ReadResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the list of profiles";
+        MsgBox::warning(this, tr("Failed to read the list of profiles."));
+        reject();
+        return;
+    }
+
+    if (profiles_result == Database::ReadResult::INCOMPLETE)
+        LOG(ERROR) << "Unable to read some of the profiles";
+
+    const QIcon profile_icon(":/img/dashboard-layout.svg");
+
+    for (const ProfileConfig& profile : std::as_const(profiles))
+    {
+        ui->combo_profile->addItem(profile_icon,
+                                   profile.isDefault() ? tr("Default") : profile.name(),
+                                   QVariant::fromValue<qint64>(profile.isDefault() ? 0 : profile.id()));
+    }
+
     QList<LocalGroupConfig> all_groups;
     if (!db.allLocalGroups(&all_groups))
     {
@@ -365,6 +388,9 @@ void LocalHostDialog::onLoadData()
             ui->combo_credential->setCurrentIndex(
                 ui->combo_credential->findData(QVariant::fromValue(host.credentialId())));
         }
+
+        ui->combo_profile->setCurrentIndex(
+            ui->combo_profile->findData(QVariant::fromValue(host.profileId())));
 
         group_id_ = host.groupId();
         selected_router_id = host.routerId();

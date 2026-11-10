@@ -63,6 +63,7 @@ Database::ReadResult readRouterHost(const SqlQuery& query, RouterHostConfig* hos
     host->setHostId(query.columnUInt64(1));
     host->setCredentialId(query.columnInt64(3));
     host->setOsCredentialId(query.columnInt64(4));
+    host->setProfileId(query.columnInt64(5));
 
     if (!host->setEncryptedData(query.columnBlob(2)))
     {
@@ -268,7 +269,8 @@ Database::ReadResult Database::allRouterHosts(QList<RouterHostConfig>* hosts) co
         return ReadResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0) "
+    SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
+                        "IFNULL(profile_id, 0) "
                         "FROM router_hosts");
 
     ReadResult result = ReadResult::OK;
@@ -315,13 +317,14 @@ bool Database::addRouterHost(const RouterHostConfig& host)
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(db_, "INSERT INTO router_hosts (router_id, host_id, data, credential_id, os_credential_id) "
-                        "VALUES (?, ?, ?, NULLIF(?, 0), NULLIF(?, 0))");
+    SqlQuery query(db_, "INSERT INTO router_hosts (router_id, host_id, data, credential_id, os_credential_id, "
+                        "profile_id) VALUES (?, ?, ?, NULLIF(?, 0), NULLIF(?, 0), NULLIF(?, 0))");
     query.addInt64(host.routerId());
     query.addUInt64(host.hostId());
     query.addBlob(*encrypted_data);
     query.addInt64(host.credentialId());
     query.addInt64(host.osCredentialId());
+    query.addInt64(host.profileId());
 
     if (!query.exec())
     {
@@ -408,7 +411,8 @@ Database::FindResult Database::findRouterHost(qint64 router_id, HostId host_id, 
         return FindResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0) "
+    SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
+                        "IFNULL(profile_id, 0) "
                         "FROM router_hosts WHERE router_id=? AND host_id=?");
     query.addInt64(router_id);
     query.addUInt64(host_id);
@@ -530,6 +534,55 @@ bool Database::setRouterHostOsCredentialId(qint64 router_id, HostId host_id, qin
     query.addInt64(credential_id);
     query.addInt64(router_id);
     query.addUInt64(host_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setRouterHostProfileId(qint64 router_id, HostId host_id, qint64 profile_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (profile_id <= 0)
+    {
+        SqlQuery query(db_, "UPDATE router_hosts SET profile_id=NULL WHERE router_id=? AND host_id=?");
+        query.addInt64(router_id);
+        query.addUInt64(host_id);
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            return false;
+        }
+
+        return true;
+    }
+
+    RouterHostConfig host;
+    host.setRouterId(router_id);
+    host.setHostId(host_id);
+
+    if (!host.isValid())
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    SqlQuery query(db_, "INSERT INTO router_hosts (router_id, host_id, profile_id) VALUES (?, ?, ?) "
+                        "ON CONFLICT(router_id, host_id) DO UPDATE SET profile_id=excluded.profile_id");
+    query.addInt64(router_id);
+    query.addUInt64(host_id);
+    query.addInt64(profile_id);
 
     if (!query.exec())
     {

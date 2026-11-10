@@ -25,11 +25,13 @@
 
 //--------------------------------------------------------------------------------------------------
 SessionState::SessionState(const HostConfig& host,
+                           const ProfileConfig& profile,
                            proto::peer::SessionType session_type,
                            const QString& display_name)
     : host_(host),
       session_type_(session_type),
-      display_name_(display_name)
+      display_name_(display_name),
+      profile_(profile)
 {
     // Nothing
 }
@@ -128,4 +130,18 @@ bool SessionState::isReconnecting() const
 {
     std::scoped_lock lock(lock_);
     return reconnecting_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionState::setProfile(const ProfileConfig& profile)
+{
+    std::scoped_lock lock(lock_);
+    profile_ = profile;
+}
+
+//--------------------------------------------------------------------------------------------------
+ProfileConfig SessionState::profile() const
+{
+    std::scoped_lock lock(lock_);
+    return profile_;
 }

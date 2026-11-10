@@ -99,6 +99,7 @@ public:
     bool outdatedRouterHosts(qint64 router_id, QList<HostId>* hosts) const;
     bool updateRouterHostCheckTime(qint64 router_id, HostId host_id);
     bool setRouterHostOsCredentialId(qint64 router_id, HostId host_id, qint64 credential_id);
+    bool setRouterHostProfileId(qint64 router_id, HostId host_id, qint64 profile_id);
 
     // Credentials.
     ReadResult credentialList(QList<CredentialConfig>* credentials,
@@ -109,6 +110,15 @@ public:
     FindResult findCredential(qint64 credential_id, CredentialConfig* credential) const;
     FindResult findCredentialByGuid(const QString& guid, CredentialConfig* credential) const;
 
+    // Connection profiles.
+    ReadResult profileList(QList<ProfileConfig>* profiles) const;
+    bool addProfile(ProfileConfig& profile);
+    bool modifyProfile(const ProfileConfig& profile);
+    bool removeProfile(qint64 profile_id);
+    FindResult findProfile(qint64 profile_id, ProfileConfig* profile) const;
+    ProfileConfig defaultProfile() const;
+    ProfileConfig hostProfile(const HostConfig& host) const;
+
     // Puts these records in place of the address book, all of them or none. Everything the book
     // held is deleted first. A record is named by a key of its own instead of an id, negative and
     // unique among the lists, and the records linking to it carry that key. A parent comes before
@@ -117,7 +127,8 @@ public:
                 const QList<LocalGroupConfig>& local_groups,
                 const QList<LocalHostConfig>& local_hosts,
                 const QList<RouterHostConfig>& router_hosts,
-                const QList<CredentialConfig>& credentials);
+                const QList<CredentialConfig>& credentials,
+                const QList<ProfileConfig>& profiles);
 
     // On failure the database is left as it was. A file already at |copy_path| is not overwritten.
     bool saveCopyAndClearAll(const QString& copy_path);
@@ -146,12 +157,6 @@ public:
 
     Minutes lockTimeout() const;
     bool setLockTimeout(Minutes timeout);
-
-    proto::control::Config desktopConfig() const;
-    bool setDesktopConfig(const proto::control::Config& config);
-
-    quint32 udpMethods() const;
-    bool setUdpMethods(quint32 methods);
 
     // Without a saved value the proxy is not used. A value that did not open leaves |proxy| that
     // way and answers INCOMPLETE.
@@ -208,6 +213,7 @@ private:
 
     QString readSetting(const QString& name, bool* found = nullptr) const;
     bool writeSetting(const QString& name, const QString& value);
+    bool ensureDefaultProfile();
 
     mutable SqlDatabase db_;
 };

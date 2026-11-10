@@ -47,6 +47,7 @@ using BackupContent = proto::storage::BackupFile::Content;
 using BackupCredential = proto::storage::BackupFile::Credential;
 using BackupLocalGroup = proto::storage::BackupFile::LocalGroup;
 using BackupLocalHost = proto::storage::BackupFile::LocalHost;
+using BackupProfile = proto::storage::BackupFile::Profile;
 using BackupRouter = proto::storage::BackupFile::Router;
 using BackupRouterHost = proto::storage::BackupFile::RouterHost;
 
@@ -82,12 +83,14 @@ void buildLocalGroup(const LocalGroupConfig& group, const QString& parent_guid,
 //--------------------------------------------------------------------------------------------------
 void buildLocalHost(const LocalHostConfig& host, const QString& group_guid,
                     const QString& router_guid, const QString& credential_guid,
-                    const QString& os_credential_guid, BackupLocalHost* out)
+                    const QString& os_credential_guid, const QString& profile_guid,
+                    BackupLocalHost* out)
 {
     out->set_group_guid(group_guid.toStdString());
     out->set_router_guid(router_guid.toStdString());
     out->set_credential_guid(credential_guid.toStdString());
     out->set_os_credential_guid(os_credential_guid.toStdString());
+    out->set_profile_guid(profile_guid.toStdString());
     out->set_guid(host.guid().toStdString());
     out->set_name(host.name().toStdString());
     out->set_comment(host.comment().toStdString());
@@ -104,11 +107,12 @@ void buildLocalHost(const LocalHostConfig& host, const QString& group_guid,
 //--------------------------------------------------------------------------------------------------
 void buildRouterHost(const RouterHostConfig& host, const QString& router_guid,
                      const QString& credential_guid, const QString& os_credential_guid,
-                     BackupRouterHost* out)
+                     const QString& profile_guid, BackupRouterHost* out)
 {
     out->set_router_guid(router_guid.toStdString());
     out->set_credential_guid(credential_guid.toStdString());
     out->set_os_credential_guid(os_credential_guid.toStdString());
+    out->set_profile_guid(profile_guid.toStdString());
     out->set_host_id(host.hostId());
     out->set_username(host.username().toStdString());
 
@@ -126,6 +130,15 @@ void buildCredential(const CredentialConfig& credential, BackupCredential* out)
 
     const SecureByteArray password = credential.password().toUtf8();
     out->set_password(password.constData(), static_cast<size_t>(password.size()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void buildProfile(const ProfileConfig& profile, BackupProfile* out)
+{
+    out->set_guid(profile.guid().toStdString());
+    out->set_name(profile.name().toStdString());
+    out->set_udp_methods(profile.udpMethods());
+    out->mutable_desktop()->CopyFrom(profile.desktopConfig());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -174,13 +187,15 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
     QList<CredentialConfig> credentials;
     QList<LocalHostConfig> hosts;
     QList<RouterHostConfig> router_hosts;
+    QList<ProfileConfig> profiles;
 
     const Database::ReadResult read_results[] =
     {
         db.routerList(&routers),
         db.credentialList(&credentials),
         db.allLocalHosts(&hosts),
-        db.allRouterHosts(&router_hosts)
+        db.allRouterHosts(&router_hosts),
+        db.profileList(&profiles)
     };
 
     if (!db.allLocalGroups(&groups))
@@ -223,6 +238,10 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
     for (const CredentialConfig& credential : std::as_const(credentials))
         credential_guids.insert(credential.id(), credential.guid());
 
+    QHash<qint64, QString> profile_guids;
+    for (const ProfileConfig& profile : std::as_const(profiles))
+        profile_guids.insert(profile.id(), profile.guid());
+
     for (const RouterConfig& router : std::as_const(routers))
     {
         buildRouter(router, data->add_routers());
@@ -242,14 +261,15 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
         // carries, so elsewhere such a host stands on its own.
         buildLocalHost(host, group_guids.value(host.groupId()), router_guids.value(host.routerId()),
                        credential_guids.value(host.credentialId()), credential_guids.value(host.osCredentialId()),
-                       data->add_local_hosts());
+                       profile_guids.value(host.profileId()), data->add_local_hosts());
         ++report->local_hosts;
     }
 
     for (const RouterHostConfig& host : std::as_const(router_hosts))
     {
         buildRouterHost(host, router_guids.value(host.routerId()), credential_guids.value(host.credentialId()),
-                        credential_guids.value(host.osCredentialId()), data->add_router_hosts());
+                        credential_guids.value(host.osCredentialId()), profile_guids.value(host.profileId()),
+                        data->add_router_hosts());
         ++report->router_hosts;
     }
 
@@ -257,6 +277,12 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
     {
         buildCredential(credential, data->add_credentials());
         ++report->credentials;
+    }
+
+    for (const ProfileConfig& profile : std::as_const(profiles))
+    {
+        buildProfile(profile, data->add_profiles());
+        ++report->profiles;
     }
 
     return Backup::Result::SUCCESS;
@@ -331,7 +357,8 @@ void buildLocalGroups(
 void buildLocalHosts(
     const BackupContent& content, QList<LocalHostConfig>* local_hosts,
     const QHash<QString, qint64>& group_links, const QHash<QString, qint64>& router_links,
-    const QHash<QString, qint64>& credential_links, Backup::Report* report)
+    const QHash<QString, qint64>& credential_links, const QHash<QString, qint64>& profile_links,
+    Backup::Report* report)
 {
     for (const BackupLocalHost& host : content.local_hosts())
     {
@@ -342,6 +369,7 @@ void buildLocalHosts(
             credential_links.value(QString::fromStdString(host.credential_guid()), 0));
         config.setOsCredentialId(
             credential_links.value(QString::fromStdString(host.os_credential_guid()), 0));
+        config.setProfileId(profile_links.value(QString::fromStdString(host.profile_guid()), 0));
         config.setGuid(QString::fromStdString(host.guid()));
         config.setName(QString::fromStdString(host.name()));
         config.setComment(QString::fromStdString(host.comment()));
@@ -361,7 +389,7 @@ void buildLocalHosts(
 void buildRouterHosts(
     const BackupContent& content, QList<RouterHostConfig>* router_hosts,
     const QHash<QString, qint64>& router_links, const QHash<QString, qint64>& credential_links,
-    Backup::Report* report)
+    const QHash<QString, qint64>& profile_links, Backup::Report* report)
 {
     for (const BackupRouterHost& host : content.router_hosts())
     {
@@ -372,6 +400,7 @@ void buildRouterHosts(
             credential_links.value(QString::fromStdString(host.credential_guid()), 0));
         config.setOsCredentialId(
             credential_links.value(QString::fromStdString(host.os_credential_guid()), 0));
+        config.setProfileId(profile_links.value(QString::fromStdString(host.profile_guid()), 0));
         config.setUsername(QString::fromStdString(host.username()));
         config.setPassword(toSecureString(host.password()));
 
@@ -398,6 +427,26 @@ void buildCredentials(
         credential_links->insert(config.guid(), config.id());
         credentials->append(config);
         ++report->credentials;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void buildProfiles(
+    const BackupContent& content, QList<ProfileConfig>* profiles,
+    QHash<QString, qint64>* profile_links, Backup::Report* report)
+{
+    for (const BackupProfile& profile : content.profiles())
+    {
+        ProfileConfig config;
+        config.setId(-(profiles->size() + 1));
+        config.setGuid(QString::fromStdString(profile.guid()));
+        config.setName(QString::fromStdString(profile.name()));
+        config.setUdpMethods(profile.udp_methods());
+        config.setDesktopConfig(profile.desktop());
+
+        profile_links->insert(config.guid(), config.id());
+        profiles->append(config);
+        ++report->profiles;
     }
 }
 
@@ -501,7 +550,8 @@ bool hasValidLocalGroups(const BackupContent& content, const QSet<QString>& grou
 //--------------------------------------------------------------------------------------------------
 bool hasValidLocalHosts(
     const BackupContent& content, const QSet<QString>& group_guids,
-    const QSet<QString>& router_guids, const QSet<QString>& credential_guids)
+    const QSet<QString>& router_guids, const QSet<QString>& credential_guids,
+    const QSet<QString>& profile_guids)
 {
     QSet<QString> guids;
 
@@ -540,6 +590,10 @@ bool hasValidLocalHosts(
         const QString os_credential_guid = QString::fromStdString(host.os_credential_guid());
         if (!os_credential_guid.isEmpty() && !credential_guids.contains(os_credential_guid))
             return false;
+
+        const QString profile_guid = QString::fromStdString(host.profile_guid());
+        if (!profile_guid.isEmpty() && !profile_guids.contains(profile_guid))
+            return false;
     }
 
     return true;
@@ -548,7 +602,7 @@ bool hasValidLocalHosts(
 //--------------------------------------------------------------------------------------------------
 bool hasValidRouterHosts(
     const BackupContent& content, const QSet<QString>& router_guids,
-    const QSet<QString>& credential_guids)
+    const QSet<QString>& credential_guids, const QSet<QString>& profile_guids)
 {
     QSet<QPair<QString, HostId>> hosts;
 
@@ -564,6 +618,10 @@ bool hasValidRouterHosts(
 
         const QString os_credential_guid = QString::fromStdString(host.os_credential_guid());
         if (!os_credential_guid.isEmpty() && !credential_guids.contains(os_credential_guid))
+            return false;
+
+        const QString profile_guid = QString::fromStdString(host.profile_guid());
+        if (!profile_guid.isEmpty() && !profile_guids.contains(profile_guid))
             return false;
 
         RouterHostConfig config;
@@ -622,6 +680,30 @@ bool hasValidCredentials(const BackupContent& content)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool hasValidProfiles(const BackupContent& content)
+{
+    QSet<QString> guids;
+
+    for (const BackupProfile& profile : content.profiles())
+    {
+        const QString guid = QString::fromStdString(profile.guid());
+        if (!isValidGuid(guid) || guids.contains(guid))
+            return false;
+
+        ProfileConfig config;
+        config.setGuid(guid);
+        config.setName(QString::fromStdString(profile.name()));
+
+        if (!config.isValid())
+            return false;
+
+        guids.insert(guid);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 // The file is written by this same application, so what it carries is what an address book holds.
 // A file that breaks any of this is not one of ours and nothing of it is taken, because a record
 // that cannot be believed says nothing about the records next to it either.
@@ -639,10 +721,14 @@ bool isValidContent(const BackupContent& content)
     for (const BackupCredential& credential : content.credentials())
         credential_guids.insert(QString::fromStdString(credential.guid()));
 
+    QSet<QString> profile_guids;
+    for (const BackupProfile& profile : content.profiles())
+        profile_guids.insert(QString::fromStdString(profile.guid()));
+
     return hasValidRouters(content) && hasValidLocalGroups(content, group_guids) &&
-           hasValidLocalHosts(content, group_guids, router_guids, credential_guids) &&
-           hasValidRouterHosts(content, router_guids, credential_guids) &&
-           hasValidCredentials(content);
+           hasValidLocalHosts(content, group_guids, router_guids, credential_guids, profile_guids) &&
+           hasValidRouterHosts(content, router_guids, credential_guids, profile_guids) &&
+           hasValidCredentials(content) && hasValidProfiles(content);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -739,6 +825,7 @@ Backup::Result importContent(Database& db, const BackupContent& content, Backup:
     QList<LocalHostConfig> local_hosts;
     QList<RouterHostConfig> router_hosts;
     QList<CredentialConfig> credentials;
+    QList<ProfileConfig> profiles;
 
     Backup::Report counted;
 
@@ -751,15 +838,19 @@ Backup::Result importContent(Database& db, const BackupContent& content, Backup:
     QHash<QString, qint64> credential_links;
     buildCredentials(content, &credentials, &credential_links, &counted);
 
-    buildLocalHosts(content, &local_hosts, group_links, router_links, credential_links, &counted);
-    buildRouterHosts(content, &router_hosts, router_links, credential_links, &counted);
+    QHash<QString, qint64> profile_links;
+    buildProfiles(content, &profiles, &profile_links, &counted);
+
+    buildLocalHosts(content, &local_hosts, group_links, router_links, credential_links, profile_links,
+                    &counted);
+    buildRouterHosts(content, &router_hosts, router_links, credential_links, profile_links, &counted);
 
     // A file with nothing in it says nothing about what the book should hold, so the book is left
     // alone instead of being emptied.
     if (counted.total() == 0)
         return Backup::Result::NOTHING_IMPORTED;
 
-    if (!db.import(routers, local_groups, local_hosts, router_hosts, credentials))
+    if (!db.import(routers, local_groups, local_hosts, router_hosts, credentials, profiles))
     {
         LOG(ERROR) << "Unable to write the address book of the file";
         return Backup::Result::INTERNAL_ERROR;
@@ -803,11 +894,6 @@ Backup::Result Backup::exportToFile(Database& db, const QString& file_path, Repo
         eraseSecretFields(&data);
         return collected;
     }
-
-    // An address book with nothing in it seals into an empty payload, which is not a file anything
-    // could be read back from.
-    if (counted.total() == 0)
-        return Result::NOTHING_EXPORTED;
 
     DataCryptor cryptor(key);
 

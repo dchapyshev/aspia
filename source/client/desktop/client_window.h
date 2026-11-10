@@ -48,7 +48,7 @@ public:
 
     // Connects to a host. Asks for the missing credentials before the attempt and asks again if
     // the host refuses credentials that are not stored for it.
-    bool connectToHost(HostConfig host, const QString& display_name);
+    bool connectToHost(HostConfig host, const ProfileConfig& profile, const QString& display_name);
 
     qint64 clientId() const { return client_id_; }
     std::shared_ptr<SessionState> sessionState() { return session_state_; }
@@ -161,7 +161,7 @@ private:
     void setClientTitle(const HostConfig& host, proto::peer::SessionType session_type);
     bool askCredentials(HostConfig* host);
     void askCredentialsAgain();
-    void startConnection(HostConfig host, const QString& display_name);
+    void startConnection(HostConfig host, const ProfileConfig& profile, const QString& display_name);
     void fetchConnectionOffer();
     void startNewSession();
 

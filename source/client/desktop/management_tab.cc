@@ -1702,10 +1702,6 @@ void ManagementTab::onExportBookAction()
         case Backup::Result::SUCCESS:
             break;
 
-        case Backup::Result::NOTHING_EXPORTED:
-            MsgBox::information(this, tr("There is nothing to save."));
-            return;
-
         case Backup::Result::FILE_ERROR:
             MsgBox::warning(this, tr("Unable to write the file."));
             return;
@@ -1719,15 +1715,18 @@ void ManagementTab::onExportBookAction()
             return;
     }
 
-    MsgBox::information(this,
-        tr("Export completed successfully.\n"
-           "Routers exported: %1\n"
-           "Groups exported: %2\n"
-           "Hosts exported: %3\n"
-           "Saved passwords exported: %4\n"
-           "Credentials exported: %5")
-            .arg(report.routers).arg(report.local_groups)
-            .arg(report.local_hosts).arg(report.router_hosts).arg(report.credentials));
+    const QStringList lines =
+    {
+        tr("Export completed successfully."),
+        tr("Routers exported: %1").arg(report.routers),
+        tr("Router hosts exported: %1").arg(report.router_hosts),
+        tr("Local groups exported: %1").arg(report.local_groups),
+        tr("Local hosts exported: %1").arg(report.local_hosts),
+        tr("Credentials exported: %1").arg(report.credentials),
+        tr("Profiles exported: %1").arg(report.profiles)
+    };
+
+    MsgBox::information(this, lines.join('\n'));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1812,15 +1811,18 @@ void ManagementTab::onImportBookAction()
             return;
     }
 
-    MsgBox::information(this,
-        tr("Import completed successfully.\n"
-           "Routers imported: %1\n"
-           "Groups imported: %2\n"
-           "Hosts imported: %3\n"
-           "Saved passwords imported: %4\n"
-           "Credentials imported: %5")
-            .arg(report.routers).arg(report.local_groups)
-            .arg(report.local_hosts).arg(report.router_hosts).arg(report.credentials));
+    const QStringList lines =
+    {
+        tr("Import completed successfully."),
+        tr("Routers imported: %1").arg(report.routers),
+        tr("Router hosts imported: %1").arg(report.router_hosts),
+        tr("Local groups imported: %1").arg(report.local_groups),
+        tr("Local hosts imported: %1").arg(report.local_hosts),
+        tr("Credentials imported: %1").arg(report.credentials),
+        tr("Profiles imported: %1").arg(report.profiles)
+    };
+
+    MsgBox::information(this, lines.join('\n'));
 
     reloadRouters();
     ui->sidebar->reloadGroups();

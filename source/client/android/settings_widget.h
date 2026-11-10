@@ -25,13 +25,13 @@
 #include <functional>
 
 #include "client/settings.h"
-#include "proto/desktop_control.h"
 
 class QVBoxLayout;
 class QStackedWidget;
 class AboutWidget;
 class UpdateWidget;
 class CredentialsWidget;
+class ProfilesWidget;
 class MasterPasswordWidget;
 class IconButton;
 class ScrollArea;
@@ -71,14 +71,18 @@ signals:
 private slots:
     void onCredentialsTitleChanged(const QString& title);
     void onCredentialsActionsChanged();
+    void onProfilesTitleChanged(const QString& title);
+    void onProfilesActionsChanged();
     void onMasterPasswordChanged();
     void onShowCredentials();
+    void onShowProfiles();
     void onShowAbout();
     void onAddFolder();
 
 private:
     void showMasterPassword();
     bool isCredentialsPage() const;
+    bool isProfilesPage() const;
     bool isAboutPage() const;
     bool isUpdatePage() const;
     bool isMasterPasswordPage() const;
@@ -89,8 +93,7 @@ private:
                         const std::function<void(bool)>& on_changed);
     void buildInterfaceSection(QVBoxLayout* layout);
     void buildSecuritySection(QVBoxLayout* layout);
-    void buildUdpSection(QVBoxLayout* layout);
-    void buildDesktopSection(QVBoxLayout* layout);
+    void buildProfilesSection(QVBoxLayout* layout);
     void buildFileTransferSection(QVBoxLayout* layout);
     void buildUpdateSection(QVBoxLayout* layout);
 
@@ -103,6 +106,7 @@ private:
     QStackedWidget* stack_ = nullptr;
     ScrollArea* settings_page_ = nullptr;
     CredentialsWidget* credentials_page_ = nullptr;
+    ProfilesWidget* profiles_page_ = nullptr;
     AboutWidget* about_page_ = nullptr;
     UpdateWidget* update_page_ = nullptr;
     MasterPasswordWidget* master_password_page_ = nullptr;
@@ -110,8 +114,6 @@ private:
     IconButton* button_about_ = nullptr;
 
     Settings settings_;
-    proto::control::Config desktop_config_;
-    quint32 udp_methods_;
 
     Q_DISABLE_COPY_MOVE(SettingsWidget)
 };

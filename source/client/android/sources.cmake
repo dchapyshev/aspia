@@ -61,6 +61,10 @@ collect_sources(SOURCE_CLIENT_ANDROID
     master_password_widget.h
     password_dialog.cc
     password_dialog.h
+    profile_editor.cc
+    profile_editor.h
+    profiles_widget.cc
+    profiles_widget.h
     remote_widget.cc
     remote_widget.h
     router_card.cc

@@ -93,6 +93,7 @@ bool createTables(SqlDatabase& db)
                  "\"guid\" TEXT NOT NULL UNIQUE,"
                  "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
                  "\"os_credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
+                 "\"profile_id\" INTEGER REFERENCES \"profiles\"(\"id\") ON DELETE SET NULL,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create local_hosts table:" << db.lastError();
@@ -118,6 +119,7 @@ bool createTables(SqlDatabase& db)
                  "\"data\" BLOB DEFAULT X'',"
                  "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
                  "\"os_credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
+                 "\"profile_id\" INTEGER REFERENCES \"profiles\"(\"id\") ON DELETE SET NULL,"
                  "PRIMARY KEY(\"router_id\",\"host_id\"))"))
     {
         LOG(ERROR) << "Unable to create router_hosts table:" << db.lastError();
@@ -133,6 +135,17 @@ bool createTables(SqlDatabase& db)
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create credentials table:" << db.lastError();
+        return false;
+    }
+
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"profiles\" ("
+                 "\"id\" INTEGER UNIQUE,"
+                 "\"name\" TEXT NOT NULL DEFAULT '',"
+                 "\"data\" BLOB DEFAULT X'',"
+                 "\"guid\" TEXT NOT NULL UNIQUE,"
+                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        LOG(ERROR) << "Unable to create profiles table:" << db.lastError();
         return false;
     }
 
@@ -152,9 +165,36 @@ bool createTables(SqlDatabase& db)
             LOG(ERROR) << "Unable to add os_credential_id column to router_hosts table:" << db.lastError();
             return false;
         }
+
+        const char kProfileId[] = "INTEGER REFERENCES \"profiles\"(\"id\") ON DELETE SET NULL";
+
+        if (!addMissingColumn(db, "local_hosts", "profile_id", kProfileId))
+        {
+            LOG(ERROR) << "Unable to add profile_id column to local_hosts table:" << db.lastError();
+            return false;
+        }
+
+        if (!addMissingColumn(db, "router_hosts", "profile_id", kProfileId))
+        {
+            LOG(ERROR) << "Unable to add profile_id column to router_hosts table:" << db.lastError();
+            return false;
+        }
     }
     // Migration end.
     //==============================================================================================
+
+    if (!db.exec("CREATE TRIGGER IF NOT EXISTS \"router_hosts_drop_empty\" "
+                 "AFTER UPDATE ON \"router_hosts\" "
+                 "WHEN NEW.\"data\" = X'' AND NEW.\"credential_id\" IS NULL AND "
+                 "NEW.\"os_credential_id\" IS NULL AND NEW.\"profile_id\" IS NULL "
+                 "BEGIN "
+                 "DELETE FROM \"router_hosts\" WHERE \"router_id\" = NEW.\"router_id\" AND "
+                 "\"host_id\" = NEW.\"host_id\"; "
+                 "END"))
+    {
+        LOG(ERROR) << "Unable to create router_hosts_drop_empty trigger:" << db.lastError();
+        return false;
+    }
 
     if (!db.exec("CREATE TABLE IF NOT EXISTS \"settings\" ("
                  "\"name\" TEXT PRIMARY KEY NOT NULL,"
@@ -220,7 +260,7 @@ bool Database::open(const QString& file_path)
         }
     }
 
-    if (!createTables(db_))
+    if (!createTables(db_) || !ensureDefaultProfile())
     {
         db_.close();
         return false;
@@ -247,7 +287,8 @@ bool Database::import(const QList<RouterConfig>& routers,
                       const QList<LocalGroupConfig>& local_groups,
                       const QList<LocalHostConfig>& local_hosts,
                       const QList<RouterHostConfig>& router_hosts,
-                      const QList<CredentialConfig>& credentials)
+                      const QList<CredentialConfig>& credentials,
+                      const QList<ProfileConfig>& profiles)
 {
     if (!isValid())
     {
@@ -266,7 +307,8 @@ bool Database::import(const QList<RouterConfig>& routers,
     // Saved credentials go with their routers, and hosts are deleted on their own, because the ones
     // at the root of the book lie in no group.
     if (!db_.exec("DELETE FROM local_groups") || !db_.exec("DELETE FROM routers") ||
-        !db_.exec("DELETE FROM local_hosts") || !db_.exec("DELETE FROM credentials"))
+        !db_.exec("DELETE FROM local_hosts") || !db_.exec("DELETE FROM credentials") ||
+        !db_.exec("DELETE FROM profiles"))
     {
         LOG(ERROR) << "Unable to clear the address book:" << db_.lastError();
         return false;
@@ -285,6 +327,21 @@ bool Database::import(const QList<RouterConfig>& routers,
 
         credential_ids.insert(credential.id(), config.id());
     }
+
+    QHash<qint64, qint64> profile_ids;
+    for (const ProfileConfig& profile : profiles)
+    {
+        ProfileConfig config = profile;
+        config.setId(-1);
+
+        if (!addProfile(config))
+            return false;
+
+        profile_ids.insert(profile.id(), config.id());
+    }
+
+    if (!ensureDefaultProfile())
+        return false;
 
     QHash<qint64, qint64> router_ids;
     for (const RouterConfig& router : routers)
@@ -315,6 +372,7 @@ bool Database::import(const QList<RouterConfig>& routers,
         config.setRouterId(router_ids.value(host.routerId(), host.routerId()));
         config.setCredentialId(credential_ids.value(host.credentialId(), host.credentialId()));
         config.setOsCredentialId(credential_ids.value(host.osCredentialId(), host.osCredentialId()));
+        config.setProfileId(profile_ids.value(host.profileId(), host.profileId()));
 
         if (!config.isValid())
         {
@@ -330,8 +388,10 @@ bool Database::import(const QList<RouterConfig>& routers,
             config.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
         SqlQuery query(db_, "INSERT INTO local_hosts (id, group_id, router_id, name, comment, data, "
-                            "create_time, modify_time, connect_time, guid, credential_id, os_credential_id) "
-                            "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), NULLIF(?, 0))");
+                            "create_time, modify_time, connect_time, guid, credential_id, os_credential_id, "
+                            "profile_id) "
+                            "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), NULLIF(?, 0), "
+                            "NULLIF(?, 0))");
         query.addInt64(config.groupId());
         query.addInt64(config.routerId());
         query.addText(config.name());
@@ -343,6 +403,7 @@ bool Database::import(const QList<RouterConfig>& routers,
         query.addText(config.guid());
         query.addInt64(config.credentialId());
         query.addInt64(config.osCredentialId());
+        query.addInt64(config.profileId());
 
         if (!query.exec())
         {
@@ -357,6 +418,7 @@ bool Database::import(const QList<RouterConfig>& routers,
         config.setRouterId(router_ids.value(host.routerId(), host.routerId()));
         config.setCredentialId(credential_ids.value(host.credentialId(), host.credentialId()));
         config.setOsCredentialId(credential_ids.value(host.osCredentialId(), host.osCredentialId()));
+        config.setProfileId(profile_ids.value(host.profileId(), host.profileId()));
 
         if (!addRouterHost(config))
             return false;
@@ -395,13 +457,13 @@ bool Database::saveCopyAndClearAll(const QString& copy_path)
 
     if (!db_.exec("DELETE FROM local_groups") || !db_.exec("DELETE FROM routers") ||
         !db_.exec("DELETE FROM local_hosts") || !db_.exec("DELETE FROM credentials") ||
-        !db_.exec("DELETE FROM settings"))
+        !db_.exec("DELETE FROM profiles") || !db_.exec("DELETE FROM settings"))
     {
         LOG(ERROR) << "Unable to clear the database:" << db_.lastError();
         return false;
     }
 
-    if (!transaction.commit())
+    if (!ensureDefaultProfile() || !transaction.commit())
         return false;
 
     LOG(INFO) << "Database is reset, the copy is saved to:" << copy_path;

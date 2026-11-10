@@ -20,6 +20,8 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
+import "desktop_control.proto";
+
 package proto.storage;
 
 // The encrypted column of a host record.
@@ -50,6 +52,12 @@ message ProxyBlob
     string password = 6;
 }
 
+message ProfileData
+{
+    uint32 udp_methods     = 1;
+    control.Config desktop = 2;
+}
+
 // The exported backup. |data| and |verifier| are sealed with a key derived from |salt| and the
 // password of the backup. |verifier| tells a wrong password from a damaged file.
 message BackupFile
@@ -72,6 +80,7 @@ message BackupFile
         string password           = 4;
         string credential_guid    = 5;
         string os_credential_guid = 6;
+        string profile_guid       = 7;
     }
 
     message LocalGroup
@@ -97,6 +106,7 @@ message BackupFile
         int64 connect_time        = 11;
         string credential_guid    = 12;
         string os_credential_guid = 13;
+        string profile_guid       = 14;
     }
 
     message Credential
@@ -108,6 +118,14 @@ message BackupFile
         string password     = 5;
     }
 
+    message Profile
+    {
+        string guid            = 1;
+        string name            = 2;
+        uint32 udp_methods     = 3;
+        control.Config desktop = 4;
+    }
+
     message Content
     {
         repeated Router routers          = 1;
@@ -115,6 +133,7 @@ message BackupFile
         repeated LocalGroup local_groups = 3;
         repeated LocalHost local_hosts   = 4;
         repeated Credential credentials  = 5;
+        repeated Profile profiles        = 6;
     }
 
     uint32 version = 1;

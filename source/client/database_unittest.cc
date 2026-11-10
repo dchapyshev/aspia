@@ -332,6 +332,26 @@ protected:
         return credentials;
     }
 
+    qint64 addProfile(const QString& name)
+    {
+        ProfileConfig config;
+        config.setName(name);
+        config.setDesktopConfig(defaultDesktopConfig());
+        config.setUdpMethods(UDP_METHOD_ALL);
+        EXPECT_TRUE(db_.addProfile(config));
+        return config.id();
+    }
+
+    // The profiles the user made, the default one left out.
+    QList<ProfileConfig> profileList()
+    {
+        QList<ProfileConfig> profiles;
+        EXPECT_EQ(db_.profileList(&profiles), Database::ReadResult::OK);
+        EXPECT_TRUE(!profiles.isEmpty() && profiles.front().isDefault());
+        profiles.removeFirst();
+        return profiles;
+    }
+
     QList<HostId> outdatedRouterHosts(qint64 router_id)
     {
         QList<HostId> hosts;
@@ -1258,59 +1278,125 @@ TEST_F(DatabaseTest, LockTimeoutIsOffUntilChosen)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Until the user changes them, sessions use the default desktop features; a change is kept.
-TEST_F(DatabaseTest, DesktopConfigIsKept)
+// The default profile comes with the database: the built-in parameters until the user changes
+// them, a change is kept. It is not one of the profiles the user made, and it cannot be deleted.
+TEST_F(DatabaseTest, DefaultProfileComesWithTheDatabase)
 {
-    EXPECT_EQ(serialize(db_.desktopConfig()), serialize(defaultDesktopConfig()));
+    ProfileConfig profile = db_.defaultProfile();
+    EXPECT_GT(profile.id(), 0);
+    EXPECT_TRUE(profile.isDefault());
+    EXPECT_EQ(serialize(profile.desktopConfig()), serialize(defaultDesktopConfig()));
+    EXPECT_EQ(profile.udpMethods(), static_cast<quint32>(UDP_METHOD_ALL));
+    EXPECT_FALSE(profile.desktopConfig().record_sessions());
+    EXPECT_FALSE(recordingPath(profile.desktopConfig()).isEmpty());
+
+    EXPECT_TRUE(profileList().isEmpty());
+
+    addProfile("Aaa");
+
+    QList<ProfileConfig> all;
+    ASSERT_EQ(db_.profileList(&all), Database::ReadResult::OK);
+    ASSERT_EQ(all.size(), 2);
+    EXPECT_EQ(all.front().id(), profile.id());
+    EXPECT_EQ(all.back().name(), QString("Aaa"));
 
     proto::control::Config config = defaultDesktopConfig();
     config.set_audio(false);
     config.set_block_input(true);
-    config.set_disable_key_combinations(true);
-    config.mutable_preferred_resolution()->set_width(1920);
-    config.mutable_preferred_resolution()->set_height(1080);
-
-    ASSERT_TRUE(db_.setDesktopConfig(config));
-    EXPECT_EQ(serialize(db_.desktopConfig()), serialize(config));
-
-    // With every feature turned off nothing is serialized; that is still not the defaults.
-    ASSERT_TRUE(db_.setDesktopConfig(proto::control::Config()));
-    const proto::control::Config reread = db_.desktopConfig();
-    EXPECT_FALSE(reread.audio());
-    EXPECT_FALSE(reread.clipboard());
-    EXPECT_FALSE(reread.cursor_shape());
-}
-
-//--------------------------------------------------------------------------------------------------
-// Sessions are not recorded until the user turns it on; the directory always has a value.
-TEST_F(DatabaseTest, SessionRecordingIsOffUntilChosen)
-{
-    proto::control::Config config = db_.desktopConfig();
-    EXPECT_FALSE(config.record_sessions());
-    EXPECT_FALSE(recordingPath(config).isEmpty());
-
     config.set_record_sessions(true);
     config.set_recording_path("/records");
-    ASSERT_TRUE(db_.setDesktopConfig(config));
+    profile.setDesktopConfig(config);
+    profile.setUdpMethods(0);
+    ASSERT_TRUE(db_.modifyProfile(profile));
 
-    config = db_.desktopConfig();
-    EXPECT_TRUE(config.record_sessions());
-    EXPECT_EQ(recordingPath(config), "/records");
+    profile = db_.defaultProfile();
+    EXPECT_EQ(serialize(profile.desktopConfig()), serialize(config));
+    EXPECT_EQ(recordingPath(profile.desktopConfig()), "/records");
+    EXPECT_EQ(profile.udpMethods(), 0u);
+
+    EXPECT_FALSE(db_.removeProfile(profile.id()));
+    EXPECT_EQ(db_.defaultProfile().id(), profile.id());
+
+    {
+        Database reopened;
+        ASSERT_TRUE(reopened.open(file_path_));
+        EXPECT_EQ(reopened.defaultProfile().id(), profile.id());
+        EXPECT_EQ(reopened.defaultProfile().udpMethods(), 0u);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-// Until the user changes them, every UDP method is allowed; a change is kept.
-TEST_F(DatabaseTest, SessionOptionsAreOnUntilChosen)
+// A default profile whose data does not read stands for the built-in parameters, and it is still
+// the row it was: a save writes the row over, and the next read gives what was saved.
+TEST_F(DatabaseTest, DamagedDefaultProfileIsRepairedByASave)
 {
-    EXPECT_EQ(db_.udpMethods(), static_cast<quint32>(UDP_METHOD_ALL));
+    const qint64 default_id = db_.defaultProfile().id();
+    ASSERT_TRUE(corruptRecordData("profiles", default_id));
 
-    ASSERT_TRUE(db_.setUdpMethods(UDP_METHOD_DIRECT | UDP_METHOD_UPNP));
+    ProfileConfig profile = db_.defaultProfile();
+    EXPECT_EQ(profile.id(), default_id);
+    EXPECT_TRUE(profile.isDefault());
+    EXPECT_TRUE(profile.name().isEmpty());
+    EXPECT_EQ(serialize(profile.desktopConfig()), serialize(defaultDesktopConfig()));
+    EXPECT_EQ(profile.udpMethods(), static_cast<quint32>(UDP_METHOD_ALL));
 
-    EXPECT_EQ(db_.udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT | UDP_METHOD_UPNP));
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    ASSERT_TRUE(db_.addLocalHost(host));
+    EXPECT_EQ(db_.hostProfile(HostConfig::forLocalHost(host)).id(), default_id);
 
-    // No method at all is a choice too, not a missing value.
-    ASSERT_TRUE(db_.setUdpMethods(0));
-    EXPECT_EQ(db_.udpMethods(), 0u);
+    profile.setUdpMethods(UDP_METHOD_DIRECT);
+    ASSERT_TRUE(db_.modifyProfile(profile));
+
+    ProfileConfig repaired;
+    ASSERT_EQ(db_.findProfile(default_id, &repaired), Database::FindResult::FOUND);
+    EXPECT_EQ(repaired.udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
+    EXPECT_EQ(db_.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A batch replaces the default profile like every other record: a batch without one leaves the
+// built-in parameters, a batch with one brings its own, and the hosts that name it land on it.
+TEST_F(DatabaseTest, BatchReplacesTheDefaultProfile)
+{
+    ProfileConfig profile = db_.defaultProfile();
+    profile.setUdpMethods(UDP_METHOD_UPNP);
+    ASSERT_TRUE(db_.modifyProfile(profile));
+
+    ASSERT_TRUE(db_.import({}, {}, {}, {}, {}, {}));
+    EXPECT_GT(db_.defaultProfile().id(), 0);
+    EXPECT_EQ(db_.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_ALL));
+
+    ProfileConfig imported;
+    imported.setId(-1);
+    imported.setGuid(ProfileConfig::kDefaultGuid);
+    imported.setDesktopConfig(defaultDesktopConfig());
+    imported.setUdpMethods(UDP_METHOD_PCP);
+
+    ProfileConfig office;
+    office.setId(-2);
+    office.setGuid("11111111-2222-3333-4444-555555555555");
+    office.setName("office");
+    office.setDesktopConfig(defaultDesktopConfig());
+    office.setUdpMethods(0);
+
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    host.setProfileId(-1);
+
+    ASSERT_TRUE(db_.import({}, {}, { host }, {}, {}, { imported, office }));
+
+    const ProfileConfig current = db_.defaultProfile();
+    EXPECT_GT(current.id(), 0);
+    EXPECT_EQ(current.udpMethods(), static_cast<quint32>(UDP_METHOD_PCP));
+
+    const QList<ProfileConfig> profiles = profileList();
+    ASSERT_EQ(profiles.size(), 1);
+    EXPECT_EQ(profiles.front().name(), QString("office"));
+
+    EXPECT_EQ(allLocalHosts().front().profileId(), current.id());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1922,7 +2008,7 @@ TEST_F(DatabaseTest, BatchIsWrittenWithItsOwnLinks)
     credentials.setUsername("user");
     credentials.setPassword(SecureString(QString("secret")));
 
-    ASSERT_TRUE(db_.import({ router }, { parent, child }, { host }, { credentials }, {}));
+    ASSERT_TRUE(db_.import({ router }, { parent, child }, { host }, { credentials }, {}, {}));
 
     const QList<RouterConfig> routers = routerList();
     ASSERT_EQ(routers.size(), 1);
@@ -1971,7 +2057,7 @@ TEST_F(DatabaseTest, BatchWithARecordThatCannotBeWrittenLeavesNothingBehind)
     broken.setUsername("user");
     broken.setGroupId(-1);
 
-    EXPECT_FALSE(db_.import({}, { group }, { host, broken }, {}, {}));
+    EXPECT_FALSE(db_.import({}, { group }, { host, broken }, {}, {}, {}));
 
     EXPECT_EQ(allLocalGroups().size(), 1);
     EXPECT_TRUE(allLocalHosts().isEmpty());
@@ -2173,6 +2259,393 @@ TEST_F(DatabaseTest, CredentialWithoutANameOrHalfItsPairIsNotStored)
 }
 
 //--------------------------------------------------------------------------------------------------
+// What comes back out of a profile has to be what went in, and every profile gets a guid of its own.
+TEST_F(DatabaseTest, ProfileSurvivesARoundTrip)
+{
+    proto::control::Config desktop_config = defaultDesktopConfig();
+    desktop_config.set_audio(false);
+    desktop_config.set_quality(kHighQuality);
+    desktop_config.set_record_sessions(true);
+    desktop_config.set_recording_path("/records");
+
+    ProfileConfig profile;
+    profile.setName("office");
+    profile.setDesktopConfig(desktop_config);
+    profile.setUdpMethods(0);
+    ASSERT_TRUE(db_.addProfile(profile));
+    EXPECT_GT(profile.id(), 0);
+    EXPECT_FALSE(profile.guid().isEmpty());
+
+    ProfileConfig stored;
+    ASSERT_EQ(db_.findProfile(profile.id(), &stored), Database::FindResult::FOUND);
+    EXPECT_EQ(stored.id(), profile.id());
+    EXPECT_EQ(stored.guid(), profile.guid());
+    EXPECT_EQ(stored.name(), QString("office"));
+    EXPECT_EQ(serialize(stored.desktopConfig()), serialize(desktop_config));
+    EXPECT_EQ(stored.udpMethods(), 0u);
+
+    const qint64 other_id = addProfile("home");
+    ProfileConfig other;
+    ASSERT_EQ(db_.findProfile(other_id, &other), Database::FindResult::FOUND);
+    EXPECT_NE(other.guid(), stored.guid());
+
+    ProfileConfig copy = stored;
+    EXPECT_FALSE(db_.addProfile(copy));
+
+    ProfileConfig missing;
+    EXPECT_EQ(db_.findProfile(other_id + 1, &missing), Database::FindResult::NOT_FOUND);
+}
+
+//--------------------------------------------------------------------------------------------------
+// An edit changes the name and the parameters, never the guid. A removed profile is gone.
+TEST_F(DatabaseTest, ProfileIsEditedAndRemoved)
+{
+    const qint64 profile_id = addProfile("office");
+
+    ProfileConfig before;
+    ASSERT_EQ(db_.findProfile(profile_id, &before), Database::FindResult::FOUND);
+
+    proto::control::Config desktop_config = defaultDesktopConfig();
+    desktop_config.set_disable_key_combinations(true);
+
+    ProfileConfig edited;
+    edited.setId(profile_id);
+    edited.setName("renamed");
+    edited.setDesktopConfig(desktop_config);
+    edited.setUdpMethods(UDP_METHOD_DIRECT);
+    EXPECT_TRUE(db_.modifyProfile(edited));
+
+    ProfileConfig unknown = edited;
+    unknown.setId(profile_id + 1);
+    EXPECT_FALSE(db_.modifyProfile(unknown));
+
+    ProfileConfig stored;
+    ASSERT_EQ(db_.findProfile(profile_id, &stored), Database::FindResult::FOUND);
+    EXPECT_EQ(stored.guid(), before.guid());
+    EXPECT_EQ(stored.name(), QString("renamed"));
+    EXPECT_EQ(serialize(stored.desktopConfig()), serialize(desktop_config));
+    EXPECT_EQ(stored.udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
+    EXPECT_EQ(profileList().size(), 1);
+
+    ASSERT_TRUE(db_.removeProfile(profile_id));
+    EXPECT_EQ(db_.findProfile(profile_id, &stored), Database::FindResult::NOT_FOUND);
+    EXPECT_TRUE(profileList().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Profiles come by name whatever order they were added in, and the case of a letter does not move
+// them.
+TEST_F(DatabaseTest, ProfilesAreListedByName)
+{
+    addProfile("office");
+    addProfile("Home");
+    addProfile(QString::fromUtf8("Склад"));
+    addProfile("backup");
+
+    const QList<ProfileConfig> profiles = profileList();
+    ASSERT_EQ(profiles.size(), 4);
+    EXPECT_EQ(profiles[0].name(), "backup");
+    EXPECT_EQ(profiles[1].name(), "Home");
+    EXPECT_EQ(profiles[2].name(), "office");
+    EXPECT_EQ(profiles[3].name(), QString::fromUtf8("Склад"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A profile is chosen by its name, so one without a name or with one too long is not stored.
+TEST_F(DatabaseTest, ProfileWithoutANameIsNotStored)
+{
+    ProfileConfig nameless;
+    EXPECT_FALSE(db_.addProfile(nameless));
+
+    ProfileConfig long_name;
+    long_name.setName(QString(ProfileConfig::kMaxNameLength + 1, QChar('a')));
+    EXPECT_FALSE(db_.addProfile(long_name));
+
+    EXPECT_TRUE(profileList().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A profile whose parameters do not read is in the list all the same, and the list says it is not
+// whole.
+TEST_F(DatabaseTest, ProfileThatDoesNotReadLeavesTheListIncomplete)
+{
+    const qint64 broken_id = addProfile("office");
+    addProfile("home");
+
+    ASSERT_TRUE(corruptRecordData("profiles", broken_id));
+
+    QList<ProfileConfig> profiles;
+    EXPECT_EQ(db_.profileList(&profiles), Database::ReadResult::INCOMPLETE);
+    ASSERT_EQ(profiles.size(), 3);
+    EXPECT_EQ(profiles[2].name(), QString("office"));
+    EXPECT_EQ(profiles[2].id(), broken_id);
+
+    ProfileConfig broken;
+    EXPECT_EQ(db_.findProfile(broken_id, &broken), Database::FindResult::UNREADABLE);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A local host is connected with the profile chosen for it, and an edit of the host is what changes
+// the choice. Once the profile is removed the host is back on the default one.
+TEST_F(DatabaseTest, LocalHostKeepsTheProfileChosenForIt)
+{
+    const qint64 office_id = addProfile("office");
+    const qint64 home_id = addProfile("home");
+
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    host.setProfileId(office_id);
+    ASSERT_TRUE(db_.addLocalHost(host));
+    EXPECT_EQ(findLocalHost(db_, host.id())->profileId(), office_id);
+    EXPECT_EQ(allLocalHosts().front().profileId(), office_id);
+
+    host.setProfileId(home_id);
+    ASSERT_TRUE(db_.modifyLocalHost(host));
+    EXPECT_EQ(findLocalHost(db_, host.id())->profileId(), home_id);
+
+    ASSERT_TRUE(db_.removeProfile(home_id));
+    EXPECT_EQ(findLocalHost(db_, host.id())->profileId(), 0);
+
+    host.setProfileId(office_id);
+    ASSERT_TRUE(db_.modifyLocalHost(host));
+    host.setProfileId(0);
+    ASSERT_TRUE(db_.modifyLocalHost(host));
+    EXPECT_EQ(findLocalHost(db_, host.id())->profileId(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A profile is kept for a host of a router whether or not credentials are saved for it, and the
+// credentials come and go without touching it.
+TEST_F(DatabaseTest, RouterHostKeepsTheProfileChosenForIt)
+{
+    const qint64 router_id = addRouter("router");
+    const qint64 profile_id = addProfile("office");
+
+    ASSERT_TRUE(db_.setRouterHostProfileId(router_id, 100500, profile_id));
+
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->profileId(), profile_id);
+    EXPECT_TRUE(stored->username().isEmpty());
+    EXPECT_EQ(stored->credentialId(), 0);
+
+    std::optional<std::pair<QString, SecureString>> credentials =
+        db_.routerHostCredentials(router_id, 100500);
+    ASSERT_TRUE(credentials.has_value());
+    EXPECT_TRUE(credentials->first.isEmpty());
+    EXPECT_TRUE(credentials->second.isEmpty());
+
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, "user", "secret")));
+    stored = findRouterHost(db_, router_id, 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->profileId(), profile_id);
+    EXPECT_EQ(stored->username(), QString("user"));
+
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, QString(), QString())));
+    stored = findRouterHost(db_, router_id, 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->profileId(), profile_id);
+    EXPECT_TRUE(stored->username().isEmpty());
+
+    ASSERT_TRUE(db_.setRouterHostProfileId(router_id, 100500, 0));
+    EXPECT_FALSE(findRouterHost(db_, router_id, 100500).has_value());
+
+    ASSERT_TRUE(db_.setRouterHostProfileId(router_id, 100501, 0));
+    EXPECT_FALSE(findRouterHost(db_, router_id, 100501).has_value());
+
+    EXPECT_FALSE(db_.setRouterHostProfileId(router_id, kMinTempHostId, profile_id));
+    EXPECT_TRUE(allRouterHosts().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The row of a host of a router stays as long as it holds something for the host. Removed
+// credentials take only themselves, and what else is kept for the host stays with the row.
+TEST_F(DatabaseTest, RouterHostRowOutlivesItsCredentials)
+{
+    const qint64 router_id = addRouter("router");
+    const qint64 credential_id = addCredential("office", "user", "secret");
+
+    CredentialConfig os = credential("workstation", "DOMAIN\\user", "secret");
+    os.setType(CredentialConfig::Type::OS);
+    ASSERT_TRUE(db_.addCredential(os));
+
+    RouterHostConfig host = routerHost(router_id, 100500, "own-user", "own-secret");
+    host.setCredentialId(credential_id);
+    ASSERT_TRUE(db_.addRouterHost(host));
+    ASSERT_TRUE(db_.setRouterHostOsCredentialId(router_id, 100500, os.id()));
+
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, QString(), QString())));
+
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_TRUE(stored->username().isEmpty());
+    EXPECT_TRUE(stored->password().isEmpty());
+    EXPECT_EQ(stored->credentialId(), 0);
+    EXPECT_EQ(stored->osCredentialId(), os.id());
+
+    EXPECT_TRUE(db_.reencryptAll(allLocalHosts(), routerList(), allRouterHosts(), credentialList(),
+                                 ProxyConfig(), QByteArray(32, 's'), QByteArray(32, 'v'), 1));
+
+    EXPECT_FALSE(db_.modifyRouterHost(routerHost(router_id, 100501, QString(), QString())));
+    EXPECT_EQ(allRouterHosts().size(), 1);
+
+    ASSERT_TRUE(db_.removeRouterHost(router_id, 100500));
+    EXPECT_TRUE(allRouterHosts().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A row that is left with no pair, no links and no profile is gone, whichever of them was the last
+// to go. A row that still holds a pair stays when its links go.
+TEST_F(DatabaseTest, EmptiedRouterHostRowIsGone)
+{
+    const qint64 router_id = addRouter("router");
+
+    CredentialConfig os = credential("workstation", "DOMAIN\\user", "secret");
+    os.setType(CredentialConfig::Type::OS);
+    ASSERT_TRUE(db_.addCredential(os));
+
+    addRouterHost(router_id, 100500, "user", "secret");
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, QString(), QString())));
+    EXPECT_FALSE(findRouterHost(db_, router_id, 100500).has_value());
+
+    addRouterHost(router_id, 100501, "user", "secret");
+    ASSERT_TRUE(db_.setRouterHostOsCredentialId(router_id, 100501, os.id()));
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100501, QString(), QString())));
+    ASSERT_TRUE(findRouterHost(db_, router_id, 100501).has_value());
+
+    ASSERT_TRUE(db_.setRouterHostOsCredentialId(router_id, 100501, 0));
+    EXPECT_FALSE(findRouterHost(db_, router_id, 100501).has_value());
+
+    addRouterHost(router_id, 100502, "user", "secret");
+    ASSERT_TRUE(db_.setRouterHostOsCredentialId(router_id, 100502, os.id()));
+    ASSERT_TRUE(db_.removeCredential(os.id()));
+
+    const std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100502);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->osCredentialId(), 0);
+    EXPECT_EQ(stored->username(), QString("user"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A removed profile leaves every host that had it on the default profile. The row of a router host
+// that held nothing but the profile is gone with it.
+TEST_F(DatabaseTest, RemovedProfileLeavesItsHostsOnTheDefaultOne)
+{
+    const qint64 router_id = addRouter("router");
+    const qint64 profile_id = addProfile("office");
+
+    ASSERT_TRUE(db_.setRouterHostProfileId(router_id, 100500, profile_id));
+
+    LocalHostConfig local_host;
+    local_host.setName("host");
+    local_host.setAddress("192.168.0.1");
+    local_host.setProfileId(profile_id);
+    ASSERT_TRUE(db_.addLocalHost(local_host));
+
+    ASSERT_TRUE(db_.removeProfile(profile_id));
+
+    EXPECT_FALSE(findRouterHost(db_, router_id, 100500).has_value());
+    EXPECT_EQ(findLocalHost(db_, local_host.id())->profileId(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A session runs on the parameters of the profile chosen for its host. A host without a profile,
+// a host that is not in the book and a host whose profile is gone all run on the default ones.
+TEST_F(DatabaseTest, SessionRunsOnTheProfileOfItsHost)
+{
+    proto::control::Config office_desktop = defaultDesktopConfig();
+    office_desktop.set_audio(false);
+
+    ProfileConfig office;
+    office.setName("office");
+    office.setDesktopConfig(office_desktop);
+    office.setUdpMethods(UDP_METHOD_DIRECT);
+    ASSERT_TRUE(db_.addProfile(office));
+
+    proto::control::Config default_desktop = defaultDesktopConfig();
+    default_desktop.set_clipboard(false);
+    ProfileConfig default_profile = db_.defaultProfile();
+    default_profile.setDesktopConfig(default_desktop);
+    default_profile.setUdpMethods(UDP_METHOD_UPNP);
+    ASSERT_TRUE(db_.modifyProfile(default_profile));
+
+    LocalHostConfig local_host;
+    local_host.setName("host");
+    local_host.setAddress("192.168.0.1");
+    local_host.setProfileId(office.id());
+    ASSERT_TRUE(db_.addLocalHost(local_host));
+
+    ProfileConfig profile = db_.hostProfile(HostConfig::forLocalHost(local_host));
+    EXPECT_EQ(profile.id(), office.id());
+    EXPECT_EQ(serialize(profile.desktopConfig()), serialize(office_desktop));
+    EXPECT_EQ(profile.udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
+
+    const qint64 router_id = addRouter("router");
+    ASSERT_TRUE(db_.setRouterHostProfileId(router_id, 100500, office.id()));
+
+    profile = db_.hostProfile(HostConfig::forRouterHost(router_id, 100500, "host"));
+    EXPECT_EQ(profile.id(), office.id());
+    EXPECT_EQ(profile.udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
+
+    profile = db_.hostProfile(HostConfig::forRouterHost(router_id, 100501, "other"));
+    EXPECT_EQ(profile.id(), default_profile.id());
+    EXPECT_EQ(serialize(profile.desktopConfig()), serialize(default_desktop));
+    EXPECT_EQ(profile.udpMethods(), static_cast<quint32>(UDP_METHOD_UPNP));
+
+    HostConfig quick_connect;
+    quick_connect.setAddress("192.168.0.2");
+    profile = db_.hostProfile(quick_connect);
+    EXPECT_EQ(profile.id(), default_profile.id());
+    EXPECT_EQ(profile.udpMethods(), static_cast<quint32>(UDP_METHOD_UPNP));
+
+    ASSERT_TRUE(db_.removeProfile(office.id()));
+
+    profile = db_.hostProfile(HostConfig::forLocalHost(local_host));
+    EXPECT_EQ(profile.id(), default_profile.id());
+    EXPECT_EQ(serialize(profile.desktopConfig()), serialize(default_desktop));
+    EXPECT_EQ(profile.udpMethods(), static_cast<quint32>(UDP_METHOD_UPNP));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The hosts of a batch name their profiles by the keys of the batch as well.
+TEST_F(DatabaseTest, BatchLinksHostsToTheirProfiles)
+{
+    ProfileConfig profile;
+    profile.setId(-1);
+    profile.setName("office");
+    profile.setDesktopConfig(defaultDesktopConfig());
+
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    host.setProfileId(-1);
+
+    RouterConfig router;
+    router.setRouterId(-1);
+    router.setDisplayName("router");
+    router.setAddress("router.example.com");
+    router.setUsername("router-user");
+    router.setPassword(SecureString(QString("router-secret")));
+
+    RouterHostConfig router_host = routerHost(-1, 100500, QString(), QString());
+    router_host.setProfileId(-1);
+
+    ASSERT_TRUE(db_.import({ router }, {}, { host }, { router_host }, {}, { profile }));
+
+    const QList<ProfileConfig> profiles = profileList();
+    ASSERT_EQ(profiles.size(), 1);
+
+    const QList<LocalHostConfig> hosts = allLocalHosts();
+    ASSERT_EQ(hosts.size(), 1);
+    EXPECT_EQ(hosts.front().profileId(), profiles.front().id());
+
+    const QList<RouterHostConfig> router_hosts = allRouterHosts();
+    ASSERT_EQ(router_hosts.size(), 1);
+    EXPECT_EQ(router_hosts.front().profileId(), profiles.front().id());
+}
+
+//--------------------------------------------------------------------------------------------------
 // A change of the master password rewrites the credentials along with everything else.
 TEST_F(DatabaseTest, ReencryptionKeepsCredentialsReadable)
 {
@@ -2199,7 +2672,7 @@ TEST_F(DatabaseTest, BatchCarriesItsCredentials)
     CredentialConfig config = credential("office", "user", "secret");
     config.setGuid("guid-of-the-file");
 
-    ASSERT_TRUE(db_.import({}, {}, {}, {}, { config }));
+    ASSERT_TRUE(db_.import({}, {}, {}, {}, { config }, {}));
 
     const QList<CredentialConfig> stored = credentialList();
     ASSERT_EQ(stored.size(), 1);
@@ -2270,16 +2743,14 @@ TEST_F(DatabaseTest, RouterHostLinksItsCredentials)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A host of a router is remembered by a pair of its own or by the record of credentials it refers
-// to. A row with neither is refused, and a row with the link alone comes back with an empty pair.
+// A host of a router remembered by the record of credentials it refers to comes back with the link
+// and an empty pair of its own.
 TEST_F(DatabaseTest, RouterHostIsKeptByItsLinkAlone)
 {
     const qint64 router_id = addRouter("router");
     const qint64 credential_id = addCredential("office", "user", "secret");
 
     RouterHostConfig host = routerHost(router_id, 100500, QString(), QString());
-    EXPECT_FALSE(db_.addRouterHost(host));
-
     host.setCredentialId(credential_id);
     ASSERT_TRUE(db_.addRouterHost(host));
 
@@ -2313,7 +2784,7 @@ TEST_F(DatabaseTest, BatchLinksHostsToItsCredentials)
     RouterHostConfig router_host = routerHost(-1, 100500, "user", "secret");
     router_host.setCredentialId(-1);
 
-    ASSERT_TRUE(db_.import({ router }, {}, { host }, { router_host }, { config }));
+    ASSERT_TRUE(db_.import({ router }, {}, { host }, { router_host }, { config }, {}));
 
     const QList<CredentialConfig> credentials = credentialList();
     ASSERT_EQ(credentials.size(), 1);
@@ -2395,7 +2866,7 @@ TEST_F(DatabaseTest, BatchLinksHostsToTheirOsCredentials)
     router_host.setCredentialId(-1);
     router_host.setOsCredentialId(-2);
 
-    ASSERT_TRUE(db_.import({ router }, {}, { host }, { router_host }, { aspia, os }));
+    ASSERT_TRUE(db_.import({ router }, {}, { host }, { router_host }, { aspia, os }, {}));
 
     QList<CredentialConfig> credentials;
     ASSERT_EQ(db_.credentialList(&credentials, CredentialConfig::Type::OS), Database::ReadResult::OK);
@@ -2411,9 +2882,9 @@ TEST_F(DatabaseTest, BatchLinksHostsToTheirOsCredentials)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The tables of hosts made before the column of the operating system credentials get it when the
-// file is opened, and a file that has it already is opened as it is.
-TEST_F(DatabaseTest, OldTablesOfHostsGetTheOsCredentialColumn)
+// The tables of hosts made before the columns of the operating system credentials and of the
+// profile get them when the file is opened, and a file that has them already is opened as it is.
+TEST_F(DatabaseTest, OldTablesOfHostsGetTheNewColumns)
 {
     const QString file_path = QFileInfo(file_path_).dir().filePath("old.db3");
 
@@ -2435,9 +2906,13 @@ TEST_F(DatabaseTest, OldTablesOfHostsGetTheOsCredentialColumn)
 
     for (const char* table : { "local_hosts", "router_hosts" })
     {
-        SqlQuery query(raw, "SELECT 1 FROM pragma_table_info(?) WHERE name='os_credential_id'");
-        query.addText(std::string_view(table));
-        EXPECT_EQ(query.next(), SqlQuery::StepResult::ROW) << table;
+        for (const char* column : { "os_credential_id", "profile_id" })
+        {
+            SqlQuery query(raw, "SELECT 1 FROM pragma_table_info(?) WHERE name=?");
+            query.addText(std::string_view(table));
+            query.addText(std::string_view(column));
+            EXPECT_EQ(query.next(), SqlQuery::StepResult::ROW) << table << "." << column;
+        }
     }
 }
 
@@ -2526,11 +3001,10 @@ TEST_F(DatabaseTest, RouterHostIsEnteredWithTheCredentialsItRefersToOrItsOwnPair
 }
 
 //--------------------------------------------------------------------------------------------------
-// A row of a router host exists for its credentials alone. Once the record it refers to is removed,
-// a row that kept no pair of its own goes with it, and one that kept a pair keeps that pair. The
-// book stays one a change of the master password walks through. A local host is a record in its
-// own right and stays, referring to nothing.
-TEST_F(DatabaseTest, RemovingARecordTakesTheRouterHostsRememberedByItAlone)
+// Once the record of credentials is removed, the hosts that referred to it refer to nothing and
+// keep the pair of their own, if any. A row of a router host that was kept by the link alone is
+// gone. The book stays one a change of the master password walks through.
+TEST_F(DatabaseTest, RemovedRecordLeavesTheHostsThatReferredToIt)
 {
     const qint64 router_id = addRouter("router");
     const qint64 group = addGroup("group", 0);
@@ -2739,6 +3213,7 @@ TEST_F(DatabaseTest, ResetKeepsWhatTheDatabaseHeldInACopy)
     addHost("Host", addGroup("Group", 0));
     addRouterHost(addRouter("Router"), 1, "user", "password");
     addCredential("Credential", "user", "password");
+    addProfile("Profile");
 
     const QString copy_path = QFileInfo(file_path_).dir().filePath("copy.db3");
     ASSERT_TRUE(db_.saveCopyAndClearAll(copy_path));
@@ -2750,6 +3225,7 @@ TEST_F(DatabaseTest, ResetKeepsWhatTheDatabaseHeldInACopy)
     EXPECT_TRUE(routerList().isEmpty());
     EXPECT_TRUE(allRouterHosts().isEmpty());
     EXPECT_TRUE(credentialList().isEmpty());
+    EXPECT_TRUE(profileList().isEmpty());
 
     Database copy;
     ASSERT_TRUE(copy.open(copy_path));
@@ -2768,6 +3244,10 @@ TEST_F(DatabaseTest, ResetKeepsWhatTheDatabaseHeldInACopy)
     QList<CredentialConfig> credentials;
     ASSERT_EQ(copy.credentialList(&credentials), Database::ReadResult::OK);
     EXPECT_EQ(credentials.size(), 1);
+
+    QList<ProfileConfig> profiles;
+    ASSERT_EQ(copy.profileList(&profiles), Database::ReadResult::OK);
+    EXPECT_EQ(profiles.size(), 2);
 }
 
 //--------------------------------------------------------------------------------------------------
