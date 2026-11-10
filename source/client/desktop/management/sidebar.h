@@ -24,10 +24,10 @@
 #include <QTreeWidget>
 #include <QWidget>
 
-#include "client/database.h"
 #include "client/router_types.h"
 #include "client/desktop/management/drag_and_drop.h"
 #include "client/desktop/management/sidebar_items.h"
+#include "client/storage/database.h"
 
 class QTimer;
 class RouterConfig;

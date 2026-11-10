@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/settings.h"
+#include "client/storage/settings.h"
 
 #include <QLocale>
 #include <QVersionNumber>

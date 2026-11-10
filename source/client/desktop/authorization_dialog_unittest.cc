@@ -28,7 +28,7 @@
 
 #include "base/crypto/secure_string.h"
 #include "client/config.h"
-#include "client/settings.h"
+#include "client/storage/settings.h"
 
 class AuthorizationDialogTest : public testing::Test
 {

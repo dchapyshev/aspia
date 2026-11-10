@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/master_password.h"
+#include "client/storage/master_password.h"
 
 #include <optional>
 #include <utility>
@@ -27,7 +27,7 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_string.h"
-#include "client/database.h"
+#include "client/storage/database.h"
 
 namespace {
 

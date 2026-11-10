@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_DATABASE_H
-#define CLIENT_DATABASE_H
+#ifndef CLIENT_STORAGE_DATABASE_H
+#define CLIENT_STORAGE_DATABASE_H
 
 #include <QList>
 #include <QObject>
@@ -28,8 +28,8 @@
 
 #include "base/time_types.h"
 #include "base/sql/sql_database.h"
-#include "client/auto_backup.h"
 #include "client/config.h"
+#include "client/storage/auto_backup.h"
 
 class Database
 {
@@ -220,4 +220,4 @@ private:
     mutable SqlDatabase db_;
 };
 
-#endif // CLIENT_DATABASE_H
+#endif // CLIENT_STORAGE_DATABASE_H

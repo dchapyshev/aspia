@@ -24,9 +24,9 @@
 
 #include <memory>
 
-#include "client/database.h"
 #include "client/mcp/mcp_controller.h"
 #include "client/online_checker/online_checker.h"
+#include "client/storage/database.h"
 
 namespace {
 

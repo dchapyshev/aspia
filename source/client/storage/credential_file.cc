@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/credential_file.h"
+#include "client/storage/credential_file.h"
 
 #include <QFile>
 #include <QSaveFile>

@@ -24,8 +24,8 @@
 #include <memory>
 
 #include "base/peer/host_id.h"
-#include "client/database.h"
 #include "client/router_controller.h"
+#include "client/storage/database.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 

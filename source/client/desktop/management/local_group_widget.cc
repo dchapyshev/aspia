@@ -30,11 +30,11 @@
 
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
-#include "client/database.h"
 #include "client/desktop/management/drag_and_drop.h"
 #include "client/desktop/management/ui_local_group_widget.h"
 #include "client/online_checker/online_checker.h"
 #include "client/router_controller.h"
+#include "client/storage/database.h"
 #include "common/desktop/msg_box.h"
 
 //--------------------------------------------------------------------------------------------------

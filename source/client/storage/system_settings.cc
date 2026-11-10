@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/system_settings.h"
+#include "client/storage/system_settings.h"
 
 #include <QCoreApplication>
 #include <QDir>

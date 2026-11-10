@@ -24,7 +24,7 @@
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "client/config.h"
-#include "client/database.h"
+#include "client/storage/database.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
 #include "common/android/controls.h"

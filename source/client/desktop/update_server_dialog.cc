@@ -25,8 +25,8 @@
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/time_types.h"
-#include "client/system_settings.h"
 #include "client/desktop/ui_update_server_dialog.h"
+#include "client/storage/system_settings.h"
 #include "common/desktop/msg_box.h"
 
 namespace {

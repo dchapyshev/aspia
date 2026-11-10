@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_SYSTEM_SETTINGS_H
-#define CLIENT_SYSTEM_SETTINGS_H
+#ifndef CLIENT_STORAGE_SYSTEM_SETTINGS_H
+#define CLIENT_STORAGE_SYSTEM_SETTINGS_H
 
 #include <QSettings>
 
@@ -45,4 +45,4 @@ private:
     Q_DISABLE_COPY_MOVE(SystemSettings)
 };
 
-#endif // CLIENT_SYSTEM_SETTINGS_H
+#endif // CLIENT_STORAGE_SYSTEM_SETTINGS_H

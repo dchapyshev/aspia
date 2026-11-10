@@ -26,12 +26,12 @@
 
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
-#include "client/database.h"
 #include "client/desktop/ui_credentials_tab.h"
 #include "client/desktop/credentials/credential_dialog.h"
 #include "client/desktop/credentials/credential_export_dialog.h"
 #include "client/desktop/credentials/credential_import_dialog.h"
 #include "client/desktop/credentials/credential_list_model.h"
+#include "client/storage/database.h"
 #include "common/desktop/msg_box.h"
 
 //--------------------------------------------------------------------------------------------------

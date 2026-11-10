@@ -26,7 +26,7 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "client/config.h"
-#include "client/database.h"
+#include "client/storage/database.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
 #include "common/android/label.h"

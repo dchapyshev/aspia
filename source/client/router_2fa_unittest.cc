@@ -32,8 +32,8 @@
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/os_crypt.h"
 #include "base/crypto/secure_byte_array.h"
-#include "client/database.h"
 #include "client/router_test_fixture.h"
+#include "client/storage/database.h"
 #include "proto/router_constants.h"
 
 namespace {

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/credential_file.h"
+#include "client/storage/credential_file.h"
 
 #include <QFile>
 #include <QTemporaryDir>
@@ -29,9 +29,9 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
-#include "client/backup.h"
 #include "client/config.h"
-#include "client/database.h"
+#include "client/storage/backup.h"
+#include "client/storage/database.h"
 #include "proto/storage.h"
 
 namespace {

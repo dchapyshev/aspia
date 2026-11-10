@@ -24,8 +24,8 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
-#include "client/settings.h"
 #include "client/desktop/client_window.h"
+#include "client/storage/settings.h"
 
 namespace {
 

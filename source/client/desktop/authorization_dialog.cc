@@ -26,8 +26,8 @@
 #include "base/logging.h"
 #include "base/time_types.h"
 #include "base/crypto/secure_string.h"
-#include "client/settings.h"
 #include "client/desktop/ui_authorization_dialog.h"
+#include "client/storage/settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/password_edit.h"
 

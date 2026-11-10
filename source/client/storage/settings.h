@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_SETTINGS_H
-#define CLIENT_SETTINGS_H
+#ifndef CLIENT_STORAGE_SETTINGS_H
+#define CLIENT_STORAGE_SETTINGS_H
 
 #include <QSettings>
 
@@ -30,7 +30,8 @@ enum SessionType : int;
 // On application upgrade (when the stored version is older than the current one), all parameters
 // are cleared on first construction in the process. Therefore this class must NOT be used for
 // connection-related, security-related or any other critical data: such values should be stored
-// in the Database (see client/database.h) or another persistent storage that survives upgrades.
+// in the Database (see client/storage/database.h) or another persistent storage that survives
+// upgrades.
 class Settings
 {
 public:
@@ -102,4 +103,4 @@ private:
     Q_DISABLE_COPY_MOVE(Settings)
 };
 
-#endif // CLIENT_SETTINGS_H
+#endif // CLIENT_STORAGE_SETTINGS_H

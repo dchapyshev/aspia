@@ -24,7 +24,7 @@
 
 #include <functional>
 
-#include "client/settings.h"
+#include "client/storage/settings.h"
 
 class QVBoxLayout;
 class QStackedWidget;

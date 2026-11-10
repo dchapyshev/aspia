@@ -20,8 +20,8 @@
 
 #include "base/logging.h"
 #include "base/peer/host_id.h"
-#include "client/database.h"
 #include "client/router_controller.h"
+#include "client/storage/database.h"
 
 //--------------------------------------------------------------------------------------------------
 RouterHostsCleaner::RouterHostsCleaner(qint64 router_id, QObject* parent)

@@ -21,8 +21,8 @@
 #include "version.h"
 #include "base/build_config.h"
 #include "base/logging.h"
-#include "client/database.h"
-#include "client/settings.h"
+#include "client/storage/database.h"
+#include "client/storage/settings.h"
 #include "client/workers/router_worker.h"
 #include "client/workers/update_worker.h"
 

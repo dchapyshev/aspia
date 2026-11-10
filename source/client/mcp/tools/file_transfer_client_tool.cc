@@ -26,9 +26,9 @@
 #include <optional>
 
 #include "base/time_types.h"
-#include "client/database.h"
 #include "client/mcp/mcp_controller.h"
 #include "client/mcp/tools/mcp_utils.h"
+#include "client/storage/database.h"
 
 namespace {
 

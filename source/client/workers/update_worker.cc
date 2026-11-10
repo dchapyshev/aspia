@@ -21,8 +21,8 @@
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/update/update_checker.h"
-#include "client/database.h"
-#include "client/system_settings.h"
+#include "client/storage/database.h"
+#include "client/storage/system_settings.h"
 
 //--------------------------------------------------------------------------------------------------
 UpdateWorker::UpdateWorker()

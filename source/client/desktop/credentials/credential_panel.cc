@@ -29,7 +29,7 @@
 #include <QVBoxLayout>
 
 #include "base/logging.h"
-#include "client/database.h"
+#include "client/storage/database.h"
 
 namespace {
 

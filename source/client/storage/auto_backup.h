@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_AUTO_BACKUP_H
-#define CLIENT_AUTO_BACKUP_H
+#ifndef CLIENT_STORAGE_AUTO_BACKUP_H
+#define CLIENT_STORAGE_AUTO_BACKUP_H
 
-#include "client/backup.h"
+#include "client/storage/backup.h"
 
 // Backups of the database made on every start of the application into a directory chosen by the user.
 class AutoBackup
@@ -42,4 +42,4 @@ private:
     Q_DISABLE_COPY_MOVE(AutoBackup)
 };
 
-#endif // CLIENT_AUTO_BACKUP_H
+#endif // CLIENT_STORAGE_AUTO_BACKUP_H

@@ -32,10 +32,10 @@
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
 #include "client/config.h"
-#include "client/database.h"
-#include "client/settings.h"
 #include "client/desktop/management/group_combo_box.h"
 #include "client/desktop/management/ui_local_host_dialog.h"
+#include "client/storage/database.h"
+#include "client/storage/settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/password_edit.h"
 

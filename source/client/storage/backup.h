@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_BACKUP_H
-#define CLIENT_BACKUP_H
+#ifndef CLIENT_STORAGE_BACKUP_H
+#define CLIENT_STORAGE_BACKUP_H
 
 #include <QString>
 
@@ -76,4 +76,4 @@ private:
     Q_DISABLE_COPY_MOVE(Backup)
 };
 
-#endif // CLIENT_BACKUP_H
+#endif // CLIENT_STORAGE_BACKUP_H

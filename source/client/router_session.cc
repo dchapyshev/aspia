@@ -23,8 +23,8 @@
 #include "base/logging.h"
 #include "base/peer/router_user.h"
 #include "base/serialization.h"
-#include "client/database.h"
 #include "client/router_controller.h"
+#include "client/storage/database.h"
 #include "client/workers/router_worker.h"
 #include "proto/router_constants.h"
 

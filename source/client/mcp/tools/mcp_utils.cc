@@ -20,8 +20,8 @@
 
 #include <QJsonArray>
 
-#include "client/database.h"
 #include "client/mcp/mcp_controller.h"
+#include "client/storage/database.h"
 
 namespace {
 

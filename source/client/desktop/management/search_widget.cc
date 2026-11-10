@@ -44,8 +44,8 @@
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
 #include "base/peer/host_id.h"
-#include "client/database.h"
 #include "client/router_controller.h"
+#include "client/storage/database.h"
 #include "common/desktop/icon_text_button.h"
 #include "proto/router_constants.h"
 

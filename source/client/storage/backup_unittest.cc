@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/backup.h"
+#include "client/storage/backup.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -35,7 +35,7 @@
 #include "base/net/udp_channel.h"
 #include "base/peer/host_id.h"
 #include "base/sql/sql_database.h"
-#include "client/database.h"
+#include "client/storage/database.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 

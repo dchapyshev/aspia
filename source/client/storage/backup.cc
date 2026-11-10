@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/backup.h"
+#include "client/storage/backup.h"
 
 #include <QFile>
 #include <QHash>
@@ -33,8 +33,8 @@
 #include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_memory.h"
 #include "base/peer/host_id.h"
-#include "client/database.h"
-#include "client/master_password.h"
+#include "client/storage/database.h"
+#include "client/storage/master_password.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 

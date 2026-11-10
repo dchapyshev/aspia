@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/auto_backup.h"
+#include "client/storage/auto_backup.h"
 
 #include <QDateTime>
 #include <QDir>

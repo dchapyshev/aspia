@@ -23,7 +23,7 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 
-#include "client/settings.h"
+#include "client/storage/settings.h"
 
 namespace {
 

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_CREDENTIAL_FILE_H
-#define CLIENT_CREDENTIAL_FILE_H
+#ifndef CLIENT_STORAGE_CREDENTIAL_FILE_H
+#define CLIENT_STORAGE_CREDENTIAL_FILE_H
 
 #include <QList>
 #include <QString>
@@ -53,4 +53,4 @@ private:
     Q_DISABLE_COPY_MOVE(CredentialFile)
 };
 
-#endif // CLIENT_CREDENTIAL_FILE_H
+#endif // CLIENT_STORAGE_CREDENTIAL_FILE_H

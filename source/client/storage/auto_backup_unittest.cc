@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/auto_backup.h"
+#include "client/storage/auto_backup.h"
 
 #include <QDateTime>
 #include <QDir>
@@ -29,7 +29,7 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
-#include "client/database.h"
+#include "client/storage/database.h"
 
 class AutoBackupTest : public testing::Test
 {

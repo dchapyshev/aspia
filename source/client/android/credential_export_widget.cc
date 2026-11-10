@@ -25,10 +25,10 @@
 
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
-#include "client/credential_file.h"
-#include "client/database.h"
-#include "client/master_password.h"
 #include "client/android/credential_selection_list.h"
+#include "client/storage/credential_file.h"
+#include "client/storage/database.h"
+#include "client/storage/master_password.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
 #include "common/android/icon_button.h"

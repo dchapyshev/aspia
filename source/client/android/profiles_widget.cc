@@ -25,8 +25,8 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/config.h"
-#include "client/database.h"
 #include "client/android/profile_editor.h"
+#include "client/storage/database.h"
 #include "common/android/icon_button.h"
 #include "common/android/tree_widget.h"
 

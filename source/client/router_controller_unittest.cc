@@ -28,8 +28,8 @@
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
 #include "client/config.h"
-#include "client/database.h"
 #include "client/router_test_fixture.h"
+#include "client/storage/database.h"
 
 // The controller without a worker: nothing connects, so what is under test is which records keep
 // a context of their own and which lose it.

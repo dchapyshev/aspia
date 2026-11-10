@@ -25,21 +25,8 @@ list(APPEND SOURCE_CLIENT_CORE
     audio_output.h
     audio_player.cc
     audio_player.h
-    auto_backup.cc
-    auto_backup.h
-    backup.cc
-    backup.h
-    database.cc
-    database.h
-    database_credentials.cc
-    database_local_hosts.cc
-    database_profiles.cc
-    database_routers.cc
-    database_settings.cc
     config.cc
     config.h
-    credential_file.cc
-    credential_file.h
     file_error_code.cc
     file_error_code.h
     file_remove_queue_builder.cc
@@ -50,8 +37,6 @@ list(APPEND SOURCE_CLIENT_CORE
     file_transfer.h
     file_transfer_queue_builder.cc
     file_transfer_queue_builder.h
-    master_password.cc
-    master_password.h
     router_2fa.cc
     router_2fa.h
     router_cache.cc
@@ -72,10 +57,6 @@ list(APPEND SOURCE_CLIENT_CORE
     session_keeper.h
     session_state.cc
     session_state.h
-    settings.cc
-    settings.h
-    system_settings.cc
-    system_settings.h
     telemetry_model.cc
     telemetry_model.h
     udp_attempt.cc
@@ -87,11 +68,7 @@ list(APPEND SOURCE_CLIENT
     main.cc)
 
 list(APPEND SOURCE_CLIENT_TESTS
-    auto_backup_unittest.cc
-    backup_unittest.cc
     config_unittest.cc
-    credential_file_unittest.cc
-    database_unittest.cc
     desktop/authorization_dialog_unittest.cc
     desktop/credentials/credential_list_model_unittest.cc
     desktop/management/access_log_list_model_unittest.cc
@@ -113,6 +90,10 @@ list(APPEND SOURCE_CLIENT_TESTS
     router_test_fixture.h
     page_model_unittest.cc
     search_page_model_unittest.cc
+    storage/auto_backup_unittest.cc
+    storage/backup_unittest.cc
+    storage/credential_file_unittest.cc
+    storage/database_unittest.cc
     tests_main.cc
     workers/video_worker_unittest.cc)
 
@@ -155,6 +136,7 @@ include(desktop/chat/sources.cmake)
 include(desktop/credentials/sources.cmake)
 include(desktop/management/sources.cmake)
 include(desktop/terminal/sources.cmake)
+include(storage/sources.cmake)
 include(workers/sources.cmake)
 
 if (WIN32)
@@ -175,6 +157,7 @@ source_group(desktop\\chat FILES ${SOURCE_CLIENT_CORE_DESKTOP_CHAT})
 source_group(desktop\\credentials FILES ${SOURCE_CLIENT_CORE_DESKTOP_CREDENTIALS})
 source_group(desktop\\terminal FILES ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL})
 source_group(desktop\\management FILES ${SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB})
+source_group(storage FILES ${SOURCE_CLIENT_STORAGE})
 source_group(win FILES ${SOURCE_CLIENT_WIN})
 source_group(workers FILES ${SOURCE_CLIENT_WORKERS})
 
@@ -203,6 +186,7 @@ if (ANDROID)
         ${SOURCE_CLIENT_CORE}
         ${SOURCE_CLIENT_ANDROID}
         ${SOURCE_CLIENT_CORE_ONLINE_CHECKER}
+        ${SOURCE_CLIENT_STORAGE}
         ${SOURCE_CLIENT_WORKERS})
 else()
     add_library(aspia_client_core STATIC
@@ -218,6 +202,7 @@ else()
         ${SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB}
         ${SOURCE_CLIENT_CORE_MCP}
         ${SOURCE_CLIENT_CORE_MCP_TOOLS}
+        ${SOURCE_CLIENT_STORAGE}
         ${SOURCE_CLIENT_WIN}
         ${SOURCE_CLIENT_WORKERS})
 endif()

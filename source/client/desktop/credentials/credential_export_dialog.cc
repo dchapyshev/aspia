@@ -26,11 +26,11 @@
 #include <QTreeWidgetItemIterator>
 
 #include "base/logging.h"
-#include "client/credential_file.h"
-#include "client/database.h"
-#include "client/master_password.h"
 #include "client/desktop/file_dialog.h"
 #include "client/desktop/credentials/ui_credential_export_dialog.h"
+#include "client/storage/credential_file.h"
+#include "client/storage/database.h"
+#include "client/storage/master_password.h"
 #include "common/desktop/msg_box.h"
 
 namespace {

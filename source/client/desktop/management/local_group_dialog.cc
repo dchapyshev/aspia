@@ -24,10 +24,10 @@
 #include <QTimer>
 
 #include "base/logging.h"
-#include "client/database.h"
-#include "client/settings.h"
 #include "client/desktop/management/group_combo_box.h"
 #include "client/desktop/management/ui_local_group_dialog.h"
+#include "client/storage/database.h"
+#include "client/storage/settings.h"
 #include "common/desktop/msg_box.h"
 
 namespace {

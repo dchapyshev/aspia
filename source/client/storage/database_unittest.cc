@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/database.h"
+#include "client/storage/database.h"
 
 #include <QDateTime>
 #include <QFile>
@@ -34,8 +34,8 @@
 #include "base/net/udp_channel.h"
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
-#include "client/master_password.h"
 #include "client/router_test_fixture.h"
+#include "client/storage/master_password.h"
 #include "proto/desktop_control.h"
 #include "proto/peer.h"
 #include "proto/router.h"

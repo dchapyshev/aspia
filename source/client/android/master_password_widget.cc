@@ -21,9 +21,9 @@
 #include <QVBoxLayout>
 
 #include "base/crypto/secure_string.h"
-#include "client/database.h"
-#include "client/master_password.h"
 #include "client/android/biometric_gate.h"
+#include "client/storage/database.h"
+#include "client/storage/master_password.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
 #include "common/android/label.h"

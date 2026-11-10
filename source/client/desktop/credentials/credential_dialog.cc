@@ -28,8 +28,8 @@
 #include "base/logging.h"
 #include "base/os_account.h"
 #include "base/peer/user.h"
-#include "client/database.h"
 #include "client/desktop/credentials/ui_credential_dialog.h"
+#include "client/storage/database.h"
 #include "common/desktop/msg_box.h"
 
 //--------------------------------------------------------------------------------------------------

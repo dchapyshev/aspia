@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_MASTER_PASSWORD_H
-#define CLIENT_MASTER_PASSWORD_H
+#ifndef CLIENT_STORAGE_MASTER_PASSWORD_H
+#define CLIENT_STORAGE_MASTER_PASSWORD_H
 
 class SecureByteArray;
 class SecureString;
@@ -66,4 +66,4 @@ private:
     ~MasterPassword() = delete;
 };
 
-#endif // CLIENT_MASTER_PASSWORD_H
+#endif // CLIENT_STORAGE_MASTER_PASSWORD_H

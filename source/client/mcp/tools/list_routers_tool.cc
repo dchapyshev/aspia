@@ -21,8 +21,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
-#include "client/database.h"
 #include "client/router_controller.h"
+#include "client/storage/database.h"
 
 namespace {
 

@@ -23,9 +23,9 @@
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/config.h"
-#include "client/database.h"
 #include "client/online_checker/online_checker_direct.h"
 #include "client/online_checker/online_checker_router.h"
+#include "client/storage/database.h"
 
 namespace {
 
