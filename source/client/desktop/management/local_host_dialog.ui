@@ -71,56 +71,56 @@
      <item row="3" column="1">
       <widget class="QLineEdit" name="edit_address"/>
      </item>
-     <item row="4" column="0" colspan="2">
-      <widget class="QCheckBox" name="checkbox_saved_credentials">
-       <property name="text">
-        <string>Use saved credentials</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_username">
-       <property name="text">
-        <string>User Name:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLineEdit" name="edit_username"/>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_password">
-       <property name="text">
-        <string>Password:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="PasswordEdit" name="edit_password"/>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_credential">
-       <property name="text">
-        <string>Credentials:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QComboBox" name="combo_credential">
-       <property name="sizeAdjustPolicy">
-        <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="label_profile">
        <property name="text">
         <string>Profile:</string>
        </property>
       </widget>
      </item>
-     <item row="8" column="1">
+     <item row="4" column="1">
       <widget class="QComboBox" name="combo_profile">
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" colspan="2">
+      <widget class="QCheckBox" name="checkbox_saved_credentials">
+       <property name="text">
+        <string>Use saved credentials</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_username">
+       <property name="text">
+        <string>User Name:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="edit_username"/>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_password">
+       <property name="text">
+        <string>Password:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="PasswordEdit" name="edit_password"/>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_credential">
+       <property name="text">
+        <string>Credentials:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QComboBox" name="combo_credential">
        <property name="sizeAdjustPolicy">
         <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
        </property>

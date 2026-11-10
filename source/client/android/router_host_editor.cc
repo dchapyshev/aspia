@@ -74,12 +74,12 @@ RouterHostEditor::RouterHostEditor(QWidget* parent)
     form_layout->setContentsMargins(kFormMargin, kFormMargin, kFormMargin, kFormMargin);
     form_layout->setSpacing(kFormSpacing);
     form_layout->addWidget(label_error_);
+    form_layout->addWidget(combo_profile_);
     form_layout->addWidget(switch_saved_credentials_);
     form_layout->addWidget(edit_username_);
     form_layout->addWidget(edit_password_);
     form_layout->addWidget(label_note_);
     form_layout->addWidget(combo_credential_);
-    form_layout->addWidget(combo_profile_);
     form_layout->addWidget(save);
     form_layout->addStretch();
 

@@ -91,11 +91,11 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
     form_layout->addWidget(edit_name_);
     form_layout->addWidget(combo_router_);
     form_layout->addWidget(edit_address_);
+    form_layout->addWidget(combo_profile_);
     form_layout->addWidget(switch_saved_credentials_);
     form_layout->addWidget(edit_username_);
     form_layout->addWidget(edit_password_);
     form_layout->addWidget(combo_credential_);
-    form_layout->addWidget(combo_profile_);
     form_layout->addWidget(edit_comment_);
     form_layout->addWidget(save);
     form_layout->addWidget(button_delete_);
