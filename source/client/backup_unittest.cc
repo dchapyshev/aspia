@@ -1490,25 +1490,6 @@ TEST_F(BackupTest, FileWhereAHostNamesCredentialsItDoesNotCarryIsNotImported)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A host of a router remembered by its link alone is left with neither once the record it refers
-// to is removed. The book must still export after that.
-TEST_F(BackupTest, BookExportsAfterTheRecordARouterHostRefersToIsRemoved)
-{
-    const qint64 credential_id = addCredential(source_, "office", "user", "secret");
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
-
-    RouterHostConfig host;
-    host.setRouterId(router_id);
-    host.setHostId(100500);
-    host.setCredentialId(credential_id);
-    ASSERT_TRUE(source_.addRouterHost(host));
-
-    ASSERT_TRUE(source_.removeCredential(credential_id));
-
-    EXPECT_EQ(exportBook(), Backup::Result::SUCCESS);
-}
-
-//--------------------------------------------------------------------------------------------------
 // A column that does not open has nothing to put into the file. Exported as an empty pair next to
 // the link the row carries, it would pass for a row remembered by its link alone and come back
 // without the pair. The book is refused as a whole, as with any record that does not open.

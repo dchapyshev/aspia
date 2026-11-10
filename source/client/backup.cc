@@ -627,7 +627,6 @@ bool hasValidRouterHosts(
         RouterHostConfig config;
         config.setRouterId(1);
         config.setHostId(host.host_id());
-        config.setCredentialId(credential_guid.isEmpty() ? 0 : 1);
         config.setUsername(QString::fromStdString(host.username()));
         config.setPassword(toSecureString(host.password()));
 
