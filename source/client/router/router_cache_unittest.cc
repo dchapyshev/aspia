@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/router_cache.h"
+#include "client/router/router_cache.h"
 
 #include <gtest/gtest.h>
 

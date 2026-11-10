@@ -26,10 +26,10 @@
 
 #include "client/config.h"
 #include "client/page_model.h"
-#include "client/router_rpc.h"
-#include "client/router_types.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/host_list_model.h"
+#include "client/router/router_rpc.h"
+#include "client/router/router_types.h"
 
 namespace Ui {
 class RouterHostsWidget;

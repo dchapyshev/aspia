@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ROUTER_TYPES_H
-#define CLIENT_ROUTER_TYPES_H
+#ifndef CLIENT_ROUTER_ROUTER_TYPES_H
+#define CLIENT_ROUTER_ROUTER_TYPES_H
 
 #include <QByteArray>
 #include <QDateTime>
@@ -143,4 +143,4 @@ Q_DECLARE_METATYPE(RouterTempHostList)
 Q_DECLARE_METATYPE(RouterGroup)
 Q_DECLARE_METATYPE(RouterGroupList)
 
-#endif // CLIENT_ROUTER_TYPES_H
+#endif // CLIENT_ROUTER_ROUTER_TYPES_H

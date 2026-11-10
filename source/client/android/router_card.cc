@@ -27,7 +27,7 @@
 #include <functional>
 
 #include "base/gui_application.h"
-#include "client/router_controller.h"
+#include "client/router/router_controller.h"
 #include "common/android/button.h"
 #include "common/android/card.h"
 #include "common/android/controls.h"

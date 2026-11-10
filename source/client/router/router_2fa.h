@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ROUTER_2FA_H
-#define CLIENT_ROUTER_2FA_H
+#ifndef CLIENT_ROUTER_ROUTER_2FA_H
+#define CLIENT_ROUTER_ROUTER_2FA_H
 
 #include <QDeadlineTimer>
 
@@ -113,4 +113,4 @@ private:
     Q_DISABLE_COPY_MOVE(Router2FA)
 };
 
-#endif // CLIENT_ROUTER_2FA_H
+#endif // CLIENT_ROUTER_ROUTER_2FA_H

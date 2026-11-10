@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ROUTER_HOSTS_CLEANER_H
-#define CLIENT_ROUTER_HOSTS_CLEANER_H
+#ifndef CLIENT_ROUTER_ROUTER_HOSTS_CLEANER_H
+#define CLIENT_ROUTER_ROUTER_HOSTS_CLEANER_H
 
 #include <QObject>
 
@@ -45,4 +45,4 @@ private:
     Q_DISABLE_COPY_MOVE(RouterHostsCleaner)
 };
 
-#endif // CLIENT_ROUTER_HOSTS_CLEANER_H
+#endif // CLIENT_ROUTER_ROUTER_HOSTS_CLEANER_H

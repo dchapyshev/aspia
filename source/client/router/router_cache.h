@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ROUTER_CACHE_H
-#define CLIENT_ROUTER_CACHE_H
+#ifndef CLIENT_ROUTER_ROUTER_CACHE_H
+#define CLIENT_ROUTER_ROUTER_CACHE_H
 
 #include <QHash>
 
 #include <string_view>
 
-#include "client/router_types.h"
+#include "client/router/router_types.h"
 
 namespace proto::router {
 class Notification;
@@ -111,4 +111,4 @@ private:
     Q_DISABLE_COPY_MOVE(RouterCache)
 };
 
-#endif // CLIENT_ROUTER_CACHE_H
+#endif // CLIENT_ROUTER_ROUTER_CACHE_H

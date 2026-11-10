@@ -16,16 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ROUTER_CONTROLLER_H
-#define CLIENT_ROUTER_CONTROLLER_H
+#ifndef CLIENT_ROUTER_ROUTER_CONTROLLER_H
+#define CLIENT_ROUTER_ROUTER_CONTROLLER_H
 
 #include <QObject>
 
 #include <unordered_map>
 
 #include "base/shared_pointer.h"
-#include "client/router_2fa.h"
-#include "client/router_session.h"
+#include "client/router/router_2fa.h"
+#include "client/router/router_session.h"
 
 // The single owner of the router records at runtime. It runs their logins (Router2FA),
 // births the working sessions (RouterSession) from the completed ones and destroys them with their
@@ -101,4 +101,4 @@ private:
     Q_DISABLE_COPY_MOVE(RouterController)
 };
 
-#endif // CLIENT_ROUTER_CONTROLLER_H
+#endif // CLIENT_ROUTER_ROUTER_CONTROLLER_H

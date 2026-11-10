@@ -35,9 +35,9 @@
 
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
-#include "client/router_controller.h"
 #include "client/desktop/file_dialog.h"
 #include "client/desktop/management/ui_router_access_log_widget.h"
+#include "client/router/router_controller.h"
 #include "common/desktop/date_edit.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/session_type.h"

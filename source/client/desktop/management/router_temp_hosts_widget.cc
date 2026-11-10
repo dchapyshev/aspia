@@ -32,7 +32,7 @@
 #include "base/logging.h"
 #include "base/shared_pointer.h"
 #include "base/peer/host_id.h"
-#include "client/router_controller.h"
+#include "client/router/router_controller.h"
 #include "common/desktop/icon_text_button.h"
 #include "common/desktop/msg_box.h"
 #include "proto/router_admin.h"

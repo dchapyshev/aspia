@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/router_session.h"
+#include "client/router/router_session.h"
 
 #include <gtest/gtest.h>
 
@@ -27,8 +27,8 @@
 
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/secure_byte_array.h"
-#include "client/router_controller.h"
-#include "client/router_test_fixture.h"
+#include "client/router/router_controller.h"
+#include "client/router/router_test_fixture.h"
 #include "client/storage/database.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"

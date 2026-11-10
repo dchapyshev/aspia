@@ -21,8 +21,8 @@
 
 #include <memory>
 
-#include "client/router_types.h"
 #include "client/desktop/management/content_widget.h"
+#include "client/router/router_types.h"
 
 namespace Ui {
 class RouterStatusWidget;

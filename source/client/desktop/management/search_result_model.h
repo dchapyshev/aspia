@@ -23,7 +23,7 @@
 #include <QCollator>
 
 #include "client/config.h"
-#include "client/router_types.h"
+#include "client/router/router_types.h"
 
 // One page of the matches of a search, over the address book and over every online router at once.
 // A row of either kind is shown and connected to the same way; what tells them apart is whether

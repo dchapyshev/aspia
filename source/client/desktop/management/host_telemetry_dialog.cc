@@ -21,9 +21,9 @@
 #include <QPushButton>
 
 #include "base/logging.h"
-#include "client/router_controller.h"
 #include "client/telemetry_model.h"
 #include "client/desktop/management/ui_host_telemetry_dialog.h"
+#include "client/router/router_controller.h"
 #include "client/storage/settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ROUTER_SESSION_H
-#define CLIENT_ROUTER_SESSION_H
+#ifndef CLIENT_ROUTER_ROUTER_SESSION_H
+#define CLIENT_ROUTER_ROUTER_SESSION_H
 
 #include <QList>
 #include <QPointer>
@@ -29,9 +29,9 @@
 #include "base/crypto/secure_string.h"
 #include "base/peer/host_id.h"
 #include "client/config.h"
-#include "client/router_cache.h"
-#include "client/router_rpc.h"
-#include "client/router_types.h"
+#include "client/router/router_cache.h"
+#include "client/router/router_rpc.h"
+#include "client/router/router_types.h"
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_manager.h"
@@ -218,4 +218,4 @@ private:
     Q_DISABLE_COPY_MOVE(RouterSession)
 };
 
-#endif // CLIENT_ROUTER_SESSION_H
+#endif // CLIENT_ROUTER_ROUTER_SESSION_H

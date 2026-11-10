@@ -22,7 +22,7 @@
 #include <QAbstractTableModel>
 #include <QCollator>
 
-#include "client/router_types.h"
+#include "client/router/router_types.h"
 
 // The hosts connected to a router with a temporary id. These are the hosts not approved by an
 // administrator yet or the Quick Support ones. They live only as long as their session does, so

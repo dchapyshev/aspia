@@ -24,7 +24,7 @@
 
 #include <gtest/gtest.h>
 
-#include "client/router_controller.h"
+#include "client/router/router_controller.h"
 #include "common/desktop/password_edit.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"

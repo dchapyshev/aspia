@@ -23,7 +23,7 @@
 
 #include <memory>
 
-#include "client/router_types.h"
+#include "client/router/router_types.h"
 
 namespace Ui {
 class HostTelemetryDialog;

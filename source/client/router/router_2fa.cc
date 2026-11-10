@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/router_2fa.h"
+#include "client/router/router_2fa.h"
 
 #include <QTimer>
 #include <QUrl>

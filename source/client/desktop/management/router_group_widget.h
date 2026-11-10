@@ -25,9 +25,9 @@
 
 #include "client/config.h"
 #include "client/page_model.h"
-#include "client/router_session.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/host_list_model.h"
+#include "client/router/router_session.h"
 
 namespace Ui {
 class RouterGroupWidget;

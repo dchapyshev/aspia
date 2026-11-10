@@ -22,7 +22,7 @@
 
 #include <gtest/gtest.h>
 
-#include "client/router_controller.h"
+#include "client/router/router_controller.h"
 
 //--------------------------------------------------------------------------------------------------
 // The tree of the journal is user-sortable, so the cap must drop the oldest event and not

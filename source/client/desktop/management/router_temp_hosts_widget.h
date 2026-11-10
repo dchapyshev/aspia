@@ -21,9 +21,9 @@
 
 #include "client/config.h"
 #include "client/page_model.h"
-#include "client/router_types.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/temp_host_list_model.h"
+#include "client/router/router_types.h"
 
 class IconTextButton;
 class QComboBox;

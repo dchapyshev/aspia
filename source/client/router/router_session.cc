@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/router_session.h"
+#include "client/router/router_session.h"
 
 #include "base/build_config.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/router_user.h"
 #include "base/serialization.h"
-#include "client/router_controller.h"
+#include "client/router/router_controller.h"
 #include "client/storage/database.h"
 #include "client/workers/router_worker.h"
 #include "proto/router_constants.h"

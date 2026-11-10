@@ -23,7 +23,7 @@
 #include <QCollator>
 #include <QHash>
 
-#include "client/router_types.h"
+#include "client/router/router_types.h"
 
 // The page of hosts a view is showing. The list itself comes from the router a page at a time, so
 // the model holds exactly what was answered and nothing more.

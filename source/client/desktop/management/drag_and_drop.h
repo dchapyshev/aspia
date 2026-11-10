@@ -23,7 +23,7 @@
 #include <QMimeData>
 
 #include "client/config.h"
-#include "client/router_types.h"
+#include "client/router/router_types.h"
 
 class SidebarLocalGroup;
 class SidebarRouterGroup;

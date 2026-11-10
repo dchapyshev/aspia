@@ -24,9 +24,9 @@
 
 #include "base/peer/host_id.h"
 #include "client/config.h"
-#include "client/router_controller.h"
 #include "client/mcp/mcp_controller.h"
 #include "client/mcp/tools/mcp_utils.h"
+#include "client/router/router_controller.h"
 #include "client/storage/database.h"
 #include "proto/router_constants.h"
 

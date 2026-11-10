@@ -24,8 +24,8 @@
 
 #include <memory>
 
-#include "client/router_controller.h"
 #include "client/mcp/tools/mcp_utils.h"
+#include "client/router/router_controller.h"
 #include "proto/router_constants.h"
 
 namespace {

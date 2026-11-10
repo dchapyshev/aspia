@@ -24,8 +24,8 @@
 #include <memory>
 
 #include "client/page_model.h"
-#include "client/router_types.h"
 #include "client/desktop/management/workspace_edit_model.h"
+#include "client/router/router_types.h"
 
 class QAbstractButton;
 class QComboBox;

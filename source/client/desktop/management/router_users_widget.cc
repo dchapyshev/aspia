@@ -29,9 +29,9 @@
 
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
-#include "client/router_controller.h"
 #include "client/desktop/management/router_user_dialog.h"
 #include "client/desktop/management/ui_router_users_widget.h"
+#include "client/router/router_controller.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"

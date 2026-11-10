@@ -24,10 +24,10 @@
 #include <QPoint>
 
 #include "client/config.h"
-#include "client/router_types.h"
 #include "client/search_page_model.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/search_result_model.h"
+#include "client/router/router_types.h"
 
 class IconTextButton;
 class QComboBox;

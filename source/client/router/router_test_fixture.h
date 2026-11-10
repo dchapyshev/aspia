@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ROUTER_TEST_FIXTURE_H
-#define CLIENT_ROUTER_TEST_FIXTURE_H
+#ifndef CLIENT_ROUTER_ROUTER_TEST_FIXTURE_H
+#define CLIENT_ROUTER_ROUTER_TEST_FIXTURE_H
 
 #include <gtest/gtest.h>
 
@@ -59,4 +59,4 @@ protected:
     }
 };
 
-#endif // CLIENT_ROUTER_TEST_FIXTURE_H
+#endif // CLIENT_ROUTER_ROUTER_TEST_FIXTURE_H

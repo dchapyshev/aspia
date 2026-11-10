@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ROUTER_RPC_H
-#define CLIENT_ROUTER_RPC_H
+#ifndef CLIENT_ROUTER_ROUTER_RPC_H
+#define CLIENT_ROUTER_ROUTER_RPC_H
 
 #include <QHash>
 #include <QPointer>
@@ -182,4 +182,4 @@ private:
     Q_DISABLE_COPY_MOVE(RouterRpc)
 };
 
-#endif // CLIENT_ROUTER_RPC_H
+#endif // CLIENT_ROUTER_ROUTER_RPC_H

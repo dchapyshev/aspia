@@ -21,7 +21,7 @@
 
 #include <QList>
 
-#include "client/router_types.h"
+#include "client/router/router_types.h"
 #include "common/android/expandable_panel.h"
 
 class Button;

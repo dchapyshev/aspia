@@ -22,8 +22,8 @@
 #include <QList>
 #include <QWidget>
 
-#include "client/router_session.h"
 #include "client/search_page_model.h"
+#include "client/router/router_session.h"
 
 namespace proto::peer {
 enum SessionType : int;

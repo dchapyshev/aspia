@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/router_2fa.h"
+#include "client/router/router_2fa.h"
 
 #include <gtest/gtest.h>
 
@@ -32,7 +32,7 @@
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/os_crypt.h"
 #include "base/crypto/secure_byte_array.h"
-#include "client/router_test_fixture.h"
+#include "client/router/router_test_fixture.h"
 #include "client/storage/database.h"
 #include "proto/router_constants.h"
 

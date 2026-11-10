@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/router_controller.h"
+#include "client/router/router_controller.h"
 
 #include <QSet>
 
@@ -24,7 +24,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "client/config.h"
-#include "client/router_hosts_cleaner.h"
+#include "client/router/router_hosts_cleaner.h"
 #include "client/storage/database.h"
 #include "client/workers/router_worker.h"
 #include "proto/router_constants.h"

@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/router_hosts_cleaner.h"
+#include "client/router/router_hosts_cleaner.h"
 
 #include "base/logging.h"
 #include "base/peer/host_id.h"
-#include "client/router_controller.h"
+#include "client/router/router_controller.h"
 #include "client/storage/database.h"
 
 //--------------------------------------------------------------------------------------------------

@@ -28,8 +28,8 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
-#include "client/router_controller.h"
 #include "client/desktop/management/ui_router_status_widget.h"
+#include "client/router/router_controller.h"
 
 namespace {
 

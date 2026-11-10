@@ -37,22 +37,10 @@ list(APPEND SOURCE_CLIENT_CORE
     file_transfer.h
     file_transfer_queue_builder.cc
     file_transfer_queue_builder.h
-    router_2fa.cc
-    router_2fa.h
-    router_cache.cc
-    router_cache.h
-    router_controller.cc
-    router_controller.h
-    router_hosts_cleaner.cc
-    router_hosts_cleaner.h
-    router_rpc.h
-    router_session.cc
-    router_session.h
     page_model.cc
     page_model.h
     search_page_model.cc
     search_page_model.h
-    router_types.h
     session_keeper.cc
     session_keeper.h
     session_state.cc
@@ -82,12 +70,12 @@ list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/search_result_model_unittest.cc
     desktop/management/temp_host_list_model_unittest.cc
     desktop/management/user_list_model_unittest.cc
-    router_2fa_unittest.cc
-    router_cache_unittest.cc
-    router_controller_unittest.cc
-    router_rpc_unittest.cc
-    router_session_unittest.cc
-    router_test_fixture.h
+    router/router_2fa_unittest.cc
+    router/router_cache_unittest.cc
+    router/router_controller_unittest.cc
+    router/router_rpc_unittest.cc
+    router/router_session_unittest.cc
+    router/router_test_fixture.h
     page_model_unittest.cc
     search_page_model_unittest.cc
     storage/auto_backup_unittest.cc
@@ -136,6 +124,7 @@ include(desktop/chat/sources.cmake)
 include(desktop/credentials/sources.cmake)
 include(desktop/management/sources.cmake)
 include(desktop/terminal/sources.cmake)
+include(router/sources.cmake)
 include(storage/sources.cmake)
 include(workers/sources.cmake)
 
@@ -157,6 +146,7 @@ source_group(desktop\\chat FILES ${SOURCE_CLIENT_CORE_DESKTOP_CHAT})
 source_group(desktop\\credentials FILES ${SOURCE_CLIENT_CORE_DESKTOP_CREDENTIALS})
 source_group(desktop\\terminal FILES ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL})
 source_group(desktop\\management FILES ${SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB})
+source_group(router FILES ${SOURCE_CLIENT_ROUTER})
 source_group(storage FILES ${SOURCE_CLIENT_STORAGE})
 source_group(win FILES ${SOURCE_CLIENT_WIN})
 source_group(workers FILES ${SOURCE_CLIENT_WORKERS})
@@ -186,6 +176,7 @@ if (ANDROID)
         ${SOURCE_CLIENT_CORE}
         ${SOURCE_CLIENT_ANDROID}
         ${SOURCE_CLIENT_CORE_ONLINE_CHECKER}
+        ${SOURCE_CLIENT_ROUTER}
         ${SOURCE_CLIENT_STORAGE}
         ${SOURCE_CLIENT_WORKERS})
 else()
@@ -202,6 +193,7 @@ else()
         ${SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB}
         ${SOURCE_CLIENT_CORE_MCP}
         ${SOURCE_CLIENT_CORE_MCP_TOOLS}
+        ${SOURCE_CLIENT_ROUTER}
         ${SOURCE_CLIENT_STORAGE}
         ${SOURCE_CLIENT_WIN}
         ${SOURCE_CLIENT_WORKERS})

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/router_cache.h"
+#include "client/router/router_cache.h"
 
 #include "proto/router_client.h"
 #include "proto/router_constants.h"

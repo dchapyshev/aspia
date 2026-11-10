@@ -24,7 +24,7 @@
 #include "base/logging.h"
 #include "base/time_types.h"
 #include "base/peer/host_id.h"
-#include "client/router_controller.h"
+#include "client/router/router_controller.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 
