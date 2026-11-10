@@ -4926,7 +4926,7 @@ Credentials replaced: %2</source>
     <name>MainWindow</name>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="536"/>
+        <location filename="../client/desktop/main_window.cc" line="542"/>
         <source>Aspia Client</source>
         <translation>Aspia 클라이언트</translation>
     </message>
@@ -5047,32 +5047,32 @@ Credentials replaced: %2</source>
         <translation>응용 프로그램을 닫으시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="512"/>
+        <location filename="../client/desktop/main_window.cc" line="518"/>
         <source>Close all sessions to lock the application.</source>
         <translation>응용 프로그램을 잠그려면 모든 세션을 닫으십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="518"/>
+        <location filename="../client/desktop/main_window.cc" line="524"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>응용 프로그램을 잠그려면 모든 대화 상자를 닫으십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="633"/>
+        <location filename="../client/desktop/main_window.cc" line="639"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>호스트 속성에 ID로 연결하도록 지정되어 있지만 라우터가 구성되지 않았습니다. 호스트 속성에서 라우터 설정을 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="888"/>
+        <location filename="../client/desktop/main_window.cc" line="894"/>
         <source>Unknown application</source>
         <translation>알 수 없는 응용 프로그램</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="891"/>
+        <location filename="../client/desktop/main_window.cc" line="897"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>MCP 커넥터. 연결됨: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="892"/>
+        <location filename="../client/desktop/main_window.cc" line="898"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - AI 연결됨</translation>
     </message>
@@ -5082,7 +5082,7 @@ Credentials replaced: %2</source>
         <translation>자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="502"/>
+        <location filename="../client/desktop/main_window.cc" line="508"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
@@ -5106,429 +5106,414 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="83"/>
-        <source>Add Router</source>
-        <translation>라우터 추가</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.ui" line="92"/>
-        <source>Edit Router</source>
-        <translation>라우터 편집</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.ui" line="101"/>
-        <source>Delete Router</source>
-        <translation>라우터 삭제</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.ui" line="110"/>
         <source>Change Password</source>
         <translation>암호 변경</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="119"/>
+        <location filename="../client/desktop/management_tab.ui" line="92"/>
         <source>Clear Events</source>
         <translation>이벤트 지우기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="128"/>
+        <location filename="../client/desktop/management_tab.ui" line="101"/>
         <source>Add Host</source>
         <translation>호스트 추가</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="137"/>
-        <location filename="../client/desktop/management_tab.cc" line="2021"/>
+        <location filename="../client/desktop/management_tab.ui" line="110"/>
+        <location filename="../client/desktop/management_tab.cc" line="2006"/>
         <source>Delete Host</source>
         <translation>호스트 삭제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="146"/>
+        <location filename="../client/desktop/management_tab.ui" line="119"/>
         <source>Edit Host</source>
         <translation>호스트 편집</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="155"/>
+        <location filename="../client/desktop/management_tab.ui" line="128"/>
         <source>Copy Host</source>
         <translation>호스트 복사</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="167"/>
-        <location filename="../client/desktop/management_tab.ui" line="170"/>
-        <location filename="../client/desktop/management_tab.ui" line="215"/>
-        <location filename="../client/desktop/management_tab.ui" line="218"/>
+        <location filename="../client/desktop/management_tab.ui" line="140"/>
+        <location filename="../client/desktop/management_tab.ui" line="143"/>
+        <location filename="../client/desktop/management_tab.ui" line="188"/>
+        <location filename="../client/desktop/management_tab.ui" line="191"/>
         <source>Desktop</source>
         <translation>데스크톱</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="182"/>
-        <location filename="../client/desktop/management_tab.ui" line="227"/>
+        <location filename="../client/desktop/management_tab.ui" line="155"/>
+        <location filename="../client/desktop/management_tab.ui" line="200"/>
         <source>File Transfer</source>
         <translation>파일 전송</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="194"/>
-        <location filename="../client/desktop/management_tab.ui" line="236"/>
+        <location filename="../client/desktop/management_tab.ui" line="167"/>
+        <location filename="../client/desktop/management_tab.ui" line="209"/>
         <source>Chat</source>
         <translation>채팅</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="206"/>
-        <location filename="../client/desktop/management_tab.ui" line="245"/>
+        <location filename="../client/desktop/management_tab.ui" line="179"/>
+        <location filename="../client/desktop/management_tab.ui" line="218"/>
         <source>System Information</source>
         <translation>시스템 정보</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="257"/>
-        <location filename="../client/desktop/management_tab.ui" line="266"/>
+        <location filename="../client/desktop/management_tab.ui" line="230"/>
+        <location filename="../client/desktop/management_tab.ui" line="239"/>
         <source>Terminal</source>
         <translation>터미널</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="275"/>
+        <location filename="../client/desktop/management_tab.ui" line="248"/>
         <source>Add Space</source>
         <translation>스페이스 추가</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="284"/>
+        <location filename="../client/desktop/management_tab.ui" line="257"/>
         <source>Edit Space</source>
         <translation>스페이스 편집</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="293"/>
+        <location filename="../client/desktop/management_tab.ui" line="266"/>
         <source>Delete Space</source>
         <translation>스페이스 삭제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="302"/>
+        <location filename="../client/desktop/management_tab.ui" line="275"/>
         <source>Add User</source>
         <translation>사용자 추가</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="311"/>
+        <location filename="../client/desktop/management_tab.ui" line="284"/>
         <source>Edit User</source>
         <translation>사용자 편집</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="320"/>
+        <location filename="../client/desktop/management_tab.ui" line="293"/>
         <source>Delete User</source>
         <translation>사용자 삭제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="329"/>
+        <location filename="../client/desktop/management_tab.ui" line="302"/>
         <source>Disconnect</source>
         <translation>연결 끊기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="338"/>
+        <location filename="../client/desktop/management_tab.ui" line="311"/>
         <source>Remove</source>
         <translation>제거</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="347"/>
+        <location filename="../client/desktop/management_tab.ui" line="320"/>
         <source>Check for Updates</source>
         <translation>업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="356"/>
+        <location filename="../client/desktop/management_tab.ui" line="329"/>
         <source>Telemetry</source>
         <translation>원격 분석</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="365"/>
+        <location filename="../client/desktop/management_tab.ui" line="338"/>
         <source>Approve</source>
         <translation>승인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="374"/>
+        <location filename="../client/desktop/management_tab.ui" line="347"/>
         <source>Save...</source>
         <translation>저장...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="377"/>
+        <location filename="../client/desktop/management_tab.ui" line="350"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="386"/>
+        <location filename="../client/desktop/management_tab.ui" line="359"/>
         <source>Reload</source>
         <translation>다시 로드</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="389"/>
+        <location filename="../client/desktop/management_tab.ui" line="362"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="398"/>
+        <location filename="../client/desktop/management_tab.ui" line="371"/>
         <source>Create Backup...</source>
         <translation>백업 만들기...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="407"/>
+        <location filename="../client/desktop/management_tab.ui" line="380"/>
         <source>Restore from Backup...</source>
         <translation>백업에서 복원...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.ui" line="415"/>
+        <location filename="../client/desktop/management_tab.ui" line="388"/>
         <source>Auto-refresh Status</source>
         <translation>상태 자동 새로 고침</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1077"/>
-        <location filename="../client/desktop/management_tab.cc" line="1154"/>
-        <location filename="../client/desktop/management_tab.cc" line="2241"/>
+        <location filename="../client/desktop/management_tab.cc" line="1065"/>
+        <location filename="../client/desktop/management_tab.cc" line="1142"/>
+        <location filename="../client/desktop/management_tab.cc" line="2224"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>로컬 데이터베이스에서 호스트 정보를 가져오지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1109"/>
+        <location filename="../client/desktop/management_tab.cc" line="1097"/>
         <source>(copy)</source>
         <translation>(복사본)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1114"/>
+        <location filename="../client/desktop/management_tab.cc" line="1102"/>
         <source>Failed to add the host to the local database.</source>
         <translation>로컬 데이터베이스에 호스트를 추가하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1172"/>
+        <location filename="../client/desktop/management_tab.cc" line="1160"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 호스트를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1200"/>
+        <location filename="../client/desktop/management_tab.cc" line="1188"/>
         <source>Unable to remove host</source>
         <translation>호스트를 제거할 수 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1268"/>
-        <location filename="../client/desktop/management_tab.cc" line="1345"/>
-        <location filename="../client/desktop/management_tab.cc" line="1378"/>
-        <location filename="../client/desktop/management_tab.cc" line="1401"/>
+        <location filename="../client/desktop/management_tab.cc" line="1256"/>
+        <location filename="../client/desktop/management_tab.cc" line="1333"/>
+        <location filename="../client/desktop/management_tab.cc" line="1366"/>
+        <location filename="../client/desktop/management_tab.cc" line="1389"/>
         <source>Copy Row</source>
         <translation>행 복사</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1269"/>
-        <location filename="../client/desktop/management_tab.cc" line="1346"/>
-        <location filename="../client/desktop/management_tab.cc" line="1379"/>
-        <location filename="../client/desktop/management_tab.cc" line="1402"/>
+        <location filename="../client/desktop/management_tab.cc" line="1257"/>
+        <location filename="../client/desktop/management_tab.cc" line="1334"/>
+        <location filename="../client/desktop/management_tab.cc" line="1367"/>
+        <location filename="../client/desktop/management_tab.cc" line="1390"/>
         <source>Copy Value</source>
         <translation>값 복사</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1644"/>
+        <location filename="../client/desktop/management_tab.cc" line="1632"/>
         <source>Failed to delete the group.</source>
         <translation>그룹을 삭제하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1683"/>
-        <location filename="../client/desktop/management_tab.cc" line="1739"/>
+        <location filename="../client/desktop/management_tab.cc" line="1671"/>
+        <location filename="../client/desktop/management_tab.cc" line="1727"/>
         <source>The database is not available.</source>
         <translation>데이터베이스를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1689"/>
+        <location filename="../client/desktop/management_tab.cc" line="1677"/>
         <source>Create Backup</source>
         <translation>백업 만들기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2236"/>
+        <location filename="../client/desktop/management_tab.cc" line="2219"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>호스트의 데이터가 손상되었습니다. 호스트를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2257"/>
+        <location filename="../client/desktop/management_tab.cc" line="2240"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>라우터의 데이터가 손상되었습니다. 라우터를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1714"/>
+        <location filename="../client/desktop/management_tab.cc" line="1702"/>
         <source>Failed to create the backup.</source>
         <translation>백업을 만들지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1745"/>
-        <location filename="../client/desktop/management_tab.cc" line="1771"/>
+        <location filename="../client/desktop/management_tab.cc" line="1733"/>
+        <location filename="../client/desktop/management_tab.cc" line="1759"/>
         <source>Restore from Backup</source>
         <translation>백업에서 복원</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1754"/>
+        <location filename="../client/desktop/management_tab.cc" line="1742"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>현재 저장된 모든 내용이 삭제되고 백업에 있는 내용으로 바뀝니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1773"/>
+        <location filename="../client/desktop/management_tab.cc" line="1761"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>백업이 다른 설치본에서 만들어졌습니다. 해당 설치본의 마스터 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1798"/>
+        <location filename="../client/desktop/management_tab.cc" line="1786"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>백업에 데이터가 없으므로 아무것도 변경되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1806"/>
+        <location filename="../client/desktop/management_tab.cc" line="1794"/>
         <source>The file is not a valid backup.</source>
         <translation>파일이 올바른 백업이 아닙니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1810"/>
+        <location filename="../client/desktop/management_tab.cc" line="1798"/>
         <source>Failed to restore from the backup.</source>
         <translation>백업에서 복원하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1690"/>
-        <location filename="../client/desktop/management_tab.cc" line="1746"/>
+        <location filename="../client/desktop/management_tab.cc" line="1678"/>
+        <location filename="../client/desktop/management_tab.cc" line="1734"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia 백업 (*.aspia-backup);;모든 파일 (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1706"/>
+        <location filename="../client/desktop/management_tab.cc" line="1694"/>
         <source>Unable to write the file.</source>
         <translation>파일을 쓸 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1802"/>
+        <location filename="../client/desktop/management_tab.cc" line="1790"/>
         <source>Unable to read the file.</source>
         <translation>파일을 읽을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="908"/>
+        <location filename="../client/desktop/management_tab.cc" line="896"/>
         <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
         <translation>&quot;%1&quot; 세션 유형은 빠른 지원에서 사용할 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1174"/>
+        <location filename="../client/desktop/management_tab.cc" line="1162"/>
         <source>Are you sure you want to delete %n hosts?</source>
         <translation>
             <numerusform>호스트 %n개를 삭제하시겠습니까?</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1202"/>
+        <location filename="../client/desktop/management_tab.cc" line="1190"/>
         <source>Failed to delete %n of the selected hosts.</source>
         <translation>
             <numerusform>선택한 호스트 중 %n개를 삭제하지 못했습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1504"/>
+        <location filename="../client/desktop/management_tab.cc" line="1492"/>
         <source>Are you sure you want to delete space &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 스페이스를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1524"/>
+        <location filename="../client/desktop/management_tab.cc" line="1512"/>
         <source>Failed to delete the space.</source>
         <translation>스페이스를 삭제하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1626"/>
+        <location filename="../client/desktop/management_tab.cc" line="1614"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the space root.</source>
         <translation>&quot;%1&quot; 그룹을 삭제하시겠습니까? 이 그룹 또는 하위 그룹에 할당된 호스트는 스페이스 루트로 이동됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1710"/>
+        <location filename="../client/desktop/management_tab.cc" line="1698"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>데이터베이스의 일부 레코드가 손상되었습니다. 해당 레코드를 수정하거나 삭제한 후 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1720"/>
+        <location filename="../client/desktop/management_tab.cc" line="1708"/>
         <source>Export completed successfully.</source>
         <translation>내보내기가 완료되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1721"/>
+        <location filename="../client/desktop/management_tab.cc" line="1709"/>
         <source>Routers exported: %1</source>
         <translation>내보낸 라우터: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1722"/>
+        <location filename="../client/desktop/management_tab.cc" line="1710"/>
         <source>Router hosts exported: %1</source>
         <translation>내보낸 라우터 호스트: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1723"/>
+        <location filename="../client/desktop/management_tab.cc" line="1711"/>
         <source>Local groups exported: %1</source>
         <translation>내보낸 로컬 그룹: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1724"/>
+        <location filename="../client/desktop/management_tab.cc" line="1712"/>
         <source>Local hosts exported: %1</source>
         <translation>내보낸 로컬 호스트: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1725"/>
+        <location filename="../client/desktop/management_tab.cc" line="1713"/>
         <source>Credentials exported: %1</source>
         <translation>내보낸 자격 증명: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1726"/>
+        <location filename="../client/desktop/management_tab.cc" line="1714"/>
         <source>Profiles exported: %1</source>
         <translation>내보낸 프로필: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1790"/>
+        <location filename="../client/desktop/management_tab.cc" line="1778"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>지정한 암호로 파일의 암호를 해독할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1794"/>
+        <location filename="../client/desktop/management_tab.cc" line="1782"/>
         <source>Unsupported file format version.</source>
         <translation>지원되지 않는 파일 형식 버전입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1816"/>
+        <location filename="../client/desktop/management_tab.cc" line="1804"/>
         <source>Import completed successfully.</source>
         <translation>가져오기가 완료되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1817"/>
+        <location filename="../client/desktop/management_tab.cc" line="1805"/>
         <source>Routers imported: %1</source>
         <translation>가져온 라우터: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1818"/>
+        <location filename="../client/desktop/management_tab.cc" line="1806"/>
         <source>Router hosts imported: %1</source>
         <translation>가져온 라우터 호스트: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1819"/>
+        <location filename="../client/desktop/management_tab.cc" line="1807"/>
         <source>Local groups imported: %1</source>
         <translation>가져온 로컬 그룹: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1820"/>
+        <location filename="../client/desktop/management_tab.cc" line="1808"/>
         <source>Local hosts imported: %1</source>
         <translation>가져온 로컬 호스트: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1821"/>
+        <location filename="../client/desktop/management_tab.cc" line="1809"/>
         <source>Credentials imported: %1</source>
         <translation>가져온 자격 증명: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1822"/>
+        <location filename="../client/desktop/management_tab.cc" line="1810"/>
         <source>Profiles imported: %1</source>
         <translation>가져온 프로필: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2080"/>
+        <location filename="../client/desktop/management_tab.cc" line="2065"/>
         <source>Delete Hosts</source>
         <translation>호스트 삭제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2258"/>
+        <location filename="../client/desktop/management_tab.cc" line="2241"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>이 호스트에 연결된 라우터가 삭제되었습니다. 호스트를 편집하여 다른 라우터를 선택하거나 직접 연결로 전환하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2265"/>
+        <location filename="../client/desktop/management_tab.cc" line="2248"/>
         <source>The host has an invalid host ID.</source>
         <translation>호스트의 호스트 ID가 잘못되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2274"/>
+        <location filename="../client/desktop/management_tab.cc" line="2257"/>
         <source>The host has an incorrect address.</source>
         <translation>호스트의 주소가 잘못되었습니다.</translation>
     </message>
@@ -6854,6 +6839,11 @@ Credentials replaced: %2</source>
         <translation>암호:</translation>
     </message>
     <message>
+        <location filename="../client/desktop/router_dialog.ui" line="101"/>
+        <source>Use by default</source>
+        <translation>기본값으로 사용</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/router_dialog.cc" line="46"/>
         <source>Administrator</source>
         <translation>관리자</translation>
@@ -6892,18 +6882,19 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="135"/>
-        <location filename="../client/desktop/router_dialog.cc" line="152"/>
-        <location filename="../client/desktop/router_dialog.cc" line="161"/>
+        <location filename="../client/desktop/router_dialog.cc" line="154"/>
+        <location filename="../client/desktop/router_dialog.cc" line="163"/>
+        <location filename="../client/desktop/router_dialog.cc" line="171"/>
         <source>Failed to save the router.</source>
         <translation>라우터를 저장하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="181"/>
+        <location filename="../client/desktop/router_dialog.cc" line="201"/>
         <source>Failed to read the router.</source>
         <translation>라우터를 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="199"/>
+        <location filename="../client/desktop/router_dialog.cc" line="221"/>
         <source>The data of the router is damaged. Enter it again.</source>
         <translation>라우터의 데이터가 손상되었습니다. 다시 입력하십시오.</translation>
     </message>
@@ -6911,81 +6902,87 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterEditor</name>
     <message>
-        <location filename="../client/android/router_editor.cc" line="54"/>
+        <location filename="../client/android/router_editor.cc" line="53"/>
+        <source>Use by default</source>
+        <translation>기본값으로 사용</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="56"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="55"/>
+        <location filename="../client/android/router_editor.cc" line="57"/>
         <source>Address</source>
         <translation>주소</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="56"/>
+        <location filename="../client/android/router_editor.cc" line="58"/>
         <source>User Name</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="57"/>
+        <location filename="../client/android/router_editor.cc" line="59"/>
         <source>Password</source>
         <translation>암호</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="66"/>
+        <location filename="../client/android/router_editor.cc" line="68"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="69"/>
-        <location filename="../client/android/router_editor.cc" line="232"/>
+        <location filename="../client/android/router_editor.cc" line="71"/>
+        <location filename="../client/android/router_editor.cc" line="251"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="141"/>
+        <location filename="../client/android/router_editor.cc" line="152"/>
         <source>The data of the router is damaged. Enter it again.</source>
         <translation>라우터의 데이터가 손상되었습니다. 다시 입력하십시오.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/router_editor.cc" line="152"/>
+        <location filename="../client/android/router_editor.cc" line="163"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="163"/>
+        <location filename="../client/android/router_editor.cc" line="174"/>
         <source>An invalid router address was entered.</source>
         <translation>잘못된 라우터 주소를 입력했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="172"/>
+        <location filename="../client/android/router_editor.cc" line="183"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 &quot;_&quot;, &quot;-&quot;, &quot;.&quot; 문자만 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="182"/>
+        <location filename="../client/android/router_editor.cc" line="193"/>
         <source>Password cannot be empty.</source>
         <translation>암호는 비워 둘 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="211"/>
-        <location filename="../client/android/router_editor.cc" line="221"/>
+        <location filename="../client/android/router_editor.cc" line="222"/>
+        <location filename="../client/android/router_editor.cc" line="232"/>
+        <location filename="../client/android/router_editor.cc" line="240"/>
         <source>Failed to save the router.</source>
         <translation>라우터를 저장하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="231"/>
+        <location filename="../client/android/router_editor.cc" line="250"/>
         <source>Delete Router</source>
         <translation>라우터 삭제</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="232"/>
+        <location filename="../client/android/router_editor.cc" line="251"/>
         <source>Delete the router &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 라우터를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="239"/>
+        <location filename="../client/android/router_editor.cc" line="258"/>
         <source>Failed to delete the router.</source>
         <translation>라우터를 삭제하지 못했습니다.</translation>
     </message>
@@ -8355,62 +8352,64 @@ Credentials replaced: %2</source>
         <translation>암호:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="417"/>
+        <location filename="../client/desktop/settings_tab.ui" line="401"/>
+        <location filename="../client/desktop/settings_tab.ui" line="557"/>
         <source>Add...</source>
         <translation>추가...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="430"/>
+        <location filename="../client/desktop/settings_tab.ui" line="570"/>
         <source>Rename...</source>
         <translation>이름 바꾸기...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="443"/>
+        <location filename="../client/desktop/settings_tab.ui" line="415"/>
+        <location filename="../client/desktop/settings_tab.ui" line="583"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="458"/>
+        <location filename="../client/desktop/settings_tab.ui" line="598"/>
         <source>Desktop Features</source>
         <translation>데스크톱 기능</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="536"/>
+        <location filename="../client/desktop/settings_tab.ui" line="676"/>
         <source>Desktop Screen</source>
         <translation>데스크톱 화면</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="598"/>
+        <location filename="../client/desktop/settings_tab.ui" line="738"/>
         <source>Desktop Recording</source>
         <translation>데스크톱 녹화</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="648"/>
+        <location filename="../client/desktop/settings_tab.ui" line="788"/>
         <source>UDP Connections</source>
         <translation>UDP 연결</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="654"/>
+        <location filename="../client/desktop/settings_tab.ui" line="794"/>
         <source>Allow direct connections</source>
         <translation>직접 연결 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="661"/>
+        <location filename="../client/desktop/settings_tab.ui" line="801"/>
         <source>Allow UDP Hole Punching</source>
         <translation>UDP 홀 펀칭 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="668"/>
+        <location filename="../client/desktop/settings_tab.ui" line="808"/>
         <source>Allow PCP protocol</source>
         <translation>PCP 프로토콜 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="675"/>
+        <location filename="../client/desktop/settings_tab.ui" line="815"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>NAT-PMP 프로토콜 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="682"/>
+        <location filename="../client/desktop/settings_tab.ui" line="822"/>
         <source>Allow UPnP protocol</source>
         <translation>UPnP 프로토콜 허용</translation>
     </message>
@@ -8435,442 +8434,508 @@ Credentials replaced: %2</source>
         <translation>마스터 암호 변경...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="464"/>
+        <location filename="../client/desktop/settings_tab.ui" line="408"/>
+        <source>Edit...</source>
+        <translation>편집...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="456"/>
+        <source>Name</source>
+        <translation>이름</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="461"/>
+        <source>Address</source>
+        <translation>주소</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="466"/>
+        <source>User Name</source>
+        <translation>사용자 이름</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="471"/>
+        <source>Access Level</source>
+        <translation>액세스 수준</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="604"/>
         <source>Enable audio</source>
         <translation>오디오 사용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="471"/>
+        <location filename="../client/desktop/settings_tab.ui" line="611"/>
         <source>Enable clipboard</source>
         <translation>클립보드 사용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="478"/>
+        <location filename="../client/desktop/settings_tab.ui" line="618"/>
         <source>Show shape of remote cursor</source>
         <translation>원격 커서 모양 표시</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="485"/>
+        <location filename="../client/desktop/settings_tab.ui" line="625"/>
         <source>Show position of remote cursor</source>
         <translation>원격 커서 위치 표시</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="492"/>
+        <location filename="../client/desktop/settings_tab.ui" line="632"/>
         <source>Disable desktop effects</source>
         <translation>바탕 화면 효과 사용 안 함</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="499"/>
+        <location filename="../client/desktop/settings_tab.ui" line="639"/>
         <source>Disable desktop wallpaper</source>
         <translation>바탕 화면 배경 사용 안 함</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="506"/>
+        <location filename="../client/desktop/settings_tab.ui" line="646"/>
         <source>Lock computer at disconnect</source>
         <translation>연결이 끊길 때 컴퓨터 잠금</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="513"/>
+        <location filename="../client/desktop/settings_tab.ui" line="653"/>
         <source>Block remote input</source>
         <translation>원격 입력 차단</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="520"/>
+        <location filename="../client/desktop/settings_tab.ui" line="660"/>
         <source>Send key combinations</source>
         <translation>키 조합 보내기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="542"/>
+        <location filename="../client/desktop/settings_tab.ui" line="682"/>
         <source>Preferred resolution:</source>
         <translation>기본 해상도:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="562"/>
+        <location filename="../client/desktop/settings_tab.ui" line="702"/>
         <source>Quality:</source>
         <translation>화질:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="582"/>
+        <location filename="../client/desktop/settings_tab.ui" line="722"/>
         <source>Scale image to window size on the host side</source>
         <translation>호스트 측에서 이미지를 창 크기에 맞게 조정</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="604"/>
+        <location filename="../client/desktop/settings_tab.ui" line="744"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>연결 시 자동으로 세션 녹화 시작</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="613"/>
+        <location filename="../client/desktop/settings_tab.ui" line="753"/>
         <source>Write path:</source>
         <translation>저장 경로:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="753"/>
+        <location filename="../client/desktop/settings_tab.ui" line="893"/>
         <source>MCP Connector</source>
         <translation>MCP 커넥터</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="759"/>
+        <location filename="../client/desktop/settings_tab.ui" line="899"/>
         <source>Allow the use of MCP</source>
         <translation>MCP 사용 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="766"/>
+        <location filename="../client/desktop/settings_tab.ui" line="906"/>
         <source>Add this command to the MCP servers of the AI application:</source>
         <translation>이 명령을 AI 응용 프로그램의 MCP 서버에 추가하십시오:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="783"/>
+        <location filename="../client/desktop/settings_tab.ui" line="923"/>
         <source>Copy</source>
         <translation>복사</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="799"/>
+        <location filename="../client/desktop/settings_tab.ui" line="939"/>
         <source>Allowed Session Types</source>
         <translation>허용된 세션 유형</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="813"/>
+        <location filename="../client/desktop/settings_tab.ui" line="953"/>
         <source>Actions</source>
         <translation>동작</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="819"/>
+        <location filename="../client/desktop/settings_tab.ui" line="959"/>
         <source>Confirm actions automatically</source>
         <translation>자동으로 동작 승인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="826"/>
+        <location filename="../client/desktop/settings_tab.ui" line="966"/>
         <source>Allow signing in with saved credentials</source>
         <translation>저장된 자격 증명으로 로그인 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="897"/>
-        <location filename="../client/desktop/settings_tab.cc" line="144"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1037"/>
+        <location filename="../client/desktop/settings_tab.cc" line="149"/>
         <source>Update</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="903"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1043"/>
         <source>Check for updates on startup</source>
         <translation>시작할 때 업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="912"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1052"/>
         <source>Update channel:</source>
         <translation>업데이트 채널:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="926"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1066"/>
         <source>Update server:</source>
         <translation>업데이트 서버:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="940"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1080"/>
         <source>Public key:</source>
         <translation>공개 키:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="958"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1098"/>
         <source>Change Update Server...</source>
         <translation>업데이트 서버 변경...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="978"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1118"/>
         <source>Check for updates</source>
         <translation>업데이트 확인</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="126"/>
-        <location filename="../client/desktop/settings_tab.cc" line="141"/>
+        <location filename="../client/desktop/settings_tab.cc" line="145"/>
         <source>General</source>
         <translation>일반</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="142"/>
+        <location filename="../client/desktop/settings_tab.cc" line="146"/>
+        <source>Routers</source>
+        <translation>라우터</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="147"/>
         <source>Profiles</source>
         <translation>프로필</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="198"/>
+        <location filename="../client/desktop/settings_tab.cc" line="204"/>
         <source>1 week</source>
         <translation>1주</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="199"/>
+        <location filename="../client/desktop/settings_tab.cc" line="205"/>
         <source>2 weeks</source>
         <translation>2주</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="200"/>
+        <location filename="../client/desktop/settings_tab.cc" line="206"/>
         <source>1 month</source>
         <translation>1개월</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="201"/>
+        <location filename="../client/desktop/settings_tab.cc" line="207"/>
         <source>6 months</source>
         <translation>6개월</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="202"/>
+        <location filename="../client/desktop/settings_tab.cc" line="208"/>
         <source>1 year</source>
         <translation>1년</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="206"/>
+        <location filename="../client/desktop/settings_tab.cc" line="212"/>
         <source>Do not lock</source>
         <translation>잠그지 않음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="207"/>
+        <location filename="../client/desktop/settings_tab.cc" line="213"/>
         <source>1 minute</source>
         <translation>1분</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="208"/>
+        <location filename="../client/desktop/settings_tab.cc" line="214"/>
         <source>5 minutes</source>
         <translation>5분</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="209"/>
+        <location filename="../client/desktop/settings_tab.cc" line="215"/>
         <source>10 minutes</source>
         <translation>10분</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="210"/>
+        <location filename="../client/desktop/settings_tab.cc" line="216"/>
         <source>30 minutes</source>
         <translation>30분</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="211"/>
+        <location filename="../client/desktop/settings_tab.cc" line="217"/>
         <source>1 hour</source>
         <translation>1시간</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="226"/>
+        <location filename="../client/desktop/settings_tab.cc" line="232"/>
         <source>No proxy</source>
         <translation>프록시 서버 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="247"/>
+        <location filename="../client/desktop/settings_tab.cc" line="262"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="252"/>
+        <location filename="../client/desktop/settings_tab.cc" line="267"/>
         <source>Automatic</source>
         <translation>자동</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="253"/>
+        <location filename="../client/desktop/settings_tab.cc" line="268"/>
         <source>Low</source>
         <translation>낮음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="254"/>
+        <location filename="../client/desktop/settings_tab.cc" line="269"/>
         <source>Medium</source>
         <translation>보통</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="255"/>
+        <location filename="../client/desktop/settings_tab.cc" line="270"/>
         <source>High</source>
         <translation>높음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="292"/>
+        <location filename="../client/desktop/settings_tab.cc" line="307"/>
         <source>Stable</source>
         <translation>안정 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="293"/>
+        <location filename="../client/desktop/settings_tab.cc" line="308"/>
         <source>Beta</source>
         <translation>베타 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="294"/>
+        <location filename="../client/desktop/settings_tab.cc" line="309"/>
         <source>Alpha</source>
         <translation>알파 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="435"/>
+        <location filename="../client/desktop/settings_tab.cc" line="457"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>새 언어는 응용 프로그램을 다시 시작한 후에 적용됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="491"/>
-        <location filename="../client/desktop/settings_tab.cc" line="669"/>
+        <location filename="../client/desktop/settings_tab.cc" line="513"/>
+        <location filename="../client/desktop/settings_tab.cc" line="764"/>
         <source>Choose path</source>
         <translation>경로 선택</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="580"/>
+        <location filename="../client/desktop/settings_tab.cc" line="645"/>
+        <source>Are you sure you want to delete router &quot;%1&quot;?</source>
+        <translation>&quot;%1&quot; 라우터를 삭제하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="654"/>
+        <source>Unable to delete router.</source>
+        <translation>라우터를 삭제할 수 없습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="675"/>
         <source>Add Profile</source>
         <translation>프로필 추가</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="590"/>
+        <location filename="../client/desktop/settings_tab.cc" line="685"/>
         <source>Unable to add profile.</source>
         <translation>프로필을 추가할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="611"/>
-        <location filename="../client/desktop/settings_tab.cc" line="1044"/>
+        <location filename="../client/desktop/settings_tab.cc" line="706"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1178"/>
         <source>Failed to read the profile.</source>
         <translation>프로필을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="615"/>
+        <location filename="../client/desktop/settings_tab.cc" line="710"/>
         <source>Rename Profile</source>
         <translation>프로필 이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="623"/>
+        <location filename="../client/desktop/settings_tab.cc" line="718"/>
         <source>Unable to rename profile.</source>
         <translation>프로필 이름을 바꿀 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="640"/>
+        <location filename="../client/desktop/settings_tab.cc" line="735"/>
         <source>Are you sure you want to delete profile &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 프로필을 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="648"/>
+        <location filename="../client/desktop/settings_tab.cc" line="743"/>
         <source>Unable to delete profile.</source>
         <translation>프로필을 삭제할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="697"/>
+        <location filename="../client/desktop/settings_tab.cc" line="792"/>
         <source>The settings will be applied after the application is restarted.</source>
         <translation>설정은 응용 프로그램을 다시 시작한 후에 적용됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="744"/>
+        <location filename="../client/desktop/settings_tab.cc" line="839"/>
         <source>Change Master Password</source>
         <translation>마스터 암호 변경</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="746"/>
+        <location filename="../client/desktop/settings_tab.cc" line="841"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>현재 암호를 입력하고 새 암호를 선택하십시오.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="754"/>
+        <location filename="../client/desktop/settings_tab.cc" line="849"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="761"/>
+        <location filename="../client/desktop/settings_tab.cc" line="856"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="762"/>
+        <location filename="../client/desktop/settings_tab.cc" line="857"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="765"/>
+        <location filename="../client/desktop/settings_tab.cc" line="860"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="778"/>
+        <location filename="../client/desktop/settings_tab.cc" line="873"/>
         <source>Invalid current password.</source>
         <translation>현재 암호가 잘못되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="782"/>
+        <location filename="../client/desktop/settings_tab.cc" line="877"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>데이터베이스의 일부 레코드가 손상되었습니다. 해당 레코드를 수정하거나 삭제한 후 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="786"/>
+        <location filename="../client/desktop/settings_tab.cc" line="881"/>
         <source>Unable to change the password.</source>
         <translation>암호를 변경할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="819"/>
+        <location filename="../client/desktop/settings_tab.cc" line="914"/>
         <source>Unable to read the proxy settings.</source>
         <translation>프록시 서버 설정을 읽을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="933"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1028"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>데이터베이스의 키가 이 컴퓨터에 저장됩니다. 사용자 계정으로 실행되는 모든 프로그램이 응용 프로그램이 실행되고 있지 않을 때에도 이 키를 읽을 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="936"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1031"/>
         <source>Do you want to continue?</source>
         <translation>계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="947"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1042"/>
         <source>Unlock Automatically</source>
         <translation>자동 잠금 해제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="949"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1044"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>시작할 때 응용 프로그램의 잠금을 자동으로 해제하려면 마스터 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="959"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1054"/>
         <source>Invalid master password.</source>
         <translation>잘못된 마스터 암호입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="963"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1058"/>
         <source>Unable to unlock the database.</source>
         <translation>데이터베이스를 잠금 해제할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="977"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1072"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>자동 잠금 해제를 켤 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="990"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1085"/>
+        <source>Failed to read the list of routers.</source>
+        <translation>라우터 목록을 읽지 못했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="1097"/>
+        <source>Administrator</source>
+        <translation>관리자</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="1099"/>
+        <source>Manager</source>
+        <translation>매니저</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="1101"/>
+        <source>Operator</source>
+        <translation>운영자</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="1110"/>
+        <source>Yes</source>
+        <translation>예</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="1124"/>
         <source>Failed to read the list of profiles.</source>
         <translation>프로필 목록을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1001"/>
+        <location filename="../client/desktop/settings_tab.ui" line="476"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1135"/>
         <source>Default</source>
         <translation>기본값</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1042"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1176"/>
         <source>The profile is damaged. Fix or delete it.</source>
         <translation>프로필이 손상되었습니다. 수정하거나 삭제하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1144"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1278"/>
         <source>Name:</source>
         <translation>이름:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1155"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1289"/>
         <source>Name cannot be empty.</source>
         <translation>이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="1162"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1296"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1179"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1313"/>
         <source>A profile with this name already exists.</source>
         <translation>같은 이름의 프로필이 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1210"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1344"/>
         <source>Unable to save profile.</source>
         <translation>프로필을 저장할 수 없습니다.</translation>
     </message>
@@ -9221,114 +9286,109 @@ Credentials replaced: %2</source>
     <name>Sidebar</name>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="115"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="155"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="154"/>
         <source>Local</source>
         <translation>로컬</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="180"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="241"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="293"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="179"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="240"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="292"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>데이터를 읽지 못했습니다. 목록이 오래되었을 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="599"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="598"/>
         <source>Change Password</source>
         <translation>암호 변경</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="607"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="606"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="608"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="607"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자를 초과할 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="616"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="615"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="617"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="616"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="620"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="619"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="643"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="642"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>암호를 변경하는 중입니다. 세션이 다시 로그인하기를 기다리는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="841"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="840"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 그룹을 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="854"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="853"/>
         <source>Unable to remove group</source>
         <translation>그룹을 제거할 수 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="919"/>
-        <source>Are you sure you want to delete router &quot;%1&quot;?</source>
-        <translation>&quot;%1&quot; 라우터를 삭제하시겠습니까?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1515"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1443"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>선택한 상위 그룹에 같은 이름의 그룹이 이미 있습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1622"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1550"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>선택한 그룹에 같은 이름의 호스트가 이미 있어 선택한 호스트 중 %n개를 이동하지 않았습니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1630"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1830"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1558"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1758"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>선택한 호스트 중 %n개를 이동하지 못했습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1524"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1727"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1433"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1452"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1655"/>
         <source>Failed to move the group.</source>
         <translation>그룹을 이동하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1584"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1512"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>호스트를 선택한 그룹으로 이동하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1621"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1549"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>선택한 그룹에 같은 이름의 호스트가 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1583"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1629"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1829"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1511"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1557"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1757"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>호스트를 선택한 그룹으로 이동하지 못했습니다.</translation>
     </message>
