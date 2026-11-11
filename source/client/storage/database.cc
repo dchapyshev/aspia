@@ -106,7 +106,6 @@ bool createTables(SqlDatabase& db)
                  "\"session_type\" INTEGER NOT NULL DEFAULT 0,"
                  "\"data\" BLOB DEFAULT X'',"
                  "\"guid\" TEXT NOT NULL UNIQUE,"
-                 "\"is_default\" INTEGER NOT NULL DEFAULT 0,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create routers table:" << db.lastError();
@@ -180,12 +179,6 @@ bool createTables(SqlDatabase& db)
             LOG(ERROR) << "Unable to add profile_id column to router_hosts table:" << db.lastError();
             return false;
         }
-
-        if (!addMissingColumn(db, "routers", "is_default", "INTEGER NOT NULL DEFAULT 0"))
-        {
-            LOG(ERROR) << "Unable to add is_default column to routers table:" << db.lastError();
-            return false;
-        }
     }
     // Migration end.
     //==============================================================================================
@@ -200,17 +193,6 @@ bool createTables(SqlDatabase& db)
                  "END"))
     {
         LOG(ERROR) << "Unable to create router_hosts_drop_empty trigger:" << db.lastError();
-        return false;
-    }
-
-    if (!db.exec("CREATE TRIGGER IF NOT EXISTS \"routers_keep_default\" "
-                 "AFTER DELETE ON \"routers\" "
-                 "WHEN OLD.\"is_default\" <> 0 "
-                 "BEGIN "
-                 "UPDATE \"routers\" SET \"is_default\" = 1 WHERE \"id\" = (SELECT MIN(\"id\") FROM \"routers\"); "
-                 "END"))
-    {
-        LOG(ERROR) << "Unable to create routers_keep_default trigger:" << db.lastError();
         return false;
     }
 
@@ -278,7 +260,7 @@ bool Database::open(const QString& file_path)
         }
     }
 
-    if (!createTables(db_) || !ensureDefaultProfile() || !ensureDefaultRouter())
+    if (!createTables(db_) || !ensureDefaultProfile())
     {
         db_.close();
         return false;
@@ -366,9 +348,6 @@ bool Database::import(const QList<RouterConfig>& routers,
     {
         RouterConfig config = router;
         if (!addRouter(config))
-            return false;
-
-        if (router.isDefault() && !setDefaultRouter(config.routerId()))
             return false;
 
         router_ids.insert(router.routerId(), config.routerId());

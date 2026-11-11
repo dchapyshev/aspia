@@ -483,11 +483,6 @@
                   <string>Access Level</string>
                  </property>
                 </column>
-                <column>
-                 <property name="text">
-                  <string>Default</string>
-                 </property>
-                </column>
                </widget>
               </item>
              </layout>

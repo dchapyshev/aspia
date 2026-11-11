@@ -87,7 +87,6 @@ public:
     bool modifyRouter(const RouterConfig& router);
     bool removeRouter(qint64 router_id);
     FindResult findRouter(qint64 router_id, RouterConfig* router) const;
-    bool setDefaultRouter(qint64 router_id);
 
     // Router Hosts.
     ReadResult allRouterHosts(QList<RouterHostConfig>* hosts) const;
@@ -215,7 +214,6 @@ private:
     QString readSetting(const QString& name, bool* found = nullptr) const;
     bool writeSetting(const QString& name, const QString& value);
     bool ensureDefaultProfile();
-    bool ensureDefaultRouter();
 
     mutable SqlDatabase db_;
 };

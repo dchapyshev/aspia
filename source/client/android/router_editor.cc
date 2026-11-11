@@ -33,7 +33,6 @@
 #include "common/android/line_edit.h"
 #include "common/android/message_dialog.h"
 #include "common/android/scroll_area.h"
-#include "common/android/switch.h"
 #include "proto/router.h"
 
 namespace {
@@ -50,7 +49,6 @@ RouterEditor::RouterEditor(QWidget* parent)
       edit_address_(new LineEdit()),
       edit_username_(new LineEdit()),
       edit_password_(new LineEdit()),
-      switch_default_(new Switch(tr("Use by default"))),
       label_error_(new Label(QString(), Label::Role::CAPTION))
 {
     edit_name_->setLabel(tr("Name"));
@@ -81,7 +79,6 @@ RouterEditor::RouterEditor(QWidget* parent)
     form_layout->addWidget(edit_address_);
     form_layout->addWidget(edit_username_);
     form_layout->addWidget(edit_password_);
-    form_layout->addWidget(switch_default_);
     form_layout->addWidget(save);
     form_layout->addWidget(button_delete_);
     form_layout->addStretch();
@@ -110,12 +107,6 @@ void RouterEditor::prepareForAdd()
     edit_address_->clear();
     edit_username_->clear();
     edit_password_->clear();
-
-    QList<RouterConfig> routers;
-    const bool first = Database::instance().routerList(&routers) != Database::ReadResult::FAILED && routers.isEmpty();
-    switch_default_->setChecked(first);
-    switch_default_->setEnabled(!first);
-
     label_error_->setVisible(false);
     button_delete_->hide();
 
@@ -139,8 +130,6 @@ bool RouterEditor::prepareForEdit(qint64 router_id)
     edit_address_->setText(router.address());
     edit_username_->setText(router.username());
     edit_password_->setText(router.password().toString());
-    switch_default_->setChecked(router.isDefault());
-    switch_default_->setEnabled(!router.isDefault());
     label_error_->setVisible(false);
     button_delete_->show();
 
@@ -228,14 +217,6 @@ void RouterEditor::onSaveClicked()
 
     const bool saved = (router_id_ < 0) ? db.addRouter(data) : db.modifyRouter(data);
     if (!saved)
-    {
-        showError(tr("Failed to save the router."));
-        return;
-    }
-
-    router_id_ = data.routerId();
-
-    if (switch_default_->isChecked() && !db.setDefaultRouter(router_id_))
     {
         showError(tr("Failed to save the router."));
         return;

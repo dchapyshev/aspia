@@ -1107,7 +1107,6 @@ void SettingsTab::reloadRouters(qint64 router_id)
         item->setText(1, router.address());
         item->setText(2, router.username());
         item->setText(3, access_level);
-        item->setText(4, router.isDefault() ? tr("Yes") : QString());
 
         if (router.routerId() == router_id)
             tree->setCurrentItem(item);
