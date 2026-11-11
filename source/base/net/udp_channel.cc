@@ -28,6 +28,10 @@
 #include "base/crypto/datagram_decryptor.h"
 #include "base/crypto/datagram_encryptor.h"
 
+#if defined(Q_OS_UNIX)
+#include <cerrno>
+#endif // defined(Q_OS_UNIX)
+
 namespace {
 
 const quint32 kMaxMessageSize = 5 * 1024 * 1024; // 5 MB
@@ -124,6 +128,30 @@ void initializeEnetWithPool()
         }
         ~Initializer() { enet_deinitialize(); }
     } initializer;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool isNetworkInterruption(SystemError::Code error_code)
+{
+    switch (error_code)
+    {
+#if defined(Q_OS_WINDOWS)
+        case WSAEADDRNOTAVAIL:
+        case WSAENETDOWN:
+        case WSAENETUNREACH:
+        case WSAEHOSTDOWN:
+        case WSAEHOSTUNREACH:
+#elif defined(Q_OS_UNIX)
+        case EADDRNOTAVAIL:
+        case ENETDOWN:
+        case ENETUNREACH:
+        case EHOSTDOWN:
+        case EHOSTUNREACH:
+#endif
+            return true;
+        default:
+            return false;
+    }
 }
 
 } // namespace
@@ -691,9 +719,40 @@ void UdpChannel::processEvents()
 
     if (result < 0)
     {
-        CLOG(ERROR) << "enet_host_service failed";
-        onErrorOccurred(FROM_HERE);
-        return;
+        SystemError error = SystemError::last();
+
+        if (!connected_ || !isNetworkInterruption(error.code()))
+        {
+            CLOG(ERROR) << "enet_host_service failed:" << error.toString();
+            onErrorOccurred(FROM_HERE);
+            return;
+        }
+
+        if (socket_error_time_ == TimePoint())
+        {
+            CLOG(WARNING) << "Network is interrupted:" << error.toString();
+            socket_error_time_ = Clock::now();
+            host_->totalSentPackets = 0;
+        }
+    }
+
+    if (socket_error_time_ != TimePoint())
+    {
+        // The network of a connected channel may be interrupted for a while, for example when its
+        // adapter restarts. The channel is closed only if no datagram is sent within the timeout.
+        const Seconds kSocketErrorTimeout{ 10 };
+        MilliSeconds duration = DurationCast<MilliSeconds>(Clock::now() - socket_error_time_);
+
+        if (result >= 0 && host_->totalSentPackets)
+        {
+            CLOG(INFO) << "Network is restored in" << duration.count() << "ms";
+            socket_error_time_ = TimePoint();
+        }
+        else if (duration >= kSocketErrorTimeout)
+        {
+            onErrorOccurred(FROM_HERE);
+            return;
+        }
     }
 
     applyWindowSize();

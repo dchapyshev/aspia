@@ -170,6 +170,8 @@ private:
     bool connected_ = false;
     bool paused_ = true;
 
+    TimePoint socket_error_time_;
+
     Mode mode_ = Mode::UNKNOWN;
     UdpMethod method_ = UdpMethod::DISABLED;
 
