@@ -58,6 +58,7 @@ protected:
 private slots:
     void onCategoryChanged(int id);
     void onGeneralChanged();
+    void onRouterChanged();
     void onSelectBackupPath();
     void onProxyTypeChanged();
     void onAutoUnlockToggled();
@@ -97,6 +98,7 @@ private:
     std::unique_ptr<Ui::SettingsTab> ui;
     QButtonGroup* category_group_ = nullptr;
     QButtonGroup* mcp_session_types_ = nullptr;
+    bool router_changed_ = false;
 
     Q_DISABLE_COPY_MOVE(SettingsTab)
 };

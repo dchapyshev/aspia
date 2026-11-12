@@ -318,24 +318,31 @@ SettingsTab::SettingsTab(QWidget* parent)
 
     // Every field of the general page waits for the save button.
     for (QComboBox* combo : { ui->combo_language, ui->combo_theme, ui->combo_backup_retention,
-                              ui->combo_router_session_type, ui->combo_lock_timeout })
+                              ui->combo_lock_timeout })
     {
         connect(combo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsTab::onGeneralChanged);
     }
 
-    for (QLineEdit* edit : { ui->edit_display_name, ui->edit_backup_dir, ui->edit_router_address,
-                             ui->edit_router_username, static_cast<QLineEdit*>(ui->edit_router_password),
-                             ui->edit_proxy_address, ui->edit_proxy_username,
-                             static_cast<QLineEdit*>(ui->edit_proxy_password) })
+    for (QLineEdit* edit : { ui->edit_display_name, ui->edit_backup_dir, ui->edit_proxy_address,
+                             ui->edit_proxy_username, static_cast<QLineEdit*>(ui->edit_proxy_password) })
     {
         connect(edit, &QLineEdit::textChanged, this, &SettingsTab::onGeneralChanged);
     }
 
-    for (QCheckBox* checkbox : { ui->checkbox_confirm_close, ui->checkbox_backup_on_startup,
-                                 ui->checkbox_router_enabled })
+    for (QCheckBox* checkbox : { ui->checkbox_confirm_close, ui->checkbox_backup_on_startup })
     {
         connect(checkbox, &QCheckBox::toggled, this, &SettingsTab::onGeneralChanged);
     }
+
+    for (QLineEdit* edit : { ui->edit_router_address, ui->edit_router_username,
+                             static_cast<QLineEdit*>(ui->edit_router_password) })
+    {
+        connect(edit, &QLineEdit::textChanged, this, &SettingsTab::onRouterChanged);
+    }
+
+    connect(ui->combo_router_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &SettingsTab::onRouterChanged);
+    connect(ui->checkbox_router_enabled, &QCheckBox::toggled, this, &SettingsTab::onRouterChanged);
 
     connect(ui->spinbox_proxy_port, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &SettingsTab::onGeneralChanged);
@@ -418,11 +425,12 @@ void SettingsTab::restoreState(const QByteArray& /* state */)
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::activate()
 {
-    if (ui->button_save_general->isEnabled())
+    if (router_changed_)
         return;
 
+    const bool unsaved = ui->button_save_general->isEnabled();
     loadRouter();
-    ui->button_save_general->setEnabled(false);
+    ui->button_save_general->setEnabled(unsaved);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -453,6 +461,13 @@ void SettingsTab::onCategoryChanged(int id)
 void SettingsTab::onGeneralChanged()
 {
     ui->button_save_general->setEnabled(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onRouterChanged()
+{
+    router_changed_ = true;
+    onGeneralChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -494,7 +509,7 @@ void SettingsTab::onSaveGeneral()
     LOG(INFO) << "[ACTION] Save general settings";
 
     std::optional<RouterConfig> router;
-    if (!routerFromUi(&router))
+    if (router_changed_ && !routerFromUi(&router))
         return;
 
     Database& db = Database::instance();
@@ -577,11 +592,11 @@ void SettingsTab::onSaveGeneral()
     {
         router_saved = saveRouter(*router);
         if (router_saved)
-        {
-            loadRouter();
             emit sig_routerChanged();
-        }
     }
+
+    if (router_saved)
+        loadRouter();
 
     // What was not written stays in the fields, so the save can be tried again.
     ui->button_save_general->setEnabled(!written || !router_saved);
@@ -1031,6 +1046,7 @@ void SettingsTab::loadRouter()
         LOG(ERROR) << "Data of the router could not be read";
 
     ui->label_router_damaged->setVisible(found == Database::FindResult::UNREADABLE);
+    router_changed_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
