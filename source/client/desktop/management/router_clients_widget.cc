@@ -101,15 +101,15 @@ RouterClientsWidget::RouterClientsWidget(QWidget* parent)
     updatePagination();
 
     RouterController& controller = RouterController::instance();
-    connect(&controller, &RouterController::sig_clientsChanged, this, [this](qint64 router_id)
+    connect(&controller, &RouterController::sig_clientsChanged, this, [this]()
     {
-        if (router_id == router_id_)
+        if (shown_)
             fetchClients();
     });
     connect(&controller, &RouterController::sig_statusChanged, this,
-            [this](qint64 router_id, RouterStatus status)
+            [this](RouterStatus status)
     {
-        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        if (status != RouterStatus::ONLINE)
         {
             model_->clear();
             updateCountLabel();
@@ -124,9 +124,9 @@ RouterClientsWidget::~RouterClientsWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterClientsWidget::showRouter(qint64 router_id)
+void RouterClientsWidget::showRouter()
 {
-    router_id_ = router_id;
+    shown_ = true;
     page_.clear();
 
     model_->clear();
@@ -304,7 +304,7 @@ void RouterClientsWidget::onDisconnectClient()
         return;
     }
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
@@ -469,7 +469,7 @@ void RouterClientsWidget::onNextClicked()
 //--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::fetchClients()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 

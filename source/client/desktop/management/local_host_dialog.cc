@@ -62,8 +62,6 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     setWindowTitle(entry_id_ != -1 ? tr("Edit Host") : tr("Add Host"));
 
     ui->edit_password->setShowPasswordButtonVisible(true);
-    connect(ui->combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &LocalHostDialog::onRouterChanged);
     connect(ui->checkbox_saved_credentials, &QCheckBox::toggled, this, &LocalHostDialog::onSavedCredentialsToggled);
     connect(ui->edit_address, &QLineEdit::textEdited, this, [this](const QString& text)
     {
@@ -74,9 +72,9 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalHostDialog::onButtonBoxClicked);
 
     int label_width = 0;
-    for (const QLabel* label : { ui->label_group, ui->label_name, ui->label_router,
-                                 ui->label_address, ui->label_username, ui->label_password,
-                                 ui->label_credential, ui->label_profile })
+    for (const QLabel* label : { ui->label_group, ui->label_name, ui->label_address,
+                                 ui->label_username, ui->label_password, ui->label_credential,
+                                 ui->label_profile })
     {
         label_width = std::max(label_width, label->sizeHint().width());
     }
@@ -97,12 +95,6 @@ LocalHostDialog::~LocalHostDialog()
 
     Settings settings;
     settings.setDialogGeometry(objectName(), saveGeometry());
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalHostDialog::onRouterChanged(int /* index */)
-{
-    updateAddressLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -149,29 +141,14 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    qint64 router_id = ui->combo_router->currentData().toLongLong();
+    const QString address = ui->edit_address->text();
 
-    if (router_id == 0)
+    if (!isHostId(address) && !Address::fromString(address, kDefaultHostTcpPort).isValid())
     {
-        Address address =
-            Address::fromString(ui->edit_address->text(), kDefaultHostTcpPort);
-        if (!address.isValid())
-        {
-            MsgBox::warning(this, tr("An invalid host address was entered."));
-            ui->edit_address->setFocus();
-            ui->edit_address->selectAll();
-            return;
-        }
-    }
-    else
-    {
-        if (!isHostId(ui->edit_address->text()))
-        {
-            MsgBox::warning(this, tr("An invalid host ID was entered."));
-            ui->edit_address->setFocus();
-            ui->edit_address->selectAll();
-            return;
-        }
+        MsgBox::warning(this, tr("An invalid host address was entered."));
+        ui->edit_address->setFocus();
+        ui->edit_address->selectAll();
+        return;
     }
 
     const QString username = ui->edit_username->text();
@@ -228,9 +205,8 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
     LocalHostConfig host;
     host.setId(entry_id_);
     host.setGroupId(group_id);
-    host.setRouterId(router_id);
     host.setName(ui->edit_name->text());
-    host.setAddress(ui->edit_address->text());
+    host.setAddress(address);
     host.setCredentialId(
         ui->checkbox_saved_credentials->isChecked() ? ui->combo_credential->currentData().toLongLong() : 0);
     host.setUsername(username);
@@ -267,30 +243,6 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
 void LocalHostDialog::onLoadData()
 {
     Database& db = Database::instance();
-
-    ui->combo_router->addItem(QIcon(":/img/connect.svg"), tr("Without Router"),
-                              QVariant::fromValue<qint64>(0));
-
-    QList<RouterConfig> routers;
-    const Database::ReadResult routers_result = db.routerList(&routers);
-    if (routers_result == Database::ReadResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to read the list of routers";
-        MsgBox::warning(this, tr("Failed to read the list of routers."));
-        reject();
-        return;
-    }
-
-    if (routers_result == Database::ReadResult::INCOMPLETE)
-        LOG(ERROR) << "Unable to read some of the routers";
-
-    const QIcon router_icon(":/img/stack.svg");
-
-    for (const RouterConfig& router : std::as_const(routers))
-    {
-        ui->combo_router->addItem(router_icon, router.displayLabel(),
-                                  QVariant::fromValue(router.routerId()));
-    }
 
     QList<CredentialConfig> credentials;
     const Database::ReadResult credentials_result = db.credentialList(
@@ -360,7 +312,6 @@ void LocalHostDialog::onLoadData()
 
     ui->combo_group->loadGroups(tr("Local"), QIcon(":/img/folder.svg"), group_entries);
 
-    qint64 selected_router_id = 0;
     Database::FindResult host_found = Database::FindResult::NOT_FOUND;
 
     if (entry_id_ != -1)
@@ -393,20 +344,6 @@ void LocalHostDialog::onLoadData()
             ui->combo_profile->findData(QVariant::fromValue(host.profileId())));
 
         group_id_ = host.groupId();
-        selected_router_id = host.routerId();
-    }
-
-    if (selected_router_id != 0)
-    {
-        int found_index = ui->combo_router->findData(QVariant::fromValue(selected_router_id));
-        if (found_index < 0)
-        {
-            LOG(WARNING) << "Host references missing router id" << selected_router_id;
-            ui->combo_router->addItem(QIcon(":/img/high-importance.svg"), tr("<deleted router>"),
-                                     QVariant::fromValue(selected_router_id));
-            found_index = ui->combo_router->count() - 1;
-        }
-        ui->combo_router->setCurrentIndex(found_index);
     }
 
     ui->combo_group->selectGroup(group_id_);
@@ -415,28 +352,11 @@ void LocalHostDialog::onLoadData()
     // in the list too, so a host never refers to one the combo does not hold.
     ui->checkbox_saved_credentials->setEnabled(ui->combo_credential->count() > 0);
 
-    updateAddressLabel();
-
     onSavedCredentialsToggled(ui->checkbox_saved_credentials->isChecked());
 
     if (host_found == Database::FindResult::UNREADABLE)
     {
         LOG(ERROR) << "Data of host" << entry_id_ << "could not be read";
         MsgBox::warning(this, tr("The data of the host is damaged. Enter it again."));
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalHostDialog::updateAddressLabel()
-{
-    if (ui->combo_router->currentData().toLongLong() == 0)
-    {
-        ui->label_address->setText(tr("Address:"));
-        ui->edit_address->setPlaceholderText(tr("Host name or IP address"));
-    }
-    else
-    {
-        ui->label_address->setText(tr("ID:"));
-        ui->edit_address->setPlaceholderText(tr("Host ID"));
     }
 }

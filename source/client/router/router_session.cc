@@ -150,16 +150,16 @@ RouterSession::~RouterSession()
 //--------------------------------------------------------------------------------------------------
 bool RouterSession::storeCredentials(const QString& user_name, const SecureString& password)
 {
-    LOG(INFO) << "Credentials changed for router" << config_->routerId();
+    LOG(INFO) << "Credentials changed";
 
     // The device token is left as it is. This runs before the router has answered and can be
     // undone, and a token the rotation revoked is dropped by the login that gets it rejected.
     config_->setUsername(user_name);
     config_->setPassword(password);
-    if (!Database::instance().modifyRouter(*config_))
+    if (!Database::instance().setRouterConfig(*config_))
     {
-        LOG(WARNING) << "Failed to persist new credentials for router" << config_->routerId();
-        RouterController::instance().addEvent(config_->routerId(), RouterEvent::Severity::WARNING,
+        LOG(WARNING) << "Failed to persist new credentials";
+        RouterController::instance().addEvent(RouterEvent::Severity::WARNING,
             tr("The router accepted the new password, but the record was not updated."));
         return false;
     }
@@ -896,8 +896,8 @@ void RouterSession::send(quint8 channel_id, const google::protobuf::MessageLite&
     if (!router_worker_)
         return;
 
-    QMetaObject::invokeMethod(router_worker_, &RouterWorker::onSendMessage, Qt::QueuedConnection,
-                              config_->routerId(), channel_id, serialize(message));
+    QMetaObject::invokeMethod(router_worker_, &RouterWorker::onSendMessage, Qt::QueuedConnection, channel_id,
+                              serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

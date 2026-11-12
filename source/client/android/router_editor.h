@@ -21,12 +21,11 @@
 
 #include <QWidget>
 
-class Button;
 class Label;
 class LineEdit;
+class Switch;
 
-// Full-screen editor for a router. On save the router is written to the local database; the delete
-// action is shown only when editing an existing router.
+// Full-screen editor for a router. On save the router is written to the local database.
 class RouterEditor final : public QWidget
 {
     Q_OBJECT
@@ -38,28 +37,25 @@ public:
     // Resets the form for adding a new router.
     void prepareForAdd();
 
-    // Loads the router |router_id| into the form for editing. Returns false if the router does not
-    // exist; the form keeps its previous state and must not be shown.
-    bool prepareForEdit(qint64 router_id);
+    // Loads the router into the form for editing. Returns false if the router is not set; the form
+    // keeps its previous state and must not be shown.
+    bool prepareForEdit();
 
 signals:
-    // Emitted after the router has been saved to or removed from the database.
+    // Emitted after the router has been saved to the database.
     void sig_accepted();
 
 private slots:
     void onSaveClicked();
-    void onDeleteClicked();
 
 private:
     void showError(const QString& message);
 
-    LineEdit* edit_name_ = nullptr;
     LineEdit* edit_address_ = nullptr;
     LineEdit* edit_username_ = nullptr;
     LineEdit* edit_password_ = nullptr;
+    Switch* switch_enabled_ = nullptr;
     Label* label_error_ = nullptr;
-    Button* button_delete_ = nullptr;
-    qint64 router_id_ = -1;
 
     Q_DISABLE_COPY_MOVE(RouterEditor)
 };

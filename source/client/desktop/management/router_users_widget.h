@@ -42,8 +42,7 @@ public:
     explicit RouterUsersWidget(QWidget* parent = nullptr);
     ~RouterUsersWidget() final;
 
-    void showRouter(qint64 router_id);
-    qint64 routerId() const { return router_id_; }
+    void showRouter();
     bool hasSelectedUser() const;
 
     // ContentWidget implementation.
@@ -84,12 +83,12 @@ private:
     const RouterUser* currentUser() const;
 
     std::unique_ptr<Ui::RouterUsersWidget> ui;
-    qint64 router_id_ = 0;
     UserListModel* model_ = nullptr;
     PageModel users_page_;
     // Guards the one-time warning about a failed initial load: the list is refetched on every
     // batched notification, and a repeating transient error must not turn into a message storm.
     bool load_error_shown_ = false;
+    bool shown_ = false;
 
     Q_DISABLE_COPY_MOVE(RouterUsersWidget)
 };

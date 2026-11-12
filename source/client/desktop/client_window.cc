@@ -61,7 +61,7 @@ bool canSaveCredentials(const HostConfig& host)
     if (host.entryId() > 0)
         return true;
 
-    return host.routerId() > 0 && !isTempHostId(stringToHostId(host.address()));
+    return isHostId(host.address()) && !isTempHostId(stringToHostId(host.address()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ std::optional<std::pair<QString, SecureString>> storedCredentials(const HostConf
     Database& db = Database::instance();
     return host.entryId() > 0 ?
         db.localHostCredentials(host.entryId()) :
-        db.routerHostCredentials(host.routerId(), stringToHostId(host.address()));
+        db.routerHostCredentials(stringToHostId(host.address()));
 }
 
 } // namespace
@@ -217,7 +217,7 @@ qint64 ClientWindow::osCredentialId() const
     }
 
     RouterHostConfig router_host;
-    if (db.findRouterHost(host.routerId(), stringToHostId(host.address()), &router_host) != Database::FindResult::FOUND)
+    if (db.findRouterHost(stringToHostId(host.address()), &router_host) != Database::FindResult::FOUND)
         return 0;
 
     return router_host.osCredentialId();
@@ -234,7 +234,7 @@ void ClientWindow::setOsCredentialId(qint64 credential_id)
 
     const bool saved = host.entryId() > 0 ?
         db.setLocalHostOsCredentialId(host.entryId(), credential_id) :
-        db.setRouterHostOsCredentialId(host.routerId(), stringToHostId(host.address()), credential_id);
+        db.setRouterHostOsCredentialId(stringToHostId(host.address()), credential_id);
     if (!saved)
         LOG(ERROR) << "Unable to save the operating system credentials of the host";
 }
@@ -428,14 +428,13 @@ void ClientWindow::saveHostCredentials(const HostConfig& host, qint64 credential
     const HostId host_id = stringToHostId(host.address());
 
     RouterHostConfig credentials;
-    credentials.setRouterId(host.routerId());
     credentials.setHostId(host_id);
     credentials.setCredentialId(credential_id);
     credentials.setUsername(username);
     credentials.setPassword(password);
 
     RouterHostConfig stored;
-    const Database::FindResult found = db.findRouterHost(host.routerId(), host_id, &stored);
+    const Database::FindResult found = db.findRouterHost(host_id, &stored);
     if (found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the credentials of host" << host_id;
@@ -485,7 +484,6 @@ void ClientWindow::forgetRefusedCredentials()
     }
 
     RouterHostConfig router_host;
-    router_host.setRouterId(host.routerId());
     router_host.setHostId(stringToHostId(host.address()));
 
     if (!Database::instance().modifyRouterHost(router_host))
@@ -508,7 +506,7 @@ bool ClientWindow::askCredentials(HostConfig* host)
 
     AutoQPointer<AuthorizationDialog> auth_dialog(new AuthorizationDialog(this));
 
-    auth_dialog->setOneTimePasswordEnabled(host->routerId() > 0);
+    auth_dialog->setOneTimePasswordEnabled(isHostId(host->address()));
     auth_dialog->setOneTimePasswordOnly(host->isPortable());
     auth_dialog->setSaveCredentialsVisible(can_save_credentials);
     auth_dialog->setUserName(host->username());
@@ -585,12 +583,12 @@ void ClientWindow::fetchConnectionOffer()
     if (session_state_->isReconnecting() && !session_state_->isAutoReconnect())
         return;
 
-    RouterSession* session = RouterController::session(session_state_->routerId());
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        // No context at all means the record is gone from the book; one that is logging in is
-        // just not online yet.
-        const RouterStatus router_status = RouterController::status(session_state_->routerId());
+        // No context at all means the database holds no router; one that is logging in is just
+        // not online yet.
+        const RouterStatus router_status = RouterController::status();
         if (router_status == RouterStatus::OFFLINE)
             onErrorOccurred(tr("The specified router is unavailable."));
         else if (router_status == RouterStatus::UNREADABLE)

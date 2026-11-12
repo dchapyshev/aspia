@@ -36,11 +36,11 @@
 #include "client/mcp/tools/file_transfer_client_tool.h"
 #include "client/mcp/tools/find_local_hosts_tool.h"
 #include "client/mcp/tools/find_router_hosts_tool.h"
+#include "client/mcp/tools/get_router_tool.h"
 #include "client/mcp/tools/list_clients_tool.h"
 #include "client/mcp/tools/list_local_groups_tool.h"
 #include "client/mcp/tools/list_quick_support_hosts_tool.h"
 #include "client/mcp/tools/list_router_groups_tool.h"
-#include "client/mcp/tools/list_routers_tool.h"
 #include "client/mcp/tools/show_client_tool.h"
 #include "client/mcp/tools/system_info_client_tool.h"
 #include "client/mcp/tools/terminal_client_tool.h"
@@ -65,7 +65,7 @@ McpController::McpController(MainWindow* main_window, QObject* parent)
     tools_.emplace_back(std::make_unique<ListLocalGroupsTool>());
     tools_.emplace_back(std::make_unique<CheckLocalHostsTool>());
     tools_.emplace_back(std::make_unique<ConnectLocalHostTool>());
-    tools_.emplace_back(std::make_unique<ListRoutersTool>());
+    tools_.emplace_back(std::make_unique<GetRouterTool>());
     tools_.emplace_back(std::make_unique<FindRouterHostsTool>());
     tools_.emplace_back(std::make_unique<ListRouterGroupsTool>());
     tools_.emplace_back(std::make_unique<CheckRouterHostsTool>());

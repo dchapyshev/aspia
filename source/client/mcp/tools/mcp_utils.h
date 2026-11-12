@@ -30,12 +30,7 @@
 #include "proto/peer.h"
 
 class LocalGroupConfig;
-
-struct RouterInfo
-{
-    qint64 id = 0;
-    QString name;
-};
+class RouterSession;
 
 // The session_type argument of the tools that connect to hosts.
 QJsonObject sessionTypeSchema();
@@ -54,9 +49,9 @@ bool hasClient(qint64 client_id);
 // True while the client is connected to the host, even when it shows a dialog.
 bool isClientConnected(qint64 client_id);
 
-// Every saved router, or only the one with the id in |value| when it is given. Returns false with the error
-// for the model in |error|.
-bool routersFromArgument(const QJsonValue& value, QList<RouterInfo>* routers, QString* error);
+// The working session of the router of the database. Returns nullptr with the error for the model in |error|
+// when no router is set or it is not connected. The session dies with the connection, so it is not kept.
+RouterSession* routerSession(QString* error);
 
 QString localGroupPath(qint64 group_id, const QHash<qint64, LocalGroupConfig>& groups);
 

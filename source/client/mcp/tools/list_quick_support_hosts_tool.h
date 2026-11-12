@@ -21,7 +21,7 @@
 
 #include "client/mcp/mcp_tool.h"
 
-// Lists the Quick Support hosts that are online on the connected routers.
+// Lists the Quick Support hosts that are online on the router.
 class ListQuickSupportHostsTool final : public McpTool
 {
 public:

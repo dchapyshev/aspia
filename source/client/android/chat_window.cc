@@ -87,16 +87,16 @@ QString chatHistoryId(const SessionState& session_state)
 
         hash.addData(entry.guid().toUtf8());
     }
-    else if (host.routerId() > 0)
+    else if (isHostId(host.address()))
     {
         if (isTempHostId(stringToHostId(host.address())))
             return QString();
 
         RouterConfig router;
-        database.findRouter(host.routerId(), &router);
+        database.routerConfig(&router);
         if (router.guid().isEmpty())
         {
-            LOG(WARNING) << "Router entry not found:" << host.routerId();
+            LOG(WARNING) << "Router entry not found";
             return QString();
         }
 
@@ -443,7 +443,6 @@ void ChatWindow::forgetHostCredentials()
     }
 
     RouterHostConfig router_host;
-    router_host.setRouterId(host_.routerId());
     router_host.setHostId(stringToHostId(host_.address()));
 
     if (!Database::instance().modifyRouterHost(router_host))
@@ -477,14 +476,14 @@ void ChatWindow::start()
 void ChatWindow::fetchConnectionOffer()
 {
     // The working session exists only while the record is online.
-    if (RouterSession* session = RouterController::session(session_state_->routerId()))
+    if (RouterSession* session = RouterController::session())
     {
         requestConnectionOffer(session);
         return;
     }
 
     RouterController& controller = RouterController::instance();
-    const RouterStatus router_status = RouterController::status(session_state_->routerId());
+    const RouterStatus router_status = RouterController::status();
     if (router_status == RouterStatus::OFFLINE || router_status == RouterStatus::UNREADABLE)
     {
         setStatusText(router_status == RouterStatus::UNREADABLE ?
@@ -500,14 +499,14 @@ void ChatWindow::fetchConnectionOffer()
     // Drop any previous pending wait, then subscribe again.
     disconnect(&controller, nullptr, this, nullptr);
     connect(&controller, &RouterController::sig_statusChanged, this,
-        [this](qint64 router_id, RouterStatus status)
+        [this](RouterStatus status)
     {
-        if (router_id != session_state_->routerId() || status != RouterStatus::ONLINE)
+        if (status != RouterStatus::ONLINE)
             return;
 
         disconnect(&RouterController::instance(), nullptr, this, nullptr);
 
-        if (RouterSession* session = RouterController::session(session_state_->routerId()))
+        if (RouterSession* session = RouterController::session())
             requestConnectionOffer(session);
     });
 }

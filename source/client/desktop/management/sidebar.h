@@ -46,28 +46,26 @@ public:
 
     bool loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);
     void reloadGroups(qint64 selected_group_id = 0);
-    Database::ReadResult loadRouters();
-    void reloadRouters();
-    void setRouterStatus(qint64 router_id, SidebarRouter::Status status);
-    void setRouterWorkspaces(qint64 router_id, const QList<RouterWorkspace>& workspaces);
-    void setRouterHostGroups(qint64 router_id, qint64 workspace_id,
-                             const QList<RouterGroup>& groups);
+    Database::ReadResult loadRouter();
+    void reloadRouter();
+    void setRouterStatus(SidebarRouter::Status status);
+    void setRouterWorkspaces(const QList<RouterWorkspace>& workspaces);
+    void setRouterHostGroups(qint64 workspace_id, const QList<RouterGroup>& groups);
     qint64 currentGroupId() const;
     SidebarItem* currentItem() const;
-    qint64 currentRouterId() const;
-    SidebarRouter* routerById(qint64 router_id) const;
-    QList<qint64> routerIds() const;
-    QList<qint64> routerWorkspaceIds(qint64 router_id) const;
+    bool isRouterItemCurrent() const;
+    SidebarRouter* routerItem() const;
+    QList<qint64> routerWorkspaceIds() const;
 
-    void changeRouterPassword(qint64 router_id);
+    void changeRouterPassword();
 
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);
     void cancelPendingItem();
 
 public slots:
-    void onRefreshWorkspaces(qint64 router_id);
-    void onRefreshHostGroups(qint64 router_id);
+    void onRefreshWorkspaces();
+    void onRefreshHostGroups();
     void onAddGroup();
     void onEditGroup();
     void onRemoveGroup();
@@ -80,8 +78,8 @@ signals:
     void sig_switchContent(SidebarItem::Type type);
     void sig_contextMenu(SidebarItem::Type type, const QPoint& pos);
     void sig_itemDropped();
-    void sig_routerHostMoved(qint64 router_id);
-    void sig_routerGroupMoved(qint64 router_id);
+    void sig_routerHostMoved();
+    void sig_routerGroupMoved();
     void sig_addGroup();
     void sig_removeGroup();
     void sig_editGroup();
@@ -91,11 +89,11 @@ private slots:
     void onContextMenu(const QPoint& pos);
     void onItemExpanded(QTreeWidgetItem* item);
     void onItemCollapsed(QTreeWidgetItem* item);
-    void onRouterStatusChanged(qint64 router_id, RouterStatus status);
+    void onRouterStatusChanged(RouterStatus status);
 
 private:
-    void buildRouterSections(qint64 router_id);
-    void removeRouterSections(qint64 router_id);
+    void buildRouterSections();
+    void removeRouterSections();
 
     bool onMousePress(QMouseEvent* event);
     bool onMouseMove(QMouseEvent* event);

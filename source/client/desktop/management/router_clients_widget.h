@@ -41,8 +41,7 @@ public:
     explicit RouterClientsWidget(QWidget* parent = nullptr);
     ~RouterClientsWidget() final;
 
-    void showRouter(qint64 router_id);
-    qint64 routerId() const { return router_id_; }
+    void showRouter();
     int selectedClientCount() const;
 
     void copyCurrentClientRow();
@@ -80,9 +79,9 @@ private:
     QList<proto::router::ClientInfo> selectedClients() const;
 
     std::unique_ptr<Ui::RouterClientsWidget> ui;
-    qint64 router_id_ = 0;
     ClientListModel* model_ = nullptr;
     PageModel page_;
+    bool shown_ = false;
 
     Q_DISABLE_COPY_MOVE(RouterClientsWidget)
 };

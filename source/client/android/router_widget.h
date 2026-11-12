@@ -16,10 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ANDROID_ROUTERS_WIDGET_H
-#define CLIENT_ANDROID_ROUTERS_WIDGET_H
+#ifndef CLIENT_ANDROID_ROUTER_WIDGET_H
+#define CLIENT_ANDROID_ROUTER_WIDGET_H
 
-#include <QHash>
 #include <QList>
 #include <QWidget>
 
@@ -27,21 +26,18 @@
 
 class IconButton;
 class RouterEditor;
-class RoutersEmptyView;
+class RouterEmptyView;
 class ScrollArea;
 class QStackedWidget;
 class QVBoxLayout;
 
-// Routers screen for the Android client: the list of configured routers. Each router is a card whose
-// connection status panel slides out below it on tap and whose editor opens on a long press. The add
-// action is exposed via appBarActions() to be hosted in the top app bar.
-class RoutersWidget final : public QWidget
+class RouterWidget final : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit RoutersWidget(QWidget* parent = nullptr);
-    ~RoutersWidget() final;
+    explicit RouterWidget(QWidget* parent = nullptr);
+    ~RouterWidget() final;
 
     QList<QWidget*> appBarActions() const;
 
@@ -60,33 +56,31 @@ signals:
     // Emitted when the set returned by appBarActions() changes (the editor hides the actions).
     void sig_appBarActionsChanged();
 
-    // The button of a card asks the two-factor question of its record again.
-    void sig_twoFactorClicked(qint64 router_id);
+    // The button of the card asks the two-factor question again.
+    void sig_twoFactorClicked();
 
 private slots:
     void onAddRouter();
-    void onCardExpandRequested(qint64 router_id);
-    void onEditRouter(qint64 router_id);
-    void onRouterEvent(qint64 router_id, const RouterEvent& event);
+    void onCardExpandRequested();
+    void onEditRouter();
+    void onRouterEvent(const RouterEvent& event);
     void returnFromEditor();
 
 private:
     void showList();
     bool isEditorPage() const;
-    void clearCards();
+    void removeCard();
 
     QStackedWidget* stack_ = nullptr;
     ScrollArea* scroll_ = nullptr;
     QWidget* container_ = nullptr;
     QVBoxLayout* cards_layout_ = nullptr;
-    RoutersEmptyView* placeholder_ = nullptr;
+    RouterEmptyView* placeholder_ = nullptr;
     RouterEditor* editor_ = nullptr;
     IconButton* button_add_ = nullptr;
-    qint64 expanded_router_id_ = -1;
+    RouterCard* card_ = nullptr;
 
-    QHash<qint64, RouterCard*> cards_;
-
-    Q_DISABLE_COPY_MOVE(RoutersWidget)
+    Q_DISABLE_COPY_MOVE(RouterWidget)
 };
 
-#endif // CLIENT_ANDROID_ROUTERS_WIDGET_H
+#endif // CLIENT_ANDROID_ROUTER_WIDGET_H

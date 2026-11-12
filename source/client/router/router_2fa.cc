@@ -50,7 +50,7 @@ TwoFactorPrompt::TwoFactorPrompt(const QString& otpauth_uri, bool code_refused,
         Router2FA* login = static_cast<Router2FA*>(parent);
         QTimer::singleShot(Seconds(blocked_seconds), Qt::PreciseTimer, this, [login]
         {
-            emit login->sig_twoFactorRequired(login->config_->routerId());
+            emit login->sig_twoFactorRequired();
         });
     }
 }
@@ -148,7 +148,7 @@ void Router2FA::openPrompt(const proto::router::TwoFactorChallenge& challenge,
     }
 
     prompt_ = new TwoFactorPrompt(otpauth_uri, challenge.code_rejected(), blocked_seconds, this);
-    emit sig_twoFactorRequired(config_->routerId());
+    emit sig_twoFactorRequired();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -173,8 +173,7 @@ void Router2FA::send(const proto::router::ClientToRouter& message)
         return;
 
     QMetaObject::invokeMethod(router_worker_, &RouterWorker::onSendMessage, Qt::QueuedConnection,
-                              config_->routerId(), quint8(proto::router::CHANNEL_ID_CLIENT),
-                              serialize(message));
+                              quint8(proto::router::CHANNEL_ID_CLIENT), serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -191,7 +190,7 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
             {
                 LOG(INFO) << "Router rejected device token - clearing local copy";
                 config_->clearDeviceToken();
-                if (!Database::instance().modifyRouter(*config_))
+                if (!Database::instance().setRouterConfig(*config_))
                     LOG(WARNING) << "Failed to clear stale device token";
 
                 openPrompt(challenge, QString());
@@ -215,7 +214,7 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
                 return;
             }
 
-            LOG(INFO) << "Two-factor code required for router" << config_->routerId();
+            LOG(INFO) << "Two-factor code required";
             openPrompt(challenge, QString());
             return;
         }
@@ -230,7 +229,7 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
             if (!otpauth_uri.starts_with("otpauth://") ||
                 otpauth_uri.size() > proto::router::kMaxOtpauthUriLength)
             {
-                LOG(ERROR) << "Malformed otpauth URI for router" << config_->routerId();
+                LOG(ERROR) << "Malformed otpauth URI";
                 return;
             }
 
@@ -239,7 +238,7 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
             const QString uri = QString::fromStdString(otpauth_uri);
             if (QUrlQuery(QUrl(uri)).queryItemValue("secret").isEmpty())
             {
-                LOG(ERROR) << "otpauth URI without a secret for router" << config_->routerId();
+                LOG(ERROR) << "otpauth URI without a secret";
                 return;
             }
 
@@ -248,11 +247,11 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
             if (!config_->deviceToken().isEmpty())
             {
                 config_->clearDeviceToken();
-                if (!Database::instance().modifyRouter(*config_))
+                if (!Database::instance().setRouterConfig(*config_))
                     LOG(WARNING) << "Failed to clear stale device token";
             }
 
-            LOG(INFO) << "Two-factor enrollment required for router" << config_->routerId();
+            LOG(INFO) << "Two-factor enrollment required";
             openPrompt(challenge, uri);
             return;
         }
@@ -266,14 +265,14 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
 //--------------------------------------------------------------------------------------------------
 void Router2FA::readLoginResult(const proto::router::LoginResult& result)
 {
-    LOG(INFO) << "Login completed for router" << config_->routerId();
+    LOG(INFO) << "Login completed";
 
     // A token arrives only when a TOTP submission produced one. Failures drop the connection
     // instead of answering, so getting here at all means the session is open.
     const QByteArray new_token = QByteArray::fromStdString(result.new_token());
     if (new_token.size() == proto::router::kDeviceTokenSize)
     {
-        LOG(INFO) << "Device token issued for router" << config_->routerId();
+        LOG(INFO) << "Device token issued";
 
         // The record stores the token wrapped by the OS keystore. A failure to wrap costs the
         // token alone: the next login asks for a code again.
@@ -281,22 +280,22 @@ void Router2FA::readLoginResult(const proto::router::LoginResult& result)
         if (OSCrypt::encryptBytes(new_token, &wrapped) && !wrapped.isEmpty())
         {
             config_->setDeviceToken(wrapped);
-            if (!Database::instance().modifyRouter(*config_))
-                LOG(WARNING) << "Failed to persist new device token for router" << config_->routerId();
+            if (!Database::instance().setRouterConfig(*config_))
+                LOG(WARNING) << "Failed to persist new device token";
         }
         else
         {
-            LOG(WARNING) << "Failed to wrap new device token for router" << config_->routerId();
+            LOG(WARNING) << "Failed to wrap new device token";
         }
     }
     else if (!new_token.isEmpty())
     {
         // The router issues tokens of exactly one size, so anything else is not a token, and
         // storing it would only buy a doomed round of presenting it back.
-        LOG(WARNING) << "Device token of unexpected size for router" << config_->routerId();
+        LOG(WARNING) << "Device token of unexpected size";
     }
 
     // The login is over. The owner stops feeding the object on this report and only then
     // destroys it, so no late message can reach it.
-    emit sig_twoFactorFinished(config_->routerId(), result.user_id(), version_);
+    emit sig_twoFactorFinished(result.user_id(), version_);
 }

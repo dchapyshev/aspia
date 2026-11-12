@@ -20,6 +20,7 @@
 #define CLIENT_DESKTOP_SETTINGS_TAB_H
 
 #include <memory>
+#include <optional>
 
 #include "client/config.h"
 #include "client/desktop/tab.h"
@@ -29,6 +30,7 @@ class SettingsTab;
 } // namespace Ui
 
 class QButtonGroup;
+class QLineEdit;
 
 class SettingsTab final : public Tab
 {
@@ -47,7 +49,7 @@ public:
 signals:
     void sig_desktopConfigChanged();
     void sig_lockTimeoutChanged();
-    void sig_routersChanged();
+    void sig_routerChanged();
 
 protected:
     // QWidget implementation.
@@ -55,21 +57,11 @@ protected:
 
 private slots:
     void onCategoryChanged(int id);
-    void onLanguageChanged();
-    void onThemeChanged();
-    void onDisplayNameChanged();
-    void onConfirmCloseChanged();
-    void onBackupOnStartupChanged();
-    void onBackupPathChanged();
+    void onGeneralChanged();
     void onSelectBackupPath();
-    void onBackupRetentionChanged();
-    void onProxyChanged();
-    void onLockTimeoutChanged();
-    void onAutoUnlockChanged();
-    void onCurrentRouterChanged();
-    void onAddRouter();
-    void onEditRouter();
-    void onDeleteRouter();
+    void onProxyTypeChanged();
+    void onAutoUnlockToggled();
+    void onSaveGeneral();
     void onProfileChanged();
     void onAddProfile();
     void onRenameProfile();
@@ -92,7 +84,10 @@ private:
     void updateProxyFields();
     void applyCategoryStyle();
     bool enableAutoUnlock();
-    void reloadRouters(qint64 router_id);
+    void loadRouter();
+    bool routerFromUi(std::optional<RouterConfig>* router);
+    bool saveRouter(RouterConfig router);
+    void showRouterError(QLineEdit* edit, const QString& message);
     void reloadProfiles(qint64 profile_id);
     void showProfile();
     ProfileConfig profileFromUi() const;

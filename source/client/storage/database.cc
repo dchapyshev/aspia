@@ -32,181 +32,6 @@ namespace {
 
 QString g_test_file_path;
 
-//--------------------------------------------------------------------------------------------------
-// Adds |column| to a |table| that was made before the column was there.
-bool addMissingColumn(SqlDatabase& db, const QString& table, const QString& column, const QString& definition)
-{
-    SqlQuery query(db, "SELECT 1 FROM pragma_table_info(?) WHERE name=? LIMIT 1");
-    query.addText(table);
-    query.addText(column);
-
-    const SqlQuery::StepResult step = query.next();
-    if (step == SqlQuery::StepResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to read the schema of table" << table << ":" << db.lastError();
-        return false;
-    }
-
-    if (step == SqlQuery::StepResult::ROW)
-        return true;
-
-    LOG(INFO) << "Adding column" << column << "to table" << table;
-
-    const QString sql = QString("ALTER TABLE \"%1\" ADD COLUMN \"%2\" %3").arg(table, column, definition);
-    if (!db.exec(sql.toUtf8().constData()))
-    {
-        LOG(ERROR) << "Unable to add column" << column << "to table" << table << ":" << db.lastError();
-        return false;
-    }
-
-    LOG(INFO) << "Column" << column << "added to table" << table;
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool createTables(SqlDatabase& db)
-{
-    // A group without a parent and a host without a group are the ones at the root: the root is
-    // where the tree starts and not a record of its own, so there is no id for them to name.
-    if (!db.exec("CREATE TABLE IF NOT EXISTS \"local_groups\" ("
-                 "\"id\" INTEGER UNIQUE,"
-                 "\"parent_id\" INTEGER REFERENCES \"local_groups\"(\"id\") ON DELETE CASCADE,"
-                 "\"name\" TEXT NOT NULL DEFAULT '',"
-                 "\"comment\" TEXT NOT NULL DEFAULT '',"
-                 "\"guid\" TEXT NOT NULL UNIQUE,"
-                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
-    {
-        LOG(ERROR) << "Unable to create local_groups table:" << db.lastError();
-        return false;
-    }
-
-    if (!db.exec("CREATE TABLE IF NOT EXISTS \"local_hosts\" ("
-                 "\"id\" INTEGER UNIQUE,"
-                 "\"group_id\" INTEGER REFERENCES \"local_groups\"(\"id\") ON DELETE SET NULL,"
-                 "\"router_id\" INTEGER NOT NULL DEFAULT 0,"
-                 "\"name\" TEXT NOT NULL DEFAULT '',"
-                 "\"comment\" TEXT NOT NULL DEFAULT '',"
-                 "\"data\" BLOB DEFAULT X'',"
-                 "\"create_time\" INTEGER NOT NULL DEFAULT 0,"
-                 "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
-                 "\"connect_time\" INTEGER NOT NULL DEFAULT 0,"
-                 "\"guid\" TEXT NOT NULL UNIQUE,"
-                 "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
-                 "\"os_credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
-                 "\"profile_id\" INTEGER REFERENCES \"profiles\"(\"id\") ON DELETE SET NULL,"
-                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
-    {
-        LOG(ERROR) << "Unable to create local_hosts table:" << db.lastError();
-        return false;
-    }
-
-    if (!db.exec("CREATE TABLE IF NOT EXISTS \"routers\" ("
-                 "\"id\" INTEGER UNIQUE,"
-                 "\"name\" TEXT NOT NULL DEFAULT '',"
-                 "\"session_type\" INTEGER NOT NULL DEFAULT 0,"
-                 "\"data\" BLOB DEFAULT X'',"
-                 "\"guid\" TEXT NOT NULL UNIQUE,"
-                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
-    {
-        LOG(ERROR) << "Unable to create routers table:" << db.lastError();
-        return false;
-    }
-
-    if (!db.exec("CREATE TABLE IF NOT EXISTS \"router_hosts\" ("
-                 "\"router_id\" INTEGER NOT NULL REFERENCES \"routers\"(\"id\") ON DELETE CASCADE,"
-                 "\"host_id\" INTEGER NOT NULL,"
-                 "\"check_time\" INTEGER NOT NULL DEFAULT 0,"
-                 "\"data\" BLOB DEFAULT X'',"
-                 "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
-                 "\"os_credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
-                 "\"profile_id\" INTEGER REFERENCES \"profiles\"(\"id\") ON DELETE SET NULL,"
-                 "PRIMARY KEY(\"router_id\",\"host_id\"))"))
-    {
-        LOG(ERROR) << "Unable to create router_hosts table:" << db.lastError();
-        return false;
-    }
-
-    if (!db.exec("CREATE TABLE IF NOT EXISTS \"credentials\" ("
-                 "\"id\" INTEGER UNIQUE,"
-                 "\"type\" INTEGER NOT NULL DEFAULT 0,"
-                 "\"name\" TEXT NOT NULL DEFAULT '',"
-                 "\"data\" BLOB DEFAULT X'',"
-                 "\"guid\" TEXT NOT NULL UNIQUE,"
-                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
-    {
-        LOG(ERROR) << "Unable to create credentials table:" << db.lastError();
-        return false;
-    }
-
-    if (!db.exec("CREATE TABLE IF NOT EXISTS \"profiles\" ("
-                 "\"id\" INTEGER UNIQUE,"
-                 "\"name\" TEXT NOT NULL DEFAULT '',"
-                 "\"data\" BLOB DEFAULT X'',"
-                 "\"guid\" TEXT NOT NULL UNIQUE,"
-                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
-    {
-        LOG(ERROR) << "Unable to create profiles table:" << db.lastError();
-        return false;
-    }
-
-    //==============================================================================================
-    // Migration begin.
-    {
-        const char kOsCredentialId[] = "INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL";
-
-        if (!addMissingColumn(db, "local_hosts", "os_credential_id", kOsCredentialId))
-        {
-            LOG(ERROR) << "Unable to add os_credential_id column to local_hosts table:" << db.lastError();
-            return false;
-        }
-
-        if (!addMissingColumn(db, "router_hosts", "os_credential_id", kOsCredentialId))
-        {
-            LOG(ERROR) << "Unable to add os_credential_id column to router_hosts table:" << db.lastError();
-            return false;
-        }
-
-        const char kProfileId[] = "INTEGER REFERENCES \"profiles\"(\"id\") ON DELETE SET NULL";
-
-        if (!addMissingColumn(db, "local_hosts", "profile_id", kProfileId))
-        {
-            LOG(ERROR) << "Unable to add profile_id column to local_hosts table:" << db.lastError();
-            return false;
-        }
-
-        if (!addMissingColumn(db, "router_hosts", "profile_id", kProfileId))
-        {
-            LOG(ERROR) << "Unable to add profile_id column to router_hosts table:" << db.lastError();
-            return false;
-        }
-    }
-    // Migration end.
-    //==============================================================================================
-
-    if (!db.exec("CREATE TRIGGER IF NOT EXISTS \"router_hosts_drop_empty\" "
-                 "AFTER UPDATE ON \"router_hosts\" "
-                 "WHEN NEW.\"data\" = X'' AND NEW.\"credential_id\" IS NULL AND "
-                 "NEW.\"os_credential_id\" IS NULL AND NEW.\"profile_id\" IS NULL "
-                 "BEGIN "
-                 "DELETE FROM \"router_hosts\" WHERE \"router_id\" = NEW.\"router_id\" AND "
-                 "\"host_id\" = NEW.\"host_id\"; "
-                 "END"))
-    {
-        LOG(ERROR) << "Unable to create router_hosts_drop_empty trigger:" << db.lastError();
-        return false;
-    }
-
-    if (!db.exec("CREATE TABLE IF NOT EXISTS \"settings\" ("
-                 "\"name\" TEXT PRIMARY KEY NOT NULL,"
-                 "\"value\" TEXT NOT NULL)"))
-    {
-        LOG(ERROR) << "Unable to create settings table:" << db.lastError();
-        return false;
-    }
-
-    return true;
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -232,7 +57,7 @@ QString Database::filePath()
     if (dir_path.isEmpty())
         return QString();
 
-    return dir_path + "/client.db3";
+    return dir_path + '/' + kDirectoryName + '/' + kDefaultFileName;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -260,7 +85,7 @@ bool Database::open(const QString& file_path)
         }
     }
 
-    if (!createTables(db_) || !ensureDefaultProfile())
+    if (!createTables(db_) || !ensureDefaultProfile() || !ensureGuid())
     {
         db_.close();
         return false;
@@ -283,7 +108,7 @@ bool Database::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::import(const QList<RouterConfig>& routers,
+bool Database::import(const std::optional<RouterConfig>& router,
                       const QList<LocalGroupConfig>& local_groups,
                       const QList<LocalHostConfig>& local_hosts,
                       const QList<RouterHostConfig>& router_hosts,
@@ -303,12 +128,9 @@ bool Database::import(const QList<RouterConfig>& routers,
         return false;
     }
 
-    // What the book held is what the file replaces, and the two have nothing to do with each other.
-    // Saved credentials go with their routers, and hosts are deleted on their own, because the ones
-    // at the root of the book lie in no group.
-    if (!db_.exec("DELETE FROM local_groups") || !db_.exec("DELETE FROM routers") ||
-        !db_.exec("DELETE FROM local_hosts") || !db_.exec("DELETE FROM credentials") ||
-        !db_.exec("DELETE FROM profiles"))
+    if (!db_.exec("DELETE FROM local_groups") || !clearRouter() ||
+        !db_.exec("DELETE FROM router_hosts") || !db_.exec("DELETE FROM local_hosts") ||
+        !db_.exec("DELETE FROM credentials") || !db_.exec("DELETE FROM profiles"))
     {
         LOG(ERROR) << "Unable to clear the address book:" << db_.lastError();
         return false;
@@ -343,15 +165,8 @@ bool Database::import(const QList<RouterConfig>& routers,
     if (!ensureDefaultProfile())
         return false;
 
-    QHash<qint64, qint64> router_ids;
-    for (const RouterConfig& router : routers)
-    {
-        RouterConfig config = router;
-        if (!addRouter(config))
-            return false;
-
-        router_ids.insert(router.routerId(), config.routerId());
-    }
+    if (router && !setRouterConfig(*router))
+        return false;
 
     QHash<qint64, qint64> group_ids;
     for (const LocalGroupConfig& group : local_groups)
@@ -369,7 +184,6 @@ bool Database::import(const QList<RouterConfig>& routers,
     {
         LocalHostConfig config = host;
         config.setGroupId(group_ids.value(host.groupId(), host.groupId()));
-        config.setRouterId(router_ids.value(host.routerId(), host.routerId()));
         config.setCredentialId(credential_ids.value(host.credentialId(), host.credentialId()));
         config.setOsCredentialId(credential_ids.value(host.osCredentialId(), host.osCredentialId()));
         config.setProfileId(profile_ids.value(host.profileId(), host.profileId()));
@@ -387,13 +201,11 @@ bool Database::import(const QList<RouterConfig>& routers,
         if (config.guid().isEmpty())
             config.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
-        SqlQuery query(db_, "INSERT INTO local_hosts (id, group_id, router_id, name, comment, data, "
-                            "create_time, modify_time, connect_time, guid, credential_id, os_credential_id, "
-                            "profile_id) "
-                            "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), NULLIF(?, 0), "
+        SqlQuery query(db_, "INSERT INTO local_hosts (id, group_id, name, comment, data, create_time, "
+                            "modify_time, connect_time, guid, credential_id, os_credential_id, profile_id) "
+                            "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), NULLIF(?, 0), "
                             "NULLIF(?, 0))");
         query.addInt64(config.groupId());
-        query.addInt64(config.routerId());
         query.addText(config.name());
         query.addText(config.comment());
         query.addBlob(*encrypted_data);
@@ -415,7 +227,6 @@ bool Database::import(const QList<RouterConfig>& routers,
     for (const RouterHostConfig& host : router_hosts)
     {
         RouterHostConfig config = host;
-        config.setRouterId(router_ids.value(host.routerId(), host.routerId()));
         config.setCredentialId(credential_ids.value(host.credentialId(), host.credentialId()));
         config.setOsCredentialId(credential_ids.value(host.osCredentialId(), host.osCredentialId()));
         config.setProfileId(profile_ids.value(host.profileId(), host.profileId()));
@@ -455,7 +266,7 @@ bool Database::saveCopyAndClearAll(const QString& copy_path)
         return false;
     }
 
-    if (!db_.exec("DELETE FROM local_groups") || !db_.exec("DELETE FROM routers") ||
+    if (!db_.exec("DELETE FROM local_groups") || !db_.exec("DELETE FROM router_hosts") ||
         !db_.exec("DELETE FROM local_hosts") || !db_.exec("DELETE FROM credentials") ||
         !db_.exec("DELETE FROM profiles") || !db_.exec("DELETE FROM settings"))
     {
@@ -463,7 +274,7 @@ bool Database::saveCopyAndClearAll(const QString& copy_path)
         return false;
     }
 
-    if (!ensureDefaultProfile() || !transaction.commit())
+    if (!ensureDefaultProfile() || !ensureGuid() || !transaction.commit())
         return false;
 
     LOG(INFO) << "Database is reset, the copy is saved to:" << copy_path;
@@ -472,7 +283,7 @@ bool Database::saveCopyAndClearAll(const QString& copy_path)
 
 //--------------------------------------------------------------------------------------------------
 bool Database::reencryptAll(const QList<LocalHostConfig>& local_hosts,
-                            const QList<RouterConfig>& routers,
+                            const std::optional<RouterConfig>& router,
                             const QList<RouterHostConfig>& router_hosts,
                             const QList<CredentialConfig>& credentials,
                             const ProxyConfig& proxy,
@@ -516,13 +327,10 @@ bool Database::reencryptAll(const QList<LocalHostConfig>& local_hosts,
         }
     }
 
-    for (const RouterConfig& router : routers)
+    if (router && !setRouterConfig(*router))
     {
-        if (!modifyRouter(router))
-        {
-            LOG(ERROR) << "Unable to re-encrypt router:" << router.routerId();
-            return false;
-        }
+        LOG(ERROR) << "Unable to re-encrypt the router";
+        return false;
     }
 
     for (const RouterHostConfig& router_host : router_hosts)
@@ -572,14 +380,111 @@ void Database::setFilePathForTesting(const QString& file_path)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::openDatabase()
+// static
+bool Database::createTables(SqlDatabase& db)
 {
-    QString dir_path = BasePaths::appUserDataDir();
-    if (dir_path.isEmpty())
+    // A group without a parent and a host without a group are the ones at the root: the root is
+    // where the tree starts and not a record of its own, so there is no id for them to name.
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"local_groups\" ("
+                 "\"id\" INTEGER UNIQUE,"
+                 "\"parent_id\" INTEGER REFERENCES \"local_groups\"(\"id\") ON DELETE CASCADE,"
+                 "\"name\" TEXT NOT NULL DEFAULT '',"
+                 "\"comment\" TEXT NOT NULL DEFAULT '',"
+                 "\"guid\" TEXT NOT NULL UNIQUE,"
+                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
-        LOG(ERROR) << "Invalid directory path";
+        LOG(ERROR) << "Unable to create local_groups table:" << db.lastError();
         return false;
     }
+
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"local_hosts\" ("
+                 "\"id\" INTEGER UNIQUE,"
+                 "\"group_id\" INTEGER REFERENCES \"local_groups\"(\"id\") ON DELETE SET NULL,"
+                 "\"name\" TEXT NOT NULL DEFAULT '',"
+                 "\"comment\" TEXT NOT NULL DEFAULT '',"
+                 "\"data\" BLOB DEFAULT X'',"
+                 "\"create_time\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"connect_time\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"guid\" TEXT NOT NULL UNIQUE,"
+                 "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
+                 "\"os_credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
+                 "\"profile_id\" INTEGER REFERENCES \"profiles\"(\"id\") ON DELETE SET NULL,"
+                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        LOG(ERROR) << "Unable to create local_hosts table:" << db.lastError();
+        return false;
+    }
+
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"router_hosts\" ("
+                 "\"host_id\" INTEGER PRIMARY KEY,"
+                 "\"check_time\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"data\" BLOB DEFAULT X'',"
+                 "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
+                 "\"os_credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
+                 "\"profile_id\" INTEGER REFERENCES \"profiles\"(\"id\") ON DELETE SET NULL)"))
+    {
+        LOG(ERROR) << "Unable to create router_hosts table:" << db.lastError();
+        return false;
+    }
+
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"credentials\" ("
+                 "\"id\" INTEGER UNIQUE,"
+                 "\"type\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"name\" TEXT NOT NULL DEFAULT '',"
+                 "\"data\" BLOB DEFAULT X'',"
+                 "\"guid\" TEXT NOT NULL UNIQUE,"
+                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        LOG(ERROR) << "Unable to create credentials table:" << db.lastError();
+        return false;
+    }
+
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"profiles\" ("
+                 "\"id\" INTEGER UNIQUE,"
+                 "\"name\" TEXT NOT NULL DEFAULT '',"
+                 "\"data\" BLOB DEFAULT X'',"
+                 "\"guid\" TEXT NOT NULL UNIQUE,"
+                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        LOG(ERROR) << "Unable to create profiles table:" << db.lastError();
+        return false;
+    }
+
+    if (!db.exec("CREATE TRIGGER IF NOT EXISTS \"router_hosts_drop_empty\" "
+                 "AFTER UPDATE ON \"router_hosts\" "
+                 "WHEN NEW.\"data\" = X'' AND NEW.\"credential_id\" IS NULL AND "
+                 "NEW.\"os_credential_id\" IS NULL AND NEW.\"profile_id\" IS NULL "
+                 "BEGIN "
+                 "DELETE FROM \"router_hosts\" WHERE \"host_id\" = NEW.\"host_id\"; "
+                 "END"))
+    {
+        LOG(ERROR) << "Unable to create router_hosts_drop_empty trigger:" << db.lastError();
+        return false;
+    }
+
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"settings\" ("
+                 "\"name\" TEXT PRIMARY KEY NOT NULL,"
+                 "\"value\" TEXT NOT NULL)"))
+    {
+        LOG(ERROR) << "Unable to create settings table:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::openDatabase()
+{
+    QString file_path = filePath();
+    if (file_path.isEmpty())
+    {
+        LOG(ERROR) << "Invalid file path";
+        return false;
+    }
+
+    QString dir_path = QFileInfo(file_path).path();
 
     // Ensure directory exists.
     QFileInfo dir_info(dir_path);
@@ -598,13 +503,6 @@ bool Database::openDatabase()
             LOG(ERROR) << "Unable to create directory for database";
             return false;
         }
-    }
-
-    QString file_path = filePath();
-    if (file_path.isEmpty())
-    {
-        LOG(ERROR) << "Invalid file path";
-        return false;
     }
 
     return open(file_path);

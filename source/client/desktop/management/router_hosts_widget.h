@@ -51,8 +51,7 @@ public:
     explicit RouterHostsWidget(QWidget* parent = nullptr);
     ~RouterHostsWidget() final;
 
-    void showRouter(qint64 router_id);
-    qint64 routerId() const { return router_id_; }
+    void showRouter();
     void setMimeType(const QString& mime_type);
     bool hasSelectedHost() const;
     HostId selectedHostId() const;
@@ -116,7 +115,6 @@ private:
                           const std::function<QString(int)>& error_text);
 
     std::unique_ptr<Ui::RouterHostsWidget> ui;
-    qint64 router_id_ = 0;
     QString mime_type_;
     QPoint start_pos_;
     QTimer* filter_timer_ = nullptr;
@@ -127,6 +125,7 @@ private:
 
     HostListModel* model_ = nullptr;
     PageModel hosts_page_;
+    bool shown_ = false;
 
     Q_DISABLE_COPY_MOVE(RouterHostsWidget)
 };

@@ -27,8 +27,10 @@ collect_sources(SOURCE_CLIENT_STORAGE
     database.h
     database_credentials.cc
     database_local_hosts.cc
+    database_migration.cc
+    database_migration.h
     database_profiles.cc
-    database_routers.cc
+    database_router.cc
     database_settings.cc
     master_password.cc
     master_password.h

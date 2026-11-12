@@ -82,32 +82,35 @@
    <item>
     <widget class="QStackedWidget" name="page_stack">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
-     <widget class="QScrollArea" name="page_general">
-      <property name="frameShape">
-       <enum>QFrame::Shape::NoFrame</enum>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="page_general_body">
-       <layout class="QHBoxLayout" name="layout_general_outer">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QWidget" name="page_general_content" native="true">
-          <layout class="QVBoxLayout" name="layout_general">
+     <widget class="QWidget" name="page_general">
+      <layout class="QVBoxLayout" name="layout_general_page">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QScrollArea" name="scroll_general">
+         <property name="frameShape">
+          <enum>QFrame::Shape::NoFrame</enum>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="page_general_body">
+          <layout class="QHBoxLayout" name="layout_general_outer">
            <property name="leftMargin">
             <number>0</number>
            </property>
@@ -121,391 +124,413 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QGroupBox" name="groupbox_general">
-             <property name="title">
-              <string>General</string>
-             </property>
-             <layout class="QGridLayout" name="gridLayout">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_language">
-                <property name="text">
-                 <string>Language:</string>
+            <widget class="QWidget" name="page_general_content" native="true">
+             <layout class="QVBoxLayout" name="layout_general">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QGroupBox" name="groupbox_general">
+                <property name="title">
+                 <string>General</string>
                 </property>
+                <layout class="QGridLayout" name="gridLayout">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_language">
+                   <property name="text">
+                    <string>Language:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QComboBox" name="combo_language">
+                   <property name="sizeAdjustPolicy">
+                    <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_theme">
+                   <property name="text">
+                    <string>Theme:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QComboBox" name="combo_theme">
+                   <property name="sizeAdjustPolicy">
+                    <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_display_name">
+                   <property name="text">
+                    <string>Display name when connected:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QLineEdit" name="edit_display_name">
+                   <property name="maxLength">
+                    <number>16</number>
+                   </property>
+                   <property name="placeholderText">
+                    <string>Enter a name or leave the field empty</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0" colspan="2">
+                  <widget class="QCheckBox" name="checkbox_confirm_close">
+                   <property name="text">
+                    <string>Ask for confirmation when closing the application</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
-              <item row="0" column="1">
-               <widget class="QComboBox" name="combo_language">
-                <property name="sizeAdjustPolicy">
-                 <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+              <item>
+               <widget class="QGroupBox" name="groupbox_router">
+                <property name="title">
+                 <string>Router</string>
                 </property>
+                <layout class="QGridLayout" name="layout_router">
+                 <item row="0" column="0" colspan="2">
+                  <widget class="QLabel" name="label_router_damaged">
+                   <property name="text">
+                    <string>The data of the router is damaged. Enter it again.</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_router_address">
+                   <property name="text">
+                    <string>Address:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QLineEdit" name="edit_router_address">
+                   <property name="maxLength">
+                    <number>64</number>
+                   </property>
+                   <property name="placeholderText">
+                    <string>Host name or IP address</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_router_session_type">
+                   <property name="text">
+                    <string>Access Level:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QComboBox" name="combo_router_session_type">
+                   <property name="sizeAdjustPolicy">
+                    <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label_router_username">
+                   <property name="text">
+                    <string>User Name:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QLineEdit" name="edit_router_username">
+                   <property name="maxLength">
+                    <number>64</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="label_router_password">
+                   <property name="text">
+                    <string>Password:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="PasswordEdit" name="edit_router_password">
+                   <property name="maxLength">
+                    <number>64</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="0" colspan="2">
+                  <widget class="QCheckBox" name="checkbox_router_enabled">
+                   <property name="text">
+                    <string>Enabled</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_theme">
-                <property name="text">
-                 <string>Theme:</string>
+              <item>
+               <widget class="QGroupBox" name="groupbox_proxy">
+                <property name="title">
+                 <string>Proxy</string>
                 </property>
+                <layout class="QGridLayout" name="layout_proxy">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_proxy_type">
+                   <property name="text">
+                    <string>Type:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1" colspan="3">
+                  <widget class="QComboBox" name="combo_proxy_type">
+                   <property name="sizeAdjustPolicy">
+                    <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_proxy_address">
+                   <property name="text">
+                    <string>Address:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QLineEdit" name="edit_proxy_address"/>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QLabel" name="label_proxy_port">
+                   <property name="text">
+                    <string>Port:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="3">
+                  <widget class="QSpinBox" name="spinbox_proxy_port">
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>65535</number>
+                   </property>
+                   <property name="value">
+                    <number>8080</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_proxy_username">
+                   <property name="text">
+                    <string>User Name:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1" colspan="3">
+                  <widget class="QLineEdit" name="edit_proxy_username"/>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label_proxy_password">
+                   <property name="text">
+                    <string>Password:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1" colspan="3">
+                  <widget class="PasswordEdit" name="edit_proxy_password"/>
+                 </item>
+                </layout>
                </widget>
               </item>
-              <item row="1" column="1">
-               <widget class="QComboBox" name="combo_theme">
-                <property name="sizeAdjustPolicy">
-                 <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+              <item>
+               <widget class="QGroupBox" name="groupbox_backup">
+                <property name="title">
+                 <string>Backup</string>
                 </property>
+                <layout class="QGridLayout" name="layout_backup">
+                 <item row="0" column="0" colspan="3">
+                  <widget class="QCheckBox" name="checkbox_backup_on_startup">
+                   <property name="text">
+                    <string>Create backups on application startup</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_backup_dir">
+                   <property name="text">
+                    <string>Directory:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QLineEdit" name="edit_backup_dir"/>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QPushButton" name="button_select_backup_dir">
+                   <property name="text">
+                    <string>Browse...</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_backup_retention">
+                   <property name="text">
+                    <string>Keep backups for:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1" colspan="2">
+                  <widget class="QComboBox" name="combo_backup_retention">
+                   <property name="sizeAdjustPolicy">
+                    <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="label_display_name">
-                <property name="text">
-                 <string>Display name when connected:</string>
+              <item>
+               <widget class="QGroupBox" name="groupbox_security">
+                <property name="title">
+                 <string>Security</string>
                 </property>
+                <layout class="QGridLayout" name="layout_security">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_lock_timeout">
+                   <property name="text">
+                    <string>Lock after inactivity:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QComboBox" name="combo_lock_timeout">
+                   <property name="sizeAdjustPolicy">
+                    <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0" colspan="2">
+                  <widget class="QCheckBox" name="checkbox_auto_unlock">
+                   <property name="text">
+                    <string>Unlock automatically on startup</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0" colspan="2" alignment="Qt::AlignmentFlag::AlignRight">
+                  <widget class="QPushButton" name="button_change_master_password">
+                   <property name="text">
+                    <string>Change Master Password...</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
-              <item row="2" column="1">
-               <widget class="QLineEdit" name="edit_display_name">
-                <property name="maxLength">
-                 <number>16</number>
+              <item>
+               <spacer name="verticalSpacer_general">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Vertical</enum>
                 </property>
-                <property name="placeholderText">
-                 <string>Enter a name or leave the field empty</string>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>148</height>
+                 </size>
                 </property>
-               </widget>
-              </item>
-              <item row="3" column="0" colspan="2">
-               <widget class="QCheckBox" name="checkbox_confirm_close">
-                <property name="text">
-                 <string>Ask for confirmation when closing the application</string>
-                </property>
-               </widget>
+               </spacer>
               </item>
              </layout>
             </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupbox_backup">
-             <property name="title">
-              <string>Backup</string>
-             </property>
-             <layout class="QGridLayout" name="layout_backup">
-              <item row="0" column="0" colspan="3">
-               <widget class="QCheckBox" name="checkbox_backup_on_startup">
-                <property name="text">
-                 <string>Create backups on application startup</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_backup_dir">
-                <property name="text">
-                 <string>Directory:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="edit_backup_dir"/>
-              </item>
-              <item row="1" column="2">
-               <widget class="QPushButton" name="button_select_backup_dir">
-                <property name="text">
-                 <string>Browse...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="label_backup_retention">
-                <property name="text">
-                 <string>Keep backups for:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1" colspan="2">
-               <widget class="QComboBox" name="combo_backup_retention">
-                <property name="sizeAdjustPolicy">
-                 <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupbox_proxy">
-             <property name="title">
-              <string>Proxy</string>
-             </property>
-             <layout class="QGridLayout" name="layout_proxy">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_proxy_type">
-                <property name="text">
-                 <string>Type:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1" colspan="3">
-               <widget class="QComboBox" name="combo_proxy_type">
-                <property name="sizeAdjustPolicy">
-                 <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_proxy_address">
-                <property name="text">
-                 <string>Address:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="edit_proxy_address"/>
-              </item>
-              <item row="1" column="2">
-               <widget class="QLabel" name="label_proxy_port">
-                <property name="text">
-                 <string>Port:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="3">
-               <widget class="QSpinBox" name="spinbox_proxy_port">
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <number>65535</number>
-                </property>
-                <property name="value">
-                 <number>8080</number>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="label_proxy_username">
-                <property name="text">
-                 <string>User Name:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1" colspan="3">
-               <widget class="QLineEdit" name="edit_proxy_username"/>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="label_proxy_password">
-                <property name="text">
-                 <string>Password:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1" colspan="3">
-               <widget class="PasswordEdit" name="edit_proxy_password"/>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupbox_security">
-             <property name="title">
-              <string>Security</string>
-             </property>
-             <layout class="QGridLayout" name="layout_security">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_lock_timeout">
-                <property name="text">
-                 <string>Lock after inactivity:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QComboBox" name="combo_lock_timeout">
-                <property name="sizeAdjustPolicy">
-                 <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0" colspan="2">
-               <widget class="QCheckBox" name="checkbox_auto_unlock">
-                <property name="text">
-                 <string>Unlock automatically on startup</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0" colspan="2" alignment="Qt::AlignmentFlag::AlignRight">
-               <widget class="QPushButton" name="button_change_master_password">
-                <property name="text">
-                 <string>Change Master Password...</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_general">
-             <property name="orientation">
-              <enum>Qt::Orientation::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>148</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
          </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QScrollArea" name="page_routers">
-      <property name="frameShape">
-       <enum>QFrame::Shape::NoFrame</enum>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="page_routers_body">
-       <layout class="QHBoxLayout" name="layout_routers_outer">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QWidget" name="page_routers_content" native="true">
-          <layout class="QVBoxLayout" name="layout_routers">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QGroupBox" name="groupbox_routers">
-             <property name="title">
-              <string>Routers</string>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="line_general_footer">
+         <property name="frameShape">
+          <enum>QFrame::Shape::HLine</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Sunken</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="page_general_footer" native="true">
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
+         <layout class="QHBoxLayout" name="layout_general_footer_outer">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QWidget" name="page_general_footer_content" native="true">
+            <layout class="QHBoxLayout" name="layout_save_general">
+             <property name="leftMargin">
+              <number>0</number>
              </property>
-             <layout class="QVBoxLayout" name="layout_groupbox_routers">
-              <item>
-               <layout class="QHBoxLayout" name="layout_router_buttons">
-                <item>
-                 <widget class="QPushButton" name="button_add_router">
-                  <property name="text">
-                   <string>Add...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="button_edit_router">
-                  <property name="text">
-                   <string>Edit...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="button_delete_router">
-                  <property name="text">
-                   <string>Delete</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_routers">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <widget class="QTreeWidget" name="tree_routers">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>200</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>200</height>
-                 </size>
-                </property>
-                <property name="rootIsDecorated">
-                 <bool>false</bool>
-                </property>
-                <property name="uniformRowHeights">
-                 <bool>true</bool>
-                </property>
-                <column>
-                 <property name="text">
-                  <string>Name</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Address</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>User Name</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Access Level</string>
-                 </property>
-                </column>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_routers">
-             <property name="orientation">
-              <enum>Qt::Orientation::Vertical</enum>
+             <property name="topMargin">
+              <number>0</number>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
+             <property name="rightMargin">
+              <number>0</number>
              </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <spacer name="horizontalSpacer_save_general">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="button_save_general">
+               <property name="text">
+                <string>Save Settings</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
      </widget>
      <widget class="QScrollArea" name="page_desktop">
       <property name="frameShape">

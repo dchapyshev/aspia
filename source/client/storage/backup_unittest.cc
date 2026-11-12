@@ -58,10 +58,10 @@ std::optional<LocalGroupConfig> findLocalGroup(const Database& db, qint64 group_
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
-std::optional<RouterConfig> findRouter(const Database& db, qint64 router_id)
+std::optional<RouterConfig> findRouter(const Database& db)
 {
     RouterConfig router;
-    const Database::FindResult result = db.findRouter(router_id, &router);
+    const Database::FindResult result = db.routerConfig(&router);
     if (result != Database::FindResult::FOUND)
     {
         EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
@@ -103,10 +103,10 @@ std::optional<CredentialConfig> findCredentialByGuid(const Database& db, const Q
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
-std::optional<RouterHostConfig> findRouterHost(const Database& db, qint64 router_id, HostId host_id)
+std::optional<RouterHostConfig> findRouterHost(const Database& db, HostId host_id)
 {
     RouterHostConfig host;
-    const Database::FindResult result = db.findRouterHost(router_id, host_id, &host);
+    const Database::FindResult result = db.findRouterHost(host_id, &host);
     if (result != Database::FindResult::FOUND)
     {
         EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
@@ -182,25 +182,19 @@ protected:
         return host.id();
     }
 
-    // The guid is not passed in: the database issues one to every router it adds, the same way it
-    // does for groups and hosts.
-    static qint64 addRouter(Database& db, const QString& name, const QString& address)
+    static void addRouter(Database& db, const QString& address)
     {
         RouterConfig router;
-        router.setDisplayName(name);
         router.setAddress(address);
         router.setUsername("router-user");
         router.setPassword(SecureString(QString("router-secret")));
 
-        EXPECT_TRUE(db.addRouter(router));
-        return router.routerId();
+        EXPECT_TRUE(db.setRouterConfig(router));
     }
 
-    static void addRouterHost(Database& db, qint64 router_id, HostId host_id,
-                              const QString& username, const QString& password)
+    static void addRouterHost(Database& db, HostId host_id, const QString& username, const QString& password)
     {
         RouterHostConfig host;
-        host.setRouterId(router_id);
         host.setHostId(host_id);
         host.setUsername(username);
         host.setPassword(SecureString(password));
@@ -220,14 +214,12 @@ protected:
         return credential.id();
     }
 
-    static qint64 addRoutedHost(Database& db, const QString& name, qint64 group_id,
-                                qint64 router_id, const QString& address)
+    static qint64 addRoutedHost(Database& db, const QString& name, qint64 group_id, const QString& address)
     {
         LocalHostConfig host;
         host.setName(name);
         host.setAddress(address);
         host.setGroupId(group_id);
-        host.setRouterId(router_id);
 
         EXPECT_TRUE(db.addLocalHost(host));
         return host.id();
@@ -247,13 +239,6 @@ protected:
         QList<LocalGroupConfig> groups;
         EXPECT_TRUE(db.allLocalGroups(&groups));
         return groups;
-    }
-
-    static QList<RouterConfig> routerList(Database& db)
-    {
-        QList<RouterConfig> routers;
-        EXPECT_EQ(db.routerList(&routers), Database::ReadResult::OK);
-        return routers;
     }
 
     static QList<RouterHostConfig> allRouterHosts(Database& db)
@@ -412,6 +397,26 @@ protected:
         file.write(serialize(file_message));
     }
 
+    // Marks the file with |version| and leaves the rest of it as the export wrote it.
+    void setFileVersion(quint32 version)
+    {
+        proto::storage::BackupFile file_message;
+
+        {
+            QFile file(backupPath());
+            ASSERT_TRUE(file.open(QIODevice::ReadOnly));
+            ASSERT_TRUE(parse(file.readAll(), &file_message));
+        }
+
+        file_message.set_version(version);
+
+        const QByteArray payload = serialize(file_message);
+
+        QFile file(backupPath());
+        ASSERT_TRUE(file.open(QIODevice::WriteOnly | QIODevice::Truncate));
+        ASSERT_EQ(file.write(payload), payload.size());
+    }
+
     // The guid the source book gave the group, which is how the file names it.
     QString groupGuid(qint64 group_id)
     {
@@ -511,29 +516,6 @@ TEST_F(BackupTest, FileNamingAParentItDoesNotCarryIsNotImported)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A guid is what names a router across databases, so a router of the file carries one. A record
-// without it names nothing, and the hosts of the file reaching that router would arrive reaching
-// none.
-TEST_F(BackupTest, FileWithARouterWithoutAGuidIsNotImported)
-{
-    addRouter(source_, "router", "router.example.com");
-    addHost(source_, "direct", 0);
-
-    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
-
-    editFileContent([](proto::storage::BackupFile::Content* data)
-    {
-        ASSERT_EQ(data->routers_size(), 1);
-        data->mutable_routers(0)->clear_guid();
-    });
-
-    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
-
-    EXPECT_TRUE(routerList(target_).isEmpty());
-    EXPECT_TRUE(allLocalHosts(target_).isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
 // A guid names one group in any database, so a file carrying two of them under one guid is not a
 // file this application wrote.
 TEST_F(BackupTest, FileWithTwoGroupsUnderOneGuidIsNotImported)
@@ -574,35 +556,35 @@ TEST_F(BackupTest, FileWhoseGroupsNameEachOtherIsNotImported)
 // the whole file with it, because the reader has no way to tell which half of a file to believe.
 TEST_F(BackupTest, FileWithARouterWithoutAPasswordIsNotImported)
 {
-    addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
     editFileContent([](proto::storage::BackupFile::Content* data)
     {
-        ASSERT_EQ(data->routers_size(), 1);
-        data->mutable_routers(0)->clear_password();
+        ASSERT_TRUE(data->has_router());
+        data->mutable_router()->clear_password();
     });
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
-    EXPECT_TRUE(routerList(target_).isEmpty());
+    EXPECT_FALSE(findRouter(target_).has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
 TEST_F(BackupTest, FileWithARouterOfAnUnknownSessionTypeIsNotImported)
 {
-    addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
     editFileContent([](proto::storage::BackupFile::Content* data)
     {
-        ASSERT_EQ(data->routers_size(), 1);
-        data->mutable_routers(0)->set_session_type(proto::router::SESSION_TYPE_HOST);
+        ASSERT_TRUE(data->has_router());
+        data->mutable_router()->set_session_type(proto::router::SESSION_TYPE_HOST);
     });
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
-    EXPECT_TRUE(routerList(target_).isEmpty());
+    EXPECT_FALSE(findRouter(target_).has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -722,45 +704,6 @@ TEST_F(BackupTest, FileWithTwoHostsUnderOneGuidIsNotImported)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A host reaches the router named among the routers of the file, or no router at all.
-TEST_F(BackupTest, FileWhereAHostReachesARouterItDoesNotCarryIsNotImported)
-{
-    const qint64 group = addGroup(source_, "group", 0);
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
-    addRoutedHost(source_, "through-router", group, router_id, "100500");
-
-    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
-
-    editFileContent([](proto::storage::BackupFile::Content* data)
-    {
-        ASSERT_EQ(data->local_hosts_size(), 1);
-        data->mutable_local_hosts(0)->set_router_guid(unknownGuid().toStdString());
-    });
-
-    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
-    EXPECT_TRUE(hostNames(target_).isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
-// The same holds for the credentials saved for a host of a router.
-TEST_F(BackupTest, FileWhereCredentialsNameARouterItDoesNotCarryIsNotImported)
-{
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
-    addRouterHost(source_, router_id, 100500, "user", "secret");
-
-    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
-
-    editFileContent([](proto::storage::BackupFile::Content* data)
-    {
-        ASSERT_EQ(data->router_hosts_size(), 1);
-        data->mutable_router_hosts(0)->set_router_guid(unknownGuid().toStdString());
-    });
-
-    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
-    EXPECT_TRUE(allRouterHosts(target_).isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
 // The file is sealed with the key of the book it came from, and nothing is written without it.
 TEST_F(BackupTest, BookIsNotImportedWithAnotherPassword)
 {
@@ -796,108 +739,55 @@ TEST_F(BackupTest, NothingOfTheBookIsReadableInTheFile)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The credentials saved for hosts of a router travel with that router. The id it has here belongs
-// to the database it came from, so what they hang on is the router the import wrote.
+// The credentials saved for hosts of the router travel with the router. They are named by the id
+// of the host on the router, so they come back for the router the import wrote and not for the one
+// the database held before.
 TEST_F(BackupTest, SavedCredentialsFollowTheirRouter)
 {
-    const qint64 source_router = addRouter(source_, "router", "router.example.com");
-    addRouterHost(source_, source_router, 100500, "user", "secret");
-    addRouterHost(source_, source_router, 100501, "other-user", "other-secret");
-
-    const std::optional<RouterConfig> original = findRouter(source_, source_router);
-    ASSERT_TRUE(original.has_value());
+    addRouter(source_, "router.example.com");
+    addRouterHost(source_, 100500, "user", "secret");
+    addRouterHost(source_, 100501, "other-user", "other-secret");
 
     Backup::Report export_counts;
     ASSERT_EQ(exportBook(&export_counts), Backup::Result::SUCCESS);
     EXPECT_EQ(export_counts.router_hosts, 2);
 
     // A router of this database, which the file replaces along with everything else.
-    addRouter(target_, "decoy", "decoy.example.com");
+    addRouter(target_, "decoy.example.com");
 
     Backup::Report report;
     ASSERT_EQ(importBook(&report), Backup::Result::SUCCESS);
 
-    EXPECT_EQ(report.routers, 1);
+    EXPECT_TRUE(report.router);
     EXPECT_EQ(report.router_hosts, 2);
 
-    const QList<RouterConfig> routers = routerList(target_);
-    ASSERT_EQ(routers.size(), 1);
-    EXPECT_EQ(routers.front().guid(), original->guid());
+    ASSERT_TRUE(findRouter(target_).has_value());
 
-    const qint64 target_router = routers.front().routerId();
-
-    const std::optional<RouterHostConfig> stored = findRouterHost(target_, target_router, 100500);
+    const std::optional<RouterHostConfig> stored = findRouterHost(target_, 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->username(), QString("user"));
     EXPECT_EQ(stored->password().toString(), QString("secret"));
 
-    EXPECT_TRUE(findRouterHost(target_, target_router, 100501).has_value());
+    EXPECT_TRUE(findRouterHost(target_, 100501).has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
-// The guid is what binds the saved credentials to a router across databases, so a router created
-// by the import carries the guid of the file, and the credentials arrive bound to it.
-TEST_F(BackupTest, ImportedRouterKeepsItsGuid)
+// A router that was turned off comes back turned off.
+TEST_F(BackupTest, RouterTurnedOffStaysTurnedOff)
 {
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
-    addRouterHost(source_, router_id, 100500, "user", "secret");
-
-    const std::optional<RouterConfig> original = findRouter(source_, router_id);
-    ASSERT_TRUE(original.has_value());
+    RouterConfig router;
+    router.setAddress("router.example.com");
+    router.setUsername("router-user");
+    router.setPassword(SecureString(QString("router-secret")));
+    router.setEnabled(false);
+    ASSERT_TRUE(source_.setRouterConfig(router));
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
 
-    const QList<RouterConfig> routers = routerList(target_);
-    ASSERT_EQ(routers.size(), 1);
-    EXPECT_EQ(routers.front().guid(), original->guid());
-
-    const std::optional<RouterHostConfig> stored =
-        findRouterHost(target_, routers.front().routerId(), 100500);
-    ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->username(), "user");
-    EXPECT_EQ(stored->password().toString(), "secret");
-}
-
-//--------------------------------------------------------------------------------------------------
-// A name of its own is not required of a router, and the address book shows the address in place of
-// it. Written into the record on the way in, the address would become a name the user never gave
-// and would stay behind when the address changes.
-TEST_F(BackupTest, RouterWithoutANameComesBackWithoutOne)
-{
-    addRouter(source_, QString(), "router.example.com");
-
-    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
-    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
-
-    const QList<RouterConfig> routers = routerList(target_);
-    ASSERT_EQ(routers.size(), 1);
-
-    EXPECT_TRUE(routers.front().displayName().isEmpty());
-    EXPECT_EQ(routers.front().displayLabel(), "router.example.com");
-}
-
-//--------------------------------------------------------------------------------------------------
-// A guid names one router, so a file naming two of them by the same guid is not an address book.
-// Nothing of it is taken, not even the records that are fine on their own.
-TEST_F(BackupTest, FileNamingOneRouterTwiceIsNotImported)
-{
-    addRouter(source_, "first", "first.example.com");
-    addRouter(source_, "second", "second.example.com");
-    addGroup(source_, "group", 0);
-
-    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
-
-    editFileContent([](proto::storage::BackupFile::Content* data)
-    {
-        ASSERT_EQ(data->routers_size(), 2);
-        data->mutable_routers(1)->set_guid(data->routers(0).guid());
-    });
-
-    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
-
-    EXPECT_TRUE(routerList(target_).isEmpty());
-    EXPECT_TRUE(groupNames(target_).isEmpty());
+    const std::optional<RouterConfig> imported = findRouter(target_);
+    ASSERT_TRUE(imported.has_value());
+    EXPECT_FALSE(imported->isEnabled());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -906,16 +796,15 @@ TEST_F(BackupTest, FileNamingOneRouterTwiceIsNotImported)
 // file carrying one is not a file this application wrote.
 TEST_F(BackupTest, SavedCredentialsOfATemporaryHostAreNotImported)
 {
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
 
     RouterHostConfig temporary;
-    temporary.setRouterId(router_id);
     temporary.setHostId(kMinTempHostId);
     temporary.setUsername("user");
     temporary.setPassword(SecureString(QString("secret")));
     EXPECT_FALSE(source_.addRouterHost(temporary));
 
-    addRouterHost(source_, router_id, 100500, "other-user", "other-secret");
+    addRouterHost(source_, 100500, "other-user", "other-secret");
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
@@ -952,12 +841,12 @@ TEST_F(BackupTest, FreshBookExportsItsDefaultProfile)
 // no file is written at all and no half-empty file is left behind.
 TEST_F(BackupTest, BookThatCannotBeReadWholeIsNotExported)
 {
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
     const qint64 group = addGroup(source_, "group", 0);
 
     addHost(source_, "host", group);
-    addRoutedHost(source_, "through-router", group, router_id, "100500");
-    addRouterHost(source_, router_id, 100500, "user", "secret");
+    addRoutedHost(source_, "through-router", group, "100500");
+    addRouterHost(source_, 100500, "user", "secret");
 
     // The key of the process is what opens the sealed columns of the address book.
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
@@ -994,18 +883,18 @@ TEST_F(BackupTest, BookWithOneUnreadableHostIsNotExported)
 // side.
 TEST_F(BackupTest, WholeBookTravels)
 {
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
     const qint64 group = addGroup(source_, "group", 0);
 
     addHost(source_, "direct", group);
-    addRoutedHost(source_, "through-router", group, router_id, "100500");
-    addRouterHost(source_, router_id, 100500, "user", "secret");
+    addRoutedHost(source_, "through-router", group, "100500");
+    addRouterHost(source_, 100500, "user", "secret");
     addCredential(source_, "office", "user", "secret");
 
     Backup::Report exported;
     ASSERT_EQ(exportBook(&exported), Backup::Result::SUCCESS);
 
-    EXPECT_EQ(exported.routers, 1);
+    EXPECT_TRUE(exported.router);
     EXPECT_EQ(exported.local_groups, 1);
     EXPECT_EQ(exported.local_hosts, 2);
     EXPECT_EQ(exported.router_hosts, 1);
@@ -1014,7 +903,7 @@ TEST_F(BackupTest, WholeBookTravels)
     Backup::Report imported;
     ASSERT_EQ(importBook(&imported), Backup::Result::SUCCESS);
 
-    EXPECT_EQ(imported.routers, 1);
+    EXPECT_TRUE(imported.router);
     EXPECT_EQ(imported.local_groups, 1);
     EXPECT_EQ(imported.local_hosts, 2);
     EXPECT_EQ(imported.router_hosts, 1);
@@ -1074,28 +963,6 @@ TEST_F(BackupTest, MomentsOfAHostTravelWithIt)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A host whose router the book no longer has is not a host anyone left out, so it travels. The
-// router it named is gone, so in the file the host stands on its own.
-TEST_F(BackupTest, HostOfARemovedRouterTravels)
-{
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
-
-    addRoutedHost(source_, "through-router", 0, router_id, "100500");
-    ASSERT_TRUE(source_.removeRouter(router_id));
-
-    Backup::Report report;
-    ASSERT_EQ(exportBook(&report), Backup::Result::SUCCESS);
-
-    EXPECT_EQ(report.local_hosts, 1);
-
-    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
-
-    ASSERT_EQ(allLocalHosts(target_).size(), 1);
-    EXPECT_EQ(allLocalHosts(target_).first().name(), QString("through-router"));
-    EXPECT_EQ(allLocalHosts(target_).first().routerId(), 0);
-}
-
-//--------------------------------------------------------------------------------------------------
 // An import is a restore: what the address book held before is gone, and what the file carries
 // stands in its place.
 TEST_F(BackupTest, ImportReplacesTheWholeBook)
@@ -1106,10 +973,10 @@ TEST_F(BackupTest, ImportReplacesTheWholeBook)
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
     // What the target machine held before the file was read.
-    const qint64 own_router = addRouter(target_, "own router", "other.example.com");
+    addRouter(target_, "other.example.com");
     const qint64 own_group = addGroup(target_, "own group", 0);
-    addRoutedHost(target_, "own host", own_group, own_router, "100500");
-    addRouterHost(target_, own_router, 100500, "user", "secret");
+    addRoutedHost(target_, "own host", own_group, "100500");
+    addRouterHost(target_, 100500, "user", "secret");
     addCredential(target_, "own credential", "user", "secret");
     addProfile(target_, "own profile");
 
@@ -1121,7 +988,7 @@ TEST_F(BackupTest, ImportReplacesTheWholeBook)
 
     EXPECT_EQ(groupNames(target_), QStringList({ "from the file" }));
     EXPECT_EQ(hostNames(target_), QStringList({ "host of the file" }));
-    EXPECT_TRUE(routerList(target_).isEmpty());
+    EXPECT_FALSE(findRouter(target_).has_value());
     EXPECT_TRUE(allRouterHosts(target_).isEmpty());
     EXPECT_TRUE(credentialList(target_).isEmpty());
     EXPECT_TRUE(profileList(target_).isEmpty());
@@ -1131,17 +998,17 @@ TEST_F(BackupTest, ImportReplacesTheWholeBook)
 // The same file read twice leaves the same address book, and no copy of anything appears.
 TEST_F(BackupTest, ImportedTwiceLeavesOneBook)
 {
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
     const qint64 group = addGroup(source_, "group", 0);
 
-    addRoutedHost(source_, "through-router", group, router_id, "100500");
-    addRouterHost(source_, router_id, 100500, "user", "secret");
+    addRoutedHost(source_, "through-router", group, "100500");
+    addRouterHost(source_, 100500, "user", "secret");
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
 
-    EXPECT_EQ(routerList(target_).size(), 1);
+    EXPECT_TRUE(findRouter(target_).has_value());
     EXPECT_EQ(allLocalGroups(target_).size(), 1);
     EXPECT_EQ(allLocalHosts(target_).size(), 1);
     EXPECT_EQ(allRouterHosts(target_).size(), 1);
@@ -1169,23 +1036,19 @@ TEST_F(BackupTest, FileOfAnotherVersionIsNamedByItsVersion)
     addGroup(source_, "group", 0);
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    ASSERT_NO_FATAL_FAILURE(setFileVersion(3));
 
-    proto::storage::BackupFile file_message;
+    EXPECT_EQ(importBook(), Backup::Result::UNSUPPORTED_VERSION);
+}
 
-    {
-        QFile file(backupPath());
-        ASSERT_TRUE(file.open(QIODevice::ReadOnly));
-        ASSERT_TRUE(parse(file.readAll(), &file_message));
-    }
+//--------------------------------------------------------------------------------------------------
+// A file of the first version comes from a book that held several routers, so it is not imported.
+TEST_F(BackupTest, FileOfTheFirstVersionIsNotImported)
+{
+    addGroup(source_, "group", 0);
 
-    file_message.set_version(file_message.version() + 1);
-
-    const QByteArray payload = serialize(file_message);
-
-    QFile file(backupPath());
-    ASSERT_TRUE(file.open(QIODevice::WriteOnly | QIODevice::Truncate));
-    ASSERT_EQ(file.write(payload), payload.size());
-    file.close();
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    ASSERT_NO_FATAL_FAILURE(setFileVersion(1));
 
     EXPECT_EQ(importBook(), Backup::Result::UNSUPPORTED_VERSION);
 }
@@ -1227,37 +1090,32 @@ TEST_F(BackupTest, ReportOfARefusedImportCountsNothing)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A host reached through a router keeps naming it across the file. The router arrives in the book
-// as a new record with an id of its own, so a host left with the id the file carries would name
-// nothing, and the book would show it as a direct connection to an address that is a host id.
+// A database holds one router, so the file names no router for a host: a host reached by its ID goes
+// through the router of the database it is imported into, and a direct one stays direct.
 TEST_F(BackupTest, HostFollowsItsRouter)
 {
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
     const qint64 group = addGroup(source_, "group", 0);
 
     addHost(source_, "direct", group);
-    addRoutedHost(source_, "through-router", group, router_id, "100500");
+    addRoutedHost(source_, "through-router", group, "100500");
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
-    // A router of this book, which the import replaces along with everything else. Its id is spent,
-    // so the record that arrives cannot get the id the file names it by.
-    addRouter(target_, "decoy", "decoy.example.com");
+    // A router of this book, which the import replaces along with everything else.
+    addRouter(target_, "decoy.example.com");
 
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
 
-    const QList<RouterConfig> routers = routerList(target_);
-    ASSERT_EQ(routers.size(), 1);
-    ASSERT_NE(routers.front().routerId(), router_id);
+    const std::optional<RouterConfig> router = findRouter(target_);
+    ASSERT_TRUE(router.has_value());
+    EXPECT_EQ(router->address(), QString("router.example.com"));
 
     const std::optional<LocalHostConfig> routed = hostByName(target_, "through-router");
     ASSERT_TRUE(routed.has_value());
-    EXPECT_EQ(routed->routerId(), routers.front().routerId());
+    EXPECT_EQ(routed->address(), QString("100500"));
 
-    // A host of the file that reaches no router keeps reaching none.
-    const std::optional<LocalHostConfig> direct = hostByName(target_, "direct");
-    ASSERT_TRUE(direct.has_value());
-    EXPECT_EQ(direct->routerId(), 0);
+    EXPECT_TRUE(hostByName(target_, "direct").has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1342,7 +1200,7 @@ TEST_F(BackupTest, FileWithABrokenCredentialIsNotImported)
 TEST_F(BackupTest, HostsKeepTheirLinksToCredentialsThroughTheFile)
 {
     const qint64 credential_id = addCredential(source_, "office", "user", "secret");
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
 
     LocalHostConfig local_host;
     local_host.setName("host");
@@ -1351,7 +1209,6 @@ TEST_F(BackupTest, HostsKeepTheirLinksToCredentialsThroughTheFile)
     ASSERT_TRUE(source_.addLocalHost(local_host));
 
     RouterHostConfig router_host;
-    router_host.setRouterId(router_id);
     router_host.setHostId(100500);
     router_host.setCredentialId(credential_id);
     ASSERT_TRUE(source_.addRouterHost(router_host));
@@ -1383,7 +1240,7 @@ TEST_F(BackupTest, HostsKeepTheirOsCredentialsThroughTheFile)
     os.setPassword(SecureString(QString("secret")));
     ASSERT_TRUE(source_.addCredential(os));
 
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
 
     LocalHostConfig local_host;
     local_host.setName("host");
@@ -1392,12 +1249,11 @@ TEST_F(BackupTest, HostsKeepTheirOsCredentialsThroughTheFile)
     ASSERT_TRUE(source_.setLocalHostOsCredentialId(local_host.id(), os.id()));
 
     RouterHostConfig router_host;
-    router_host.setRouterId(router_id);
     router_host.setHostId(100500);
     router_host.setUsername("user");
     router_host.setPassword(SecureString(QString("secret")));
     ASSERT_TRUE(source_.addRouterHost(router_host));
-    ASSERT_TRUE(source_.setRouterHostOsCredentialId(router_id, 100500, os.id()));
+    ASSERT_TRUE(source_.setRouterHostOsCredentialId(100500, os.id()));
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
@@ -1418,7 +1274,7 @@ TEST_F(BackupTest, HostsKeepTheirOsCredentialsThroughTheFile)
 // The operating system credentials of a host are a record the file carries, or none.
 TEST_F(BackupTest, FileWhereAHostNamesOsCredentialsItDoesNotCarryIsNotImported)
 {
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
 
     LocalHostConfig local_host;
     local_host.setName("host");
@@ -1426,7 +1282,6 @@ TEST_F(BackupTest, FileWhereAHostNamesOsCredentialsItDoesNotCarryIsNotImported)
     ASSERT_TRUE(source_.addLocalHost(local_host));
 
     RouterHostConfig router_host;
-    router_host.setRouterId(router_id);
     router_host.setHostId(100500);
     router_host.setUsername("user");
     router_host.setPassword(SecureString(QString("secret")));
@@ -1455,7 +1310,7 @@ TEST_F(BackupTest, FileWhereAHostNamesOsCredentialsItDoesNotCarryIsNotImported)
 TEST_F(BackupTest, FileWhereAHostNamesCredentialsItDoesNotCarryIsNotImported)
 {
     const qint64 credential_id = addCredential(source_, "office", "user", "secret");
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
 
     LocalHostConfig local_host;
     local_host.setName("host");
@@ -1473,7 +1328,6 @@ TEST_F(BackupTest, FileWhereAHostNamesCredentialsItDoesNotCarryIsNotImported)
     ASSERT_TRUE(source_.removeLocalHost(local_host.id()));
 
     RouterHostConfig router_host;
-    router_host.setRouterId(router_id);
     router_host.setHostId(100500);
     router_host.setCredentialId(credential_id);
     ASSERT_TRUE(source_.addRouterHost(router_host));
@@ -1496,10 +1350,9 @@ TEST_F(BackupTest, FileWhereAHostNamesCredentialsItDoesNotCarryIsNotImported)
 TEST_F(BackupTest, BookWithALinkedRouterHostThatDoesNotOpenIsNotExported)
 {
     const qint64 credential_id = addCredential(source_, "office", "user", "secret");
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
 
     RouterHostConfig host;
-    host.setRouterId(router_id);
     host.setHostId(100500);
     host.setCredentialId(credential_id);
     host.setUsername("own-user");
@@ -1629,7 +1482,7 @@ TEST_F(BackupTest, FileWithABrokenProfileIsNotImported)
 TEST_F(BackupTest, HostsKeepTheirProfilesThroughTheFile)
 {
     const qint64 profile_id = addProfile(source_, "office");
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
 
     LocalHostConfig local_host;
     local_host.setName("host");
@@ -1637,7 +1490,7 @@ TEST_F(BackupTest, HostsKeepTheirProfilesThroughTheFile)
     local_host.setProfileId(profile_id);
     ASSERT_TRUE(source_.addLocalHost(local_host));
 
-    ASSERT_TRUE(source_.setRouterHostProfileId(router_id, 100500, profile_id));
+    ASSERT_TRUE(source_.setRouterHostProfileId(100500, profile_id));
 
     Backup::Report exported;
     ASSERT_EQ(exportBook(&exported), Backup::Result::SUCCESS);
@@ -1663,14 +1516,14 @@ TEST_F(BackupTest, HostsKeepTheirProfilesThroughTheFile)
 TEST_F(BackupTest, FileWhereAHostNamesAProfileItDoesNotCarryIsNotImported)
 {
     const qint64 profile_id = addProfile(source_, "office");
-    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouter(source_, "router.example.com");
 
     LocalHostConfig local_host;
     local_host.setName("host");
     local_host.setAddress("192.168.0.1");
     ASSERT_TRUE(source_.addLocalHost(local_host));
 
-    ASSERT_TRUE(source_.setRouterHostProfileId(router_id, 100500, profile_id));
+    ASSERT_TRUE(source_.setRouterHostProfileId(100500, profile_id));
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     editFileContent([](proto::storage::BackupFile::Content* data)

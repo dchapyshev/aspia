@@ -40,14 +40,11 @@ public:
     qint64 entryId() const { return entry_id_; }
 
 private slots:
-    void onRouterChanged(int index);
     void onSavedCredentialsToggled(bool checked);
     void onButtonBoxClicked(QAbstractButton* button);
     void onLoadData();
 
 private:
-    void updateAddressLabel();
-
     std::unique_ptr<Ui::LocalHostDialog> ui;
     qint64 entry_id_ = -1;
     qint64 group_id_ = 0;

@@ -69,7 +69,7 @@ QJsonObject FindLocalHostsTool::definition() const
         { "name", name() },
         { "description", "Lists the hosts saved in the local database of Aspia Client, or only those whose name, "
                          "address or comment contains the query, ignoring case, and that are in the given group. The "
-                         "hosts of routers are found by find_router_hosts. Passwords, user names and comments are "
+                         "hosts of the router are found by find_router_hosts. Passwords, user names and comments are "
                          "never returned." },
         { "inputSchema", QJsonObject{ { "type", "object" },
                                       { "properties", QJsonObject{ { "query", query }, { "group_id", group_id } } },

@@ -30,6 +30,7 @@
 
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
+#include "base/peer/host_id.h"
 #include "client/desktop/management/drag_and_drop.h"
 #include "client/desktop/management/ui_local_group_widget.h"
 #include "client/online_checker/online_checker.h"
@@ -98,7 +99,7 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
             this, &LocalGroupWidget::onOnlineCheckerFinished);
 
     connect(&RouterController::instance(), &RouterController::sig_statusChanged, this,
-            [this](qint64 router_id, RouterStatus status)
+            [this](RouterStatus status)
     {
         if (status != RouterStatus::ONLINE)
             return;
@@ -106,7 +107,7 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
         QList<qint64> ids;
         for (const LocalHostConfig& host : model_->hosts())
         {
-            if (host.routerId() == router_id)
+            if (isHostId(host.address()))
                 ids.append(host.id());
         }
 

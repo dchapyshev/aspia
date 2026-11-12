@@ -18,9 +18,9 @@
 
 #include "base/logging.h"
 #include "base/threading/asio_event_dispatcher.h"
+#include "client/storage/settings.h"
 
 #include <QApplication>
-#include <QSettings>
 #include <QTemporaryDir>
 #include <QTimer>
 
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
         // the whole store when it sees an older version. The store goes to a directory of its own,
         // which is removed with the process.
         QTemporaryDir settings_dir;
-        QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, settings_dir.path());
+        Settings::setFilePathForTesting(settings_dir.filePath("settings.ini"));
 
         // The widgets under test are drawn into memory: the run needs no display and opens no
         // window on the machine it runs on.

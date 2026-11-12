@@ -31,8 +31,8 @@
 #include "common/android/controls.h"
 #include "common/android/label.h"
 #include "common/android/line_edit.h"
-#include "common/android/message_dialog.h"
 #include "common/android/scroll_area.h"
+#include "common/android/switch.h"
 #include "proto/router.h"
 
 namespace {
@@ -45,13 +45,12 @@ constexpr int kFormSpacing = 8;
 //--------------------------------------------------------------------------------------------------
 RouterEditor::RouterEditor(QWidget* parent)
     : QWidget(parent),
-      edit_name_(new LineEdit()),
       edit_address_(new LineEdit()),
       edit_username_(new LineEdit()),
       edit_password_(new LineEdit()),
+      switch_enabled_(new Switch(tr("Enabled"))),
       label_error_(new Label(QString(), Label::Role::CAPTION))
 {
-    edit_name_->setLabel(tr("Name"));
     edit_address_->setLabel(tr("Address"));
     edit_username_->setLabel(tr("User Name"));
     edit_password_->setLabel(tr("Password"));
@@ -65,22 +64,16 @@ RouterEditor::RouterEditor(QWidget* parent)
 
     Button* save = new Button(tr("Save"), Button::Role::FILLED);
 
-    // The delete action is destructive, so its text is tinted red and it shows only when editing.
-    button_delete_ = new Button(tr("Delete"), Button::Role::TEXT);
-    button_delete_->setAccentColor(Controls::errorColor());
-    button_delete_->hide();
-
     QWidget* form = new QWidget();
     QVBoxLayout* form_layout = new QVBoxLayout(form);
     form_layout->setContentsMargins(kFormMargin, kFormMargin, kFormMargin, kFormMargin);
     form_layout->setSpacing(kFormSpacing);
     form_layout->addWidget(label_error_);
-    form_layout->addWidget(edit_name_);
     form_layout->addWidget(edit_address_);
     form_layout->addWidget(edit_username_);
     form_layout->addWidget(edit_password_);
+    form_layout->addWidget(switch_enabled_);
     form_layout->addWidget(save);
-    form_layout->addWidget(button_delete_);
     form_layout->addStretch();
 
     ScrollArea* scroll = new ScrollArea(this);
@@ -92,7 +85,6 @@ RouterEditor::RouterEditor(QWidget* parent)
     layout->addWidget(scroll);
 
     connect(save, &Button::clicked, this, &RouterEditor::onSaveClicked);
-    connect(button_delete_, &Button::clicked, this, &RouterEditor::onDeleteClicked);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -101,43 +93,37 @@ RouterEditor::~RouterEditor() = default;
 //--------------------------------------------------------------------------------------------------
 void RouterEditor::prepareForAdd()
 {
-    router_id_ = -1;
-
-    edit_name_->clear();
     edit_address_->clear();
     edit_username_->clear();
     edit_password_->clear();
+    switch_enabled_->setChecked(true);
     label_error_->setVisible(false);
-    button_delete_->hide();
 
-    edit_name_->setFocus();
+    edit_address_->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
-bool RouterEditor::prepareForEdit(qint64 router_id)
+bool RouterEditor::prepareForEdit()
 {
     RouterConfig router;
-    const Database::FindResult found = Database::instance().findRouter(router_id, &router);
+    const Database::FindResult found = Database::instance().routerConfig(&router);
     if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
     {
-        LOG(ERROR) << "Router not found:" << router_id;
+        LOG(ERROR) << "Router not found:" << found;
         return false;
     }
 
-    router_id_ = router_id;
-
-    edit_name_->setText(router.displayName());
     edit_address_->setText(router.address());
     edit_username_->setText(router.username());
     edit_password_->setText(router.password().toString());
+    switch_enabled_->setChecked(router.isEnabled());
     label_error_->setVisible(false);
-    button_delete_->show();
 
-    edit_name_->setFocus();
+    edit_address_->setFocus();
 
     if (found == Database::FindResult::UNREADABLE)
     {
-        LOG(ERROR) << "Data of router" << router_id << "could not be read";
+        LOG(ERROR) << "Data of the router could not be read";
         showError(tr("The data of the router is damaged. Enter it again."));
     }
 
@@ -147,15 +133,6 @@ bool RouterEditor::prepareForEdit(qint64 router_id)
 //--------------------------------------------------------------------------------------------------
 void RouterEditor::onSaveClicked()
 {
-    if (edit_name_->text().length() > RouterConfig::kMaxNameLength)
-    {
-        showError(tr("Too long name. The maximum length of the name is %n characters.",
-                     "", RouterConfig::kMaxNameLength));
-        edit_name_->setFocus();
-        edit_name_->selectAll();
-        return;
-    }
-
     const QString address_text = edit_address_->text();
     Address address = Address::fromString(address_text, kDefaultRouterClientTcpPort);
     if (!address.isValid())
@@ -186,57 +163,34 @@ void RouterEditor::onSaveClicked()
     }
 
     RouterConfig data;
-    data.setRouterId(router_id_);
-    data.setDisplayName(edit_name_->text());
     data.setAddress(address_text);
     data.setSessionType(proto::router::SESSION_TYPE_OPERATOR);
     data.setUsername(username);
     data.setPassword(password);
+    data.setEnabled(switch_enabled_->isChecked());
 
     Database& db = Database::instance();
 
     // The token is not edited here. The login of this record writes a fresh one whenever a TOTP
     // code is accepted, so it is read now instead of when the editor opened and a token issued
-    // meanwhile survives the save. It belongs to the account of the record, and an edit that
+    // meanwhile survives the save. It belongs to the account of the router, and an edit that
     // changes the account leaves it behind, because presented for another one it would only be
     // refused.
-    if (router_id_ >= 0)
+    RouterConfig stored;
+    const Database::FindResult stored_found = db.routerConfig(&stored);
+    if (stored_found == Database::FindResult::FAILED)
     {
-        RouterConfig stored;
-        const Database::FindResult stored_found = db.findRouter(router_id_, &stored);
-        if (stored_found == Database::FindResult::NOT_FOUND ||
-            stored_found == Database::FindResult::FAILED)
-        {
-            LOG(ERROR) << "Failed to re-read router" << router_id_;
-            showError(tr("Failed to save the router."));
-            return;
-        }
-        if (stored.hasSameAccount(data))
-            data.setDeviceToken(stored.deviceToken());
-    }
-
-    const bool saved = (router_id_ < 0) ? db.addRouter(data) : db.modifyRouter(data);
-    if (!saved)
-    {
+        LOG(ERROR) << "Failed to re-read the router";
         showError(tr("Failed to save the router."));
         return;
     }
 
-    emit sig_accepted();
-}
+    if (stored_found == Database::FindResult::FOUND && stored.hasSameAccount(data))
+        data.setDeviceToken(stored.deviceToken());
 
-//--------------------------------------------------------------------------------------------------
-void RouterEditor::onDeleteClicked()
-{
-    if (!MessageDialog::confirm(this, tr("Delete Router"),
-                                tr("Delete the router \"%1\"?").arg(edit_name_->text()), tr("Delete")))
+    if (!db.setRouterConfig(data))
     {
-        return;
-    }
-
-    if (!Database::instance().removeRouter(router_id_))
-    {
-        showError(tr("Failed to delete the router."));
+        showError(tr("Failed to save the router."));
         return;
     }
 

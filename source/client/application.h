@@ -31,6 +31,8 @@ public:
 
     static Application* instance();
 
+    bool isMigrationFailed() const { return migration_failed_; }
+
 public slots:
     void activateWindow();
 
@@ -38,6 +40,8 @@ signals:
     void sig_windowActivated();
 
 private:
+    bool migration_failed_ = false;
+
     Q_DISABLE_COPY_MOVE(Application)
 };
 

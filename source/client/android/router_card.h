@@ -29,17 +29,13 @@ class Label;
 class QLabel;
 class QVBoxLayout;
 
-// A router row in the routers list: an ExpandablePanel whose header shows the status icon and name,
-// opens the connection event log on tap and the editor on a long press.
 class RouterCard final : public ExpandablePanel
 {
     Q_OBJECT
 
 public:
-    RouterCard(qint64 router_id, const QString& name, QWidget* parent = nullptr);
+    explicit RouterCard(const QString& name, QWidget* parent = nullptr);
     ~RouterCard() final;
-
-    qint64 routerId() const { return router_id_; }
 
     void setStatus(RouterStatus status);
     void updateTwoFactorButton();
@@ -48,14 +44,13 @@ public:
     void appendEvent(const RouterEvent& event);
 
 signals:
-    void sig_expandRequested(qint64 router_id);
-    void sig_editRequested(qint64 router_id);
-    void sig_twoFactorClicked(qint64 router_id);
+    void sig_expandRequested();
+    void sig_editRequested();
+    void sig_twoFactorClicked();
 
 private:
     void clearEvents();
 
-    qint64 router_id_;
     QLabel* label_status_icon_ = nullptr;
     Label* label_name_ = nullptr;
     Button* button_two_factor_ = nullptr;

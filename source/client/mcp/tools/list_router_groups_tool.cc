@@ -60,28 +60,22 @@ QString ListRouterGroupsTool::name() const
 //--------------------------------------------------------------------------------------------------
 QJsonObject ListRouterGroupsTool::definition() const
 {
-    QJsonObject router_id{ { "type", "integer" },
-                           { "description", "Id of a router from list_routers. Without it every connected router "
-                                            "is listed." } };
-
     return QJsonObject{
         { "name", name() },
-        { "description", "Lists the workspaces of the routers saved in Aspia Client that the user can see, with the "
+        { "description", "Lists the workspaces of the router saved in Aspia Client that the user can see, with the "
                          "groups of hosts in each workspace. A group with parent_id 0 is at the root of its "
-                         "workspace, and the path holds the names of the group and its parents. A router that is "
-                         "not connected is not listed, and a warning says so. The local groups are listed by "
-                         "list_local_groups. Comments and members of the workspaces are never returned." },
-        { "inputSchema", QJsonObject{ { "type", "object" },
-                                      { "properties", QJsonObject{ { "router_id", router_id } } },
-                                      { "additionalProperties", false } } } };
+                         "workspace, and the path holds the names of the group and its parents. The router must "
+                         "be connected. The local groups are listed by list_local_groups. Comments and members of "
+                         "the workspaces are never returned." },
+        { "inputSchema", QJsonObject{ { "type", "object" }, { "additionalProperties", false } } } };
 }
 
 //--------------------------------------------------------------------------------------------------
-void ListRouterGroupsTool::call(const QJsonObject& arguments, Reply reply)
+void ListRouterGroupsTool::call(const QJsonObject& /* arguments */, Reply reply)
 {
-    QList<RouterInfo> routers;
     QString error;
-    if (!routersFromArgument(arguments.value("router_id"), &routers, &error))
+    RouterSession* session = routerSession(&error);
+    if (!session)
     {
         reply(false, error);
         return;
@@ -91,6 +85,8 @@ void ListRouterGroupsTool::call(const QJsonObject& arguments, Reply reply)
     {
         QList<QJsonObject> workspaces;
         QJsonArray warnings;
+
+        // The workspace list counts as one, so a group reply during its loop does not finish early.
         int pending = 1;
     };
 
@@ -115,74 +111,59 @@ void ListRouterGroupsTool::call(const QJsonObject& arguments, Reply reply)
             finish();
     };
 
-    for (const RouterInfo& router : std::as_const(routers))
+    session->listWorkspaces(RouterSession::CachePolicy::USE_CACHE, 0, { &RouterController::instance(),
+        [listing, done, reply](const RouterWorkspaceList& list)
     {
-        RouterSession* session = RouterController::session(router.id);
-        if (!session)
+        if (list.error_code != proto::router::kErrorOk)
         {
-            listing->warnings.append(QString("The router \"%1\" (id %2) is not connected, its groups are not "
-                                             "listed.").arg(router.name).arg(router.id));
-            continue;
+            reply(false, QString("Unable to list the workspaces of the router: %1.").arg(list.error_code));
+            return;
         }
 
-        ++listing->pending;
-
-        session->listWorkspaces(RouterSession::CachePolicy::USE_CACHE, 0, { &RouterController::instance(),
-            [listing, done, router](const RouterWorkspaceList& list)
+        RouterSession* current_session = RouterController::session();
+        if (!current_session)
         {
-            RouterSession* current_session = RouterController::session(router.id);
-            if (list.error_code != proto::router::kErrorOk || !current_session)
+            reply(false, "The router is not connected.");
+            return;
+        }
+
+        for (const RouterWorkspace& workspace : list.workspaces)
+        {
+            const qsizetype index = listing->workspaces.size();
+            listing->workspaces.append(QJsonObject{
+                { "workspace_id", workspace.entry_id }, { "name", workspace.name },
+                { "groups", QJsonArray() } });
+
+            ++listing->pending;
+
+            current_session->listGroups(RouterSession::CachePolicy::USE_CACHE, workspace.entry_id,
+                { &RouterController::instance(), [listing, done, index](const RouterGroupList& group_list)
             {
-                listing->warnings.append(QString("Unable to list the workspaces of the router \"%1\" (id %2): "
-                                                 "%3.").arg(router.name).arg(router.id).arg(list.error_code));
-                done();
-                return;
-            }
-
-            for (const RouterWorkspace& workspace : list.workspaces)
-            {
-                const qsizetype index = listing->workspaces.size();
-                listing->workspaces.append(QJsonObject{
-                    { "router_id", router.id }, { "router", router.name },
-                    { "workspace_id", workspace.entry_id }, { "name", workspace.name },
-                    { "groups", QJsonArray() } });
-
-                ++listing->pending;
-
-                current_session->listGroups(RouterSession::CachePolicy::USE_CACHE, workspace.entry_id,
-                    { &RouterController::instance(), [listing, done, router, index](const RouterGroupList& group_list)
+                if (group_list.error_code != proto::router::kErrorOk)
                 {
-                    if (group_list.error_code != proto::router::kErrorOk)
-                    {
-                        listing->warnings.append(QString("Unable to list the groups of the workspace \"%1\" of "
-                                                         "the router \"%2\": %3.")
-                            .arg(listing->workspaces.at(index).value("name").toString(), router.name,
-                                 group_list.error_code));
-                        done();
-                        return;
-                    }
-
-                    QHash<qint64, RouterGroup> groups;
-                    for (const RouterGroup& group : group_list.groups)
-                        groups.insert(group.entry_id, group);
-
-                    QJsonArray result;
-                    for (const RouterGroup& group : group_list.groups)
-                    {
-                        result.append(QJsonObject{ { "group_id", group.entry_id }, { "name", group.name },
-                                                   { "parent_id", group.parent_id },
-                                                   { "path", groupPath(group.entry_id, groups) } });
-                    }
-
-                    listing->workspaces[index].insert("groups", result);
+                    listing->warnings.append(QString("Unable to list the groups of the workspace \"%1\": %2.")
+                        .arg(listing->workspaces.at(index).value("name").toString(), group_list.error_code));
                     done();
-                } });
-            }
+                    return;
+                }
 
-            done();
-        } });
-    }
+                QHash<qint64, RouterGroup> groups;
+                for (const RouterGroup& group : group_list.groups)
+                    groups.insert(group.entry_id, group);
 
-    // The count starts at one, so a reply that comes during the loop does not finish early.
-    done();
+                QJsonArray result;
+                for (const RouterGroup& group : group_list.groups)
+                {
+                    result.append(QJsonObject{ { "group_id", group.entry_id }, { "name", group.name },
+                                               { "parent_id", group.parent_id },
+                                               { "path", groupPath(group.entry_id, groups) } });
+                }
+
+                listing->workspaces[index].insert("groups", result);
+                done();
+            } });
+        }
+
+        done();
+    } });
 }

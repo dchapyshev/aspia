@@ -65,10 +65,8 @@ RouterStatusWidget::~RouterStatusWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::showRouter(qint64 router_id, const QList<RouterEvent>& events)
+void RouterStatusWidget::showRouter(const QList<RouterEvent>& events)
 {
-    router_id_ = router_id;
-
     ui->tree_events->clear();
     for (const RouterEvent& event : events)
         addEvent(event);
@@ -110,29 +108,23 @@ void RouterStatusWidget::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::onEvent(qint64 router_id, const RouterEvent& event)
+void RouterStatusWidget::onEvent(const RouterEvent& event)
 {
-    if (router_id != router_id_)
-        return;
-
     addEvent(event);
     ui->tree_events->scrollToBottom();
     updateTwoFactorPrompt();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::onStatusChanged(qint64 router_id)
+void RouterStatusWidget::onStatusChanged()
 {
-    if (router_id != router_id_)
-        return;
-
     updateTwoFactorPrompt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterStatusWidget::onTwoFactorClicked()
 {
-    emit sig_twoFactorClicked(router_id_);
+    emit sig_twoFactorClicked();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -171,7 +163,7 @@ void RouterStatusWidget::addEvent(const RouterEvent& event)
 //--------------------------------------------------------------------------------------------------
 void RouterStatusWidget::updateTwoFactorPrompt()
 {
-    TwoFactorPrompt* prompt = RouterController::twoFactorPrompt(router_id_);
+    TwoFactorPrompt* prompt = RouterController::twoFactorPrompt();
     if (!prompt)
     {
         ui->frame_two_factor->setVisible(false);

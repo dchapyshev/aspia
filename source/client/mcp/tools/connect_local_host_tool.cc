@@ -43,7 +43,7 @@ QJsonObject ConnectLocalHostTool::definition() const
                          "the user, who sees the authorization, its errors and the session itself. The reply "
                          "gives the client_id of the window or says that the user is asked for the credentials, "
                          "and list_clients shows the state of the client later. The credentials stay in Aspia "
-                         "Client. The hosts of routers are connected by connect_router_host." },
+                         "Client. The hosts of the router are connected by connect_router_host." },
         { "inputSchema", QJsonObject{ { "type", "object" },
                                       { "properties", QJsonObject{ { "id", id },
                                                                    { "session_type", sessionTypeSchema() } } },

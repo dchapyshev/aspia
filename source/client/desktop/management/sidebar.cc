@@ -61,9 +61,9 @@ namespace {
 constexpr Seconds kPendingItemTimeout{ 30 };
 
 //--------------------------------------------------------------------------------------------------
-bool isRouterAdmin(qint64 router_id)
+bool isRouterAdmin()
 {
-    RouterSession* session = RouterController::session(router_id);
+    RouterSession* session = RouterController::session();
     return session && session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
 }
 
@@ -71,10 +71,9 @@ bool isRouterAdmin(qint64 router_id)
 // The hosts that a drop onto the group |group_id| of the workspace |workspace_id| moves. A host
 // that is already there is left out. Only an administrator moves a host to another workspace, as
 // the server refuses it for anybody else.
-QList<RouterHost> hostsToMove(const QList<RouterHost>& hosts, qint64 router_id, qint64 workspace_id,
-                              qint64 group_id)
+QList<RouterHost> hostsToMove(const QList<RouterHost>& hosts, qint64 workspace_id, qint64 group_id)
 {
-    const bool is_admin = isRouterAdmin(router_id);
+    const bool is_admin = isRouterAdmin();
 
     QList<RouterHost> result;
     for (const RouterHost& host : hosts)
@@ -92,17 +91,9 @@ QList<RouterHost> hostsToMove(const QList<RouterHost>& hosts, qint64 router_id, 
 }
 
 //--------------------------------------------------------------------------------------------------
-// Names an item across restarts. The items of a router lie under it at the top level.
+// Names an item across restarts.
 QByteArray itemKey(const SidebarItem* item)
 {
-    const QTreeWidgetItem* top_item = item;
-    while (top_item->parent())
-        top_item = top_item->parent();
-
-    qint64 router_id = 0;
-    if (item->itemType() != SidebarItem::LOCAL_GROUP)
-        router_id = static_cast<const SidebarRouter*>(top_item)->routerId();
-
     qint64 entry_id = item->groupId();
     if (item->itemType() == SidebarItem::ROUTER_WORKSPACE)
         entry_id = static_cast<const SidebarRouterWorkspace*>(item)->workspaceId();
@@ -112,7 +103,7 @@ QByteArray itemKey(const SidebarItem* item)
     {
         QDataStream stream(&buffer, QIODevice::WriteOnly);
         stream.setVersion(QDataStream::Qt_6_10);
-        stream << static_cast<qint32>(item->itemType()) << router_id << entry_id;
+        stream << static_cast<qint32>(item->itemType()) << entry_id;
     }
 
     return buffer;
@@ -146,14 +137,14 @@ Sidebar::Sidebar(QWidget* parent)
     connect(&controller, &RouterController::sig_workspacesChanged, this, &Sidebar::onRefreshWorkspaces);
     connect(&controller, &RouterController::sig_groupsChanged, this, &Sidebar::onRefreshHostGroups);
 
-    const Database::ReadResult routers_result = loadRouters();
+    const Database::ReadResult router_result = loadRouter();
 
     LocalGroupConfig local_root_data;
     local_root_data.setId(0);
     local_root_data.setParentId(0);
     local_root_data.setName(tr("Local"));
 
-    // Create local root after routers so it appears at the bottom.
+    // Create local root after the router so it appears at the bottom.
     local_root_ = new SidebarLocalGroup(local_root_data, tree_widget_);
     local_root_->setExpanded(Settings().isLocalGroupExpanded(local_root_data.id()));
 
@@ -175,7 +166,7 @@ Sidebar::Sidebar(QWidget* parent)
 
     tree_widget_->setCurrentItem(local_root_);
 
-    if (!groups_read || routers_result == Database::ReadResult::FAILED)
+    if (!groups_read || router_result == Database::ReadResult::FAILED)
         MsgBox::warning(this, tr("Failed to read data. The list may be out of date."));
 }
 
@@ -261,19 +252,28 @@ void Sidebar::reloadGroups(qint64 selected_group_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-Database::ReadResult Sidebar::loadRouters()
+Database::ReadResult Sidebar::loadRouter()
 {
-    QList<RouterConfig> routers;
-    const Database::ReadResult result = Database::instance().routerList(&routers);
+    RouterConfig router_config;
+    const Database::FindResult found = Database::instance().routerConfig(&router_config);
 
-    if (result == Database::ReadResult::FAILED)
-        LOG(ERROR) << "Unable to read the list of routers";
-    else if (result == Database::ReadResult::INCOMPLETE)
-        LOG(ERROR) << "Unable to read some of the routers";
-
-    for (const RouterConfig& router_config : std::as_const(routers))
+    Database::ReadResult result = Database::ReadResult::OK;
+    if (found == Database::FindResult::FAILED)
     {
-        SidebarRouter* router = new SidebarRouter(router_config.routerId(), router_config.displayLabel(), tree_widget_);
+        LOG(ERROR) << "Unable to read the router";
+        result = Database::ReadResult::FAILED;
+    }
+    else if (found == Database::FindResult::UNREADABLE)
+    {
+        LOG(ERROR) << "Unable to read the data of the router";
+        result = Database::ReadResult::INCOMPLETE;
+    }
+
+    // A router turned off is not shown, as if there were none.
+    if ((found == Database::FindResult::FOUND && router_config.isEnabled()) ||
+        found == Database::FindResult::UNREADABLE)
+    {
+        SidebarRouter* router = new SidebarRouter(tree_widget_);
         router->setExpanded(true);
     }
 
@@ -282,71 +282,45 @@ Database::ReadResult Sidebar::loadRouters()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::reloadRouters()
+void Sidebar::reloadRouter()
 {
-    QList<RouterConfig> routers;
-    const Database::ReadResult result = Database::instance().routerList(&routers);
-    if (result == Database::ReadResult::FAILED)
+    RouterConfig router_config;
+    const Database::FindResult found = Database::instance().routerConfig(&router_config);
+    if (found == Database::FindResult::FAILED)
     {
-        LOG(ERROR) << "Unable to read the router list";
+        LOG(ERROR) << "Unable to read the router";
         MsgBox::warning(this, tr("Failed to read data. The list may be out of date."));
         return;
     }
 
-    if (result == Database::ReadResult::INCOMPLETE)
-        LOG(ERROR) << "Unable to read some of the routers";
+    if (found == Database::FindResult::UNREADABLE)
+        LOG(ERROR) << "Unable to read the data of the router";
 
-    QSet<qint64> new_ids;
-    new_ids.reserve(routers.size());
-    for (const RouterConfig& router_data : std::as_const(routers))
-        new_ids.insert(router_data.routerId());
+    SidebarRouter* router = routerItem();
 
-    // Remove only Router items whose id no longer exists.
-    for (int i = tree_widget_->topLevelItemCount() - 1; i >= 0; --i)
+    // A router turned off is not shown, as if there were none.
+    if (found == Database::FindResult::NOT_FOUND ||
+        (found == Database::FindResult::FOUND && !router_config.isEnabled()))
     {
-        SidebarItem* item = static_cast<SidebarItem*>(tree_widget_->topLevelItem(i));
-        if (item->itemType() != SidebarItem::ROUTER)
-            continue;
-
-        const qint64 router_id = static_cast<SidebarRouter*>(item)->routerId();
-        if (!new_ids.contains(router_id))
-            delete tree_widget_->takeTopLevelItem(i);
+        delete router;
     }
-
-    // Update existing routers, append new ones at the end. Child items (Unassigned, ...) are
-    // managed by setRouterStatus() based on the current connection state, not here.
-    for (const RouterConfig& router_config : std::as_const(routers))
+    else if (!router)
     {
-        const QString name = router_config.displayLabel();
+        router = new SidebarRouter(tree_widget_);
+        router->setExpanded(true);
 
-        SidebarRouter* router = routerById(router_config.routerId());
-        if (router)
-        {
-            router->setName(name);
-        }
-        else
-        {
-            SidebarRouter* new_router = new SidebarRouter(router_config.routerId(), name, tree_widget_);
-            new_router->setExpanded(true);
-
-            // Keep ordering: routers first, local root last.
-            int local_idx = tree_widget_->indexOfTopLevelItem(local_root_);
-            int router_idx = tree_widget_->indexOfTopLevelItem(new_router);
-            if (router_idx > local_idx)
-            {
-                tree_widget_->takeTopLevelItem(router_idx);
-                tree_widget_->insertTopLevelItem(local_idx, new_router);
-            }
-        }
+        // The router goes above the local root.
+        tree_widget_->takeTopLevelItem(tree_widget_->indexOfTopLevelItem(router));
+        tree_widget_->insertTopLevelItem(tree_widget_->indexOfTopLevelItem(local_root_), router);
     }
 
     RouterController::instance().reload();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::setRouterStatus(qint64 router_id, SidebarRouter::Status status)
+void Sidebar::setRouterStatus(SidebarRouter::Status status)
 {
-    SidebarRouter* router = routerById(router_id);
+    SidebarRouter* router = routerItem();
     if (!router)
         return;
 
@@ -354,9 +328,9 @@ void Sidebar::setRouterStatus(qint64 router_id, SidebarRouter::Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<RouterWorkspace>& workspaces)
+void Sidebar::setRouterWorkspaces(const QList<RouterWorkspace>& workspaces)
 {
-    SidebarRouter* router = routerById(router_id);
+    SidebarRouter* router = routerItem();
     if (!router)
         return;
 
@@ -390,8 +364,8 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<RouterWorkspace>
         SidebarRouterWorkspace* item = existing.value(workspace.entry_id);
         if (!item)
         {
-            item = new SidebarRouterWorkspace(router_id, workspace, router);
-            item->setExpanded(settings.isWorkspaceExpanded(router_id, workspace.entry_id));
+            item = new SidebarRouterWorkspace(workspace, router);
+            item->setExpanded(settings.isWorkspaceExpanded(workspace.entry_id));
         }
         else
         {
@@ -405,9 +379,9 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<RouterWorkspace>
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const QList<RouterGroup>& groups)
+void Sidebar::setRouterHostGroups(qint64 workspace_id, const QList<RouterGroup>& groups)
 {
-    SidebarRouter* router = routerById(router_id);
+    SidebarRouter* router = routerItem();
     if (!router)
         return;
 
@@ -486,8 +460,8 @@ void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const Q
             SidebarRouterGroup* item = existing.value(group->entry_id);
             if (!item)
             {
-                item = new SidebarRouterGroup(router_id, *group, tree_parent);
-                item->setExpanded(settings.isRouterGroupExpanded(router_id, group->entry_id));
+                item = new SidebarRouterGroup(*group, tree_parent);
+                item->setExpanded(settings.isRouterGroupExpanded(group->entry_id));
                 existing.insert(group->entry_id, item);
             }
             else
@@ -523,58 +497,37 @@ SidebarItem* Sidebar::currentItem() const
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 Sidebar::currentRouterId() const
+bool Sidebar::isRouterItemCurrent() const
 {
-    for (QTreeWidgetItem* item = tree_widget_->currentItem(); item; item = item->parent())
-    {
-        SidebarItem* sidebar_item = static_cast<SidebarItem*>(item);
-        if (sidebar_item->itemType() == SidebarItem::ROUTER)
-            return static_cast<SidebarRouter*>(sidebar_item)->routerId();
-    }
+    QTreeWidgetItem* item = tree_widget_->currentItem();
+    if (!item)
+        return false;
 
-    return 0;
+    while (item->parent())
+        item = item->parent();
+
+    return static_cast<SidebarItem*>(item)->itemType() == SidebarItem::ROUTER;
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarRouter* Sidebar::routerById(qint64 router_id) const
+SidebarRouter* Sidebar::routerItem() const
 {
     for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i)
     {
         SidebarItem* item = static_cast<SidebarItem*>(tree_widget_->topLevelItem(i));
-        if (item->itemType() != SidebarItem::ROUTER)
-            continue;
-
-        SidebarRouter* router = static_cast<SidebarRouter*>(item);
-        if (router->routerId() == router_id)
-            return router;
+        if (item->itemType() == SidebarItem::ROUTER)
+            return static_cast<SidebarRouter*>(item);
     }
 
     return nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<qint64> Sidebar::routerIds() const
+QList<qint64> Sidebar::routerWorkspaceIds() const
 {
     QList<qint64> ids;
 
-    for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i)
-    {
-        SidebarItem* item = static_cast<SidebarItem*>(tree_widget_->topLevelItem(i));
-        if (item->itemType() != SidebarItem::ROUTER)
-            continue;
-
-        ids.append(static_cast<SidebarRouter*>(item)->routerId());
-    }
-
-    return ids;
-}
-
-//--------------------------------------------------------------------------------------------------
-QList<qint64> Sidebar::routerWorkspaceIds(qint64 router_id) const
-{
-    QList<qint64> ids;
-
-    SidebarRouter* router = routerById(router_id);
+    SidebarRouter* router = routerItem();
     if (!router)
         return ids;
 
@@ -589,9 +542,9 @@ QList<qint64> Sidebar::routerWorkspaceIds(qint64 router_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::changeRouterPassword(qint64 router_id)
+void Sidebar::changeRouterPassword()
 {
-    if (!RouterController::session(router_id))
+    if (!RouterController::session())
         return;
 
     AutoQPointer<CredentialsDialog> dialog(new CredentialsDialog(CredentialsDialog::Type::SET_PASSWORD, this));
@@ -630,7 +583,7 @@ void Sidebar::changeRouterPassword(qint64 router_id)
         return;
 
     // A disconnect while the dialog is shown deletes the session, so it is looked up again.
-    RouterSession* session = RouterController::session(router_id);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
@@ -638,7 +591,7 @@ void Sidebar::changeRouterPassword(qint64 router_id)
     // sessions, this one included, so a reply arrives only when it refuses. The client reconnects
     // with the new password, and the user is asked for a code again on the fresh session (handled
     // by the existing two-factor plumbing).
-    RouterController::instance().addEvent(router_id, RouterEvent::Severity::INFO,
+    RouterController::instance().addEvent(RouterEvent::Severity::INFO,
         tr("Changing the password. Waiting for the session to sign in again..."));
 
     session->changePassword(dialog->password(), { this,
@@ -679,11 +632,10 @@ void Sidebar::restoreState(const QByteArray& state)
     stream.setVersion(QDataStream::Qt_6_10);
 
     qint32 type = 0;
-    qint64 router_id = 0;
-    stream >> type >> router_id;
+    stream >> type;
 
-    SidebarRouter* router = routerById(router_id);
-    if (!router)
+    SidebarRouter* router = routerItem();
+    if (!router || stream.status() != QDataStream::Ok || type == SidebarItem::LOCAL_GROUP)
         return;
 
     // The items of a router appear once it is connected, so until then the router stands in for the
@@ -701,14 +653,14 @@ void Sidebar::cancelPendingItem()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::onRefreshWorkspaces(qint64 router_id)
+void Sidebar::onRefreshWorkspaces()
 {
-    RouterSession* session = RouterController::session(router_id);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
     session->listWorkspaces(RouterSession::CachePolicy::RELOAD, 0, { this,
-        [this, router_id](const RouterWorkspaceList& list)
+        [this](const RouterWorkspaceList& list)
     {
         if (list.error_code != proto::router::kErrorOk)
         {
@@ -718,11 +670,11 @@ void Sidebar::onRefreshWorkspaces(qint64 router_id)
             return;
         }
 
-        setRouterWorkspaces(router_id, list.workspaces);
+        setRouterWorkspaces(list.workspaces);
 
         // Once the workspace items are in place, fan out a host-group fetch per workspace.
         // Each response builds the subtree under its workspace via setRouterHostGroups().
-        RouterSession* session = RouterController::session(router_id);
+        RouterSession* session = RouterController::session();
         if (!session)
             return;
 
@@ -730,33 +682,33 @@ void Sidebar::onRefreshWorkspaces(qint64 router_id)
         {
             const qint64 workspace_id = workspace.entry_id;
             session->listGroups(RouterSession::CachePolicy::RELOAD, workspace_id, { this,
-                [this, router_id, workspace_id](const RouterGroupList& result)
+                [this, workspace_id](const RouterGroupList& result)
             {
                 if (result.error_code != proto::router::kErrorOk)
                 {
                     LOG(ERROR) << "Unable to get the list of the groups:" << result.error_code;
                     return;
                 }
-                setRouterHostGroups(router_id, workspace_id, result.groups);
+                setRouterHostGroups(workspace_id, result.groups);
             } });
         }
     } });
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::onRefreshHostGroups(qint64 router_id)
+void Sidebar::onRefreshHostGroups()
 {
     // The workspace items already exist in the sidebar; refetch the group tree for each one
     // without disturbing the workspaces themselves.
-    RouterSession* session = RouterController::session(router_id);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
-    const QList<qint64> workspace_ids = routerWorkspaceIds(router_id);
+    const QList<qint64> workspace_ids = routerWorkspaceIds();
     for (qint64 workspace_id : std::as_const(workspace_ids))
     {
         session->listGroups(RouterSession::CachePolicy::RELOAD, workspace_id, { this,
-            [this, router_id, workspace_id](const RouterGroupList& result)
+            [this, workspace_id](const RouterGroupList& result)
         {
             if (result.error_code != proto::router::kErrorOk)
             {
@@ -764,7 +716,7 @@ void Sidebar::onRefreshHostGroups(qint64 router_id)
                 LOG(ERROR) << "Unable to get the list of the groups:" << result.error_code;
                 return;
             }
-            setRouterHostGroups(router_id, workspace_id, result.groups);
+            setRouterHostGroups(workspace_id, result.groups);
         } });
     }
 }
@@ -987,12 +939,12 @@ void Sidebar::onItemExpanded(QTreeWidgetItem* item)
     else if (sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
     {
         auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
-        Settings().setWorkspaceExpanded(workspace_item->routerId(), workspace_item->workspaceId(), true);
+        Settings().setWorkspaceExpanded(workspace_item->workspaceId(), true);
     }
     else if (sidebar_item->itemType() == SidebarItem::ROUTER_GROUP)
     {
         auto* group_item = static_cast<SidebarRouterGroup*>(sidebar_item);
-        Settings().setRouterGroupExpanded(group_item->routerId(), group_item->groupId(), true);
+        Settings().setRouterGroupExpanded(group_item->groupId(), true);
     }
 }
 
@@ -1009,17 +961,17 @@ void Sidebar::onItemCollapsed(QTreeWidgetItem* item)
     else if (sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
     {
         auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
-        Settings().setWorkspaceExpanded(workspace_item->routerId(), workspace_item->workspaceId(), false);
+        Settings().setWorkspaceExpanded(workspace_item->workspaceId(), false);
     }
     else if (sidebar_item->itemType() == SidebarItem::ROUTER_GROUP)
     {
         auto* group_item = static_cast<SidebarRouterGroup*>(sidebar_item);
-        Settings().setRouterGroupExpanded(group_item->routerId(), group_item->groupId(), false);
+        Settings().setRouterGroupExpanded(group_item->groupId(), false);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::onRouterStatusChanged(qint64 router_id, RouterStatus status)
+void Sidebar::onRouterStatusChanged(RouterStatus status)
 {
     SidebarRouter::Status sidebar_status = SidebarRouter::Status::OFFLINE;
     switch (status)
@@ -1030,41 +982,41 @@ void Sidebar::onRouterStatusChanged(qint64 router_id, RouterStatus status)
         case RouterStatus::ONLINE:     sidebar_status = SidebarRouter::Status::ONLINE;     break;
         case RouterStatus::UNREADABLE: sidebar_status = SidebarRouter::Status::UNREADABLE; break;
     }
-    setRouterStatus(router_id, sidebar_status);
+    setRouterStatus(sidebar_status);
 
     if (status == RouterStatus::ONLINE)
     {
         if (!pending_item_.isEmpty())
             pending_timer_->start();
 
-        buildRouterSections(router_id);
-        onRefreshWorkspaces(router_id);
+        buildRouterSections();
+        onRefreshWorkspaces();
     }
     else
     {
-        SidebarRouter* router = routerById(router_id);
+        SidebarRouter* router = routerItem();
         SidebarItem* item = currentItem();
 
-        if (router && item && item != router && currentRouterId() == router_id)
+        if (router && item && item != router && isRouterItemCurrent())
         {
             const QByteArray key = itemKey(item);
             tree_widget_->setCurrentItem(router);
             pending_item_ = key;
         }
 
-        removeRouterSections(router_id);
-        setRouterWorkspaces(router_id, {});
+        removeRouterSections();
+        setRouterWorkspaces({});
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::buildRouterSections(qint64 router_id)
+void Sidebar::buildRouterSections()
 {
-    SidebarRouter* router = routerById(router_id);
+    SidebarRouter* router = routerItem();
     if (!router)
         return;
 
-    removeRouterSections(router_id);
+    removeRouterSections();
 
     // Sections live above the workspace subtree. Insert each at the top in reverse display order.
     auto move_to_top = [router](QTreeWidgetItem* item)
@@ -1072,20 +1024,20 @@ void Sidebar::buildRouterSections(qint64 router_id)
         router->insertChild(0, router->takeChild(router->indexOfChild(item)));
     };
 
-    move_to_top(new SidebarRouterQsHosts(router_id, router));
+    move_to_top(new SidebarRouterQsHosts(router));
 
     // Administrative sections are only meaningful for an administrator session.
-    RouterSession* session = RouterController::session(router_id);
+    RouterSession* session = RouterController::session();
     if (session && session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
     {
         if (session->version() >= kVersion_3_2_0)
-            move_to_top(new SidebarRouterAccessLog(router_id, router));
+            move_to_top(new SidebarRouterAccessLog(router));
 
-        move_to_top(new SidebarRouterUsers(router_id, router));
-        move_to_top(new SidebarRouterRelays(router_id, router));
-        move_to_top(new SidebarRouterClients(router_id, router));
-        move_to_top(new SidebarRouterHosts(router_id, router));
-        move_to_top(new SidebarRouterTempHosts(router_id, router));
+        move_to_top(new SidebarRouterUsers(router));
+        move_to_top(new SidebarRouterRelays(router));
+        move_to_top(new SidebarRouterClients(router));
+        move_to_top(new SidebarRouterHosts(router));
+        move_to_top(new SidebarRouterTempHosts(router));
     }
 
     router->setExpanded(true);
@@ -1093,9 +1045,9 @@ void Sidebar::buildRouterSections(qint64 router_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::removeRouterSections(qint64 router_id)
+void Sidebar::removeRouterSections()
 {
-    SidebarRouter* router = routerById(router_id);
+    SidebarRouter* router = routerItem();
     if (!router)
         return;
 
@@ -1167,7 +1119,7 @@ void Sidebar::startDrag()
         auto* group_item = static_cast<SidebarRouterGroup*>(item);
 
         // Clients are read-only and cannot move host groups.
-        RouterSession* session = RouterController::session(group_item->routerId());
+        RouterSession* session = RouterController::session();
         if (!session || session->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
             return;
 
@@ -1242,20 +1194,14 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
         if (target_item->itemType() == SidebarItem::ROUTER_GROUP)
         {
             auto* target_group = static_cast<SidebarRouterGroup*>(target_item);
-            if (target_group->routerId() != source_group->routerId() ||
-                target_group->workspaceId() != source_group->workspaceId())
-            {
+            if (target_group->workspaceId() != source_group->workspaceId())
                 return true;
-            }
         }
         else if (target_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
         {
             auto* target_workspace = static_cast<SidebarRouterWorkspace*>(target_item);
-            if (target_workspace->routerId() != source_group->routerId() ||
-                target_workspace->workspaceId() != source_group->workspaceId())
-            {
+            if (target_workspace->workspaceId() != source_group->workspaceId())
                 return true;
-            }
         }
         else
         {
@@ -1331,23 +1277,20 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
             return true;
 
         // The target is either a host group or the workspace item (move to the workspace root,
-        // group id 0). A host stays within its router.
+        // group id 0).
         SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-        qint64 target_router_id = 0;
         qint64 target_workspace_id = 0;
         qint64 target_group_id = 0;
 
         if (target_item->itemType() == SidebarItem::ROUTER_GROUP)
         {
             auto* group_item = static_cast<SidebarRouterGroup*>(target_item);
-            target_router_id = group_item->routerId();
             target_workspace_id = group_item->workspaceId();
             target_group_id = group_item->groupId();
         }
         else if (target_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
         {
             auto* workspace_item = static_cast<SidebarRouterWorkspace*>(target_item);
-            target_router_id = workspace_item->routerId();
             target_workspace_id = workspace_item->workspaceId();
         }
         else
@@ -1355,10 +1298,7 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
             return true;
         }
 
-        if (target_router_id != host_mime_data->routerId())
-            return true;
-
-        if (hostsToMove(host_mime_data->hosts(), target_router_id, target_workspace_id, target_group_id).isEmpty())
+        if (hostsToMove(host_mime_data->hosts(), target_workspace_id, target_group_id).isEmpty())
             return true;
 
         tree_widget_->clearSelection();
@@ -1598,21 +1538,18 @@ bool Sidebar::onDrop(QDropEvent* event)
         // The target is either a host group (drop = nest under it, parent_id is its entry_id)
         // or the workspace item (drop = move to the workspace root, parent_id 0).
         SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-        qint64 target_router_id = 0;
         qint64 target_workspace_id = 0;
         qint64 target_group_id = 0;
 
         if (target_item->itemType() == SidebarItem::ROUTER_GROUP)
         {
             auto* target_group = static_cast<SidebarRouterGroup*>(target_item);
-            target_router_id = target_group->routerId();
             target_workspace_id = target_group->workspaceId();
             target_group_id = target_group->groupId();
         }
         else if (target_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
         {
             auto* target_workspace = static_cast<SidebarRouterWorkspace*>(target_item);
-            target_router_id = target_workspace->routerId();
             target_workspace_id = target_workspace->workspaceId();
         }
         else
@@ -1621,8 +1558,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        if (target_router_id != source_group->routerId() ||
-            target_workspace_id != source_group->workspaceId())
+        if (target_workspace_id != source_group->workspaceId())
         {
             restoreSelection();
             return true;
@@ -1634,8 +1570,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        const qint64 router_id = source_group->routerId();
-        RouterSession* session = RouterController::session(router_id);
+        RouterSession* session = RouterController::session();
         if (!session)
         {
             restoreSelection();
@@ -1647,7 +1582,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         group.parent_id = target_group_id;
 
         session->modifyGroup(source_group->workspaceId(), group, { this,
-            [this, router_id](const proto::router::GroupResult& result)
+            [this](const proto::router::GroupResult& result)
         {
             if (result.error_code() != proto::router::kErrorOk)
             {
@@ -1655,7 +1590,7 @@ bool Sidebar::onDrop(QDropEvent* event)
                 MsgBox::warning(tree_widget_, tr("Failed to move the group."));
                 return;
             }
-            emit sig_routerGroupMoved(router_id);
+            emit sig_routerGroupMoved();
         } });
 
         event->acceptProposedAction();
@@ -1680,21 +1615,18 @@ bool Sidebar::onDrop(QDropEvent* event)
 
         // The target is either a host group or the workspace item (move to the workspace root).
         SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-        qint64 target_router_id = 0;
         qint64 target_workspace_id = 0;
         qint64 target_group_id = 0;
 
         if (target_item->itemType() == SidebarItem::ROUTER_GROUP)
         {
             auto* group_item = static_cast<SidebarRouterGroup*>(target_item);
-            target_router_id = group_item->routerId();
             target_workspace_id = group_item->workspaceId();
             target_group_id = group_item->groupId();
         }
         else if (target_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
         {
             auto* workspace_item = static_cast<SidebarRouterWorkspace*>(target_item);
-            target_router_id = workspace_item->routerId();
             target_workspace_id = workspace_item->workspaceId();
         }
         else
@@ -1703,20 +1635,17 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        const qint64 router_id = host_mime_data->routerId();
-
         // Repeat the eligibility checks from onDragMove in case the user releases over a
         // target that wasn't validated (DragLeave without DragMove can happen).
-        const QList<RouterHost> hosts = target_router_id == router_id ?
-            hostsToMove(host_mime_data->hosts(), router_id, target_workspace_id, target_group_id) :
-            QList<RouterHost>();
+        const QList<RouterHost> hosts =
+            hostsToMove(host_mime_data->hosts(), target_workspace_id, target_group_id);
         if (hosts.isEmpty())
         {
             restoreSelection();
             return true;
         }
 
-        RouterSession* session = RouterController::session(router_id);
+        RouterSession* session = RouterController::session();
         if (!session)
         {
             restoreSelection();
@@ -1740,7 +1669,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             host.workspace_id = target_workspace_id;
             host.group_id = target_group_id;
             session->editHost(host, { this,
-                [this, router_id, batch, total, host_id](const proto::router::HostResult& result)
+                [this, batch, total, host_id](const proto::router::HostResult& result)
             {
                 if (result.error_code() != proto::router::kErrorOk)
                 {
@@ -1759,7 +1688,7 @@ bool Sidebar::onDrop(QDropEvent* event)
                 }
 
                 if (batch->failed < total)
-                    emit sig_routerHostMoved(router_id);
+                    emit sig_routerHostMoved();
             } });
         }
 

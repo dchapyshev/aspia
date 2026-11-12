@@ -68,8 +68,7 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 HostConfig hostForRouterRow(const SearchResultModel::Row& row)
 {
-    return HostConfig::forRouterHost(
-        row.host.routerId(), stringToHostId(row.host.address()), row.host.name());
+    return HostConfig::forRouterHost(stringToHostId(row.host.address()), row.host.name());
 }
 
 } // namespace
@@ -168,7 +167,7 @@ ManagementTab::ManagementTab(QWidget* parent)
     connect(&controller, &RouterController::sig_statusChanged,
             this, &ManagementTab::updateActionsState);
 
-    // The button of the status widget asks the question of its record again.
+    // The button of the status widget asks the question of the router again.
     connect(router_status_widget_, &RouterStatusWidget::sig_twoFactorClicked,
             this, &ManagementTab::onTwoFactorRequired);
 
@@ -249,7 +248,7 @@ ManagementTab::ManagementTab(QWidget* parent)
     connect(ui->action_delete_group, &QAction::triggered, this, &ManagementTab::onDeleteGroupAction);
     connect(ui->action_change_router_password, &QAction::triggered, this, &ManagementTab::onChangeRouterPassword);
     connect(ui->action_clear_router_events, &QAction::triggered, this, &ManagementTab::onClearRouterEvents);
-    connect(ui->sidebar, &Sidebar::sig_routerHostMoved, this, [this](qint64 /* router_id */)
+    connect(ui->sidebar, &Sidebar::sig_routerHostMoved, this, [this]()
     {
         if (current_content_ == router_group_widget_)
             router_group_widget_->reload();
@@ -490,9 +489,9 @@ void ManagementTab::searchTextChanged(const QString& text)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ManagementTab::reloadRouters()
+void ManagementTab::reloadRouter()
 {
-    ui->sidebar->reloadRouters();
+    ui->sidebar->reloadRouter();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -535,10 +534,8 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
             if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER)
                 break;
 
-            const qint64 router_id = static_cast<SidebarRouter*>(sidebar_item)->routerId();
             switchContent(router_status_widget_);
-            router_status_widget_->showRouter(
-                router_id, RouterController::instance().events(router_id));
+            router_status_widget_->showRouter(RouterController::instance().events());
         }
         break;
 
@@ -547,7 +544,7 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
             switchContent(router_group_widget_);
 
             auto* item = static_cast<SidebarRouterWorkspace*>(ui->sidebar->currentItem());
-            router_group_widget_->showGroup(item->routerId(), item->workspaceId(), /*group_id=*/0);
+            router_group_widget_->showGroup(item->workspaceId(), /*group_id=*/0);
         }
         break;
 
@@ -556,7 +553,7 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
             switchContent(router_group_widget_);
 
             auto* item = static_cast<SidebarRouterGroup*>(ui->sidebar->currentItem());
-            router_group_widget_->showGroup(item->routerId(), item->workspaceId(), item->groupId());
+            router_group_widget_->showGroup(item->workspaceId(), item->groupId());
         }
         break;
 
@@ -566,9 +563,8 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
             if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_USERS)
                 break;
 
-            auto* users_item = static_cast<SidebarRouterUsers*>(sidebar_item);
             switchContent(router_users_widget_);
-            router_users_widget_->showRouter(users_item->routerId());
+            router_users_widget_->showRouter();
         }
         break;
 
@@ -578,9 +574,8 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
             if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_CLIENTS)
                 break;
 
-            auto* clients_item = static_cast<SidebarRouterClients*>(sidebar_item);
             switchContent(router_clients_widget_);
-            router_clients_widget_->showRouter(clients_item->routerId());
+            router_clients_widget_->showRouter();
         }
         break;
 
@@ -590,9 +585,8 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
             if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_RELAYS)
                 break;
 
-            auto* relays_item = static_cast<SidebarRouterRelays*>(sidebar_item);
             switchContent(router_relays_widget_);
-            router_relays_widget_->showRouter(relays_item->routerId());
+            router_relays_widget_->showRouter();
         }
         break;
 
@@ -602,9 +596,8 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
             if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_ACCESS_LOG)
                 break;
 
-            auto* access_log_item = static_cast<SidebarRouterAccessLog*>(sidebar_item);
             switchContent(router_access_log_widget_);
-            router_access_log_widget_->showRouter(access_log_item->routerId());
+            router_access_log_widget_->showRouter();
         }
         break;
 
@@ -614,9 +607,8 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
             if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_HOSTS)
                 break;
 
-            auto* hosts_item = static_cast<SidebarRouterHosts*>(sidebar_item);
             switchContent(router_hosts_widget_);
-            router_hosts_widget_->showRouter(hosts_item->routerId());
+            router_hosts_widget_->showRouter();
         }
         break;
 
@@ -626,9 +618,8 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
             if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_TEMP_HOSTS)
                 break;
 
-            auto* temp_hosts_item = static_cast<SidebarRouterTempHosts*>(sidebar_item);
             switchContent(router_temp_hosts_widget_);
-            router_temp_hosts_widget_->showRouter(temp_hosts_item->routerId());
+            router_temp_hosts_widget_->showRouter();
         }
         break;
 
@@ -638,9 +629,8 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
             if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_QS_HOSTS)
                 break;
 
-            auto* qs_hosts_item = static_cast<SidebarRouterQsHosts*>(sidebar_item);
             switchContent(router_qs_hosts_widget_);
-            router_qs_hosts_widget_->showRouter(qs_hosts_item->routerId());
+            router_qs_hosts_widget_->showRouter();
         }
         break;
 
@@ -677,7 +667,7 @@ void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& p
         auto* workspace_item = static_cast<SidebarRouterWorkspace*>(item);
 
         proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
-        if (RouterSession* session = RouterController::session(workspace_item->routerId()))
+        if (RouterSession* session = RouterController::session())
             session_type = session->config().sessionType();
 
         // Operators are read-only; only an administrator manages the workspaces themselves.
@@ -700,7 +690,7 @@ void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& p
         auto* group_item = static_cast<SidebarRouterGroup*>(item);
 
         proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
-        if (RouterSession* session = RouterController::session(group_item->routerId()))
+        if (RouterSession* session = RouterController::session())
             session_type = session->config().sessionType();
 
         // Clients are read-only and cannot manage host groups.
@@ -719,8 +709,7 @@ void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& p
 
         menu->addAction(ui->action_clear_router_events);
 
-        auto* router_item = static_cast<SidebarRouter*>(item);
-        RouterSession* session = RouterController::session(router_item->routerId());
+        RouterSession* session = RouterController::session();
         if (session)
         {
             menu->addSeparator();
@@ -1041,10 +1030,9 @@ void ManagementTab::onEditHost()
         const SearchResultModel::Row* row = search_widget_->currentRow();
         if (row && row->type == SearchResultModel::Type::ROUTER)
         {
-            const qint64 router_id = row->host.routerId();
             const RouterHost& host = row->router_host;
 
-            AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(router_id, host, this));
+            AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(host, this));
             if (dialog->exec() == QDialog::Accepted)
                 search_widget_->search(search_widget_->currentQuery());
             return;
@@ -1453,13 +1441,12 @@ void ManagementTab::onDeleteUserAction()
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onAddWorkspaceAction()
 {
-    const qint64 router_id = ui->sidebar->currentRouterId();
-    if (!router_id || !RouterController::session(router_id))
+    if (!ui->sidebar->isRouterItemCurrent() || !RouterController::session())
         return;
 
-    AutoQPointer<RouterWorkspaceDialog> dialog(new RouterWorkspaceDialog(router_id, 0, this));
+    AutoQPointer<RouterWorkspaceDialog> dialog(new RouterWorkspaceDialog(0, this));
     if (dialog->exec() == QDialog::Accepted)
-        ui->sidebar->onRefreshWorkspaces(router_id);
+        ui->sidebar->onRefreshWorkspaces();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1470,12 +1457,11 @@ void ManagementTab::onEditWorkspaceAction()
         return;
 
     auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
-    const qint64 router_id = workspace_item->routerId();
 
     AutoQPointer<RouterWorkspaceDialog> dialog(
-        new RouterWorkspaceDialog(router_id, workspace_item->workspaceId(), this));
+        new RouterWorkspaceDialog(workspace_item->workspaceId(), this));
     if (dialog->exec() == QDialog::Accepted)
-        ui->sidebar->onRefreshWorkspaces(router_id);
+        ui->sidebar->onRefreshWorkspaces();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1486,7 +1472,6 @@ void ManagementTab::onDeleteWorkspaceAction()
         return;
 
     auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
-    const qint64 router_id = workspace_item->routerId();
     const qint64 workspace_id = workspace_item->workspaceId();
 
     if (MsgBox::question(this, tr("Are you sure you want to delete space \"%1\"?")
@@ -1496,13 +1481,13 @@ void ManagementTab::onDeleteWorkspaceAction()
         return;
     }
 
-    RouterSession* session = RouterController::session(router_id);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
     LOG(INFO) << "[ACTION] Delete workspace accepted by user";
     session->deleteWorkspace(workspace_id, { this,
-        [this, router_id](const proto::router::WorkspaceResult& result)
+        [this](const proto::router::WorkspaceResult& result)
     {
         if (result.error_code() != proto::router::kErrorOk)
         {
@@ -1511,7 +1496,7 @@ void ManagementTab::onDeleteWorkspaceAction()
             LOG(ERROR) << "Workspace delete failed:" << result.error_code();
             MsgBox::warning(this, tr("Failed to delete the space."));
         }
-        ui->sidebar->onRefreshWorkspaces(router_id);
+        ui->sidebar->onRefreshWorkspaces();
     } });
 }
 
@@ -1530,7 +1515,6 @@ void ManagementTab::onAddGroupAction()
 
     // For a workspace item the new group goes to the workspace root (parent 0); for a host
     // group it becomes its subgroup.
-    qint64 router_id = 0;
     qint64 workspace_id = 0;
     qint64 default_parent_id = 0;
     QString workspace_name;
@@ -1538,7 +1522,6 @@ void ManagementTab::onAddGroupAction()
     if (item->itemType() == SidebarItem::ROUTER_WORKSPACE)
     {
         auto* workspace_item = static_cast<SidebarRouterWorkspace*>(item);
-        router_id = workspace_item->routerId();
         workspace_id = workspace_item->workspaceId();
         workspace_name = workspace_item->workspaceName();
         default_parent_id = 0;
@@ -1546,7 +1529,6 @@ void ManagementTab::onAddGroupAction()
     else if (item->itemType() == SidebarItem::ROUTER_GROUP)
     {
         auto* group_item = static_cast<SidebarRouterGroup*>(item);
-        router_id = group_item->routerId();
         workspace_id = group_item->workspaceId();
         workspace_name = group_item->workspaceName();
         default_parent_id = group_item->groupId();
@@ -1557,9 +1539,9 @@ void ManagementTab::onAddGroupAction()
     }
 
     AutoQPointer<RouterGroupDialog> dialog(
-        new RouterGroupDialog(router_id, workspace_id, workspace_name, 0, default_parent_id, this));
+        new RouterGroupDialog(workspace_id, workspace_name, 0, default_parent_id, this));
     if (dialog->exec() == QDialog::Accepted)
-        ui->sidebar->onRefreshHostGroups(router_id);
+        ui->sidebar->onRefreshHostGroups();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1580,11 +1562,10 @@ void ManagementTab::onEditGroupAction()
 
     auto* group_item = static_cast<SidebarRouterGroup*>(item);
 
-    const qint64 router_id = group_item->routerId();
-    AutoQPointer<RouterGroupDialog> dialog(new RouterGroupDialog(router_id, group_item->workspaceId(),
+    AutoQPointer<RouterGroupDialog> dialog(new RouterGroupDialog(group_item->workspaceId(),
         group_item->workspaceName(), group_item->groupId(), 0, this));
     if (dialog->exec() == QDialog::Accepted)
-        ui->sidebar->onRefreshHostGroups(router_id);
+        ui->sidebar->onRefreshHostGroups();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1607,7 +1588,6 @@ void ManagementTab::onDeleteGroupAction()
 
     // A refresh or a disconnect of the router while the question is shown deletes the item, so the
     // ids are taken before asking.
-    const qint64 router_id = group_item->routerId();
     const qint64 workspace_id = group_item->workspaceId();
     const qint64 group_id = group_item->groupId();
 
@@ -1617,12 +1597,12 @@ void ManagementTab::onDeleteGroupAction()
     if (MsgBox::question(this, question) == MsgBox::No)
         return;
 
-    RouterSession* session = RouterController::session(router_id);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
     session->deleteGroup(workspace_id, group_id, { this,
-        [this, router_id](const proto::router::GroupResult& result)
+        [this](const proto::router::GroupResult& result)
     {
         if (result.error_code() != proto::router::kErrorOk)
         {
@@ -1632,7 +1612,7 @@ void ManagementTab::onDeleteGroupAction()
             MsgBox::warning(this, tr("Failed to delete the group."));
             return;
         }
-        ui->sidebar->onRefreshHostGroups(router_id);
+        ui->sidebar->onRefreshHostGroups();
     } });
 }
 
@@ -1644,8 +1624,8 @@ void ManagementTab::onChangeRouterPassword()
         return;
 
     SidebarRouter* router = static_cast<SidebarRouter*>(sidebar_item);
-    if (RouterController::session(router->routerId()))
-        ui->sidebar->changeRouterPassword(router->routerId());
+    if (RouterController::session())
+        ui->sidebar->changeRouterPassword();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1655,10 +1635,9 @@ void ManagementTab::onClearRouterEvents()
     if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER)
         return;
 
-    const qint64 router_id = static_cast<SidebarRouter*>(sidebar_item)->routerId();
     RouterController& controller = RouterController::instance();
-    controller.clearEvents(router_id);
-    router_status_widget_->showRouter(router_id, controller.events(router_id));
+    controller.clearEvents();
+    router_status_widget_->showRouter(controller.events());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1703,16 +1682,16 @@ void ManagementTab::onExportBookAction()
             return;
     }
 
-    const QStringList lines =
-    {
-        tr("Export completed successfully."),
-        tr("Routers exported: %1").arg(report.routers),
-        tr("Router hosts exported: %1").arg(report.router_hosts),
-        tr("Local groups exported: %1").arg(report.local_groups),
-        tr("Local hosts exported: %1").arg(report.local_hosts),
-        tr("Credentials exported: %1").arg(report.credentials),
-        tr("Profiles exported: %1").arg(report.profiles)
-    };
+    QStringList lines = { tr("Export completed successfully.") };
+
+    if (report.router)
+        lines.append(tr("Router exported"));
+
+    lines << tr("Router hosts exported: %1").arg(report.router_hosts)
+          << tr("Local groups exported: %1").arg(report.local_groups)
+          << tr("Local hosts exported: %1").arg(report.local_hosts)
+          << tr("Credentials exported: %1").arg(report.credentials)
+          << tr("Profiles exported: %1").arg(report.profiles);
 
     MsgBox::information(this, lines.join('\n'));
 }
@@ -1799,20 +1778,23 @@ void ManagementTab::onImportBookAction()
             return;
     }
 
-    const QStringList lines =
-    {
-        tr("Import completed successfully."),
-        tr("Routers imported: %1").arg(report.routers),
-        tr("Router hosts imported: %1").arg(report.router_hosts),
-        tr("Local groups imported: %1").arg(report.local_groups),
-        tr("Local hosts imported: %1").arg(report.local_hosts),
-        tr("Credentials imported: %1").arg(report.credentials),
-        tr("Profiles imported: %1").arg(report.profiles)
-    };
+    QStringList lines = { tr("Import completed successfully.") };
+
+    if (report.router)
+        lines.append(tr("Router imported"));
+
+    lines << tr("Router hosts imported: %1").arg(report.router_hosts)
+          << tr("Local groups imported: %1").arg(report.local_groups)
+          << tr("Local hosts imported: %1").arg(report.local_hosts)
+          << tr("Credentials imported: %1").arg(report.credentials)
+          << tr("Profiles imported: %1").arg(report.profiles);
+
+    // The router is reloaded before the message, whose event loop lets a session of the replaced
+    // router write its old record over the imported one.
+    reloadRouter();
 
     MsgBox::information(this, lines.join('\n'));
 
-    reloadRouters();
     ui->sidebar->reloadGroups();
     updateActionsState();
 }
@@ -1887,24 +1869,19 @@ void ManagementTab::onOnlineCheckToggled(bool checked)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ManagementTab::onTwoFactorRequired(qint64 router_id)
+void ManagementTab::onTwoFactorRequired()
 {
-    // Being asked again, by a fresh question or by the button of the record, puts the record
-    // back into the rotation, even when another dialog holds the screen right now.
-    dismissed_two_factor_.remove(router_id);
+    // Being asked again, by a fresh question or by the button of the router, brings back a question
+    // the user dismissed.
+    two_factor_dismissed_ = false;
 
     if (two_factor_dialog_)
         return;
 
-    // The question of the record. Gone or blocked means nothing to put on screen.
-    QPointer<TwoFactorPrompt> prompt(RouterController::twoFactorPrompt(router_id));
+    // The question of the router. Gone or blocked means nothing to put on screen.
+    QPointer<TwoFactorPrompt> prompt(RouterController::twoFactorPrompt());
     if (!prompt || prompt->blockedSeconds() > 0)
         return;
-
-    // The record exists for as long as the prompt does; a failure to read it here is a transient
-    // one, and the question matters more than the name in the title.
-    RouterConfig record;
-    const bool record_read = Database::instance().findRouter(router_id, &record) == Database::FindResult::FOUND;
 
     // An account with no secret yet scans what the router handed out before it can answer, so the
     // two are asked in different dialogs.
@@ -1915,17 +1892,17 @@ void ManagementTab::onTwoFactorRequired(qint64 router_id)
     if (otpauth_uri.isEmpty())
     {
         TwoFactorCodeDialog* code_dialog = new TwoFactorCodeDialog(code_refused, this);
-        connect(code_dialog, &QDialog::finished, this, [this, prompt, code_dialog, router_id](int result)
+        connect(code_dialog, &QDialog::finished, this, [this, prompt, code_dialog](int result)
         {
             two_factor_dialog_.clear();
 
             if (result == QDialog::Accepted && prompt)
                 prompt->submitCode(code_dialog->code());
             else if (prompt)
-                dismissed_two_factor_.insert(router_id);
+                two_factor_dismissed_ = true;
 
-            // The next record waiting takes the screen. A dismissed question steps aside
-            // instead of silencing it.
+            // A question that replaced the answered one takes the screen. A dismissed question
+            // steps aside until it is asked again.
             showNextTwoFactorPrompt();
         });
         dialog = code_dialog;
@@ -1935,27 +1912,24 @@ void ManagementTab::onTwoFactorRequired(qint64 router_id)
         TwoFactorEnrollDialog* enroll_dialog =
             new TwoFactorEnrollDialog(otpauth_uri, code_refused, this);
         connect(enroll_dialog, &QDialog::finished, this,
-                [this, prompt, enroll_dialog, router_id](int result)
+                [this, prompt, enroll_dialog](int result)
         {
             two_factor_dialog_.clear();
 
             if (result == QDialog::Accepted && prompt)
                 prompt->submitCode(enroll_dialog->code());
             else if (prompt)
-                dismissed_two_factor_.insert(router_id);
+                two_factor_dismissed_ = true;
 
             showNextTwoFactorPrompt();
         });
         dialog = enroll_dialog;
     }
 
-    // The question can leave the screen before the operator does: its death (the record left,
+    // The question can leave the screen before the operator does: its death (the router left,
     // the challenge changed) closes the dialog.
     connect(prompt, &QObject::destroyed, dialog, &QWidget::close);
 
-    // The title names the router, so with several of them the user can tell whose code is asked.
-    if (record_read)
-        dialog->setWindowTitle(dialog->windowTitle() + " - " + record.displayLabel());
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     two_factor_dialog_ = dialog;
 
@@ -1967,18 +1941,12 @@ void ManagementTab::onTwoFactorRequired(qint64 router_id)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::showNextTwoFactorPrompt()
 {
-    for (qint64 router_id : ui->sidebar->routerIds())
-    {
-        if (dismissed_two_factor_.contains(router_id))
-            continue;
+    if (two_factor_dismissed_)
+        return;
 
-        TwoFactorPrompt* prompt = RouterController::twoFactorPrompt(router_id);
-        if (prompt && prompt->blockedSeconds() == 0)
-        {
-            onTwoFactorRequired(router_id);
-            return;
-        }
-    }
+    TwoFactorPrompt* prompt = RouterController::twoFactorPrompt();
+    if (prompt && prompt->blockedSeconds() == 0)
+        onTwoFactorRequired();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2041,7 +2009,7 @@ void ManagementTab::updateActionsState()
         const SearchResultModel::Row* row = search_widget_->currentRow();
         const bool is_local_host = row != nullptr && row->type == SearchResultModel::Type::LOCAL;
         const bool is_router_host = row != nullptr && row->type == SearchResultModel::Type::ROUTER &&
-            RouterController::session(row->host.routerId()) != nullptr;
+            RouterController::session() != nullptr;
 
         // Router hosts have no address-book record to copy or delete.
         ui->action_delete_host->setVisible(is_local_host);
@@ -2071,7 +2039,7 @@ void ManagementTab::updateActionsState()
         auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
 
         proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
-        if (RouterSession* session = RouterController::session(workspace_item->routerId()))
+        if (RouterSession* session = RouterController::session())
             session_type = session->config().sessionType();
 
         // Operators are read-only; only an administrator manages the workspaces themselves.
@@ -2085,7 +2053,7 @@ void ManagementTab::updateActionsState()
         auto* group_item = static_cast<SidebarRouterGroup*>(sidebar_item);
 
         proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
-        if (RouterSession* session = RouterController::session(group_item->routerId()))
+        if (RouterSession* session = RouterController::session())
             session_type = session->config().sessionType();
 
         // Clients are read-only and cannot manage host groups.
@@ -2127,7 +2095,7 @@ void ManagementTab::updateActionsState()
         ui->action_host_approve->setVisible(!router_temp_hosts_widget_->selectedHosts().isEmpty());
     }
 
-    // The address book is saved and restored as a whole, routers included, so its actions go with
+    // The address book is saved and restored as a whole, the router included, so its actions go with
     // every item of the sidebar.
     const bool book_actions = sidebar_item && current_content_ != search_widget_;
     ui->action_export_book->setVisible(book_actions);
@@ -2137,14 +2105,12 @@ void ManagementTab::updateActionsState()
     {
         ui->action_clear_router_events->setVisible(true);
 
-        SidebarRouter* router = static_cast<SidebarRouter*>(sidebar_item);
-        ui->action_change_router_password->setVisible(
-            RouterController::session(router->routerId()) != nullptr);
+        ui->action_change_router_password->setVisible(RouterController::session() != nullptr);
     }
 
     // Adding a workspace targets the whole router, so the action goes with every item of a router
     // when connected as an administrator.
-    RouterSession* router_session = RouterController::session(ui->sidebar->currentRouterId());
+    RouterSession* router_session = ui->sidebar->isRouterItemCurrent() ? RouterController::session() : nullptr;
     ui->action_add_workspace->setVisible(router_session &&
         router_session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN);
 
@@ -2170,7 +2136,7 @@ void ManagementTab::updateActionsState()
         (sidebar_item->itemType() == SidebarItem::ROUTER_GROUP ||
          sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE))
     {
-        RouterSession* session = RouterController::session(router_group_widget_->routerId());
+        RouterSession* session = RouterController::session();
         ui->action_edit_host->setVisible(session && router_group_widget_->hasSelectedHost());
     }
 
@@ -2230,16 +2196,33 @@ bool ManagementTab::readLocalHost(qint64 entry_id, LocalHostConfig* host)
 //--------------------------------------------------------------------------------------------------
 bool ManagementTab::validateHostForConnect(const HostConfig& host)
 {
-    if (host.routerId() != 0)
+    if (isHostId(host.address()))
     {
         RouterConfig router;
-        const Database::FindResult found = Database::instance().findRouter(host.routerId(), &router);
+        const Database::FindResult found = Database::instance().routerConfig(&router);
+        if (found == Database::FindResult::UNREADABLE)
+        {
+            MsgBox::warning(this, tr("The data of the router is damaged. Edit the router and enter it again."));
+            return false;
+        }
+
+        if (found == Database::FindResult::NOT_FOUND)
+        {
+            MsgBox::warning(this, tr("The host is reached through a router, but no router is set. "
+                                     "Add a router or enter the address of the host instead of its ID."));
+            return false;
+        }
+
         if (found != Database::FindResult::FOUND)
         {
-            MsgBox::warning(this, found == Database::FindResult::UNREADABLE ?
-                tr("The data of the router is damaged. Edit the router and enter it again.") :
-                tr("The router associated with this host has been deleted. "
-                   "Edit the host to select another router or switch to direct connection."));
+            MsgBox::warning(this, tr("Failed to read the router."));
+            return false;
+        }
+
+        if (!router.isEnabled())
+        {
+            MsgBox::warning(this, tr("The router is turned off. Turn it on in the router settings to "
+                                     "connect to this host."));
             return false;
         }
 

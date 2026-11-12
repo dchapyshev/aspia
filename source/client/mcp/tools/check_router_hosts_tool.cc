@@ -24,8 +24,8 @@
 #include <memory>
 
 #include "base/peer/host_id.h"
+#include "client/mcp/tools/mcp_utils.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 
@@ -38,9 +38,6 @@ QString CheckRouterHostsTool::name() const
 //--------------------------------------------------------------------------------------------------
 QJsonObject CheckRouterHostsTool::definition() const
 {
-    QJsonObject router_id{ { "type", "integer" },
-                           { "description", "Id of a router from list_routers." } };
-
     QJsonObject host_ids{ { "type", "array" },
                           { "items", QJsonObject{ { "type", "integer" }, { "minimum", 1 } } },
                           { "minItems", 1 },
@@ -48,27 +45,19 @@ QJsonObject CheckRouterHostsTool::definition() const
 
     return QJsonObject{
         { "name", name() },
-        { "description", "Asks a router saved in Aspia Client whether its hosts are online right now. The status "
-                         "is online, offline, not_found when the router has no such host, or unknown with the "
-                         "error of the router. The router must be connected. The local hosts are checked by "
-                         "check_local_hosts." },
+        { "description", "Asks the router saved in Aspia Client whether its hosts are online right now. The "
+                         "status is online, offline, not_found when the router has no such host, or unknown "
+                         "with the error of the router. The router must be connected. The local hosts are "
+                         "checked by check_local_hosts." },
         { "inputSchema", QJsonObject{ { "type", "object" },
-                                      { "properties", QJsonObject{ { "router_id", router_id },
-                                                                   { "host_ids", host_ids } } },
-                                      { "required", QJsonArray{ "router_id", "host_ids" } },
+                                      { "properties", QJsonObject{ { "host_ids", host_ids } } },
+                                      { "required", QJsonArray{ "host_ids" } },
                                       { "additionalProperties", false } } } };
 }
 
 //--------------------------------------------------------------------------------------------------
 void CheckRouterHostsTool::call(const QJsonObject& arguments, Reply reply)
 {
-    QJsonValue router_value = arguments.value("router_id");
-    if (!router_value.isDouble() || router_value.toDouble() != static_cast<double>(router_value.toInteger()))
-    {
-        reply(false, "The router_id must be an integer.");
-        return;
-    }
-
     QJsonValue host_ids_value = arguments.value("host_ids");
     if (!host_ids_value.isArray() || host_ids_value.toArray().isEmpty())
     {
@@ -89,26 +78,11 @@ void CheckRouterHostsTool::call(const QJsonObject& arguments, Reply reply)
         host_ids.append(static_cast<HostId>(host_id.toInteger()));
     }
 
-    const qint64 router_id = router_value.toInteger();
-
-    RouterConfig config;
-    switch (Database::instance().findRouter(router_id, &config))
-    {
-        case Database::FindResult::FOUND:
-            break;
-        case Database::FindResult::NOT_FOUND:
-            reply(false, QString("There is no router with id %1. Use list_routers to get the ids.").arg(router_id));
-            return;
-        case Database::FindResult::UNREADABLE:
-        case Database::FindResult::FAILED:
-            reply(false, "Unable to read the database.");
-            return;
-    }
-
-    RouterSession* session = RouterController::session(router_id);
+    QString error;
+    RouterSession* session = routerSession(&error);
     if (!session)
     {
-        reply(false, QString("The router \"%1\" (id %2) is not connected.").arg(config.displayLabel()).arg(router_id));
+        reply(false, error);
         return;
     }
 

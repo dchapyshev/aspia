@@ -44,8 +44,7 @@ public:
     explicit RouterAccessLogWidget(QWidget* parent = nullptr);
     ~RouterAccessLogWidget() final;
 
-    void showRouter(qint64 router_id);
-    qint64 routerId() const { return router_id_; }
+    void showRouter();
     bool hasCurrentEntry() const;
 
     void copyCurrentRow();
@@ -81,7 +80,6 @@ private:
     void updateCountLabel();
 
     std::unique_ptr<Ui::RouterAccessLogWidget> ui;
-    qint64 router_id_ = 0;
     QTimer* filter_timer_ = nullptr;
     AccessLogListModel* model_ = nullptr;
     PageModel page_;

@@ -85,10 +85,8 @@ void RouterGroupDrag::setGroupItem(SidebarRouterGroup* group_item, const QString
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostMimeData::setHosts(qint64 router_id, const QList<RouterHost>& hosts,
-                                  const QString& mime_type)
+void RouterHostMimeData::setHosts(const QList<RouterHost>& hosts, const QString& mime_type)
 {
-    router_id_ = router_id;
     hosts_ = hosts;
     setData(mime_type, QByteArray());
 }
@@ -101,9 +99,9 @@ RouterHostDrag::RouterHostDrag(QObject* drag_source)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostDrag::setHosts(qint64 router_id, const QList<RouterHost>& hosts, const QString& mime_type)
+void RouterHostDrag::setHosts(const QList<RouterHost>& hosts, const QString& mime_type)
 {
     RouterHostMimeData* mime_data = new RouterHostMimeData();
-    mime_data->setHosts(router_id, hosts, mime_type);
+    mime_data->setHosts(hosts, mime_type);
     setMimeData(mime_data);
 }

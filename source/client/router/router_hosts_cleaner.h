@@ -29,7 +29,7 @@ class RouterHostsCleaner final : public QObject
     Q_OBJECT
 
 public:
-    explicit RouterHostsCleaner(qint64 router_id, QObject* parent = nullptr);
+    explicit RouterHostsCleaner(QObject* parent = nullptr);
     ~RouterHostsCleaner() final;
 
     void start();
@@ -38,7 +38,6 @@ signals:
     void sig_finished();
 
 private:
-    const qint64 router_id_;
     qsizetype pending_ = 0;
     bool started_ = false;
 

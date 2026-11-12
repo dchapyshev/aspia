@@ -31,18 +31,17 @@ Database::ReadResult readLocalHost(const SqlQuery& query, LocalHostConfig* host)
 {
     host->setId(query.columnInt64(0));
     host->setGroupId(query.columnInt64(1));
-    host->setRouterId(query.columnInt64(2));
-    host->setName(query.columnText(3));
-    host->setComment(query.columnText(4));
-    host->setCreateTime(query.columnInt64(6));
-    host->setModifyTime(query.columnInt64(7));
-    host->setConnectTime(query.columnInt64(8));
-    host->setGuid(query.columnText(9));
-    host->setCredentialId(query.columnInt64(10));
-    host->setOsCredentialId(query.columnInt64(11));
-    host->setProfileId(query.columnInt64(12));
+    host->setName(query.columnText(2));
+    host->setComment(query.columnText(3));
+    host->setCreateTime(query.columnInt64(5));
+    host->setModifyTime(query.columnInt64(6));
+    host->setConnectTime(query.columnInt64(7));
+    host->setGuid(query.columnText(8));
+    host->setCredentialId(query.columnInt64(9));
+    host->setOsCredentialId(query.columnInt64(10));
+    host->setProfileId(query.columnInt64(11));
 
-    if (!host->setEncryptedData(query.columnBlob(5)))
+    if (!host->setEncryptedData(query.columnBlob(4)))
     {
         LOG(ERROR) << "Unable to read encrypted data of host" << host->id();
         return Database::ReadResult::INCOMPLETE;
@@ -107,7 +106,7 @@ Database::ReadResult Database::localHostList(qint64 group_id, QList<LocalHostCon
         return ReadResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), name, comment, data, "
                         "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
                         "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
                         "FROM local_hosts WHERE group_id IS NULLIF(?, 0) ORDER BY casefold(name)");
@@ -150,7 +149,7 @@ Database::ReadResult Database::allLocalHosts(QList<LocalHostConfig>* hosts) cons
         return ReadResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), name, comment, data, "
                         "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
                         "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
                         "FROM local_hosts");
@@ -207,13 +206,11 @@ bool Database::addLocalHost(LocalHostConfig& host)
     if (host.guid().isEmpty())
         host.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
-    SqlQuery query(db_, "INSERT INTO local_hosts (id, group_id, router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid, credential_id, os_credential_id, "
-                        "profile_id) "
-                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), NULLIF(?, 0), "
+    SqlQuery query(db_, "INSERT INTO local_hosts (id, group_id, name, comment, data, create_time, "
+                        "modify_time, connect_time, guid, credential_id, os_credential_id, profile_id) "
+                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), NULLIF(?, 0), "
                         "NULLIF(?, 0))");
     query.addInt64(host.groupId());
-    query.addInt64(host.routerId());
     query.addText(host.name());
     query.addText(host.comment());
     query.addBlob(*encrypted_data);
@@ -256,11 +253,10 @@ bool Database::modifyLocalHost(LocalHostConfig& host)
 
     host.setModifyTime(QDateTime::currentSecsSinceEpoch());
 
-    SqlQuery query(db_, "UPDATE local_hosts SET group_id=NULLIF(?, 0), router_id=?, name=?, comment=?, "
+    SqlQuery query(db_, "UPDATE local_hosts SET group_id=NULLIF(?, 0), name=?, comment=?, "
                         "data=?, modify_time=?, credential_id=NULLIF(?, 0), profile_id=NULLIF(?, 0) "
                         "WHERE id=?");
     query.addInt64(host.groupId());
-    query.addInt64(host.routerId());
     query.addText(host.name());
     query.addText(host.comment());
     query.addBlob(*encrypted_data);
@@ -384,7 +380,7 @@ Database::FindResult Database::findLocalHost(qint64 entry_id, LocalHostConfig* h
         return FindResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), name, comment, data, "
                         "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
                         "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
                         "FROM local_hosts WHERE id=?");
@@ -439,7 +435,7 @@ Database::ReadResult Database::searchLocalHosts(
         return ReadResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), name, comment, data, "
                         "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
                         "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
                         "FROM local_hosts ORDER BY casefold(name)");
@@ -660,9 +656,6 @@ bool Database::removeLocalGroup(qint64 group_id)
         return false;
     }
 
-    // The child groups go with it and the hosts of the whole subtree move to the root. Both are
-    // declared by the tables themselves, so no path can leave a row pointing at a group that is
-    // gone - the tree is walked from the root down and such a row is in no place the user can reach.
     SqlQuery query(db_, "DELETE FROM local_groups WHERE id=?");
     query.addInt64(group_id);
 

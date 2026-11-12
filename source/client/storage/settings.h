@@ -38,6 +38,9 @@ public:
     Settings();
     ~Settings();
 
+    static QString filePath();
+    static void setFilePathForTesting(const QString& file_path);
+
     QString locale() const;
     void setLocale(const QString& locale);
 
@@ -90,13 +93,11 @@ public:
     void setLocalGroupExpanded(qint64 group_id, bool expanded);
     void removeLocalGroupExpanded(qint64 group_id);
 
-    bool isWorkspaceExpanded(qint64 router_id, qint64 workspace_id) const;
-    void setWorkspaceExpanded(qint64 router_id, qint64 workspace_id, bool expanded);
+    bool isWorkspaceExpanded(qint64 workspace_id) const;
+    void setWorkspaceExpanded(qint64 workspace_id, bool expanded);
 
-    bool isRouterGroupExpanded(qint64 router_id, qint64 group_id) const;
-    void setRouterGroupExpanded(qint64 router_id, qint64 group_id, bool expanded);
-
-    void removeRouterExpanded(qint64 router_id);
+    bool isRouterGroupExpanded(qint64 group_id) const;
+    void setRouterGroupExpanded(qint64 group_id, bool expanded);
 
 private:
     QSettings settings_;

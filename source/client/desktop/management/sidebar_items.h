@@ -78,19 +78,14 @@ private:
 //--------------------------------------------------------------------------------------------------
 class SidebarRouter final : public SidebarItem
 {
+    Q_DECLARE_TR_FUNCTIONS(SidebarRouter)
+
 public:
-    SidebarRouter(qint64 router_id, const QString& name, QTreeWidget* parent);
+    explicit SidebarRouter(QTreeWidget* parent);
 
     enum class Status { OFFLINE, CONNECTING, TWO_FACTOR, ONLINE, UNREADABLE };
 
-    qint64 routerId() const;
-    const QString& name() const { return name_; }
-    void setName(const QString& name);
     void setStatus(Status status);
-
-private:
-    qint64 router_id_;
-    QString name_;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -99,10 +94,8 @@ class SidebarRouterWorkspace final : public SidebarItem
 public:
     // group_id is 0 (no host-group filter); the workspace's own entry_id lives in
     // workspaceId(). The QTreeWidgetItem parent is the SidebarRouter.
-    SidebarRouterWorkspace(qint64 router_id, const RouterWorkspace& workspace,
-                           QTreeWidgetItem* parent);
+    SidebarRouterWorkspace(const RouterWorkspace& workspace, QTreeWidgetItem* parent);
 
-    qint64 routerId() const { return router_id_; }
     qint64 workspaceId() const { return workspace_.entry_id; }
     QString workspaceName() const { return workspace_.name; }
     const RouterWorkspace& workspace() const { return workspace_; }
@@ -111,7 +104,6 @@ public:
     void update(const RouterWorkspace& workspace);
 
 private:
-    const qint64 router_id_;
     RouterWorkspace workspace_;
 };
 
@@ -122,9 +114,8 @@ public:
     // group.workspace_id identifies the enclosing workspace; the QTreeWidgetItem parent is
     // either the workspace item or a parent group item (mirrors group.parent_id, so it is
     // not stored separately).
-    SidebarRouterGroup(qint64 router_id, const RouterGroup& group, QTreeWidgetItem* parent);
+    SidebarRouterGroup(const RouterGroup& group, QTreeWidgetItem* parent);
 
-    qint64 routerId() const { return router_id_; }
     qint64 workspaceId() const { return group_.workspace_id; }
     QString workspaceName() const;
     const RouterGroup& group() const { return group_; }
@@ -133,7 +124,6 @@ public:
     void update(const RouterGroup& group);
 
 private:
-    const qint64 router_id_;
     RouterGroup group_;
 };
 
@@ -143,12 +133,7 @@ class SidebarRouterHosts final : public SidebarItem
     Q_DECLARE_TR_FUNCTIONS(SidebarRouterHosts)
 
 public:
-    SidebarRouterHosts(qint64 router_id, QTreeWidgetItem* parent);
-
-    qint64 routerId() const { return router_id_; }
-
-private:
-    const qint64 router_id_;
+    explicit SidebarRouterHosts(QTreeWidgetItem* parent);
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -157,12 +142,7 @@ class SidebarRouterUsers final : public SidebarItem
     Q_DECLARE_TR_FUNCTIONS(SidebarRouterUsers)
 
 public:
-    SidebarRouterUsers(qint64 router_id, QTreeWidgetItem* parent);
-
-    qint64 routerId() const { return router_id_; }
-
-private:
-    const qint64 router_id_;
+    explicit SidebarRouterUsers(QTreeWidgetItem* parent);
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -171,12 +151,7 @@ class SidebarRouterClients final : public SidebarItem
     Q_DECLARE_TR_FUNCTIONS(SidebarRouterClients)
 
 public:
-    SidebarRouterClients(qint64 router_id, QTreeWidgetItem* parent);
-
-    qint64 routerId() const { return router_id_; }
-
-private:
-    const qint64 router_id_;
+    explicit SidebarRouterClients(QTreeWidgetItem* parent);
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -185,12 +160,7 @@ class SidebarRouterAccessLog final : public SidebarItem
     Q_DECLARE_TR_FUNCTIONS(SidebarRouterAccessLog)
 
 public:
-    SidebarRouterAccessLog(qint64 router_id, QTreeWidgetItem* parent);
-
-    qint64 routerId() const { return router_id_; }
-
-private:
-    const qint64 router_id_;
+    explicit SidebarRouterAccessLog(QTreeWidgetItem* parent);
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -199,12 +169,7 @@ class SidebarRouterRelays final : public SidebarItem
     Q_DECLARE_TR_FUNCTIONS(SidebarRouterRelays)
 
 public:
-    SidebarRouterRelays(qint64 router_id, QTreeWidgetItem* parent);
-
-    qint64 routerId() const { return router_id_; }
-
-private:
-    const qint64 router_id_;
+    explicit SidebarRouterRelays(QTreeWidgetItem* parent);
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -213,12 +178,7 @@ class SidebarRouterTempHosts final : public SidebarItem
     Q_DECLARE_TR_FUNCTIONS(SidebarRouterTempHosts)
 
 public:
-    SidebarRouterTempHosts(qint64 router_id, QTreeWidgetItem* parent);
-
-    qint64 routerId() const { return router_id_; }
-
-private:
-    const qint64 router_id_;
+    explicit SidebarRouterTempHosts(QTreeWidgetItem* parent);
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -227,12 +187,7 @@ class SidebarRouterQsHosts final : public SidebarItem
     Q_DECLARE_TR_FUNCTIONS(SidebarRouterQsHosts)
 
 public:
-    SidebarRouterQsHosts(qint64 router_id, QTreeWidgetItem* parent);
-
-    qint64 routerId() const { return router_id_; }
-
-private:
-    const qint64 router_id_;
+    explicit SidebarRouterQsHosts(QTreeWidgetItem* parent);
 };
 
 #endif // CLIENT_DESKTOP_MANAGEMENT_SIDEBAR_ITEMS_H

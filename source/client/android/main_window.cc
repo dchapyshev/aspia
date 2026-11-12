@@ -41,11 +41,12 @@
 #include "client/android/local_widget.h"
 #include "client/android/master_password_dialog.h"
 #include "client/android/remote_widget.h"
-#include "client/android/routers_widget.h"
+#include "client/android/router_widget.h"
 #include "client/android/settings_widget.h"
 #include "client/android/two_factor_dialog.h"
 #include "client/router/router_controller.h"
 #include "client/storage/database.h"
+#include "client/storage/database_migration.h"
 #include "client/storage/master_password.h"
 #include "client/workers/update_worker.h"
 #include "common/android/app_bar.h"
@@ -70,7 +71,7 @@ enum Section
 {
     SECTION_LOCAL = 0,
     SECTION_REMOTE,
-    SECTION_ROUTERS,
+    SECTION_ROUTER,
     SECTION_SETTINGS
 };
 
@@ -118,18 +119,18 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
             this, &AndroidMainWindow::onTwoFactorRequired);
 
     LocalWidget* local = new LocalWidget(this);
-    RoutersWidget* routers = new RoutersWidget(this);
+    RouterWidget* router_widget = new RouterWidget(this);
     RemoteWidget* remote = new RemoteWidget(this);
     SettingsWidget* settings = new SettingsWidget(this);
 
     stack_content_->addWidget(local);
     stack_content_->addWidget(remote);
-    stack_content_->addWidget(routers);
+    stack_content_->addWidget(router_widget);
     stack_content_->addWidget(settings);
 
-    connect(routers, &RoutersWidget::sig_twoFactorClicked, this, &AndroidMainWindow::onTwoFactorRequired);
-    connect(routers, &RoutersWidget::sig_appBarActionsChanged, this, &AndroidMainWindow::onRouterActionsChanged);
-    connect(routers, &RoutersWidget::sig_titleChanged, this, &AndroidMainWindow::onRoutersTitleChanged);
+    connect(router_widget, &RouterWidget::sig_twoFactorClicked, this, &AndroidMainWindow::onTwoFactorRequired);
+    connect(router_widget, &RouterWidget::sig_appBarActionsChanged, this, &AndroidMainWindow::onRouterActionsChanged);
+    connect(router_widget, &RouterWidget::sig_titleChanged, this, &AndroidMainWindow::onRouterTitleChanged);
     connect(local, &LocalWidget::sig_titleChanged, this, &AndroidMainWindow::onLocalTitleChanged);
     connect(local, &LocalWidget::sig_appBarActionsChanged, this, &AndroidMainWindow::onLocalActionsChanged);
     connect(remote, &RemoteWidget::sig_titleChanged, this, &AndroidMainWindow::onRemoteTitleChanged);
@@ -144,7 +145,7 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 
     nav_bar_->addItem(tr("Local"), ":/img/folder.svg");
     nav_bar_->addItem(tr("Remote"), ":/img/workspace.svg");
-    nav_bar_->addItem(tr("Routers"), ":/img/stack.svg");
+    nav_bar_->addItem(tr("Router"), ":/img/stack.svg");
     nav_bar_->addItem(tr("Settings"), ":/img/settings.svg");
 
     // The address book shell. While a desktop connection is active it is replaced by the desktop view.
@@ -282,9 +283,9 @@ void AndroidMainWindow::onSectionChanged(int index)
     // The back button belongs to the remote host view; any tab switch clears it.
     app_bar_->setBackVisible(false);
 
-    RoutersWidget* routers = qobject_cast<RoutersWidget*>(stack_content_->widget(SECTION_ROUTERS));
-    if (index != SECTION_ROUTERS && routers)
-        routers->resetToList();
+    RouterWidget* router_widget = qobject_cast<RouterWidget*>(stack_content_->widget(SECTION_ROUTER));
+    if (index != SECTION_ROUTER && router_widget)
+        router_widget->resetToList();
 
     LocalWidget* local = qobject_cast<LocalWidget*>(stack_content_->widget(SECTION_LOCAL));
     RemoteWidget* remote = qobject_cast<RemoteWidget*>(stack_content_->widget(SECTION_REMOTE));
@@ -300,14 +301,14 @@ void AndroidMainWindow::onSectionChanged(int index)
         local->reload();
     else if (index == SECTION_REMOTE && remote)
         remote->reload();
-    else if (index == SECTION_ROUTERS && routers)
-        routers->reload();
+    else if (index == SECTION_ROUTER && router_widget)
+        router_widget->reload();
 
     QList<QWidget*> actions;
     if (index == SECTION_LOCAL && local)
         actions = local->appBarActions();
-    else if (index == SECTION_ROUTERS && routers)
-        actions = routers->appBarActions();
+    else if (index == SECTION_ROUTER && router_widget)
+        actions = router_widget->appBarActions();
     else if (index == SECTION_REMOTE && remote)
         actions = remote->appBarActions();
     else if (index == SECTION_SETTINGS && settings)
@@ -324,8 +325,8 @@ void AndroidMainWindow::onSectionChanged(int index)
             app_bar_->setTitle(tr("Remote"));
             break;
 
-        case SECTION_ROUTERS:
-            app_bar_->setTitle(tr("Routers"));
+        case SECTION_ROUTER:
+            app_bar_->setTitle(tr("Router"));
             break;
 
         case SECTION_SETTINGS:
@@ -346,9 +347,9 @@ void AndroidMainWindow::onKeyboardActiveChanged(bool active)
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onRouterActionsChanged()
 {
-    RoutersWidget* routers = qobject_cast<RoutersWidget*>(stack_content_->widget(SECTION_ROUTERS));
-    if (nav_bar_->currentIndex() == SECTION_ROUTERS && routers)
-        app_bar_->setActions(routers->appBarActions());
+    RouterWidget* router_widget = qobject_cast<RouterWidget*>(stack_content_->widget(SECTION_ROUTER));
+    if (nav_bar_->currentIndex() == SECTION_ROUTER && router_widget)
+        app_bar_->setActions(router_widget->appBarActions());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -370,12 +371,12 @@ void AndroidMainWindow::onLocalTitleChanged(const QString& title, bool back_visi
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::onRoutersTitleChanged(const QString& title, bool back_visible)
+void AndroidMainWindow::onRouterTitleChanged(const QString& title, bool back_visible)
 {
-    if (nav_bar_->currentIndex() != SECTION_ROUTERS)
+    if (nav_bar_->currentIndex() != SECTION_ROUTER)
         return;
 
-    app_bar_->setTitle(title.isEmpty() ? tr("Routers") : title);
+    app_bar_->setTitle(title.isEmpty() ? tr("Router") : title);
     app_bar_->setBackVisible(back_visible);
 }
 
@@ -460,9 +461,9 @@ void AndroidMainWindow::onBackClicked()
                 remote->goBack();
             break;
 
-        case SECTION_ROUTERS:
-            if (RoutersWidget* routers = qobject_cast<RoutersWidget*>(stack_content_->widget(SECTION_ROUTERS)))
-                routers->goBack();
+        case SECTION_ROUTER:
+            if (RouterWidget* router_widget = qobject_cast<RouterWidget*>(stack_content_->widget(SECTION_ROUTER)))
+                router_widget->goBack();
             break;
 
         case SECTION_SETTINGS:
@@ -579,11 +580,11 @@ void AndroidMainWindow::onAuthorizationClosed()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::onTwoFactorRequired(qint64 router_id)
+void AndroidMainWindow::onTwoFactorRequired()
 {
-    // Being asked again, by a fresh question or by the button of the record, puts the record
-    // back into the rotation, even when another dialog holds the screen right now.
-    dismissed_two_factor_.remove(router_id);
+    // Being asked again, by a fresh question or by the button of the card, takes the dismissal
+    // back, even when another dialog holds the screen right now.
+    two_factor_dismissed_ = false;
 
     // The lock screen owns the display: both are overlays of the same window, so a dialog
     // opened now would rise above the master password prompt, and an enrollment would put the
@@ -594,40 +595,31 @@ void AndroidMainWindow::onTwoFactorRequired(qint64 router_id)
     if (two_factor_dialog_)
         return;
 
-    // The question of the record. Gone or blocked means nothing to put on screen.
-    QPointer<TwoFactorPrompt> prompt(RouterController::twoFactorPrompt(router_id));
+    // The question of the router. Gone or blocked means nothing to put on screen.
+    QPointer<TwoFactorPrompt> prompt(RouterController::twoFactorPrompt());
     if (!prompt || prompt->blockedSeconds() > 0)
         return;
 
-    // The record exists for as long as the prompt does; a failure to read it here is a transient
-    // one, and the question matters more than the name in the title.
-    RouterConfig record;
-    const bool record_read = Database::instance().findRouter(router_id, &record) == Database::FindResult::FOUND;
-
     TwoFactorDialog* dialog =
         new TwoFactorDialog(prompt->otpauthUri(), prompt->codeRefused(), this);
-
-    // The title names the router, so with several of them the user can tell whose code is asked.
-    if (record_read)
-        dialog->setTitle(tr("Two-Factor Authentication - %1").arg(record.displayLabel()));
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     two_factor_dialog_ = dialog;
 
-    connect(dialog, &QDialog::finished, this, [this, prompt, dialog, router_id](int result)
+    connect(dialog, &QDialog::finished, this, [this, prompt, dialog](int result)
     {
         two_factor_dialog_.clear();
 
         if (result == QDialog::Accepted && prompt)
             prompt->submitCode(dialog->code());
         else if (prompt)
-            dismissed_two_factor_.insert(router_id);
+            two_factor_dismissed_ = true;
 
-        // The next record waiting takes the screen. A dismissed question steps aside instead
-        // of silencing it.
+        // A question that replaced the answered one takes the screen. A dismissed question
+        // steps aside until it is asked again.
         showNextTwoFactorPrompt();
     });
 
-    // The question can leave the screen before the operator does: its death (the record left,
+    // The question can leave the screen before the operator does: its death (the router left,
     // the challenge changed) closes the dialog.
     connect(prompt, &QObject::destroyed, dialog, &QWidget::close);
 
@@ -661,20 +653,12 @@ void AndroidMainWindow::onApplicationStateChanged(Qt::ApplicationState state)
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::showNextTwoFactorPrompt()
 {
-    QList<RouterConfig> routers;
-    Database::instance().routerList(&routers);
-    for (const RouterConfig& config : std::as_const(routers))
-    {
-        if (dismissed_two_factor_.contains(config.routerId()))
-            continue;
+    if (two_factor_dismissed_)
+        return;
 
-        TwoFactorPrompt* prompt = RouterController::twoFactorPrompt(config.routerId());
-        if (prompt && prompt->blockedSeconds() == 0)
-        {
-            onTwoFactorRequired(config.routerId());
-            return;
-        }
-    }
+    TwoFactorPrompt* prompt = RouterController::twoFactorPrompt();
+    if (prompt && prompt->blockedSeconds() == 0)
+        onTwoFactorRequired();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -703,11 +687,14 @@ void AndroidMainWindow::runMasterPasswordGate()
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onUnlocked()
 {
+    if (!DatabaseMigration::finish(Database::instance(), DatabaseMigration::oldFilePath()))
+        LOG(ERROR) << "Unable to move the router of the old address book, the next start tries again";
+
     if (LocalWidget* local = qobject_cast<LocalWidget*>(stack_content_->widget(SECTION_LOCAL)))
         local->reload();
 
-    if (RoutersWidget* routers = qobject_cast<RoutersWidget*>(stack_content_->widget(SECTION_ROUTERS)))
-        routers->reload();
+    if (RouterWidget* router_widget = qobject_cast<RouterWidget*>(stack_content_->widget(SECTION_ROUTER)))
+        router_widget->reload();
 
     if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(stack_content_->widget(SECTION_REMOTE)))
         remote->reload();
@@ -766,25 +753,38 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
     if (desktop_ || file_transfer_ || chat_ || authorization_)
         return;
 
-    if (host.entryId() > 0 && host.routerId() != 0)
+    if (host.entryId() > 0 && isHostId(host.address()))
     {
         RouterConfig router;
-        const Database::FindResult found = Database::instance().findRouter(host.routerId(), &router);
+        const Database::FindResult found = Database::instance().routerConfig(&router);
         if (found != Database::FindResult::FOUND)
         {
-            LOG(ERROR) << "Unable to read router" << host.routerId();
+            LOG(ERROR) << "Unable to read the router";
+
+            QString message;
+            if (found == Database::FindResult::UNREADABLE)
+                message = tr("The data of the router is damaged. Edit the router and enter it again.");
+            else if (found == Database::FindResult::NOT_FOUND)
+                message = tr("The host is reached through a router, but no router is set. "
+                             "Add a router or enter the address of the host instead of its ID.");
+            else
+                message = tr("Failed to read the router.");
+
+            MessageDialog::info(this, tr("Connection"), message);
+            return;
+        }
+
+        if (!router.isEnabled())
+        {
             MessageDialog::info(this, tr("Connection"),
-                found == Database::FindResult::UNREADABLE ?
-                    tr("The data of the router is damaged. Edit the router and enter it again.") :
-                    tr("The router associated with this host has been deleted. "
-                       "Edit the host to select another router or switch to direct connection."));
+                tr("The router is turned off. Turn it on in the router settings to connect to this host."));
             return;
         }
     }
 
     bool can_save_credentials = host.entryId() > 0;
 
-    if (host.entryId() <= 0 && host.routerId() > 0 && !isTempHostId(stringToHostId(host.address())))
+    if (host.entryId() <= 0 && isHostId(host.address()) && !isTempHostId(stringToHostId(host.address())))
         can_save_credentials = true;
 
     if (can_save_credentials)
@@ -792,7 +792,7 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
         Database& db = Database::instance();
         std::optional<std::pair<QString, SecureString>> credentials = host.entryId() > 0 ?
             db.localHostCredentials(host.entryId()) :
-            db.routerHostCredentials(host.routerId(), stringToHostId(host.address()));
+            db.routerHostCredentials(stringToHostId(host.address()));
         if (credentials.has_value())
         {
             LOG(INFO) << "Using stored credentials of host" << host.address();
@@ -878,14 +878,13 @@ void AndroidMainWindow::saveHostCredentials(const HostConfig& host, qint64 crede
     const HostId host_id = stringToHostId(host.address());
 
     RouterHostConfig credentials;
-    credentials.setRouterId(host.routerId());
     credentials.setHostId(host_id);
     credentials.setCredentialId(credential_id);
     credentials.setUsername(username);
     credentials.setPassword(password);
 
     RouterHostConfig stored;
-    const Database::FindResult found = db.findRouterHost(host.routerId(), host_id, &stored);
+    const Database::FindResult found = db.findRouterHost(host_id, &stored);
     if (found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the credentials of host" << host_id;

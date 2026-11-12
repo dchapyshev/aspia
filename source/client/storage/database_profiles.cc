@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "base/net/udp_channel.h"
+#include "base/peer/host_id.h"
 #include "base/sql/sql_query.h"
 
 namespace {
@@ -257,11 +258,11 @@ ProfileConfig Database::hostProfile(const HostConfig& host) const
         if (found == FindResult::FOUND || found == FindResult::UNREADABLE)
             profile_id = local_host.profileId();
     }
-    else if (host.routerId() > 0)
+    else if (isHostId(host.address()))
     {
         RouterHostConfig router_host;
         const FindResult found =
-            findRouterHost(host.routerId(), stringToHostId(host.address()), &router_host);
+            findRouterHost(stringToHostId(host.address()), &router_host);
         if (found == FindResult::FOUND || found == FindResult::UNREADABLE)
             profile_id = router_host.profileId();
     }

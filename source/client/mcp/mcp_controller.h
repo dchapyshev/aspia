@@ -75,7 +75,6 @@ public:
         proto::peer::SessionType session_type;
         QString name;
         qint64 entry_id = 0;
-        qint64 router_id = 0;
         QString address;
         bool portable = false;
         bool detached = false;

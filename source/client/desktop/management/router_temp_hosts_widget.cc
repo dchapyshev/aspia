@@ -123,18 +123,18 @@ RouterTempHostsWidget::RouterTempHostsWidget(bool portable, QWidget* parent)
     connect(tree_->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterTempHostsWidget::onHeaderContextMenu);
 
-    // The working sessions come and go with their connections, so the subscriptions live on the
-    // controller and follow whatever record is displayed.
+    // The working session comes and goes with its connection, so the subscriptions live on the
+    // controller.
     RouterController& controller = RouterController::instance();
-    connect(&controller, &RouterController::sig_tempHostsChanged, this, [this](qint64 router_id)
+    connect(&controller, &RouterController::sig_tempHostsChanged, this, [this]()
     {
-        if (router_id == router_id_)
+        if (shown_)
             fetchTempHosts();
     });
     connect(&controller, &RouterController::sig_statusChanged, this,
-            [this](qint64 router_id, RouterStatus status)
+            [this](RouterStatus status)
     {
-        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        if (status != RouterStatus::ONLINE)
             model_->clear();
     });
 }
@@ -146,9 +146,9 @@ RouterTempHostsWidget::~RouterTempHostsWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterTempHostsWidget::showRouter(qint64 router_id)
+void RouterTempHostsWidget::showRouter()
 {
-    router_id_ = router_id;
+    shown_ = true;
     page_.clear();
 
     model_->clear();
@@ -183,7 +183,7 @@ HostConfig RouterTempHostsWidget::selectedHostConfig() const
     if (hosts.size() != 1 || hosts.front().temp_id == kInvalidHostId)
         return HostConfig();
 
-    HostConfig config = HostConfig::forRouterHost(router_id_, hosts.front().temp_id, hosts.front().computer_name);
+    HostConfig config = HostConfig::forRouterHost(hosts.front().temp_id, hosts.front().computer_name);
     config.setPortable(hosts.front().portable);
     return config;
 }
@@ -234,7 +234,7 @@ void RouterTempHostsWidget::onApproveHost()
         return;
     }
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
@@ -398,7 +398,7 @@ void RouterTempHostsWidget::onNextClicked()
 //--------------------------------------------------------------------------------------------------
 void RouterTempHostsWidget::fetchTempHosts()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 

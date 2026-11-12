@@ -30,8 +30,10 @@
 #if defined(Q_OS_ANDROID)
 #include <QCoreApplication>
 #include <QJniObject>
+#include <QWidget>
 
 #include "client/android/main_window.h"
+#include "common/android/message_dialog.h"
 #else
 #include <QCommandLineParser>
 #include <QDir>
@@ -45,6 +47,7 @@
 #include "client/desktop/update_server_dialog.h"
 #include "client/mcp/mcp_worker.h"
 #include "client/storage/database.h"
+#include "client/storage/database_migration.h"
 #include "client/storage/master_password.h"
 #include "client/storage/system_settings.h"
 #include "common/desktop/credentials_dialog.h"
@@ -278,6 +281,22 @@ int main(int argc, char* argv[])
     LOG(INFO) << "Qt version:" << QT_VERSION_STR;
     LOG(INFO) << "Command line:" << application.arguments();
 
+    if (application.isMigrationFailed())
+    {
+        const QString message = QApplication::translate(
+            "Client", "Unable to move the address book into the new format. The old address book is not "
+                      "changed, and the next start tries again. The details are in the log.");
+
+#if defined(Q_OS_ANDROID)
+        QWidget window;
+        window.showMaximized();
+        MessageDialog::info(&window, QApplication::translate("Client", "Aspia Client"), message);
+#else
+        MsgBox::warning(nullptr, message);
+#endif // defined(Q_OS_ANDROID)
+        return 1;
+    }
+
 #if defined(Q_OS_ANDROID)
     AndroidMainWindow main_window;
     main_window.show();
@@ -329,6 +348,9 @@ int main(int argc, char* argv[])
         if (!setMasterPassword())
             return 0;
     }
+
+    if (!DatabaseMigration::finish(Database::instance(), DatabaseMigration::oldFilePath()))
+        LOG(ERROR) << "Unable to move the router of the old address book, the next start tries again";
 
     backupOnStartup();
 

@@ -21,7 +21,7 @@
 
 #include "client/mcp/mcp_tool.h"
 
-// Searches the hosts of the connected routers by the name and the host ID. The credentials and
+// Searches the hosts of the router by the name and the host ID. The credentials and
 // the comments are never returned.
 class FindRouterHostsTool final : public McpTool
 {

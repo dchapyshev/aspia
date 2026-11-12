@@ -125,13 +125,13 @@ protected:
         return model_.get();
     }
 
-    // A page as the widget builds it: the matches of the address book first, then the ones of a
+    // A page as the widget builds it: the matches of the address book first, then the ones of the
     // router. The names only sort right when read as a person reads them.
     static QList<Row> rows()
     {
         return { makeLocalRow(11, "host2", "192.168.0.2", "Local / Office"),
                  makeLocalRow(12, "host10", "192.168.0.10", "Local"),
-                 makeRouterRow("alpha", "123 456 789", "Router 1") };
+                 makeRouterRow("alpha", "123 456 789", "Router") };
     }
 
     static QStringList rowNames(const SearchResultModel* model)
@@ -188,7 +188,7 @@ TEST_F(SearchResultModelTest, RowShowsWhereItWasFound)
 
     EXPECT_EQ(textAt(model(), 2, Column::NAME), QString("alpha"));
     EXPECT_EQ(textAt(model(), 2, Column::ADDRESS), QString("123 456 789"));
-    EXPECT_EQ(textAt(model(), 2, Column::SOURCE), QString("Router 1"));
+    EXPECT_EQ(textAt(model(), 2, Column::SOURCE), QString("Router"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -305,12 +305,12 @@ TEST_F(SearchResultModelTest, SortingCarriesTheSelectionToItsRow)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Rows of routers have no id to be told apart by, so the selection is carried by a key of the model
-// instead. Found by id they would all be the same row.
+// Rows of the router have no id to be told apart by, so the selection is carried by a key of the
+// model instead. Found by id they would all be the same row.
 TEST_F(SearchResultModelTest, SortingCarriesTheSelectionOfARouterRow)
 {
-    model()->setRows({ makeRouterRow("beta", "111 111 111", "Router 1"),
-                       makeRouterRow("alpha", "222 222 222", "Router 2") });
+    model()->setRows({ makeRouterRow("beta", "111 111 111", "Router"),
+                       makeRouterRow("alpha", "222 222 222", "Router") });
     model()->sort(static_cast<int>(Column::NAME), Qt::AscendingOrder);
 
     QItemSelectionModel selection(model());
@@ -367,7 +367,7 @@ TEST_F(SearchResultModelTest, UpdateOfARecordThatIsNotShownChangesNothing)
     EXPECT_FALSE(model()->updateEntry(absent, "Local"));
 
     LocalHostConfig router_host;
-    EXPECT_FALSE(model()->updateEntry(router_host, "Router 1"));
+    EXPECT_FALSE(model()->updateEntry(router_host, "Router"));
 
     EXPECT_EQ(rowNames(model()), QStringList({ "host2", "host10", "alpha" }));
 }

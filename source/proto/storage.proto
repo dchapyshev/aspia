@@ -35,10 +35,12 @@ message HostBlob
 // The encrypted column of a router record.
 message RouterBlob
 {
-    string address     = 1;
-    string username    = 2;
-    string password    = 3;
-    bytes device_token = 4;
+    string address      = 1;
+    string username     = 2;
+    string password     = 3;
+    bytes device_token  = 4;
+    uint32 session_type = 5;
+    bool enabled        = 6;
 }
 
 // The encrypted proxy settings of the client.
@@ -64,23 +66,21 @@ message BackupFile
 {
     message Router
     {
-        string guid         = 1;
-        string display_name = 2;
-        string address      = 3;
-        uint32 session_type = 4;
-        string username     = 5;
-        string password     = 6;
+        string address      = 1;
+        uint32 session_type = 2;
+        string username     = 3;
+        string password     = 4;
+        bool enabled        = 5;
     }
 
     message RouterHost
     {
-        string router_guid        = 1;
-        uint64 host_id            = 2;
-        string username           = 3;
-        string password           = 4;
-        string credential_guid    = 5;
-        string os_credential_guid = 6;
-        string profile_guid       = 7;
+        uint64 host_id            = 1;
+        string username           = 2;
+        string password           = 3;
+        string credential_guid    = 4;
+        string os_credential_guid = 5;
+        string profile_guid       = 6;
     }
 
     message LocalGroup
@@ -95,18 +95,17 @@ message BackupFile
     {
         string guid               = 1;
         string group_guid         = 2;
-        string router_guid        = 3;
-        string name               = 4;
-        string comment            = 5;
-        string address            = 6;
-        string username           = 7;
-        string password           = 8;
-        int64 create_time         = 9;
-        int64 modify_time         = 10;
-        int64 connect_time        = 11;
-        string credential_guid    = 12;
-        string os_credential_guid = 13;
-        string profile_guid       = 14;
+        string name               = 3;
+        string comment            = 4;
+        string address            = 5;
+        string username           = 6;
+        string password           = 7;
+        int64 create_time         = 8;
+        int64 modify_time         = 9;
+        int64 connect_time        = 10;
+        string credential_guid    = 11;
+        string os_credential_guid = 12;
+        string profile_guid       = 13;
     }
 
     message Credential
@@ -128,7 +127,7 @@ message BackupFile
 
     message Content
     {
-        repeated Router routers          = 1;
+        Router router                    = 1;
         repeated RouterHost router_hosts = 2;
         repeated LocalGroup local_groups = 3;
         repeated LocalHost local_hosts   = 4;

@@ -424,12 +424,6 @@ void NetworkWorker::startConnection()
     {
         LOG(INFO) << "Starting RELAY connection";
 
-        if (session_state_->routerId() <= 0)
-        {
-            LOG(FATAL) << "No router id. Continuation is impossible";
-            return;
-        }
-
         const proto::router::ConnectionOffer offer = session_state_->connectionOffer();
         if (offer.error_code() != proto::router::kErrorOk)
         {

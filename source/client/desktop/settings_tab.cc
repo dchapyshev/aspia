@@ -27,8 +27,8 @@
 #include <QEvent>
 #include <QFileDialog>
 #include <QGuiApplication>
-#include <QHeaderView>
 #include <QInputDialog>
+#include <QLineEdit>
 #include <QPalette>
 #include <QPointer>
 #include <QPushButton>
@@ -37,7 +37,6 @@
 #include <QSignalBlocker>
 #include <QSpinBox>
 #include <QToolButton>
-#include <QTreeWidget>
 #include <QVBoxLayout>
 
 #include "base/auto_qpointer.h"
@@ -46,10 +45,11 @@
 #include "base/logging.h"
 #include "base/process_util.h"
 #include "base/crypto/secure_string.h"
+#include "base/net/address.h"
 #include "base/net/udp_channel.h"
+#include "base/peer/user.h"
 #include "client/application.h"
 #include "client/mcp/mcp_worker.h"
-#include "client/desktop/router_dialog.h"
 #include "client/desktop/ui_settings_tab.h"
 #include "client/desktop/update_server_dialog.h"
 #include "client/storage/database.h"
@@ -143,7 +143,6 @@ SettingsTab::SettingsTab(QWidget* parent)
 
     int button_id = 0;
     add_button(button_id++, ":/img/gear.svg", tr("General"));
-    add_button(button_id++, ":/img/stack.svg", tr("Routers"));
     add_button(button_id++, ":/img/dashboard-layout.svg", tr("Profiles"));
     add_button(button_id++, ":/img/ai.svg", "MCP");
     add_button(button_id++, ":/img/restart.svg", tr("Update"));
@@ -164,13 +163,13 @@ SettingsTab::SettingsTab(QWidget* parent)
         outer->addStretch(1);
     };
     center(ui->layout_general_outer, ui->page_general_content, kMaxContentWidth);
-    center(ui->layout_routers_outer, ui->page_routers_content, kMaxContentWidth);
+    center(ui->layout_general_footer_outer, ui->page_general_footer_content, kMaxContentWidth);
     center(ui->layout_desktop_outer, ui->page_desktop_content, kMaxContentWidth);
     center(ui->layout_mcp_outer, ui->page_mcp_content, kMaxContentWidth);
     center(ui->layout_update_outer, ui->page_update_content, kMaxContentWidth);
 
     // A scroll area fills the page with the window color, the pane of the tab has the base one.
-    for (QScrollArea* page : { ui->page_general, ui->page_routers, ui->page_desktop, ui->page_mcp, ui->page_update })
+    for (QScrollArea* page : { ui->scroll_general, ui->page_desktop, ui->page_mcp, ui->page_update })
     {
         page->viewport()->setAutoFillBackground(false);
         page->widget()->setAutoFillBackground(false);
@@ -208,6 +207,16 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->combo_backup_retention->addItem(tr("1 year"), static_cast<int>(AutoBackup::Retention::ONE_YEAR));
     ui->combo_backup_retention->setCurrentIndex(
         ui->combo_backup_retention->findData(static_cast<int>(db.backupRetention())));
+
+    ui->combo_router_session_type->addItem(tr("Administrator"), proto::router::SESSION_TYPE_ADMIN);
+    ui->combo_router_session_type->addItem(tr("Manager"), proto::router::SESSION_TYPE_MANAGER);
+    ui->combo_router_session_type->addItem(tr("Operator"), proto::router::SESSION_TYPE_OPERATOR);
+    ui->edit_router_password->setShowPasswordButtonVisible(true);
+
+    loadRouter();
+
+    ui->button_save_general->setIcon(QIcon(":/img/done.svg"));
+    ui->button_save_general->setIconSize(QSize(24, 24));
 
     ui->combo_lock_timeout->addItem(tr("Do not lock"), 0);
     ui->combo_lock_timeout->addItem(tr("1 minute"), 1);
@@ -248,15 +257,6 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->edit_proxy_username->setText(proxy_settings.user);
     ui->edit_proxy_password->setPassword(proxy_settings.password);
     updateProxyFields();
-
-    // Routers page.
-    QHeaderView* routers_header = ui->tree_routers->header();
-    routers_header->resizeSection(0, 200);
-    routers_header->resizeSection(1, 200);
-    routers_header->resizeSection(2, 150);
-    routers_header->resizeSection(3, 150);
-
-    reloadRouters(-1);
 
     // Profiles page.
     ui->combo_resolution->addItem(tr("None"), QSize());
@@ -316,35 +316,38 @@ SettingsTab::SettingsTab(QWidget* parent)
     // Wire signals after initial values are loaded to avoid spurious saves.
     connect(category_group_, &QButtonGroup::idClicked, this, &SettingsTab::onCategoryChanged);
 
-    connect(ui->combo_language, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &SettingsTab::onLanguageChanged);
-    connect(ui->combo_theme, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &SettingsTab::onThemeChanged);
-    connect(ui->edit_display_name, &QLineEdit::editingFinished,
-            this, &SettingsTab::onDisplayNameChanged);
-    connect(ui->checkbox_confirm_close, &QCheckBox::toggled, this, &SettingsTab::onConfirmCloseChanged);
-    connect(ui->checkbox_backup_on_startup, &QCheckBox::toggled, this, &SettingsTab::onBackupOnStartupChanged);
-    connect(ui->edit_backup_dir, &QLineEdit::editingFinished, this, &SettingsTab::onBackupPathChanged);
-    connect(ui->button_select_backup_dir, &QPushButton::clicked, this, &SettingsTab::onSelectBackupPath);
-    connect(ui->combo_backup_retention, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &SettingsTab::onBackupRetentionChanged);
+    // Every field of the general page waits for the save button.
+    for (QComboBox* combo : { ui->combo_language, ui->combo_theme, ui->combo_backup_retention,
+                              ui->combo_router_session_type, ui->combo_lock_timeout })
+    {
+        connect(combo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsTab::onGeneralChanged);
+    }
+
+    for (QLineEdit* edit : { ui->edit_display_name, ui->edit_backup_dir, ui->edit_router_address,
+                             ui->edit_router_username, static_cast<QLineEdit*>(ui->edit_router_password),
+                             ui->edit_proxy_address, ui->edit_proxy_username,
+                             static_cast<QLineEdit*>(ui->edit_proxy_password) })
+    {
+        connect(edit, &QLineEdit::textChanged, this, &SettingsTab::onGeneralChanged);
+    }
+
+    for (QCheckBox* checkbox : { ui->checkbox_confirm_close, ui->checkbox_backup_on_startup,
+                                 ui->checkbox_router_enabled })
+    {
+        connect(checkbox, &QCheckBox::toggled, this, &SettingsTab::onGeneralChanged);
+    }
+
+    connect(ui->spinbox_proxy_port, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &SettingsTab::onGeneralChanged);
     connect(ui->combo_proxy_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &SettingsTab::onProxyChanged);
-    connect(ui->edit_proxy_address, &QLineEdit::editingFinished, this, &SettingsTab::onProxyChanged);
-    connect(ui->spinbox_proxy_port, &QSpinBox::editingFinished, this, &SettingsTab::onProxyChanged);
-    connect(ui->edit_proxy_username, &QLineEdit::editingFinished, this, &SettingsTab::onProxyChanged);
-    connect(ui->edit_proxy_password, &QLineEdit::editingFinished, this, &SettingsTab::onProxyChanged);
-    connect(ui->combo_lock_timeout, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &SettingsTab::onLockTimeoutChanged);
-    connect(ui->checkbox_auto_unlock, &QCheckBox::toggled, this, &SettingsTab::onAutoUnlockChanged);
+            this, &SettingsTab::onProxyTypeChanged);
+    connect(ui->checkbox_auto_unlock, &QCheckBox::toggled, this, &SettingsTab::onAutoUnlockToggled);
+    connect(ui->button_select_backup_dir, &QPushButton::clicked, this, &SettingsTab::onSelectBackupPath);
+    connect(ui->button_save_general, &QPushButton::clicked, this, &SettingsTab::onSaveGeneral);
     connect(ui->button_change_master_password, &QPushButton::clicked,
             this, &SettingsTab::onChangeMasterPassword);
 
-    connect(ui->tree_routers, &QTreeWidget::currentItemChanged, this, &SettingsTab::onCurrentRouterChanged);
-    connect(ui->tree_routers, &QTreeWidget::itemDoubleClicked, this, &SettingsTab::onEditRouter);
-    connect(ui->button_add_router, &QPushButton::clicked, this, &SettingsTab::onAddRouter);
-    connect(ui->button_edit_router, &QPushButton::clicked, this, &SettingsTab::onEditRouter);
-    connect(ui->button_delete_router, &QPushButton::clicked, this, &SettingsTab::onDeleteRouter);
+    ui->button_save_general->setEnabled(false);
 
     connect(ui->combo_profile, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onProfileChanged);
@@ -415,8 +418,11 @@ void SettingsTab::restoreState(const QByteArray& /* state */)
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::activate()
 {
-    QTreeWidgetItem* item = ui->tree_routers->currentItem();
-    reloadRouters(item ? item->data(0, Qt::UserRole).toLongLong() : -1);
+    if (ui->button_save_general->isEnabled())
+        return;
+
+    loadRouter();
+    ui->button_save_general->setEnabled(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -444,64 +450,9 @@ void SettingsTab::onCategoryChanged(int id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::onLanguageChanged()
+void SettingsTab::onGeneralChanged()
 {
-    QString new_locale = ui->combo_language->currentData().toString();
-    LOG(INFO) << "[ACTION] Language changed:" << new_locale;
-
-    // The language is not switched live; the new value is applied on the next application start.
-    Settings settings;
-    settings.setLocale(new_locale);
-
-    MsgBox::information(this,
-        tr("The new language will be applied after the application is restarted."));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onThemeChanged()
-{
-    QString new_theme = ui->combo_theme->currentData().toString();
-    LOG(INFO) << "[ACTION] Theme changed:" << new_theme;
-
-    Settings settings;
-    settings.setTheme(new_theme);
-    GuiApplication::instance()->setTheme(new_theme);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onDisplayNameChanged()
-{
-    LOG(INFO) << "[ACTION] Display name changed";
-    Database::instance().setDisplayName(ui->edit_display_name->text());
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onConfirmCloseChanged()
-{
-    LOG(INFO) << "[ACTION] Confirm close changed";
-    Database::instance().setConfirmCloseEnabled(ui->checkbox_confirm_close->isChecked());
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onBackupOnStartupChanged()
-{
-    LOG(INFO) << "[ACTION] Backup on startup changed";
-    Database::instance().setBackupOnStartupEnabled(ui->checkbox_backup_on_startup->isChecked());
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onBackupPathChanged()
-{
-    LOG(INFO) << "[ACTION] Backup path changed";
-
-    Database& db = Database::instance();
-    if (ui->edit_backup_dir->text().isEmpty())
-    {
-        ui->edit_backup_dir->setText(db.backupPath());
-        return;
-    }
-
-    db.setBackupPath(ui->edit_backup_dir->text());
+    ui->button_save_general->setEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -521,143 +472,122 @@ void SettingsTab::onSelectBackupPath()
 
     LOG(INFO) << "[ACTION] Backup path selected:" << path;
     ui->edit_backup_dir->setText(path);
-    Database::instance().setBackupPath(path);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::onBackupRetentionChanged()
+void SettingsTab::onProxyTypeChanged()
 {
-    LOG(INFO) << "[ACTION] Backup retention changed";
-    Database::instance().setBackupRetention(
+    updateProxyFields();
+    onGeneralChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onAutoUnlockToggled()
+{
+    ui->combo_lock_timeout->setEnabled(!ui->checkbox_auto_unlock->isChecked());
+    onGeneralChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onSaveGeneral()
+{
+    LOG(INFO) << "[ACTION] Save general settings";
+
+    std::optional<RouterConfig> router;
+    if (!routerFromUi(&router))
+        return;
+
+    Database& db = Database::instance();
+    Settings settings;
+
+    const QString locale = ui->combo_language->currentData().toString();
+    const bool locale_changed = locale != settings.locale();
+    if (locale_changed)
+    {
+        LOG(INFO) << "Language changed:" << locale;
+        settings.setLocale(locale);
+    }
+
+    const QString theme = ui->combo_theme->currentData().toString();
+    if (theme != settings.theme())
+    {
+        LOG(INFO) << "Theme changed:" << theme;
+        settings.setTheme(theme);
+        GuiApplication::instance()->setTheme(theme);
+    }
+
+    bool written = db.setDisplayName(ui->edit_display_name->text());
+    written &= db.setConfirmCloseEnabled(ui->checkbox_confirm_close->isChecked());
+    written &= db.setBackupOnStartupEnabled(ui->checkbox_backup_on_startup->isChecked());
+
+    // An empty field names no directory, so the stored one stays.
+    if (ui->edit_backup_dir->text().isEmpty())
+        ui->edit_backup_dir->setText(db.backupPath());
+    else
+        written &= db.setBackupPath(ui->edit_backup_dir->text());
+
+    written &= db.setBackupRetention(
         static_cast<AutoBackup::Retention>(ui->combo_backup_retention->currentData().toInt()));
-}
 
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onProxyChanged()
-{
-    const int type = ui->combo_proxy_type->currentData().toInt();
+    const int proxy_type = ui->combo_proxy_type->currentData().toInt();
 
-    ProxySettings settings;
-    settings.enabled = type != kNoProxy;
-    if (settings.enabled)
-        settings.type = static_cast<ProxySettings::Type>(type);
-    settings.address = ui->edit_proxy_address->text().trimmed();
-    settings.port = static_cast<quint16>(ui->spinbox_proxy_port->value());
-    settings.user = ui->edit_proxy_username->text();
-    settings.password = ui->edit_proxy_password->password();
+    ProxySettings proxy_settings;
+    proxy_settings.enabled = proxy_type != kNoProxy;
+    if (proxy_settings.enabled)
+        proxy_settings.type = static_cast<ProxySettings::Type>(proxy_type);
+    proxy_settings.address = ui->edit_proxy_address->text().trimmed();
+    proxy_settings.port = static_cast<quint16>(ui->spinbox_proxy_port->value());
+    proxy_settings.user = ui->edit_proxy_username->text();
+    proxy_settings.password = ui->edit_proxy_password->password();
 
     ProxyConfig proxy;
-    proxy.setSettings(settings);
+    proxy.setSettings(proxy_settings);
+    written &= db.setProxyConfig(proxy);
 
-    if (settings.enabled)
-        LOG(INFO) << "[ACTION] Proxy changed:" << settings.type;
-    else
-        LOG(INFO) << "[ACTION] Proxy turned off";
-
-    updateProxyFields();
-    Database::instance().setProxyConfig(proxy);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onLockTimeoutChanged()
-{
-    LOG(INFO) << "[ACTION] Lock timeout changed";
-    Database::instance().setLockTimeout(Minutes(ui->combo_lock_timeout->currentData().toInt()));
-    emit sig_lockTimeoutChanged();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onAutoUnlockChanged()
-{
-    const bool enable = ui->checkbox_auto_unlock->isChecked();
-    LOG(INFO) << "[ACTION] Auto unlock changed:" << enable;
-
-    const bool done = enable ? enableAutoUnlock() : MasterPassword::setAutoUnlockEnabled(false);
-    const bool auto_unlock = MasterPassword::isAutoUnlockEnabled();
-
-    if (!done)
+    // The master password is asked for here, and a refusal leaves the box as the stored state is.
+    const bool auto_unlock = ui->checkbox_auto_unlock->isChecked();
+    if (auto_unlock != MasterPassword::isAutoUnlockEnabled())
     {
-        QSignalBlocker blocker(ui->checkbox_auto_unlock);
-        ui->checkbox_auto_unlock->setChecked(auto_unlock);
+        LOG(INFO) << "Auto unlock changed:" << auto_unlock;
+
+        if (!(auto_unlock ? enableAutoUnlock() : MasterPassword::setAutoUnlockEnabled(false)))
+        {
+            QSignalBlocker blocker(ui->checkbox_auto_unlock);
+            ui->checkbox_auto_unlock->setChecked(MasterPassword::isAutoUnlockEnabled());
+            ui->combo_lock_timeout->setEnabled(!ui->checkbox_auto_unlock->isChecked());
+        }
     }
 
     // A locked application would be unlocked by starting it again.
-    if (auto_unlock)
+    if (MasterPassword::isAutoUnlockEnabled())
         ui->combo_lock_timeout->setCurrentIndex(ui->combo_lock_timeout->findData(0));
-    ui->combo_lock_timeout->setEnabled(!auto_unlock);
-}
 
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onCurrentRouterChanged()
-{
-    const bool selected = ui->tree_routers->currentItem() != nullptr;
-    ui->button_edit_router->setEnabled(selected);
-    ui->button_delete_router->setEnabled(selected);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onAddRouter()
-{
-    LOG(INFO) << "[ACTION] Add router";
-
-    AutoQPointer<RouterDialog> dialog(new RouterDialog(-1, this));
-    if (dialog->exec() != QDialog::Accepted)
+    const Minutes lock_timeout(ui->combo_lock_timeout->currentData().toInt());
+    if (lock_timeout != db.lockTimeout())
     {
-        LOG(INFO) << "[ACTION] Rejected by user";
-        return;
+        written &= db.setLockTimeout(lock_timeout);
+        emit sig_lockTimeoutChanged();
     }
 
-    reloadRouters(-1);
-    emit sig_routersChanged();
-}
+    if (!written)
+        MsgBox::warning(this, tr("Failed to save the settings."));
 
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onEditRouter()
-{
-    QTreeWidgetItem* item = ui->tree_routers->currentItem();
-    if (!item)
-        return;
-
-    const qint64 router_id = item->data(0, Qt::UserRole).toLongLong();
-    LOG(INFO) << "[ACTION] Edit router" << router_id;
-
-    AutoQPointer<RouterDialog> dialog(new RouterDialog(router_id, this));
-    if (dialog->exec() != QDialog::Accepted)
+    bool router_saved = true;
+    if (router.has_value())
     {
-        LOG(INFO) << "[ACTION] Rejected by user";
-        return;
+        router_saved = saveRouter(*router);
+        if (router_saved)
+        {
+            loadRouter();
+            emit sig_routerChanged();
+        }
     }
 
-    reloadRouters(router_id);
-    emit sig_routersChanged();
-}
+    // What was not written stays in the fields, so the save can be tried again.
+    ui->button_save_general->setEnabled(!written || !router_saved);
 
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onDeleteRouter()
-{
-    QTreeWidgetItem* item = ui->tree_routers->currentItem();
-    if (!item)
-        return;
-
-    const qint64 router_id = item->data(0, Qt::UserRole).toLongLong();
-    LOG(INFO) << "[ACTION] Delete router" << router_id;
-
-    QString message = tr("Are you sure you want to delete router \"%1\"?").arg(item->text(0));
-    if (MsgBox::question(this, message) == MsgBox::No)
-    {
-        LOG(INFO) << "Action is rejected by user";
-        return;
-    }
-
-    if (!Database::instance().removeRouter(router_id))
-    {
-        MsgBox::warning(this, tr("Unable to delete router."));
-        return;
-    }
-
-    Settings().removeRouterExpanded(router_id);
-    reloadRouters(-1);
-    emit sig_routersChanged();
+    if (locale_changed)
+        MsgBox::information(this, tr("The new language will be applied after the application is restarted."));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1078,41 +1008,125 @@ bool SettingsTab::enableAutoUnlock()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::reloadRouters(qint64 router_id)
+void SettingsTab::loadRouter()
 {
-    QList<RouterConfig> routers;
-    if (Database::instance().routerList(&routers) == Database::ReadResult::FAILED)
-        MsgBox::warning(this, tr("Failed to read the list of routers."));
-
-    QTreeWidget* tree = ui->tree_routers;
-    tree->clear();
-
-    const QIcon icon(":/img/stack.svg");
-
-    for (const RouterConfig& router : std::as_const(routers))
+    RouterConfig router;
+    const Database::FindResult found = Database::instance().routerConfig(&router);
+    if (found == Database::FindResult::FAILED)
     {
-        QString access_level;
-
-        if (router.sessionType() == proto::router::SESSION_TYPE_ADMIN)
-            access_level = tr("Administrator");
-        else if (router.sessionType() == proto::router::SESSION_TYPE_MANAGER)
-            access_level = tr("Manager");
-        else if (router.sessionType() == proto::router::SESSION_TYPE_OPERATOR)
-            access_level = tr("Operator");
-
-        QTreeWidgetItem* item = new QTreeWidgetItem(tree);
-        item->setData(0, Qt::UserRole, router.routerId());
-        item->setIcon(0, icon);
-        item->setText(0, router.displayLabel());
-        item->setText(1, router.address());
-        item->setText(2, router.username());
-        item->setText(3, access_level);
-
-        if (router.routerId() == router_id)
-            tree->setCurrentItem(item);
+        LOG(ERROR) << "Unable to read the router";
+        MsgBox::warning(this, tr("Failed to read the router."));
     }
 
-    onCurrentRouterChanged();
+    const proto::router::SessionType session_type = found == Database::FindResult::NOT_FOUND ?
+        proto::router::SESSION_TYPE_OPERATOR : router.sessionType();
+
+    ui->edit_router_address->setText(router.address());
+    ui->combo_router_session_type->setCurrentIndex(ui->combo_router_session_type->findData(session_type));
+    ui->edit_router_username->setText(router.username());
+    ui->edit_router_password->setPassword(router.password());
+    ui->checkbox_router_enabled->setChecked(router.isEnabled());
+
+    if (found == Database::FindResult::UNREADABLE)
+        LOG(ERROR) << "Data of the router could not be read";
+
+    ui->label_router_damaged->setVisible(found == Database::FindResult::UNREADABLE);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SettingsTab::routerFromUi(std::optional<RouterConfig>* router)
+{
+    const QString address_text = ui->edit_router_address->text();
+    const QString username = ui->edit_router_username->text();
+    const SecureString password = ui->edit_router_password->password();
+
+    if (address_text.isEmpty() && username.isEmpty() && password.isEmpty())
+    {
+        RouterConfig stored;
+        const Database::FindResult found = Database::instance().routerConfig(&stored);
+        if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::UNREADABLE)
+        {
+            router->reset();
+            return true;
+        }
+
+        if (found == Database::FindResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to read the router";
+            MsgBox::warning(this, tr("Failed to read the router."));
+            return false;
+        }
+    }
+
+    Address address = Address::fromString(address_text, kDefaultRouterClientTcpPort);
+    if (!address.isValid())
+    {
+        LOG(ERROR) << "Invalid router address entered";
+        showRouterError(ui->edit_router_address, tr("An invalid router address was entered."));
+        return false;
+    }
+
+    if (!User::isValidUserName(username))
+    {
+        LOG(ERROR) << "Invalid user name entered";
+        showRouterError(ui->edit_router_username,
+                        tr("The user name can not be empty and can contain only"
+                           " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
+        return false;
+    }
+
+    if (password.isEmpty())
+    {
+        LOG(ERROR) << "Invalid password entered";
+        showRouterError(ui->edit_router_password, tr("Password cannot be empty."));
+        return false;
+    }
+
+    RouterConfig config;
+    config.setAddress(address_text);
+    config.setSessionType(
+        static_cast<proto::router::SessionType>(ui->combo_router_session_type->currentData().toUInt()));
+    config.setUsername(username);
+    config.setPassword(password);
+    config.setEnabled(ui->checkbox_router_enabled->isChecked());
+
+    *router = config;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SettingsTab::saveRouter(RouterConfig router)
+{
+    Database& db = Database::instance();
+
+    RouterConfig stored;
+    const Database::FindResult stored_found = db.routerConfig(&stored);
+    if (stored_found == Database::FindResult::FAILED)
+    {
+        LOG(ERROR) << "Failed to re-read the router";
+        MsgBox::warning(this, tr("Failed to save the router."));
+        return false;
+    }
+
+    if (stored_found == Database::FindResult::FOUND && stored.hasSameAccount(router))
+        router.setDeviceToken(stored.deviceToken());
+
+    if (!db.setRouterConfig(router))
+    {
+        LOG(ERROR) << "Failed to write router to database";
+        MsgBox::warning(this, tr("Failed to save the router."));
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::showRouterError(QLineEdit* edit, const QString& message)
+{
+    MsgBox::warning(this, message);
+    edit->setFocus();
+    edit->selectAll();
 }
 
 //--------------------------------------------------------------------------------------------------

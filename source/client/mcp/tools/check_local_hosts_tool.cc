@@ -68,7 +68,7 @@ QJsonObject CheckLocalHostsTool::definition() const
         { "description", "Checks whether the hosts saved in the local database of Aspia Client are online. The "
                          "status is online, offline or unknown. It is unknown when the host has no address, or "
                          "when the host is reached by a host ID and its router is not connected or does not "
-                         "answer in time. The hosts of routers are checked by check_router_hosts." },
+                         "answer in time. The hosts of the router are checked by check_router_hosts." },
         { "inputSchema", QJsonObject{ { "type", "object" },
                                       { "properties", QJsonObject{ { "ids", ids } } },
                                       { "required", QJsonArray{ "ids" } },

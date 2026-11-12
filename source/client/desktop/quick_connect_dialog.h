@@ -46,15 +46,11 @@ public:
     proto::peer::SessionType sessionType() const;
 
 private slots:
-    void onRouterChanged(int index);
     void onButtonBoxClicked(QAbstractButton* button);
     void onLoadData();
 
 private:
-    void updateAddressLabel();
-
     std::unique_ptr<Ui::QuickConnectDialog> ui;
-    qint64 router_id_ = 0;
     qint32 session_type_ = 0;
 
     Q_DISABLE_COPY_MOVE(QuickConnectDialog)

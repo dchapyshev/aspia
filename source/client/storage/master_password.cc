@@ -70,7 +70,7 @@ MasterPassword::Result changeKeyAndReencrypt(
     const SecureByteArray old_key = cryptor.key();
 
     QList<LocalHostConfig> local_hosts;
-    QList<RouterConfig> routers;
+    RouterConfig router;
     QList<RouterHostConfig> router_hosts;
     QList<CredentialConfig> credentials;
     ProxyConfig proxy;
@@ -78,13 +78,19 @@ MasterPassword::Result changeKeyAndReencrypt(
     const Database::ReadResult read_results[] =
     {
         db.allLocalHosts(&local_hosts),
-        db.routerList(&routers),
         db.allRouterHosts(&router_hosts),
         db.credentialList(&credentials),
         db.proxyConfig(&proxy)
     };
 
-    bool incomplete = false;
+    const Database::FindResult router_found = db.routerConfig(&router);
+    if (router_found == Database::FindResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the address book";
+        return MasterPassword::Result::FAILED;
+    }
+
+    bool incomplete = router_found == Database::FindResult::UNREADABLE;
 
     for (Database::ReadResult read_result : read_results)
     {
@@ -106,7 +112,11 @@ MasterPassword::Result changeKeyAndReencrypt(
 
     cryptor.setKey(new_key);
 
-    if (!db.reencryptAll(local_hosts, routers, router_hosts, credentials, proxy, new_salt, new_verifier,
+    std::optional<RouterConfig> stored_router;
+    if (router_found == Database::FindResult::FOUND)
+        stored_router = router;
+
+    if (!db.reencryptAll(local_hosts, stored_router, router_hosts, credentials, proxy, new_salt, new_verifier,
                          kCurrentVersion))
     {
         // Nothing was written, so restore the in-memory key to keep it consistent with the database.

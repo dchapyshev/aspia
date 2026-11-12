@@ -19,6 +19,7 @@
 #include "client/storage/database.h"
 
 #include <QStandardPaths>
+#include <QUuid>
 
 #include "base/build_config.h"
 #include "base/logging.h"
@@ -28,6 +29,7 @@
 
 namespace {
 
+constexpr auto kSettingGuid          = "database_guid";
 constexpr auto kSettingDisplayName   = "display_name";
 constexpr auto kSettingConfirmClose  = "confirm_close";
 constexpr auto kSettingCheckUpdates  = "check_updates";
@@ -48,6 +50,12 @@ constexpr auto kSettingBiometricBlob = "biometric_blob";
 constexpr auto kSettingAutoUnlock    = "auto_unlock";
 
 } // namespace
+
+//--------------------------------------------------------------------------------------------------
+QString Database::guid() const
+{
+    return readSetting(kSettingGuid);
+}
 
 //--------------------------------------------------------------------------------------------------
 QString Database::displayName() const
@@ -364,4 +372,13 @@ bool Database::writeSetting(const QString& name, const QString& value)
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::ensureGuid()
+{
+    if (!guid().isEmpty())
+        return true;
+
+    return writeSetting(kSettingGuid, QUuid::createUuid().toString(QUuid::WithoutBraces));
 }

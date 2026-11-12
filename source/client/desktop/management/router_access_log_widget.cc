@@ -155,9 +155,9 @@ RouterAccessLogWidget::RouterAccessLogWidget(QWidget* parent)
     updateCountLabel();
 
     connect(&RouterController::instance(), &RouterController::sig_statusChanged, this,
-            [this](qint64 router_id, RouterStatus status)
+            [this](RouterStatus status)
     {
-        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        if (status != RouterStatus::ONLINE)
         {
             model_->clear();
             page_.clear();
@@ -174,9 +174,8 @@ RouterAccessLogWidget::~RouterAccessLogWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterAccessLogWidget::showRouter(qint64 router_id)
+void RouterAccessLogWidget::showRouter()
 {
-    router_id_ = router_id;
     page_.clear();
     max_entry_id_ = 0;
 
@@ -453,7 +452,7 @@ void RouterAccessLogWidget::onFilterReset()
 //--------------------------------------------------------------------------------------------------
 void RouterAccessLogWidget::fetchEntries()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 

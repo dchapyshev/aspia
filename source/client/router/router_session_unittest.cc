@@ -36,15 +36,14 @@
 
 namespace {
 
-constexpr qint64 kRouterId = 1;
 constexpr qint64 kWorkspaceId = 10;
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
-std::optional<RouterConfig> findRouter(const Database& db, qint64 router_id)
+std::optional<RouterConfig> findRouter(const Database& db)
 {
     RouterConfig router;
-    const Database::FindResult result = db.findRouter(router_id, &router);
+    const Database::FindResult result = db.routerConfig(&router);
     if (result != Database::FindResult::FOUND)
     {
         EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
@@ -97,7 +96,6 @@ protected:
     static SharedPointer<RouterConfig> config(const QByteArray& device_token = QByteArray())
     {
         RouterConfig* config = new RouterConfig();
-        config->setRouterId(kRouterId);
         config->setAddress("router.example.com");
         config->setUsername("user");
         config->setPassword(SecureString(QString("secret")));
@@ -109,8 +107,7 @@ protected:
     void seedRecord(const QByteArray& device_token = QByteArray())
     {
         RouterConfig record = *config(device_token);
-        ASSERT_TRUE(Database::instance().addRouter(record));
-        ASSERT_EQ(record.routerId(), kRouterId);
+        ASSERT_TRUE(Database::instance().setRouterConfig(record));
     }
 
     // Hands a reply to the session the way the owner does after parsing the wire.
@@ -533,7 +530,7 @@ TEST_F(RouterSessionTest, PasswordRotationIsStoredWithoutAReply)
 
     EXPECT_TRUE(shared->password() == SecureString(QString("new-password")));
 
-    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance());
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->password() == SecureString(QString("new-password")));
 }
@@ -564,7 +561,7 @@ TEST_F(RouterSessionTest, PasswordRotationSurvivesTheLostConnection)
     EXPECT_EQ(calls, 1);
     EXPECT_TRUE(shared->password() == SecureString(QString("new-password")));
 
-    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance());
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->password() == SecureString(QString("new-password")));
 }
@@ -596,7 +593,7 @@ TEST_F(RouterSessionTest, RefusedPasswordRotationIsRolledBack)
     EXPECT_FALSE(shared->deviceToken().isEmpty());
     EXPECT_TRUE(shared->password() == SecureString(QString("secret")));
 
-    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance());
     ASSERT_TRUE(stored.has_value());
     EXPECT_FALSE(stored->deviceToken().isEmpty());
     EXPECT_TRUE(stored->password() == SecureString(QString("secret")));
@@ -616,18 +613,19 @@ TEST_F(RouterSessionTest, StoreCredentialsWritesTheNewName)
 
     EXPECT_EQ(shared->username(), QString("renamed"));
 
-    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance());
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->username(), QString("renamed"));
     EXPECT_TRUE(stored->password() == SecureString(QString("new-password")));
 }
 
 //--------------------------------------------------------------------------------------------------
-// The record can be gone by the time the router accepts the rotation. The store says so instead
-// of pretending the record now holds the new password, and the journal of the record tells the
-// operator what to do.
-TEST_F(RouterSessionTest, CredentialsOfAGoneRecordAreReportedUnstored)
+// A store the database refuses is not passed off as done. The store says so instead of pretending
+// the record now holds the new password, and the journal of the record tells the operator what to do.
+TEST_F(RouterSessionTest, RefusedCredentialsAreReportedUnstored)
 {
+    seedRecord();
+
     // The controller does not run in this stand; the store reaches it only for the journal line.
     RouterController controller;
 
@@ -636,13 +634,14 @@ TEST_F(RouterSessionTest, CredentialsOfAGoneRecordAreReportedUnstored)
 
     int warnings = 0;
     QObject::connect(&controller, &RouterController::sig_event,
-                     &receiver_, [&warnings](qint64 router_id, const RouterEvent& event)
+                     &receiver_, [&warnings](const RouterEvent& event)
     {
-        if (router_id == kRouterId && event.severity == RouterEvent::Severity::WARNING)
+        if (event.severity == RouterEvent::Severity::WARNING)
             ++warnings;
     });
 
-    EXPECT_FALSE(router.storeCredentials("user", SecureString(QString("new-password"))));
+    // A router without a password is not one the database takes.
+    EXPECT_FALSE(router.storeCredentials("user", SecureString()));
     EXPECT_EQ(warnings, 1);
 }
 
@@ -652,7 +651,6 @@ TEST_F(RouterSessionTest, CredentialsOfAGoneRecordAreReportedUnstored)
 TEST_F(RouterSessionTest, DyingSessionAnswersItsCallers)
 {
     SharedPointer<RouterConfig> other = config();
-    other->setRouterId(kRouterId + 1);
 
     int calls = 0;
     std::string last_error;

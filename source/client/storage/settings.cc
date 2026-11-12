@@ -25,9 +25,15 @@
 
 #include "version.h"
 #include "base/logging.h"
+#include "base/files/base_paths.h"
 #include "proto/peer.h"
 
 namespace {
+
+QString g_test_file_path;
+
+const QString kDirectoryName = "client";
+const QString kFileName = "default.ini";
 
 const QString kVersionParam = "version";
 const QString kLocaleParam = "locale";
@@ -51,9 +57,9 @@ const QString kWorkspaceExpandedParam = "workspace_expanded";
 const QString kRouterGroupExpandedParam = "router_group_expanded";
 
 //--------------------------------------------------------------------------------------------------
-QString scopedKey(const QString& prefix, qint64 router_id, qint64 entry_id)
+QString scopedKey(const QString& prefix, qint64 entry_id)
 {
-    return prefix + "/" + QString::number(router_id) + "/" + QString::number(entry_id);
+    return prefix + "/" + QString::number(entry_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -70,7 +76,7 @@ void writeExpanded(QSettings& settings, const QString& key, bool expanded, bool 
 
 //--------------------------------------------------------------------------------------------------
 Settings::Settings()
-    : settings_(QSettings::IniFormat, QSettings::UserScope, "aspia", "client")
+    : settings_(filePath(), QSettings::IniFormat)
 {
     static std::once_flag version_check_flag;
     std::call_once(version_check_flag, [this]()
@@ -91,6 +97,27 @@ Settings::Settings()
 Settings::~Settings()
 {
     settings_.setValue(kVersionParam, QString::fromLatin1(ASPIA_VERSION_SHORT_STRING));
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString Settings::filePath()
+{
+    if (!g_test_file_path.isEmpty())
+        return g_test_file_path;
+
+    const QString dir_path = BasePaths::appUserDataDir();
+    if (dir_path.isEmpty())
+        return QString();
+
+    return dir_path + '/' + kDirectoryName + '/' + kFileName;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void Settings::setFilePathForTesting(const QString& file_path)
+{
+    g_test_file_path = file_path;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -311,33 +338,25 @@ void Settings::removeLocalGroupExpanded(qint64 group_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::isWorkspaceExpanded(qint64 router_id, qint64 workspace_id) const
+bool Settings::isWorkspaceExpanded(qint64 workspace_id) const
 {
-    return settings_.value(scopedKey(kWorkspaceExpandedParam, router_id, workspace_id), false).toBool();
+    return settings_.value(scopedKey(kWorkspaceExpandedParam, workspace_id), false).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setWorkspaceExpanded(qint64 router_id, qint64 workspace_id, bool expanded)
+void Settings::setWorkspaceExpanded(qint64 workspace_id, bool expanded)
 {
-    writeExpanded(settings_, scopedKey(kWorkspaceExpandedParam, router_id, workspace_id), expanded, false);
+    writeExpanded(settings_, scopedKey(kWorkspaceExpandedParam, workspace_id), expanded, false);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::isRouterGroupExpanded(qint64 router_id, qint64 group_id) const
+bool Settings::isRouterGroupExpanded(qint64 group_id) const
 {
-    return settings_.value(scopedKey(kRouterGroupExpandedParam, router_id, group_id), true).toBool();
+    return settings_.value(scopedKey(kRouterGroupExpandedParam, group_id), true).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setRouterGroupExpanded(qint64 router_id, qint64 group_id, bool expanded)
+void Settings::setRouterGroupExpanded(qint64 group_id, bool expanded)
 {
-    writeExpanded(settings_, scopedKey(kRouterGroupExpandedParam, router_id, group_id), expanded, true);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::removeRouterExpanded(qint64 router_id)
-{
-    const QString router_suffix = "/" + QString::number(router_id);
-    settings_.remove(kWorkspaceExpandedParam + router_suffix);
-    settings_.remove(kRouterGroupExpandedParam + router_suffix);
+    writeExpanded(settings_, scopedKey(kRouterGroupExpandedParam, group_id), expanded, true);
 }

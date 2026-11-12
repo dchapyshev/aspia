@@ -169,20 +169,20 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
     connect(ui->button_filter_reset, &QToolButton::clicked, this, &RouterHostsWidget::onFilterReset);
 
     RouterController& controller = RouterController::instance();
-    connect(&controller, &RouterController::sig_hostsChanged, this, [this](qint64 router_id)
+    connect(&controller, &RouterController::sig_hostsChanged, this, [this]()
     {
-        if (router_id == router_id_)
+        if (shown_)
             fetchHosts();
     });
-    connect(&controller, &RouterController::sig_workspacesChanged, this, [this](qint64 router_id)
+    connect(&controller, &RouterController::sig_workspacesChanged, this, [this]()
     {
-        if (router_id == router_id_)
+        if (shown_)
             fetchWorkspaces();
     });
     connect(&controller, &RouterController::sig_statusChanged, this,
-            [this](qint64 router_id, RouterStatus status)
+            [this](RouterStatus status)
     {
-        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        if (status != RouterStatus::ONLINE)
         {
             model_->setHosts({});
             workspace_names_.clear();
@@ -198,9 +198,9 @@ RouterHostsWidget::~RouterHostsWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostsWidget::showRouter(qint64 router_id)
+void RouterHostsWidget::showRouter()
 {
-    router_id_ = router_id;
+    shown_ = true;
     hosts_page_.clear();
 
     model_->setHosts({});
@@ -247,7 +247,7 @@ HostConfig RouterHostsWidget::selectedHostConfig() const
     if (name.isEmpty())
         name = host.computer_name;
 
-    return HostConfig::forRouterHost(router_id_, host.host_id, name);
+    return HostConfig::forRouterHost(host.host_id, name);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -345,7 +345,7 @@ void RouterHostsWidget::onModifyHost()
 
     const RouterHost& host = hosts.front();
 
-    AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(router_id_, host, this));
+    AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(host, this));
     if (dialog->exec() == QDialog::Accepted)
         fetchHosts();
 }
@@ -443,7 +443,7 @@ void RouterHostsWidget::onHostTelemetry()
     const RouterHost& host = hosts.front();
 
     LOG(INFO) << "[ACTION] Host telemetry requested by user";
-    AutoQPointer<HostTelemetryDialog> dialog(new HostTelemetryDialog(router_id_, host, this));
+    AutoQPointer<HostTelemetryDialog> dialog(new HostTelemetryDialog(host, this));
     dialog->exec();
 }
 
@@ -646,7 +646,7 @@ void RouterHostsWidget::onFilterReset()
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::fetchHosts()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
@@ -665,7 +665,7 @@ void RouterHostsWidget::fetchHosts()
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::fetchWorkspaces()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
@@ -776,7 +776,7 @@ void RouterHostsWidget::startDrag()
         return;
 
     RouterHostDrag drag(this);
-    drag.setHosts(router_id_, hosts, mime_type_);
+    drag.setHosts(hosts, mime_type_);
 
     const QIcon icon = index.siblingAtColumn(0).data(Qt::DecorationRole).value<QIcon>();
     drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
@@ -890,7 +890,7 @@ void RouterHostsWidget::saveHostsToFile()
 void RouterHostsWidget::sendHostRequests(const QList<RouterHost>& hosts, HostRequest request,
                                          const std::function<QString(int)>& error_text)
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 

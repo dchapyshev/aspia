@@ -44,7 +44,6 @@ public:
 
     const HostConfig& host() const { return host_; }
     proto::peer::SessionType sessionType() const { return session_type_; }
-    qint64 routerId() const { return host_.routerId(); }
     QString computerName() const { return host_.name(); }
     const QString& displayName() const { return display_name_; }
     HostId hostId() const;

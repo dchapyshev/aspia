@@ -21,7 +21,6 @@
 
 #include <QHash>
 #include <QPointer>
-#include <QSet>
 
 #include <memory>
 
@@ -67,7 +66,7 @@ public:
     QString searchText() const final;
     void searchTextChanged(const QString& text) final;
 
-    void reloadRouters();
+    void reloadRouter();
     void connectLocalHost(qint64 entry_id, proto::peer::SessionType session_type);
     void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type);
 
@@ -115,7 +114,7 @@ private slots:
     void onCheckHostUpdatesAction();
     void onHostTelemetryAction();
     void onOnlineCheckToggled(bool checked);
-    void onTwoFactorRequired(qint64 router_id);
+    void onTwoFactorRequired();
 
 private:
     void showNextTwoFactorPrompt();
@@ -134,7 +133,7 @@ private:
     std::unique_ptr<Ui::ManagementTab> ui;
 
     QPointer<QDialog> two_factor_dialog_;
-    QSet<qint64> dismissed_two_factor_;
+    bool two_factor_dismissed_ = false;
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;
 

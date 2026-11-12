@@ -37,8 +37,7 @@ public:
     explicit RouterTempHostsWidget(bool portable, QWidget* parent = nullptr);
     ~RouterTempHostsWidget() final;
 
-    void showRouter(qint64 router_id);
-    qint64 routerId() const { return router_id_; }
+    void showRouter();
     QList<RouterTempHost> selectedHosts() const;
     bool hasSelectedHost() const;
     HostConfig selectedHostConfig() const;
@@ -77,8 +76,8 @@ private:
     IconTextButton* button_next_ = nullptr;
     QComboBox* combo_page_ = nullptr;
     QComboBox* combo_page_size_ = nullptr;
-    qint64 router_id_ = 0;
     PageModel page_;
+    bool shown_ = false;
 
     Q_DISABLE_COPY_MOVE(RouterTempHostsWidget)
 };

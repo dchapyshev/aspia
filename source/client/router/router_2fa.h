@@ -86,8 +86,8 @@ public:
     const RouterConfig& config() const { return *config_; }
 
 signals:
-    void sig_twoFactorRequired(qint64 router_id);
-    void sig_twoFactorFinished(qint64 router_id, qint64 user_id, const QVersionNumber& peer_version);
+    void sig_twoFactorRequired();
+    void sig_twoFactorFinished(qint64 user_id, const QVersionNumber& peer_version);
 
 private slots:
     void onStart(const QVersionNumber& peer_version);

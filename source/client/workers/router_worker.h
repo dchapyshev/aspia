@@ -19,8 +19,9 @@
 #ifndef CLIENT_WORKERS_ROUTER_WORKER_H
 #define CLIENT_WORKERS_ROUTER_WORKER_H
 
-#include <QHash>
 #include <QVersionNumber>
+
+#include <optional>
 
 #include "base/net/tcp_channel.h"
 #include "base/threading/worker.h"
@@ -34,25 +35,25 @@ public:
     ~RouterWorker() final;
 
 public slots:
-    // Starts (and keeps reconnecting) the connection to |router_id|. Its config is read from the
+    // Starts (and keeps reconnecting) the connection to the router. Its config is read from the
     // database. A no-op if it is already active.
-    void onConnect(qint64 router_id);
+    void onConnect();
 
-    // Stops the connection to |router_id| and cancels its reconnect.
-    void onDisconnect(qint64 router_id);
+    // Stops the connection to the router and cancels its reconnect.
+    void onDisconnect();
 
-    // Drops the current connection to |router_id| and lets the timer bring it back, the same way a
+    // Drops the current connection to the router and lets the timer bring it back, the same way a
     // channel error does. A router that is not connected yet is started the same way.
-    void onReconnect(qint64 router_id);
+    void onReconnect();
 
-    // Sends an outgoing message on the given channel of |router_id|.
-    void onSendMessage(qint64 router_id, quint8 channel_id, const QByteArray& buffer);
+    // Sends an outgoing message on the given channel of the router.
+    void onSendMessage(quint8 channel_id, const QByteArray& buffer);
 
 signals:
-    void sig_authenticated(qint64 router_id, const QVersionNumber& peer_version);
-    void sig_errorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
-    void sig_messageReceived(qint64 router_id, quint8 channel_id, const QByteArray& buffer);
-    void sig_reconnecting(qint64 router_id);
+    void sig_authenticated(const QVersionNumber& peer_version);
+    void sig_errorOccurred(TcpChannel::ErrorCode error_code);
+    void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
+    void sig_reconnecting();
 
 protected:
     // Worker implementation.
@@ -61,20 +62,20 @@ protected:
     void onTimer(TimePoint now) final;
 
 private:
-    // One router's connection state. |channel| is null while waiting to reconnect;
-    // |reconnect_countdown| is the number of one-second ticks left before the next attempt.
+    // The connection state. |channel| is null while waiting to reconnect; |reconnect_countdown| is
+    // the number of one-second ticks left before the next attempt.
     struct Connection
     {
         TcpChannel* channel = nullptr;
         int reconnect_countdown = 0;
     };
 
-    void startConnection(qint64 router_id);
-    void onChannelAuthenticated(qint64 router_id);
-    void onChannelErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
+    void startConnection();
+    void onChannelAuthenticated();
+    void onChannelErrorOccurred(TcpChannel::ErrorCode error_code);
 
-    // Wanted connections keyed by router_id; a present key means the router should stay connected.
-    QHash<qint64, Connection> connections_;
+    // Present while the router should stay connected.
+    std::optional<Connection> connection_;
 
     Q_DISABLE_COPY_MOVE(RouterWorker)
 };

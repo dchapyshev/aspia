@@ -81,6 +81,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     storage/auto_backup_unittest.cc
     storage/backup_unittest.cc
     storage/credential_file_unittest.cc
+    storage/database_migration_unittest.cc
     storage/database_unittest.cc
     tests_main.cc
     workers/video_worker_unittest.cc)

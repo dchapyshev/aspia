@@ -75,8 +75,6 @@ private:
 
     void updateCountLabel();
 
-    // Counts the matches of the local address book and of every online router, in that order, and
-    // hands the counts to the page model. The page itself is fetched once every source answered.
     void countSources();
     void onSourceCounted(int slot, qint64 match_count);
 
@@ -96,13 +94,11 @@ private:
     QLabel* label_count_ = nullptr;
     QString current_query_;
 
-    // One source of matches. The local address book comes first and each online router follows,
-    // ordered by its id, so the whole result has an order that does not depend on which router
-    // answers first.
+    // One source of matches. The local address book comes first and the router follows while it is
+    // online.
     struct Source
     {
-        qint64 router_id = 0; // 0 - the local address book.
-        QString label;
+        bool router = false;
         qint64 match_count = -1; // -1 until the source answered; it drops out if it never does.
     };
 

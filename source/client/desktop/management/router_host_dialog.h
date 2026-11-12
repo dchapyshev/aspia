@@ -40,7 +40,7 @@ class RouterHostDialog final : public QDialog
     Q_OBJECT
 
 public:
-    RouterHostDialog(qint64 router_id, const RouterHost& host, QWidget* parent);
+    RouterHostDialog(const RouterHost& host, QWidget* parent);
     ~RouterHostDialog() final;
 
 private slots:
@@ -60,7 +60,6 @@ private:
     void setCredentialsEnabled(bool enable);
 
     std::unique_ptr<Ui::RouterHostDialog> ui;
-    qint64 router_id_ = 0;
     RouterHost host_;
     bool credentials_loaded_ = false;
 

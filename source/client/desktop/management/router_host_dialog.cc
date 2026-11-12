@@ -43,10 +43,9 @@
 #include "proto/router_manager.h"
 
 //--------------------------------------------------------------------------------------------------
-RouterHostDialog::RouterHostDialog(qint64 router_id, const RouterHost& host, QWidget* parent)
+RouterHostDialog::RouterHostDialog(const RouterHost& host, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterHostDialog>()),
-      router_id_(router_id),
       host_(host)
 {
     LOG(INFO) << "Ctor";
@@ -60,7 +59,7 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const RouterHost& host, QWi
 
     ui->edit_password->setShowPasswordButtonVisible(true);
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (session && session->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
     {
         ui->edit_display_name->setReadOnly(true);
@@ -100,9 +99,9 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const RouterHost& host, QWi
     ui->edit_display_name->setFocus();
 
     connect(&RouterController::instance(), &RouterController::sig_statusChanged, this,
-            [this](qint64 router_id, RouterStatus status)
+            [this](RouterStatus status)
     {
-        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        if (status != RouterStatus::ONLINE)
             reject();
     });
 
@@ -114,7 +113,7 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const RouterHost& host, QWi
 
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         return;
     }
 
@@ -238,10 +237,10 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         reject();
         return;
     }
@@ -342,7 +341,7 @@ void RouterHostDialog::onLoadData()
     }
 
     RouterHostConfig credentials;
-    const Database::FindResult credentials_found = db.findRouterHost(router_id_, host_.host_id, &credentials);
+    const Database::FindResult credentials_found = db.findRouterHost(host_.host_id, &credentials);
     credentials_loaded_ = credentials_found != Database::FindResult::FAILED;
 
     if (credentials_found == Database::FindResult::FOUND || credentials_found == Database::FindResult::UNREADABLE)
@@ -393,10 +392,10 @@ void RouterHostDialog::fetchGroups()
 {
     ui->combo_group->clearGroups();
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         return;
     }
 
@@ -435,7 +434,7 @@ bool RouterHostDialog::saveCredentials()
     const SecureString password = ui->edit_password->password();
 
     RouterHostConfig stored;
-    const Database::FindResult stored_found = db.findRouterHost(router_id_, host_.host_id, &stored);
+    const Database::FindResult stored_found = db.findRouterHost(host_.host_id, &stored);
     if (stored_found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the credentials of host" << host_.host_id;
@@ -448,7 +447,6 @@ bool RouterHostDialog::saveCredentials()
         return true;
 
     RouterHostConfig credentials;
-    credentials.setRouterId(router_id_);
     credentials.setHostId(host_.host_id);
     credentials.setCredentialId(credential_id);
     credentials.setUsername(username);
@@ -473,8 +471,7 @@ bool RouterHostDialog::saveProfile()
     if (!credentials_loaded_)
         return true;
 
-    return Database::instance().setRouterHostProfileId(
-        router_id_, host_.host_id, ui->combo_profile->currentData().toLongLong());
+    return Database::instance().setRouterHostProfileId(host_.host_id, ui->combo_profile->currentData().toLongLong());
 }
 
 //--------------------------------------------------------------------------------------------------

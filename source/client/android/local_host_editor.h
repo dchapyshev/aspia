@@ -28,8 +28,6 @@ class LineEdit;
 class Switch;
 class TextArea;
 
-// Full-screen editor for a local host. The router selector switches the address field between a
-// direct address and a host ID; on save the host is written to the local database.
 class LocalHostEditor final : public QWidget
 {
     Q_OBJECT
@@ -38,7 +36,7 @@ public:
     explicit LocalHostEditor(QWidget* parent = nullptr);
     ~LocalHostEditor() final;
 
-    // Resets the form for adding a new host to |group_id| and reloads the router list.
+    // Resets the form for adding a new host to |group_id|.
     void prepareForAdd(qint64 group_id);
 
     // Loads the host |host_id| into the form for editing. Returns false if the host does not
@@ -50,18 +48,15 @@ signals:
     void sig_accepted();
 
 private slots:
-    void onRouterChanged();
     void onSavedCredentialsToggled(bool checked);
     void onSaveClicked();
     void onDeleteClicked();
 
 private:
-    bool loadRouters(qint64 selected_router_id);
     bool loadCredentials(qint64 selected_credential_id);
     bool loadProfiles(qint64 selected_profile_id);
     void showError(const QString& message);
 
-    ComboBox* combo_router_ = nullptr;
     LineEdit* edit_name_ = nullptr;
     LineEdit* edit_address_ = nullptr;
     Switch* switch_saved_credentials_ = nullptr;

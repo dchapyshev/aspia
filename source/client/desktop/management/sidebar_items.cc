@@ -98,26 +98,11 @@ SidebarLocalGroup::SidebarLocalGroup(const LocalGroupConfig& group, QTreeWidgetI
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarRouter::SidebarRouter(qint64 router_id, const QString& name, QTreeWidget* parent)
-    : SidebarItem(ROUTER, -1, parent),
-      router_id_(router_id),
-      name_(name)
+SidebarRouter::SidebarRouter(QTreeWidget* parent)
+    : SidebarItem(ROUTER, -1, parent)
 {
-    setText(0, name);
+    setText(0, tr("Router"));
     setIcon(0, QIcon(":/img/router-offline.svg"));
-}
-
-//--------------------------------------------------------------------------------------------------
-qint64 SidebarRouter::routerId() const
-{
-    return router_id_;
-}
-
-//--------------------------------------------------------------------------------------------------
-void SidebarRouter::setName(const QString& name)
-{
-    name_ = name;
-    setText(0, name);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -135,10 +120,8 @@ void SidebarRouter::setStatus(Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarRouterWorkspace::SidebarRouterWorkspace(
-    qint64 router_id, const RouterWorkspace& workspace, QTreeWidgetItem* parent)
+SidebarRouterWorkspace::SidebarRouterWorkspace(const RouterWorkspace& workspace, QTreeWidgetItem* parent)
     : SidebarItem(ROUTER_WORKSPACE, /*group_id=*/0, parent),
-      router_id_(router_id),
       workspace_(workspace)
 {
     setText(0, workspace.name);
@@ -153,10 +136,8 @@ void SidebarRouterWorkspace::update(const RouterWorkspace& workspace)
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarRouterGroup::SidebarRouterGroup(
-    qint64 router_id, const RouterGroup& group, QTreeWidgetItem* parent)
+SidebarRouterGroup::SidebarRouterGroup(const RouterGroup& group, QTreeWidgetItem* parent)
     : SidebarItem(ROUTER_GROUP, group.entry_id, parent),
-      router_id_(router_id),
       group_(group)
 {
     setText(0, group.name);
@@ -182,63 +163,56 @@ void SidebarRouterGroup::update(const RouterGroup& group)
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarRouterHosts::SidebarRouterHosts(qint64 router_id, QTreeWidgetItem* parent)
-    : SidebarItem(ROUTER_HOSTS, /*group_id=*/-1, parent),
-      router_id_(router_id)
+SidebarRouterHosts::SidebarRouterHosts(QTreeWidgetItem* parent)
+    : SidebarItem(ROUTER_HOSTS, /*group_id=*/-1, parent)
 {
     setText(0, tr("Approved Hosts"));
     setIcon(0, QIcon(":/img/computer.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarRouterUsers::SidebarRouterUsers(qint64 router_id, QTreeWidgetItem* parent)
-    : SidebarItem(ROUTER_USERS, /*group_id=*/-1, parent),
-      router_id_(router_id)
+SidebarRouterUsers::SidebarRouterUsers(QTreeWidgetItem* parent)
+    : SidebarItem(ROUTER_USERS, /*group_id=*/-1, parent)
 {
     setText(0, tr("Users"));
     setIcon(0, QIcon(":/img/user-account.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarRouterClients::SidebarRouterClients(qint64 router_id, QTreeWidgetItem* parent)
-    : SidebarItem(ROUTER_CLIENTS, /*group_id=*/-1, parent),
-      router_id_(router_id)
+SidebarRouterClients::SidebarRouterClients(QTreeWidgetItem* parent)
+    : SidebarItem(ROUTER_CLIENTS, /*group_id=*/-1, parent)
 {
     setText(0, tr("Clients"));
     setIcon(0, QIcon(":/img/computer.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarRouterAccessLog::SidebarRouterAccessLog(qint64 router_id, QTreeWidgetItem* parent)
-    : SidebarItem(ROUTER_ACCESS_LOG, /*group_id=*/-1, parent),
-      router_id_(router_id)
+SidebarRouterAccessLog::SidebarRouterAccessLog(QTreeWidgetItem* parent)
+    : SidebarItem(ROUTER_ACCESS_LOG, /*group_id=*/-1, parent)
 {
     setText(0, tr("Access Log"));
     setIcon(0, QIcon(":/img/day-view.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarRouterRelays::SidebarRouterRelays(qint64 router_id, QTreeWidgetItem* parent)
-    : SidebarItem(ROUTER_RELAYS, /*group_id=*/-1, parent),
-      router_id_(router_id)
+SidebarRouterRelays::SidebarRouterRelays(QTreeWidgetItem* parent)
+    : SidebarItem(ROUTER_RELAYS, /*group_id=*/-1, parent)
 {
     setText(0, tr("Relays"));
     setIcon(0, QIcon(":/img/stack.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarRouterTempHosts::SidebarRouterTempHosts(qint64 router_id, QTreeWidgetItem* parent)
-    : SidebarItem(ROUTER_TEMP_HOSTS, /*group_id=*/-1, parent),
-      router_id_(router_id)
+SidebarRouterTempHosts::SidebarRouterTempHosts(QTreeWidgetItem* parent)
+    : SidebarItem(ROUTER_TEMP_HOSTS, /*group_id=*/-1, parent)
 {
     setText(0, tr("Unapproved Hosts"));
     setIcon(0, QIcon(":/img/computer.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarRouterQsHosts::SidebarRouterQsHosts(qint64 router_id, QTreeWidgetItem* parent)
-    : SidebarItem(ROUTER_QS_HOSTS, /*group_id=*/-1, parent),
-      router_id_(router_id)
+SidebarRouterQsHosts::SidebarRouterQsHosts(QTreeWidgetItem* parent)
+    : SidebarItem(ROUTER_QS_HOSTS, /*group_id=*/-1, parent)
 {
     setText(0, tr("Quick Support"));
     setIcon(0, QIcon(":/img/computer-qs.svg"));

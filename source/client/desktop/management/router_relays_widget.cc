@@ -86,15 +86,15 @@ RouterRelaysWidget::RouterRelaysWidget(QWidget* parent)
             this, &RouterRelaysWidget::onPeerContextMenu);
 
     RouterController& controller = RouterController::instance();
-    connect(&controller, &RouterController::sig_relaysChanged, this, [this](qint64 router_id)
+    connect(&controller, &RouterController::sig_relaysChanged, this, [this]()
     {
-        if (router_id == router_id_)
+        if (shown_)
             fetchRelays();
     });
     connect(&controller, &RouterController::sig_statusChanged, this,
-            [this](qint64 router_id, RouterStatus status)
+            [this](RouterStatus status)
     {
-        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        if (status != RouterStatus::ONLINE)
         {
             relay_model_->clear();
             peer_model_->clear();
@@ -109,9 +109,9 @@ RouterRelaysWidget::~RouterRelaysWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterRelaysWidget::showRouter(qint64 router_id)
+void RouterRelaysWidget::showRouter()
 {
-    router_id_ = router_id;
+    shown_ = true;
 
     relay_model_->clear();
     peer_model_->clear();
@@ -342,7 +342,7 @@ void RouterRelaysWidget::onDisconnectRelay()
         return;
     }
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
@@ -459,7 +459,7 @@ void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
             return;
         }
 
-        RouterSession* session = RouterController::session(router_id_);
+        RouterSession* session = RouterController::session();
         if (!session)
             return;
 
@@ -548,7 +548,7 @@ void RouterRelaysWidget::onPeerResultReceived(const proto::router::PeerResult& r
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::fetchRelays()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 

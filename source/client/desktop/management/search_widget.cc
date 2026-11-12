@@ -130,8 +130,7 @@ SearchResultModel::Row makeLocalRow(const LocalHostConfig& host, const QString& 
 //--------------------------------------------------------------------------------------------------
 // A router host is put into a record of the same shape as one of the address book, so a row of
 // either kind is shown and connected to the same way. The record is never stored, so it has no id.
-SearchResultModel::Row makeRouterRow(qint64 router_id, const RouterHost& host,
-                                     const QString& source_label)
+SearchResultModel::Row makeRouterRow(const RouterHost& host, const QString& source_label)
 {
     QString name = host.display_name;
     if (name.isEmpty())
@@ -141,7 +140,6 @@ SearchResultModel::Row makeRouterRow(qint64 router_id, const RouterHost& host,
     row.type = SearchResultModel::Type::ROUTER;
     row.source = source_label;
 
-    row.host.setRouterId(router_id);
     row.host.setAddress(hostIdToString(host.host_id));
     row.host.setName(name);
     row.host.setComment(host.comment);
@@ -366,11 +364,7 @@ void SearchWidget::search(const QString& query)
     if (read_result != Database::ReadResult::OK)
         LOG(ERROR) << "Unable to search the hosts of the local database:" << read_result;
 
-    // The local matches are in hand already, so the local part of the first page is shown at
-    // once, with the local address book as the only source. The routers are queried after the
-    // debounce, not on every keystroke, and the page is rebuilt when they answer.
     Source local;
-    local.router_id = 0;
     local.match_count = local_matches_.size();
     sources_.append(local);
 
@@ -400,66 +394,39 @@ void SearchWidget::countSources()
 
     // The local address book is the first source and its count is known already.
     Source local;
-    local.router_id = 0;
     local.match_count = local_matches_.size();
     sources_.append(local);
 
-    // Then the routers, ordered by id, so the whole result keeps one order however fast each of
-    // them answers.
-    QList<RouterConfig> routers;
-    Database::instance().routerList(&routers);
-    std::sort(routers.begin(), routers.end(), [](const RouterConfig& first, const RouterConfig& second)
-    {
-        return first.routerId() < second.routerId();
-    });
-
-    QList<int> pending;
-
-    for (const RouterConfig& config : std::as_const(routers))
-    {
-        if (!RouterController::session(config.routerId()))
-            continue;
-
-        Source source;
-        source.router_id = config.routerId();
-        source.label = config.displayLabel();
-        sources_.append(source);
-
-        pending.append(static_cast<int>(sources_.size()) - 1);
-    }
-
-    if (pending.isEmpty())
+    // Then the router while it is online.
+    RouterSession* session = RouterController::session();
+    if (!session)
     {
         // Nothing but the local address book to page over.
         fetchCurrentPage();
         return;
     }
 
-    for (int slot : std::as_const(pending))
+    Source router;
+    router.router = true;
+    sources_.append(router);
+
+    const int slot = static_cast<int>(sources_.size()) - 1;
+
+    session->searchHosts(query, 0, 1, { this,
+        [this, generation, slot](const RouterHostList& list)
     {
-        const qint64 router_id = sources_[slot].router_id;
-        RouterSession* session = RouterController::session(router_id);
+        if (generation != generation_)
+            return;
 
-        // A single record is asked for: what is wanted here is the size of the whole match set,
-        // and the page itself is fetched once every source has reported.
-        session->searchHosts(query, 0, 1, { this,
-            [this, generation, slot, router_id](const RouterHostList& list)
+        if (list.error_code != proto::router::kErrorOk)
         {
-            if (generation != generation_)
-                return;
+            LOG(ERROR) << "Host search failed on the router:" << list.error_code;
+            onSourceCounted(slot, kSourceFailed);
+            return;
+        }
 
-            if (list.error_code != proto::router::kErrorOk)
-            {
-                // Not fatal for the search as a whole (the other sources still contribute), but
-                // without the log a failed router looks exactly like "nothing found" there.
-                LOG(ERROR) << "Host search failed on router" << router_id << ":" << list.error_code;
-                onSourceCounted(slot, kSourceFailed);
-                return;
-            }
-
-            onSourceCounted(slot, list.total_count);
-        } });
-    }
+        onSourceCounted(slot, list.total_count);
+    } });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -526,16 +493,14 @@ void SearchWidget::fetchCurrentPage()
     for (int i = 0; i < page_slices_.size(); ++i)
     {
         PageSlice& slice = page_slices_[i];
-        const qint64 router_id = sources_[slice.source].router_id;
-
-        if (router_id == 0)
+        if (!sources_[slice.source].router)
         {
             // The local matches are in memory, so the window is a range of them.
             slice.ready = true;
             continue;
         }
 
-        RouterSession* session = RouterController::session(router_id);
+        RouterSession* session = RouterController::session();
         if (!session)
         {
             slice.ready = true;
@@ -543,13 +508,13 @@ void SearchWidget::fetchCurrentPage()
         }
 
         session->searchHosts(query, slice.offset, slice.count, { this,
-            [this, generation, i, router_id](const RouterHostList& list)
+            [this, generation, i](const RouterHostList& list)
         {
             if (generation != generation_ || i >= page_slices_.size())
                 return;
 
             if (list.error_code != proto::router::kErrorOk)
-                LOG(ERROR) << "Host search failed on router" << router_id << ":" << list.error_code;
+                LOG(ERROR) << "Host search failed on the router:" << list.error_code;
             else
                 page_slices_[i].router_hosts = list.hosts;
 
@@ -578,7 +543,7 @@ void SearchWidget::showCurrentPage()
     {
         const Source& source = sources_[slice.source];
 
-        if (source.router_id == 0)
+        if (!source.router)
         {
             for (qint64 i = slice.offset; i < slice.offset + slice.count; ++i)
             {
@@ -592,7 +557,7 @@ void SearchWidget::showCurrentPage()
         else
         {
             for (const RouterHost& host : std::as_const(slice.router_hosts))
-                rows.append(makeRouterRow(source.router_id, host, source.label));
+                rows.append(makeRouterRow(host, tr("Router")));
         }
     }
 

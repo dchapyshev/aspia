@@ -75,10 +75,10 @@ std::optional<LocalGroupConfig> findLocalGroup(const Database& db, qint64 group_
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
-std::optional<RouterConfig> findRouter(const Database& db, qint64 router_id)
+std::optional<RouterConfig> findRouter(const Database& db)
 {
     RouterConfig router;
-    const Database::FindResult result = db.findRouter(router_id, &router);
+    const Database::FindResult result = db.routerConfig(&router);
     if (result != Database::FindResult::FOUND)
     {
         EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
@@ -120,10 +120,10 @@ std::optional<CredentialConfig> findCredentialByGuid(const Database& db, const Q
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
-std::optional<RouterHostConfig> findRouterHost(const Database& db, qint64 router_id, HostId host_id)
+std::optional<RouterHostConfig> findRouterHost(const Database& db, HostId host_id)
 {
     RouterHostConfig host;
-    const Database::FindResult result = db.findRouterHost(router_id, host_id, &host);
+    const Database::FindResult result = db.findRouterHost(host_id, &host);
     if (result != Database::FindResult::FOUND)
     {
         EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
@@ -151,15 +151,14 @@ protected:
     }
 
     // Writes a check time the public API cannot produce, since it always stamps the current one.
-    bool setRouterHostCheckTime(qint64 router_id, HostId host_id, qint64 check_time)
+    bool setRouterHostCheckTime(HostId host_id, qint64 check_time)
     {
         SqlDatabase raw;
         if (!raw.open(file_path_))
             return false;
 
-        SqlQuery query(raw, "UPDATE router_hosts SET check_time=? WHERE router_id=? AND host_id=?");
+        SqlQuery query(raw, "UPDATE router_hosts SET check_time=? WHERE host_id=?");
         query.addInt64(check_time);
-        query.addInt64(router_id);
         query.addUInt64(host_id);
 
         return query.exec();
@@ -182,15 +181,24 @@ protected:
         return query.exec();
     }
 
-    // The same for a record of a router host: it is named by the pair it belongs to, not by an id.
-    bool corruptRouterHostData(qint64 router_id, HostId host_id)
+    // The same for the router, which is kept among the settings.
+    bool corruptRouterData()
     {
         SqlDatabase raw;
         if (!raw.open(file_path_))
             return false;
 
-        SqlQuery query(raw, "UPDATE router_hosts SET data=X'00' WHERE router_id=? AND host_id=?");
-        query.addInt64(router_id);
+        return raw.exec("UPDATE settings SET value='AA==' WHERE name='router'");
+    }
+
+    // The same for a record of a router host, which is named by the id of its host.
+    bool corruptRouterHostData(HostId host_id)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return false;
+
+        SqlQuery query(raw, "UPDATE router_hosts SET data=X'00' WHERE host_id=?");
         query.addUInt64(host_id);
 
         return query.exec();
@@ -217,33 +225,28 @@ protected:
         return host.id();
     }
 
-    qint64 addRouter(const QString& name)
+    void addRouter()
     {
         RouterConfig router;
-        router.setDisplayName(name);
         router.setAddress("router.example.com");
         router.setUsername("router-user");
         router.setPassword(SecureString("router-secret"));
 
-        EXPECT_TRUE(db_.addRouter(router));
-        return router.routerId();
+        EXPECT_TRUE(db_.setRouterConfig(router));
     }
 
-    RouterHostConfig routerHost(qint64 router_id, HostId host_id, const QString& username,
-                                const QString& password)
+    RouterHostConfig routerHost(HostId host_id, const QString& username, const QString& password)
     {
         RouterHostConfig host;
-        host.setRouterId(router_id);
         host.setHostId(host_id);
         host.setUsername(username);
         host.setPassword(SecureString(password));
         return host;
     }
 
-    void addRouterHost(qint64 router_id, HostId host_id, const QString& username,
-                       const QString& password)
+    void addRouterHost(HostId host_id, const QString& username, const QString& password)
     {
-        EXPECT_TRUE(db_.addRouterHost(routerHost(router_id, host_id, username, password)));
+        EXPECT_TRUE(db_.addRouterHost(routerHost(host_id, username, password)));
     }
 
     QStringList groupNames()
@@ -292,13 +295,6 @@ protected:
         QList<LocalGroupConfig> groups;
         EXPECT_TRUE(db_.allLocalGroups(&groups));
         return groups;
-    }
-
-    QList<RouterConfig> routerList()
-    {
-        QList<RouterConfig> routers;
-        EXPECT_EQ(db_.routerList(&routers), Database::ReadResult::OK);
-        return routers;
     }
 
     QList<RouterHostConfig> allRouterHosts()
@@ -352,10 +348,10 @@ protected:
         return profiles;
     }
 
-    QList<HostId> outdatedRouterHosts(qint64 router_id)
+    QList<HostId> outdatedRouterHosts()
     {
         QList<HostId> hosts;
-        EXPECT_TRUE(db_.outdatedRouterHosts(router_id, &hosts));
+        EXPECT_TRUE(db_.outdatedRouterHosts(&hosts));
         return hosts;
     }
 
@@ -603,7 +599,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheMomentARecordWasEdited)
     // one that left it alone.
     QThread::msleep(1100);
 
-    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routerList(), allRouterHosts(), {},
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), findRouter(db_), allRouterHosts(), {},
                                  ProxyConfig(), "salt", "verifier", 1));
 
     EXPECT_EQ(findLocalHost(db_, entry_id)->modifyTime(), modify_time);
@@ -690,26 +686,24 @@ TEST_F(DatabaseTest, GroupGuidSurvivesEveryEdit)
 // by it.
 TEST_F(DatabaseTest, RouterKeepsItsGuidThroughAnEdit)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
 
-    const std::optional<RouterConfig> before = findRouter(db_, router_id);
+    const std::optional<RouterConfig> before = findRouter(db_);
     ASSERT_TRUE(before.has_value());
     ASSERT_FALSE(before->guid().isEmpty());
 
     // What both editors of a router hand over: the fields of the form and nothing else.
     RouterConfig edited;
-    edited.setRouterId(router_id);
-    edited.setDisplayName("renamed");
-    edited.setAddress("router.example.com");
+    edited.setAddress("moved.example.com");
     edited.setSessionType(proto::router::SESSION_TYPE_OPERATOR);
     edited.setUsername("router-user");
     edited.setPassword(SecureString("router-secret"));
 
-    ASSERT_TRUE(db_.modifyRouter(edited));
+    ASSERT_TRUE(db_.setRouterConfig(edited));
 
-    const std::optional<RouterConfig> after = findRouter(db_, router_id);
+    const std::optional<RouterConfig> after = findRouter(db_);
     ASSERT_TRUE(after.has_value());
-    EXPECT_EQ(after->displayName(), "renamed");
+    EXPECT_EQ(after->address(), "moved.example.com");
     EXPECT_EQ(after->guid(), before->guid());
 }
 
@@ -755,21 +749,19 @@ TEST_F(DatabaseTest, TwoLocalHostsDoNotShareOneGuid)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A router is named by its id inside this database only. The guid names the same record in every
-// database that hears about it, and the deep links are built on it, so every router gets one the
-// moment it is added.
-TEST_F(DatabaseTest, RouterGetsAGuidOfItsOwn)
+TEST_F(DatabaseTest, DatabaseGetsAGuidOfItsOwn)
 {
-    const qint64 first = addRouter("first");
-    const qint64 second = addRouter("second");
+    const QString guid = db_.guid();
+    ASSERT_FALSE(guid.isEmpty());
 
-    const std::optional<RouterConfig> stored = findRouter(db_, first);
-    ASSERT_TRUE(stored.has_value());
-    EXPECT_FALSE(stored->guid().isEmpty());
+    Database reopened;
+    ASSERT_TRUE(reopened.open(file_path_));
+    EXPECT_EQ(reopened.guid(), guid);
 
-    const std::optional<RouterConfig> other = findRouter(db_, second);
-    ASSERT_TRUE(other.has_value());
-    EXPECT_NE(stored->guid(), other->guid());
+    Database other;
+    ASSERT_TRUE(other.open(QFileInfo(file_path_).absolutePath() + "/other.db3"));
+    EXPECT_FALSE(other.guid().isEmpty());
+    EXPECT_NE(other.guid(), guid);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -802,7 +794,6 @@ TEST_F(DatabaseTest, EncryptedDataSurvivesARoundTrip)
 TEST_F(DatabaseTest, RouterDataDoesNotOpenAsHostData)
 {
     RouterConfig router;
-    router.setDisplayName("router");
     router.setAddress("router.example.com");
     router.setUsername("router-user");
     router.setPassword(SecureString("router-secret"));
@@ -900,80 +891,47 @@ TEST_F(DatabaseTest, HostThatDoesNotOpenLeavesTheSearchIncomplete)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST_F(DatabaseTest, RouterThatDoesNotOpenLeavesTheListIncomplete)
+// A database holds one router, so the one written takes the place of the one there.
+TEST_F(DatabaseTest, DatabaseHoldsOneRouter)
 {
-    const qint64 broken_id = addRouter("broken");
-    addRouter("readable");
+    addRouter();
 
-    ASSERT_TRUE(corruptRecordData("routers", broken_id));
+    RouterConfig second;
+    second.setAddress("second.example.com");
+    second.setUsername("router-user");
+    second.setPassword(SecureString("router-secret"));
+    EXPECT_TRUE(db_.setRouterConfig(second));
 
-    // The record that did not open is in the list all the same: without it the user would have
-    // no way to reach the row, and the result says the list is not whole.
-    QList<RouterConfig> routers;
-    EXPECT_EQ(db_.routerList(&routers), Database::ReadResult::INCOMPLETE);
-    ASSERT_EQ(routers.size(), 2);
-
-    const RouterConfig& broken = routers.front().routerId() == broken_id ?
-        routers.front() : routers.back();
-    const RouterConfig& readable = routers.front().routerId() == broken_id ?
-        routers.back() : routers.front();
-
-    EXPECT_EQ(broken.displayName(), QString("broken"));
-    EXPECT_TRUE(broken.address().isEmpty());
-    EXPECT_EQ(readable.displayName(), QString("readable"));
-    EXPECT_EQ(readable.address(), QString("router.example.com"));
+    const std::optional<RouterConfig> stored = findRouter(db_);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->address(), QString("second.example.com"));
 }
 
 //--------------------------------------------------------------------------------------------------
-// Routers come by the label they are shown with, whatever the case: a router without a name goes
-// by its address.
-TEST_F(DatabaseTest, RoutersAreListedByLabel)
+TEST_F(DatabaseTest, RouterStaysSwitchedOffUntilSwitchedOn)
 {
-    addRouter("gamma");
+    addRouter();
 
-    RouterConfig unnamed;
-    unnamed.setAddress("beta.example.com");
-    unnamed.setUsername("router-user");
-    unnamed.setPassword(SecureString("router-secret"));
-    ASSERT_TRUE(db_.addRouter(unnamed));
+    std::optional<RouterConfig> stored = findRouter(db_);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_TRUE(stored->isEnabled());
 
-    addRouter("Alpha");
+    stored->setEnabled(false);
+    ASSERT_TRUE(db_.setRouterConfig(*stored));
 
-    const QList<RouterConfig> routers = routerList();
-    ASSERT_EQ(routers.size(), 3);
-    EXPECT_EQ(routers[0].displayLabel(), "Alpha");
-    EXPECT_EQ(routers[1].displayLabel(), "beta.example.com");
-    EXPECT_EQ(routers[2].displayLabel(), "gamma");
-}
-
-//--------------------------------------------------------------------------------------------------
-// A record that did not open has no name of its own to show and no address to fall back to.
-// The list holds the row all the same, so there must be something to show it under.
-TEST_F(DatabaseTest, RouterThatDoesNotOpenHasALabelToShow)
-{
-    RouterConfig router;
-    router.setAddress("router.example.com");
-    router.setUsername("router-user");
-    router.setPassword(SecureString("router-secret"));
-
-    ASSERT_TRUE(db_.addRouter(router));
-    ASSERT_TRUE(corruptRecordData("routers", router.routerId()));
-
-    RouterConfig stored;
-    ASSERT_EQ(db_.findRouter(router.routerId(), &stored), Database::FindResult::UNREADABLE);
-    EXPECT_TRUE(stored.displayName().isEmpty());
-    EXPECT_TRUE(stored.address().isEmpty());
-    EXPECT_FALSE(stored.displayLabel().isEmpty());
+    stored = findRouter(db_);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_FALSE(stored->isEnabled());
+    EXPECT_EQ(stored->address(), QString("router.example.com"));
 }
 
 //--------------------------------------------------------------------------------------------------
 TEST_F(DatabaseTest, RouterHostThatDoesNotOpenLeavesTheListIncomplete)
 {
-    const qint64 router_id = addRouter("router");
-    addRouterHost(router_id, 1, "user-1", "secret");
-    addRouterHost(router_id, 2, "user-2", "secret");
+    addRouterHost(1, "user-1", "secret");
+    addRouterHost(2, "user-2", "secret");
 
-    ASSERT_TRUE(corruptRouterHostData(router_id, 1));
+    ASSERT_TRUE(corruptRouterHostData(1));
 
     // The row is in the list whether or not it opened, so a caller counting what the base
     // holds does not take a record that did not open for one that is not there.
@@ -984,7 +942,6 @@ TEST_F(DatabaseTest, RouterHostThatDoesNotOpenLeavesTheListIncomplete)
     const RouterHostConfig& broken = hosts.front().hostId() == 1 ? hosts.front() : hosts.back();
     const RouterHostConfig& readable = hosts.front().hostId() == 1 ? hosts.back() : hosts.front();
 
-    EXPECT_EQ(broken.routerId(), router_id);
     EXPECT_EQ(broken.hostId(), 1U);
     EXPECT_TRUE(broken.username().isEmpty());
     EXPECT_EQ(readable.username(), QString("user-2"));
@@ -995,22 +952,22 @@ TEST_F(DatabaseTest, RouterHostThatDoesNotOpenLeavesTheListIncomplete)
 // one without credentials and delete the row that is still there.
 TEST_F(DatabaseTest, RouterHostThatDoesNotOpenIsNotTakenForAMissingOne)
 {
-    const qint64 router_id = addRouter("router");
-    addRouterHost(router_id, 1, "user-1", "secret");
-    addRouterHost(router_id, 2, "user-2", "secret");
+    addRouter();
+    addRouterHost(1, "user-1", "secret");
+    addRouterHost(2, "user-2", "secret");
 
-    ASSERT_TRUE(corruptRouterHostData(router_id, 1));
+    ASSERT_TRUE(corruptRouterHostData(1));
 
     RouterHostConfig broken;
-    EXPECT_EQ(db_.findRouterHost(router_id, 1, &broken), Database::FindResult::UNREADABLE);
-    EXPECT_FALSE(db_.routerHostCredentials(router_id, 1).has_value());
+    EXPECT_EQ(db_.findRouterHost(1, &broken), Database::FindResult::UNREADABLE);
+    EXPECT_FALSE(db_.routerHostCredentials(1).has_value());
 
     RouterHostConfig readable;
-    EXPECT_EQ(db_.findRouterHost(router_id, 2, &readable), Database::FindResult::FOUND);
+    EXPECT_EQ(db_.findRouterHost(2, &readable), Database::FindResult::FOUND);
     EXPECT_EQ(readable.username(), QString("user-2"));
 
     RouterHostConfig missing;
-    EXPECT_EQ(db_.findRouterHost(router_id, 3, &missing), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(db_.findRouterHost(3, &missing), Database::FindResult::NOT_FOUND);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1078,8 +1035,8 @@ TEST_F(DatabaseTest, SearchThatFoundNothingLeavesTheOutputEmpty)
 {
     const qint64 group_id = addGroup("group", 0);
     const qint64 entry_id = addHost("host", group_id);
-    const qint64 router_id = addRouter("router");
-    addRouterHost(router_id, 100500, "user", "secret");
+    addRouter();
+    addRouterHost(100500, "user", "secret");
     const qint64 credential_id = addCredential("office", "user", "secret");
 
     LocalHostConfig host;
@@ -1095,17 +1052,19 @@ TEST_F(DatabaseTest, SearchThatFoundNothingLeavesTheOutputEmpty)
     EXPECT_EQ(group.id(), -1);
     EXPECT_TRUE(group.name().isEmpty());
 
+    Database without_router;
+    ASSERT_TRUE(without_router.open(QFileInfo(file_path_).absolutePath() + "/without_router.db3"));
+
     RouterConfig router;
-    ASSERT_EQ(db_.findRouter(router_id, &router), Database::FindResult::FOUND);
-    EXPECT_EQ(db_.findRouter(router_id + 1000, &router), Database::FindResult::NOT_FOUND);
-    EXPECT_EQ(router.routerId(), -1);
+    ASSERT_EQ(db_.routerConfig(&router), Database::FindResult::FOUND);
+    EXPECT_EQ(without_router.routerConfig(&router), Database::FindResult::NOT_FOUND);
     EXPECT_TRUE(router.address().isEmpty());
     EXPECT_TRUE(router.guid().isEmpty());
 
     RouterHostConfig router_host;
-    ASSERT_EQ(db_.findRouterHost(router_id, 100500, &router_host), Database::FindResult::FOUND);
-    EXPECT_EQ(db_.findRouterHost(router_id, 100501, &router_host), Database::FindResult::NOT_FOUND);
-    EXPECT_EQ(router_host.routerId(), -1);
+    ASSERT_EQ(db_.findRouterHost(100500, &router_host), Database::FindResult::FOUND);
+    EXPECT_EQ(db_.findRouterHost(100501, &router_host), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(router_host.hostId(), kInvalidHostId);
     EXPECT_TRUE(router_host.username().isEmpty());
 
     const std::optional<CredentialConfig> credential_record = findCredential(db_, credential_id);
@@ -1136,25 +1095,23 @@ TEST_F(DatabaseTest, SearchOfARecordThatDoesNotOpenKeepsWhatWasRead)
     const qint64 broken_entry_id = addHost("broken", group_id);
     const qint64 readable_credential_id = addCredential("home", "user", "secret");
     const qint64 broken_credential_id = addCredential("office", "user", "secret");
-    const qint64 readable_router_id = addRouter("readable-router");
-    const qint64 broken_router_id = addRouter("broken-router");
+    addRouter();
 
     LocalHostConfig linked;
     ASSERT_EQ(db_.findLocalHost(broken_entry_id, &linked), Database::FindResult::FOUND);
     linked.setCredentialId(broken_credential_id);
     ASSERT_TRUE(db_.modifyLocalHost(linked));
 
-    addRouterHost(readable_router_id, 100501, "user-1", "secret");
+    addRouterHost(100501, "user-1", "secret");
 
-    RouterHostConfig broken_router_host =
-        routerHost(readable_router_id, 100500, "user-2", "secret");
+    RouterHostConfig broken_router_host = routerHost(100500, "user-2", "secret");
     broken_router_host.setCredentialId(broken_credential_id);
     ASSERT_TRUE(db_.addRouterHost(broken_router_host));
 
     ASSERT_TRUE(corruptRecordData("local_hosts", broken_entry_id));
     ASSERT_TRUE(corruptRecordData("credentials", broken_credential_id));
-    ASSERT_TRUE(corruptRecordData("routers", broken_router_id));
-    ASSERT_TRUE(corruptRouterHostData(readable_router_id, 100500));
+    ASSERT_TRUE(corruptRouterData());
+    ASSERT_TRUE(corruptRouterHostData(100500));
 
     LocalHostConfig host;
     ASSERT_EQ(db_.findLocalHost(readable_entry_id, &host), Database::FindResult::FOUND);
@@ -1170,13 +1127,10 @@ TEST_F(DatabaseTest, SearchOfARecordThatDoesNotOpenKeepsWhatWasRead)
     EXPECT_TRUE(host.username().isEmpty());
 
     RouterHostConfig router_host;
-    ASSERT_EQ(db_.findRouterHost(readable_router_id, 100501, &router_host),
-              Database::FindResult::FOUND);
+    ASSERT_EQ(db_.findRouterHost(100501, &router_host), Database::FindResult::FOUND);
     ASSERT_FALSE(router_host.username().isEmpty());
 
-    EXPECT_EQ(db_.findRouterHost(readable_router_id, 100500, &router_host),
-              Database::FindResult::UNREADABLE);
-    EXPECT_EQ(router_host.routerId(), readable_router_id);
+    EXPECT_EQ(db_.findRouterHost(100500, &router_host), Database::FindResult::UNREADABLE);
     EXPECT_EQ(router_host.hostId(), 100500U);
     EXPECT_EQ(router_host.credentialId(), broken_credential_id);
     EXPECT_TRUE(router_host.username().isEmpty());
@@ -1191,12 +1145,7 @@ TEST_F(DatabaseTest, SearchOfARecordThatDoesNotOpenKeepsWhatWasRead)
     EXPECT_TRUE(credential.username().isEmpty());
 
     RouterConfig router;
-    ASSERT_EQ(db_.findRouter(readable_router_id, &router), Database::FindResult::FOUND);
-    ASSERT_FALSE(router.address().isEmpty());
-
-    EXPECT_EQ(db_.findRouter(broken_router_id, &router), Database::FindResult::UNREADABLE);
-    EXPECT_EQ(router.routerId(), broken_router_id);
-    EXPECT_EQ(router.displayName(), QString("broken-router"));
+    EXPECT_EQ(db_.routerConfig(&router), Database::FindResult::UNREADABLE);
     EXPECT_FALSE(router.guid().isEmpty());
     EXPECT_TRUE(router.address().isEmpty());
     EXPECT_TRUE(router.username().isEmpty());
@@ -1209,7 +1158,7 @@ TEST_F(DatabaseTest, SearchOfAClosedDatabaseFails)
     Database closed;
 
     RouterHostConfig host;
-    EXPECT_EQ(closed.findRouterHost(1, 100500, &host), Database::FindResult::FAILED);
+    EXPECT_EQ(closed.findRouterHost(100500, &host), Database::FindResult::FAILED);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1230,7 +1179,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsDataReadable)
     QList<LocalHostConfig> hosts = allLocalHosts();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
-    ASSERT_TRUE(db_.reencryptAll(hosts, routerList(), allRouterHosts(), {},
+    ASSERT_TRUE(db_.reencryptAll(hosts, findRouter(db_), allRouterHosts(), {},
                                  ProxyConfig(), "salt", "verifier", 1));
 
     std::optional<LocalHostConfig> stored = findLocalHost(db_, host.id());
@@ -1246,20 +1195,20 @@ TEST_F(DatabaseTest, ReencryptionKeepsDataReadable)
 // rewrite untouched, whether or not the keystore that wrapped it would open it right now.
 TEST_F(DatabaseTest, ReencryptionKeepsTheDeviceToken)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
 
-    std::optional<RouterConfig> stored = findRouter(db_, router_id);
+    std::optional<RouterConfig> stored = findRouter(db_);
     ASSERT_TRUE(stored.has_value());
     stored->setDeviceToken("wrapped-elsewhere");
-    ASSERT_TRUE(db_.modifyRouter(*stored));
+    ASSERT_TRUE(db_.setRouterConfig(*stored));
 
-    QList<RouterConfig> routers = routerList();
+    const std::optional<RouterConfig> router = findRouter(db_);
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
-    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routers, allRouterHosts(), {},
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), router, allRouterHosts(), {},
                                  ProxyConfig(), "salt", "verifier", 1));
 
-    const std::optional<RouterConfig> reread = findRouter(db_, router_id);
+    const std::optional<RouterConfig> reread = findRouter(db_);
     ASSERT_TRUE(reread.has_value());
     EXPECT_EQ(reread->deviceToken(), QByteArray("wrapped-elsewhere"));
 }
@@ -1519,7 +1468,7 @@ TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
     EXPECT_TRUE(unreadable.settings().address.isEmpty());
     EXPECT_TRUE(unreadable.settings().password.isEmpty());
 
-    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routerList(), allRouterHosts(), {},
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), findRouter(db_), allRouterHosts(), {},
                                  proxy, "salt", "verifier", 1));
 
     ProxyConfig reread;
@@ -1535,11 +1484,11 @@ TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
 // The credentials the user saved for a host of a router come back as they were saved.
 TEST_F(DatabaseTest, RouterHostCredentialsSurviveARoundTrip)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
 
-    ASSERT_TRUE(db_.addRouterHost(routerHost(router_id, 100500, "user", "secret")));
+    ASSERT_TRUE(db_.addRouterHost(routerHost(100500, "user", "secret")));
 
-    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, 100500);
     ASSERT_TRUE(stored.has_value());
 
     EXPECT_EQ(stored->username(), QString("user"));
@@ -1552,18 +1501,18 @@ TEST_F(DatabaseTest, RouterHostCredentialsSurviveARoundTrip)
 // user entered.
 TEST_F(DatabaseTest, RouterHostThatDoesNotOpenIsRewrittenInPlace)
 {
-    const qint64 router_id = addRouter("router");
-    addRouterHost(router_id, 100500, "user", "secret");
+    addRouter();
+    addRouterHost(100500, "user", "secret");
 
-    ASSERT_TRUE(corruptRouterHostData(router_id, 100500));
+    ASSERT_TRUE(corruptRouterHostData(100500));
 
     RouterHostConfig broken;
-    ASSERT_EQ(db_.findRouterHost(router_id, 100500, &broken), Database::FindResult::UNREADABLE);
+    ASSERT_EQ(db_.findRouterHost(100500, &broken), Database::FindResult::UNREADABLE);
 
-    EXPECT_FALSE(db_.addRouterHost(routerHost(router_id, 100500, "new-user", "new-secret")));
-    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, "new-user", "new-secret")));
+    EXPECT_FALSE(db_.addRouterHost(routerHost(100500, "new-user", "new-secret")));
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(100500, "new-user", "new-secret")));
 
-    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->username(), QString("new-user"));
     EXPECT_EQ(stored->password().toString(), QString("new-secret"));
@@ -1575,42 +1524,25 @@ TEST_F(DatabaseTest, RouterHostThatDoesNotOpenIsRewrittenInPlace)
 // and removing takes the row out.
 TEST_F(DatabaseTest, RouterHostCredentialsAreEditedAndRemoved)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
 
-    addRouterHost(router_id, 100500, "user", "secret");
+    addRouterHost(100500, "user", "secret");
 
-    EXPECT_FALSE(db_.addRouterHost(routerHost(router_id, 100500, "other-user", "other-secret")));
-    EXPECT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, "other-user", "other-secret")));
+    EXPECT_FALSE(db_.addRouterHost(routerHost(100500, "other-user", "other-secret")));
+    EXPECT_TRUE(db_.modifyRouterHost(routerHost(100500, "other-user", "other-secret")));
 
     // A host the user never saved anything for has no row to edit.
-    EXPECT_FALSE(db_.modifyRouterHost(routerHost(router_id, 100501, "user", "secret")));
+    EXPECT_FALSE(db_.modifyRouterHost(routerHost(100501, "user", "secret")));
 
-    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->username(), QString("other-user"));
     EXPECT_EQ(stored->password().toString(), QString("other-secret"));
     EXPECT_EQ(allRouterHosts().size(), 1);
 
-    ASSERT_TRUE(db_.removeRouterHost(router_id, 100500));
-    EXPECT_FALSE(findRouterHost(db_, router_id, 100500).has_value());
+    ASSERT_TRUE(db_.removeRouterHost(100500));
+    EXPECT_FALSE(findRouterHost(db_, 100500).has_value());
     EXPECT_TRUE(allRouterHosts().isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
-// A router record is what the credentials hang on, so removing it takes them along. The credentials
-// of another router are not touched.
-TEST_F(DatabaseTest, RemovedRouterTakesItsHostCredentialsWithIt)
-{
-    const qint64 first = addRouter("first");
-    const qint64 second = addRouter("second");
-
-    addRouterHost(first, 100500, "user", "secret");
-    addRouterHost(second, 100501, "other-user", "other-secret");
-
-    ASSERT_TRUE(db_.removeRouter(first));
-
-    EXPECT_FALSE(findRouterHost(db_, first, 100500).has_value());
-    EXPECT_TRUE(findRouterHost(db_, second, 100501).has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1619,7 +1551,6 @@ TEST_F(DatabaseTest, RemovedRouterTakesItsHostCredentialsWithIt)
 TEST_F(DatabaseTest, RouterHostCredentialsDoNotOpenForAnotherHost)
 {
     RouterHostConfig host;
-    host.setRouterId(1);
     host.setHostId(100500);
     host.setUsername("user");
     host.setPassword(SecureString("secret"));
@@ -1628,31 +1559,7 @@ TEST_F(DatabaseTest, RouterHostCredentialsDoNotOpenForAnotherHost)
     ASSERT_TRUE(sealed.has_value());
 
     RouterHostConfig other;
-    other.setRouterId(1);
     other.setHostId(100501);
-
-    EXPECT_FALSE(other.setEncryptedData(*sealed));
-    EXPECT_TRUE(other.username().isEmpty());
-    EXPECT_TRUE(other.password().isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
-// The row is keyed by the router and the host together, so the credentials do not open for the same
-// host reached through another router either.
-TEST_F(DatabaseTest, RouterHostCredentialsDoNotOpenForAnotherRouter)
-{
-    RouterHostConfig host;
-    host.setRouterId(1);
-    host.setHostId(100500);
-    host.setUsername("user");
-    host.setPassword(SecureString("secret"));
-
-    std::optional<QByteArray> sealed = host.encryptedData();
-    ASSERT_TRUE(sealed.has_value());
-
-    RouterHostConfig other;
-    other.setRouterId(2);
-    other.setHostId(100500);
 
     EXPECT_FALSE(other.setEncryptedData(*sealed));
     EXPECT_TRUE(other.username().isEmpty());
@@ -1665,37 +1572,37 @@ TEST_F(DatabaseTest, RouterHostCredentialsDoNotOpenForAnotherRouter)
 // long enough, and asking is remembered.
 TEST_F(DatabaseTest, OutdatedRouterHostsAreTheOnesNotCheckedForLong)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
 
-    addRouterHost(router_id, 100500, "user", "secret");
-    addRouterHost(router_id, 100501, "other-user", "other-secret");
-    addRouterHost(router_id, 100502, "third-user", "third-secret");
+    addRouterHost(100500, "user", "secret");
+    addRouterHost(100501, "other-user", "other-secret");
+    addRouterHost(100502, "third-user", "third-secret");
 
     // The router was never asked about any of them.
-    QList<HostId> outdated = outdatedRouterHosts(router_id);
+    QList<HostId> outdated = outdatedRouterHosts();
     EXPECT_EQ(outdated.size(), 3);
     EXPECT_TRUE(outdated.contains(100500));
     EXPECT_TRUE(outdated.contains(100501));
     EXPECT_TRUE(outdated.contains(100502));
 
-    ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, 100500));
-    ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, 100501));
-    ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, 100502));
+    ASSERT_TRUE(db_.updateRouterHostCheckTime(100500));
+    ASSERT_TRUE(db_.updateRouterHostCheckTime(100501));
+    ASSERT_TRUE(db_.updateRouterHostCheckTime(100502));
 
-    EXPECT_TRUE(outdatedRouterHosts(router_id).isEmpty());
+    EXPECT_TRUE(outdatedRouterHosts().isEmpty());
 
     // The answer of the router is trusted for a week. A row asked about a day ago is not offered
     // again, and one asked about eight days ago is.
     const qint64 now = QDateTime::currentSecsSinceEpoch();
     const qint64 day = 24 * 60 * 60;
 
-    ASSERT_TRUE(setRouterHostCheckTime(router_id, 100501, now - day));
-    ASSERT_TRUE(setRouterHostCheckTime(router_id, 100502, now - 8 * day));
+    ASSERT_TRUE(setRouterHostCheckTime(100501, now - day));
+    ASSERT_TRUE(setRouterHostCheckTime(100502, now - 8 * day));
 
-    EXPECT_EQ(outdatedRouterHosts(router_id), QList<HostId>({ HostId(100502) }));
+    EXPECT_EQ(outdatedRouterHosts(), QList<HostId>({ HostId(100502) }));
 
     // There is nothing to remember for a host the user saved nothing for.
-    EXPECT_FALSE(db_.updateRouterHostCheckTime(router_id, 100503));
+    EXPECT_FALSE(db_.updateRouterHostCheckTime(100503));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1703,50 +1610,28 @@ TEST_F(DatabaseTest, OutdatedRouterHostsAreTheOnesNotCheckedForLong)
 // of them. What one call left behind is what the next one takes.
 TEST_F(DatabaseTest, OutdatedRouterHostsAreTakenInBoundedBatches)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
 
     for (HostId host_id = 100500; host_id < 100512; ++host_id)
-        addRouterHost(router_id, host_id, "user", "secret");
+        addRouterHost(host_id, "user", "secret");
 
     // Twelve rows are waiting, and no answer carries more than ten.
-    const QList<HostId> first = outdatedRouterHosts(router_id);
+    const QList<HostId> first = outdatedRouterHosts();
     EXPECT_EQ(first.size(), 10);
 
     for (HostId host_id : first)
-        ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, host_id));
+        ASSERT_TRUE(db_.updateRouterHostCheckTime(host_id));
 
-    const QList<HostId> second = outdatedRouterHosts(router_id);
+    const QList<HostId> second = outdatedRouterHosts();
     EXPECT_EQ(second.size(), 2);
 
     for (HostId host_id : second)
     {
         EXPECT_FALSE(first.contains(host_id));
-        ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, host_id));
+        ASSERT_TRUE(db_.updateRouterHostCheckTime(host_id));
     }
 
-    EXPECT_TRUE(outdatedRouterHosts(router_id).isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
-// A session asks its own router about its own rows: the rows of another router are none of its
-// business, and the same host id under another router is another row.
-TEST_F(DatabaseTest, OutdatedRouterHostsBelongToTheirOwnRouter)
-{
-    const qint64 first = addRouter("first");
-    const qint64 second = addRouter("second");
-
-    addRouterHost(first, 100500, "user", "secret");
-    addRouterHost(second, 100501, "other-user", "other-secret");
-
-    EXPECT_EQ(outdatedRouterHosts(first), QList<HostId>({ HostId(100500) }));
-    EXPECT_EQ(outdatedRouterHosts(second), QList<HostId>({ HostId(100501) }));
-
-    ASSERT_TRUE(db_.updateRouterHostCheckTime(first, 100500));
-
-    EXPECT_TRUE(outdatedRouterHosts(first).isEmpty());
-    EXPECT_EQ(outdatedRouterHosts(second), QList<HostId>({ HostId(100501) }));
-
-    EXPECT_FALSE(db_.updateRouterHostCheckTime(second, 100500));
+    EXPECT_TRUE(outdatedRouterHosts().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1754,28 +1639,28 @@ TEST_F(DatabaseTest, OutdatedRouterHostsBelongToTheirOwnRouter)
 // host still being there. Neither may pass for an answer of the router.
 TEST_F(DatabaseTest, EditedRouterHostCredentialsKeepTheirCheckTime)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
 
     // One row the router has answered about and one it has not. An edit that moves the check time
     // in either direction shows up as a change of what is offered for checking.
-    addRouterHost(router_id, 100500, "user", "secret");
-    addRouterHost(router_id, 100501, "other-user", "other-secret");
+    addRouterHost(100500, "user", "secret");
+    addRouterHost(100501, "other-user", "other-secret");
 
-    ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, 100500));
-    ASSERT_EQ(outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
+    ASSERT_TRUE(db_.updateRouterHostCheckTime(100500));
+    ASSERT_EQ(outdatedRouterHosts(), QList<HostId>({ HostId(100501) }));
 
-    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, "edited-user", "edited-secret")));
-    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100501, "third-user", "third-secret")));
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(100500, "edited-user", "edited-secret")));
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(100501, "third-user", "third-secret")));
 
-    EXPECT_EQ(outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
+    EXPECT_EQ(outdatedRouterHosts(), QList<HostId>({ HostId(100501) }));
 
     QList<RouterHostConfig> router_hosts = allRouterHosts();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
-    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), router_hosts, {},
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), std::nullopt, router_hosts, {},
                                  ProxyConfig(), "salt", "verifier", 1));
 
-    EXPECT_EQ(outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
+    EXPECT_EQ(outdatedRouterHosts(), QList<HostId>({ HostId(100501) }));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1783,16 +1668,16 @@ TEST_F(DatabaseTest, EditedRouterHostCredentialsKeepTheirCheckTime)
 // stay under the old key and never open again.
 TEST_F(DatabaseTest, ReencryptionKeepsRouterHostCredentialsReadable)
 {
-    const qint64 router_id = addRouter("router");
-    addRouterHost(router_id, 100500, "user", "secret");
+    addRouter();
+    addRouterHost(100500, "user", "secret");
 
     QList<RouterHostConfig> router_hosts = allRouterHosts();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
-    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), router_hosts, {},
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), std::nullopt, router_hosts, {},
                                  ProxyConfig(), "salt", "verifier", 1));
 
-    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, 100500);
     ASSERT_TRUE(stored.has_value());
 
     EXPECT_EQ(stored->username(), QString("user"));
@@ -1804,31 +1689,28 @@ TEST_F(DatabaseTest, ReencryptionKeepsRouterHostCredentialsReadable)
 TEST_F(DatabaseTest, RouterWithoutAPasswordIsNotStored)
 {
     RouterConfig router;
-    router.setDisplayName("router");
     router.setAddress("router.example.com");
     router.setUsername("router-user");
 
-    EXPECT_FALSE(db_.addRouter(router));
-    EXPECT_TRUE(routerList().isEmpty());
+    EXPECT_FALSE(db_.setRouterConfig(router));
+    EXPECT_FALSE(findRouter(db_).has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
-// An edit cannot leave behind what an insert would have refused.
+// A write over the router there cannot leave behind one without a password.
 TEST_F(DatabaseTest, RouterCannotBeEditedIntoOneWithoutAPassword)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
 
     RouterConfig edited;
-    edited.setRouterId(router_id);
-    edited.setDisplayName("renamed");
-    edited.setAddress("router.example.com");
+    edited.setAddress("moved.example.com");
     edited.setUsername("router-user");
 
-    EXPECT_FALSE(db_.modifyRouter(edited));
+    EXPECT_FALSE(db_.setRouterConfig(edited));
 
-    const std::optional<RouterConfig> after = findRouter(db_, router_id);
+    const std::optional<RouterConfig> after = findRouter(db_);
     ASSERT_TRUE(after.has_value());
-    EXPECT_EQ(after->displayName(), "router");
+    EXPECT_EQ(after->address(), "router.example.com");
     EXPECT_FALSE(after->password().isEmpty());
 }
 
@@ -1839,7 +1721,6 @@ TEST_F(DatabaseTest, RouterCannotBeEditedIntoOneWithoutAPassword)
 TEST_F(DatabaseTest, DeviceTokenRidesTheRecordAsOpaqueBytes)
 {
     RouterConfig router;
-    router.setDisplayName("router");
     router.setAddress("router.example.com");
     router.setUsername("router-user");
     router.setPassword(SecureString("router-secret"));
@@ -1861,19 +1742,22 @@ TEST_F(DatabaseTest, DeviceTokenRidesTheRecordAsOpaqueBytes)
 }
 
 //--------------------------------------------------------------------------------------------------
-// An update of a missing row succeeds as far as SQL cares. The report of the edit must not: the
-// caller persisting a fresh device token has to learn the record is gone.
-TEST_F(DatabaseTest, RouterThatIsGoneCannotBeModified)
+// A database without a router is given one by the same write that edits a router already there.
+TEST_F(DatabaseTest, RouterIsWrittenWhereNoneIsSet)
 {
-    RouterConfig edited;
-    edited.setRouterId(100500);
-    edited.setDisplayName("renamed");
-    edited.setAddress("router.example.com");
-    edited.setSessionType(proto::router::SESSION_TYPE_OPERATOR);
-    edited.setUsername("router-user");
-    edited.setPassword(SecureString("router-secret"));
+    ASSERT_FALSE(findRouter(db_).has_value());
 
-    EXPECT_FALSE(db_.modifyRouter(edited));
+    RouterConfig router;
+    router.setAddress("router.example.com");
+    router.setSessionType(proto::router::SESSION_TYPE_OPERATOR);
+    router.setUsername("router-user");
+    router.setPassword(SecureString("router-secret"));
+
+    EXPECT_TRUE(db_.setRouterConfig(router));
+
+    const std::optional<RouterConfig> stored = findRouter(db_);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->address(), QString("router.example.com"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1904,16 +1788,8 @@ TEST_F(DatabaseTest, RecordsPastTheirBoundsAreNotStored)
     without_address.setPassword(SecureString(QString("secret")));
     EXPECT_FALSE(db_.addLocalHost(without_address));
 
-    RouterConfig router;
-    router.setDisplayName(long_name);
-    router.setAddress("router.example.com");
-    router.setUsername("router-user");
-    router.setPassword(SecureString(QString("router-secret")));
-    EXPECT_FALSE(db_.addRouter(router));
-
     EXPECT_TRUE(allLocalGroups().isEmpty());
     EXPECT_TRUE(allLocalHosts().isEmpty());
-    EXPECT_TRUE(routerList().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1946,10 +1822,7 @@ TEST_F(DatabaseTest, HostWithHalfItsCredentialsIsNotStored)
 // saved under it would be sent to a host the user never gave it to.
 TEST_F(DatabaseTest, CredentialsOfATemporaryHostAreNotStored)
 {
-    const qint64 router_id = addRouter("router");
-
     RouterHostConfig credentials;
-    credentials.setRouterId(router_id);
     credentials.setHostId(kMinTempHostId);
     credentials.setUsername("user");
     credentials.setPassword(SecureString(QString("secret")));
@@ -1964,10 +1837,7 @@ TEST_F(DatabaseTest, CredentialsOfATemporaryHostAreNotStored)
 // answer is no answer.
 TEST_F(DatabaseTest, CredentialsWithoutAPasswordAreNotStored)
 {
-    const qint64 router_id = addRouter("router");
-
     RouterHostConfig credentials;
-    credentials.setRouterId(router_id);
     credentials.setHostId(100500);
     credentials.setUsername("user");
 
@@ -1981,8 +1851,6 @@ TEST_F(DatabaseTest, CredentialsWithoutAPasswordAreNotStored)
 TEST_F(DatabaseTest, BatchIsWrittenWithItsOwnLinks)
 {
     RouterConfig router;
-    router.setRouterId(-1);
-    router.setDisplayName("router");
     router.setAddress("router.example.com");
     router.setUsername("router-user");
     router.setPassword(SecureString(QString("router-secret")));
@@ -2000,18 +1868,15 @@ TEST_F(DatabaseTest, BatchIsWrittenWithItsOwnLinks)
     host.setName("host");
     host.setAddress("100500");
     host.setGroupId(-2);
-    host.setRouterId(-1);
 
     RouterHostConfig credentials;
-    credentials.setRouterId(-1);
     credentials.setHostId(100500);
     credentials.setUsername("user");
     credentials.setPassword(SecureString(QString("secret")));
 
-    ASSERT_TRUE(db_.import({ router }, { parent, child }, { host }, { credentials }, {}, {}));
+    ASSERT_TRUE(db_.import(router, { parent, child }, { host }, { credentials }, {}, {}));
 
-    const QList<RouterConfig> routers = routerList();
-    ASSERT_EQ(routers.size(), 1);
+    ASSERT_TRUE(findRouter(db_).has_value());
 
     const QList<LocalGroupConfig> groups = allLocalGroups();
     ASSERT_EQ(groups.size(), 2);
@@ -2027,11 +1892,10 @@ TEST_F(DatabaseTest, BatchIsWrittenWithItsOwnLinks)
     const QList<LocalHostConfig> hosts = allLocalHosts();
     ASSERT_EQ(hosts.size(), 1);
     EXPECT_EQ(hosts.front().groupId(), stored_child->id());
-    EXPECT_EQ(hosts.front().routerId(), routers.front().routerId());
 
     const QList<RouterHostConfig> stored_credentials = allRouterHosts();
     ASSERT_EQ(stored_credentials.size(), 1);
-    EXPECT_EQ(stored_credentials.front().routerId(), routers.front().routerId());
+    EXPECT_EQ(stored_credentials.front().hostId(), 100500U);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2419,42 +2283,42 @@ TEST_F(DatabaseTest, LocalHostKeepsTheProfileChosenForIt)
 // credentials come and go without touching it.
 TEST_F(DatabaseTest, RouterHostKeepsTheProfileChosenForIt)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
     const qint64 profile_id = addProfile("office");
 
-    ASSERT_TRUE(db_.setRouterHostProfileId(router_id, 100500, profile_id));
+    ASSERT_TRUE(db_.setRouterHostProfileId(100500, profile_id));
 
-    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->profileId(), profile_id);
     EXPECT_TRUE(stored->username().isEmpty());
     EXPECT_EQ(stored->credentialId(), 0);
 
     std::optional<std::pair<QString, SecureString>> credentials =
-        db_.routerHostCredentials(router_id, 100500);
+        db_.routerHostCredentials(100500);
     ASSERT_TRUE(credentials.has_value());
     EXPECT_TRUE(credentials->first.isEmpty());
     EXPECT_TRUE(credentials->second.isEmpty());
 
-    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, "user", "secret")));
-    stored = findRouterHost(db_, router_id, 100500);
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(100500, "user", "secret")));
+    stored = findRouterHost(db_, 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->profileId(), profile_id);
     EXPECT_EQ(stored->username(), QString("user"));
 
-    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, QString(), QString())));
-    stored = findRouterHost(db_, router_id, 100500);
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(100500, QString(), QString())));
+    stored = findRouterHost(db_, 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->profileId(), profile_id);
     EXPECT_TRUE(stored->username().isEmpty());
 
-    ASSERT_TRUE(db_.setRouterHostProfileId(router_id, 100500, 0));
-    EXPECT_FALSE(findRouterHost(db_, router_id, 100500).has_value());
+    ASSERT_TRUE(db_.setRouterHostProfileId(100500, 0));
+    EXPECT_FALSE(findRouterHost(db_, 100500).has_value());
 
-    ASSERT_TRUE(db_.setRouterHostProfileId(router_id, 100501, 0));
-    EXPECT_FALSE(findRouterHost(db_, router_id, 100501).has_value());
+    ASSERT_TRUE(db_.setRouterHostProfileId(100501, 0));
+    EXPECT_FALSE(findRouterHost(db_, 100501).has_value());
 
-    EXPECT_FALSE(db_.setRouterHostProfileId(router_id, kMinTempHostId, profile_id));
+    EXPECT_FALSE(db_.setRouterHostProfileId(kMinTempHostId, profile_id));
     EXPECT_TRUE(allRouterHosts().isEmpty());
 }
 
@@ -2463,34 +2327,34 @@ TEST_F(DatabaseTest, RouterHostKeepsTheProfileChosenForIt)
 // credentials take only themselves, and what else is kept for the host stays with the row.
 TEST_F(DatabaseTest, RouterHostRowOutlivesItsCredentials)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
     const qint64 credential_id = addCredential("office", "user", "secret");
 
     CredentialConfig os = credential("workstation", "DOMAIN\\user", "secret");
     os.setType(CredentialConfig::Type::OS);
     ASSERT_TRUE(db_.addCredential(os));
 
-    RouterHostConfig host = routerHost(router_id, 100500, "own-user", "own-secret");
+    RouterHostConfig host = routerHost(100500, "own-user", "own-secret");
     host.setCredentialId(credential_id);
     ASSERT_TRUE(db_.addRouterHost(host));
-    ASSERT_TRUE(db_.setRouterHostOsCredentialId(router_id, 100500, os.id()));
+    ASSERT_TRUE(db_.setRouterHostOsCredentialId(100500, os.id()));
 
-    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, QString(), QString())));
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(100500, QString(), QString())));
 
-    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->username().isEmpty());
     EXPECT_TRUE(stored->password().isEmpty());
     EXPECT_EQ(stored->credentialId(), 0);
     EXPECT_EQ(stored->osCredentialId(), os.id());
 
-    EXPECT_TRUE(db_.reencryptAll(allLocalHosts(), routerList(), allRouterHosts(), credentialList(),
+    EXPECT_TRUE(db_.reencryptAll(allLocalHosts(), findRouter(db_), allRouterHosts(), credentialList(),
                                  ProxyConfig(), QByteArray(32, 's'), QByteArray(32, 'v'), 1));
 
-    EXPECT_FALSE(db_.modifyRouterHost(routerHost(router_id, 100501, QString(), QString())));
+    EXPECT_FALSE(db_.modifyRouterHost(routerHost(100501, QString(), QString())));
     EXPECT_EQ(allRouterHosts().size(), 1);
 
-    ASSERT_TRUE(db_.removeRouterHost(router_id, 100500));
+    ASSERT_TRUE(db_.removeRouterHost(100500));
     EXPECT_TRUE(allRouterHosts().isEmpty());
 }
 
@@ -2499,29 +2363,29 @@ TEST_F(DatabaseTest, RouterHostRowOutlivesItsCredentials)
 // to go. A row that still holds a pair stays when its links go.
 TEST_F(DatabaseTest, EmptiedRouterHostRowIsGone)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
 
     CredentialConfig os = credential("workstation", "DOMAIN\\user", "secret");
     os.setType(CredentialConfig::Type::OS);
     ASSERT_TRUE(db_.addCredential(os));
 
-    addRouterHost(router_id, 100500, "user", "secret");
-    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, QString(), QString())));
-    EXPECT_FALSE(findRouterHost(db_, router_id, 100500).has_value());
+    addRouterHost(100500, "user", "secret");
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(100500, QString(), QString())));
+    EXPECT_FALSE(findRouterHost(db_, 100500).has_value());
 
-    addRouterHost(router_id, 100501, "user", "secret");
-    ASSERT_TRUE(db_.setRouterHostOsCredentialId(router_id, 100501, os.id()));
-    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100501, QString(), QString())));
-    ASSERT_TRUE(findRouterHost(db_, router_id, 100501).has_value());
+    addRouterHost(100501, "user", "secret");
+    ASSERT_TRUE(db_.setRouterHostOsCredentialId(100501, os.id()));
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(100501, QString(), QString())));
+    ASSERT_TRUE(findRouterHost(db_, 100501).has_value());
 
-    ASSERT_TRUE(db_.setRouterHostOsCredentialId(router_id, 100501, 0));
-    EXPECT_FALSE(findRouterHost(db_, router_id, 100501).has_value());
+    ASSERT_TRUE(db_.setRouterHostOsCredentialId(100501, 0));
+    EXPECT_FALSE(findRouterHost(db_, 100501).has_value());
 
-    addRouterHost(router_id, 100502, "user", "secret");
-    ASSERT_TRUE(db_.setRouterHostOsCredentialId(router_id, 100502, os.id()));
+    addRouterHost(100502, "user", "secret");
+    ASSERT_TRUE(db_.setRouterHostOsCredentialId(100502, os.id()));
     ASSERT_TRUE(db_.removeCredential(os.id()));
 
-    const std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100502);
+    const std::optional<RouterHostConfig> stored = findRouterHost(db_, 100502);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->osCredentialId(), 0);
     EXPECT_EQ(stored->username(), QString("user"));
@@ -2532,10 +2396,10 @@ TEST_F(DatabaseTest, EmptiedRouterHostRowIsGone)
 // that held nothing but the profile is gone with it.
 TEST_F(DatabaseTest, RemovedProfileLeavesItsHostsOnTheDefaultOne)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
     const qint64 profile_id = addProfile("office");
 
-    ASSERT_TRUE(db_.setRouterHostProfileId(router_id, 100500, profile_id));
+    ASSERT_TRUE(db_.setRouterHostProfileId(100500, profile_id));
 
     LocalHostConfig local_host;
     local_host.setName("host");
@@ -2545,7 +2409,7 @@ TEST_F(DatabaseTest, RemovedProfileLeavesItsHostsOnTheDefaultOne)
 
     ASSERT_TRUE(db_.removeProfile(profile_id));
 
-    EXPECT_FALSE(findRouterHost(db_, router_id, 100500).has_value());
+    EXPECT_FALSE(findRouterHost(db_, 100500).has_value());
     EXPECT_EQ(findLocalHost(db_, local_host.id())->profileId(), 0);
 }
 
@@ -2581,14 +2445,14 @@ TEST_F(DatabaseTest, SessionRunsOnTheProfileOfItsHost)
     EXPECT_EQ(serialize(profile.desktopConfig()), serialize(office_desktop));
     EXPECT_EQ(profile.udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
 
-    const qint64 router_id = addRouter("router");
-    ASSERT_TRUE(db_.setRouterHostProfileId(router_id, 100500, office.id()));
+    addRouter();
+    ASSERT_TRUE(db_.setRouterHostProfileId(100500, office.id()));
 
-    profile = db_.hostProfile(HostConfig::forRouterHost(router_id, 100500, "host"));
+    profile = db_.hostProfile(HostConfig::forRouterHost(100500, "host"));
     EXPECT_EQ(profile.id(), office.id());
     EXPECT_EQ(profile.udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
 
-    profile = db_.hostProfile(HostConfig::forRouterHost(router_id, 100501, "other"));
+    profile = db_.hostProfile(HostConfig::forRouterHost(100501, "other"));
     EXPECT_EQ(profile.id(), default_profile.id());
     EXPECT_EQ(serialize(profile.desktopConfig()), serialize(default_desktop));
     EXPECT_EQ(profile.udpMethods(), static_cast<quint32>(UDP_METHOD_UPNP));
@@ -2622,16 +2486,14 @@ TEST_F(DatabaseTest, BatchLinksHostsToTheirProfiles)
     host.setProfileId(-1);
 
     RouterConfig router;
-    router.setRouterId(-1);
-    router.setDisplayName("router");
     router.setAddress("router.example.com");
     router.setUsername("router-user");
     router.setPassword(SecureString(QString("router-secret")));
 
-    RouterHostConfig router_host = routerHost(-1, 100500, QString(), QString());
+    RouterHostConfig router_host = routerHost(100500, QString(), QString());
     router_host.setProfileId(-1);
 
-    ASSERT_TRUE(db_.import({ router }, {}, { host }, { router_host }, {}, { profile }));
+    ASSERT_TRUE(db_.import(router, {}, { host }, { router_host }, {}, { profile }));
 
     const QList<ProfileConfig> profiles = profileList();
     ASSERT_EQ(profiles.size(), 1);
@@ -2654,7 +2516,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsCredentialsReadable)
     QList<CredentialConfig> credentials = credentialList();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
-    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), allRouterHosts(),
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), std::nullopt, allRouterHosts(),
                                  credentials, ProxyConfig(), "salt", "verifier", 1));
 
     const std::optional<CredentialConfig> stored = findCredential(db_, credential_id);
@@ -2720,26 +2582,22 @@ TEST_F(DatabaseTest, LocalHostLinksItsCredentials)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The row of a router host links credentials the same way. The record outlives the row and the
-// router: it belongs to the manager, and a host that is gone was only one of those entered with it.
+// The row of a router host links credentials the same way.
 TEST_F(DatabaseTest, RouterHostLinksItsCredentials)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
     const qint64 credential_id = addCredential("office", "user", "secret");
 
-    RouterHostConfig host = routerHost(router_id, 100500, "user", "secret");
+    RouterHostConfig host = routerHost(100500, "user", "secret");
     host.setCredentialId(credential_id);
     ASSERT_TRUE(db_.addRouterHost(host));
 
-    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->credentialId(), credential_id);
 
     ASSERT_TRUE(db_.removeCredential(credential_id));
-    EXPECT_EQ(findRouterHost(db_, router_id, 100500)->credentialId(), 0);
-
-    ASSERT_TRUE(db_.removeRouter(router_id));
-    EXPECT_TRUE(allRouterHosts().isEmpty());
+    EXPECT_EQ(findRouterHost(db_, 100500)->credentialId(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2747,14 +2605,14 @@ TEST_F(DatabaseTest, RouterHostLinksItsCredentials)
 // and an empty pair of its own.
 TEST_F(DatabaseTest, RouterHostIsKeptByItsLinkAlone)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
     const qint64 credential_id = addCredential("office", "user", "secret");
 
-    RouterHostConfig host = routerHost(router_id, 100500, QString(), QString());
+    RouterHostConfig host = routerHost(100500, QString(), QString());
     host.setCredentialId(credential_id);
     ASSERT_TRUE(db_.addRouterHost(host));
 
-    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->credentialId(), credential_id);
     EXPECT_TRUE(stored->username().isEmpty());
@@ -2775,16 +2633,14 @@ TEST_F(DatabaseTest, BatchLinksHostsToItsCredentials)
     host.setCredentialId(-1);
 
     RouterConfig router;
-    router.setRouterId(-1);
-    router.setDisplayName("router");
     router.setAddress("router.example.com");
     router.setUsername("router-user");
     router.setPassword(SecureString(QString("router-secret")));
 
-    RouterHostConfig router_host = routerHost(-1, 100500, "user", "secret");
+    RouterHostConfig router_host = routerHost(100500, "user", "secret");
     router_host.setCredentialId(-1);
 
-    ASSERT_TRUE(db_.import({ router }, {}, { host }, { router_host }, { config }, {}));
+    ASSERT_TRUE(db_.import(router, {}, { host }, { router_host }, { config }, {}));
 
     const QList<CredentialConfig> credentials = credentialList();
     ASSERT_EQ(credentials.size(), 1);
@@ -2824,19 +2680,19 @@ TEST_F(DatabaseTest, HostsKeepTheOsCredentialsLastChosenForThem)
     ASSERT_TRUE(db_.modifyLocalHost(edited));
     EXPECT_EQ(findLocalHost(db_, host.id())->osCredentialId(), os.id());
 
-    const qint64 router_id = addRouter("router");
-    ASSERT_TRUE(db_.addRouterHost(routerHost(router_id, 100500, "user", "secret")));
+    addRouter();
+    ASSERT_TRUE(db_.addRouterHost(routerHost(100500, "user", "secret")));
 
-    ASSERT_TRUE(db_.setRouterHostOsCredentialId(router_id, 100500, os.id()));
-    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, "other-user", "other-secret")));
-    EXPECT_EQ(findRouterHost(db_, router_id, 100500)->osCredentialId(), os.id());
+    ASSERT_TRUE(db_.setRouterHostOsCredentialId(100500, os.id()));
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(100500, "other-user", "other-secret")));
+    EXPECT_EQ(findRouterHost(db_, 100500)->osCredentialId(), os.id());
 
-    ASSERT_TRUE(db_.setRouterHostOsCredentialId(router_id, 100501, os.id()));
+    ASSERT_TRUE(db_.setRouterHostOsCredentialId(100501, os.id()));
     EXPECT_EQ(allRouterHosts().size(), 1);
 
     ASSERT_TRUE(db_.removeCredential(os.id()));
     EXPECT_EQ(findLocalHost(db_, host.id())->osCredentialId(), 0);
-    EXPECT_EQ(findRouterHost(db_, router_id, 100500)->osCredentialId(), 0);
+    EXPECT_EQ(findRouterHost(db_, 100500)->osCredentialId(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2856,17 +2712,15 @@ TEST_F(DatabaseTest, BatchLinksHostsToTheirOsCredentials)
     host.setOsCredentialId(-2);
 
     RouterConfig router;
-    router.setRouterId(-1);
-    router.setDisplayName("router");
     router.setAddress("router.example.com");
     router.setUsername("router-user");
     router.setPassword(SecureString(QString("router-secret")));
 
-    RouterHostConfig router_host = routerHost(-1, 100500, QString(), QString());
+    RouterHostConfig router_host = routerHost(100500, QString(), QString());
     router_host.setCredentialId(-1);
     router_host.setOsCredentialId(-2);
 
-    ASSERT_TRUE(db_.import({ router }, {}, { host }, { router_host }, { aspia, os }, {}));
+    ASSERT_TRUE(db_.import(router, {}, { host }, { router_host }, { aspia, os }, {}));
 
     QList<CredentialConfig> credentials;
     ASSERT_EQ(db_.credentialList(&credentials, CredentialConfig::Type::OS), Database::ReadResult::OK);
@@ -2879,41 +2733,6 @@ TEST_F(DatabaseTest, BatchLinksHostsToTheirOsCredentials)
     const QList<RouterHostConfig> router_hosts = allRouterHosts();
     ASSERT_EQ(router_hosts.size(), 1);
     EXPECT_EQ(router_hosts.front().osCredentialId(), credentials.front().id());
-}
-
-//--------------------------------------------------------------------------------------------------
-// The tables of hosts made before the columns of the operating system credentials and of the
-// profile get them when the file is opened, and a file that has them already is opened as it is.
-TEST_F(DatabaseTest, OldTablesOfHostsGetTheNewColumns)
-{
-    const QString file_path = QFileInfo(file_path_).dir().filePath("old.db3");
-
-    {
-        SqlDatabase raw;
-        ASSERT_TRUE(raw.open(file_path));
-        ASSERT_TRUE(raw.exec("CREATE TABLE local_hosts (id INTEGER PRIMARY KEY, credential_id INTEGER)"));
-        ASSERT_TRUE(raw.exec("CREATE TABLE router_hosts (router_id INTEGER, host_id INTEGER, credential_id INTEGER)"));
-    }
-
-    for (int i = 0; i < 2; ++i)
-    {
-        Database db;
-        ASSERT_TRUE(db.open(file_path));
-    }
-
-    SqlDatabase raw;
-    ASSERT_TRUE(raw.open(file_path));
-
-    for (const char* table : { "local_hosts", "router_hosts" })
-    {
-        for (const char* column : { "os_credential_id", "profile_id" })
-        {
-            SqlQuery query(raw, "SELECT 1 FROM pragma_table_info(?) WHERE name=?");
-            query.addText(std::string_view(table));
-            query.addText(std::string_view(column));
-            EXPECT_EQ(query.next(), SqlQuery::StepResult::ROW) << table << "." << column;
-        }
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2977,27 +2796,27 @@ TEST_F(DatabaseTest, LocalHostIsEnteredWithTheCredentialsItRefersToOrItsOwnPair)
 // The same for a host of a router. A host without a row is entered with nothing.
 TEST_F(DatabaseTest, RouterHostIsEnteredWithTheCredentialsItRefersToOrItsOwnPair)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
     const qint64 credential_id = addCredential("office", "shared-user", "shared-secret");
 
-    ASSERT_TRUE(db_.addRouterHost(routerHost(router_id, 100500, "user", "secret")));
+    ASSERT_TRUE(db_.addRouterHost(routerHost(100500, "user", "secret")));
 
-    RouterHostConfig linked = routerHost(router_id, 100501, "user", "secret");
+    RouterHostConfig linked = routerHost(100501, "user", "secret");
     linked.setCredentialId(credential_id);
     ASSERT_TRUE(db_.addRouterHost(linked));
 
     std::optional<std::pair<QString, SecureString>> credentials =
-        db_.routerHostCredentials(router_id, 100500);
+        db_.routerHostCredentials(100500);
     ASSERT_TRUE(credentials.has_value());
     EXPECT_EQ(credentials->first, QString("user"));
     EXPECT_EQ(credentials->second.toString(), QString("secret"));
 
-    credentials = db_.routerHostCredentials(router_id, 100501);
+    credentials = db_.routerHostCredentials(100501);
     ASSERT_TRUE(credentials.has_value());
     EXPECT_EQ(credentials->first, QString("shared-user"));
     EXPECT_EQ(credentials->second.toString(), QString("shared-secret"));
 
-    EXPECT_FALSE(db_.routerHostCredentials(router_id, 100502).has_value());
+    EXPECT_FALSE(db_.routerHostCredentials(100502).has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3006,20 +2825,20 @@ TEST_F(DatabaseTest, RouterHostIsEnteredWithTheCredentialsItRefersToOrItsOwnPair
 // gone. The book stays one a change of the master password walks through.
 TEST_F(DatabaseTest, RemovedRecordLeavesTheHostsThatReferredToIt)
 {
-    const qint64 router_id = addRouter("router");
+    addRouter();
     const qint64 group = addGroup("group", 0);
     const qint64 credential_id = addCredential("office", "user", "secret");
     const qint64 other_id = addCredential("other", "other-user", "other-secret");
 
-    RouterHostConfig link_only = routerHost(router_id, 100500, QString(), QString());
+    RouterHostConfig link_only = routerHost(100500, QString(), QString());
     link_only.setCredentialId(credential_id);
     ASSERT_TRUE(db_.addRouterHost(link_only));
 
-    RouterHostConfig with_pair = routerHost(router_id, 100501, "own-user", "own-secret");
+    RouterHostConfig with_pair = routerHost(100501, "own-user", "own-secret");
     with_pair.setCredentialId(credential_id);
     ASSERT_TRUE(db_.addRouterHost(with_pair));
 
-    RouterHostConfig other_link = routerHost(router_id, 100502, QString(), QString());
+    RouterHostConfig other_link = routerHost(100502, QString(), QString());
     other_link.setCredentialId(other_id);
     ASSERT_TRUE(db_.addRouterHost(other_link));
 
@@ -3032,15 +2851,15 @@ TEST_F(DatabaseTest, RemovedRecordLeavesTheHostsThatReferredToIt)
 
     ASSERT_TRUE(db_.removeCredential(credential_id));
 
-    EXPECT_FALSE(findRouterHost(db_, router_id, 100500).has_value());
+    EXPECT_FALSE(findRouterHost(db_, 100500).has_value());
 
-    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100501);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, 100501);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->credentialId(), 0);
     EXPECT_EQ(stored->username(), QString("own-user"));
     EXPECT_EQ(stored->password().toString(), QString("own-secret"));
 
-    stored = findRouterHost(db_, router_id, 100502);
+    stored = findRouterHost(db_, 100502);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->credentialId(), other_id);
 
@@ -3048,7 +2867,7 @@ TEST_F(DatabaseTest, RemovedRecordLeavesTheHostsThatReferredToIt)
     ASSERT_TRUE(stored_local.has_value());
     EXPECT_EQ(stored_local->credentialId(), 0);
 
-    EXPECT_TRUE(db_.reencryptAll(allLocalHosts(), routerList(), allRouterHosts(), credentialList(),
+    EXPECT_TRUE(db_.reencryptAll(allLocalHosts(), findRouter(db_), allRouterHosts(), credentialList(),
                                  ProxyConfig(), QByteArray(32, 's'), QByteArray(32, 'v'), 1));
 }
 
@@ -3066,11 +2885,10 @@ TEST_F(DatabaseTest, MasterPasswordChangeIsRefusedWhenALinkedRouterHostDoesNotOp
     ASSERT_TRUE(db.isValid());
 
     RouterConfig router;
-    router.setDisplayName("router");
     router.setAddress("router.example.com");
     router.setUsername("router-user");
     router.setPassword(SecureString("router-secret"));
-    ASSERT_TRUE(db.addRouter(router));
+    ASSERT_TRUE(db.setRouterConfig(router));
 
     CredentialConfig credential;
     credential.setDisplayName("office");
@@ -3078,7 +2896,7 @@ TEST_F(DatabaseTest, MasterPasswordChangeIsRefusedWhenALinkedRouterHostDoesNotOp
     credential.setPassword(SecureString("secret"));
     ASSERT_TRUE(db.addCredential(credential));
 
-    RouterHostConfig host = routerHost(router.routerId(), 100500, "own-user", "own-secret");
+    RouterHostConfig host = routerHost(100500, "own-user", "own-secret");
     host.setCredentialId(credential.id());
     ASSERT_TRUE(db.addRouterHost(host));
 
@@ -3211,7 +3029,7 @@ TEST_F(DatabaseTest, ResetKeepsWhatTheDatabaseHeldInACopy)
     ASSERT_TRUE(db_.setLockTimeout(Minutes(5)));
 
     addHost("Host", addGroup("Group", 0));
-    addRouterHost(addRouter("Router"), 1, "user", "password");
+    addRouterHost(1, "user", "password");
     addCredential("Credential", "user", "password");
     addProfile("Profile");
 
@@ -3222,7 +3040,7 @@ TEST_F(DatabaseTest, ResetKeepsWhatTheDatabaseHeldInACopy)
     EXPECT_EQ(db_.lockTimeout(), Minutes::zero());
     EXPECT_TRUE(allLocalGroups().isEmpty());
     EXPECT_TRUE(allLocalHosts().isEmpty());
-    EXPECT_TRUE(routerList().isEmpty());
+    EXPECT_FALSE(findRouter(db_).has_value());
     EXPECT_TRUE(allRouterHosts().isEmpty());
     EXPECT_TRUE(credentialList().isEmpty());
     EXPECT_TRUE(profileList().isEmpty());

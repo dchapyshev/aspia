@@ -46,7 +46,7 @@ class RouterUserDialog final : public QDialog
 
 public:
     // user_id == 0 means create mode; > 0 means modify mode.
-    RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* parent);
+    RouterUserDialog(qint64 user_id, QWidget* parent);
     ~RouterUserDialog() final;
 
 protected:
@@ -85,7 +85,6 @@ private:
     static QString formatTimestamp(qint64 unix_seconds);
 
     std::unique_ptr<Ui::RouterUserDialog> ui;
-    qint64 router_id_ = 0;
     qint64 entry_id_ = 0;
     UserEditModel model_;
     QList<Token> tokens_;

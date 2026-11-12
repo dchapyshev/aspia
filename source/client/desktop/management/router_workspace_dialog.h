@@ -49,7 +49,7 @@ class RouterWorkspaceDialog final : public QDialog
 
 public:
     // workspace_id == 0 means create mode; > 0 means modify mode.
-    RouterWorkspaceDialog(qint64 router_id, qint64 workspace_id, QWidget* parent);
+    RouterWorkspaceDialog(qint64 workspace_id, QWidget* parent);
     ~RouterWorkspaceDialog() final;
 
 protected:
@@ -98,7 +98,6 @@ private:
     QString validatedName();
 
     std::unique_ptr<Ui::RouterWorkspaceDialog> ui;
-    qint64 router_id_ = 0;
     qint64 entry_id_ = 0;
     bool is_admin_ = false;
 

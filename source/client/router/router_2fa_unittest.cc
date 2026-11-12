@@ -38,15 +38,14 @@
 
 namespace {
 
-constexpr qint64 kRouterId = 1;
 constexpr qint64 kUserId = 7;
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
-std::optional<RouterConfig> findRouter(const Database& db, qint64 router_id)
+std::optional<RouterConfig> findRouter(const Database& db)
 {
     RouterConfig router;
-    const Database::FindResult result = db.findRouter(router_id, &router);
+    const Database::FindResult result = db.routerConfig(&router);
     if (result != Database::FindResult::FOUND)
     {
         EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
@@ -89,9 +88,9 @@ protected:
         : login_(config())
     {
         QObject::connect(&login_, &Router2FA::sig_twoFactorRequired,
-                         [this](qint64) { ++prompts_required_; });
+                         [this]() { ++prompts_required_; });
         QObject::connect(&login_, &Router2FA::sig_twoFactorFinished,
-                         [this](qint64, qint64 user_id, const QVersionNumber& peer_version)
+                         [this](qint64 user_id, const QVersionNumber& peer_version)
         {
             logged_in_user_ = user_id;
             logged_in_version_ = peer_version;
@@ -112,7 +111,6 @@ protected:
     static SharedPointer<RouterConfig> config(const QByteArray& device_token = QByteArray())
     {
         RouterConfig* config = new RouterConfig();
-        config->setRouterId(kRouterId);
         config->setAddress("router.example.com");
         config->setUsername("user");
         config->setPassword(SecureString(QString("secret")));
@@ -132,8 +130,7 @@ protected:
     void seedRecord(const QByteArray& device_token = QByteArray())
     {
         RouterConfig record = *config(device_token);
-        ASSERT_TRUE(Database::instance().addRouter(record));
-        ASSERT_EQ(record.routerId(), kRouterId);
+        ASSERT_TRUE(Database::instance().setRouterConfig(record));
     }
 
     static proto::router::RouterToClient activeChallenge()
@@ -208,7 +205,7 @@ TEST_F(Router2FATest, RejectedTokenIsDroppedFromTheRecord)
 
     EXPECT_NE(login.twoFactorPrompt(), nullptr);
 
-    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance());
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->deviceToken().isEmpty());
 }
@@ -229,7 +226,7 @@ TEST_F(Router2FATest, EnrollmentDropsTheStoredToken)
 
     EXPECT_NE(login.twoFactorPrompt(), nullptr);
 
-    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance());
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->deviceToken().isEmpty());
 }
@@ -241,10 +238,10 @@ TEST_F(Router2FATest, EnrollmentWithoutAStoredTokenLeavesTheRecordAlone)
 {
     seedRecord();
 
-    // A rename made behind the login's back: a needless rewrite would revert it.
-    RouterConfig renamed = *config();
-    renamed.setDisplayName("renamed");
-    ASSERT_TRUE(Database::instance().modifyRouter(renamed));
+    // An edit made behind the login's back: a needless rewrite would revert it.
+    RouterConfig edited = *config();
+    edited.setSessionType(proto::router::SESSION_TYPE_ADMIN);
+    ASSERT_TRUE(Database::instance().setRouterConfig(edited));
 
     proto::router::RouterToClient message;
     message.mutable_two_factor_challenge()->set_mode(proto::router::TWO_FACTOR_MODE_ENROLL);
@@ -254,9 +251,9 @@ TEST_F(Router2FATest, EnrollmentWithoutAStoredTokenLeavesTheRecordAlone)
 
     EXPECT_NE(login_.twoFactorPrompt(), nullptr);
 
-    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance());
     ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->displayName(), QString("renamed"));
+    EXPECT_EQ(stored->sessionType(), proto::router::SESSION_TYPE_ADMIN);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -311,7 +308,7 @@ TEST_F(Router2FATest, IssuedTokenIsStoredInTheRecord)
     EXPECT_EQ(logged_in_user_, kUserId);
 
     // The record stores the wrap, and the wrap made here opens back into the token.
-    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance());
     ASSERT_TRUE(stored.has_value());
     QByteArray raw;
     ASSERT_TRUE(OSCrypt::decryptBytes(stored->deviceToken(), &raw));
@@ -336,7 +333,7 @@ TEST_F(Router2FATest, TokenOfAnUnexpectedSizeIsNotStored)
 
     EXPECT_EQ(logged_in_user_, kUserId);
 
-    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance());
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->deviceToken().isEmpty());
 }
@@ -522,7 +519,7 @@ TEST_F(Router2FATest, EnrollmentUriWithoutASecretIsRefused)
 
     EXPECT_EQ(login.twoFactorPrompt(), nullptr);
 
-    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance());
     ASSERT_TRUE(stored.has_value());
     QByteArray raw;
     ASSERT_TRUE(OSCrypt::decryptBytes(stored->deviceToken(), &raw));

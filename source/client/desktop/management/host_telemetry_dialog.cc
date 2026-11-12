@@ -31,10 +31,9 @@
 #include "proto/router_constants.h"
 
 //--------------------------------------------------------------------------------------------------
-HostTelemetryDialog::HostTelemetryDialog(qint64 router_id, const RouterHost& host, QWidget* parent)
+HostTelemetryDialog::HostTelemetryDialog(const RouterHost& host, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::HostTelemetryDialog>()),
-      router_id_(router_id),
       host_(host),
       model_(new TelemetryModel(this))
 {
@@ -51,9 +50,9 @@ HostTelemetryDialog::HostTelemetryDialog(qint64 router_id, const RouterHost& hos
     connect(ui->button_box, &QDialogButtonBox::rejected, this, &HostTelemetryDialog::reject);
 
     connect(&RouterController::instance(), &RouterController::sig_statusChanged, this,
-            [this](qint64 router_id, RouterStatus status)
+            [this](RouterStatus status)
     {
-        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        if (status != RouterStatus::ONLINE)
             reject();
     });
 
@@ -95,10 +94,10 @@ void HostTelemetryDialog::onTelemetryReceived(const proto::router::HostTelemetry
 //--------------------------------------------------------------------------------------------------
 void HostTelemetryDialog::requestTelemetry()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         return;
     }
 

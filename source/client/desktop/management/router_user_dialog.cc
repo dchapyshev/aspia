@@ -67,10 +67,9 @@ bool isNameAllowed(const QString& username)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* parent)
+RouterUserDialog::RouterUserDialog(qint64 user_id, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterUserDialog>()),
-      router_id_(router_id),
       entry_id_(user_id),
       model_(user_id)
 {
@@ -143,16 +142,15 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
 
     RouterController& controller = RouterController::instance();
     connect(&controller, &RouterController::sig_statusChanged, this,
-            [this](qint64 router_id, RouterStatus status)
+            [this](RouterStatus status)
     {
-        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        if (status != RouterStatus::ONLINE)
             reject();
     });
 
-    connect(&controller, &RouterController::sig_usersChanged, this, [this](qint64 router_id)
+    connect(&controller, &RouterController::sig_usersChanged, this, [this]()
     {
-        if (router_id == router_id_)
-            fetchUser();
+        fetchUser();
     });
 
     if (entry_id_ > 0)
@@ -318,10 +316,10 @@ void RouterUserDialog::onResetOtpClicked()
     if (entry_id_ <= 0)
         return;
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         return;
     }
 
@@ -337,10 +335,10 @@ void RouterUserDialog::onResetOtpClicked()
         return;
 
     // The question ran a nested event loop, so the session is looked up anew.
-    session = RouterController::session(router_id_);
+    session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         return;
     }
 
@@ -386,10 +384,10 @@ void RouterUserDialog::onRevokeTokenClicked()
     if (MsgBox::question(this, question) != MsgBox::Yes)
         return;
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         return;
     }
 
@@ -413,10 +411,10 @@ void RouterUserDialog::onRevokeAllTokensClicked()
         return;
     }
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         return;
     }
 
@@ -600,7 +598,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::fetchUser()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session || entry_id_ <= 0)
         return;
 
@@ -611,10 +609,10 @@ void RouterUserDialog::fetchUser()
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::submitWithNameCheck(const RouterUser& request, const QString& username)
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         return;
     }
 
@@ -647,10 +645,10 @@ void RouterUserDialog::submitWithNameCheck(const RouterUser& request, const QStr
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::submitUser(const RouterUser& request)
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         return;
     }
 
@@ -680,7 +678,7 @@ void RouterUserDialog::submitUser(const RouterUser& request)
             if (error_code != proto::router::kErrorOk &&
                 error_code != proto::router::kErrorLostConnection)
             {
-                if (RouterSession* session = RouterController::session(router_id_))
+                if (RouterSession* session = RouterController::session())
                     session->storeCredentials(old_user_name, old_password);
             }
 

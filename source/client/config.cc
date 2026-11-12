@@ -31,20 +31,13 @@
 
 namespace {
 
-// Names the table a column was sealed for. A host and a router number their fields the same way, so
-// without this a router column moved into a host row would parse as a host one and open.
 const char kLocalHostsAad[] = "local_hosts";
 const char kRoutersAad[] = "routers";
 const char kProxyAad[] = "settings/proxy";
 
-// The credentials of a router host are sealed for their row, both halves of its key. Every column
-// of the table opens with the same key, so a blob moved into the row of another host, or of the
-// same host under another router, would otherwise open and hand out credentials the user never
-// saved for it.
-QByteArray routerHostAad(qint64 router_id, HostId host_id)
+QByteArray routerHostAad(HostId host_id)
 {
-    return QByteArrayLiteral("router_hosts/") + QByteArray::number(router_id) + '/' +
-           QByteArray::number(host_id);
+    return QByteArrayLiteral("router_hosts/") + QByteArray::number(host_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -110,8 +103,7 @@ RouterConfig::RouterConfig()
 //--------------------------------------------------------------------------------------------------
 bool RouterConfig::isValid() const
 {
-    return !address_.isEmpty() && !username_.isEmpty() && !password_.isEmpty() &&
-           display_name_.length() <= kMaxNameLength;
+    return !address_.isEmpty() && !username_.isEmpty() && !password_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -122,24 +114,14 @@ bool RouterConfig::hasSameAccount(const RouterConfig& other) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString RouterConfig::displayLabel() const
-{
-    if (!display_name_.isEmpty())
-        return display_name_;
-
-    if (!address_.isEmpty())
-        return address_;
-
-    return tr("<unreadable router>");
-}
-
-//--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> RouterConfig::encryptedData() const
 {
     proto::storage::RouterBlob data;
     data.set_address(address_.toStdString());
     data.set_username(username_.toStdString());
     data.set_device_token(device_token_.toStdString());
+    data.set_session_type(static_cast<quint32>(session_type_));
+    data.set_enabled(enabled_);
 
     const SecureByteArray password = password_.toUtf8();
     data.set_password(password.constData(), static_cast<size_t>(password.size()));
@@ -160,6 +142,8 @@ bool RouterConfig::setEncryptedData(const QByteArray& blob)
     username_.clear();
     password_.clear();
     device_token_.clear();
+    session_type_ = proto::router::SESSION_TYPE_OPERATOR;
+    enabled_ = true;
 
     if (blob.isEmpty())
         return true;
@@ -172,6 +156,8 @@ bool RouterConfig::setEncryptedData(const QByteArray& blob)
     username_ = QString::fromStdString(data.username());
     password_ = toSecureString(data.password());
     device_token_ = QByteArray::fromStdString(data.device_token());
+    session_type_ = static_cast<proto::router::SessionType>(data.session_type());
+    enabled_ = data.enabled();
 
     memZero(data.mutable_address());
     memZero(data.mutable_username());
@@ -183,8 +169,7 @@ bool RouterConfig::setEncryptedData(const QByteArray& blob)
 //--------------------------------------------------------------------------------------------------
 bool RouterHostConfig::isValid() const
 {
-    return router_id_ > 0 && host_id_ != kInvalidHostId && !isTempHostId(host_id_) &&
-           username_.isEmpty() == password_.isEmpty();
+    return host_id_ != kInvalidHostId && !isTempHostId(host_id_) && username_.isEmpty() == password_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -199,7 +184,7 @@ std::optional<QByteArray> RouterHostConfig::encryptedData() const
     const SecureByteArray password = password_.toUtf8();
     data.set_password(password.constData(), static_cast<size_t>(password.size()));
 
-    std::optional<QByteArray> sealed = sealMessage(data, routerHostAad(router_id_, host_id_));
+    std::optional<QByteArray> sealed = sealMessage(data, routerHostAad(host_id_));
 
     memZero(data.mutable_username());
     memZero(data.mutable_password());
@@ -217,7 +202,7 @@ bool RouterHostConfig::setEncryptedData(const QByteArray& blob)
         return true;
 
     proto::storage::HostBlob data;
-    if (!unsealMessage(blob, routerHostAad(router_id_, host_id_), &data))
+    if (!unsealMessage(blob, routerHostAad(host_id_), &data))
         return false;
 
     username_ = QString::fromStdString(data.username());
@@ -434,7 +419,6 @@ HostConfig HostConfig::forLocalHost(const LocalHostConfig& host)
 {
     HostConfig config;
     config.setEntryId(host.id());
-    config.setRouterId(host.routerId());
     config.setAddress(host.address());
     config.setName(host.name());
     config.setUsername(host.username());
@@ -444,10 +428,9 @@ HostConfig HostConfig::forLocalHost(const LocalHostConfig& host)
 
 //--------------------------------------------------------------------------------------------------
 // static
-HostConfig HostConfig::forRouterHost(qint64 router_id, HostId host_id, const QString& name)
+HostConfig HostConfig::forRouterHost(HostId host_id, const QString& name)
 {
     HostConfig config;
-    config.setRouterId(router_id);
     config.setAddress(hostIdToString(host_id));
     config.setName(name);
     return config;

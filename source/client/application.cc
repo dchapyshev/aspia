@@ -22,6 +22,7 @@
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "client/storage/database.h"
+#include "client/storage/database_migration.h"
 #include "client/storage/settings.h"
 #include "client/workers/router_worker.h"
 #include "client/workers/update_worker.h"
@@ -30,7 +31,9 @@
 #include "client/mcp/mcp_worker.h"
 #endif // !defined(Q_OS_ANDROID)
 
+#include <QFileInfo>
 #include <QIcon>
+#include <QLocale>
 
 namespace {
 
@@ -62,6 +65,18 @@ Application::Application(int& argc, char* argv[])
             LOG(ERROR) << "Unhandled message";
         }
     });
+
+    const DatabaseMigration::Result migration = DatabaseMigration::migrate(
+        DatabaseMigration::oldFilePath(), QFileInfo(Database::filePath()).absolutePath());
+    if (migration == DatabaseMigration::Result::FAILED)
+    {
+        LOG(ERROR) << "Unable to migrate the old address book";
+        migration_failed_ = true;
+
+        setLocale(resolveLocale(QLocale::system().bcp47Name()));
+        setTheme("auto");
+        return;
+    }
 
     Settings settings;
 

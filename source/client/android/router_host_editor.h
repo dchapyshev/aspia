@@ -36,10 +36,9 @@ public:
     explicit RouterHostEditor(QWidget* parent = nullptr);
     ~RouterHostEditor() final;
 
-    // Loads what is kept for the host |host_id| of the router |router_id| into the form. Returns
-    // false when nothing can be kept for such a host; the form keeps its previous state and must
-    // not be shown.
-    bool prepareForEdit(qint64 router_id, HostId host_id);
+    // Loads what is kept for the router host |host_id| into the form. Returns false when nothing
+    // can be kept for such a host; the form keeps its previous state and must not be shown.
+    bool prepareForEdit(HostId host_id);
 
 signals:
     // Emitted after the credentials have been saved or forgotten.
@@ -61,7 +60,6 @@ private:
     ComboBox* combo_credential_ = nullptr;
     ComboBox* combo_profile_ = nullptr;
     Label* label_error_ = nullptr;
-    qint64 router_id_ = 0;
     HostId host_id_ = kInvalidHostId;
     bool credentials_loaded_ = true;
 

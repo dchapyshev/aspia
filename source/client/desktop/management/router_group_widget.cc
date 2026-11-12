@@ -134,11 +134,9 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     ui->tree_host->viewport()->installEventFilter(this);
     ui->tree_host->installEventFilter(this);
 
-    connect(&RouterController::instance(), &RouterController::sig_hostsChanged, this,
-            [this](qint64 router_id)
+    connect(&RouterController::instance(), &RouterController::sig_hostsChanged, this, [this]()
     {
-        if (router_id == router_id_)
-            fetchHosts(RouterSession::CachePolicy::RELOAD);
+        fetchHosts(RouterSession::CachePolicy::RELOAD);
     });
 }
 
@@ -149,9 +147,8 @@ RouterGroupWidget::~RouterGroupWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id, qint64 group_id)
+void RouterGroupWidget::showGroup(qint64 workspace_id, qint64 group_id)
 {
-    router_id_ = router_id;
     workspace_id_ = workspace_id;
     group_id_ = group_id;
 
@@ -190,7 +187,7 @@ HostConfig RouterGroupWidget::selectedHostConfig() const
     if (name.isEmpty())
         name = selected.computer_name;
 
-    return HostConfig::forRouterHost(router_id_, selected.host_id, name);
+    return HostConfig::forRouterHost(selected.host_id, name);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -234,7 +231,7 @@ void RouterGroupWidget::onEditHost()
     if (hosts.size() != 1)
         return;
 
-    AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(router_id_, hosts.front(), this));
+    AutoQPointer<RouterHostDialog> dialog(new RouterHostDialog(hosts.front(), this));
     if (dialog->exec() == QDialog::Accepted)
         fetchHosts(RouterSession::CachePolicy::RELOAD);
 }
@@ -406,10 +403,10 @@ void RouterGroupWidget::onHostContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::fetchHosts(RouterSession::CachePolicy policy)
 {
-    if (router_id_ == 0)
+    if (workspace_id_ == 0)
         return;
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
@@ -448,7 +445,7 @@ void RouterGroupWidget::updatePagination()
 void RouterGroupWidget::startDrag()
 {
     // Clients are read-only and cannot move hosts between groups.
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session || session->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
         return;
 
@@ -463,7 +460,7 @@ void RouterGroupWidget::startDrag()
         return;
 
     RouterHostDrag drag(this);
-    drag.setHosts(router_id_, hosts, mime_type_);
+    drag.setHosts(hosts, mime_type_);
 
     const QIcon icon = index.siblingAtColumn(0).data(Qt::DecorationRole).value<QIcon>();
     drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));

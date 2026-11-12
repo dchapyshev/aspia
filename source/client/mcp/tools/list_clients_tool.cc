@@ -64,8 +64,8 @@ QJsonObject ListClientsTool::definition() const
                          "client_id, session_type, the host and whether the window is detached or is a tab of the "
                          "main window. current is true for the chosen tab of the main window and for every detached "
                          "window. The client_id stays the same while the window is open. A host of the local "
-                         "database has the id from find_local_hosts, a host of a router has the router_id and "
-                         "host_id, and quick_support says whether it is a Quick Support host. A host entered by its "
+                         "database has the id from find_local_hosts, a host of the router has the host_id, and "
+                         "quick_support says whether it is a Quick Support host. A host entered by its "
                          "address in the quick connection has only the address. The state is connecting while the "
                          "client connects, authorization while it asks the user for the credentials of the host, "
                          "dialog while it shows another dialog to the user, disconnected when the connection has "
@@ -95,9 +95,8 @@ void ListClientsTool::call(const QJsonObject& /* arguments */, Reply reply)
         if (client.entry_id != 0)
             entry.insert("id", client.entry_id);
 
-        if (client.router_id != 0)
+        if (isHostId(client.address))
         {
-            entry.insert("router_id", client.router_id);
             entry.insert("host_id", static_cast<qint64>(stringToHostId(client.address)));
             entry.insert("quick_support", client.portable);
         }

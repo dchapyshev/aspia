@@ -99,17 +99,16 @@ RouterHostEditor::RouterHostEditor(QWidget* parent)
 RouterHostEditor::~RouterHostEditor() = default;
 
 //--------------------------------------------------------------------------------------------------
-bool RouterHostEditor::prepareForEdit(qint64 router_id, HostId host_id)
+bool RouterHostEditor::prepareForEdit(HostId host_id)
 {
     // A temporary host id is handed out at random and comes back for another machine, so what was
     // saved under it would be sent to a host the user never gave it to.
-    if (router_id <= 0 || host_id == kInvalidHostId || isTempHostId(host_id))
+    if (host_id == kInvalidHostId || isTempHostId(host_id))
     {
-        LOG(ERROR) << "Credentials cannot be kept for host" << host_id << "of router" << router_id;
+        LOG(ERROR) << "Credentials cannot be kept for host" << host_id;
         return false;
     }
 
-    router_id_ = router_id;
     host_id_ = host_id;
 
     edit_username_->clear();
@@ -121,7 +120,7 @@ bool RouterHostEditor::prepareForEdit(qint64 router_id, HostId host_id)
 
     RouterHostConfig credentials;
     const Database::FindResult found =
-        Database::instance().findRouterHost(router_id_, host_id_, &credentials);
+        Database::instance().findRouterHost(host_id_, &credentials);
 
     if (found == Database::FindResult::FOUND || found == Database::FindResult::UNREADABLE)
     {
@@ -190,7 +189,7 @@ void RouterHostEditor::onSaveClicked()
     Database& db = Database::instance();
 
     RouterHostConfig stored;
-    const Database::FindResult found = db.findRouterHost(router_id_, host_id_, &stored);
+    const Database::FindResult found = db.findRouterHost(host_id_, &stored);
     if (found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the credentials of host" << host_id_;
@@ -201,7 +200,6 @@ void RouterHostEditor::onSaveClicked()
     if (!username.isEmpty() || credential_id > 0 || found == Database::FindResult::FOUND)
     {
         RouterHostConfig credentials;
-        credentials.setRouterId(router_id_);
         credentials.setHostId(host_id_);
         credentials.setCredentialId(credential_id);
         credentials.setUsername(username);
@@ -221,7 +219,7 @@ void RouterHostEditor::onSaveClicked()
         }
     }
 
-    if (!db.setRouterHostProfileId(router_id_, host_id_, combo_profile_->currentData().toLongLong()))
+    if (!db.setRouterHostProfileId(host_id_, combo_profile_->currentData().toLongLong()))
     {
         showError(tr("Failed to save the profile."));
         return;

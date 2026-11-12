@@ -64,7 +64,6 @@ public:
     qint64 userId() const { return user_id_; }
 
     QVersionNumber version() const { return version_; }
-    qint64 routerId() const { return config_->routerId(); }
     const RouterConfig& config() const { return *config_; }
 
     //----------------------------------------------------------------------------------------------

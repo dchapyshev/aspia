@@ -43,8 +43,8 @@ public:
     // entry_id == 0 means add mode (the new group's parent defaults to default_parent_id);
     // entry_id > 0 means modify mode (the existing group's name/parent/comment populate the
     // form and default_parent_id is ignored).
-    RouterGroupDialog(qint64 router_id, qint64 workspace_id, const QString& workspace_name,
-                      qint64 entry_id, qint64 default_parent_id, QWidget* parent);
+    RouterGroupDialog(qint64 workspace_id, const QString& workspace_name, qint64 entry_id,
+                      qint64 default_parent_id, QWidget* parent);
     ~RouterGroupDialog() final;
 
 private slots:
@@ -55,7 +55,6 @@ private:
     void onButtonBoxClicked(QAbstractButton* button);
 
     std::unique_ptr<Ui::RouterGroupDialog> ui;
-    qint64 router_id_ = 0;
     qint64 workspace_id_ = 0;
     QString workspace_name_;
     qint64 entry_id_ = 0;

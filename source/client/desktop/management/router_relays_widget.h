@@ -42,8 +42,7 @@ public:
     explicit RouterRelaysWidget(QWidget* parent = nullptr);
     ~RouterRelaysWidget() final;
 
-    void showRouter(qint64 router_id);
-    qint64 routerId() const { return router_id_; }
+    void showRouter();
     int selectedRelayCount() const;
 
     void copyCurrentRelayRow();
@@ -84,7 +83,7 @@ private:
     std::unique_ptr<Ui::RouterRelaysWidget> ui;
     RelayListModel* relay_model_ = nullptr;
     PeerListModel* peer_model_ = nullptr;
-    qint64 router_id_ = 0;
+    bool shown_ = false;
 
     Q_DISABLE_COPY_MOVE(RouterRelaysWidget)
 };

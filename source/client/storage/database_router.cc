@@ -19,13 +19,15 @@
 #include "client/storage/database.h"
 
 #include <QDateTime>
-#include <QUuid>
 
 #include "base/logging.h"
+#include "base/peer/host_id.h"
 #include "base/sql/sql_query.h"
 #include "proto/router.h"
 
 namespace {
+
+const char kSettingRouter[] = "router";
 
 // The rows one pass takes. Every one of them costs a request to the router, so the list is walked
 // over as many passes as it needs instead of at once.
@@ -38,18 +40,15 @@ const qint64 kRouterHostRecheckInterval = 7 * 24 * 60 * 60;
 //--------------------------------------------------------------------------------------------------
 Database::ReadResult readRouter(const SqlQuery& query, RouterConfig* router)
 {
-    router->setRouterId(query.columnInt64(0));
-    router->setDisplayName(query.columnText(1));
+    const bool opened = router->setEncryptedData(QByteArray::fromBase64(query.columnText(0).toLatin1()));
+
 #if defined(Q_OS_ANDROID)
     router->setSessionType(proto::router::SESSION_TYPE_OPERATOR);
-#else
-    router->setSessionType(static_cast<proto::router::SessionType>(query.columnInt64(2)));
 #endif
-    router->setGuid(query.columnText(4));
 
-    if (!router->setEncryptedData(query.columnBlob(3)))
+    if (!opened)
     {
-        LOG(ERROR) << "Unable to read encrypted data of router" << router->routerId();
+        LOG(ERROR) << "Unable to read encrypted data of router";
         return Database::ReadResult::INCOMPLETE;
     }
 
@@ -59,13 +58,12 @@ Database::ReadResult readRouter(const SqlQuery& query, RouterConfig* router)
 //--------------------------------------------------------------------------------------------------
 Database::ReadResult readRouterHost(const SqlQuery& query, RouterHostConfig* host)
 {
-    host->setRouterId(query.columnInt64(0));
-    host->setHostId(query.columnUInt64(1));
-    host->setCredentialId(query.columnInt64(3));
-    host->setOsCredentialId(query.columnInt64(4));
-    host->setProfileId(query.columnInt64(5));
+    host->setHostId(query.columnUInt64(0));
+    host->setCredentialId(query.columnInt64(2));
+    host->setOsCredentialId(query.columnInt64(3));
+    host->setProfileId(query.columnInt64(4));
 
-    if (!host->setEncryptedData(query.columnBlob(2)))
+    if (!host->setEncryptedData(query.columnBlob(1)))
     {
         LOG(ERROR) << "Unable to read encrypted data of router host" << host->hostId();
         return Database::ReadResult::INCOMPLETE;
@@ -77,154 +75,7 @@ Database::ReadResult readRouterHost(const SqlQuery& query, RouterHostConfig* hos
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Database::ReadResult Database::routerList(QList<RouterConfig>* routers) const
-{
-    CHECK(routers);
-    routers->clear();
-
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return ReadResult::FAILED;
-    }
-
-    SqlQuery query(db_, "SELECT id, name, session_type, data, guid FROM routers");
-
-    ReadResult result = ReadResult::OK;
-
-    for (;;)
-    {
-        const SqlQuery::StepResult step = query.next();
-        if (step == SqlQuery::StepResult::FAILED)
-        {
-            // A failed step must not pass for the end of the rows: a caller may treat what is
-            // missing from the list as deleted.
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return ReadResult::FAILED;
-        }
-        if (step == SqlQuery::StepResult::DONE)
-            break;
-
-        RouterConfig router;
-        if (readRouter(query, &router) != ReadResult::OK)
-            result = ReadResult::INCOMPLETE;
-
-        routers->append(router);
-    }
-
-    std::stable_sort(routers->begin(), routers->end(), [](const RouterConfig& first, const RouterConfig& second)
-    {
-        return first.displayLabel().compare(second.displayLabel(), Qt::CaseInsensitive) < 0;
-    });
-
-    return result;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::addRouter(RouterConfig& router)
-{
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return false;
-    }
-
-    if (!router.isValid())
-    {
-        LOG(ERROR) << "Invalid parameters";
-        return false;
-    }
-
-    std::optional<QByteArray> encrypted_data = router.encryptedData();
-    if (!encrypted_data.has_value())
-        return false;
-
-    if (router.guid().isEmpty())
-        router.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
-
-    SqlQuery query(db_, "INSERT INTO routers (id, name, session_type, data, guid) "
-                        "VALUES (NULL, ?, ?, ?, ?)");
-    query.addText(router.displayName());
-    query.addInt64(static_cast<quint32>(router.sessionType()));
-    query.addBlob(*encrypted_data);
-    query.addText(router.guid());
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return false;
-    }
-
-    router.setRouterId(db_.lastInsertRowId());
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::modifyRouter(const RouterConfig& router)
-{
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return false;
-    }
-
-    if (!router.isValid())
-    {
-        LOG(ERROR) << "Invalid parameters";
-        return false;
-    }
-
-    std::optional<QByteArray> encrypted_data = router.encryptedData();
-    if (!encrypted_data.has_value())
-        return false;
-
-    // The guid is not among the columns. It names the record from the moment it is added, and
-    // the chat history stored under it would be lost if an edit could change it.
-    SqlQuery query(db_, "UPDATE routers SET name=?, session_type=?, data=? WHERE id=?");
-    query.addText(router.displayName());
-    query.addInt64(static_cast<quint32>(router.sessionType()));
-    query.addBlob(*encrypted_data);
-    query.addInt64(router.routerId());
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return false;
-    }
-
-    // An update of a row that is not there changes nothing and reports no error of its own.
-    if (db_.changes() == 0)
-    {
-        LOG(ERROR) << "Router" << router.routerId() << "not found";
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::removeRouter(qint64 router_id)
-{
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return false;
-    }
-
-    SqlQuery query(db_, "DELETE FROM routers WHERE id=?");
-    query.addInt64(router_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-Database::FindResult Database::findRouter(qint64 router_id, RouterConfig* router) const
+Database::FindResult Database::routerConfig(RouterConfig* router) const
 {
     CHECK(router);
     *router = RouterConfig();
@@ -235,8 +86,8 @@ Database::FindResult Database::findRouter(qint64 router_id, RouterConfig* router
         return FindResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT id, name, session_type, data, guid FROM routers WHERE id=?");
-    query.addInt64(router_id);
+    SqlQuery query(db_, "SELECT value FROM settings WHERE name=?");
+    query.addText(std::string_view(kSettingRouter));
 
     const SqlQuery::StepResult step = query.next();
     if (step == SqlQuery::StepResult::FAILED)
@@ -248,13 +99,31 @@ Database::FindResult Database::findRouter(qint64 router_id, RouterConfig* router
     if (step == SqlQuery::StepResult::DONE)
         return FindResult::NOT_FOUND;
 
+    router->setGuid(guid());
+
     if (readRouter(query, router) != ReadResult::OK)
     {
-        LOG(ERROR) << "Unable to read the data of router" << router_id;
+        LOG(ERROR) << "Unable to read the data of router";
         return FindResult::UNREADABLE;
     }
 
     return FindResult::FOUND;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setRouterConfig(const RouterConfig& router)
+{
+    if (!router.isValid())
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    std::optional<QByteArray> encrypted_data = router.encryptedData();
+    if (!encrypted_data.has_value())
+        return false;
+
+    return writeSetting(kSettingRouter, QString::fromLatin1(encrypted_data->toBase64()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -269,7 +138,7 @@ Database::ReadResult Database::allRouterHosts(QList<RouterHostConfig>* hosts) co
         return ReadResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
+    SqlQuery query(db_, "SELECT host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
                         "IFNULL(profile_id, 0) "
                         "FROM router_hosts");
 
@@ -317,9 +186,8 @@ bool Database::addRouterHost(const RouterHostConfig& host)
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(db_, "INSERT INTO router_hosts (router_id, host_id, data, credential_id, os_credential_id, "
-                        "profile_id) VALUES (?, ?, ?, NULLIF(?, 0), NULLIF(?, 0), NULLIF(?, 0))");
-    query.addInt64(host.routerId());
+    SqlQuery query(db_, "INSERT INTO router_hosts (host_id, data, credential_id, os_credential_id, profile_id) "
+                        "VALUES (?, ?, NULLIF(?, 0), NULLIF(?, 0), NULLIF(?, 0))");
     query.addUInt64(host.hostId());
     query.addBlob(*encrypted_data);
     query.addInt64(host.credentialId());
@@ -354,11 +222,9 @@ bool Database::modifyRouterHost(const RouterHostConfig& host)
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(db_, "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0) "
-                        "WHERE router_id=? AND host_id=?");
+    SqlQuery query(db_, "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0) WHERE host_id=?");
     query.addBlob(*encrypted_data);
     query.addInt64(host.credentialId());
-    query.addInt64(host.routerId());
     query.addUInt64(host.hostId());
 
     if (!query.exec())
@@ -378,7 +244,7 @@ bool Database::modifyRouterHost(const RouterHostConfig& host)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::removeRouterHost(qint64 router_id, HostId host_id)
+bool Database::removeRouterHost(HostId host_id)
 {
     if (!isValid())
     {
@@ -386,8 +252,7 @@ bool Database::removeRouterHost(qint64 router_id, HostId host_id)
         return false;
     }
 
-    SqlQuery query(db_, "DELETE FROM router_hosts WHERE router_id=? AND host_id=?");
-    query.addInt64(router_id);
+    SqlQuery query(db_, "DELETE FROM router_hosts WHERE host_id=?");
     query.addUInt64(host_id);
 
     if (!query.exec())
@@ -400,7 +265,7 @@ bool Database::removeRouterHost(qint64 router_id, HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-Database::FindResult Database::findRouterHost(qint64 router_id, HostId host_id, RouterHostConfig* host) const
+Database::FindResult Database::findRouterHost(HostId host_id, RouterHostConfig* host) const
 {
     CHECK(host);
     *host = RouterHostConfig();
@@ -411,10 +276,9 @@ Database::FindResult Database::findRouterHost(qint64 router_id, HostId host_id, 
         return FindResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
+    SqlQuery query(db_, "SELECT host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
                         "IFNULL(profile_id, 0) "
-                        "FROM router_hosts WHERE router_id=? AND host_id=?");
-    query.addInt64(router_id);
+                        "FROM router_hosts WHERE host_id=?");
     query.addUInt64(host_id);
 
     const SqlQuery::StepResult step = query.next();
@@ -437,11 +301,10 @@ Database::FindResult Database::findRouterHost(qint64 router_id, HostId host_id, 
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<std::pair<QString, SecureString>> Database::routerHostCredentials(
-    qint64 router_id, HostId host_id) const
+std::optional<std::pair<QString, SecureString>> Database::routerHostCredentials(HostId host_id) const
 {
     RouterHostConfig host;
-    if (findRouterHost(router_id, host_id, &host) != FindResult::FOUND)
+    if (findRouterHost(host_id, &host) != FindResult::FOUND)
         return std::nullopt;
 
     if (host.credentialId() <= 0)
@@ -455,7 +318,7 @@ std::optional<std::pair<QString, SecureString>> Database::routerHostCredentials(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::outdatedRouterHosts(qint64 router_id, QList<HostId>* hosts) const
+bool Database::outdatedRouterHosts(QList<HostId>* hosts) const
 {
     CHECK(hosts);
     hosts->clear();
@@ -468,9 +331,7 @@ bool Database::outdatedRouterHosts(qint64 router_id, QList<HostId>* hosts) const
 
     // The rows checked longest ago come first, so repeated calls walk the whole list instead of
     // returning to the same rows.
-    SqlQuery query(db_, "SELECT host_id FROM router_hosts WHERE router_id=? AND check_time<? "
-                        "ORDER BY check_time LIMIT ?");
-    query.addInt64(router_id);
+    SqlQuery query(db_, "SELECT host_id FROM router_hosts WHERE check_time<? ORDER BY check_time LIMIT ?");
     query.addInt64(QDateTime::currentSecsSinceEpoch() - kRouterHostRecheckInterval);
     query.addInt64(kMaxRouterHostsToCheck);
 
@@ -492,7 +353,7 @@ bool Database::outdatedRouterHosts(qint64 router_id, QList<HostId>* hosts) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::updateRouterHostCheckTime(qint64 router_id, HostId host_id)
+bool Database::updateRouterHostCheckTime(HostId host_id)
 {
     if (!isValid())
     {
@@ -500,9 +361,8 @@ bool Database::updateRouterHostCheckTime(qint64 router_id, HostId host_id)
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE router_hosts SET check_time=? WHERE router_id=? AND host_id=?");
+    SqlQuery query(db_, "UPDATE router_hosts SET check_time=? WHERE host_id=?");
     query.addInt64(QDateTime::currentSecsSinceEpoch());
-    query.addInt64(router_id);
     query.addUInt64(host_id);
 
     if (!query.exec())
@@ -522,7 +382,7 @@ bool Database::updateRouterHostCheckTime(qint64 router_id, HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::setRouterHostOsCredentialId(qint64 router_id, HostId host_id, qint64 credential_id)
+bool Database::setRouterHostOsCredentialId(HostId host_id, qint64 credential_id)
 {
     if (!isValid())
     {
@@ -530,9 +390,8 @@ bool Database::setRouterHostOsCredentialId(qint64 router_id, HostId host_id, qin
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE router_hosts SET os_credential_id=NULLIF(?, 0) WHERE router_id=? AND host_id=?");
+    SqlQuery query(db_, "UPDATE router_hosts SET os_credential_id=NULLIF(?, 0) WHERE host_id=?");
     query.addInt64(credential_id);
-    query.addInt64(router_id);
     query.addUInt64(host_id);
 
     if (!query.exec())
@@ -545,7 +404,7 @@ bool Database::setRouterHostOsCredentialId(qint64 router_id, HostId host_id, qin
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::setRouterHostProfileId(qint64 router_id, HostId host_id, qint64 profile_id)
+bool Database::setRouterHostProfileId(HostId host_id, qint64 profile_id)
 {
     if (!isValid())
     {
@@ -555,8 +414,7 @@ bool Database::setRouterHostProfileId(qint64 router_id, HostId host_id, qint64 p
 
     if (profile_id <= 0)
     {
-        SqlQuery query(db_, "UPDATE router_hosts SET profile_id=NULL WHERE router_id=? AND host_id=?");
-        query.addInt64(router_id);
+        SqlQuery query(db_, "UPDATE router_hosts SET profile_id=NULL WHERE host_id=?");
         query.addUInt64(host_id);
 
         if (!query.exec())
@@ -568,21 +426,31 @@ bool Database::setRouterHostProfileId(qint64 router_id, HostId host_id, qint64 p
         return true;
     }
 
-    RouterHostConfig host;
-    host.setRouterId(router_id);
-    host.setHostId(host_id);
-
-    if (!host.isValid())
+    if (host_id == kInvalidHostId || isTempHostId(host_id))
     {
         LOG(ERROR) << "Invalid parameters";
         return false;
     }
 
-    SqlQuery query(db_, "INSERT INTO router_hosts (router_id, host_id, profile_id) VALUES (?, ?, ?) "
-                        "ON CONFLICT(router_id, host_id) DO UPDATE SET profile_id=excluded.profile_id");
-    query.addInt64(router_id);
+    SqlQuery query(db_, "INSERT INTO router_hosts (host_id, profile_id) VALUES (?, ?) "
+                        "ON CONFLICT(host_id) DO UPDATE SET profile_id=excluded.profile_id");
     query.addUInt64(host_id);
     query.addInt64(profile_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::clearRouter()
+{
+    SqlQuery query(db_, "DELETE FROM settings WHERE name=?");
+    query.addText(std::string_view(kSettingRouter));
 
     if (!query.exec())
     {

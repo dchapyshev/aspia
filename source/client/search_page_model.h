@@ -24,18 +24,6 @@
 
 #include "client/page_model.h"
 
-// Pagination of a host search whose matches come from several sources at once: the local address
-// book and every router the client is connected to. Each source counts and orders its own matches
-// and can hand out an arbitrary window of them, but none of them knows about the others, so the
-// paging over the whole result belongs here.
-//
-// The order of the whole result is the sources in the order they were added, and inside a source
-// the order that source produced. Sorting the result as a whole would mean merging the sources
-// item by item, which needs a cursor into each of them on every page instead of a plain window,
-// so the sources stay whole and follow one another.
-//
-// No UI and no networking: the model turns the match counts into the windows to ask each source
-// for, and the widget only issues the requests and shows what comes back.
 class SearchPageModel
 {
 public:

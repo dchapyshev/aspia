@@ -51,16 +51,16 @@ QString chatHistoryId(const SessionState& session_state)
 
         hash.addData(entry.guid().toUtf8());
     }
-    else if (host.routerId() > 0)
+    else if (isHostId(host.address()))
     {
         if (isTempHostId(stringToHostId(host.address())))
             return QString();
 
         RouterConfig router;
-        database.findRouter(host.routerId(), &router);
+        database.routerConfig(&router);
         if (router.guid().isEmpty())
         {
-            LOG(WARNING) << "Router entry not found:" << host.routerId();
+            LOG(WARNING) << "Router entry not found";
             return QString();
         }
 

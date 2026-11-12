@@ -36,19 +36,18 @@ public:
     explicit RouterStatusWidget(QWidget* parent = nullptr);
     ~RouterStatusWidget() final;
 
-    void showRouter(qint64 router_id, const QList<RouterEvent>& events);
-    qint64 routerId() const { return router_id_; }
+    void showRouter(const QList<RouterEvent>& events);
 
     // ContentWidget implementation.
     QByteArray saveState() final;
     void restoreState(const QByteArray& state) final;
 
 signals:
-    void sig_twoFactorClicked(qint64 router_id);
+    void sig_twoFactorClicked();
 
 public slots:
-    void onEvent(qint64 router_id, const RouterEvent& event);
-    void onStatusChanged(qint64 router_id);
+    void onEvent(const RouterEvent& event);
+    void onStatusChanged();
 
 private slots:
     void onTwoFactorClicked();
@@ -58,7 +57,6 @@ private:
     void updateTwoFactorPrompt();
 
     std::unique_ptr<Ui::RouterStatusWidget> ui;
-    qint64 router_id_ = 0;
 
     Q_DISABLE_COPY_MOVE(RouterStatusWidget)
 };

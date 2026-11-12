@@ -41,7 +41,7 @@ TEST(RouterStatusWidgetTest, CapDropsTheOldestEventUnderAnySortOrder)
         events.append(RouterEvent{ QDateTime(QDate(2026, 1, 1), QTime(0, 0, 0)).addSecs(i * 60),
                                    RouterEvent::Severity::INFO, QString("event %1").arg(i) });
     }
-    widget.showRouter(1, events);
+    widget.showRouter(events);
 
     auto* tree = widget.findChild<QTreeWidget*>("tree_events");
     ASSERT_TRUE(tree);
@@ -49,7 +49,7 @@ TEST(RouterStatusWidgetTest, CapDropsTheOldestEventUnderAnySortOrder)
 
     tree->sortItems(0, Qt::DescendingOrder);
 
-    widget.onEvent(1, RouterEvent{ QDateTime(QDate(2026, 1, 2), QTime(12, 0, 0)),
+    widget.onEvent(RouterEvent{ QDateTime(QDate(2026, 1, 2), QTime(12, 0, 0)),
                                    RouterEvent::Severity::INFO, QString("fresh") });
 
     EXPECT_EQ(tree->topLevelItemCount(), RouterController::kMaxStoredEvents);

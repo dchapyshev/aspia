@@ -25,9 +25,6 @@
 
 class Database;
 
-// A copy of the whole address book in a single sealed file. An export writes the book as it is, and
-// an import puts that book back in place of the current one. The file is sealed with the master
-// password of the book it was saved from, so an export asks nothing of the user.
 class Backup
 {
 public:
@@ -44,10 +41,9 @@ public:
         INTERNAL_ERROR,
     };
 
-    // How many records of each kind went through.
     struct Report
     {
-        int routers = 0;
+        bool router = false;
         int local_groups = 0;
         int local_hosts = 0;
         int router_hosts = 0;
@@ -56,18 +52,12 @@ public:
 
         int total() const
         {
-            return routers + local_groups + local_hosts + router_hosts + credentials + profiles;
+            return (router ? 1 : 0) + local_groups + local_hosts + router_hosts + credentials + profiles;
         }
     };
 
-    // Writes the address book of |db| to |file_path|. |report| (optional) receives what was
-    // written, and is left alone unless the file was.
     static Result exportToFile(Database& db, const QString& file_path, Report* report = nullptr);
 
-    // Puts the address book of the file in place of the one |db| holds. What the book had is
-    // deleted. An empty |password| means the file is expected to open with the key the book is
-    // already open with, and a file saved from another book answers WRONG_PASSWORD. |report|
-    // (optional) receives what arrived, and is left alone unless the book took it.
     static Result importFromFile(
         Database& db, const QString& file_path, const SecureString& password,
         Report* report = nullptr);

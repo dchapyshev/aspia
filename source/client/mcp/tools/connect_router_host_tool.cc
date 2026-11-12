@@ -27,7 +27,6 @@
 #include "client/mcp/mcp_controller.h"
 #include "client/mcp/tools/mcp_utils.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
 #include "proto/router_constants.h"
 
 namespace {
@@ -42,9 +41,9 @@ struct Lookup
 using LookupCallback = std::function<void(const Lookup& lookup)>;
 
 //--------------------------------------------------------------------------------------------------
-void findHost(qint64 router_id, HostId host_id, qint64 offset, LookupCallback callback)
+void findHost(HostId host_id, qint64 offset, LookupCallback callback)
 {
-    RouterSession* session = RouterController::session(router_id);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
         callback(Lookup{ false, QString(), "The router is not connected." });
@@ -52,7 +51,7 @@ void findHost(qint64 router_id, HostId host_id, qint64 offset, LookupCallback ca
     }
 
     session->searchHosts(QString::number(host_id), offset, proto::router::kMaxHostPageSize,
-        { &RouterController::instance(), [router_id, host_id, offset, callback](const RouterHostList& list)
+        { &RouterController::instance(), [host_id, offset, callback](const RouterHostList& list)
     {
         if (list.error_code != proto::router::kErrorOk)
         {
@@ -73,14 +72,14 @@ void findHost(qint64 router_id, HostId host_id, qint64 offset, LookupCallback ca
         if (list.hosts.isEmpty() || next_offset >= list.total_count)
             callback(Lookup());
         else
-            findHost(router_id, host_id, next_offset, callback);
+            findHost(host_id, next_offset, callback);
     } });
 }
 
 //--------------------------------------------------------------------------------------------------
-void findQuickSupportHost(qint64 router_id, HostId host_id, qint64 offset, LookupCallback callback)
+void findQuickSupportHost(HostId host_id, qint64 offset, LookupCallback callback)
 {
-    RouterSession* session = RouterController::session(router_id);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
         callback(Lookup{ false, QString(), "The router is not connected." });
@@ -88,7 +87,7 @@ void findQuickSupportHost(qint64 router_id, HostId host_id, qint64 offset, Looku
     }
 
     session->listTempHosts(true, offset, proto::router::kMaxTempHostPageSize,
-        { &RouterController::instance(), [router_id, host_id, offset, callback](const RouterTempHostList& list)
+        { &RouterController::instance(), [host_id, offset, callback](const RouterTempHostList& list)
     {
         if (list.error_code != proto::router::kErrorOk)
         {
@@ -109,7 +108,7 @@ void findQuickSupportHost(qint64 router_id, HostId host_id, qint64 offset, Looku
         if (list.hosts.isEmpty() || next_offset >= list.total_count)
             callback(Lookup());
         else
-            findQuickSupportHost(router_id, host_id, next_offset, callback);
+            findQuickSupportHost(host_id, next_offset, callback);
     } });
 }
 
@@ -124,16 +123,13 @@ QString ConnectRouterHostTool::name() const
 //--------------------------------------------------------------------------------------------------
 QJsonObject ConnectRouterHostTool::definition() const
 {
-    QJsonObject router_id{ { "type", "integer" },
-                           { "description", "Id of a router from list_routers." } };
-
     QJsonObject host_id{ { "type", "integer" },
                          { "minimum", 1 },
                          { "description", "Host ID from find_router_hosts or list_quick_support_hosts." } };
 
     return QJsonObject{
         { "name", name() },
-        { "description", "Opens a session to a host of a router saved in Aspia Client, the same way as the user "
+        { "description", "Opens a session to a host of the router saved in Aspia Client, the same way as the user "
                          "does it from the address book. The router must be connected. The session window opens "
                          "on the screen of the user, who sees the authorization, its errors and the session "
                          "itself. The reply gives the client_id of the window or says that the user is asked for "
@@ -142,23 +138,15 @@ QJsonObject ConnectRouterHostTool::definition() const
                          "one-time password that the person on the other side tells. The local hosts are "
                          "connected by connect_local_host." },
         { "inputSchema", QJsonObject{ { "type", "object" },
-                                      { "properties", QJsonObject{ { "router_id", router_id },
-                                                                   { "host_id", host_id },
+                                      { "properties", QJsonObject{ { "host_id", host_id },
                                                                    { "session_type", sessionTypeSchema() } } },
-                                      { "required", QJsonArray{ "router_id", "host_id", "session_type" } },
+                                      { "required", QJsonArray{ "host_id", "session_type" } },
                                       { "additionalProperties", false } } } };
 }
 
 //--------------------------------------------------------------------------------------------------
 void ConnectRouterHostTool::call(const QJsonObject& arguments, Reply reply)
 {
-    QJsonValue router_value = arguments.value("router_id");
-    if (!router_value.isDouble() || router_value.toDouble() != static_cast<double>(router_value.toInteger()))
-    {
-        reply(false, "The router_id must be an integer.");
-        return;
-    }
-
     QJsonValue host_value = arguments.value("host_id");
     if (!host_value.isDouble() || host_value.toDouble() != static_cast<double>(host_value.toInteger()) ||
         host_value.toInteger() <= 0)
@@ -181,7 +169,6 @@ void ConnectRouterHostTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    const qint64 router_id = router_value.toInteger();
     const HostId host_id = static_cast<HostId>(host_value.toInteger());
     const bool quick_support = isTempHostId(host_id);
 
@@ -192,42 +179,32 @@ void ConnectRouterHostTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    RouterConfig config;
-    switch (Database::instance().findRouter(router_id, &config))
+    QString error;
+    if (!routerSession(&error))
     {
-        case Database::FindResult::FOUND:
-            break;
-        case Database::FindResult::NOT_FOUND:
-            reply(false, QString("There is no router with id %1. Use list_routers to get the ids.").arg(router_id));
-            return;
-        case Database::FindResult::UNREADABLE:
-        case Database::FindResult::FAILED:
-            reply(false, "Unable to read the database.");
-            return;
+        reply(false, error);
+        return;
     }
 
     QString session_name = arguments.value("session_type").toString();
-    QString router_name = config.displayLabel();
 
-    auto finish =
-        [reply, router_id, router_name, host_id, quick_support, session_type, session_name](const Lookup& lookup)
+    auto finish = [reply, host_id, quick_support, session_type, session_name](const Lookup& lookup)
     {
         if (!lookup.error.isEmpty())
         {
-            reply(false, QString("Unable to find the host on the router \"%1\" (id %2). %3")
-                .arg(router_name).arg(router_id).arg(lookup.error));
+            reply(false, QString("Unable to find the host on the router. %1").arg(lookup.error));
             return;
         }
 
         if (!lookup.found)
         {
-            reply(false, QString("The router \"%1\" (id %2) has no %3 with ID %4. Use %5 to get the IDs.")
-                .arg(router_name).arg(router_id).arg(quick_support ? "Quick Support host" : "host")
-                .arg(host_id).arg(quick_support ? "list_quick_support_hosts" : "find_router_hosts"));
+            reply(false, QString("The router has no %1 with ID %2. Use %3 to get the IDs.")
+                .arg(quick_support ? "Quick Support host" : "host").arg(host_id)
+                .arg(quick_support ? "list_quick_support_hosts" : "find_router_hosts"));
             return;
         }
 
-        HostConfig host = HostConfig::forRouterHost(router_id, host_id, lookup.name);
+        HostConfig host = HostConfig::forRouterHost(host_id, lookup.name);
         host.setPortable(quick_support);
 
         McpController::instance().connectRouterHost(host, *session_type);
@@ -235,7 +212,7 @@ void ConnectRouterHostTool::call(const QJsonObject& arguments, Reply reply)
     };
 
     if (quick_support)
-        findQuickSupportHost(router_id, host_id, 0, finish);
+        findQuickSupportHost(host_id, 0, finish);
     else
-        findHost(router_id, host_id, 0, finish);
+        findHost(host_id, 0, finish);
 }

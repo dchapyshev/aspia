@@ -23,8 +23,6 @@
 #include <QJsonDocument>
 #include <QTimeZone>
 
-#include <memory>
-
 #include "client/mcp/tools/mcp_utils.h"
 #include "client/router/router_controller.h"
 #include "proto/router_constants.h"
@@ -38,103 +36,60 @@ QString ListQuickSupportHostsTool::name() const
 //--------------------------------------------------------------------------------------------------
 QJsonObject ListQuickSupportHostsTool::definition() const
 {
-    QJsonObject router_id{ { "type", "integer" },
-                           { "description", "Id of a router from list_routers. Without it every connected router "
-                                            "is asked." } };
-
     return QJsonObject{
         { "name", name() },
-        { "description", "Lists the Quick Support hosts that are online on the routers saved in Aspia Client. Such "
+        { "description", "Lists the Quick Support hosts that are online on the router saved in Aspia Client. Such "
                          "a host is run by a person who asks for help, and its host_id is the temporary ID that "
-                         "the person sees and tells. A router that is not connected is not asked, and a warning "
-                         "says so. A router returns at most 100 hosts, and a warning says when it has more. The "
-                         "connect_time is in UTC." },
-        { "inputSchema", QJsonObject{ { "type", "object" },
-                                      { "properties", QJsonObject{ { "router_id", router_id } } },
-                                      { "additionalProperties", false } } } };
+                         "the person sees and tells. The router must be connected. It returns at most 100 hosts, "
+                         "and a warning says when it has more. The connect_time is in UTC." },
+        { "inputSchema", QJsonObject{ { "type", "object" }, { "additionalProperties", false } } } };
 }
 
 //--------------------------------------------------------------------------------------------------
-void ListQuickSupportHostsTool::call(const QJsonObject& arguments, Reply reply)
+void ListQuickSupportHostsTool::call(const QJsonObject& /* arguments */, Reply reply)
 {
-    QList<RouterInfo> routers;
     QString error;
-    if (!routersFromArgument(arguments.value("router_id"), &routers, &error))
+    RouterSession* session = routerSession(&error);
+    if (!session)
     {
         reply(false, error);
         return;
     }
 
-    struct Listing
+    session->listTempHosts(true, 0, proto::router::kMaxTempHostPageSize,
+        { &RouterController::instance(), [reply](const RouterTempHostList& list)
     {
-        QJsonArray hosts;
-        QJsonArray warnings;
-        int pending = 1;
-    };
-
-    std::shared_ptr<Listing> listing = std::make_shared<Listing>();
-
-    auto finish = [listing, reply]()
-    {
-        QJsonObject content{ { "hosts", listing->hosts } };
-        if (!listing->warnings.isEmpty())
-            content.insert("warnings", listing->warnings);
-
-        reply(true, QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact)));
-    };
-
-    for (const RouterInfo& router : std::as_const(routers))
-    {
-        RouterSession* session = RouterController::session(router.id);
-        if (!session)
+        if (list.error_code != proto::router::kErrorOk)
         {
-            listing->warnings.append(QString("The router \"%1\" (id %2) is not connected, its hosts are "
-                                             "not listed.").arg(router.name).arg(router.id));
-            continue;
+            reply(false, QString("Unable to list the hosts of the router: %1.").arg(list.error_code));
+            return;
         }
 
-        ++listing->pending;
-
-        session->listTempHosts(true, 0, proto::router::kMaxTempHostPageSize, { &RouterController::instance(),
-            [listing, finish, router](const RouterTempHostList& list)
+        QJsonArray hosts;
+        for (const RouterTempHost& host : list.hosts)
         {
-            if (list.error_code != proto::router::kErrorOk)
+            QString connect_time;
+            if (host.connect_time != 0)
             {
-                listing->warnings.append(QString("Unable to list the hosts of the router \"%1\" (id %2): %3.")
-                    .arg(router.name).arg(router.id).arg(list.error_code));
-            }
-            else
-            {
-                for (const RouterTempHost& host : list.hosts)
-                {
-                    QString connect_time;
-                    if (host.connect_time != 0)
-                    {
-                        connect_time = QDateTime::fromSecsSinceEpoch(host.connect_time, QTimeZone::UTC)
-                            .toString(Qt::ISODate);
-                    }
-
-                    listing->hosts.append(QJsonObject{
-                        { "router_id", router.id }, { "router", router.name },
-                        { "host_id", static_cast<qint64>(host.temp_id) },
-                        { "computer_name", host.computer_name }, { "os_name", host.os_name },
-                        { "version", host.version }, { "address", host.address },
-                        { "connect_time", connect_time } });
-                }
-
-                if (list.total_count > list.hosts.size())
-                {
-                    listing->warnings.append(QString("The router \"%1\" (id %2) has %3 hosts, only the first "
-                                                     "%4 are listed.")
-                        .arg(router.name).arg(router.id).arg(list.total_count).arg(list.hosts.size()));
-                }
+                connect_time = QDateTime::fromSecsSinceEpoch(host.connect_time, QTimeZone::UTC)
+                    .toString(Qt::ISODate);
             }
 
-            if (--listing->pending == 0)
-                finish();
-        } });
-    }
+            hosts.append(QJsonObject{
+                { "host_id", static_cast<qint64>(host.temp_id) },
+                { "computer_name", host.computer_name }, { "os_name", host.os_name },
+                { "version", host.version }, { "address", host.address },
+                { "connect_time", connect_time } });
+        }
 
-    if (--listing->pending == 0)
-        finish();
+        QJsonObject content{ { "hosts", hosts } };
+        if (list.total_count > list.hosts.size())
+        {
+            content.insert("warnings", QJsonArray{ QString("The router has %1 hosts, only the first %2 are "
+                                                           "listed.")
+                .arg(list.total_count).arg(list.hosts.size()) });
+        }
+
+        reply(true, QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact)));
+    } });
 }

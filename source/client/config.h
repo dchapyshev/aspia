@@ -20,7 +20,6 @@
 #define CLIENT_CONFIG_H
 
 #include <QByteArray>
-#include <QCoreApplication>
 #include <QString>
 
 #include <optional>
@@ -34,25 +33,10 @@ namespace proto::router {
 enum SessionType : int;
 } // namespace proto::router
 
-// Every field but the device token is held as plain text. The key that would decrypt them sits
-// in memory anyway for as long as the address book is unlocked, so keeping the ciphertext next
-// to it protects nothing. The device token always keeps its OS keystore wrapping, and the code
-// that presents it to the router unwraps its own copy right before the send.
-//
-// What reaches the database is another matter. Whatever of a record has to be kept secret goes
-// there as one column - serialized together, then encrypted - so no single field can be lifted out
-// of it and stored where it would be read as something else. encryptedData() and its setter are
-// that boundary, and they are the only place in the class that touches the cipher.
 class RouterConfig final
 {
-    Q_DECLARE_TR_FUNCTIONS(RouterConfig)
-
 public:
     RouterConfig();
-
-    // A name of its own is not required. displayLabel() falls back to the address, and to a
-    // placeholder for a record that did not open and has neither.
-    static constexpr int kMaxNameLength = 64;
 
     // A router is entered with an account of its own, so a record read back without an address, a
     // user name or a password did not open.
@@ -61,20 +45,14 @@ public:
     // The same router entered with the same account: address, user name and password.
     bool hasSameAccount(const RouterConfig& other) const;
 
-    // Returns user-set display name if non-empty, otherwise falls back to address.
-    QString displayLabel() const;
-
-    qint64 routerId() const { return router_id_; }
-    void setRouterId(qint64 id) { router_id_ = id; }
-
     proto::router::SessionType sessionType() const { return session_type_; }
     void setSessionType(proto::router::SessionType type) { session_type_ = type; }
 
+    bool isEnabled() const { return enabled_; }
+    void setEnabled(bool enable) { enabled_ = enable; }
+
     const QString& guid() const { return guid_; }
     void setGuid(const QString& value) { guid_ = value; }
-
-    const QString& displayName() const { return display_name_; }
-    void setDisplayName(const QString& value) { display_name_ = value; }
 
     const QString& address() const { return address_; }
     void setAddress(const QString& value) { address_ = value; }
@@ -103,10 +81,9 @@ public:
     bool setEncryptedData(const QByteArray& blob);
 
 private:
-    qint64 router_id_ = -1;
     proto::router::SessionType session_type_;
+    bool enabled_ = true;
     QString guid_;
-    QString display_name_;
     QString address_;
     QString username_;
     SecureString password_;
@@ -119,9 +96,6 @@ public:
     RouterHostConfig() = default;
 
     bool isValid() const;
-
-    qint64 routerId() const { return router_id_; }
-    void setRouterId(qint64 id) { router_id_ = id; }
 
     HostId hostId() const { return host_id_; }
     void setHostId(HostId id) { host_id_ = id; }
@@ -146,7 +120,6 @@ public:
     bool setEncryptedData(const QByteArray& blob);
 
 private:
-    qint64 router_id_ = -1;
     HostId host_id_ = kInvalidHostId;
     qint64 credential_id_ = 0;
     qint64 os_credential_id_ = 0;
@@ -172,9 +145,6 @@ public:
 
     qint64 groupId() const { return group_id_; }
     void setGroupId(qint64 id) { group_id_ = id; }
-
-    qint64 routerId() const { return router_id_; }
-    void setRouterId(qint64 id) { router_id_ = id; }
 
     qint64 credentialId() const { return credential_id_; }
     void setCredentialId(qint64 id) { credential_id_ = id; }
@@ -219,7 +189,6 @@ public:
 private:
     qint64 id_ = -1;
     qint64 group_id_ = 0;
-    qint64 router_id_ = 0;
     qint64 credential_id_ = 0;
     qint64 os_credential_id_ = 0;
     qint64 profile_id_ = 0;
@@ -371,14 +340,11 @@ public:
     HostConfig() = default;
 
     static HostConfig forLocalHost(const LocalHostConfig& host);
-    static HostConfig forRouterHost(qint64 router_id, HostId host_id, const QString& name);
+    static HostConfig forRouterHost(HostId host_id, const QString& name);
 
     // The local host the connection was built from, 0 for a host of a router.
     qint64 entryId() const { return entry_id_; }
     void setEntryId(qint64 id) { entry_id_ = id; }
-
-    qint64 routerId() const { return router_id_; }
-    void setRouterId(qint64 id) { router_id_ = id; }
 
     const QString& address() const { return address_; }
     void setAddress(const QString& value) { address_ = value; }
@@ -397,7 +363,6 @@ public:
 
 private:
     qint64 entry_id_ = 0;
-    qint64 router_id_ = 0;
     QString address_;
     QString name_;
     QString username_;

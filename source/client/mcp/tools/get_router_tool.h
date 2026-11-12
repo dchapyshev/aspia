@@ -16,18 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_MCP_TOOLS_LIST_ROUTERS_TOOL_H
-#define CLIENT_MCP_TOOLS_LIST_ROUTERS_TOOL_H
+#ifndef CLIENT_MCP_TOOLS_GET_ROUTER_TOOL_H
+#define CLIENT_MCP_TOOLS_GET_ROUTER_TOOL_H
 
 #include "client/mcp/mcp_tool.h"
 
-// Lists the routers of the database with the status of their connections. The credentials are never
+// Tells the router of the database and the status of its connection. The credentials are never
 // returned.
-class ListRoutersTool final : public McpTool
+class GetRouterTool final : public McpTool
 {
 public:
-    ListRoutersTool() = default;
-    ~ListRoutersTool() final = default;
+    GetRouterTool() = default;
+    ~GetRouterTool() final = default;
 
     // McpTool implementation.
     QString name() const final;
@@ -35,7 +35,7 @@ public:
     void call(const QJsonObject& arguments, Reply reply) final;
 
 private:
-    Q_DISABLE_COPY_MOVE(ListRoutersTool)
+    Q_DISABLE_COPY_MOVE(GetRouterTool)
 };
 
-#endif // CLIENT_MCP_TOOLS_LIST_ROUTERS_TOOL_H
+#endif // CLIENT_MCP_TOOLS_GET_ROUTER_TOOL_H

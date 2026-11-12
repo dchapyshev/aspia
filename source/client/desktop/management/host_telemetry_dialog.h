@@ -41,7 +41,7 @@ class HostTelemetryDialog final : public QDialog
     Q_OBJECT
 
 public:
-    HostTelemetryDialog(qint64 router_id, const RouterHost& host, QWidget* parent);
+    HostTelemetryDialog(const RouterHost& host, QWidget* parent);
     ~HostTelemetryDialog() final;
 
 private slots:
@@ -53,7 +53,6 @@ private:
     void showTelemetry(const QByteArray& json);
 
     std::unique_ptr<Ui::HostTelemetryDialog> ui;
-    qint64 router_id_ = 0;
     RouterHost host_;
     TelemetryModel* model_ = nullptr;
 

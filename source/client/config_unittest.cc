@@ -31,7 +31,6 @@ RouterConfig makeConfig()
     config.setSessionType(proto::router::SESSION_TYPE_ADMIN);
     config.setUsername("user");
     config.setPassword(SecureString(QString("secret")));
-    config.setDisplayName("display");
     return config;
 }
 
@@ -40,7 +39,7 @@ RouterConfig makeConfig()
 //--------------------------------------------------------------------------------------------------
 // The account predicate decides whether the editors carry the device token over: the router
 // binds the token to the user, so the address, the user name and the password make the account.
-// The display name and the session type are not part of it.
+// The session type is not part of it.
 TEST(RouterConfigTest, SameAccountFollowsTheCredentialsOnly)
 {
     const RouterConfig base = makeConfig();
@@ -60,9 +59,5 @@ TEST(RouterConfigTest, SameAccountFollowsTheCredentialsOnly)
 
     other = makeConfig();
     other.setSessionType(proto::router::SESSION_TYPE_OPERATOR);
-    EXPECT_TRUE(base.hasSameAccount(other));
-
-    other = makeConfig();
-    other.setDisplayName("renamed");
     EXPECT_TRUE(base.hasSameAccount(other));
 }

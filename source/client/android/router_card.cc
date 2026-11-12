@@ -159,9 +159,8 @@ private:
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RouterCard::RouterCard(qint64 router_id, const QString& name, QWidget* parent)
-    : ExpandablePanel(parent),
-      router_id_(router_id)
+RouterCard::RouterCard(const QString& name, QWidget* parent)
+    : ExpandablePanel(parent)
 {
     // Header: status icon and name.
     label_status_icon_ = new QLabel();
@@ -178,8 +177,7 @@ RouterCard::RouterCard(qint64 router_id, const QString& name, QWidget* parent)
     // panel of a working router is the event log alone.
     button_two_factor_ = new Button(tr("Enter Code"), Button::Role::FILLED);
     button_two_factor_->setVisible(false);
-    connect(button_two_factor_, &Button::clicked, this,
-            [this]() { emit sig_twoFactorClicked(router_id_); });
+    connect(button_two_factor_, &Button::clicked, this, &RouterCard::sig_twoFactorClicked);
     contentLayout()->addWidget(button_two_factor_);
 
     Card* card = new Card(Card::Role::FILLED);
@@ -192,8 +190,8 @@ RouterCard::RouterCard(qint64 router_id, const QString& name, QWidget* parent)
 
     contentLayout()->addWidget(card);
 
-    connect(this, &ExpandablePanel::sig_headerClicked, this, [this]() { emit sig_expandRequested(router_id_); });
-    connect(this, &ExpandablePanel::sig_headerLongPressed, this, [this]() { emit sig_editRequested(router_id_); });
+    connect(this, &ExpandablePanel::sig_headerClicked, this, &RouterCard::sig_expandRequested);
+    connect(this, &ExpandablePanel::sig_headerLongPressed, this, &RouterCard::sig_editRequested);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -214,7 +212,7 @@ void RouterCard::updateTwoFactorButton()
     // The router does not look at codes while the block runs, so the button is disabled for it,
     // but it stays on the card. A hidden button would read as if no question existed, and the
     // journal line naming the wait can be pushed out by the reconnect noise of the blocked stage.
-    TwoFactorPrompt* prompt = RouterController::twoFactorPrompt(router_id_);
+    TwoFactorPrompt* prompt = RouterController::twoFactorPrompt();
     button_two_factor_->setVisible(prompt != nullptr);
 
     if (prompt)

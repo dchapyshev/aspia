@@ -94,10 +94,9 @@ void OnlineCheckerRouter::checkNextHost()
     const LocalHostConfig& host = hosts_.front();
     const HostId host_id = stringToHostId(host.address());
 
-    LOG(TRACE) << "Checking status for host id" << host_id
-               << "(router_id:" << host.routerId() << "entry_id:" << host.id() << ")";
+    LOG(TRACE) << "Checking status for host id" << host_id << "(entry_id:" << host.id() << ")";
 
-    RouterSession* session = RouterController::session(host.routerId());
+    RouterSession* session = RouterController::session();
     if (!session)
     {
         emit sig_checkerResult(host.id(), OnlineStatus::SKIPPED);

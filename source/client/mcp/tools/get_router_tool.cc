@@ -16,9 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/mcp/tools/list_routers_tool.h"
+#include "client/mcp/tools/get_router_tool.h"
 
-#include <QJsonArray>
 #include <QJsonDocument>
 
 #include "client/router/router_controller.h"
@@ -49,45 +48,44 @@ QString statusName(RouterStatus status)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-QString ListRoutersTool::name() const
+QString GetRouterTool::name() const
 {
-    return "list_routers";
+    return "get_router";
 }
 
 //--------------------------------------------------------------------------------------------------
-QJsonObject ListRoutersTool::definition() const
+QJsonObject GetRouterTool::definition() const
 {
     return QJsonObject{
         { "name", name() },
-        { "description", "Lists the routers saved in Aspia Client with the status of their connections: online, "
+        { "description", "Tells the router saved in Aspia Client with the status of its connection: online, "
                          "connecting, two_factor (waits for the user to enter a two-factor code), offline or "
-                         "unreadable (the record is damaged). The hosts of a router are searched by "
-                         "find_router_hosts and its groups are listed by list_router_groups while it is "
-                         "online. Credentials are never returned." },
+                         "unreadable (the record is damaged). A router turned off by the user has enabled set "
+                         "to false and stays offline. The router is null when no router is set. The hosts "
+                         "of the router are searched by find_router_hosts and its groups are listed by "
+                         "list_router_groups while it is online. Credentials are never returned." },
         { "inputSchema", QJsonObject{ { "type", "object" }, { "additionalProperties", false } } } };
 }
 
 //--------------------------------------------------------------------------------------------------
-void ListRoutersTool::call(const QJsonObject& /* arguments */, Reply reply)
+void GetRouterTool::call(const QJsonObject& /* arguments */, Reply reply)
 {
-    QList<RouterConfig> routers;
-    Database::ReadResult result = Database::instance().routerList(&routers);
-    if (result == Database::ReadResult::FAILED)
+    RouterConfig router;
+    const Database::FindResult found = Database::instance().routerConfig(&router);
+    if (found == Database::FindResult::FAILED)
     {
         reply(false, "Unable to read the database.");
         return;
     }
 
-    QJsonArray list;
-    for (const RouterConfig& router : std::as_const(routers))
+    QJsonValue value;
+    if (found == Database::FindResult::FOUND || found == Database::FindResult::UNREADABLE)
     {
-        list.append(QJsonObject{ { "id", router.routerId() }, { "name", router.displayLabel() },
-                                 { "status", statusName(RouterController::status(router.routerId())) } });
+        value = QJsonObject{ { "address", router.address() },
+                             { "status", statusName(RouterController::status()) },
+                             { "enabled", router.isEnabled() } };
     }
 
-    QJsonObject content{ { "routers", list } };
-    if (result == Database::ReadResult::INCOMPLETE)
-        content.insert("warning", "Some records of the database are damaged, their data may be missing.");
-
+    QJsonObject content{ { "router", value } };
     reply(true, QString::fromUtf8(QJsonDocument(content).toJson(QJsonDocument::Compact)));
 }

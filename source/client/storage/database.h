@@ -42,6 +42,10 @@ public:
     ~Database() = default;
 
     static Database& instance();
+
+    static constexpr char kDirectoryName[] = "client";
+    static constexpr char kDefaultFileName[] = "default.db3";
+
     static QString filePath();
 
     // Opens (creating when absent) the database at |file_path| and ensures the schema. instance()
@@ -81,25 +85,21 @@ public:
     bool removeLocalGroup(qint64 group_id);
     FindResult findLocalGroup(qint64 group_id, LocalGroupConfig* group) const;
 
-    // Routers.
-    ReadResult routerList(QList<RouterConfig>* routers) const;
-    bool addRouter(RouterConfig& router);
-    bool modifyRouter(const RouterConfig& router);
-    bool removeRouter(qint64 router_id);
-    FindResult findRouter(qint64 router_id, RouterConfig* router) const;
+    // Router.
+    FindResult routerConfig(RouterConfig* router) const;
+    bool setRouterConfig(const RouterConfig& router);
 
     // Router Hosts.
     ReadResult allRouterHosts(QList<RouterHostConfig>* hosts) const;
     bool addRouterHost(const RouterHostConfig& host);
     bool modifyRouterHost(const RouterHostConfig& host);
-    bool removeRouterHost(qint64 router_id, HostId host_id);
-    FindResult findRouterHost(qint64 router_id, HostId host_id, RouterHostConfig* host) const;
-    std::optional<std::pair<QString, SecureString>> routerHostCredentials(
-        qint64 router_id, HostId host_id) const;
-    bool outdatedRouterHosts(qint64 router_id, QList<HostId>* hosts) const;
-    bool updateRouterHostCheckTime(qint64 router_id, HostId host_id);
-    bool setRouterHostOsCredentialId(qint64 router_id, HostId host_id, qint64 credential_id);
-    bool setRouterHostProfileId(qint64 router_id, HostId host_id, qint64 profile_id);
+    bool removeRouterHost(HostId host_id);
+    FindResult findRouterHost(HostId host_id, RouterHostConfig* host) const;
+    std::optional<std::pair<QString, SecureString>> routerHostCredentials(HostId host_id) const;
+    bool outdatedRouterHosts(QList<HostId>* hosts) const;
+    bool updateRouterHostCheckTime(HostId host_id);
+    bool setRouterHostOsCredentialId(HostId host_id, qint64 credential_id);
+    bool setRouterHostProfileId(HostId host_id, qint64 profile_id);
 
     // Credentials.
     ReadResult credentialList(QList<CredentialConfig>* credentials,
@@ -119,11 +119,7 @@ public:
     ProfileConfig defaultProfile() const;
     ProfileConfig hostProfile(const HostConfig& host) const;
 
-    // Puts these records in place of the address book, all of them or none. Everything the book
-    // held is deleted first. A record is named by a key of its own instead of an id, negative and
-    // unique among the lists, and the records linking to it carry that key. A parent comes before
-    // the records naming it, and the credentials before the hosts entered with them.
-    bool import(const QList<RouterConfig>& routers,
+    bool import(const std::optional<RouterConfig>& router,
                 const QList<LocalGroupConfig>& local_groups,
                 const QList<LocalHostConfig>& local_hosts,
                 const QList<RouterHostConfig>& router_hosts,
@@ -134,6 +130,8 @@ public:
     bool saveCopyAndClearAll(const QString& copy_path);
 
     // Settings.
+    QString guid() const;
+
     QString displayName() const;
     bool setDisplayName(const QString& name);
 
@@ -178,11 +176,8 @@ public:
     // Master password.
     bool isMasterPasswordSet() const;
 
-    // Atomically rewrites every stored record with fields already re-encrypted under the new key and
-    // updates the master password verifier. Either all changes are applied or none of them are, so
-    // the address book can never be left with records under two different keys.
     bool reencryptAll(const QList<LocalHostConfig>& local_hosts,
-                      const QList<RouterConfig>& routers,
+                      const std::optional<RouterConfig>& router,
                       const QList<RouterHostConfig>& router_hosts,
                       const QList<CredentialConfig>& credentials,
                       const ProxyConfig& proxy,
@@ -204,9 +199,11 @@ public:
     bool clearBiometricUnlock();
 
 private:
+    friend class DatabaseMigration;
     friend class DatabaseTestPeer;
 
     static void setFilePathForTesting(const QString& file_path);
+    static bool createTables(SqlDatabase& db);
 
     bool openDatabase();
     bool setMasterPassword(const QByteArray& salt, const QByteArray& verifier, quint32 version);
@@ -214,6 +211,8 @@ private:
     QString readSetting(const QString& name, bool* found = nullptr) const;
     bool writeSetting(const QString& name, const QString& value);
     bool ensureDefaultProfile();
+    bool ensureGuid();
+    bool clearRouter();
 
     mutable SqlDatabase db_;
 };

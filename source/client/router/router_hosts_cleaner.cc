@@ -24,9 +24,8 @@
 #include "client/storage/database.h"
 
 //--------------------------------------------------------------------------------------------------
-RouterHostsCleaner::RouterHostsCleaner(qint64 router_id, QObject* parent)
-    : QObject(parent),
-      router_id_(router_id)
+RouterHostsCleaner::RouterHostsCleaner(QObject* parent)
+    : QObject(parent)
 {
     LOG(TRACE) << "Ctor";
 }
@@ -42,29 +41,29 @@ void RouterHostsCleaner::start()
 {
     if (started_)
     {
-        LOG(ERROR) << "Cleaner for router" << router_id_ << "is already started";
+        LOG(ERROR) << "Cleaner is already started";
         return;
     }
 
     started_ = true;
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         emit sig_finished();
         return;
     }
 
     QList<HostId> hosts;
-    if (!Database::instance().outdatedRouterHosts(router_id_, &hosts) || hosts.isEmpty())
+    if (!Database::instance().outdatedRouterHosts(&hosts) || hosts.isEmpty())
     {
         LOG(TRACE) << "No outdated hosts";
         emit sig_finished();
         return;
     }
 
-    LOG(INFO) << "Checking" << hosts.size() << "saved hosts of router" << router_id_;
+    LOG(INFO) << "Checking" << hosts.size() << "saved hosts of router";
 
     // Counted before the first request is sent. An answer delivered in place would otherwise
     // bring the count down to zero while the rest of the list is still to be asked about.
@@ -74,7 +73,7 @@ void RouterHostsCleaner::start()
     {
         // The moment of asking is remembered before the answer arrives. A row whose answer is lost
         // waits for its turn again instead of being asked about at every session.
-        if (!Database::instance().updateRouterHostCheckTime(router_id_, host_id))
+        if (!Database::instance().updateRouterHostCheckTime(host_id))
             LOG(ERROR) << "Unable to update check time of host" << host_id;
 
         session->checkHostStatus(host_id, { this,
@@ -86,7 +85,7 @@ void RouterHostsCleaner::start()
             {
                 LOG(INFO) << "Host" << host_id << "is gone. Removing saved credentials";
 
-                if (!Database::instance().removeRouterHost(router_id_, host_id))
+                if (!Database::instance().removeRouterHost(host_id))
                     LOG(ERROR) << "Unable to remove credentials of host" << host_id;
             }
 

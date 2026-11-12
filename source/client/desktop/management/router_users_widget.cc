@@ -86,15 +86,15 @@ RouterUsersWidget::RouterUsersWidget(QWidget* parent)
     ui->tree_users->installEventFilter(this);
 
     RouterController& controller = RouterController::instance();
-    connect(&controller, &RouterController::sig_usersChanged, this, [this](qint64 router_id)
+    connect(&controller, &RouterController::sig_usersChanged, this, [this]()
     {
-        if (router_id == router_id_)
+        if (shown_)
             fetchUsers();
     });
     connect(&controller, &RouterController::sig_statusChanged, this,
-            [this](qint64 router_id, RouterStatus status)
+            [this](RouterStatus status)
     {
-        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        if (status != RouterStatus::ONLINE)
         {
             model_->clear();
             users_page_.clear();
@@ -111,9 +111,9 @@ RouterUsersWidget::~RouterUsersWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterUsersWidget::showRouter(qint64 router_id)
+void RouterUsersWidget::showRouter()
 {
-    router_id_ = router_id;
+    shown_ = true;
 
     model_->clear();
     users_page_.clear();
@@ -170,7 +170,7 @@ void RouterUsersWidget::reload()
 //--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::onAddUser()
 {
-    AutoQPointer<RouterUserDialog> dialog(new RouterUserDialog(router_id_, 0, this));
+    AutoQPointer<RouterUserDialog> dialog(new RouterUserDialog(0, this));
     if (dialog->exec() == QDialog::Accepted)
         fetchUsers();
 }
@@ -185,7 +185,7 @@ void RouterUsersWidget::onModifyUser()
         return;
     }
 
-    AutoQPointer<RouterUserDialog> dialog(new RouterUserDialog(router_id_, user->entry_id, this));
+    AutoQPointer<RouterUserDialog> dialog(new RouterUserDialog(user->entry_id, this));
     if (dialog->exec() == QDialog::Accepted)
         fetchUsers();
 }
@@ -216,7 +216,7 @@ void RouterUsersWidget::onDeleteUser()
         return;
     }
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
@@ -380,7 +380,7 @@ void RouterUsersWidget::onUsersNextClicked()
 //--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::fetchUsers()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 

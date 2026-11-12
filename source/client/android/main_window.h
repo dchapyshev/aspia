@@ -20,7 +20,6 @@
 #define CLIENT_ANDROID_MAIN_WINDOW_H
 
 #include <QPointer>
-#include <QSet>
 #include <QWidget>
 
 #include "base/time_types.h"
@@ -43,7 +42,7 @@ class QDialog;
 class QStackedWidget;
 
 // Top-level application window for the Android client: a top app bar, a content area switched by
-// the bottom navigation bar between the address book, routers and settings sections.
+// the bottom navigation bar between the address book, the router and the settings sections.
 class AndroidMainWindow final : public QWidget
 {
     Q_OBJECT
@@ -62,7 +61,7 @@ private slots:
     void onRouterActionsChanged();
     void onLocalActionsChanged();
     void onLocalTitleChanged(const QString& title, bool back_visible);
-    void onRoutersTitleChanged(const QString& title, bool back_visible);
+    void onRouterTitleChanged(const QString& title, bool back_visible);
     void onRemoteTitleChanged(const QString& title, bool back_visible);
     void onSettingsTitleChanged(const QString& title, bool back_visible);
     void onSettingsActionsChanged();
@@ -76,14 +75,14 @@ private slots:
     void onChatClosed();
     void onAuthorizationAccepted();
     void onAuthorizationClosed();
-    void onTwoFactorRequired(qint64 router_id);
+    void onTwoFactorRequired();
 
     // Tracks foreground/background transitions to re-lock the app after it has been in the background
     // longer than the timeout.
     void onApplicationStateChanged(Qt::ApplicationState state);
 
 private:
-    // The screen is a queue of one: when it frees up, the next record waiting for a code is asked.
+    // When the screen frees up, the question still waiting is asked again unless it was dismissed.
     void showNextTwoFactorPrompt();
 
     // Gates the window behind the master password: prompts to create or unlock it, and reloads the
@@ -107,21 +106,10 @@ private:
     void startSession(const HostConfig& host, proto::peer::SessionType session_type,
                       bool credentials_saved);
 
-    // Keeps the credentials the user entered, in the local host the connection was built from or
-    // in the row of a host of a router.
-    // Keeps what the host was entered with: the link to a record of the manager when one was
-    // chosen (|credential_id| above zero), the pair itself otherwise.
     void saveHostCredentials(const HostConfig& host, qint64 credential_id);
 
-    // Replaces the address book with a full-screen desktop view for the given host.
-    // |credentials_saved| tells the screen that the credentials it was given were written here, so
-    // it is the one to take them back if the host refuses them.
     void openDesktop(const HostConfig& host, bool credentials_saved);
-
-    // Opens the file transfer screen for the given host as a regular page (not full-screen).
     void openFileTransfer(const HostConfig& host, bool credentials_saved);
-
-    // Opens the chat screen for the given host as a regular page (not full-screen).
     void openChat(const HostConfig& host, bool credentials_saved);
 
     // Returns the dialog, sheet or menu on top of the window, or nullptr when none is shown.
@@ -138,7 +126,7 @@ private:
     AuthorizationWindow* authorization_ = nullptr;
 
     QPointer<QDialog> two_factor_dialog_;
-    QSet<qint64> dismissed_two_factor_;
+    bool two_factor_dismissed_ = false;
 
     // When the app went to the background (invalid while in the foreground), and a guard against
     // re-entering the lock prompt while it is already shown.

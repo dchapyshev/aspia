@@ -73,8 +73,8 @@ collect_sources(SOURCE_CLIENT_ANDROID
     router_editor.h
     router_host_editor.cc
     router_host_editor.h
-    routers_widget.cc
-    routers_widget.h
+    router_widget.cc
+    router_widget.h
     search_widget.cc
     search_widget.h
     session_keeper_android.cc

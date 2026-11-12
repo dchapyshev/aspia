@@ -30,7 +30,6 @@
 #include "base/peer/host_id.h"
 #include "client/config.h"
 #include "client/desktop/ui_quick_connect_dialog.h"
-#include "client/storage/database.h"
 #include "client/storage/settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/session_type.h"
@@ -49,22 +48,19 @@ QuickConnectDialog::QuickConnectDialog(QWidget* parent)
     stream.setVersion(QDataStream::Qt_6_10);
 
     QByteArray geometry;
-    qint64 router_id = 0;
     qint32 session_type = 0;
-    stream >> geometry >> router_id >> session_type;
+    stream >> geometry >> session_type;
 
-    // The router and the session type are selected once the lists are filled.
+    // The session type is selected once the list is filled.
     if (stream.status() == QDataStream::Ok)
     {
         restoreGeometry(geometry);
-        router_id_ = router_id;
         session_type_ = session_type;
     }
 
     QPushButton* connect_button = ui->button_box->addButton(tr("Connect"), QDialogButtonBox::AcceptRole);
     connect_button->setDefault(true);
 
-    connect(ui->combo_router, &QComboBox::currentIndexChanged, this, &QuickConnectDialog::onRouterChanged);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &QuickConnectDialog::onButtonBoxClicked);
 
     ui->edit_address->setFocus();
@@ -84,7 +80,6 @@ QuickConnectDialog::~QuickConnectDialog()
         stream.setVersion(QDataStream::Qt_6_10);
 
         stream << saveGeometry();
-        stream << ui->combo_router->currentData().toLongLong();
         stream << static_cast<qint32>(sessionType());
     }
 
@@ -94,11 +89,10 @@ QuickConnectDialog::~QuickConnectDialog()
 //--------------------------------------------------------------------------------------------------
 HostConfig QuickConnectDialog::host() const
 {
-    const qint64 router_id = ui->combo_router->currentData().toLongLong();
     const QString address = ui->edit_address->text().trimmed();
 
-    if (router_id != 0)
-        return HostConfig::forRouterHost(router_id, stringToHostId(address), QString());
+    if (isHostId(address))
+        return HostConfig::forRouterHost(stringToHostId(address), QString());
 
     HostConfig host;
     host.setAddress(address);
@@ -112,12 +106,6 @@ proto::peer::SessionType QuickConnectDialog::sessionType() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void QuickConnectDialog::onRouterChanged(int /* index */)
-{
-    updateAddressLabel();
-}
-
-//--------------------------------------------------------------------------------------------------
 void QuickConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui->button_box->buttonRole(button) != QDialogButtonBox::AcceptRole)
@@ -127,30 +115,12 @@ void QuickConnectDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    const qint64 router_id = ui->combo_router->currentData().toLongLong();
     const QString address = ui->edit_address->text().trimmed();
 
-    if (router_id == 0)
+    // Digits alone are the ID of a host reached through the router.
+    if (!isHostId(address) && !Address::fromString(address, kDefaultHostTcpPort).isValid())
     {
-        // Digits alone are an ID, and a host is found by its ID only through a router.
-        if (isHostId(address))
-        {
-            MsgBox::warning(this, tr("Select a router to connect by ID."));
-            ui->combo_router->setFocus();
-            return;
-        }
-
-        if (!Address::fromString(address, kDefaultHostTcpPort).isValid())
-        {
-            MsgBox::warning(this, tr("An invalid host address was entered."));
-            ui->edit_address->setFocus();
-            ui->edit_address->selectAll();
-            return;
-        }
-    }
-    else if (!isHostId(address))
-    {
-        MsgBox::warning(this, tr("An invalid host ID was entered."));
+        MsgBox::warning(this, tr("An invalid host address was entered."));
         ui->edit_address->setFocus();
         ui->edit_address->selectAll();
         return;
@@ -163,31 +133,6 @@ void QuickConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void QuickConnectDialog::onLoadData()
 {
-    ui->combo_router->addItem(QIcon(":/img/connect.svg"), tr("Without Router"), QVariant::fromValue<qint64>(0));
-
-    QList<RouterConfig> routers;
-    const Database::ReadResult routers_result = Database::instance().routerList(&routers);
-    if (routers_result == Database::ReadResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to read the list of routers";
-        MsgBox::warning(this, tr("Failed to read the list of routers."));
-        reject();
-        return;
-    }
-
-    if (routers_result == Database::ReadResult::INCOMPLETE)
-        LOG(ERROR) << "Unable to read some of the routers";
-
-    const QIcon router_icon(":/img/stack.svg");
-
-    for (const RouterConfig& router : std::as_const(routers))
-        ui->combo_router->addItem(router_icon, router.displayLabel(), QVariant::fromValue(router.routerId()));
-
-    // A router deleted since the dialog was closed leaves the choice without a router.
-    const int router_index = ui->combo_router->findData(QVariant::fromValue(router_id_));
-    if (router_index >= 0)
-        ui->combo_router->setCurrentIndex(router_index);
-
     const proto::peer::SessionType session_types[] =
     {
         proto::peer::SESSION_TYPE_DESKTOP,
@@ -204,26 +149,9 @@ void QuickConnectDialog::onLoadData()
     if (session_type_index >= 0)
         ui->combo_session_type->setCurrentIndex(session_type_index);
 
-    updateAddressLabel();
-
     // The combo boxes only compute their content-based size hint once the layout has been activated for
     // the populated items; without this the dialog size hint uses the empty combo heights and fixing the
     // height to it squeezes the fields below their natural size.
     layout()->activate();
     setFixedHeight(sizeHint().height());
-}
-
-//--------------------------------------------------------------------------------------------------
-void QuickConnectDialog::updateAddressLabel()
-{
-    if (ui->combo_router->currentData().toLongLong() == 0)
-    {
-        ui->label_address->setText(tr("Address:"));
-        ui->edit_address->setPlaceholderText(tr("Host name or IP address"));
-    }
-    else
-    {
-        ui->label_address->setText(tr("ID:"));
-        ui->edit_address->setPlaceholderText(tr("Host ID"));
-    }
 }

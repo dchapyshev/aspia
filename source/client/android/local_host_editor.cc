@@ -49,7 +49,6 @@ constexpr int kFormSpacing = 8;
 //--------------------------------------------------------------------------------------------------
 LocalHostEditor::LocalHostEditor(QWidget* parent)
     : QWidget(parent),
-      combo_router_(new ComboBox()),
       edit_name_(new LineEdit()),
       edit_address_(new LineEdit()),
       switch_saved_credentials_(new Switch(tr("Use existing"))),
@@ -61,8 +60,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
       label_error_(new Label(QString(), Label::Role::CAPTION))
 {
     edit_name_->setLabel(tr("Name"));
-    combo_router_->setLabel(tr("Router"));
-    edit_address_->setLabel(tr("Address"));
+    edit_address_->setLabel(tr("Address / ID"));
     edit_username_->setLabel(tr("User Name"));
     edit_password_->setLabel(tr("Password"));
     edit_password_->setEchoMode(QLineEdit::Password);
@@ -89,7 +87,6 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
     form_layout->setSpacing(kFormSpacing);
     form_layout->addWidget(label_error_);
     form_layout->addWidget(edit_name_);
-    form_layout->addWidget(combo_router_);
     form_layout->addWidget(edit_address_);
     form_layout->addWidget(combo_profile_);
     form_layout->addWidget(switch_saved_credentials_);
@@ -109,8 +106,6 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(scroll);
 
-    connect(combo_router_, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &LocalHostEditor::onRouterChanged);
     connect(switch_saved_credentials_, &Switch::toggled, this, &LocalHostEditor::onSavedCredentialsToggled);
     connect(save, &Button::clicked, this, &LocalHostEditor::onSaveClicked);
     connect(button_delete_, &Button::clicked, this, &LocalHostEditor::onDeleteClicked);
@@ -133,11 +128,9 @@ void LocalHostEditor::prepareForAdd(qint64 group_id)
     label_error_->setVisible(false);
     button_delete_->hide();
 
-    const bool routers_loaded = loadRouters(0);
-    onRouterChanged();
     const bool credentials_loaded = loadCredentials(0);
     const bool profiles_loaded = loadProfiles(0);
-    lists_loaded_ = routers_loaded && credentials_loaded && profiles_loaded;
+    lists_loaded_ = credentials_loaded && profiles_loaded;
 
     edit_name_->setFocus();
 }
@@ -164,11 +157,9 @@ bool LocalHostEditor::prepareForEdit(qint64 host_id)
     label_error_->setVisible(false);
     button_delete_->show();
 
-    const bool routers_loaded = loadRouters(host.routerId());
-    onRouterChanged();
     const bool credentials_loaded = loadCredentials(host.credentialId());
     const bool profiles_loaded = loadProfiles(host.profileId());
-    lists_loaded_ = routers_loaded && credentials_loaded && profiles_loaded;
+    lists_loaded_ = credentials_loaded && profiles_loaded;
 
     edit_name_->setFocus();
 
@@ -180,14 +171,6 @@ bool LocalHostEditor::prepareForEdit(qint64 host_id)
     }
 
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalHostEditor::onRouterChanged()
-{
-    // Without a router the address is a host name or IP; through a router it is a host ID.
-    const bool direct = (combo_router_->currentData().toLongLong() == 0);
-    edit_address_->setLabel(direct ? tr("Address") : tr("ID"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -239,22 +222,11 @@ void LocalHostEditor::onSaveClicked()
         return;
     }
 
-    const qint64 router_id = combo_router_->currentData().toLongLong();
     const QString address_text = edit_address_->text();
 
-    if (router_id == 0)
+    if (!isHostId(address_text) && !Address::fromString(address_text, kDefaultHostTcpPort).isValid())
     {
-        if (!Address::fromString(address_text, kDefaultHostTcpPort).isValid())
-        {
-            showError(tr("An invalid host address was entered."));
-            edit_address_->setFocus();
-            edit_address_->selectAll();
-            return;
-        }
-    }
-    else if (!isHostId(address_text))
-    {
-        showError(tr("An invalid host ID was entered."));
+        showError(tr("An invalid host address was entered."));
         edit_address_->setFocus();
         edit_address_->selectAll();
         return;
@@ -281,7 +253,6 @@ void LocalHostEditor::onSaveClicked()
     LocalHostConfig data;
     data.setId(entry_id_);
     data.setGroupId(group_id_);
-    data.setRouterId(router_id);
     data.setName(name);
     data.setAddress(address_text);
     data.setCredentialId(switch_saved_credentials_->isChecked() ? combo_credential_->currentData().toLongLong() : 0);
@@ -317,32 +288,6 @@ void LocalHostEditor::onDeleteClicked()
     }
 
     emit sig_accepted();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool LocalHostEditor::loadRouters(qint64 selected_router_id)
-{
-    combo_router_->clear();
-    combo_router_->addItem(tr("Without Router"), QVariant::fromValue<qint64>(0));
-
-    QList<RouterConfig> routers;
-    const Database::ReadResult result = Database::instance().routerList(&routers);
-    if (result == Database::ReadResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to read the list of routers";
-        showError(tr("Failed to read data from the local database."));
-        return false;
-    }
-
-    if (result == Database::ReadResult::INCOMPLETE)
-        LOG(ERROR) << "Unable to read some of the routers";
-
-    for (const RouterConfig& router : std::as_const(routers))
-        combo_router_->addItem(router.displayLabel(), QVariant::fromValue(router.routerId()));
-
-    const int index = combo_router_->findData(QVariant::fromValue(selected_router_id));
-    combo_router_->setCurrentIndex(index >= 0 ? index : 0);
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -18,8 +18,6 @@
 
 #include "client/router/router_controller.h"
 
-#include <QSet>
-
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -62,16 +60,13 @@ RouterController::RouterController(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 RouterController::~RouterController()
 {
-    for (auto& [router_id, context] : contexts_)
+    if (context_)
     {
-        if (context.session)
-            context.session->rpc_.dropPending();
+        if (context_->session)
+            context_->session->rpc_.dropPending();
 
         if (router_worker_)
-        {
-            QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect,
-                                      Qt::QueuedConnection, router_id);
-        }
+            QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect, Qt::QueuedConnection);
     }
 
     g_instance = nullptr;
@@ -87,15 +82,13 @@ RouterController& RouterController::instance()
 
 //--------------------------------------------------------------------------------------------------
 // static
-RouterStatus RouterController::status(qint64 router_id)
+RouterStatus RouterController::status()
 {
     const RouterController& controller = instance();
-
-    auto it = controller.contexts_.find(router_id);
-    if (it == controller.contexts_.end())
+    if (!controller.context_)
         return RouterStatus::OFFLINE;
 
-    const RouterContext& context = it->second;
+    const RouterContext& context = *controller.context_;
     if (context.session)
         return RouterStatus::ONLINE;
 
@@ -110,195 +103,170 @@ RouterStatus RouterController::status(qint64 router_id)
 
 //--------------------------------------------------------------------------------------------------
 // static
-RouterSession* RouterController::session(qint64 router_id)
+RouterSession* RouterController::session()
 {
     const RouterController& controller = instance();
-
-    auto it = controller.contexts_.find(router_id);
-    return it != controller.contexts_.end() ? it->second.session.get() : nullptr;
+    return controller.context_ ? controller.context_->session.get() : nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-TwoFactorPrompt* RouterController::twoFactorPrompt(qint64 router_id)
+TwoFactorPrompt* RouterController::twoFactorPrompt()
 {
     const RouterController& controller = instance();
-
-    auto it = controller.contexts_.find(router_id);
-    if (it == controller.contexts_.end() || !it->second.two_factor)
+    if (!controller.context_ || !controller.context_->two_factor)
         return nullptr;
 
-    return it->second.two_factor->twoFactorPrompt();
+    return controller.context_->two_factor->twoFactorPrompt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterController::reload()
 {
-    QList<RouterConfig> configs;
-    if (Database::instance().routerList(&configs) == Database::ReadResult::FAILED)
+    RouterConfig config;
+    const Database::FindResult found = Database::instance().routerConfig(&config);
+    if (found == Database::FindResult::FAILED)
     {
-        LOG(ERROR) << "Failed to read the router list - keeping the current state";
+        LOG(ERROR) << "Failed to read the router - keeping the current state";
         return;
     }
 
-    QSet<qint64> present;
-    present.reserve(configs.size());
-    for (const RouterConfig& config : configs)
-        present.insert(config.routerId());
-
-    // The dead records go first. Whatever they run leaves with the context.
-    QList<qint64> known;
-    for (const auto& entry : contexts_)
-        known.append(entry.first);
-    for (qint64 router_id : std::as_const(known))
+    // A router that is gone or turned off takes whatever it runs with its context.
+    const bool turned_off = found == Database::FindResult::FOUND && !config.isEnabled();
+    if (found == Database::FindResult::NOT_FOUND || turned_off)
     {
-        if (present.contains(router_id))
-            continue;
+        if (!context_)
+            return;
 
-        contexts_.erase(router_id);
+        context_.reset();
 
         if (router_worker_)
-        {
-            QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect,
-                                      Qt::QueuedConnection, router_id);
-        }
+            QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect, Qt::QueuedConnection);
 
-        updateStatus(router_id);
+        updateStatus();
+        return;
     }
 
-    // Connect the new records, refresh the configuration of the ones already running.
-    for (const RouterConfig& config : configs)
+    // A router already running gets its fresh configuration.
+    if (context_)
     {
-        const qint64 router_id = config.routerId();
-
-        auto it = contexts_.find(router_id);
-        if (it != contexts_.end())
-        {
-            RouterContext& context = it->second;
-
-            if (!config.isValid())
-            {
-                if (!context.session)
-                {
-                    context.two_factor.reset();
-                    context.config.reset(new RouterConfig(config));
-
-                    if (router_worker_)
-                    {
-                        QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect,
-                                                  Qt::QueuedConnection, router_id);
-                    }
-
-                    updateStatus(router_id);
-                }
-                continue;
-            }
-
-            // A rename keeps what is running. Another account or another session type replaces
-            // it whole: the login and the session belong to the account and the type they were
-            // opened with. A context that runs nothing yet waits for its reconnect barrier and
-            // starts with the config left here.
-            if (context.config->hasSameAccount(config) &&
-                context.config->sessionType() == config.sessionType())
-            {
-                // The instance is shared with whoever runs, so the edit is seen at once.
-                *context.config = config;
-                continue;
-            }
-
-            context.two_factor.reset();
-            context.session.reset();
-            context.config.reset(new RouterConfig(config));
-
-            if (router_worker_)
-            {
-                addEvent(router_id, RouterEvent::Severity::INFO,
-                         tr("Connecting to router %1...").arg(config.address()));
-                QMetaObject::invokeMethod(router_worker_, &RouterWorker::onReconnect,
-                                          Qt::QueuedConnection, router_id);
-            }
-            else
-            {
-                startTwoFactor(router_id);
-            }
-
-            updateStatus(router_id);
-            continue;
-        }
-
-        contexts_[router_id].config.reset(new RouterConfig(config));
+        RouterContext& context = *context_;
 
         if (!config.isValid())
         {
-            updateStatus(router_id);
-            continue;
+            if (!context.session)
+            {
+                context.two_factor.reset();
+                context.config.reset(new RouterConfig(config));
+
+                if (router_worker_)
+                {
+                    QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect,
+                                              Qt::QueuedConnection);
+                }
+
+                updateStatus();
+            }
+            return;
         }
 
-        startTwoFactor(router_id);
+        // A rename keeps what is running. Another account or another session type replaces it
+        // whole: the login and the session belong to the account and the type they were opened
+        // with. A context that runs nothing yet waits for its reconnect barrier and starts with
+        // the config left here.
+        if (context.config->hasSameAccount(config) &&
+            context.config->sessionType() == config.sessionType())
+        {
+            // The instance is shared with whoever runs, so the edit is seen at once.
+            *context.config = config;
+            return;
+        }
+
+        context.two_factor.reset();
+        context.session.reset();
+        context.config.reset(new RouterConfig(config));
 
         if (router_worker_)
         {
-            addEvent(router_id, RouterEvent::Severity::INFO,
-                     tr("Connecting to router %1...").arg(config.address()));
-            QMetaObject::invokeMethod(router_worker_, &RouterWorker::onConnect,
-                                      Qt::QueuedConnection, router_id);
+            addEvent(RouterEvent::Severity::INFO, tr("Connecting to router %1...").arg(config.address()));
+            QMetaObject::invokeMethod(router_worker_, &RouterWorker::onReconnect, Qt::QueuedConnection);
+        }
+        else
+        {
+            startTwoFactor();
         }
 
-        updateStatus(router_id);
+        updateStatus();
+        return;
     }
+
+    context_.emplace();
+    context_->config.reset(new RouterConfig(config));
+
+    if (!config.isValid())
+    {
+        updateStatus();
+        return;
+    }
+
+    startTwoFactor();
+
+    if (router_worker_)
+    {
+        addEvent(RouterEvent::Severity::INFO, tr("Connecting to router %1...").arg(config.address()));
+        QMetaObject::invokeMethod(router_worker_, &RouterWorker::onConnect, Qt::QueuedConnection);
+    }
+
+    updateStatus();
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<RouterEvent> RouterController::events(qint64 router_id) const
+QList<RouterEvent> RouterController::events() const
 {
-    auto it = contexts_.find(router_id);
-    return it != contexts_.end() ? it->second.events : QList<RouterEvent>();
+    return context_ ? context_->events : QList<RouterEvent>();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::clearEvents(qint64 router_id)
+void RouterController::clearEvents()
 {
-    auto it = contexts_.find(router_id);
-    if (it != contexts_.end())
-        it->second.events.clear();
+    if (context_)
+        context_->events.clear();
 
-    addEvent(router_id, RouterEvent::Severity::INFO, tr("Event history cleared."));
+    addEvent(RouterEvent::Severity::INFO, tr("Event history cleared."));
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::addEvent(qint64 router_id, RouterEvent::Severity severity,
-                               const QString& text)
+void RouterController::addEvent(RouterEvent::Severity severity, const QString& text)
 {
     const RouterEvent event{ QDateTime::currentDateTime(), severity, text };
 
-    auto it = contexts_.find(router_id);
-    if (it != contexts_.end())
+    if (context_)
     {
-        it->second.events.append(event);
+        context_->events.append(event);
 
-        while (it->second.events.size() > kMaxStoredEvents)
-            it->second.events.removeFirst();
+        while (context_->events.size() > kMaxStoredEvents)
+            context_->events.removeFirst();
     }
 
-    emit sig_event(router_id, event);
+    emit sig_event(event);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTwoFactorRequired(qint64 router_id)
+void RouterController::onTwoFactorRequired()
 {
-    TwoFactorPrompt* prompt = twoFactorPrompt(router_id);
+    TwoFactorPrompt* prompt = twoFactorPrompt();
     if (!prompt)
         return;
 
-    updateStatus(router_id);
+    updateStatus();
 
-    // The death of the question is a status transition of the record.
-    connect(prompt, &QObject::destroyed, this, [this, router_id](QObject*)
+    // The death of the question is a status transition of the router.
+    connect(prompt, &QObject::destroyed, this, [this](QObject*)
     {
-        updateStatus(router_id);
+        updateStatus();
     });
 
-    const QString address = contexts_.find(router_id)->second.two_factor->config().address();
+    const QString address = context_->two_factor->config().address();
 
     // A blocked account has no question to answer: the router does not look at codes while the
     // block runs, so the prompt is not put on screen. The dialog of the question it replaced
@@ -306,83 +274,71 @@ void RouterController::onTwoFactorRequired(qint64 router_id)
     if (prompt->blockedSeconds() > 0)
     {
         const qint64 minutes = (prompt->blockedSeconds() + 59) / 60;
-        addEvent(router_id, RouterEvent::Severity::WARNING,
+        addEvent(RouterEvent::Severity::WARNING,
                  tr("Too many failed attempts. Router %1 accepts codes again"
                     " in about %2 min.").arg(address).arg(minutes));
         return;
     }
 
     if (prompt->codeRefused())
-    {
-        addEvent(router_id, RouterEvent::Severity::WARNING,
-                 tr("The code was not accepted by router %1.").arg(address));
-    }
-    addEvent(router_id, RouterEvent::Severity::WARNING,
-             tr("Router %1 is waiting for a two-factor code.").arg(address));
+        addEvent(RouterEvent::Severity::WARNING, tr("The code was not accepted by router %1.").arg(address));
 
-    emit sig_twoFactorRequired(router_id);
+    addEvent(RouterEvent::Severity::WARNING, tr("Router %1 is waiting for a two-factor code.").arg(address));
+
+    emit sig_twoFactorRequired();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTwoFactorFinished(
-    qint64 router_id, qint64 user_id, const QVersionNumber& peer_version)
+void RouterController::onTwoFactorFinished(qint64 user_id, const QVersionNumber& peer_version)
 {
-    auto it = contexts_.find(router_id);
-    if (it == contexts_.end() || !it->second.two_factor)
+    if (!context_ || !context_->two_factor)
         return;
 
-    RouterContext& context = it->second;
+    RouterContext& context = *context_;
     context.two_factor.reset();
 
     RouterConfig config;
-    if (Database::instance().findRouter(router_id, &config) == Database::FindResult::FOUND && config.isValid())
-    {
+    if (Database::instance().routerConfig(&config) == Database::FindResult::FOUND && config.isValid())
         *context.config = config;
-    }
     else
-    {
-        LOG(WARNING) << "Failed to re-read record (router_id:" << router_id << "): using the in-memory copy";
-    }
+        LOG(WARNING) << "Failed to re-read the router: using the in-memory copy";
 
     context.session = new RouterSession(context.config, user_id, peer_version, this);
 
-    addEvent(router_id, RouterEvent::Severity::INFO,
+    addEvent(RouterEvent::Severity::INFO,
              tr("Connection to router %1 established.").arg(context.config->address()));
-    updateStatus(router_id);
+    updateStatus();
 
     // The saved credentials of hosts this router no longer knows are of no use to anyone.
-    RouterHostsCleaner* cleaner = new RouterHostsCleaner(router_id, this);
+    RouterHostsCleaner* cleaner = new RouterHostsCleaner(this);
     connect(cleaner, &RouterHostsCleaner::sig_finished, cleaner, &QObject::deleteLater);
     cleaner->start();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onRouterAuthenticated(qint64 router_id, const QVersionNumber& peer_version)
+void RouterController::onRouterAuthenticated(const QVersionNumber& peer_version)
 {
-    auto it = contexts_.find(router_id);
-    if (it != contexts_.end() && it->second.two_factor)
-        it->second.two_factor->onStart(peer_version);
+    if (context_ && context_->two_factor)
+        context_->two_factor->onStart(peer_version);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onRouterReconnecting(qint64 router_id)
+void RouterController::onRouterReconnecting()
 {
-    auto it = contexts_.find(router_id);
-    if (it == contexts_.end() || it->second.two_factor || it->second.session)
+    if (!context_ || context_->two_factor || context_->session)
         return;
 
-    startTwoFactor(router_id);
-    updateStatus(router_id);
+    startTwoFactor();
+    updateStatus();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onRouterError(qint64 router_id, TcpChannel::ErrorCode error_code)
+void RouterController::onRouterError(TcpChannel::ErrorCode error_code)
 {
-    auto it = contexts_.find(router_id);
-    if (it == contexts_.end())
+    if (!context_)
         return;
 
-    RouterContext& context = it->second;
+    RouterContext& context = *context_;
 
     RouterEvent::Severity severity = RouterEvent::Severity::WARNING;
     if (error_code == TcpChannel::ErrorCode::CRYPTO_ERROR ||
@@ -391,10 +347,9 @@ void RouterController::onRouterError(qint64 router_id, TcpChannel::ErrorCode err
         severity = RouterEvent::Severity::CRITICAL;
     }
 
-    addEvent(router_id, severity,
-             tr("Network error: %1").arg(TcpChannel::errorToString(error_code)));
+    addEvent(severity, tr("Network error: %1").arg(TcpChannel::errorToString(error_code)));
 
-    // The question of a logging-in record survives the connection, so nothing else changes for
+    // The question of a logging-in router survives the connection, so nothing else changes for
     // it. The worker keeps the reconnect cycle running by itself.
     if (context.two_factor)
     {
@@ -405,59 +360,51 @@ void RouterController::onRouterError(qint64 router_id, TcpChannel::ErrorCode err
     if (!context.session)
         return;
 
-    addEvent(router_id, RouterEvent::Severity::WARNING,
+    addEvent(RouterEvent::Severity::WARNING,
              tr("Disconnected from router %1.").arg(context.session->config().address()));
 
     // The death of the session answers everything it still owes. The worker keeps the
-    // reconnect cycle running by itself, so the record goes back to logging in.
+    // reconnect cycle running by itself, so the router goes back to logging in.
     context.session.reset();
 
     RouterConfig config;
-    const Database::FindResult found = Database::instance().findRouter(router_id, &config);
+    const Database::FindResult found = Database::instance().routerConfig(&config);
     if (found == Database::FindResult::UNREADABLE)
     {
-        LOG(ERROR) << "Data of router" << router_id << "could not be read";
+        LOG(ERROR) << "Data of the router could not be read";
         context.config.reset(new RouterConfig(config));
 
         if (router_worker_)
-        {
-            QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect,
-                                      Qt::QueuedConnection, router_id);
-        }
+            QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect, Qt::QueuedConnection);
 
-        updateStatus(router_id);
+        updateStatus();
         return;
     }
 
     if (found == Database::FindResult::FOUND && config.isValid())
-    {
         *context.config = config;
-    }
     else
-    {
-        LOG(WARNING) << "Failed to re-read record (router_id:" << router_id << "): using the in-memory copy";
-    }
+        LOG(WARNING) << "Failed to re-read the router: using the in-memory copy";
 
-    addEvent(router_id, RouterEvent::Severity::INFO,
+    addEvent(RouterEvent::Severity::INFO,
              tr("Connecting to router %1...").arg(context.config->address()));
-    startTwoFactor(router_id);
-    updateStatus(router_id);
+    startTwoFactor();
+    updateStatus();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onRouterMessage(qint64 router_id, quint8 channel_id, const QByteArray& buffer)
+void RouterController::onRouterMessage(quint8 channel_id, const QByteArray& buffer)
 {
-    auto it = contexts_.find(router_id);
-    if (it == contexts_.end())
+    if (!context_)
         return;
 
-    if (Router2FA* two_factor = it->second.two_factor.get())
+    if (Router2FA* two_factor = context_->two_factor.get())
     {
         two_factor->onMessageReceived(channel_id, buffer);
         return;
     }
 
-    RouterSession* session = it->second.session.get();
+    RouterSession* session = context_->session.get();
     if (!session)
         return;
 
@@ -499,20 +446,21 @@ void RouterController::onRouterMessage(qint64 router_id, quint8 channel_id, cons
         if (message.has_notification())
         {
             const proto::router::Notification& notification = message.notification();
+
             if (notification.temp_hosts_dirty())
-                emit sig_tempHostsChanged(router_id);
+                emit sig_tempHostsChanged();
             if (notification.hosts_dirty())
-                emit sig_hostsChanged(router_id);
+                emit sig_hostsChanged();
             if (notification.relays_dirty())
-                emit sig_relaysChanged(router_id);
+                emit sig_relaysChanged();
             if (notification.clients_dirty())
-                emit sig_clientsChanged(router_id);
+                emit sig_clientsChanged();
             if (notification.users_dirty())
-                emit sig_usersChanged(router_id);
+                emit sig_usersChanged();
             if (notification.workspaces_dirty())
-                emit sig_workspacesChanged(router_id);
+                emit sig_workspacesChanged();
             if (notification.groups_dirty())
-                emit sig_groupsChanged(router_id);
+                emit sig_groupsChanged();
         }
     }
     else
@@ -522,34 +470,31 @@ void RouterController::onRouterMessage(qint64 router_id, quint8 channel_id, cons
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::startTwoFactor(qint64 router_id)
+void RouterController::startTwoFactor()
 {
-    auto it = contexts_.find(router_id);
-    CHECK(it != contexts_.end() && it->second.config);
-    RouterContext& context = it->second;
+    CHECK(context_ && context_->config);
 
-    Router2FA* two_factor = new Router2FA(context.config, this);
-    context.two_factor = two_factor;
+    Router2FA* two_factor = new Router2FA(context_->config, this);
+    context_->two_factor = two_factor;
 
     connect(two_factor, &Router2FA::sig_twoFactorRequired, this, &RouterController::onTwoFactorRequired);
     connect(two_factor, &Router2FA::sig_twoFactorFinished, this, &RouterController::onTwoFactorFinished);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::updateStatus(qint64 router_id)
+void RouterController::updateStatus()
 {
-    auto it = contexts_.find(router_id);
-    if (it == contexts_.end())
+    if (!context_)
     {
-        // The record just left. Its removal is the one transition announced without a context.
-        emit sig_statusChanged(router_id, RouterStatus::OFFLINE);
+        // The router just left. Its removal is the one transition announced without a context.
+        emit sig_statusChanged(RouterStatus::OFFLINE);
         return;
     }
 
-    const RouterStatus current = status(router_id);
-    if (it->second.last_status == current)
+    const RouterStatus current = status();
+    if (context_->last_status == current)
         return;
-    it->second.last_status = current;
+    context_->last_status = current;
 
-    emit sig_statusChanged(router_id, current);
+    emit sig_statusChanged(current);
 }

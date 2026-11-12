@@ -33,7 +33,6 @@
 #include "base/auto_qpointer.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
-#include "base/peer/host_id.h"
 #include "base/update/update_info.h"
 #include "client/desktop/app_lock.h"
 #include "client/desktop/authorization_dialog.h"
@@ -298,8 +297,8 @@ QList<McpController::ClientInfo> MainWindow::mcpClients() const
         {
             const HostConfig& host = client_window->sessionState()->host();
             McpController::ClientInfo client{ client_window->clientId(), client_window->sessionType(),
-                                              host.name(), host.entryId(), host.routerId(),
-                                              host.address(), host.isPortable(), client_tab->isDetached() };
+                                              host.name(), host.entryId(), host.address(),
+                                              host.isPortable(), client_tab->isDetached() };
 
             client.current = client.detached || ui->tabs->currentWidget() == client_tab;
 
@@ -486,10 +485,10 @@ void MainWindow::onSettings()
         app_lock_->setTimeout(Database::instance().lockTimeout());
     });
 
-    connect(settings_tab, &SettingsTab::sig_routersChanged, this, [this]()
+    connect(settings_tab, &SettingsTab::sig_routerChanged, this, [this]()
     {
         if (ManagementTab* management_tab = managementTab())
-            management_tab->reloadRouters();
+            management_tab->reloadRouter();
     });
 
     connect(settings_tab, &SettingsTab::sig_desktopConfigChanged, this, [this]()
@@ -633,15 +632,6 @@ void MainWindow::onFindAction()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType session_type)
 {
-    if (isHostId(host.address()) && host.routerId() <= 0)
-    {
-        MsgBox::warning(this,
-            tr("Connection by ID is specified in the properties of the host, "
-               "but the router is not configured. Check the parameters of the "
-               "router in the properties of the host."));
-        return;
-    }
-
     Tab* parent_tab = qobject_cast<Tab*>(sender());
     bool detached = (parent_tab && parent_tab->tabType() == Tab::Type::SESSION) ?
         parent_tab->isDetached() : !ui->action_sessions_in_tabs->isChecked();

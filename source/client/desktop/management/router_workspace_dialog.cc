@@ -47,11 +47,9 @@ constexpr qint64 kNoWorkspace = 0;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RouterWorkspaceDialog::RouterWorkspaceDialog(
-    qint64 router_id, qint64 workspace_id, QWidget* parent)
+RouterWorkspaceDialog::RouterWorkspaceDialog(qint64 workspace_id, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterWorkspaceDialog>()),
-      router_id_(router_id),
       entry_id_(workspace_id),
       model_(std::make_unique<WorkspaceEditModel>(workspace_id))
 {
@@ -139,31 +137,25 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
 
     RouterController& controller = RouterController::instance();
     connect(&controller, &RouterController::sig_statusChanged, this,
-            [this](qint64 router_id, RouterStatus status)
+            [this](RouterStatus status)
     {
-        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        if (status != RouterStatus::ONLINE)
             reject();
     });
 
     // The dialog can stay open for a long time, so the snapshots it edits on top of track the
     // changes made from other consoles.
-    connect(&controller, &RouterController::sig_usersChanged, this, [this](qint64 router_id)
+    connect(&controller, &RouterController::sig_usersChanged, this, [this]()
     {
-        if (router_id != router_id_)
-            return;
-
         fetchUsers();
         fetchMemberNames();
     });
 
     // The save is built on top of the server snapshot (the membership and the revision inside the
     // model), so the snapshot must follow concurrent changes.
-    connect(&controller, &RouterController::sig_workspacesChanged, this, [this](qint64 router_id)
+    connect(&controller, &RouterController::sig_workspacesChanged, this, [this]()
     {
-        if (router_id != router_id_)
-            return;
-
-        RouterSession* session = RouterController::session(router_id_);
+        RouterSession* session = RouterController::session();
         if (session)
         {
             session->listWorkspaces(RouterSession::CachePolicy::RELOAD, 0,
@@ -171,16 +163,15 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
         }
     });
 
-    connect(&controller, &RouterController::sig_hostsChanged, this, [this](qint64 router_id)
+    connect(&controller, &RouterController::sig_hostsChanged, this, [this]()
     {
-        if (router_id == router_id_)
-            fetchHosts();
+        fetchHosts();
     });
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         return;
     }
 
@@ -453,10 +444,10 @@ void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
     workspace.revision = model_->baseRevision();
     workspace.user_ids = model_->accessUserIdsForSave();
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         return;
     }
 
@@ -561,7 +552,7 @@ void RouterWorkspaceDialog::applyMemberLookup(const proto::router::UserList& lis
 //--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::moveHost(const RouterHost& host, qint64 workspace_id)
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session || host.host_id == kInvalidHostId)
     {
         LOG(ERROR) << "Nothing to move";
@@ -603,7 +594,7 @@ void RouterWorkspaceDialog::moveHost(const RouterHost& host, qint64 workspace_id
 //--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::runPendingHostMove()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session || !pending_host_move_)
         return;
 
@@ -642,7 +633,7 @@ RouterHost RouterWorkspaceDialog::hostById(quint64 host_id) const
 //--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::fetchUsers()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
@@ -653,7 +644,7 @@ void RouterWorkspaceDialog::fetchUsers()
 //--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::fetchMemberNames()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 
@@ -669,7 +660,7 @@ void RouterWorkspaceDialog::fetchMemberNames()
 //--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::fetchHosts()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session || !is_admin_)
         return;
 
@@ -700,7 +691,7 @@ void RouterWorkspaceDialog::fetchHosts()
 //--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::refetchLists()
 {
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
         return;
 

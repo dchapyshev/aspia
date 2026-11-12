@@ -22,7 +22,7 @@
 #include <QList>
 #include <QWidget>
 
-#include "client/search_page_model.h"
+#include "client/page_model.h"
 #include "client/router/router_session.h"
 
 namespace proto::peer {
@@ -36,10 +36,6 @@ class TreeWidget;
 class QStackedWidget;
 class QTreeWidgetItem;
 
-// Remote screen for the Android client: an accordion tree of routers -> workspaces -> groups. A tap
-// on a workspace or group opens its host list; routers expand to reveal their content. Fetched lists
-// are served from the session cache, so a tab switch shows the stored content without a request;
-// the refresh action and router notifications re-fetch from the server.
 class RemoteWidget final : public QWidget
 {
     Q_OBJECT
@@ -51,14 +47,14 @@ public:
     // Action buttons hosted in the app bar while the remote screen is active.
     QList<QWidget*> appBarActions() const;
 
-    // Rebuilds the router list (after the cryptor is unlocked or a router is added/removed).
+    // Rebuilds the tree (after the cryptor is unlocked or the router is added or edited).
     void reload();
 
     // Returns to the tree from the host list. Driven by the app bar back button.
     void goBack();
 
-    // Searches every online router by |query|; fed by the app bar search field while the search
-    // screen is shown.
+    // Searches the router by |query| while it is online; fed by the app bar search field while the
+    // search screen is shown.
     void searchQuery(const QString& query);
 
 signals:
@@ -79,7 +75,7 @@ private slots:
     void onHostLongPressed(QTreeWidgetItem* item);
 
 private:
-    void fetchRouter(qint64 router_id, RouterSession::CachePolicy policy);
+    void fetchRouter(RouterSession::CachePolicy policy);
     void fetchHosts(RouterSession::CachePolicy policy, bool append = false);
     void fetchTempHosts(bool append = false);
     void rebuildHostRows();
@@ -98,46 +94,14 @@ private:
     // and file transfer sessions only.
     void showSessionMenu(const HostConfig& host, bool portable);
 
-    QTreeWidgetItem* routerItem(qint64 router_id) const;
-    QTreeWidgetItem* workspaceItem(qint64 router_id, qint64 workspace_id) const;
+    QTreeWidgetItem* routerItem() const;
+    QTreeWidgetItem* workspaceItem(qint64 workspace_id) const;
 
     void showSearch();
     bool isSearchPage() const;
     void rebuildSearchResults();
 
-    // Counts the matches of every online router, then fetches the window of the current page
-    // from the routers it falls on. The counts have to be complete before a page can be cut,
-    // so the results appear once every router has answered.
-    void countSearchSources();
-    void onSearchSourceCounted(int slot, qint64 match_count);
     void fetchSearchPage();
-    void showSearchPage();
-
-    // A search match, kept so the connection config can be rebuilt on tap (each router is searched
-    // independently, so the owning router id travels with the host).
-    struct SearchHost
-    {
-        qint64 router_id = -1;
-        RouterHost host;
-    };
-
-    // One router the search runs against. The routers are ordered by id so the whole result
-    // has an order that does not depend on which of them answers first.
-    struct SearchSource
-    {
-        qint64 router_id = 0;
-        qint64 match_count = -1; // -1 while unanswered, -2 when the router failed.
-    };
-
-    // The window of the current page one router contributes, and the rows it answered with.
-    struct SearchSlice
-    {
-        int source = -1;
-        qint64 offset = 0;
-        qint64 count = 0;
-        bool ready = false;
-        QList<RouterHost> hosts;
-    };
 
     QStackedWidget* stack_ = nullptr;
     TreeWidget* tree_ = nullptr;
@@ -147,7 +111,6 @@ private:
     RouterHostEditor* credentials_page_ = nullptr;
     IconButton* button_search_ = nullptr;
     IconButton* button_refresh_ = nullptr;
-    qint64 host_router_id_ = -1;
     qint64 host_workspace_id_ = 0;
     qint64 host_group_id_ = 0;
 
@@ -161,13 +124,12 @@ private:
     QList<RouterTempHost> temp_hosts_;
     qint64 temp_hosts_total_count_ = 0;
 
-    // The active search query and the matches of the page currently on screen.
+    // The active search query and the matches of the page currently on screen, kept so the
+    // connection config can be rebuilt on tap.
     QString search_query_;
-    QList<SearchHost> search_results_;
+    QList<RouterHost> search_results_;
 
-    SearchPageModel search_page_model_;
-    QList<SearchSource> search_sources_;
-    QList<SearchSlice> search_slices_;
+    PageModel search_page_model_;
 
     // Replies of a query the user has moved on from are dropped by this, and so are the
     // replies of an earlier page of the same query.

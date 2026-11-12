@@ -356,7 +356,7 @@ void LocalWidget::onImport()
             break;
 
         case Backup::Result::UNSUPPORTED_VERSION:
-            message = tr("The file was created by a newer version and cannot be imported.");
+            message = tr("Unsupported file format version.");
             break;
 
         case Backup::Result::NOTHING_IMPORTED:
@@ -374,19 +374,23 @@ void LocalWidget::onImport()
         return;
     }
 
-    const QStringList lines =
-    {
-        tr("Routers imported: %1").arg(report.routers),
-        tr("Router hosts imported: %1").arg(report.router_hosts),
-        tr("Local groups imported: %1").arg(report.local_groups),
-        tr("Local hosts imported: %1").arg(report.local_hosts),
-        tr("Credentials imported: %1").arg(report.credentials),
-        tr("Profiles imported: %1").arg(report.profiles)
-    };
+    QStringList lines;
+
+    if (report.router)
+        lines.append(tr("Router imported"));
+
+    lines << tr("Router hosts imported: %1").arg(report.router_hosts)
+          << tr("Local groups imported: %1").arg(report.local_groups)
+          << tr("Local hosts imported: %1").arg(report.local_hosts)
+          << tr("Credentials imported: %1").arg(report.credentials)
+          << tr("Profiles imported: %1").arg(report.profiles);
+
+    // The router is reloaded before the message, whose event loop lets a session of the replaced
+    // router write its old record over the imported one.
+    RouterController::instance().reload();
 
     MessageDialog::info(this, tr("Restore from Backup"), lines.join('\n'));
 
-    RouterController::instance().reload();
     reload();
 }
 

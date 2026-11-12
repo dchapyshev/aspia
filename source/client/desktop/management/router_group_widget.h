@@ -41,9 +41,8 @@ public:
     explicit RouterGroupWidget(QWidget* parent = nullptr);
     ~RouterGroupWidget() final;
 
-    void showGroup(qint64 router_id, qint64 workspace_id, qint64 group_id);
+    void showGroup(qint64 workspace_id, qint64 group_id);
 
-    qint64 routerId() const { return router_id_; }
     bool hasSelectedHost() const;
     RouterHost selectedHost() const;
     HostConfig selectedHostConfig() const;
@@ -85,7 +84,6 @@ private:
     QList<RouterHost> selectedHosts() const;
 
     std::unique_ptr<Ui::RouterGroupWidget> ui;
-    qint64 router_id_ = 0;
     qint64 workspace_id_ = 0;
     qint64 group_id_ = 0;
     QString mime_type_;

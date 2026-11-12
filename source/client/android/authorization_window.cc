@@ -23,6 +23,7 @@
 #include <QButtonGroup>
 #include <QVBoxLayout>
 
+#include "base/peer/host_id.h"
 #include "common/android/app_bar.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
@@ -263,7 +264,7 @@ bool AuthorizationWindow::usesOneTimePassword() const
 //--------------------------------------------------------------------------------------------------
 bool AuthorizationWindow::isOneTimePasswordOffered() const
 {
-    return host_.routerId() > 0;
+    return isHostId(host_.address());
 }
 
 //--------------------------------------------------------------------------------------------------

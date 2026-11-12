@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/android/routers_widget.h"
+#include "client/android/router_widget.h"
 
 #include <QGridLayout>
 #include <QPainter>
@@ -40,10 +40,10 @@ constexpr double kPlaceholderTextOpacity = 0.6;
 } // namespace
 
 // Overlay shown over the empty list: the standard window surface with a centered hint.
-class RoutersEmptyView final : public QWidget
+class RouterEmptyView final : public QWidget
 {
 public:
-    explicit RoutersEmptyView(QWidget* parent)
+    explicit RouterEmptyView(QWidget* parent)
         : QWidget(parent)
     {
         // Nothing.
@@ -75,13 +75,13 @@ private:
 };
 
 //--------------------------------------------------------------------------------------------------
-RoutersWidget::RoutersWidget(QWidget* parent)
+RouterWidget::RouterWidget(QWidget* parent)
     : QWidget(parent),
       stack_(new QStackedWidget(this)),
       scroll_(new ScrollArea(this)),
       container_(new QWidget(scroll_)),
       cards_layout_(new QVBoxLayout(container_)),
-      placeholder_(new RoutersEmptyView(this)),
+      placeholder_(new RouterEmptyView(this)),
       editor_(new RouterEditor(this)),
       button_add_(new IconButton(":/img/material/add_2.svg", this))
 {
@@ -112,39 +112,39 @@ RoutersWidget::RoutersWidget(QWidget* parent)
     layout->setSpacing(0);
     layout->addWidget(stack_);
 
-    connect(button_add_, &IconButton::clicked, this, &RoutersWidget::onAddRouter);
-    connect(editor_, &RouterEditor::sig_accepted, this, &RoutersWidget::returnFromEditor);
+    connect(button_add_, &IconButton::clicked, this, &RouterWidget::onAddRouter);
+    connect(editor_, &RouterEditor::sig_accepted, this, &RouterWidget::returnFromEditor);
 
     RouterController& controller = RouterController::instance();
     connect(&controller, &RouterController::sig_statusChanged, this,
-            [this](qint64 router_id, RouterStatus status)
+            [this](RouterStatus status)
     {
-        if (RouterCard* card = cards_.value(router_id))
-            card->setStatus(status);
+        if (card_)
+            card_->setStatus(status);
     });
-    connect(&controller, &RouterController::sig_event, this, &RoutersWidget::onRouterEvent);
+    connect(&controller, &RouterController::sig_event, this, &RouterWidget::onRouterEvent);
 
-    placeholder_->setText(tr("No routers added"));
+    placeholder_->setText(tr("No router is set"));
     reload();
 }
 
 //--------------------------------------------------------------------------------------------------
-RoutersWidget::~RoutersWidget() = default;
+RouterWidget::~RouterWidget() = default;
 
 //--------------------------------------------------------------------------------------------------
-QList<QWidget*> RoutersWidget::appBarActions() const
+QList<QWidget*> RouterWidget::appBarActions() const
 {
     // The editor screen has its own form; no list actions there.
-    if (isEditorPage())
+    if (isEditorPage() || card_)
         return {};
 
     return { button_add_ };
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::reload()
+void RouterWidget::reload()
 {
-    clearCards();
+    removeCard();
 
     // The router fields are decrypted with the master-password-derived key, so there is nothing to
     // show until the cryptor is unlocked.
@@ -158,48 +158,47 @@ void RoutersWidget::reload()
 
     RouterController::instance().reload();
 
-    QList<RouterConfig> routers;
-    const Database::ReadResult result = Database::instance().routerList(&routers);
-    if (result != Database::ReadResult::OK)
-        LOG(ERROR) << "Unable to read the list of routers:" << result;
+    RouterConfig config;
+    const Database::FindResult found = Database::instance().routerConfig(&config);
+    if (found == Database::FindResult::FAILED)
+        LOG(ERROR) << "Unable to read the router";
 
-    for (const RouterConfig& config : std::as_const(routers))
+    if (found == Database::FindResult::FOUND || found == Database::FindResult::UNREADABLE)
     {
-        const qint64 router_id = config.routerId();
+        const QString label = config.address().isEmpty() ? tr("Router") : config.address();
 
         // The event log is filled lazily when the panel is opened, so the card starts empty.
-        RouterCard* card = new RouterCard(router_id, config.displayLabel(), container_);
-        card->setStatus(RouterController::status(router_id));
+        card_ = new RouterCard(config.isEnabled() ? label : tr("%1 (disabled)").arg(label), container_);
+        card_->setStatus(RouterController::status());
 
-        connect(card, &RouterCard::sig_expandRequested, this, &RoutersWidget::onCardExpandRequested);
-        connect(card, &RouterCard::sig_editRequested, this, &RoutersWidget::onEditRouter);
-        connect(card, &RouterCard::sig_twoFactorClicked, this, &RoutersWidget::sig_twoFactorClicked);
+        connect(card_, &RouterCard::sig_expandRequested, this, &RouterWidget::onCardExpandRequested);
+        connect(card_, &RouterCard::sig_editRequested, this, &RouterWidget::onEditRouter);
+        connect(card_, &RouterCard::sig_twoFactorClicked, this, &RouterWidget::sig_twoFactorClicked);
 
-        cards_layout_->addWidget(card);
-        cards_.insert(router_id, card);
+        cards_layout_->addWidget(card_);
     }
 
     cards_layout_->addStretch();
 
-    placeholder_->setVisible(cards_.isEmpty());
+    placeholder_->setVisible(!card_);
     emit sig_appBarActionsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::goBack()
+void RouterWidget::goBack()
 {
     showList();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::resetToList()
+void RouterWidget::resetToList()
 {
     if (isEditorPage())
         stack_->setCurrentIndex(0);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::onAddRouter()
+void RouterWidget::onAddRouter()
 {
     editor_->prepareForAdd();
     stack_->setCurrentIndex(1);
@@ -208,35 +207,27 @@ void RoutersWidget::onAddRouter()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::onCardExpandRequested(qint64 router_id)
+void RouterWidget::onCardExpandRequested()
 {
-    // Tapping the open router closes its panel; tapping another closes the previous one first, so
-    // only a single panel is ever open.
-    if (expanded_router_id_ == router_id)
+    if (!card_)
+        return;
+
+    // Tapping the open card closes its panel.
+    if (card_->isExpanded())
     {
-        if (RouterCard* card = cards_.value(router_id))
-            card->setExpanded(false);
-        expanded_router_id_ = -1;
+        card_->setExpanded(false);
         return;
     }
 
-    if (RouterCard* previous = cards_.value(expanded_router_id_))
-        previous->setExpanded(false);
-
-    RouterCard* card = cards_.value(router_id);
-    if (!card)
-        return;
-
     // Fill the log from the stored history only now that the panel is being shown.
-    card->setEvents(RouterController::instance().events(router_id));
-    card->setExpanded(true);
-    expanded_router_id_ = router_id;
+    card_->setEvents(RouterController::instance().events());
+    card_->setExpanded(true);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::onEditRouter(qint64 router_id)
+void RouterWidget::onEditRouter()
 {
-    if (!editor_->prepareForEdit(router_id))
+    if (!editor_->prepareForEdit())
         return;
 
     stack_->setCurrentIndex(1);
@@ -245,32 +236,31 @@ void RoutersWidget::onEditRouter(qint64 router_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::onRouterEvent(qint64 router_id, const RouterEvent& event)
+void RouterWidget::onRouterEvent(const RouterEvent& event)
 {
-    RouterCard* card = cards_.value(router_id);
-    if (!card)
+    if (!card_)
         return;
 
-    card->updateTwoFactorButton();
+    card_->updateTwoFactorButton();
 
-    // Only the open panel shows its log live; the others are refilled from the journal when
+    // Only the open panel shows the log live; a closed one is refilled from the journal when
     // expanded.
-    if (router_id != expanded_router_id_)
+    if (!card_->isExpanded())
         return;
 
-    card->appendEvent(event);
+    card_->appendEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::returnFromEditor()
+void RouterWidget::returnFromEditor()
 {
-    // The router list changed (added, edited or removed), so it is rebuilt before returning.
+    // The router was added or edited, so the card is rebuilt before returning.
     reload();
     showList();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::showList()
+void RouterWidget::showList()
 {
     stack_->setCurrentIndex(0);
     emit sig_titleChanged(QString(), false);
@@ -278,13 +268,13 @@ void RoutersWidget::showList()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool RoutersWidget::isEditorPage() const
+bool RouterWidget::isEditorPage() const
 {
     return stack_->currentIndex() == 1;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::clearCards()
+void RouterWidget::removeCard()
 {
     QLayoutItem* item;
     while ((item = cards_layout_->takeAt(0)) != nullptr)
@@ -294,6 +284,5 @@ void RoutersWidget::clearCards()
         delete item;
     }
 
-    cards_.clear();
-    expanded_router_id_ = -1;
+    card_ = nullptr;
 }

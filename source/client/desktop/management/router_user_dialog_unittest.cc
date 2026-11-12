@@ -72,7 +72,7 @@ TEST(RouterUserDialogTest, TypingTheNameKeepsTheEnteredPassword)
     // The dialog reaches the controller for its signals; there is no worker in this stand.
     RouterController controller;
 
-    RouterUserDialog dialog(1, 0, nullptr);
+    RouterUserDialog dialog(0, nullptr);
     dialog.show();
 
     auto* password = dialog.findChild<PasswordEdit*>("edit_password");
@@ -96,7 +96,7 @@ TEST(RouterUserDialogTest, FailedTokenListGraysTheSessionsTab)
 {
     RouterController controller;
 
-    RouterUserDialog dialog(1, 7, nullptr);
+    RouterUserDialog dialog(7, nullptr);
     dialog.show();
 
     auto* tab = dialog.findChild<QWidget*>("tab_sessions");
@@ -122,7 +122,7 @@ TEST(RouterUserDialogTest, TokenListMarksTheSessionRowAndReplacesTheOld)
 {
     RouterController controller;
 
-    RouterUserDialog dialog(1, 7, nullptr);
+    RouterUserDialog dialog(7, nullptr);
     dialog.show();
 
     proto::router::UserTokenList list;
@@ -158,7 +158,7 @@ TEST(RouterUserDialogTest, ResultsAfterTheDialogStartedClosingChangeNothing)
 {
     RouterController controller;
 
-    RouterUserDialog dialog(1, 7, nullptr);
+    RouterUserDialog dialog(7, nullptr);
     dialog.show();
 
     RouterUserDialogTestPeer::addToken(dialog, 5);

@@ -21,6 +21,7 @@
 #include <QJsonArray>
 
 #include "client/mcp/mcp_controller.h"
+#include "client/router/router_controller.h"
 #include "client/storage/database.h"
 
 namespace {
@@ -139,39 +140,30 @@ bool isClientConnected(qint64 client_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool routersFromArgument(const QJsonValue& value, QList<RouterInfo>* routers, QString* error)
+RouterSession* routerSession(QString* error)
 {
-    std::optional<qint64> router_id;
-    if (!value.isUndefined())
+    if (RouterSession* session = RouterController::session())
+        return session;
+
+    RouterConfig config;
+    switch (Database::instance().routerConfig(&config))
     {
-        router_id = integerArgument(value);
-        if (!router_id)
-        {
-            *error = "The router_id must be an integer.";
-            return false;
-        }
+        case Database::FindResult::NOT_FOUND:
+            *error = "No router is set in Aspia Client.";
+            break;
+        case Database::FindResult::UNREADABLE:
+        case Database::FindResult::FAILED:
+            *error = "Unable to read the database.";
+            break;
+        case Database::FindResult::FOUND:
+            if (!config.isEnabled())
+                *error = "The router is turned off in Aspia Client.";
+            else
+                *error = "The router is not connected.";
+            break;
     }
 
-    QList<RouterConfig> configs;
-    if (Database::instance().routerList(&configs) == Database::ReadResult::FAILED)
-    {
-        *error = "Unable to read the database.";
-        return false;
-    }
-
-    for (const RouterConfig& config : std::as_const(configs))
-    {
-        if (!router_id || config.routerId() == *router_id)
-            routers->append(RouterInfo{ config.routerId(), config.displayLabel() });
-    }
-
-    if (router_id && routers->isEmpty())
-    {
-        *error = QString("There is no router with id %1. Use list_routers to get the ids.").arg(*router_id);
-        return false;
-    }
-
-    return true;
+    return nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------

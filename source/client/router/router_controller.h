@@ -21,16 +21,12 @@
 
 #include <QObject>
 
-#include <unordered_map>
+#include <optional>
 
 #include "base/shared_pointer.h"
 #include "client/router/router_2fa.h"
 #include "client/router/router_session.h"
 
-// The single owner of the router records at runtime. It runs their logins (Router2FA),
-// births the working sessions (RouterSession) from the completed ones and destroys them with their
-// connections. The signals of the short-lived sessions are relayed under its own stable ones,
-// and the connection journal is written here for both platforms.
 class RouterController final : public QObject
 {
     Q_OBJECT
@@ -41,46 +37,46 @@ public:
     ~RouterController() final;
 
     static RouterController& instance();
-    static RouterStatus status(qint64 router_id);
+    static RouterStatus status();
 
-    // The working session of the record, nullptr unless the record is ONLINE. The object dies
+    // The working session of the router, nullptr unless the router is ONLINE. The object dies
     // with the connection, so it is looked up at use and never kept.
-    static RouterSession* session(qint64 router_id);
+    static RouterSession* session();
 
-    // The two-factor question of the record, nullptr while nothing is asked. Answered and
+    // The two-factor question of the router, nullptr while nothing is asked. Answered and
     // dismissed through the object itself; who shows it and when is the business of the GUI.
-    static TwoFactorPrompt* twoFactorPrompt(qint64 router_id);
+    static TwoFactorPrompt* twoFactorPrompt();
 
-    // Syncs the logins and the sessions with the stored router records. A new record with
-    // usable credentials starts logging in, a record that stays receives its fresh config, and
-    // everything a record that is gone was running is destroyed.
+    // Syncs the login and the session with the stored router. A new router with usable
+    // credentials starts logging in, a router that stays receives its fresh config, and
+    // everything a router that is gone was running is destroyed.
     void reload();
 
     static constexpr int kMaxStoredEvents = 100;
 
-    QList<RouterEvent> events(qint64 router_id) const;
-    void clearEvents(qint64 router_id);
-    void addEvent(qint64 router_id, RouterEvent::Severity severity, const QString& text);
+    QList<RouterEvent> events() const;
+    void clearEvents();
+    void addEvent(RouterEvent::Severity severity, const QString& text);
 
 signals:
-    void sig_statusChanged(qint64 router_id, RouterStatus status);
-    void sig_event(qint64 router_id, const RouterEvent& event);
-    void sig_twoFactorRequired(qint64 router_id);
-    void sig_tempHostsChanged(qint64 router_id);
-    void sig_hostsChanged(qint64 router_id);
-    void sig_relaysChanged(qint64 router_id);
-    void sig_clientsChanged(qint64 router_id);
-    void sig_usersChanged(qint64 router_id);
-    void sig_workspacesChanged(qint64 router_id);
-    void sig_groupsChanged(qint64 router_id);
+    void sig_statusChanged(RouterStatus status);
+    void sig_event(const RouterEvent& event);
+    void sig_twoFactorRequired();
+    void sig_tempHostsChanged();
+    void sig_hostsChanged();
+    void sig_relaysChanged();
+    void sig_clientsChanged();
+    void sig_usersChanged();
+    void sig_workspacesChanged();
+    void sig_groupsChanged();
 
 private slots:
-    void onTwoFactorRequired(qint64 router_id);
-    void onTwoFactorFinished(qint64 router_id, qint64 user_id, const QVersionNumber& peer_version);
-    void onRouterAuthenticated(qint64 router_id, const QVersionNumber& peer_version);
-    void onRouterReconnecting(qint64 router_id);
-    void onRouterError(qint64 router_id, TcpChannel::ErrorCode error_code);
-    void onRouterMessage(qint64 router_id, quint8 channel_id, const QByteArray& buffer);
+    void onTwoFactorRequired();
+    void onTwoFactorFinished(qint64 user_id, const QVersionNumber& peer_version);
+    void onRouterAuthenticated(const QVersionNumber& peer_version);
+    void onRouterReconnecting();
+    void onRouterError(TcpChannel::ErrorCode error_code);
+    void onRouterMessage(quint8 channel_id, const QByteArray& buffer);
 
 private:
     struct RouterContext
@@ -92,10 +88,10 @@ private:
         QList<RouterEvent> events;
     };
 
-    void startTwoFactor(qint64 router_id);
-    void updateStatus(qint64 router_id);
+    void startTwoFactor();
+    void updateStatus();
 
-    std::unordered_map<qint64, RouterContext> contexts_;
+    std::optional<RouterContext> context_;
     QPointer<RouterWorker> router_worker_;
 
     Q_DISABLE_COPY_MOVE(RouterController)

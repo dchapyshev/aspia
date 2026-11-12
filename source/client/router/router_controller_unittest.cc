@@ -26,7 +26,6 @@
 #include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_string.h"
 #include "base/sql/sql_database.h"
-#include "base/sql/sql_query.h"
 #include "client/config.h"
 #include "client/router/router_test_fixture.h"
 #include "client/storage/database.h"
@@ -47,42 +46,36 @@ protected:
         DataCryptor::instance().setKey(SecureByteArray(QByteArray(32, 'k')));
     }
 
-    qint64 addRouter(const QString& name)
+    void addRouter()
     {
         RouterConfig router;
-        router.setDisplayName(name);
         router.setAddress("router.example.com");
         router.setUsername("router-user");
         router.setPassword(SecureString("router-secret"));
 
-        EXPECT_TRUE(Database::instance().addRouter(router));
-        return router.routerId();
+        EXPECT_TRUE(Database::instance().setRouterConfig(router));
     }
 
-    bool writeRouter(qint64 router_id, const QString& name)
+    bool writeRouter(bool enabled = true)
     {
         RouterConfig router;
-        router.setRouterId(router_id);
-        router.setDisplayName(name);
         router.setAddress("router.example.com");
         router.setUsername("router-user");
         router.setPassword(SecureString("router-secret"));
+        router.setEnabled(enabled);
 
-        return Database::instance().modifyRouter(router);
+        return Database::instance().setRouterConfig(router);
     }
 
     // What a master password entered elsewhere leaves behind: the row is there and its sealed
     // column does not open.
-    bool corruptRecordData(qint64 router_id)
+    bool corruptRecordData()
     {
         SqlDatabase raw;
         if (!raw.open(file_path_))
             return false;
 
-        SqlQuery query(raw, "UPDATE routers SET data=X'00' WHERE id=?");
-        query.addInt64(router_id);
-
-        return query.exec();
+        return raw.exec("UPDATE settings SET value='AA==' WHERE name='router'");
     }
 
     QTemporaryDir dir_;
@@ -92,32 +85,26 @@ protected:
 //--------------------------------------------------------------------------------------------------
 // A record that did not open is not a record that is gone, and the user reaches it to enter its
 // data again. The login it had cannot finish, so it is given up and the row says the record did
-// not open. A record that really left takes its context with it, even though the list it left
-// from was not whole.
+// not open.
 TEST_F(RouterControllerTest, RecordThatDoesNotOpenGivesUpTheLoginItCannotFinish)
 {
-    const qint64 kept_id = addRouter("kept");
-    const qint64 removed_id = addRouter("removed");
+    addRouter();
 
     RouterController controller;
     controller.reload();
 
-    ASSERT_EQ(RouterController::status(kept_id), RouterStatus::CONNECTING);
-    ASSERT_EQ(RouterController::status(removed_id), RouterStatus::CONNECTING);
+    ASSERT_EQ(RouterController::status(), RouterStatus::CONNECTING);
 
-    ASSERT_TRUE(corruptRecordData(kept_id));
-    ASSERT_TRUE(Database::instance().removeRouter(removed_id));
-
+    ASSERT_TRUE(corruptRecordData());
     controller.reload();
 
-    EXPECT_EQ(RouterController::status(kept_id), RouterStatus::UNREADABLE);
-    EXPECT_EQ(RouterController::status(removed_id), RouterStatus::OFFLINE);
+    EXPECT_EQ(RouterController::status(), RouterStatus::UNREADABLE);
 
     // Entered again, the record logs in like any other.
-    ASSERT_TRUE(writeRouter(kept_id, "kept"));
+    ASSERT_TRUE(writeRouter());
     controller.reload();
 
-    EXPECT_EQ(RouterController::status(kept_id), RouterStatus::CONNECTING);
+    EXPECT_EQ(RouterController::status(), RouterStatus::CONNECTING);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -125,17 +112,53 @@ TEST_F(RouterControllerTest, RecordThatDoesNotOpenGivesUpTheLoginItCannotFinish)
 // it stands in the list as a record that did not open. Entered again, it starts logging in.
 TEST_F(RouterControllerTest, RecordThatDoesNotOpenIsNotIdle)
 {
-    const qint64 router_id = addRouter("broken");
-    ASSERT_TRUE(corruptRecordData(router_id));
+    addRouter();
+    ASSERT_TRUE(corruptRecordData());
 
     RouterController controller;
     controller.reload();
 
-    ASSERT_EQ(RouterController::status(router_id), RouterStatus::UNREADABLE);
+    ASSERT_EQ(RouterController::status(), RouterStatus::UNREADABLE);
 
-    ASSERT_TRUE(writeRouter(router_id, "broken"));
+    ASSERT_TRUE(writeRouter());
 
     controller.reload();
 
-    EXPECT_EQ(RouterController::status(router_id), RouterStatus::CONNECTING);
+    EXPECT_EQ(RouterController::status(), RouterStatus::CONNECTING);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A router turned off gives up the login it runs, and turned on again it logs in anew.
+TEST_F(RouterControllerTest, RouterTurnedOffGivesUpItsLogin)
+{
+    addRouter();
+
+    RouterController controller;
+    controller.reload();
+
+    ASSERT_EQ(RouterController::status(), RouterStatus::CONNECTING);
+
+    ASSERT_TRUE(writeRouter(false));
+    controller.reload();
+
+    EXPECT_EQ(RouterController::status(), RouterStatus::OFFLINE);
+    EXPECT_EQ(RouterController::session(), nullptr);
+
+    ASSERT_TRUE(writeRouter(true));
+    controller.reload();
+
+    EXPECT_EQ(RouterController::status(), RouterStatus::CONNECTING);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A router that is off when the controller first sees it does not log in.
+TEST_F(RouterControllerTest, RouterTurnedOffIsNotStarted)
+{
+    addRouter();
+    ASSERT_TRUE(writeRouter(false));
+
+    RouterController controller;
+    controller.reload();
+
+    EXPECT_EQ(RouterController::status(), RouterStatus::OFFLINE);
 }

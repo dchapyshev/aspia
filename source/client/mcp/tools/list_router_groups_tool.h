@@ -21,7 +21,7 @@
 
 #include "client/mcp/mcp_tool.h"
 
-// Lists the workspaces of the connected routers with their groups. The comments and the members of
+// Lists the workspaces of the router with their groups. The comments and the members of
 // the workspaces are never returned.
 class ListRouterGroupsTool final : public McpTool
 {

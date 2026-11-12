@@ -48,60 +48,57 @@ RouterWorker::~RouterWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorker::onConnect(qint64 router_id)
+void RouterWorker::onConnect()
 {
-    if (connections_.contains(router_id))
+    if (connection_)
         return;
 
-    connections_.insert(router_id, Connection());
-    startConnection(router_id);
+    connection_.emplace();
+    startConnection();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorker::onDisconnect(qint64 router_id)
+void RouterWorker::onDisconnect()
 {
-    auto it = connections_.find(router_id);
-    if (it == connections_.end())
+    if (!connection_)
         return;
 
-    if (it->channel)
+    if (connection_->channel)
     {
-        it->channel->disconnect();
-        it->channel->deleteLater();
+        connection_->channel->disconnect();
+        connection_->channel->deleteLater();
     }
 
-    connections_.erase(it);
+    connection_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorker::onReconnect(qint64 router_id)
+void RouterWorker::onReconnect()
 {
-    auto it = connections_.find(router_id);
-    if (it == connections_.end())
-        it = connections_.insert(router_id, Connection());
+    if (!connection_)
+        connection_.emplace();
 
-    if (it->channel)
+    if (connection_->channel)
     {
-        it->channel->disconnect();
-        it->channel->deleteLater();
-        it->channel = nullptr;
+        connection_->channel->disconnect();
+        connection_->channel->deleteLater();
+        connection_->channel = nullptr;
     }
 
-    it->reconnect_countdown = kReconnectTicks;
-    emit sig_reconnecting(router_id);
+    connection_->reconnect_countdown = kReconnectTicks;
+    emit sig_reconnecting();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorker::onSendMessage(qint64 router_id, quint8 channel_id, const QByteArray& buffer)
+void RouterWorker::onSendMessage(quint8 channel_id, const QByteArray& buffer)
 {
-    auto it = connections_.find(router_id);
-    if (it == connections_.end() || !it->channel)
+    if (!connection_ || !connection_->channel)
     {
-        LOG(WARNING) << "Dropping outgoing message, channel not ready for router" << router_id;
+        LOG(WARNING) << "Dropping outgoing message, channel not ready";
         return;
     }
 
-    it->channel->send(channel_id, buffer);
+    connection_->channel->send(channel_id, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -114,66 +111,50 @@ void RouterWorker::onStart()
 void RouterWorker::onStop()
 {
     LOG(INFO) << "Router worker stopped";
-
-    for (const Connection& connection : std::as_const(connections_))
-    {
-        if (connection.channel)
-        {
-            connection.channel->disconnect();
-            connection.channel->deleteLater();
-        }
-    }
-
-    connections_.clear();
+    onDisconnect();
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWorker::onTimer(TimePoint now)
 {
-    for (auto it = connections_.begin(); it != connections_.end(); ++it)
-    {
-        if (it->channel)
-        {
-            it->channel->tick(now);
-            continue;
-        }
+    if (!connection_)
+        return;
 
-        if (it->reconnect_countdown != 0 && --it->reconnect_countdown == 0)
-            startConnection(it.key());
+    if (connection_->channel)
+    {
+        connection_->channel->tick(now);
+        return;
     }
+
+    if (connection_->reconnect_countdown != 0 && --connection_->reconnect_countdown == 0)
+        startConnection();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorker::startConnection(qint64 router_id)
+void RouterWorker::startConnection()
 {
-    auto it = connections_.find(router_id);
-    if (it == connections_.end() || it->channel)
+    if (!connection_ || connection_->channel)
         return;
 
-    // The worker owns the connection, so it reads the credentials from the database itself (thread-
-    // local connection) instead of shuttling them across threads on every connect. A record whose
-    // sealed column did not open (a master password change in flight) is not handed out and is
-    // retried, not connected with. The proxy settings are retried the same way, because a direct
-    // connection would go around the proxy the user chose.
     Database& db = Database::instance();
 
     RouterConfig config;
-    if (db.findRouter(router_id, &config) != Database::FindResult::FOUND || !config.isValid())
+    if (db.routerConfig(&config) != Database::FindResult::FOUND || !config.isValid() || !config.isEnabled())
     {
-        LOG(ERROR) << "No readable config for router" << router_id;
-        it->reconnect_countdown = kReconnectTicks;
+        LOG(ERROR) << "No usable config for router";
+        connection_->reconnect_countdown = kReconnectTicks;
         return;
     }
 
     ProxyConfig proxy;
     if (db.proxyConfig(&proxy) != Database::ReadResult::OK)
     {
-        LOG(ERROR) << "No readable proxy config for router" << router_id;
-        it->reconnect_countdown = kReconnectTicks;
+        LOG(ERROR) << "No readable proxy config for router";
+        connection_->reconnect_countdown = kReconnectTicks;
         return;
     }
 
-    LOG(INFO) << "Connecting to router" << router_id << config.address()
+    LOG(INFO) << "Connecting to router" << config.address()
               << (proxy.settings().enabled ? "through proxy" : "directly");
 
     const Address addr = Address::fromString(config.address(), kDefaultRouterClientTcpPort);
@@ -187,54 +168,42 @@ void RouterWorker::startConnection(qint64 router_id)
     // The channel takes ownership of the authenticator and lives on this worker thread.
     TcpChannel* channel = TcpChannelProxy::create(
         TcpChannel::Type::DIRECT, proxy.settings(), authenticator, this);
-    it->channel = channel;
+    connection_->channel = channel;
 
-    connect(channel, &TcpChannel::sig_authenticated, this, [this, router_id]()
-    {
-        onChannelAuthenticated(router_id);
-    });
-    connect(channel, &TcpChannel::sig_errorOccurred, this, [this, router_id](TcpChannel::ErrorCode error_code)
-    {
-        onChannelErrorOccurred(router_id, error_code);
-    });
-    connect(channel, &TcpChannel::sig_messageReceived, this,
-            [this, router_id](quint8 channel_id, const QByteArray& buffer)
-    {
-        emit sig_messageReceived(router_id, channel_id, buffer);
-    });
+    connect(channel, &TcpChannel::sig_authenticated, this, &RouterWorker::onChannelAuthenticated);
+    connect(channel, &TcpChannel::sig_errorOccurred, this, &RouterWorker::onChannelErrorOccurred);
+    connect(channel, &TcpChannel::sig_messageReceived, this, &RouterWorker::sig_messageReceived);
 
     channel->connectTo(addr.host(), addr.port());
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorker::onChannelAuthenticated(qint64 router_id)
+void RouterWorker::onChannelAuthenticated()
 {
-    auto it = connections_.find(router_id);
-    if (it == connections_.end() || !it->channel)
+    if (!connection_ || !connection_->channel)
         return;
 
     // Authentication passed; let the router replies flow and hand the peer version to the
     // controller.
-    it->channel->setPaused(false);
-    emit sig_authenticated(router_id, it->channel->peerVersion());
+    connection_->channel->setPaused(false);
+    emit sig_authenticated(connection_->channel->peerVersion());
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorker::onChannelErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code)
+void RouterWorker::onChannelErrorOccurred(TcpChannel::ErrorCode error_code)
 {
-    auto it = connections_.find(router_id);
-    if (it == connections_.end())
+    if (!connection_)
         return;
 
-    if (it->channel)
+    if (connection_->channel)
     {
-        it->channel->disconnect();
-        it->channel->deleteLater();
-        it->channel = nullptr;
+        connection_->channel->disconnect();
+        connection_->channel->deleteLater();
+        connection_->channel = nullptr;
     }
 
     // The one-second timer retries once the countdown elapses.
-    it->reconnect_countdown = kReconnectTicks;
+    connection_->reconnect_countdown = kReconnectTicks;
 
-    emit sig_errorOccurred(router_id, error_code);
+    emit sig_errorOccurred(error_code);
 }

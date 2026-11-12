@@ -30,12 +30,10 @@
 #include "proto/router_constants.h"
 
 //--------------------------------------------------------------------------------------------------
-RouterGroupDialog::RouterGroupDialog(
-    qint64 router_id, qint64 workspace_id, const QString& workspace_name,
-    qint64 entry_id, qint64 default_parent_id, QWidget* parent)
+RouterGroupDialog::RouterGroupDialog(qint64 workspace_id, const QString& workspace_name, qint64 entry_id,
+                                     qint64 default_parent_id, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterGroupDialog>()),
-      router_id_(router_id),
       workspace_id_(workspace_id),
       workspace_name_(workspace_name),
       entry_id_(entry_id),
@@ -60,16 +58,16 @@ RouterGroupDialog::RouterGroupDialog(
 
     RouterController& controller = RouterController::instance();
     connect(&controller, &RouterController::sig_statusChanged, this,
-            [this](qint64 router_id, RouterStatus status)
+            [this](RouterStatus status)
     {
-        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        if (status != RouterStatus::ONLINE)
             reject();
     });
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         return;
     }
 
@@ -170,10 +168,10 @@ void RouterGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     group.comment   = ui->edit_comment->toPlainText();
     group.revision  = base_revision_;
 
-    RouterSession* session = RouterController::session(router_id_);
+    RouterSession* session = RouterController::session();
     if (!session)
     {
-        LOG(ERROR) << "No session for router" << router_id_;
+        LOG(ERROR) << "No session for router";
         MsgBox::warning(this, tr("Unknown internal error."));
         return;
     }
