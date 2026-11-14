@@ -217,7 +217,7 @@ public:
     void connectRouterHost(const HostConfig& host, proto::peer::SessionType session_type);
 
 signals:
-    void sig_enableFailed();
+    void sig_enableFailed(bool busy);
 
     // The AI applications that are connected now. The name is empty when an application does not give it.
     void sig_clientsChanged(const QStringList& clients);

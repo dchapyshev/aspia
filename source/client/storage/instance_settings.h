@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_STORAGE_SETTINGS_H
-#define CLIENT_STORAGE_SETTINGS_H
+#ifndef CLIENT_STORAGE_INSTANCE_SETTINGS_H
+#define CLIENT_STORAGE_INSTANCE_SETTINGS_H
 
 #include <QSettings>
 
@@ -32,20 +32,17 @@ enum SessionType : int;
 // connection-related, security-related or any other critical data: such values should be stored
 // in the Database (see client/storage/database.h) or another persistent storage that survives
 // upgrades.
-class Settings
+class InstanceSettings
 {
 public:
-    Settings();
-    ~Settings();
+    InstanceSettings();
+    ~InstanceSettings();
+
+    static void select(const QString& id);
+    static void remove(const QString& id);
 
     static QString filePath();
     static void setFilePathForTesting(const QString& file_path);
-
-    QString locale() const;
-    void setLocale(const QString& locale);
-
-    QString theme() const;
-    void setTheme(const QString& theme);
 
     proto::peer::SessionType sessionType() const;
     void setSessionType(proto::peer::SessionType session_type);
@@ -101,7 +98,7 @@ public:
 
 private:
     QSettings settings_;
-    Q_DISABLE_COPY_MOVE(Settings)
+    Q_DISABLE_COPY_MOVE(InstanceSettings)
 };
 
-#endif // CLIENT_STORAGE_SETTINGS_H
+#endif // CLIENT_STORAGE_INSTANCE_SETTINGS_H

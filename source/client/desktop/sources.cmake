@@ -43,6 +43,9 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP
     tab_bar.h
     tab_widget.cc
     tab_widget.h
+    unlock_dialog.cc
+    unlock_dialog.h
+    unlock_dialog.ui
     quick_connect_dialog.cc
     quick_connect_dialog.h
     quick_connect_dialog.ui

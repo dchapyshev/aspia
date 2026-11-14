@@ -19,9 +19,11 @@
 #include "client/mcp/mcp_worker.h"
 
 #include <QCoreApplication>
+#include <QDir>
 #include <QJsonDocument>
 #include <QLocalServer>
 #include <QLocalSocket>
+#include <QLockFile>
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -252,13 +254,23 @@ void McpWorker::onEnable()
 {
     QString channel_name = channelName();
 
+    lock_file_ = std::make_unique<QLockFile>(QDir::tempPath() + '/' + channel_name + ".lock");
+    if (!lock_file_->tryLock())
+    {
+        LOG(INFO) << "MCP connector is already turned on in another instance";
+        lock_file_.reset();
+        emit sig_enableFailed(true);
+        return;
+    }
+
     // A socket file left by a crashed client prevents listening on UNIX.
     QLocalServer::removeServer(channel_name);
 
     if (!server_->listen(channel_name))
     {
         LOG(ERROR) << "Unable to listen on channel" << channel_name << ":" << server_->errorString();
-        emit sig_enableFailed();
+        lock_file_.reset();
+        emit sig_enableFailed(false);
         return;
     }
 
@@ -283,6 +295,8 @@ void McpWorker::onDisable()
         socket->abort();
         socket->deleteLater();
     }
+
+    lock_file_.reset();
 
     reportClients();
     LOG(INFO) << "MCP connector stopped";

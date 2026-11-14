@@ -23,14 +23,14 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 
-#include "client/storage/settings.h"
+#include "client/storage/instance_settings.h"
 
 namespace {
 
 //--------------------------------------------------------------------------------------------------
 QString startDirectory()
 {
-    const QString directory = Settings().lastDirectory();
+    const QString directory = InstanceSettings().lastDirectory();
     if (directory.isEmpty() || !QDir(directory).exists())
         return QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
 
@@ -40,7 +40,7 @@ QString startDirectory()
 //--------------------------------------------------------------------------------------------------
 void rememberDirectory(const QString& file_path)
 {
-    Settings().setLastDirectory(QFileInfo(file_path).absolutePath());
+    InstanceSettings().setLastDirectory(QFileInfo(file_path).absolutePath());
 }
 
 } // namespace

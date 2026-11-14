@@ -31,6 +31,7 @@
 
 class QLocalServer;
 class QLocalSocket;
+class QLockFile;
 
 class McpWorker final : public Worker
 {
@@ -52,7 +53,7 @@ public slots:
     void onToolNotFound(qint64 request_id, const QString& name);
 
 signals:
-    void sig_enableFailed();
+    void sig_enableFailed(bool busy);
     void sig_clientsChanged(const QStringList& clients);
     void sig_toolsListRequested(qint64 request_id);
     void sig_toolCallRequested(qint64 request_id, const QString& name, const QJsonObject& arguments);
@@ -91,6 +92,7 @@ private:
                        const Respond& respond);
 
     ScopedQPointer<QLocalServer> server_;
+    std::unique_ptr<QLockFile> lock_file_;
     QHash<QLocalSocket*, Connection> connections_;
 
     QHash<qint64, Pending> pending_;

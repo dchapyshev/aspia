@@ -18,11 +18,8 @@
 
 #include "client/desktop/app_lock.h"
 
-#include <QDateTime>
-#include <QDir>
 #include <QEvent>
 #include <QFileDialog>
-#include <QFileInfo>
 #include <QThread>
 #include <QTimer>
 
@@ -31,10 +28,9 @@
 #include "base/crypto/secure_string.h"
 #include "client/application.h"
 #include "client/desktop/main_window.h"
-#include "client/storage/database.h"
+#include "client/desktop/unlock_dialog.h"
+#include "client/storage/instance_settings.h"
 #include "client/storage/master_password.h"
-#include "client/storage/settings.h"
-#include "common/desktop/credentials_dialog.h"
 #include "common/desktop/elevate_util.h"
 #include "common/desktop/msg_box.h"
 
@@ -60,85 +56,67 @@ AppLock::~AppLock() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-AppLock::Result AppLock::unlock(bool reset_allowed)
+AppLock::Result AppLock::unlock(bool startup)
 {
-    const int kResetResult = QDialog::Accepted + 1;
+    AutoQPointer<UnlockDialog> dialog(
+        new UnlockDialog(startup ? UnlockDialog::Mode::STARTUP : UnlockDialog::Mode::LOCK, nullptr));
 
-    while (true)
+    // The settings are kept with the database, and at the startup none is chosen yet.
+    if (!startup)
+        dialog->restoreGeometry(InstanceSettings().dialogGeometry(dialog->objectName()));
+
+    // A second start of the application activates its window, and until the unlock that window
+    // is this dialog.
+    connect(Application::instance(), &Application::sig_windowActivated, dialog.get(), [window = dialog.get()]()
     {
-        AutoQPointer<CredentialsDialog> dialog(
-            new CredentialsDialog(CredentialsDialog::Type::ENTER_PASSWORD, nullptr));
-        dialog->setObjectName("UnlockDialog");
-        dialog->setWindowTitle(tr("Unlock"));
-        dialog->setHeaderIcon(":/img/lock.svg");
-        dialog->setHeaderText(tr("Enter the master password to unlock the application."));
-        dialog->setShowPasswordButtonVisible(true);
-        if (reset_allowed)
-            dialog->setLink(tr("Forgot password?"), kResetResult);
+        window->raise();
+        window->activateWindow();
+    });
 
-        Settings settings;
-        dialog->restoreGeometry(settings.dialogGeometry(dialog->objectName()));
+    const int result = dialog->exec();
 
-        // A second start of the application activates its window, and until the unlock that window
-        // is this dialog.
-        connect(Application::instance(), &Application::sig_windowActivated, dialog.get(), [window = dialog.get()]()
-        {
-            window->raise();
-            window->activateWindow();
-        });
+    if (!startup)
+        InstanceSettings().setDialogGeometry(dialog->objectName(), dialog->saveGeometry());
 
-        const int result = dialog->exec();
-        settings.setDialogGeometry(dialog->objectName(), dialog->saveGeometry());
-
-        if (result == kResetResult)
-        {
-            const QFileInfo file_info(Database::filePath());
-            const QString copy_path = QString("%1/%2-%3.%4").arg(file_info.path(), file_info.completeBaseName(),
-                QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"), file_info.suffix());
-
-            const QString question = tr(
-                "The master password cannot be recovered. To continue using the application, you need to reset "
-                "the database. All records, the master password and the settings will be deleted, but a copy of "
-                "the current database will first be saved to the file \"%1\".\nReset the database?")
-                    .arg(QDir::toNativeSeparators(copy_path));
-
-            if (MsgBox::importantQuestion(nullptr, question, Seconds(30)) != MsgBox::Yes)
-                continue;
-
-            if (!Database::instance().saveCopyAndClearAll(copy_path))
-            {
-                MsgBox::warning(nullptr, tr("Unable to reset the database."));
-                continue;
-            }
-
-            LOG(INFO) << "Database reset by user";
-            MsgBox::information(nullptr, tr("The database is reset. The previous database is saved to the file \"%1\".")
-                .arg(QDir::toNativeSeparators(copy_path)));
-            return Result::RESET;
-        }
-
-        if (result != QDialog::Accepted)
-        {
-            LOG(INFO) << "Master password unlock cancelled by user";
-            return Result::CANCELLED;
-        }
-
-        const MasterPassword::Result unlocked = MasterPassword::unlock(dialog->password());
-        if (unlocked == MasterPassword::Result::SUCCESS)
-        {
-            LOG(INFO) << "Master password accepted";
-            return Result::UNLOCKED;
-        }
-
-        if (unlocked != MasterPassword::Result::INVALID_PASSWORD)
-        {
-            LOG(ERROR) << "Unable to unlock the database";
-            MsgBox::warning(nullptr, tr("Unable to unlock the database."));
-            return Result::FAILED;
-        }
-
-        MsgBox::warning(nullptr, tr("Invalid master password."));
+    if (result != QDialog::Accepted)
+    {
+        LOG(INFO) << "Unlock cancelled by user";
+        return Result::CANCELLED;
     }
+
+    LOG(INFO) << "Database unlocked";
+    return Result::UNLOCKED;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool AppLock::checkNewPassword(QWidget* parent, const SecureString& password)
+{
+    if (password.size() < MasterPassword::kMinPasswordLength)
+    {
+        MsgBox::warning(parent, QApplication::translate(
+            "Client", "The password can not be shorter than %n characters.",
+            "", MasterPassword::kMinPasswordLength));
+        return false;
+    }
+
+    if (!MasterPassword::isSafePassword(password))
+    {
+        QString unsafe = QApplication::translate(
+            "Client", "Password you entered does not meet the security requirements!");
+        QString safe = QApplication::translate("Client",
+            "The password must contain lowercase and uppercase characters, "
+            "numbers and should not be shorter than %n characters.",
+            "", MasterPassword::kSafePasswordLength);
+        QString question = QApplication::translate(
+            "Client", "Do you want to enter a different password?");
+
+        if (MsgBox::warning(parent, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
+                            MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
+            return false;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -37,11 +37,10 @@
 #else
 #include <QCommandLineParser>
 #include <QDir>
+#include <QProcess>
 
 #include <functional>
 
-#include "base/auto_qpointer.h"
-#include "base/crypto/secure_string.h"
 #include "client/desktop/app_lock.h"
 #include "client/desktop/main_window.h"
 #include "client/desktop/update_server_dialog.h"
@@ -50,13 +49,24 @@
 #include "client/storage/database_migration.h"
 #include "client/storage/master_password.h"
 #include "client/storage/system_settings.h"
-#include "common/desktop/credentials_dialog.h"
+#include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/update_dialog.h"
 #endif // defined(Q_OS_ANDROID)
 
 #if !defined(Q_OS_ANDROID)
 namespace {
+
+//--------------------------------------------------------------------------------------------------
+bool openOnlyDatabase()
+{
+    const QList<Database::Info> list = Database::list();
+    if (list.size() != 1 || !list.first().auto_unlock)
+        return false;
+
+    Database::select(list.first().id);
+    return MasterPassword::autoUnlock();
+}
 
 //--------------------------------------------------------------------------------------------------
 void backupOnStartup()
@@ -88,62 +98,6 @@ void backupOnStartup()
             MsgBox::warning(nullptr, QApplication::translate("Client", "Unable to create a backup."));
             break;
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-bool setMasterPassword()
-{
-    AutoQPointer<CredentialsDialog> dialog(
-        new CredentialsDialog(CredentialsDialog::Type::SET_PASSWORD, nullptr));
-    dialog->setWindowTitle(QApplication::translate("Client", "Set Master Password"));
-    dialog->setHeaderIcon(":/img/lock.svg");
-    dialog->setHeaderText(QApplication::translate(
-        "Client", "Set a master password required to unlock the application."));
-    dialog->setValidator([](CredentialsDialog* d) -> bool
-    {
-        SecureString new_password = d->password();
-
-        if (new_password.size() < MasterPassword::kMinPasswordLength)
-        {
-            MsgBox::warning(d, QApplication::translate(
-                "Client", "The password can not be shorter than %n characters.",
-                "", MasterPassword::kMinPasswordLength));
-            return false;
-        }
-
-        if (!MasterPassword::isSafePassword(new_password))
-        {
-            QString unsafe = QApplication::translate(
-                "Client", "Password you entered does not meet the security requirements!");
-            QString safe = QApplication::translate("Client",
-                "The password must contain lowercase and uppercase characters, "
-                "numbers and should not be shorter than %n characters.",
-                "", MasterPassword::kSafePasswordLength);
-            QString question = QApplication::translate(
-                "Client", "Do you want to enter a different password?");
-
-            if (MsgBox::warning(d, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
-                                MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
-                return false;
-        }
-
-        if (MasterPassword::setNew(new_password) != MasterPassword::Result::SUCCESS)
-        {
-            MsgBox::warning(d, QApplication::translate("Client", "Unable to set master password."));
-            return false;
-        }
-
-        return true;
-    });
-
-    if (dialog->exec() != QDialog::Accepted)
-    {
-        LOG(INFO) << "Master password set cancelled by user";
-        return false;
-    }
-
-    LOG(INFO) << "Master password set";
-    return true;
 }
 
 } // namespace
@@ -303,53 +257,38 @@ int main(int argc, char* argv[])
 
     return application.exec();
 #else
+    QCommandLineOption select_database_option("select-database",
+        QApplication::translate("Client", "Show the database selection dialog."));
+
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::translate("Client", "Aspia Client"));
     parser.addHelpOption();
     parser.addVersionOption();
+    parser.addOption(select_database_option);
     parser.process(application);
+
+    if (parser.isSet(select_database_option) || !openOnlyDatabase())
+    {
+        if (AppLock::unlock(true) != AppLock::Result::UNLOCKED)
+            return 0;
+    }
+
+    Database& db = Database::instance();
+
+    application.setInstanceKey(db.guid());
 
     if (application.isRunning())
     {
-        LOG(INFO) << "Another instance is already running, activating its window";
+        LOG(INFO) << "Another instance has opened the database, activating its window";
         application.activateWindow();
         return 0;
     }
 
-    if (MasterPassword::autoUnlock())
-    {
-        LOG(INFO) << "Unlocked automatically";
-    }
-    else if (MasterPassword::isSet())
-    {
-        LOG(INFO) << "Master password is set, prompting user";
+    application.loadSettings();
 
-        switch (AppLock::unlock(true))
-        {
-            case AppLock::Result::UNLOCKED:
-                break;
+    UserSettings().setLastDatabase(db.guid());
 
-            case AppLock::Result::RESET:
-                if (!setMasterPassword())
-                    return 0;
-                break;
-
-            case AppLock::Result::CANCELLED:
-                return 0;
-
-            case AppLock::Result::FAILED:
-                return 1;
-        }
-    }
-    else
-    {
-        LOG(INFO) << "Master password is not set, prompting user to set one";
-
-        if (!setMasterPassword())
-            return 0;
-    }
-
-    if (!DatabaseMigration::finish(Database::instance(), DatabaseMigration::oldFilePath()))
+    if (!DatabaseMigration::finish(db, DatabaseMigration::oldFilePath()))
         LOG(ERROR) << "Unable to move the router of the old address book, the next start tries again";
 
     backupOnStartup();
@@ -380,6 +319,16 @@ int main(int argc, char* argv[])
 
             create_main_window();
             QApplication::setQuitOnLastWindowClosed(quit_on_last_window_closed);
+        }, Qt::QueuedConnection);
+        QObject::connect(main_window.get(), &MainWindow::sig_changeDatabaseRequested, &application, [&]()
+        {
+            main_window.reset();
+            application.setInstanceKey(QString());
+
+            if (!QProcess::startDetached(QApplication::applicationFilePath(), { "--select-database" }))
+                LOG(ERROR) << "Unable to start the database selection";
+
+            QApplication::quit();
         }, Qt::QueuedConnection);
 
         main_window->show();

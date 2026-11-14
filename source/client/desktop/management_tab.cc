@@ -53,7 +53,7 @@
 #include "client/router/router_controller.h"
 #include "client/storage/backup.h"
 #include "client/storage/database.h"
-#include "client/storage/settings.h"
+#include "client/storage/instance_settings.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/session_type.h"
@@ -103,7 +103,7 @@ ManagementTab::ManagementTab(QWidget* parent)
     session_connect_group->addAction(ui->action_chat_connect);
     session_connect_group->addAction(ui->action_system_info_connect);
 
-    Settings settings;
+    InstanceSettings settings;
 
     switch (settings.sessionType())
     {
@@ -326,7 +326,7 @@ ManagementTab::~ManagementTab()
 
     delete two_factor_dialog_;
 
-    Settings settings;
+    InstanceSettings settings;
     settings.setSessionType(defaultSessionType());
 }
 
@@ -1863,7 +1863,7 @@ void ManagementTab::onHostTelemetryAction()
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onOnlineCheckToggled(bool checked)
 {
-    Settings settings;
+    InstanceSettings settings;
     settings.setOnlineCheckEnabled(checked);
     local_group_widget_->setOnlineCheckEnabled(checked);
 }

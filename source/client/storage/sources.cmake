@@ -32,9 +32,11 @@ collect_sources(SOURCE_CLIENT_STORAGE
     database_profiles.cc
     database_router.cc
     database_settings.cc
+    instance_settings.cc
+    instance_settings.h
     master_password.cc
     master_password.h
-    settings.cc
-    settings.h
     system_settings.cc
-    system_settings.h)
+    system_settings.h
+    user_settings.cc
+    user_settings.h)

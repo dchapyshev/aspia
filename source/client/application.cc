@@ -18,22 +18,23 @@
 
 #include "client/application.h"
 
+#include <QIcon>
+#include <QLocale>
+#include <QUuid>
+
 #include "version.h"
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "client/storage/database.h"
 #include "client/storage/database_migration.h"
-#include "client/storage/settings.h"
+#include "client/storage/instance_settings.h"
+#include "client/storage/user_settings.h"
 #include "client/workers/router_worker.h"
 #include "client/workers/update_worker.h"
 
 #if !defined(Q_OS_ANDROID)
 #include "client/mcp/mcp_worker.h"
 #endif // !defined(Q_OS_ANDROID)
-
-#include <QFileInfo>
-#include <QIcon>
-#include <QLocale>
 
 namespace {
 
@@ -66,29 +67,30 @@ Application::Application(int& argc, char* argv[])
         }
     });
 
-    const DatabaseMigration::Result migration = DatabaseMigration::migrate(
-        DatabaseMigration::oldFilePath(), QFileInfo(Database::filePath()).absolutePath());
-    if (migration == DatabaseMigration::Result::FAILED)
-    {
-        LOG(ERROR) << "Unable to migrate the old address book";
-        migration_failed_ = true;
+    UserSettings settings;
 
-        setLocale(resolveLocale(QLocale::system().bcp47Name()));
-        setTheme("auto");
-        return;
-    }
+    QString locale = resolveLocale(QLocale::system().bcp47Name());
 
-    Settings settings;
-
-    QString locale = resolveLocale(settings.locale());
+#if !defined(Q_OS_ANDROID)
+    locale = resolveLocale(settings.locale());
     if (locale != settings.locale())
     {
         LOG(INFO) << "Locale changed to:" << locale;
         settings.setLocale(locale);
     }
+#endif // !defined(Q_OS_ANDROID)
 
     setLocale(locale);
     setTheme(settings.theme());
+
+    const DatabaseMigration::Result migration = DatabaseMigration::migrate(
+        DatabaseMigration::oldFilePath(), Database::directoryPath());
+    if (migration == DatabaseMigration::Result::FAILED)
+    {
+        LOG(ERROR) << "Unable to migrate the old address book";
+        migration_failed_ = true;
+        return;
+    }
 
     addWorker(std::make_unique<RouterWorker>());
 
@@ -96,10 +98,12 @@ Application::Application(int& argc, char* argv[])
     addWorker(std::make_unique<UpdateWorker>());
 #endif // !defined(ASPIA_GOOGLE_PLAY)
 
-#if !defined(Q_OS_ANDROID)
-    if (Database::instance().isMcpEnabled())
-        addWorker(std::make_unique<McpWorker>());
-#endif // !defined(Q_OS_ANDROID)
+#if defined(Q_OS_ANDROID)
+    const QList<Database::Info> list = Database::list();
+
+    Database::select(list.isEmpty() ? QUuid::createUuid().toString(QUuid::WithoutBraces) : list.first().id);
+    loadSettings();
+#endif // defined(Q_OS_ANDROID)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -113,6 +117,19 @@ Application::~Application()
 Application* Application::instance()
 {
     return static_cast<Application*>(QApplication::instance());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Application::loadSettings()
+{
+    Database& db = Database::instance();
+
+    InstanceSettings::select(db.guid());
+
+#if !defined(Q_OS_ANDROID)
+    if (db.isMcpEnabled())
+        addWorker(std::make_unique<McpWorker>());
+#endif // !defined(Q_OS_ANDROID)
 }
 
 //--------------------------------------------------------------------------------------------------

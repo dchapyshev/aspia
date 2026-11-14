@@ -30,8 +30,8 @@ public:
     virtual ~Application() final;
 
     static Application* instance();
-
     bool isMigrationFailed() const { return migration_failed_; }
+    void loadSettings();
 
 public slots:
     void activateWindow();

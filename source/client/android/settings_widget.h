@@ -24,7 +24,7 @@
 
 #include <functional>
 
-#include "client/storage/settings.h"
+#include "client/storage/user_settings.h"
 
 class QVBoxLayout;
 class QStackedWidget;
@@ -113,7 +113,7 @@ private:
     IconButton* button_credentials_ = nullptr;
     IconButton* button_about_ = nullptr;
 
-    Settings settings_;
+    UserSettings settings_;
 
     Q_DISABLE_COPY_MOVE(SettingsWidget)
 };

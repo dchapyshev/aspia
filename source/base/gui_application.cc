@@ -409,6 +409,9 @@ bool GuiApplication::isRunning()
 //--------------------------------------------------------------------------------------------------
 void GuiApplication::setInstanceKey(const QString& key)
 {
+    if (server_)
+        server_->close();
+
     server_name_ = instance_name_ + key;
     lock_file_ = std::make_unique<QLockFile>(lock_dir_path_ + '/' + server_name_ + ".lock");
 }

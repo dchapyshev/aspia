@@ -28,7 +28,7 @@
 
 #include "base/crypto/secure_string.h"
 #include "client/config.h"
-#include "client/storage/settings.h"
+#include "client/storage/instance_settings.h"
 
 class AuthorizationDialogTest : public testing::Test
 {
@@ -37,7 +37,7 @@ public:
     // it back when it closes, so every test says what it starts from.
     static void rememberOneTimePassword(bool checked)
     {
-        Settings settings;
+        InstanceSettings settings;
         settings.setOneTimePasswordChecked(checked);
     }
 
@@ -227,7 +227,7 @@ TEST_F(AuthorizationDialogTest, SavedUserNameLeavesTheRememberedChoiceAlone)
         EXPECT_FALSE(one_time->isChecked());
     }
 
-    Settings settings;
+    InstanceSettings settings;
     EXPECT_TRUE(settings.isOneTimePasswordChecked());
 }
 
@@ -249,7 +249,7 @@ TEST_F(AuthorizationDialogTest, ChoiceOfTheUserIsRemembered)
         ASSERT_TRUE(one_time->isChecked());
     }
 
-    Settings settings;
+    InstanceSettings settings;
     EXPECT_TRUE(settings.isOneTimePasswordChecked());
 }
 
@@ -415,5 +415,5 @@ TEST_F(AuthorizationDialogTest, OneTimePasswordOnlyLocksTheOtherModes)
         EXPECT_TRUE(dialog.userName().isEmpty());
     }
 
-    EXPECT_FALSE(Settings().isOneTimePasswordChecked());
+    EXPECT_FALSE(InstanceSettings().isOneTimePasswordChecked());
 }

@@ -30,7 +30,7 @@
 #include "base/peer/host_id.h"
 #include "client/config.h"
 #include "client/desktop/ui_quick_connect_dialog.h"
-#include "client/storage/settings.h"
+#include "client/storage/instance_settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/session_type.h"
 #include "proto/peer.h"
@@ -44,7 +44,7 @@ QuickConnectDialog::QuickConnectDialog(QWidget* parent)
 
     ui->setupUi(this);
 
-    QDataStream stream(Settings().quickConnectState());
+    QDataStream stream(InstanceSettings().quickConnectState());
     stream.setVersion(QDataStream::Qt_6_10);
 
     QByteArray geometry;
@@ -83,7 +83,7 @@ QuickConnectDialog::~QuickConnectDialog()
         stream << static_cast<qint32>(sessionType());
     }
 
-    Settings().setQuickConnectState(state);
+    InstanceSettings().setQuickConnectState(state);
 }
 
 //--------------------------------------------------------------------------------------------------

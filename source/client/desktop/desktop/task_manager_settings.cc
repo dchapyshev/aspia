@@ -20,7 +20,7 @@
 
 #include <QStandardPaths>
 
-#include "client/storage/settings.h"
+#include "client/storage/instance_settings.h"
 
 namespace {
 
@@ -34,7 +34,7 @@ const QString kUpdateSpeedParam = "TaskManager/UpdateSpeed";
 
 //--------------------------------------------------------------------------------------------------
 TaskManagerSettings::TaskManagerSettings()
-    : settings_(Settings::filePath(), QSettings::IniFormat)
+    : settings_(InstanceSettings::filePath(), QSettings::IniFormat)
 {
     // Nothing
 }

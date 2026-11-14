@@ -19,6 +19,7 @@
 #include "client/storage/database.h"
 
 #include <QDir>
+#include <QFile>
 #include <QFileInfo>
 #include <QHash>
 #include <QUuid>
@@ -30,7 +31,18 @@
 
 namespace {
 
-QString g_test_file_path;
+QString g_test_dir_path;
+QString g_selected_id;
+
+//--------------------------------------------------------------------------------------------------
+QString filePathOf(const QString& id)
+{
+    const QString dir_path = Database::directoryPath();
+    if (dir_path.isEmpty() || id.isEmpty())
+        return QString();
+
+    return dir_path + '/' + id + ".db3";
+}
 
 } // namespace
 
@@ -48,16 +60,51 @@ Database& Database::instance()
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString Database::filePath()
+QString Database::directoryPath()
 {
-    if (!g_test_file_path.isEmpty())
-        return g_test_file_path;
+    if (!g_test_dir_path.isEmpty())
+        return g_test_dir_path;
 
     QString dir_path = BasePaths::appUserDataDir();
     if (dir_path.isEmpty())
         return QString();
 
-    return dir_path + '/' + kDirectoryName + '/' + kDefaultFileName;
+    return dir_path + '/' + kDirectoryName;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString Database::filePath()
+{
+    return filePathOf(g_selected_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void Database::select(const QString& id)
+{
+    g_selected_id = id;
+    instance().db_.close();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool Database::moveToTrash(const QString& id)
+{
+    if (id == g_selected_id)
+        select(QString());
+
+    return QFile::moveToTrash(filePathOf(id));
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool Database::remove(const QString& id)
+{
+    if (id == g_selected_id)
+        select(QString());
+
+    return QFile::remove(filePathOf(id));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -85,7 +132,7 @@ bool Database::open(const QString& file_path)
         }
     }
 
-    if (!createTables(db_) || !ensureDefaultProfile() || !ensureGuid())
+    if (!createTables(db_) || !ensureDefaultProfile())
     {
         db_.close();
         return false;
@@ -105,6 +152,12 @@ bool Database::open(const QString& file_path)
 bool Database::isValid() const
 {
     return db_.isOpen();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Database::guid() const
+{
+    return QFileInfo(db_.filePath()).completeBaseName();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -239,49 +292,6 @@ bool Database::import(const std::optional<RouterConfig>& router,
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::saveCopyAndClearAll(const QString& copy_path)
-{
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return false;
-    }
-
-    // The workers keep their own connections to the file, so it is not renamed but emptied in place.
-    {
-        SqlQuery copy(db_, "VACUUM INTO ?");
-        copy.addText(copy_path);
-
-        if (!copy.exec())
-        {
-            LOG(ERROR) << "Unable to copy the database:" << db_.lastError();
-            return false;
-        }
-    }
-
-    SqlTransaction transaction(db_);
-    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
-    {
-        LOG(ERROR) << "Unable to begin transaction";
-        return false;
-    }
-
-    if (!db_.exec("DELETE FROM local_groups") || !db_.exec("DELETE FROM router_hosts") ||
-        !db_.exec("DELETE FROM local_hosts") || !db_.exec("DELETE FROM credentials") ||
-        !db_.exec("DELETE FROM profiles") || !db_.exec("DELETE FROM settings"))
-    {
-        LOG(ERROR) << "Unable to clear the database:" << db_.lastError();
-        return false;
-    }
-
-    if (!ensureDefaultProfile() || !ensureGuid() || !transaction.commit())
-        return false;
-
-    LOG(INFO) << "Database is reset, the copy is saved to:" << copy_path;
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
 bool Database::reencryptAll(const QList<LocalHostConfig>& local_hosts,
                             const std::optional<RouterConfig>& router,
                             const QList<RouterHostConfig>& router_hosts,
@@ -373,10 +383,9 @@ bool Database::reencryptAll(const QList<LocalHostConfig>& local_hosts,
 
 //--------------------------------------------------------------------------------------------------
 // static
-void Database::setFilePathForTesting(const QString& file_path)
+void Database::setDirectoryPathForTesting(const QString& dir_path)
 {
-    g_test_file_path = file_path;
-    instance().db_.close();
+    g_test_dir_path = dir_path;
 }
 
 //--------------------------------------------------------------------------------------------------

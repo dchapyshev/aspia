@@ -18,7 +18,7 @@
 
 #include "base/logging.h"
 #include "base/threading/asio_event_dispatcher.h"
-#include "client/storage/settings.h"
+#include "client/storage/instance_settings.h"
 
 #include <QApplication>
 #include <QTemporaryDir>
@@ -86,11 +86,12 @@ int main(int argc, char **argv)
 
         ScopedLogging scoped_logging(logging_settings);
 
-        // The settings of the user running the tests are none of their business, and Settings wipes
+        // The settings of the user running the tests are none of their business, and InstanceSettings wipes
         // the whole store when it sees an older version. The store goes to a directory of its own,
         // which is removed with the process.
         QTemporaryDir settings_dir;
-        Settings::setFilePathForTesting(settings_dir.filePath("settings.ini"));
+        InstanceSettings::setFilePathForTesting(settings_dir.filePath("settings.ini"));
+        QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, settings_dir.path());
 
         // The widgets under test are drawn into memory: the run needs no display and opens no
         // window on the machine it runs on.

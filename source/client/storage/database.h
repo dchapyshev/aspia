@@ -44,9 +44,22 @@ public:
     static Database& instance();
 
     static constexpr char kDirectoryName[] = "client";
-    static constexpr char kDefaultFileName[] = "default.db3";
 
+    static QString directoryPath();
     static QString filePath();
+
+    struct Info
+    {
+        QString id;
+        QString name;
+        bool auto_unlock = false;
+        bool has_password = true;
+    };
+
+    static QList<Info> list();
+    static void select(const QString& id);
+    static bool moveToTrash(const QString& id);
+    static bool remove(const QString& id);
 
     // Opens (creating when absent) the database at |file_path| and ensures the schema. instance()
     // opens the per-thread connection at filePath(); this entry exists so the tests can run every
@@ -54,6 +67,7 @@ public:
     bool open(const QString& file_path);
 
     bool isValid() const;
+    QString guid() const;
 
     enum class ReadResult { OK, INCOMPLETE, FAILED };
     Q_ENUM(ReadResult)
@@ -126,11 +140,9 @@ public:
                 const QList<CredentialConfig>& credentials,
                 const QList<ProfileConfig>& profiles);
 
-    // On failure the database is left as it was. A file already at |copy_path| is not overwritten.
-    bool saveCopyAndClearAll(const QString& copy_path);
-
     // Settings.
-    QString guid() const;
+    QString name() const;
+    bool setName(const QString& name);
 
     QString displayName() const;
     bool setDisplayName(const QString& name);
@@ -202,7 +214,7 @@ private:
     friend class DatabaseMigration;
     friend class DatabaseTestPeer;
 
-    static void setFilePathForTesting(const QString& file_path);
+    static void setDirectoryPathForTesting(const QString& dir_path);
     static bool createTables(SqlDatabase& db);
 
     bool openDatabase();
@@ -211,7 +223,6 @@ private:
     QString readSetting(const QString& name, bool* found = nullptr) const;
     bool writeSetting(const QString& name, const QString& value);
     bool ensureDefaultProfile();
-    bool ensureGuid();
     bool clearRouter();
 
     mutable SqlDatabase db_;

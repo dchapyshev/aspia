@@ -73,6 +73,7 @@
     <addaction name="separator"/>
     <addaction name="action_mcp_connector"/>
     <addaction name="separator"/>
+    <addaction name="action_change_database"/>
     <addaction name="action_lock"/>
     <addaction name="action_exit"/>
    </widget>
@@ -188,6 +189,15 @@
    </property>
    <property name="text">
     <string>MCP Connector</string>
+   </property>
+  </action>
+  <action name="action_change_database">
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/database.svg</normaloff>:/img/database.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Change Database...</string>
    </property>
   </action>
   <action name="action_lock">

@@ -48,7 +48,7 @@
 #include "client/desktop/management/local_group_widget.h"
 #include "client/router/router_controller.h"
 #include "client/storage/database.h"
-#include "client/storage/settings.h"
+#include "client/storage/instance_settings.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
@@ -146,7 +146,7 @@ Sidebar::Sidebar(QWidget* parent)
 
     // Create local root after the router so it appears at the bottom.
     local_root_ = new SidebarLocalGroup(local_root_data, tree_widget_);
-    local_root_->setExpanded(Settings().isLocalGroupExpanded(local_root_data.id()));
+    local_root_->setExpanded(InstanceSettings().isLocalGroupExpanded(local_root_data.id()));
 
     // Setup drag-and-drop.
     tree_widget_->setAcceptDrops(true);
@@ -201,7 +201,7 @@ bool Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
         return false;
     }
 
-    Settings settings;
+    InstanceSettings settings;
     bool result = true;
 
     for (const LocalGroupConfig& group : std::as_const(groups))
@@ -230,7 +230,7 @@ void Sidebar::reloadGroups(qint64 selected_group_id)
     if (!loadGroups(0, local_root_))
         MsgBox::warning(this, tr("Failed to read data. The list may be out of date."));
 
-    local_root_->setExpanded(Settings().isLocalGroupExpanded(0));
+    local_root_->setExpanded(InstanceSettings().isLocalGroupExpanded(0));
 
     // Find and select the requested group.
     QTreeWidgetItem* selected = nullptr;
@@ -358,7 +358,7 @@ void Sidebar::setRouterWorkspaces(const QList<RouterWorkspace>& workspaces)
         existing.insert(workspace_item->workspaceId(), workspace_item);
     }
 
-    Settings settings;
+    InstanceSettings settings;
     for (const RouterWorkspace& workspace : workspaces)
     {
         SidebarRouterWorkspace* item = existing.value(workspace.entry_id);
@@ -445,7 +445,7 @@ void Sidebar::setRouterHostGroups(qint64 workspace_id, const QList<RouterGroup>&
     };
     sweep(workspace_item);
 
-    Settings settings;
+    InstanceSettings settings;
     QSet<qint64> visited;
     std::function<void(qint64, QTreeWidgetItem*)> apply = [&](qint64 parent_id,
                                                               QTreeWidgetItem* tree_parent)
@@ -807,7 +807,7 @@ void Sidebar::onRemoveGroup()
         return;
     }
 
-    Settings().removeLocalGroupExpanded(group_id);
+    InstanceSettings().removeLocalGroupExpanded(group_id);
 
     reloadGroups(parent_id);
 }
@@ -934,17 +934,17 @@ void Sidebar::onItemExpanded(QTreeWidgetItem* item)
     SidebarItem* sidebar_item = static_cast<SidebarItem*>(item);
     if (sidebar_item->itemType() == SidebarItem::LOCAL_GROUP)
     {
-        Settings().setLocalGroupExpanded(sidebar_item->groupId(), true);
+        InstanceSettings().setLocalGroupExpanded(sidebar_item->groupId(), true);
     }
     else if (sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
     {
         auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
-        Settings().setWorkspaceExpanded(workspace_item->workspaceId(), true);
+        InstanceSettings().setWorkspaceExpanded(workspace_item->workspaceId(), true);
     }
     else if (sidebar_item->itemType() == SidebarItem::ROUTER_GROUP)
     {
         auto* group_item = static_cast<SidebarRouterGroup*>(sidebar_item);
-        Settings().setRouterGroupExpanded(group_item->groupId(), true);
+        InstanceSettings().setRouterGroupExpanded(group_item->groupId(), true);
     }
 }
 
@@ -956,17 +956,17 @@ void Sidebar::onItemCollapsed(QTreeWidgetItem* item)
     SidebarItem* sidebar_item = static_cast<SidebarItem*>(item);
     if (sidebar_item->itemType() == SidebarItem::LOCAL_GROUP)
     {
-        Settings().setLocalGroupExpanded(sidebar_item->groupId(), false);
+        InstanceSettings().setLocalGroupExpanded(sidebar_item->groupId(), false);
     }
     else if (sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
     {
         auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
-        Settings().setWorkspaceExpanded(workspace_item->workspaceId(), false);
+        InstanceSettings().setWorkspaceExpanded(workspace_item->workspaceId(), false);
     }
     else if (sidebar_item->itemType() == SidebarItem::ROUTER_GROUP)
     {
         auto* group_item = static_cast<SidebarRouterGroup*>(sidebar_item);
-        Settings().setRouterGroupExpanded(group_item->groupId(), false);
+        InstanceSettings().setRouterGroupExpanded(group_item->groupId(), false);
     }
 }
 

@@ -23,6 +23,7 @@
 #include <QFile>
 
 #include "base/logging.h"
+#include "client/storage/database.h"
 
 namespace {
 
@@ -55,9 +56,8 @@ QDateTime expiryTime(AutoBackup::Retention retention, const QDateTime& now)
 }
 
 //--------------------------------------------------------------------------------------------------
-void removeExpired(const QDir& dir, const QDateTime& expiry)
+void removeExpired(const QDir& dir, const QString& prefix, const QDateTime& expiry)
 {
-    const QString prefix(kFilePrefix);
     const QString suffix(kFileSuffix);
     const QStringList files = dir.entryList({ prefix + '*' + suffix }, QDir::Files);
 
@@ -97,14 +97,17 @@ Backup::Result AutoBackup::run(Database& db, const QString& directory, Retention
         return Backup::Result::FILE_ERROR;
     }
 
+    // The backups of every database may share a directory, so the name tells whose a backup is.
+    const QString prefix = QString(kFilePrefix) + db.guid().left(8) + '-';
+
     const QDateTime now = QDateTime::currentDateTime();
-    const QString file_name = kFilePrefix + now.toString(kTimeFormat) + kFileSuffix;
+    const QString file_name = prefix + now.toString(kTimeFormat) + kFileSuffix;
 
     const Backup::Result result = Backup::exportToFile(db, dir.filePath(file_name));
     if (result != Backup::Result::SUCCESS)
         return result;
 
     LOG(INFO) << "Backup written:" << dir.filePath(file_name);
-    removeExpired(dir, expiryTime(retention, now));
+    removeExpired(dir, prefix, expiryTime(retention, now));
     return result;
 }

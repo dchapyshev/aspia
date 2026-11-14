@@ -37,7 +37,7 @@ public:
 private:
     static bool build(const QString& old_file_path, const QString& dir_path);
     static bool buildDatabase(SqlDatabase& old_db, const QString& file_path, qint64 router_id,
-                              const QString& router_guid);
+                              const QString& name);
 
     DatabaseMigration() = delete;
     ~DatabaseMigration() = delete;

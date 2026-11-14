@@ -62,10 +62,10 @@ protected:
 
     QString backupDir() const { return dir_.filePath("backups"); }
 
-    // The name a backup made |days| ago carries.
-    static QString nameOfDaysAgo(int days)
+    // The name a backup of the database |id| made |days| ago carries.
+    static QString nameOfDaysAgo(int days, const QString& id = "book")
     {
-        return "client-" + QDateTime::currentDateTime().addDays(-days).toString("yyyy-MM-dd-HHmmss") +
+        return "client-" + id + '-' + QDateTime::currentDateTime().addDays(-days).toString("yyyy-MM-dd-HHmmss") +
                ".aspia-backup";
     }
 
@@ -97,7 +97,7 @@ TEST_F(AutoBackupTest, WritesABackupIntoANewDirectory)
 
     const QStringList names = files();
     ASSERT_EQ(names.size(), 1);
-    EXPECT_TRUE(names.front().startsWith("client-"));
+    EXPECT_TRUE(names.front().startsWith("client-book-"));
     EXPECT_TRUE(names.front().endsWith(".aspia-backup"));
 
     Database restored;
@@ -158,6 +158,23 @@ TEST_F(AutoBackupTest, FilesThatAreNotBackupsStay)
     EXPECT_TRUE(names.contains("client-notes.aspia-backup"));
     EXPECT_TRUE(names.contains("book.aspia-backup"));
     EXPECT_TRUE(names.contains("readme.txt"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(AutoBackupTest, BackupsOfAnotherDatabaseStay)
+{
+    addGroup();
+
+    const QString other = nameOfDaysAgo(30, "other");
+
+    createFile(other);
+    createFile(nameOfDaysAgo(30));
+
+    ASSERT_EQ(AutoBackup::run(db_, backupDir(), AutoBackup::Retention::ONE_WEEK), Backup::Result::SUCCESS);
+
+    const QStringList names = files();
+    EXPECT_EQ(names.size(), 2);
+    EXPECT_TRUE(names.contains(other));
 }
 
 //--------------------------------------------------------------------------------------------------

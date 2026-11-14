@@ -36,6 +36,7 @@
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
 #include "client/storage/database.h"
+#include "client/storage/user_settings.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 
@@ -45,7 +46,7 @@ const char kOldFileName[] = "client.db3";
 
 // The id of the router of the old file a database waits for. The row goes once the router is there.
 const char kSettingRouterId[] = "migration_router_id";
-const char kSettingGuid[] = "database_guid";
+const char kSettingName[] = "database_name";
 
 // How long a start waits for another one that migrates the same files.
 const int kLockTimeout = 30000;
@@ -236,9 +237,9 @@ bool readRouters(SqlDatabase& db, QList<OldRouter>* routers)
 // Everything of the old file that opens with any row, except the hosts of other routers.
 bool copyBook(SqlDatabase& from, SqlDatabase& to, qint64 router_id)
 {
-    // The guid of the database and the row naming the router are of the new file alone.
+    // The row naming the router is of the new file alone.
     if (!copyRows(from, to, "settings", { { "name", Kind::TEXT }, { "value", Kind::TEXT } },
-                  "\"name\" NOT IN ('database_guid', 'router', 'migration_router_id')"))
+                  "\"name\" NOT IN ('router', 'migration_router_id')"))
     {
         return false;
     }
@@ -528,24 +529,28 @@ bool DatabaseMigration::build(const QString& old_file_path, const QString& dir_p
     if (!readRouters(old_db, &routers))
         return false;
 
-    const QString default_path = dir_path + '/' + Database::kDefaultFileName;
-
     if (routers.isEmpty())
-        return buildDatabase(old_db, default_path, 0, QString());
+    {
+        const QString id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+        return buildDatabase(old_db, dir_path + '/' + id + ".db3", 0, QString("Database #1"));
+    }
 
     for (qsizetype i = 0; i < routers.size(); ++i)
     {
         const OldRouter& router = routers[i];
 
-        // A guid that is not one would make a poor file name, and the database gets a guid of its own.
-        QString name = router.guid;
-        if (!isValidGuid(name))
-            name = QUuid::createUuid().toString(QUuid::WithoutBraces);
+        // A guid that is not one would make a poor file name, so the database gets a new one.
+        QString id = router.guid;
+        if (!isValidGuid(id))
+            id = QUuid::createUuid().toString(QUuid::WithoutBraces);
 
-        const QString file_path = (i == 0) ? default_path : dir_path + '/' + name + ".db3";
+        const QString name = QString("Database #%1").arg(i + 1);
 
-        if (!buildDatabase(old_db, file_path, router.id, router.guid))
+        if (!buildDatabase(old_db, dir_path + '/' + id + ".db3", router.id, name))
             return false;
+
+        if (i == 0)
+            UserSettings().setLastDatabase(id);
     }
 
     return true;
@@ -554,7 +559,7 @@ bool DatabaseMigration::build(const QString& old_file_path, const QString& dir_p
 //--------------------------------------------------------------------------------------------------
 // static
 bool DatabaseMigration::buildDatabase(SqlDatabase& old_db, const QString& file_path, qint64 router_id,
-                                      const QString& router_guid)
+                                      const QString& name)
 {
     SqlDatabase db;
     if (!db.open(file_path))
@@ -573,15 +578,11 @@ bool DatabaseMigration::buildDatabase(SqlDatabase& old_db, const QString& file_p
     if (!copyBook(old_db, db, router_id))
         return false;
 
-    if (router_id != 0)
-    {
-        // The history of the chats with the hosts of the router is kept under the guid it had.
-        if (isValidGuid(router_guid) && !writeSetting(db, kSettingGuid, router_guid))
-            return false;
+    if (!writeSetting(db, kSettingName, name))
+        return false;
 
-        if (!writeSetting(db, kSettingRouterId, QString::number(router_id)))
-            return false;
-    }
+    if (router_id != 0 && !writeSetting(db, kSettingRouterId, QString::number(router_id)))
+        return false;
 
     return transaction.commit();
 }

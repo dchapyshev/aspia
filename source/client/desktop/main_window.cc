@@ -54,7 +54,7 @@
 #include "client/desktop/terminal/terminal_window.h"
 #include "client/mcp/mcp_worker.h"
 #include "client/storage/database.h"
-#include "client/storage/settings.h"
+#include "client/storage/instance_settings.h"
 #include "client/storage/system_settings.h"
 #include "client/workers/update_worker.h"
 #include "common/desktop/about_dialog.h"
@@ -106,9 +106,14 @@ MainWindow::MainWindow(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
 
-    Settings settings;
+    InstanceSettings settings;
 
     ui->setupUi(this);
+
+    const QString database_name = Database::instance().name();
+    if (!database_name.isEmpty() && Database::list().size() > 1)
+        setWindowTitle(QString("%1 - %2").arg(database_name, windowTitle()));
+
     window_title_ = windowTitle();
 
     connect(ui->tabs->tabBar(), &TabBar::sig_tabDetachRequested, this, &MainWindow::onTabDetachRequested);
@@ -154,6 +159,7 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui->action_mcp_connector, &QAction::toggled, this, &MainWindow::onMcpConnector);
     connect(ui->action_help, &QAction::triggered, this, &MainWindow::onHelp);
     connect(ui->action_about, &QAction::triggered, this, &MainWindow::onAbout);
+    connect(ui->action_change_database, &QAction::triggered, this, &MainWindow::onChangeDatabase);
     connect(ui->action_lock, &QAction::triggered, this, &MainWindow::onLock);
     connect(ui->action_exit, &QAction::triggered, this, &MainWindow::close);
     connect(ui->toolbar, &QToolBar::visibilityChanged, ui->action_toolbar, &QAction::setChecked);
@@ -205,9 +211,12 @@ MainWindow::MainWindow(QWidget* parent)
     ui->action_mcp_connector->setVisible(mcp_controller_ != nullptr);
     if (mcp_controller_)
     {
-        connect(mcp_controller_, &McpController::sig_enableFailed, this, [this]()
+        connect(mcp_controller_, &McpController::sig_enableFailed, this, [this](bool busy)
         {
-            MsgBox::warning(this, tr("Unable to turn on the MCP connector."));
+            if (busy)
+                MsgBox::warning(this, tr("The MCP connector is already in use by another window of the application."));
+            else
+                MsgBox::warning(this, tr("Unable to turn on the MCP connector."));
 
             QSignalBlocker blocker(ui->action_mcp_connector);
             ui->action_mcp_connector->setChecked(false);
@@ -508,6 +517,27 @@ void MainWindow::onSettings()
 }
 
 //--------------------------------------------------------------------------------------------------
+void MainWindow::onChangeDatabase()
+{
+    LOG(INFO) << "[ACTION] Change database clicked";
+
+    if (hasSessions())
+    {
+        MsgBox::information(this, tr("Close all sessions to change the database."));
+        return;
+    }
+
+    if (AppLock::hasOpenDialogs())
+    {
+        MsgBox::information(this, tr("Close all dialogs to change the database."));
+        return;
+    }
+
+    saveWindowState();
+    emit sig_changeDatabaseRequested();
+}
+
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onLock()
 {
     LOG(INFO) << "[ACTION] Lock clicked";
@@ -584,7 +614,7 @@ void MainWindow::onCloseTab(int index)
         active_tab_ = nullptr;
     }
 
-    Settings settings;
+    InstanceSettings settings;
     settings.setTabState(tab->objectName(), tab->saveState());
 
     ui->tabs->removeTab(index);
@@ -900,7 +930,7 @@ void MainWindow::onLockRequested()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::saveWindowState()
 {
-    Settings settings;
+    InstanceSettings settings;
     settings.setWindowGeometry(saveGeometry());
     settings.setWindowState(saveState());
     settings.setToolBarEnabled(ui->action_toolbar->isChecked());
@@ -925,7 +955,7 @@ void MainWindow::addTab(Tab* tab, const QString& title, const QIcon& icon)
     if (!tab->isClosable())
         hideCloseButtonForTab(index);
 
-    Settings settings;
+    InstanceSettings settings;
     tab->restoreState(settings.tabState(tab->objectName()));
 
     connect(tab, &Tab::sig_titleChanged, this, [this, tab](const QString& new_title)

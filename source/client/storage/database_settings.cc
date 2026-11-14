@@ -18,6 +18,8 @@
 
 #include "client/storage/database.h"
 
+#include <QDir>
+#include <QFileInfo>
 #include <QStandardPaths>
 #include <QUuid>
 
@@ -29,7 +31,7 @@
 
 namespace {
 
-constexpr auto kSettingGuid          = "database_guid";
+constexpr auto kSettingName          = "database_name";
 constexpr auto kSettingDisplayName   = "display_name";
 constexpr auto kSettingConfirmClose  = "confirm_close";
 constexpr auto kSettingCheckUpdates  = "check_updates";
@@ -52,9 +54,74 @@ constexpr auto kSettingAutoUnlock    = "auto_unlock";
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-QString Database::guid() const
+// static
+QList<Database::Info> Database::list()
 {
-    return readSetting(kSettingGuid);
+    QList<Info> result;
+
+    const QString dir_path = directoryPath();
+    if (dir_path.isEmpty())
+        return result;
+
+    const QDir dir(dir_path);
+    const QStringList file_names = dir.entryList({ "*.db3" }, QDir::Files, QDir::Name);
+
+    for (const QString& file_name : file_names)
+    {
+        const QString id = QFileInfo(file_name).completeBaseName();
+        if (QUuid::fromString(id).toString(QUuid::WithoutBraces) != id)
+            continue;
+
+        Info& info = result.emplaceBack();
+        info.id = id;
+
+        const QString file_path = dir.filePath(file_name);
+
+        SqlDatabase db;
+        if (db.open(file_path, SqlDatabase::OpenMode::READ_ONLY))
+        {
+            SqlQuery query(db, "SELECT name, value FROM settings WHERE name IN (?, ?, ?)");
+            query.addText(std::string_view(kSettingName));
+            query.addText(std::string_view(kSettingAutoUnlock));
+            query.addText(std::string_view(kSettingVerifier));
+
+            bool has_password = false;
+
+            SqlQuery::StepResult step = query.next();
+            while (step == SqlQuery::StepResult::ROW)
+            {
+                const std::string_view name = query.columnTextView(0);
+
+                if (name == kSettingName)
+                    info.name = query.columnText(1);
+                else if (name == kSettingAutoUnlock)
+                    info.auto_unlock = !query.columnTextView(1).empty();
+                else
+                    has_password = !query.columnTextView(1).empty();
+
+                step = query.next();
+            }
+
+            if (step == SqlQuery::StepResult::FAILED)
+                LOG(ERROR) << "Unable to read" << file_path << ":" << db.lastError();
+            else
+                info.has_password = has_password;
+        }
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Database::name() const
+{
+    return readSetting(kSettingName);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setName(const QString& name)
+{
+    return writeSetting(kSettingName, name);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -372,13 +439,4 @@ bool Database::writeSetting(const QString& name, const QString& value)
     }
 
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::ensureGuid()
-{
-    if (!guid().isEmpty())
-        return true;
-
-    return writeSetting(kSettingGuid, QUuid::createUuid().toString(QUuid::WithoutBraces));
 }

@@ -62,6 +62,7 @@ public slots:
 signals:
     // The state of the window is saved by then, and the window is expected to be destroyed.
     void sig_lockRequested();
+    void sig_changeDatabaseRequested();
 
 protected:
     // QMainWindow implementation.
@@ -86,6 +87,7 @@ private slots:
     void onQuickConnect();
     void onCredentials();
     void onSettings();
+    void onChangeDatabase();
     void onLock();
     void onHelp();
     void onAbout();

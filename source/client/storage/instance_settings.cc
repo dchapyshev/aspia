@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/storage/settings.h"
+#include "client/storage/instance_settings.h"
 
-#include <QLocale>
+#include <QFile>
 #include <QVersionNumber>
 
 #include <mutex>
@@ -31,13 +31,11 @@
 namespace {
 
 QString g_test_file_path;
+QString g_selected_id;
 
 const QString kDirectoryName = "client";
-const QString kFileName = "default.ini";
 
 const QString kVersionParam = "version";
-const QString kLocaleParam = "locale";
-const QString kThemeParam = "theme";
 const QString kSessionTypeParam = "session_type";
 const QString kOneTimePasswordCheckedParam = "one_time_password_checked";
 const QString kQuickConnectStateParam = "quick_connect_state";
@@ -75,7 +73,7 @@ void writeExpanded(QSettings& settings, const QString& key, bool expanded, bool 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Settings::Settings()
+InstanceSettings::InstanceSettings()
     : settings_(filePath(), QSettings::IniFormat)
 {
     static std::once_flag version_check_flag;
@@ -94,233 +92,227 @@ Settings::Settings()
 }
 
 //--------------------------------------------------------------------------------------------------
-Settings::~Settings()
+InstanceSettings::~InstanceSettings()
 {
     settings_.setValue(kVersionParam, QString::fromLatin1(ASPIA_VERSION_SHORT_STRING));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString Settings::filePath()
+void InstanceSettings::select(const QString& id)
+{
+    g_selected_id = id;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void InstanceSettings::remove(const QString& id)
+{
+    const QString dir_path = BasePaths::appUserDataDir();
+    if (dir_path.isEmpty() || id.isEmpty())
+        return;
+
+    QFile::remove(dir_path + '/' + kDirectoryName + '/' + id + ".ini");
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString InstanceSettings::filePath()
 {
     if (!g_test_file_path.isEmpty())
         return g_test_file_path;
 
     const QString dir_path = BasePaths::appUserDataDir();
-    if (dir_path.isEmpty())
+    if (dir_path.isEmpty() || g_selected_id.isEmpty())
         return QString();
 
-    return dir_path + '/' + kDirectoryName + '/' + kFileName;
+    return dir_path + '/' + kDirectoryName + '/' + g_selected_id + ".ini";
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-void Settings::setFilePathForTesting(const QString& file_path)
+void InstanceSettings::setFilePathForTesting(const QString& file_path)
 {
     g_test_file_path = file_path;
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Settings::locale() const
-{
-    return settings_.value(kLocaleParam, QLocale::system().bcp47Name()).toString();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setLocale(const QString& locale)
-{
-    settings_.setValue(kLocaleParam, locale);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString Settings::theme() const
-{
-    return settings_.value(kThemeParam, "auto").toString();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setTheme(const QString& theme)
-{
-    settings_.setValue(kThemeParam, theme);
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::peer::SessionType Settings::sessionType() const
+proto::peer::SessionType InstanceSettings::sessionType() const
 {
     return static_cast<proto::peer::SessionType>(
         settings_.value(kSessionTypeParam, proto::peer::SESSION_TYPE_DESKTOP).toUInt());
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setSessionType(proto::peer::SessionType session_type)
+void InstanceSettings::setSessionType(proto::peer::SessionType session_type)
 {
     settings_.setValue(kSessionTypeParam, static_cast<quint32>(session_type));
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::isOneTimePasswordChecked() const
+bool InstanceSettings::isOneTimePasswordChecked() const
 {
     return settings_.value(kOneTimePasswordCheckedParam, false).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setOneTimePasswordChecked(bool check)
+void InstanceSettings::setOneTimePasswordChecked(bool check)
 {
     settings_.setValue(kOneTimePasswordCheckedParam, check);
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray Settings::quickConnectState() const
+QByteArray InstanceSettings::quickConnectState() const
 {
     return settings_.value(kQuickConnectStateParam).toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setQuickConnectState(const QByteArray& state)
+void InstanceSettings::setQuickConnectState(const QByteArray& state)
 {
     settings_.setValue(kQuickConnectStateParam, state);
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray Settings::windowGeometry() const
+QByteArray InstanceSettings::windowGeometry() const
 {
     return settings_.value(kWindowGeometryParam).toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setWindowGeometry(const QByteArray& geometry)
+void InstanceSettings::setWindowGeometry(const QByteArray& geometry)
 {
     settings_.setValue(kWindowGeometryParam, geometry);
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray Settings::windowState() const
+QByteArray InstanceSettings::windowState() const
 {
     return settings_.value(kWindowStateParam).toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setWindowState(const QByteArray& state)
+void InstanceSettings::setWindowState(const QByteArray& state)
 {
     settings_.setValue(kWindowStateParam, state);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::largeIcons() const
+bool InstanceSettings::largeIcons() const
 {
     return settings_.value(kLargeIconsParam).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setLargeIcons(bool enable)
+void InstanceSettings::setLargeIcons(bool enable)
 {
     settings_.setValue(kLargeIconsParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::isToolBarEnabled() const
+bool InstanceSettings::isToolBarEnabled() const
 {
     return settings_.value(kToolbarParam, true).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setToolBarEnabled(bool enable)
+void InstanceSettings::setToolBarEnabled(bool enable)
 {
     settings_.setValue(kToolbarParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::isSearchFieldEnabled() const
+bool InstanceSettings::isSearchFieldEnabled() const
 {
     return settings_.value(kSearchFieldParam, true).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setSearchFieldEnabled(bool enable)
+void InstanceSettings::setSearchFieldEnabled(bool enable)
 {
     settings_.setValue(kSearchFieldParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::isOnlineCheckEnabled() const
+bool InstanceSettings::isOnlineCheckEnabled() const
 {
     return settings_.value(kOnlineCheckParam, true).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setOnlineCheckEnabled(bool enable)
+void InstanceSettings::setOnlineCheckEnabled(bool enable)
 {
     settings_.setValue(kOnlineCheckParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::alwaysOnTop() const
+bool InstanceSettings::alwaysOnTop() const
 {
     return settings_.value(kAlwaysOnTopParam, false).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setAlwaysOnTop(bool enable)
+void InstanceSettings::setAlwaysOnTop(bool enable)
 {
     settings_.setValue(kAlwaysOnTopParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::openSessionsInTabs() const
+bool InstanceSettings::openSessionsInTabs() const
 {
     return settings_.value(kOpenSessionsInTabsParam, true).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setOpenSessionsInTabs(bool enable)
+void InstanceSettings::setOpenSessionsInTabs(bool enable)
 {
     settings_.setValue(kOpenSessionsInTabsParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Settings::lastDirectory() const
+QString InstanceSettings::lastDirectory() const
 {
     return settings_.value(kLastDirectoryParam).toString();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setLastDirectory(const QString& path)
+void InstanceSettings::setLastDirectory(const QString& path)
 {
     settings_.setValue(kLastDirectoryParam, path);
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray Settings::tabState(const QString& name) const
+QByteArray InstanceSettings::tabState(const QString& name) const
 {
     return settings_.value(kTabStateParam + "/" + name).toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setTabState(const QString& name, const QByteArray& state)
+void InstanceSettings::setTabState(const QString& name, const QByteArray& state)
 {
     settings_.setValue(kTabStateParam + "/" + name, state);
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray Settings::dialogGeometry(const QString& name) const
+QByteArray InstanceSettings::dialogGeometry(const QString& name) const
 {
     return settings_.value(kDialogGeometryParam + "/" + name).toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setDialogGeometry(const QString& name, const QByteArray& geometry)
+void InstanceSettings::setDialogGeometry(const QString& name, const QByteArray& geometry)
 {
     settings_.setValue(kDialogGeometryParam + "/" + name, geometry);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::isLocalGroupExpanded(qint64 group_id) const
+bool InstanceSettings::isLocalGroupExpanded(qint64 group_id) const
 {
     return settings_.value(kLocalGroupExpandedParam + "/" + QString::number(group_id), true).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setLocalGroupExpanded(qint64 group_id, bool expanded)
+void InstanceSettings::setLocalGroupExpanded(qint64 group_id, bool expanded)
 {
     QString key = kLocalGroupExpandedParam + "/" + QString::number(group_id);
 
@@ -332,31 +324,31 @@ void Settings::setLocalGroupExpanded(qint64 group_id, bool expanded)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::removeLocalGroupExpanded(qint64 group_id)
+void InstanceSettings::removeLocalGroupExpanded(qint64 group_id)
 {
     settings_.remove(kLocalGroupExpandedParam + "/" + QString::number(group_id));
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::isWorkspaceExpanded(qint64 workspace_id) const
+bool InstanceSettings::isWorkspaceExpanded(qint64 workspace_id) const
 {
     return settings_.value(scopedKey(kWorkspaceExpandedParam, workspace_id), false).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setWorkspaceExpanded(qint64 workspace_id, bool expanded)
+void InstanceSettings::setWorkspaceExpanded(qint64 workspace_id, bool expanded)
 {
     writeExpanded(settings_, scopedKey(kWorkspaceExpandedParam, workspace_id), expanded, false);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::isRouterGroupExpanded(qint64 group_id) const
+bool InstanceSettings::isRouterGroupExpanded(qint64 group_id) const
 {
     return settings_.value(scopedKey(kRouterGroupExpandedParam, group_id), true).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setRouterGroupExpanded(qint64 group_id, bool expanded)
+void InstanceSettings::setRouterGroupExpanded(qint64 group_id, bool expanded)
 {
     writeExpanded(settings_, scopedKey(kRouterGroupExpandedParam, group_id), expanded, true);
 }

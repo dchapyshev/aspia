@@ -26,6 +26,8 @@
 
 class MainWindow;
 class QTimer;
+class QWidget;
+class SecureString;
 
 // Asks for the lock of the application when the user has not touched it for the time set in the
 // settings.
@@ -34,14 +36,18 @@ class AppLock final : public QObject
     Q_OBJECT
 
 public:
-    enum class Result { UNLOCKED, RESET, CANCELLED, FAILED };
+    enum class Result { UNLOCKED, CANCELLED };
 
     explicit AppLock(MainWindow* main_window);
     ~AppLock() final;
 
-    // Asks the master password until the user enters the right one, resets the database or gives up.
-    // The reset is offered only when |reset_allowed|. After a reset the database has no master password.
-    static Result unlock(bool reset_allowed);
+    // Shows the unlock dialog. At the |startup| the user chooses the database, later the dialog asks
+    // for the one already open.
+    static Result unlock(bool startup);
+
+    // Tells the user what is wrong with |password| as a new master password. Returns false when
+    // another one has to be entered.
+    static bool checkNewPassword(QWidget* parent, const SecureString& password);
 
     // A dialog, a message box, a menu or a file dialog is on the screen. The window can not be
     // destroyed under them.

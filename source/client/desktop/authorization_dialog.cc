@@ -27,7 +27,7 @@
 #include "base/time_types.h"
 #include "base/crypto/secure_string.h"
 #include "client/desktop/ui_authorization_dialog.h"
-#include "client/storage/settings.h"
+#include "client/storage/instance_settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/password_edit.h"
 
@@ -35,7 +35,7 @@
 AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::AuthorizationDialog>()),
-      one_time_password_choice_(Settings().isOneTimePasswordChecked())
+      one_time_password_choice_(InstanceSettings().isOneTimePasswordChecked())
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
@@ -63,7 +63,7 @@ AuthorizationDialog::~AuthorizationDialog()
 {
     LOG(INFO) << "Dtor";
 
-    Settings settings;
+    InstanceSettings settings;
     settings.setOneTimePasswordChecked(one_time_password_choice_);
 }
 

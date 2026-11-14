@@ -19,6 +19,8 @@
 #ifndef CLIENT_ROUTER_ROUTER_TEST_FIXTURE_H
 #define CLIENT_ROUTER_ROUTER_TEST_FIXTURE_H
 
+#include <QFileInfo>
+
 #include <gtest/gtest.h>
 
 #include "base/peer/host_id.h"
@@ -30,7 +32,13 @@
 class DatabaseTestPeer
 {
 public:
-    static void setFilePath(const QString& file_path) { Database::setFilePathForTesting(file_path); }
+    static void setFilePath(const QString& file_path)
+    {
+        const QFileInfo file_info(file_path);
+
+        Database::setDirectoryPathForTesting(file_info.absolutePath());
+        Database::select(file_info.completeBaseName());
+    }
 };
 
 // The account a router session runs on and the canned replies of the router.

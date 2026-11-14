@@ -34,7 +34,9 @@
 #include "base/crypto/secure_byte_array.h"
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
+#include "client/router/router_test_fixture.h"
 #include "client/storage/database.h"
+#include "client/storage/user_settings.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 
@@ -105,7 +107,7 @@ protected:
         dir_path_ = dir_.filePath("client");
     }
 
-    QString defaultPath() const { return dir_path_ + '/' + Database::kDefaultFileName; }
+    QString firstPath() const { return dir_path_ + '/' + kFirstGuid + ".db3"; }
 
     // The tables of the address book the way a release created them.
     void createOldBook(Schema schema)
@@ -272,7 +274,7 @@ protected:
         ASSERT_EQ(DatabaseMigration::migrate(old_path_, dir_path_), DatabaseMigration::Result::DONE);
 
         Database db;
-        ASSERT_TRUE(db.open(defaultPath()));
+        ASSERT_TRUE(db.open(firstPath()));
         ASSERT_TRUE(DatabaseMigration::finish(db, old_path_));
 
         EXPECT_EQ(db.guid(), QString(kFirstGuid));
@@ -361,9 +363,8 @@ TEST_F(DatabaseMigrationTest, BookWithProfilesIsMigrated)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The first router takes the default database and every other one a database named by its guid. A
-// direct host is in each of them, a host of a router in the database of its router only, and a host
-// of a router that is gone in none.
+// Every router takes a database named by its guid. A direct host is in each of them, a host of a
+// router in the database of its router only, and a host of a router that is gone in none.
 TEST_F(DatabaseMigrationTest, EveryRouterGetsADatabaseOfItsOwn)
 {
     createOldBook(Schema::DEV);
@@ -383,7 +384,7 @@ TEST_F(DatabaseMigrationTest, EveryRouterGetsADatabaseOfItsOwn)
     EXPECT_EQ(QDir(dir_path_).entryList(QDir::Files).size(), 2);
 
     Database first;
-    ASSERT_TRUE(first.open(defaultPath()));
+    ASSERT_TRUE(first.open(firstPath()));
     EXPECT_EQ(first.guid(), QString(kFirstGuid));
     EXPECT_EQ(first.displayName(), QString("operator"));
     EXPECT_EQ(hostNames(first), QSet<QString>({ "direct", "first-host" }));
@@ -406,6 +407,39 @@ TEST_F(DatabaseMigrationTest, EveryRouterGetsADatabaseOfItsOwn)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST_F(DatabaseMigrationTest, DatabasesAreNumberedInTheOrderOfTheirRouters)
+{
+    createOldBook(Schema::V3_3_4);
+    addOldRouter(2, "second", kSecondGuid);
+    addOldRouter(1, "first", kFirstGuid);
+    closeOldBook();
+
+    ASSERT_EQ(DatabaseMigration::migrate(old_path_, dir_path_), DatabaseMigration::Result::DONE);
+
+    Database first;
+    ASSERT_TRUE(first.open(firstPath()));
+    EXPECT_EQ(first.name(), QString("Database #1"));
+
+    Database second;
+    ASSERT_TRUE(second.open(dir_path_ + '/' + kSecondGuid + ".db3"));
+    EXPECT_EQ(second.name(), QString("Database #2"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The database of the first router is the one a start without a choice opens.
+TEST_F(DatabaseMigrationTest, DatabaseOfTheFirstRouterIsTheLastOpened)
+{
+    createOldBook(Schema::V3_3_4);
+    addOldRouter(2, "second", kFirstGuid);
+    addOldRouter(1, "first", kSecondGuid);
+    closeOldBook();
+
+    ASSERT_EQ(DatabaseMigration::migrate(old_path_, dir_path_), DatabaseMigration::Result::DONE);
+
+    EXPECT_EQ(UserSettings().lastDatabase(), QString(kSecondGuid));
+}
+
+//--------------------------------------------------------------------------------------------------
 // The router is written once. A database that got it no longer waits, and a start after that leaves
 // whatever the user changed alone.
 TEST_F(DatabaseMigrationTest, RouterIsMovedOnce)
@@ -417,7 +451,7 @@ TEST_F(DatabaseMigrationTest, RouterIsMovedOnce)
     ASSERT_EQ(DatabaseMigration::migrate(old_path_, dir_path_), DatabaseMigration::Result::DONE);
 
     Database db;
-    ASSERT_TRUE(db.open(defaultPath()));
+    ASSERT_TRUE(db.open(firstPath()));
 
     RouterConfig router;
     EXPECT_EQ(db.routerConfig(&router), Database::FindResult::NOT_FOUND);
@@ -445,7 +479,7 @@ TEST_F(DatabaseMigrationTest, RouterWaitsForTheOldFile)
     ASSERT_EQ(DatabaseMigration::migrate(old_path_, dir_path_), DatabaseMigration::Result::DONE);
 
     Database db;
-    ASSERT_TRUE(db.open(defaultPath()));
+    ASSERT_TRUE(db.open(firstPath()));
 
     const QString away_path = old_path_ + ".away";
     ASSERT_TRUE(QFile::rename(old_path_, away_path));
@@ -478,7 +512,7 @@ TEST_F(DatabaseMigrationTest, RouterThatDoesNotOpenIsNotMoved)
     ASSERT_EQ(DatabaseMigration::migrate(old_path_, dir_path_), DatabaseMigration::Result::DONE);
 
     Database db;
-    ASSERT_TRUE(db.open(defaultPath()));
+    ASSERT_TRUE(db.open(firstPath()));
     ASSERT_TRUE(DatabaseMigration::finish(db, old_path_));
 
     RouterConfig router;
@@ -507,13 +541,15 @@ TEST_F(DatabaseMigrationTest, BookWithoutRoutersGivesOneDatabase)
     closeOldBook();
 
     ASSERT_EQ(DatabaseMigration::migrate(old_path_, dir_path_), DatabaseMigration::Result::DONE);
-    EXPECT_EQ(QDir(dir_path_).entryList(QDir::Files), QStringList({ Database::kDefaultFileName }));
+    const QStringList file_names = QDir(dir_path_).entryList(QDir::Files);
+    ASSERT_EQ(file_names.size(), 1);
 
     Database db;
-    ASSERT_TRUE(db.open(defaultPath()));
+    ASSERT_TRUE(db.open(dir_path_ + '/' + file_names.front()));
     ASSERT_TRUE(DatabaseMigration::finish(db, old_path_));
 
     EXPECT_FALSE(db.guid().isEmpty());
+    EXPECT_EQ(db.name(), QString("Database #1"));
     EXPECT_EQ(hostNames(db), QSet<QString>({ "direct" }));
 
     RouterConfig router;
@@ -536,7 +572,7 @@ TEST_F(DatabaseMigrationTest, OldFileIsOnlyRead)
 
     {
         Database db;
-        ASSERT_TRUE(db.open(defaultPath()));
+        ASSERT_TRUE(db.open(firstPath()));
         ASSERT_TRUE(DatabaseMigration::finish(db, old_path_));
     }
 

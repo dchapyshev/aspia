@@ -54,8 +54,8 @@
 #include "client/desktop/update_server_dialog.h"
 #include "client/storage/database.h"
 #include "client/storage/master_password.h"
-#include "client/storage/settings.h"
 #include "client/storage/system_settings.h"
+#include "client/storage/user_settings.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/elevate_util.h"
 #include "common/desktop/msg_box.h"
@@ -116,7 +116,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    Settings settings;
+    UserSettings settings;
     Database& db = Database::instance();
 
     category_group_ = new QButtonGroup(this);
@@ -513,7 +513,7 @@ void SettingsTab::onSaveGeneral()
         return;
 
     Database& db = Database::instance();
-    Settings settings;
+    UserSettings settings;
 
     const QString locale = ui->combo_language->currentData().toString();
     const bool locale_changed = locale != settings.locale();

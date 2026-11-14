@@ -123,7 +123,7 @@ void McpController::setEnabled(bool enable)
     if (!mcp_worker_)
     {
         if (enable)
-            emit sig_enableFailed();
+            emit sig_enableFailed(false);
         return;
     }
 

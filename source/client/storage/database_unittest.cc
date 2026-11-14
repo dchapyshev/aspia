@@ -749,19 +749,103 @@ TEST_F(DatabaseTest, TwoLocalHostsDoNotShareOneGuid)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST_F(DatabaseTest, DatabaseGetsAGuidOfItsOwn)
+TEST_F(DatabaseTest, DatabaseIsIdentifiedByTheNameOfItsFile)
 {
-    const QString guid = db_.guid();
-    ASSERT_FALSE(guid.isEmpty());
+    EXPECT_EQ(db_.guid(), QString("client"));
+
+    const QString guid = "7b0f1d18-0e3a-4a0e-9a4e-2a1c6a0f0c11";
+
+    Database other;
+    ASSERT_TRUE(other.open(QFileInfo(file_path_).absolutePath() + '/' + guid + ".db3"));
+    EXPECT_EQ(other.guid(), guid);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(DatabaseTest, DatabaseHasNoNameUntilItIsGiven)
+{
+    EXPECT_TRUE(db_.name().isEmpty());
+    ASSERT_TRUE(db_.setName("Office"));
 
     Database reopened;
     ASSERT_TRUE(reopened.open(file_path_));
-    EXPECT_EQ(reopened.guid(), guid);
+    EXPECT_EQ(reopened.name(), QString("Office"));
+}
 
-    Database other;
-    ASSERT_TRUE(other.open(QFileInfo(file_path_).absolutePath() + "/other.db3"));
-    EXPECT_FALSE(other.guid().isEmpty());
-    EXPECT_NE(other.guid(), guid);
+//--------------------------------------------------------------------------------------------------
+// Only the files named by a guid are databases, and the list tells them apart before any is unlocked.
+TEST_F(DatabaseTest, DatabasesOfTheDirectoryAreListed)
+{
+    const QDir dir = QFileInfo(file_path_).dir();
+
+    const QString first_id = "11111111-1111-4111-8111-111111111111";
+    const QString damaged_id = "22222222-2222-4222-8222-222222222222";
+    const QString second_id = "33333333-3333-4333-8333-333333333333";
+
+    Database first;
+    ASSERT_TRUE(first.open(dir.filePath(first_id + ".db3")));
+    ASSERT_TRUE(first.setName("First"));
+
+    Database second;
+    ASSERT_TRUE(second.open(dir.filePath(second_id + ".db3")));
+    ASSERT_TRUE(second.setName("Second"));
+    ASSERT_TRUE(second.setAutoUnlockBlob("blob"));
+    ASSERT_TRUE(second.reencryptAll({}, {}, {}, {}, ProxyConfig(), "salt", "verifier", 1));
+
+    for (const QString& file_name : { QString(damaged_id + ".db3"), QString("notes.db3"), QString("notes.txt") })
+    {
+        QFile file(dir.filePath(file_name));
+        ASSERT_TRUE(file.open(QIODevice::WriteOnly));
+        ASSERT_EQ(file.write("data"), 4);
+    }
+
+    DatabaseTestPeer::setFilePath(file_path_);
+
+    const QList<Database::Info> list = Database::list();
+    ASSERT_EQ(list.size(), 3);
+
+    EXPECT_EQ(list[0].id, first_id);
+    EXPECT_EQ(list[0].name, QString("First"));
+    EXPECT_FALSE(list[0].auto_unlock);
+    EXPECT_FALSE(list[0].has_password);
+
+    EXPECT_EQ(list[1].id, damaged_id);
+    EXPECT_TRUE(list[1].name.isEmpty());
+    EXPECT_TRUE(list[1].has_password);
+
+    EXPECT_EQ(list[2].id, second_id);
+    EXPECT_EQ(list[2].name, QString("Second"));
+    EXPECT_TRUE(list[2].auto_unlock);
+    EXPECT_TRUE(list[2].has_password);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(DatabaseTest, RemovedDatabaseIsNoLongerListed)
+{
+    const QString id = "11111111-1111-4111-8111-111111111111";
+    const QString file_path = QFileInfo(file_path_).dir().filePath(id + ".db3");
+
+    DatabaseTestPeer::setFilePath(file_path);
+    ASSERT_TRUE(Database::instance().setName("First"));
+    ASSERT_EQ(Database::list().size(), 1);
+
+    ASSERT_TRUE(Database::remove(id));
+    EXPECT_FALSE(QFileInfo::exists(file_path));
+    EXPECT_TRUE(Database::list().isEmpty());
+    EXPECT_TRUE(Database::filePath().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(DatabaseTest, ConnectionFollowsTheSelectedDatabase)
+{
+    DatabaseTestPeer::setFilePath(file_path_);
+    ASSERT_TRUE(Database::instance().setName("First"));
+
+    Database::select("other");
+    EXPECT_EQ(Database::filePath(), QFileInfo(file_path_).dir().filePath("other.db3"));
+    EXPECT_TRUE(Database::instance().name().isEmpty());
+
+    Database::select("client");
+    EXPECT_EQ(Database::instance().name(), QString("First"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3018,72 +3102,4 @@ TEST_F(DatabaseTest, AutoUnlockIsTurnedOffOnlyByAKeyThatDoesNotFit)
 
     // Closes the file before the directory goes.
     DatabaseTestPeer::setFilePath(file_path);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A reset leaves the database empty and without the master password, and what it held stays in a
-// copy next to it.
-TEST_F(DatabaseTest, ResetKeepsWhatTheDatabaseHeldInACopy)
-{
-    ASSERT_TRUE(db_.reencryptAll({}, {}, {}, {}, ProxyConfig(), "salt", "verifier", 1));
-    ASSERT_TRUE(db_.setLockTimeout(Minutes(5)));
-
-    addHost("Host", addGroup("Group", 0));
-    addRouterHost(1, "user", "password");
-    addCredential("Credential", "user", "password");
-    addProfile("Profile");
-
-    const QString copy_path = QFileInfo(file_path_).dir().filePath("copy.db3");
-    ASSERT_TRUE(db_.saveCopyAndClearAll(copy_path));
-
-    EXPECT_FALSE(db_.isMasterPasswordSet());
-    EXPECT_EQ(db_.lockTimeout(), Minutes::zero());
-    EXPECT_TRUE(allLocalGroups().isEmpty());
-    EXPECT_TRUE(allLocalHosts().isEmpty());
-    EXPECT_FALSE(findRouter(db_).has_value());
-    EXPECT_TRUE(allRouterHosts().isEmpty());
-    EXPECT_TRUE(credentialList().isEmpty());
-    EXPECT_TRUE(profileList().isEmpty());
-
-    Database copy;
-    ASSERT_TRUE(copy.open(copy_path));
-    EXPECT_TRUE(copy.isMasterPasswordSet());
-    EXPECT_EQ(copy.lockTimeout(), Minutes(5));
-
-    QList<LocalHostConfig> hosts;
-    ASSERT_EQ(copy.allLocalHosts(&hosts), Database::ReadResult::OK);
-    ASSERT_EQ(hosts.size(), 1);
-    EXPECT_EQ(hosts.front().address(), "192.168.0.1");
-
-    QList<RouterHostConfig> router_hosts;
-    ASSERT_EQ(copy.allRouterHosts(&router_hosts), Database::ReadResult::OK);
-    EXPECT_EQ(router_hosts.size(), 1);
-
-    QList<CredentialConfig> credentials;
-    ASSERT_EQ(copy.credentialList(&credentials), Database::ReadResult::OK);
-    EXPECT_EQ(credentials.size(), 1);
-
-    QList<ProfileConfig> profiles;
-    ASSERT_EQ(copy.profileList(&profiles), Database::ReadResult::OK);
-    EXPECT_EQ(profiles.size(), 2);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A file that is already where the copy goes is not overwritten, and the database is not cleared.
-TEST_F(DatabaseTest, ResetDoesNotOverwriteAFileInPlaceOfTheCopy)
-{
-    addHost("Host", 0);
-
-    const QString copy_path = QFileInfo(file_path_).dir().filePath("copy.db3");
-
-    QFile file(copy_path);
-    ASSERT_TRUE(file.open(QIODevice::WriteOnly));
-    ASSERT_EQ(file.write("data"), 4);
-    file.close();
-
-    EXPECT_FALSE(db_.saveCopyAndClearAll(copy_path));
-    EXPECT_EQ(allLocalHosts().size(), 1);
-
-    ASSERT_TRUE(file.open(QIODevice::ReadOnly));
-    EXPECT_EQ(file.readAll(), "data");
 }
