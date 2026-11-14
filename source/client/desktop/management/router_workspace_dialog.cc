@@ -31,7 +31,7 @@
 #include "base/logging.h"
 #include "client/desktop/management/ui_router_workspace_dialog.h"
 #include "client/router/router_controller.h"
-#include "client/storage/instance_settings.h"
+#include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
@@ -57,7 +57,7 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(qint64 workspace_id, QWidget* paren
     ui->setupUi(this);
     updateArrowIcons();
 
-    InstanceSettings settings;
+    UserSettings settings;
     restoreGeometry(settings.dialogGeometry(objectName()));
 
     // Counts characters, the bound counts UTF-8 bytes. A non-ASCII name is caught before sending.
@@ -195,7 +195,7 @@ RouterWorkspaceDialog::~RouterWorkspaceDialog()
 {
     LOG(INFO) << "Dtor";
 
-    InstanceSettings settings;
+    UserSettings settings;
     settings.setDialogGeometry(objectName(), saveGeometry());
 }
 

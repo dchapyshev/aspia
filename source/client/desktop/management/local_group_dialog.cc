@@ -27,7 +27,7 @@
 #include "client/desktop/management/group_combo_box.h"
 #include "client/desktop/management/ui_local_group_dialog.h"
 #include "client/storage/database.h"
-#include "client/storage/instance_settings.h"
+#include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
 
 namespace {
@@ -47,7 +47,7 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
 
     ui->setupUi(this);
 
-    InstanceSettings settings;
+    UserSettings settings;
     restoreGeometry(settings.dialogGeometry(objectName()));
 
     setWindowTitle(group_id_ != -1 ? tr("Edit Group") : tr("Add Group"));
@@ -63,7 +63,7 @@ LocalGroupDialog::~LocalGroupDialog()
 {
     LOG(INFO) << "Dtor";
 
-    InstanceSettings settings;
+    UserSettings settings;
     settings.setDialogGeometry(objectName(), saveGeometry());
 }
 

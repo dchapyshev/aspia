@@ -40,14 +40,8 @@ public:
     static QString filePath();
     static void setFilePathForTesting(const QString& file_path);
 
-    QByteArray quickConnectState() const;
-    void setQuickConnectState(const QByteArray& state);
-
     QByteArray tabState(const QString& name) const;
     void setTabState(const QString& name, const QByteArray& state);
-
-    QByteArray dialogGeometry(const QString& name) const;
-    void setDialogGeometry(const QString& name, const QByteArray& geometry);
 
     bool isLocalGroupExpanded(qint64 group_id) const;
     void setLocalGroupExpanded(qint64 group_id, bool expanded);

@@ -23,7 +23,7 @@
 #include "base/logging.h"
 #include "client/desktop/management/ui_router_group_dialog.h"
 #include "client/router/router_controller.h"
-#include "client/storage/instance_settings.h"
+#include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
@@ -42,7 +42,7 @@ RouterGroupDialog::RouterGroupDialog(qint64 workspace_id, const QString& workspa
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    InstanceSettings settings;
+    UserSettings settings;
     restoreGeometry(settings.dialogGeometry(objectName()));
 
     setWindowTitle(entry_id_ > 0 ? tr("Edit Group") : tr("Add Group"));
@@ -80,7 +80,7 @@ RouterGroupDialog::~RouterGroupDialog()
 {
     LOG(INFO) << "Dtor";
 
-    InstanceSettings settings;
+    UserSettings settings;
     settings.setDialogGeometry(objectName(), saveGeometry());
 }
 

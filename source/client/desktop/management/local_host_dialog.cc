@@ -35,7 +35,7 @@
 #include "client/desktop/management/group_combo_box.h"
 #include "client/desktop/management/ui_local_host_dialog.h"
 #include "client/storage/database.h"
-#include "client/storage/instance_settings.h"
+#include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/password_edit.h"
 
@@ -56,7 +56,7 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
 
     ui->setupUi(this);
 
-    InstanceSettings settings;
+    UserSettings settings;
     restoreGeometry(settings.dialogGeometry(objectName()));
 
     setWindowTitle(entry_id_ != -1 ? tr("Edit Host") : tr("Add Host"));
@@ -93,7 +93,7 @@ LocalHostDialog::~LocalHostDialog()
 {
     LOG(INFO) << "Dtor";
 
-    InstanceSettings settings;
+    UserSettings settings;
     settings.setDialogGeometry(objectName(), saveGeometry());
 }
 

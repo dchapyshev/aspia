@@ -24,7 +24,7 @@
 #include "client/telemetry_model.h"
 #include "client/desktop/management/ui_host_telemetry_dialog.h"
 #include "client/router/router_controller.h"
-#include "client/storage/instance_settings.h"
+#include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
@@ -43,7 +43,7 @@ HostTelemetryDialog::HostTelemetryDialog(const RouterHost& host, QWidget* parent
     ui->tree_telemetry->setModel(model_);
     ui->label_message->setVisible(false);
 
-    InstanceSettings settings;
+    UserSettings settings;
     restoreGeometry(settings.dialogGeometry(objectName()));
 
     connect(ui->button_refresh, &QPushButton::clicked, this, &HostTelemetryDialog::onRefresh);
@@ -64,7 +64,7 @@ HostTelemetryDialog::~HostTelemetryDialog()
 {
     LOG(TRACE) << "Dtor";
 
-    InstanceSettings settings;
+    UserSettings settings;
     settings.setDialogGeometry(objectName(), saveGeometry());
 }
 

@@ -29,8 +29,8 @@
 #include "client/application.h"
 #include "client/desktop/main_window.h"
 #include "client/desktop/unlock_dialog.h"
-#include "client/storage/instance_settings.h"
 #include "client/storage/master_password.h"
+#include "client/storage/user_settings.h"
 #include "common/desktop/elevate_util.h"
 #include "common/desktop/msg_box.h"
 
@@ -61,9 +61,7 @@ AppLock::Result AppLock::unlock(bool startup)
     AutoQPointer<UnlockDialog> dialog(
         new UnlockDialog(startup ? UnlockDialog::Mode::STARTUP : UnlockDialog::Mode::LOCK, nullptr));
 
-    // The settings are kept with the database, and at the startup none is chosen yet.
-    if (!startup)
-        dialog->restoreGeometry(InstanceSettings().dialogGeometry(dialog->objectName()));
+    dialog->restoreGeometry(UserSettings().dialogGeometry(dialog->objectName()));
 
     // A second start of the application activates its window, and until the unlock that window
     // is this dialog.
@@ -75,8 +73,7 @@ AppLock::Result AppLock::unlock(bool startup)
 
     const int result = dialog->exec();
 
-    if (!startup)
-        InstanceSettings().setDialogGeometry(dialog->objectName(), dialog->saveGeometry());
+    UserSettings().setDialogGeometry(dialog->objectName(), dialog->saveGeometry());
 
     if (result != QDialog::Accepted)
     {

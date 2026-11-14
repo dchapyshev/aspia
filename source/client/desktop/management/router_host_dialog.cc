@@ -35,7 +35,7 @@
 #include "client/desktop/management/ui_router_host_dialog.h"
 #include "client/router/router_controller.h"
 #include "client/storage/database.h"
-#include "client/storage/instance_settings.h"
+#include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "common/desktop/password_edit.h"
@@ -51,7 +51,7 @@ RouterHostDialog::RouterHostDialog(const RouterHost& host, QWidget* parent)
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    InstanceSettings settings;
+    UserSettings settings;
     restoreGeometry(settings.dialogGeometry(objectName()));
 
     ui->edit_display_name->setText(host_.display_name);
@@ -126,7 +126,7 @@ RouterHostDialog::~RouterHostDialog()
 {
     LOG(INFO) << "Dtor";
 
-    InstanceSettings settings;
+    UserSettings settings;
     settings.setDialogGeometry(objectName(), saveGeometry());
 }
 

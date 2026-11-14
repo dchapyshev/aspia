@@ -35,9 +35,7 @@ QString g_selected_id;
 const QString kDirectoryName = "client";
 
 const QString kVersionParam = "version";
-const QString kQuickConnectStateParam = "quick_connect_state";
 const QString kTabStateParam = "tab_state";
-const QString kDialogGeometryParam = "dialog_geometry";
 const QString kLocalGroupExpandedParam = "local_group_expanded";
 const QString kWorkspaceExpandedParam = "workspace_expanded";
 const QString kRouterGroupExpandedParam = "router_group_expanded";
@@ -125,18 +123,6 @@ void InstanceSettings::setFilePathForTesting(const QString& file_path)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray InstanceSettings::quickConnectState() const
-{
-    return settings_.value(kQuickConnectStateParam).toByteArray();
-}
-
-//--------------------------------------------------------------------------------------------------
-void InstanceSettings::setQuickConnectState(const QByteArray& state)
-{
-    settings_.setValue(kQuickConnectStateParam, state);
-}
-
-//--------------------------------------------------------------------------------------------------
 QByteArray InstanceSettings::tabState(const QString& name) const
 {
     return settings_.value(kTabStateParam + "/" + name).toByteArray();
@@ -146,18 +132,6 @@ QByteArray InstanceSettings::tabState(const QString& name) const
 void InstanceSettings::setTabState(const QString& name, const QByteArray& state)
 {
     settings_.setValue(kTabStateParam + "/" + name, state);
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray InstanceSettings::dialogGeometry(const QString& name) const
-{
-    return settings_.value(kDialogGeometryParam + "/" + name).toByteArray();
-}
-
-//--------------------------------------------------------------------------------------------------
-void InstanceSettings::setDialogGeometry(const QString& name, const QByteArray& geometry)
-{
-    settings_.setValue(kDialogGeometryParam + "/" + name, geometry);
 }
 
 //--------------------------------------------------------------------------------------------------

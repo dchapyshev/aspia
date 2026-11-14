@@ -71,6 +71,20 @@ TEST_F(UserSettingsTest, WindowIsPlacedByTheSystemUntilSaved)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST_F(UserSettingsTest, DialogsArePlacedByTheSystemUntilSaved)
+{
+    EXPECT_TRUE(UserSettings().quickConnectState().isEmpty());
+    EXPECT_TRUE(UserSettings().dialogGeometry("first").isEmpty());
+
+    UserSettings().setQuickConnectState("quick");
+    UserSettings().setDialogGeometry("first", "geometry");
+
+    EXPECT_EQ(UserSettings().quickConnectState(), QByteArray("quick"));
+    EXPECT_EQ(UserSettings().dialogGeometry("first"), QByteArray("geometry"));
+    EXPECT_TRUE(UserSettings().dialogGeometry("second").isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST_F(UserSettingsTest, ToolBarIsShownWithSmallIconsUntilChosen)
 {
     EXPECT_FALSE(UserSettings().largeIcons());

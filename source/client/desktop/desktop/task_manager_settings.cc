@@ -20,8 +20,6 @@
 
 #include <QStandardPaths>
 
-#include "client/storage/instance_settings.h"
-
 namespace {
 
 const QString kWindowStateParam = "TaskManager/WindowState";
@@ -34,7 +32,7 @@ const QString kUpdateSpeedParam = "TaskManager/UpdateSpeed";
 
 //--------------------------------------------------------------------------------------------------
 TaskManagerSettings::TaskManagerSettings()
-    : settings_(InstanceSettings::filePath(), QSettings::IniFormat)
+    : settings_(QSettings::IniFormat, QSettings::UserScope, "aspia", "client")
 {
     // Nothing
 }

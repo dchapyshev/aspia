@@ -32,6 +32,8 @@ const QString kSessionTypeParam = "session_type";
 const QString kOneTimePasswordCheckedParam = "one_time_password_checked";
 const QString kWindowGeometryParam = "window_geometry";
 const QString kWindowStateParam = "window_state";
+const QString kQuickConnectStateParam = "quick_connect_state";
+const QString kDialogGeometryParam = "dialog_geometry";
 const QString kLargeIconsParam = "large_icons";
 const QString kToolbarParam = "toolbar";
 const QString kSearchFieldParam = "search_field";
@@ -142,6 +144,30 @@ QByteArray UserSettings::windowState() const
 void UserSettings::setWindowState(const QByteArray& state)
 {
     settings_.setValue(kWindowStateParam, state);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray UserSettings::quickConnectState() const
+{
+    return settings_.value(kQuickConnectStateParam).toByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setQuickConnectState(const QByteArray& state)
+{
+    settings_.setValue(kQuickConnectStateParam, state);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray UserSettings::dialogGeometry(const QString& name) const
+{
+    return settings_.value(kDialogGeometryParam + "/" + name).toByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setDialogGeometry(const QString& name, const QByteArray& geometry)
+{
+    settings_.setValue(kDialogGeometryParam + "/" + name, geometry);
 }
 
 //--------------------------------------------------------------------------------------------------
