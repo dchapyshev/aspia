@@ -19,12 +19,17 @@
 #include "client/storage/user_settings.h"
 
 #include <QLocale>
+#include <QVersionNumber>
 
+#include <mutex>
+
+#include "version.h"
 #include "base/build_config.h"
 #include "proto/peer.h"
 
 namespace {
 
+const QString kVersionParam = "version";
 const QString kLocaleParam = "locale";
 const QString kThemeParam = "theme";
 const QString kLastDatabaseParam = "last_database";
@@ -55,7 +60,13 @@ const QString kMcpSessionTypesParam = "mcp_session_types";
 UserSettings::UserSettings()
     : settings_(QSettings::IniFormat, QSettings::UserScope, "aspia", "client")
 {
-    // Nothing
+    static std::once_flag version_flag;
+    std::call_once(version_flag, [this]()
+    {
+        const QVersionNumber current = QVersionNumber::fromString(ASPIA_VERSION_SHORT_STRING);
+        if (QVersionNumber::fromString(settings_.value(kVersionParam).toString()) < current)
+            settings_.setValue(kVersionParam, current.toString());
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
