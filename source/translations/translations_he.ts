@@ -409,30 +409,30 @@
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="145"/>
-        <location filename="../client/android/main_window.cc" line="320"/>
-        <location filename="../client/android/main_window.cc" line="368"/>
+        <location filename="../client/android/main_window.cc" line="146"/>
+        <location filename="../client/android/main_window.cc" line="321"/>
+        <location filename="../client/android/main_window.cc" line="369"/>
         <source>Local</source>
         <translation>מקומי</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="146"/>
-        <location filename="../client/android/main_window.cc" line="324"/>
-        <location filename="../client/android/main_window.cc" line="388"/>
+        <location filename="../client/android/main_window.cc" line="147"/>
+        <location filename="../client/android/main_window.cc" line="325"/>
+        <location filename="../client/android/main_window.cc" line="389"/>
         <source>Remote</source>
         <translation>מרוחק</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="147"/>
-        <location filename="../client/android/main_window.cc" line="328"/>
-        <location filename="../client/android/main_window.cc" line="378"/>
-        <source>Routers</source>
-        <translation>נתבים</translation>
+        <location filename="../client/android/main_window.cc" line="148"/>
+        <location filename="../client/android/main_window.cc" line="329"/>
+        <location filename="../client/android/main_window.cc" line="379"/>
+        <source>Router</source>
+        <translation>נתב</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="148"/>
-        <location filename="../client/android/main_window.cc" line="332"/>
-        <location filename="../client/android/main_window.cc" line="398"/>
+        <location filename="../client/android/main_window.cc" line="149"/>
+        <location filename="../client/android/main_window.cc" line="333"/>
+        <location filename="../client/android/main_window.cc" line="399"/>
         <location filename="../host/android/main_window.cc" line="84"/>
         <location filename="../host/android/main_window.cc" line="100"/>
         <location filename="../host/android/main_window.cc" line="390"/>
@@ -440,38 +440,44 @@
         <translation>הגדרות</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="729"/>
+        <location filename="../client/android/main_window.cc" line="716"/>
         <source>Update</source>
         <translation>עדכון</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="730"/>
+        <location filename="../client/android/main_window.cc" line="717"/>
         <source>Version %1 is available.</source>
         <translation>גרסה %1 זמינה.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="779"/>
-        <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation>הנתב המשויך למארח זה נמחק. ערוך את המארח כדי לבחור נתב אחר או לעבור לחיבור ישיר.</translation>
+        <location filename="../client/android/main_window.cc" line="768"/>
+        <source>The host is reached through a router, but no router is set. Add a router or enter the address of the host instead of its ID.</source>
+        <translation>החיבור למארח עובר דרך נתב, אך לא הוגדר נתב. הוסף נתב או הזן את כתובת המארח במקום ה-ID שלו.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="612"/>
-        <source>Two-Factor Authentication - %1</source>
-        <translation>אימות דו-שלבי - %1</translation>
+        <location filename="../client/android/main_window.cc" line="771"/>
+        <source>Failed to read the router.</source>
+        <translation>קריאת הנתב נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="490"/>
+        <location filename="../client/android/main_window.cc" line="780"/>
+        <source>The router is turned off. Turn it on in the router settings to connect to this host.</source>
+        <translation>הנתב מושבת. הפעל אותו בהגדרות הנתב כדי להתחבר למארח זה.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="491"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>נתוני המארח פגומים. ערוך את המארח והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="778"/>
+        <location filename="../client/android/main_window.cc" line="766"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="489"/>
-        <location filename="../client/android/main_window.cc" line="776"/>
+        <location filename="../client/android/main_window.cc" line="490"/>
+        <location filename="../client/android/main_window.cc" line="773"/>
+        <location filename="../client/android/main_window.cc" line="779"/>
         <location filename="../host/android/main_window.cc" line="83"/>
         <location filename="../host/android/main_window.cc" line="99"/>
         <location filename="../host/android/main_window.cc" line="388"/>
@@ -484,7 +490,7 @@
         <translation>הרשאות</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="730"/>
+        <location filename="../client/android/main_window.cc" line="717"/>
         <source>Open</source>
         <translation>פתח</translation>
     </message>
@@ -495,51 +501,6 @@
         <location filename="../common/android/app_bar.cc" line="55"/>
         <source>Search</source>
         <translation>חיפוש</translation>
-    </message>
-</context>
-<context>
-    <name>AppLock</name>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="72"/>
-        <source>Unlock</source>
-        <translation>בטל נעילה</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="74"/>
-        <source>Enter the master password to unlock the application.</source>
-        <translation>הזן את הסיסמה הראשית כדי לבטל את נעילת היישום.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="77"/>
-        <source>Forgot password?</source>
-        <translation>שכחת סיסמה?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="99"/>
-        <source>The master password cannot be recovered. To continue using the application, you need to reset the database. All records, the master password and the settings will be deleted, but a copy of the current database will first be saved to the file &quot;%1&quot;.
-Reset the database?</source>
-        <translation>לא ניתן לשחזר את הסיסמה הראשית. כדי להמשיך להשתמש ביישום, יש לאפס את מסד הנתונים. כל הרשומות, הסיסמה הראשית וההגדרות יימחקו, אך לפני כן עותק של מסד הנתונים הנוכחי יישמר בקובץ &quot;%1&quot;.
-לאפס את מסד הנתונים?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="110"/>
-        <source>Unable to reset the database.</source>
-        <translation>לא ניתן לאפס את מסד הנתונים.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="115"/>
-        <source>The database is reset. The previous database is saved to the file &quot;%1&quot;.</source>
-        <translation>מסד הנתונים אופס. מסד הנתונים הקודם נשמר בקובץ &quot;%1&quot;.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="136"/>
-        <source>Unable to unlock the database.</source>
-        <translation>לא ניתן לבטל את נעילת מסד הנתונים.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/app_lock.cc" line="140"/>
-        <source>Invalid master password.</source>
-        <translation>הסיסמה הראשית שגויה.</translation>
     </message>
 </context>
 <context>
@@ -600,59 +561,59 @@ Reset the database?</source>
 <context>
     <name>AuthorizationWindow</name>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="72"/>
+        <location filename="../client/android/authorization_window.cc" line="73"/>
         <source>Enter user name and password</source>
         <translation>הזן שם משתמש וסיסמה</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="73"/>
+        <location filename="../client/android/authorization_window.cc" line="74"/>
         <source>One-time password connection</source>
         <translation>חיבור עם סיסמה חד-פעמית</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="74"/>
+        <location filename="../client/android/authorization_window.cc" line="75"/>
         <source>Use saved credentials</source>
         <translation>השתמש בפרטי כניסה שמורים</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="84"/>
+        <location filename="../client/android/authorization_window.cc" line="85"/>
         <source>Authorization</source>
         <translation>הרשאה</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="92"/>
+        <location filename="../client/android/authorization_window.cc" line="93"/>
         <source>User Name</source>
         <translation>שם משתמש</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="137"/>
+        <location filename="../client/android/authorization_window.cc" line="138"/>
         <source>Save sign-in data</source>
         <translation>שמור נתוני התחברות</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="235"/>
+        <location filename="../client/android/authorization_window.cc" line="236"/>
         <source>User name cannot be empty.</source>
         <translation>שם המשתמש אינו יכול להיות ריק.</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="95"/>
-        <location filename="../client/android/authorization_window.cc" line="98"/>
+        <location filename="../client/android/authorization_window.cc" line="96"/>
+        <location filename="../client/android/authorization_window.cc" line="99"/>
         <source>Password</source>
         <translation>סיסמה</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="101"/>
+        <location filename="../client/android/authorization_window.cc" line="102"/>
         <source>Credentials</source>
         <translation>פרטי כניסה</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="105"/>
+        <location filename="../client/android/authorization_window.cc" line="106"/>
         <source>Connect</source>
         <translation>התחבר</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="226"/>
-        <location filename="../client/android/authorization_window.cc" line="242"/>
+        <location filename="../client/android/authorization_window.cc" line="227"/>
+        <location filename="../client/android/authorization_window.cc" line="243"/>
         <source>Password cannot be empty.</source>
         <translation>הסיסמה אינה יכולה להיות ריקה.</translation>
     </message>
@@ -927,12 +888,12 @@ Reset the database?</source>
         <translation>החיבור למארח אבד.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="492"/>
+        <location filename="../client/android/chat_window.cc" line="491"/>
         <source>The specified router is unavailable.</source>
         <translation>הנתב שצוין אינו זמין.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="531"/>
+        <location filename="../client/android/chat_window.cc" line="530"/>
         <source>Error requesting connection via router.</source>
         <translation>שגיאה בבקשת חיבור דרך הנתב.</translation>
     </message>
@@ -947,22 +908,22 @@ Reset the database?</source>
         <translation>%1 מקליד...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="468"/>
+        <location filename="../client/android/chat_window.cc" line="467"/>
         <source>Connecting...</source>
         <translation>מתחבר...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="491"/>
+        <location filename="../client/android/chat_window.cc" line="490"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="498"/>
+        <location filename="../client/android/chat_window.cc" line="497"/>
         <source>Connecting to router...</source>
         <translation>מתחבר לנתב...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="519"/>
+        <location filename="../client/android/chat_window.cc" line="518"/>
         <source>Requesting connection to the host...</source>
         <translation>מבקש חיבור למארח...</translation>
     </message>
@@ -1023,22 +984,12 @@ Reset the database?</source>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="79"/>
+        <location filename="../client/main.cc" line="92"/>
         <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
         <translation>יצירת הגיבוי נכשלה. חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן.</translation>
     </message>
-    <message>
-        <location filename="../client/main.cc" line="95"/>
-        <source>Set Master Password</source>
-        <translation>הגדרת סיסמה ראשית</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="97"/>
-        <source>Set a master password required to unlock the application.</source>
-        <translation>הגדר סיסמה ראשית הנדרשת לביטול נעילת היישום.</translation>
-    </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="105"/>
+        <location filename="../client/desktop/app_lock.cc" line="97"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יפחת מ-%n תו.</numerusform>
@@ -1046,12 +997,12 @@ Reset the database?</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="113"/>
+        <location filename="../client/desktop/app_lock.cc" line="105"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>הסיסמה שהזנת אינה עומדת בדרישות האבטחה!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="115"/>
+        <location filename="../client/desktop/app_lock.cc" line="107"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>הסיסמה חייבת להכיל אותיות קטנות וגדולות ומספרים, ואורכה לא יפחת מ-%n תו.</numerusform>
@@ -1059,29 +1010,35 @@ Reset the database?</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="119"/>
+        <location filename="../client/desktop/app_lock.cc" line="111"/>
         <source>Do you want to enter a different password?</source>
         <translation>האם ברצונך להזין סיסמה אחרת?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="129"/>
-        <source>Unable to set master password.</source>
-        <translation>לא ניתן להגדיר סיסמה ראשית.</translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="73"/>
+        <location filename="../client/main.cc" line="86"/>
         <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
         <translation>יצירת הגיבוי בתיקייה &quot;%1&quot; נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="85"/>
+        <location filename="../client/main.cc" line="98"/>
         <source>Unable to create a backup.</source>
         <translation>יצירת הגיבוי נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="288"/>
+        <location filename="../client/main.cc" line="240"/>
+        <source>Unable to move the address book into the new format. The old address book is not changed, and the next start tries again. The details are in the log.</source>
+        <translation>לא ניתן להעביר את ספר הכתובות לתבנית החדשה. ספר הכתובות הישן לא שונה, ובהפעלה הבאה יתבצע ניסיון נוסף. הפרטים מופיעים ביומן.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="247"/>
+        <location filename="../client/main.cc" line="264"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="261"/>
+        <source>Show the database selection dialog.</source>
+        <translation>הצגת תיבת הדו-שיח לבחירת מסד נתונים.</translation>
     </message>
 </context>
 <context>
@@ -1130,17 +1087,17 @@ Reset the database?</source>
         <translation>ההפעלה החלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="595"/>
+        <location filename="../client/desktop/client_window.cc" line="593"/>
         <source>The specified router is unavailable.</source>
         <translation>הנתב שצוין אינו זמין.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="597"/>
+        <location filename="../client/desktop/client_window.cc" line="595"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="599"/>
+        <location filename="../client/desktop/client_window.cc" line="597"/>
         <source>The specified router is offline.</source>
         <translation>הנתב שצוין אינו מקוון.</translation>
     </message>
@@ -1170,17 +1127,17 @@ Reset the database?</source>
         <translation>גרסת המארח חדשה מגרסת הלקוח (%1 &gt; %2). נא לעדכן את היישום.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="606"/>
+        <location filename="../client/desktop/client_window.cc" line="604"/>
         <source>Requesting connection to the host...</source>
         <translation>מבקש חיבור למארח...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="614"/>
+        <location filename="../client/desktop/client_window.cc" line="612"/>
         <source>Connection offer received.</source>
         <translation>התקבלה הצעת חיבור.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="628"/>
+        <location filename="../client/desktop/client_window.cc" line="626"/>
         <source>Error requesting connection via router.</source>
         <translation>שגיאה בבקשת חיבור דרך הנתב.</translation>
     </message>
@@ -2875,17 +2832,17 @@ Credentials replaced: %2</source>
         <translation>החשבון מושבת.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="509"/>
+        <location filename="../client/android/desktop_window.cc" line="508"/>
         <source>Connecting...</source>
         <translation>מתחבר...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="533"/>
+        <location filename="../client/android/desktop_window.cc" line="532"/>
         <source>The specified router is unavailable.</source>
         <translation>הנתב שצוין אינו זמין.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="560"/>
+        <location filename="../client/android/desktop_window.cc" line="559"/>
         <source>Requesting connection to the host...</source>
         <translation>מבקש חיבור למארח...</translation>
     </message>
@@ -2900,32 +2857,32 @@ Credentials replaced: %2</source>
         <translation>הפעלה %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="532"/>
+        <location filename="../client/android/desktop_window.cc" line="531"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="539"/>
+        <location filename="../client/android/desktop_window.cc" line="538"/>
         <source>Connecting to router...</source>
         <translation>מתחבר לנתב...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="769"/>
+        <location filename="../client/android/desktop_window.cc" line="768"/>
         <source>Connecting to host %1...</source>
         <translation>מתחבר למארח %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="775"/>
+        <location filename="../client/android/desktop_window.cc" line="774"/>
         <source>Connection established.</source>
         <translation>החיבור נוצר.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="788"/>
+        <location filename="../client/android/desktop_window.cc" line="787"/>
         <source>The connection to the host has been lost.</source>
         <translation>החיבור למארח אבד.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="801"/>
+        <location filename="../client/android/desktop_window.cc" line="800"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>גרסת המארח חדשה מגרסת הלקוח. נא לעדכן את היישום.</translation>
     </message>
@@ -2960,68 +2917,68 @@ Credentials replaced: %2</source>
         <translation>נתק</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="656"/>
-        <location filename="../client/android/desktop_window.cc" line="713"/>
+        <location filename="../client/android/desktop_window.cc" line="655"/>
+        <location filename="../client/android/desktop_window.cc" line="712"/>
         <source>Back</source>
         <translation>חזרה</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="657"/>
+        <location filename="../client/android/desktop_window.cc" line="656"/>
         <source>Shutdown</source>
         <translation>כיבוי</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="658"/>
+        <location filename="../client/android/desktop_window.cc" line="657"/>
         <source>Reboot</source>
         <translation>הפעלה מחדש</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="662"/>
         <source>Safe Mode</source>
         <translation>מצב בטוח</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="664"/>
+        <location filename="../client/android/desktop_window.cc" line="663"/>
         <source>Logoff</source>
         <translation>התנתקות</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="665"/>
+        <location filename="../client/android/desktop_window.cc" line="664"/>
         <source>Lock</source>
         <translation>נעל</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="681"/>
+        <location filename="../client/android/desktop_window.cc" line="680"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>האם אתה בטוח שברצונך לכבות את המחשב המרוחק?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="685"/>
+        <location filename="../client/android/desktop_window.cc" line="684"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>האם אתה בטוח שברצונך להפעיל מחדש את המחשב המרוחק?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="689"/>
+        <location filename="../client/android/desktop_window.cc" line="688"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>האם אתה בטוח שברצונך להפעיל מחדש את המחשב המרוחק במצב בטוח?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="693"/>
+        <location filename="../client/android/desktop_window.cc" line="692"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>האם אתה בטוח שברצונך לסיים את הפעלת המשתמש במחשב המרוחק?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="697"/>
+        <location filename="../client/android/desktop_window.cc" line="696"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>האם אתה בטוח שברצונך לנעול את הפעלת המשתמש במחשב המרוחק?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="752"/>
+        <location filename="../client/android/desktop_window.cc" line="751"/>
         <source>Confirmation</source>
         <translation>אישור</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="752"/>
+        <location filename="../client/android/desktop_window.cc" line="751"/>
         <source>Yes</source>
         <translation>כן</translation>
     </message>
@@ -3693,8 +3650,8 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="57"/>
         <location filename="../client/android/file_transfer_window.cc" line="179"/>
-        <location filename="../client/android/file_transfer_window.cc" line="421"/>
-        <location filename="../client/android/file_transfer_window.cc" line="432"/>
+        <location filename="../client/android/file_transfer_window.cc" line="420"/>
+        <location filename="../client/android/file_transfer_window.cc" line="431"/>
         <source>File Transfer</source>
         <translation>העברת קבצים</translation>
     </message>
@@ -3715,17 +3672,17 @@ Credentials replaced: %2</source>
         <translation>החיבור למארח אבד.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="288"/>
+        <location filename="../client/android/file_transfer_window.cc" line="287"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="289"/>
+        <location filename="../client/android/file_transfer_window.cc" line="288"/>
         <source>The specified router is unavailable.</source>
         <translation>הנתב שצוין אינו זמין.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="328"/>
+        <location filename="../client/android/file_transfer_window.cc" line="327"/>
         <source>Error requesting connection via router.</source>
         <translation>שגיאה בבקשת חיבור דרך הנתב.</translation>
     </message>
@@ -3740,27 +3697,27 @@ Credentials replaced: %2</source>
         <translation>אין משתמש מחובר במארח. ההפעלה אינה זמינה.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="265"/>
+        <location filename="../client/android/file_transfer_window.cc" line="264"/>
         <source>Connecting...</source>
         <translation>מתחבר...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="295"/>
+        <location filename="../client/android/file_transfer_window.cc" line="294"/>
         <source>Connecting to router...</source>
         <translation>מתחבר לנתב...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="316"/>
+        <location filename="../client/android/file_transfer_window.cc" line="315"/>
         <source>Requesting connection to the host...</source>
         <translation>מבקש חיבור למארח...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="422"/>
+        <location filename="../client/android/file_transfer_window.cc" line="421"/>
         <source>Open a destination folder on the other side first.</source>
         <translation>פתח תחילה תיקיית יעד בצד השני.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="475"/>
+        <location filename="../client/android/file_transfer_window.cc" line="474"/>
         <source>Deleting</source>
         <translation>מוחק</translation>
     </message>
@@ -3873,17 +3830,17 @@ Credentials replaced: %2</source>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="620"/>
+        <location filename="../base/gui_application.cc" line="642"/>
         <source>Dark</source>
         <translation>כהה</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="622"/>
+        <location filename="../base/gui_application.cc" line="644"/>
         <source>Light</source>
         <translation>בהיר</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="623"/>
+        <location filename="../base/gui_application.cc" line="645"/>
         <source>Auto</source>
         <translation>אוטומטי</translation>
     </message>
@@ -4016,17 +3973,17 @@ Credentials replaced: %2</source>
         <translation>רענן</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="121"/>
+        <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="120"/>
         <source>The host has not reported telemetry yet.</source>
         <translation>המארח עדיין לא דיווח על טלמטריה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="125"/>
+        <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="124"/>
         <source>The telemetry of the host could not be read.</source>
         <translation>לא ניתן היה לקרוא את הטלמטריה של המארח.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="129"/>
+        <location filename="../client/desktop/management/host_telemetry_dialog.cc" line="128"/>
         <source>The telemetry of the host is in a newer format. Update the client to view it.</source>
         <translation>הטלמטריה של המארח בתבנית חדשה יותר. עדכן את הלקוח כדי להציג אותה.</translation>
     </message>
@@ -4395,7 +4352,7 @@ Credentials replaced: %2</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="162"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="163"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>קריאת הנתונים נכשלה. ייתכן שהרשימה אינה מעודכנת.</translation>
     </message>
@@ -4423,50 +4380,44 @@ Credentials replaced: %2</source>
         <translation>שם תצוגה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="53"/>
-        <source>Router:</source>
-        <translation>נתב:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="67"/>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="434"/>
-        <source>Address:</source>
-        <translation>כתובת:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="77"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="81"/>
         <source>Use saved credentials</source>
         <translation>השתמש בפרטי כניסה שמורים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="84"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="88"/>
         <source>User Name:</source>
         <translation>שם משתמש:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="94"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="98"/>
         <source>Password:</source>
         <translation>סיסמה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="104"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="108"/>
         <source>Credentials:</source>
         <translation>פרטי כניסה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="118"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="67"/>
         <source>Profile:</source>
         <translation>פרופיל:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="136"/>
-        <source>Comment:</source>
-        <translation>הערה:</translation>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="53"/>
+        <source>Address / ID:</source>
+        <translation>כתובת / ID:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="271"/>
-        <source>Without Router</source>
-        <translation>ללא נתב</translation>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="60"/>
+        <source>Host name, IP address or ID</source>
+        <translation>שם מארח, כתובת IP או ID</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="126"/>
+        <source>Comment:</source>
+        <translation>הערה:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="62"/>
@@ -4479,22 +4430,17 @@ Credentials replaced: %2</source>
         <translation>הוספת מארח</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="405"/>
-        <source>&lt;deleted router&gt;</source>
-        <translation>&lt;נתב שנמחק&gt;</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="361"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="313"/>
         <source>Local</source>
         <translation>מקומי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="137"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="129"/>
         <source>Name cannot be empty.</source>
         <translation>השם אינו יכול להיות ריק.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="145"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="137"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תו.</numerusform>
@@ -4502,27 +4448,22 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="160"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="148"/>
         <source>An invalid host address was entered.</source>
         <translation>הוזנה כתובת מארח שגויה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="170"/>
-        <source>An invalid host ID was entered.</source>
-        <translation>הוזן מזהה מארח שגוי.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="183"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="160"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>שם המשתמש אינו יכול להיות ריק ויכול להכיל רק אותיות, ספרות ואת התווים &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="192"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="169"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>הזן גם שם משתמש וגם סיסמה, או השאר את שניהם ריקים.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="200"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>ההערה ארוכה מדי. האורך המרבי של ההערה הוא %n תו.</numerusform>
@@ -4530,165 +4471,128 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="213"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="190"/>
         <source>Failed to read data from the local database.</source>
         <translation>קריאת הנתונים ממסד הנתונים המקומי נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="222"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="199"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>מארח בשם זה כבר קיים בקבוצה שנבחרה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="247"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="223"/>
         <source>Unable to add host</source>
         <translation>לא ניתן להוסיף מארח</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="257"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="233"/>
         <source>Unable to modify host</source>
         <translation>לא ניתן לשנות מארח</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="279"/>
-        <source>Failed to read the list of routers.</source>
-        <translation>קריאת רשימת הנתבים נכשלה.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="301"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="253"/>
         <source>Failed to read the list of credentials.</source>
         <translation>קריאת רשימת פרטי הכניסה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="324"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="276"/>
         <source>Failed to read the list of profiles.</source>
         <translation>קריאת רשימת הפרופילים נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="337"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="289"/>
         <source>Default</source>
         <translation>ברירת מחדל</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="345"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="297"/>
         <source>Failed to read the list of groups.</source>
         <translation>קריאת רשימת הקבוצות נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="374"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="325"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>אחזור פרטי המארח ממסד הנתונים המקומי נכשל.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="425"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="360"/>
         <source>The data of the host is damaged. Enter it again.</source>
         <translation>נתוני המארח פגומים. הזן אותם מחדש.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="435"/>
-        <source>Host name or IP address</source>
-        <translation>שם מארח או כתובת IP</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="439"/>
-        <source>ID:</source>
-        <translation>ID:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="440"/>
-        <source>Host ID</source>
-        <translation>מזהה מארח</translation>
     </message>
 </context>
 <context>
     <name>LocalHostEditor</name>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="55"/>
+        <location filename="../client/android/local_host_editor.cc" line="54"/>
         <source>Use existing</source>
         <translation>השתמש בקיימים</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="63"/>
+        <location filename="../client/android/local_host_editor.cc" line="62"/>
         <source>Name</source>
         <translation>שם</translation>
     </message>
     <message>
+        <location filename="../client/android/local_host_editor.cc" line="63"/>
+        <source>Address / ID</source>
+        <translation>כתובת / ID</translation>
+    </message>
+    <message>
         <location filename="../client/android/local_host_editor.cc" line="64"/>
-        <source>Router</source>
-        <translation>נתב</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_host_editor.cc" line="65"/>
-        <location filename="../client/android/local_host_editor.cc" line="190"/>
-        <source>Address</source>
-        <translation>כתובת</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_host_editor.cc" line="66"/>
         <source>User Name</source>
         <translation>שם משתמש</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="67"/>
+        <location filename="../client/android/local_host_editor.cc" line="65"/>
         <source>Password</source>
         <translation>סיסמה</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="69"/>
+        <location filename="../client/android/local_host_editor.cc" line="67"/>
         <source>Credentials</source>
         <translation>פרטי כניסה</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="71"/>
+        <location filename="../client/android/local_host_editor.cc" line="69"/>
         <source>Comment</source>
         <translation>הערה</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="79"/>
+        <location filename="../client/android/local_host_editor.cc" line="77"/>
         <source>Save</source>
         <translation>שמור</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="82"/>
-        <location filename="../client/android/local_host_editor.cc" line="308"/>
+        <location filename="../client/android/local_host_editor.cc" line="80"/>
+        <location filename="../client/android/local_host_editor.cc" line="279"/>
         <source>Delete</source>
         <translation>מחק</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="179"/>
+        <location filename="../client/android/local_host_editor.cc" line="170"/>
         <source>The data of the host is damaged. Enter it again.</source>
         <translation>נתוני המארח פגומים. הזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="326"/>
-        <source>Without Router</source>
-        <translation>ללא נתב</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_host_editor.cc" line="213"/>
-        <location filename="../client/android/local_host_editor.cc" line="333"/>
-        <location filename="../client/android/local_host_editor.cc" line="359"/>
-        <location filename="../client/android/local_host_editor.cc" line="396"/>
+        <location filename="../client/android/local_host_editor.cc" line="196"/>
+        <location filename="../client/android/local_host_editor.cc" line="304"/>
+        <location filename="../client/android/local_host_editor.cc" line="341"/>
         <source>Failed to read data from the local database.</source>
         <translation>קריאת הנתונים ממסד הנתונים המקומי נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="70"/>
+        <location filename="../client/android/local_host_editor.cc" line="68"/>
         <source>Profile</source>
         <translation>פרופיל</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="190"/>
-        <source>ID</source>
-        <translation>ID</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_host_editor.cc" line="220"/>
+        <location filename="../client/android/local_host_editor.cc" line="203"/>
         <source>Name cannot be empty.</source>
         <translation>השם אינו יכול להיות ריק.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_host_editor.cc" line="227"/>
+        <location filename="../client/android/local_host_editor.cc" line="210"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תו.</numerusform>
@@ -4696,7 +4600,7 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_host_editor.cc" line="236"/>
+        <location filename="../client/android/local_host_editor.cc" line="219"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>ההערה ארוכה מדי. האורך המרבי של ההערה הוא %n תו.</numerusform>
@@ -4704,47 +4608,42 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="249"/>
+        <location filename="../client/android/local_host_editor.cc" line="229"/>
         <source>An invalid host address was entered.</source>
         <translation>הוזנה כתובת מארח שגויה.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="257"/>
-        <source>An invalid host ID was entered.</source>
-        <translation>הוזן מזהה מארח שגוי.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_host_editor.cc" line="268"/>
+        <location filename="../client/android/local_host_editor.cc" line="240"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>שם המשתמש אינו יכול להיות ריק ויכול להכיל רק אותיות, ספרות ואת התווים &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="277"/>
+        <location filename="../client/android/local_host_editor.cc" line="249"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>הזן גם שם משתמש וגם סיסמה, או השאר את שניהם ריקים.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="297"/>
+        <location filename="../client/android/local_host_editor.cc" line="268"/>
         <source>Failed to save the host.</source>
         <translation>שמירת המארח נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="307"/>
+        <location filename="../client/android/local_host_editor.cc" line="278"/>
         <source>Delete Host</source>
         <translation>מחיקת מארח</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="308"/>
+        <location filename="../client/android/local_host_editor.cc" line="279"/>
         <source>Delete the host &quot;%1&quot;?</source>
         <translation>למחוק את המארח &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="315"/>
+        <location filename="../client/android/local_host_editor.cc" line="286"/>
         <source>Failed to delete the host.</source>
         <translation>מחיקת המארח נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="408"/>
+        <location filename="../client/android/local_host_editor.cc" line="353"/>
         <source>Default</source>
         <translation>ברירת מחדל</translation>
     </message>
@@ -4806,13 +4705,13 @@ Credentials replaced: %2</source>
     <name>LocalWidget</name>
     <message>
         <location filename="../client/android/local_widget.cc" line="295"/>
-        <location filename="../client/android/local_widget.cc" line="440"/>
+        <location filename="../client/android/local_widget.cc" line="444"/>
         <source>Add Group</source>
         <translation>הוספת קבוצה</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="296"/>
-        <location filename="../client/android/local_widget.cc" line="450"/>
+        <location filename="../client/android/local_widget.cc" line="454"/>
         <source>Add Host</source>
         <translation>הוספת מארח</translation>
     </message>
@@ -4822,48 +4721,38 @@ Credentials replaced: %2</source>
         <translation>סיסמה שגויה.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="359"/>
-        <source>The file was created by a newer version and cannot be imported.</source>
-        <translation>הקובץ נוצר בגרסה חדשה יותר ולא ניתן לייבא אותו.</translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="320"/>
-        <location filename="../client/android/local_widget.cc" line="398"/>
+        <location filename="../client/android/local_widget.cc" line="402"/>
         <source>Aspia Backup (*.aspia-backup)</source>
         <translation>גיבוי Aspia (*.aspia-backup)</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="379"/>
-        <source>Routers imported: %1</source>
-        <translation>נתבים שיובאו: %1</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="380"/>
+        <location filename="../client/android/local_widget.cc" line="382"/>
         <source>Router hosts imported: %1</source>
         <translation>מארחי נתבים שיובאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="381"/>
+        <location filename="../client/android/local_widget.cc" line="383"/>
         <source>Local groups imported: %1</source>
         <translation>קבוצות מקומיות שיובאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="382"/>
+        <location filename="../client/android/local_widget.cc" line="384"/>
         <source>Local hosts imported: %1</source>
         <translation>מארחים מקומיים שיובאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="383"/>
+        <location filename="../client/android/local_widget.cc" line="385"/>
         <source>Credentials imported: %1</source>
         <translation>פרטי כניסה שיובאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="384"/>
+        <location filename="../client/android/local_widget.cc" line="386"/>
         <source>Profiles imported: %1</source>
         <translation>פרופילים שיובאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="411"/>
+        <location filename="../client/android/local_widget.cc" line="415"/>
         <source>Unable to write the file.</source>
         <translation>לא ניתן לכתוב את הקובץ.</translation>
     </message>
@@ -4872,15 +4761,15 @@ Credentials replaced: %2</source>
         <location filename="../client/android/local_widget.cc" line="320"/>
         <location filename="../client/android/local_widget.cc" line="324"/>
         <location filename="../client/android/local_widget.cc" line="373"/>
-        <location filename="../client/android/local_widget.cc" line="387"/>
+        <location filename="../client/android/local_widget.cc" line="392"/>
         <source>Restore from Backup</source>
         <translation>שחזור מגיבוי</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="298"/>
-        <location filename="../client/android/local_widget.cc" line="397"/>
-        <location filename="../client/android/local_widget.cc" line="425"/>
+        <location filename="../client/android/local_widget.cc" line="401"/>
         <location filename="../client/android/local_widget.cc" line="429"/>
+        <location filename="../client/android/local_widget.cc" line="433"/>
         <source>Create Backup</source>
         <translation>יצירת גיבוי</translation>
     </message>
@@ -4895,6 +4784,11 @@ Credentials replaced: %2</source>
         <translation>שחזור</translation>
     </message>
     <message>
+        <location filename="../client/android/local_widget.cc" line="359"/>
+        <source>Unsupported file format version.</source>
+        <translation>גרסת תבנית קובץ שאינה נתמכת.</translation>
+    </message>
+    <message>
         <location filename="../client/android/local_widget.cc" line="363"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>הגיבוי אינו מכיל נתונים, ולכן לא שונה דבר.</translation>
@@ -4905,42 +4799,47 @@ Credentials replaced: %2</source>
         <translation>השחזור מהגיבוי נכשל.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="415"/>
+        <location filename="../client/android/local_widget.cc" line="380"/>
+        <source>Router imported</source>
+        <translation>הנתב יובא</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="419"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="419"/>
+        <location filename="../client/android/local_widget.cc" line="423"/>
         <source>Failed to create the backup.</source>
         <translation>יצירת הגיבוי נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="430"/>
+        <location filename="../client/android/local_widget.cc" line="434"/>
         <source>The file is written to %1. To open it elsewhere the master password of this installation is needed.</source>
         <translation>הקובץ נכתב אל %1. כדי לפתוח אותו במקום אחר נדרשת הסיסמה הראשית של התקנה זו.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="538"/>
+        <location filename="../client/android/local_widget.cc" line="542"/>
         <source>Edit Group</source>
         <translation>עריכת קבוצה</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="549"/>
+        <location filename="../client/android/local_widget.cc" line="553"/>
         <source>Edit Host</source>
         <translation>עריכת מארח</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="659"/>
+        <location filename="../client/android/local_widget.cc" line="663"/>
         <source>Desktop</source>
         <translation>שולחן עבודה</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="661"/>
+        <location filename="../client/android/local_widget.cc" line="665"/>
         <source>File Transfer</source>
         <translation>העברת קבצים</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="663"/>
+        <location filename="../client/android/local_widget.cc" line="667"/>
         <source>Chat</source>
         <translation>צ&apos;אט</translation>
     </message>
@@ -4948,34 +4847,34 @@ Credentials replaced: %2</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="93"/>
+        <location filename="../client/desktop/main_window.ui" line="94"/>
         <source>View</source>
         <translation>תצוגה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="121"/>
-        <location filename="../client/desktop/main_window.ui" line="216"/>
+        <location filename="../client/desktop/main_window.ui" line="122"/>
+        <location filename="../client/desktop/main_window.ui" line="226"/>
         <source>Tool Bar</source>
         <translation>סרגל כלים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="81"/>
+        <location filename="../client/desktop/main_window.ui" line="82"/>
         <source>Help</source>
         <translation>עזרה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="208"/>
+        <location filename="../client/desktop/main_window.ui" line="218"/>
         <source>Exit</source>
         <translation>יציאה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="142"/>
+        <location filename="../client/desktop/main_window.ui" line="143"/>
         <source>Online Help...</source>
         <translation>עזרה מקוונת...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="542"/>
+        <location filename="../client/desktop/main_window.cc" line="571"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4985,127 +4884,142 @@ Credentials replaced: %2</source>
         <translation>קובץ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="88"/>
+        <location filename="../client/desktop/main_window.ui" line="89"/>
         <source>Edit</source>
         <translation>עריכה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="104"/>
+        <location filename="../client/desktop/main_window.ui" line="105"/>
         <source>Session Type</source>
         <translation>סוג הפעלה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="109"/>
+        <location filename="../client/desktop/main_window.ui" line="110"/>
         <source>Actions</source>
         <translation>פעולות</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="151"/>
+        <location filename="../client/desktop/main_window.ui" line="152"/>
         <source>About</source>
         <translation>אודות</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="160"/>
+        <location filename="../client/desktop/main_window.ui" line="161"/>
         <source>Quick Connect...</source>
         <translation>חיבור מהיר...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="169"/>
+        <location filename="../client/desktop/main_window.ui" line="170"/>
         <source>Credentials...</source>
         <translation>פרטי כניסה...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="178"/>
+        <location filename="../client/desktop/main_window.ui" line="179"/>
         <source>Settings...</source>
         <translation>הגדרות...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="190"/>
+        <location filename="../client/desktop/main_window.ui" line="191"/>
         <source>MCP Connector</source>
         <translation>מחבר MCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="199"/>
+        <location filename="../client/desktop/main_window.ui" line="200"/>
+        <source>Change Database...</source>
+        <translation>החלף מסד נתונים...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.ui" line="209"/>
         <source>Lock</source>
         <translation>נעל</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="224"/>
+        <location filename="../client/desktop/main_window.ui" line="234"/>
         <source>Search Field</source>
         <translation>שדה חיפוש</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="232"/>
+        <location filename="../client/desktop/main_window.ui" line="242"/>
         <source>Large icons</source>
         <translation>סמלים גדולים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="240"/>
+        <location filename="../client/desktop/main_window.ui" line="250"/>
         <source>Open Sessions in Tabs</source>
         <translation>פתח הפעלות בכרטיסיות</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="248"/>
+        <location filename="../client/desktop/main_window.ui" line="258"/>
         <source>Always on Top</source>
         <translation>תמיד עליון</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="123"/>
+        <location filename="../client/desktop/main_window.cc" line="127"/>
         <source>Search...</source>
         <translation>חיפוש...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="211"/>
+        <location filename="../client/desktop/main_window.cc" line="217"/>
+        <source>The MCP connector is already in use by another window of the application.</source>
+        <translation>מחבר ה-MCP כבר נמצא בשימוש על ידי חלון אחר של היישום.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="219"/>
         <source>Unable to turn on the MCP connector.</source>
         <translation>לא ניתן להפעיל את מחבר ה-MCP.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="234"/>
+        <location filename="../client/desktop/main_window.cc" line="242"/>
         <source>Management</source>
         <translation>ניהול</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="277"/>
+        <location filename="../client/desktop/main_window.cc" line="285"/>
         <source>Are you sure you want to close the application?</source>
         <translation>האם אתה בטוח שברצונך לסגור את היישום?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="518"/>
+        <location filename="../client/desktop/main_window.cc" line="526"/>
+        <source>Close all sessions to change the database.</source>
+        <translation>סגור את כל ההפעלות כדי להחליף את מסד הנתונים.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="532"/>
+        <source>Close all dialogs to change the database.</source>
+        <translation>סגור את כל תיבות הדו-שיח כדי להחליף את מסד הנתונים.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="547"/>
         <source>Close all sessions to lock the application.</source>
         <translation>סגור את כל ההפעלות כדי לנעול את היישום.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="524"/>
+        <location filename="../client/desktop/main_window.cc" line="553"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>סגור את כל תיבות הדו-שיח כדי לנעול את היישום.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="639"/>
-        <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
-        <translation>במאפייני המארח צוין חיבור לפי ID, אך הנתב אינו מוגדר. בדוק את פרמטרי הנתב במאפייני המארח.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.cc" line="894"/>
+        <location filename="../client/desktop/main_window.cc" line="914"/>
         <source>Unknown application</source>
         <translation>יישום לא ידוע</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="897"/>
+        <location filename="../client/desktop/main_window.cc" line="917"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>מחבר MCP. יישומים מחוברים: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="898"/>
+        <location filename="../client/desktop/main_window.cc" line="918"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - בינה מלאכותית מחוברת</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="471"/>
+        <location filename="../client/desktop/main_window.cc" line="479"/>
         <source>Credentials</source>
         <translation>פרטי כניסה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="508"/>
+        <location filename="../client/desktop/main_window.cc" line="516"/>
         <source>Settings</source>
         <translation>הגדרות</translation>
     </message>
@@ -5144,7 +5058,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="110"/>
-        <location filename="../client/desktop/management_tab.cc" line="2006"/>
+        <location filename="../client/desktop/management_tab.cc" line="1974"/>
         <source>Delete Host</source>
         <translation>מחיקת מארח</translation>
     </message>
@@ -5281,34 +5195,34 @@ Credentials replaced: %2</source>
         <translation>רענון מצב אוטומטי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1097"/>
+        <location filename="../client/desktop/management_tab.cc" line="1085"/>
         <source>(copy)</source>
         <translation>(עותק)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1065"/>
-        <location filename="../client/desktop/management_tab.cc" line="1142"/>
-        <location filename="../client/desktop/management_tab.cc" line="2224"/>
+        <location filename="../client/desktop/management_tab.cc" line="1053"/>
+        <location filename="../client/desktop/management_tab.cc" line="1130"/>
+        <location filename="../client/desktop/management_tab.cc" line="2190"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>אחזור פרטי המארח ממסד הנתונים המקומי נכשל.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="896"/>
+        <location filename="../client/desktop/management_tab.cc" line="885"/>
         <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
         <translation>סוג ההפעלה &quot;%1&quot; אינו זמין עבור Quick Support.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1102"/>
+        <location filename="../client/desktop/management_tab.cc" line="1090"/>
         <source>Failed to add the host to the local database.</source>
         <translation>הוספת המארח למסד הנתונים המקומי נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1160"/>
+        <location filename="../client/desktop/management_tab.cc" line="1148"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך למחוק את המארח &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1162"/>
+        <location filename="../client/desktop/management_tab.cc" line="1150"/>
         <source>Are you sure you want to delete %n hosts?</source>
         <translation>
             <numerusform>האם אתה בטוח שברצונך למחוק %n מארח?</numerusform>
@@ -5316,12 +5230,12 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1188"/>
+        <location filename="../client/desktop/management_tab.cc" line="1176"/>
         <source>Unable to remove host</source>
         <translation>לא ניתן להסיר מארח</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1190"/>
+        <location filename="../client/desktop/management_tab.cc" line="1178"/>
         <source>Failed to delete %n of the selected hosts.</source>
         <translation>
             <numerusform>מחיקת %n מהמארחים שנבחרו נכשלה.</numerusform>
@@ -5329,216 +5243,226 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1256"/>
-        <location filename="../client/desktop/management_tab.cc" line="1333"/>
-        <location filename="../client/desktop/management_tab.cc" line="1366"/>
-        <location filename="../client/desktop/management_tab.cc" line="1389"/>
+        <location filename="../client/desktop/management_tab.cc" line="1244"/>
+        <location filename="../client/desktop/management_tab.cc" line="1321"/>
+        <location filename="../client/desktop/management_tab.cc" line="1354"/>
+        <location filename="../client/desktop/management_tab.cc" line="1377"/>
         <source>Copy Row</source>
         <translation>העתק שורה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1257"/>
-        <location filename="../client/desktop/management_tab.cc" line="1334"/>
-        <location filename="../client/desktop/management_tab.cc" line="1367"/>
-        <location filename="../client/desktop/management_tab.cc" line="1390"/>
+        <location filename="../client/desktop/management_tab.cc" line="1245"/>
+        <location filename="../client/desktop/management_tab.cc" line="1322"/>
+        <location filename="../client/desktop/management_tab.cc" line="1355"/>
+        <location filename="../client/desktop/management_tab.cc" line="1378"/>
         <source>Copy Value</source>
         <translation>העתק ערך</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1632"/>
+        <location filename="../client/desktop/management_tab.cc" line="1612"/>
         <source>Failed to delete the group.</source>
         <translation>מחיקת הקבוצה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1671"/>
-        <location filename="../client/desktop/management_tab.cc" line="1727"/>
+        <location filename="../client/desktop/management_tab.cc" line="1650"/>
+        <location filename="../client/desktop/management_tab.cc" line="1706"/>
         <source>The database is not available.</source>
         <translation>מסד הנתונים אינו זמין.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1677"/>
+        <location filename="../client/desktop/management_tab.cc" line="1656"/>
         <source>Create Backup</source>
         <translation>יצירת גיבוי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2065"/>
+        <location filename="../client/desktop/management_tab.cc" line="1688"/>
+        <source>Router exported</source>
+        <translation>הנתב יוצא</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1784"/>
+        <source>Router imported</source>
+        <translation>הנתב יובא</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="2033"/>
         <source>Delete Hosts</source>
         <translation>מחיקת מארחים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2219"/>
+        <location filename="../client/desktop/management_tab.cc" line="2185"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>נתוני המארח פגומים. ערוך את המארח והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2240"/>
+        <location filename="../client/desktop/management_tab.cc" line="2205"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>נתוני הנתב פגומים. ערוך את הנתב והזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1702"/>
+        <location filename="../client/desktop/management_tab.cc" line="2211"/>
+        <source>The host is reached through a router, but no router is set. Add a router or enter the address of the host instead of its ID.</source>
+        <translation>החיבור למארח עובר דרך נתב, אך לא הוגדר נתב. הוסף נתב או הזן את כתובת המארח במקום ה-ID שלו.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="2218"/>
+        <source>Failed to read the router.</source>
+        <translation>קריאת הנתב נכשלה.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="2224"/>
+        <source>The router is turned off. Turn it on in the router settings to connect to this host.</source>
+        <translation>הנתב מושבת. הפעל אותו בהגדרות הנתב כדי להתחבר למארח זה.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1681"/>
         <source>Failed to create the backup.</source>
         <translation>יצירת הגיבוי נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1708"/>
+        <location filename="../client/desktop/management_tab.cc" line="1685"/>
         <source>Export completed successfully.</source>
         <translation>הייצוא הושלם בהצלחה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1709"/>
-        <source>Routers exported: %1</source>
-        <translation>נתבים שיוצאו: %1</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1710"/>
+        <location filename="../client/desktop/management_tab.cc" line="1690"/>
         <source>Router hosts exported: %1</source>
         <translation>מארחי נתבים שיוצאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1711"/>
+        <location filename="../client/desktop/management_tab.cc" line="1691"/>
         <source>Local groups exported: %1</source>
         <translation>קבוצות מקומיות שיוצאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1712"/>
+        <location filename="../client/desktop/management_tab.cc" line="1692"/>
         <source>Local hosts exported: %1</source>
         <translation>מארחים מקומיים שיוצאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1713"/>
+        <location filename="../client/desktop/management_tab.cc" line="1693"/>
         <source>Credentials exported: %1</source>
         <translation>פרטי כניסה שיוצאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1714"/>
+        <location filename="../client/desktop/management_tab.cc" line="1694"/>
         <source>Profiles exported: %1</source>
         <translation>פרופילים שיוצאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1733"/>
-        <location filename="../client/desktop/management_tab.cc" line="1759"/>
+        <location filename="../client/desktop/management_tab.cc" line="1712"/>
+        <location filename="../client/desktop/management_tab.cc" line="1738"/>
         <source>Restore from Backup</source>
         <translation>שחזור מגיבוי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1742"/>
+        <location filename="../client/desktop/management_tab.cc" line="1721"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>כל מה ששמור כעת יימחק ויוחלף במה שהגיבוי מכיל. להמשיך?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1761"/>
+        <location filename="../client/desktop/management_tab.cc" line="1740"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>הגיבוי נוצר בהתקנה אחרת. הזן את הסיסמה הראשית ששימשה שם.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1786"/>
+        <location filename="../client/desktop/management_tab.cc" line="1765"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>הגיבוי אינו מכיל נתונים, ולכן לא שונה דבר.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1794"/>
+        <location filename="../client/desktop/management_tab.cc" line="1773"/>
         <source>The file is not a valid backup.</source>
         <translation>הקובץ אינו גיבוי חוקי.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1798"/>
+        <location filename="../client/desktop/management_tab.cc" line="1777"/>
         <source>Failed to restore from the backup.</source>
         <translation>השחזור מהגיבוי נכשל.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1804"/>
+        <location filename="../client/desktop/management_tab.cc" line="1781"/>
         <source>Import completed successfully.</source>
         <translation>הייבוא הושלם בהצלחה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1805"/>
-        <source>Routers imported: %1</source>
-        <translation>נתבים שיובאו: %1</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1806"/>
+        <location filename="../client/desktop/management_tab.cc" line="1786"/>
         <source>Router hosts imported: %1</source>
         <translation>מארחי נתבים שיובאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1807"/>
+        <location filename="../client/desktop/management_tab.cc" line="1787"/>
         <source>Local groups imported: %1</source>
         <translation>קבוצות מקומיות שיובאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1808"/>
+        <location filename="../client/desktop/management_tab.cc" line="1788"/>
         <source>Local hosts imported: %1</source>
         <translation>מארחים מקומיים שיובאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1809"/>
+        <location filename="../client/desktop/management_tab.cc" line="1789"/>
         <source>Credentials imported: %1</source>
         <translation>פרטי כניסה שיובאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1810"/>
+        <location filename="../client/desktop/management_tab.cc" line="1790"/>
         <source>Profiles imported: %1</source>
         <translation>פרופילים שיובאו: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1678"/>
-        <location filename="../client/desktop/management_tab.cc" line="1734"/>
+        <location filename="../client/desktop/management_tab.cc" line="1657"/>
+        <location filename="../client/desktop/management_tab.cc" line="1713"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>גיבוי Aspia (*.aspia-backup);;כל הקבצים (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1694"/>
+        <location filename="../client/desktop/management_tab.cc" line="1673"/>
         <source>Unable to write the file.</source>
         <translation>לא ניתן לכתוב את הקובץ.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1790"/>
+        <location filename="../client/desktop/management_tab.cc" line="1769"/>
         <source>Unable to read the file.</source>
         <translation>לא ניתן לקרוא את הקובץ.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1492"/>
+        <location filename="../client/desktop/management_tab.cc" line="1477"/>
         <source>Are you sure you want to delete space &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך למחוק את המרחב &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1512"/>
+        <location filename="../client/desktop/management_tab.cc" line="1497"/>
         <source>Failed to delete the space.</source>
         <translation>מחיקת המרחב נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1614"/>
+        <location filename="../client/desktop/management_tab.cc" line="1594"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the space root.</source>
         <translation>האם אתה בטוח שברצונך למחוק את הקבוצה &quot;%1&quot;? מארחים המשויכים לקבוצה זו או לקבוצות המשנה שלה יועברו לשורש המרחב.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1698"/>
+        <location filename="../client/desktop/management_tab.cc" line="1677"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1778"/>
+        <location filename="../client/desktop/management_tab.cc" line="1757"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>לא ניתן לפענח את הקובץ באמצעות הסיסמה שצוינה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1782"/>
+        <location filename="../client/desktop/management_tab.cc" line="1761"/>
         <source>Unsupported file format version.</source>
         <translation>גרסת תבנית קובץ שאינה נתמכת.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2241"/>
-        <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation>הנתב המשויך למארח זה נמחק. ערוך את המארח כדי לבחור נתב אחר או לעבור לחיבור ישיר.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="2248"/>
+        <location filename="../client/desktop/management_tab.cc" line="2231"/>
         <source>The host has an invalid host ID.</source>
         <translation>למארח מזהה מארח לא חוקי.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2257"/>
+        <location filename="../client/desktop/management_tab.cc" line="2240"/>
         <source>The host has an incorrect address.</source>
         <translation>למארח כתובת שגויה.</translation>
     </message>
@@ -6445,64 +6369,28 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/quick_connect_dialog.ui" line="25"/>
-        <source>Router:</source>
-        <translation>נתב:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/quick_connect_dialog.ui" line="39"/>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="221"/>
         <source>Address:</source>
         <translation>כתובת:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.ui" line="49"/>
+        <location filename="../client/desktop/quick_connect_dialog.ui" line="32"/>
+        <source>Host name, IP address or ID</source>
+        <translation>שם מארח, כתובת IP או ID</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/quick_connect_dialog.ui" line="39"/>
         <source>Session Type:</source>
         <translation>סוג הפעלה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="64"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="61"/>
         <source>Connect</source>
         <translation>התחבר</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="138"/>
-        <source>Select a router to connect by ID.</source>
-        <translation>בחר נתב כדי להתחבר לפי ID.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="145"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="123"/>
         <source>An invalid host address was entered.</source>
         <translation>הוזנה כתובת מארח שגויה.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="153"/>
-        <source>An invalid host ID was entered.</source>
-        <translation>הוזן מזהה מארח שגוי.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="166"/>
-        <source>Without Router</source>
-        <translation>ללא נתב</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="173"/>
-        <source>Failed to read the list of routers.</source>
-        <translation>קריאת רשימת הנתבים נכשלה.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="222"/>
-        <source>Host name or IP address</source>
-        <translation>שם מארח או כתובת IP</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="226"/>
-        <source>ID:</source>
-        <translation>ID:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="227"/>
-        <source>Host ID</source>
-        <translation>מזהה מארח</translation>
     </message>
 </context>
 <context>
@@ -6546,34 +6434,39 @@ Credentials replaced: %2</source>
 <context>
     <name>RemoteWidget</name>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="695"/>
+        <location filename="../client/android/remote_widget.cc" line="335"/>
+        <source>Router</source>
+        <translation>נתב</translation>
+    </message>
+    <message>
+        <location filename="../client/android/remote_widget.cc" line="553"/>
         <source>Quick Support</source>
         <translation>Quick Support</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="831"/>
-        <location filename="../client/android/remote_widget.cc" line="852"/>
+        <location filename="../client/android/remote_widget.cc" line="685"/>
+        <location filename="../client/android/remote_widget.cc" line="706"/>
         <source>Show more</source>
         <translation>הצג עוד</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="831"/>
-        <location filename="../client/android/remote_widget.cc" line="852"/>
+        <location filename="../client/android/remote_widget.cc" line="685"/>
+        <location filename="../client/android/remote_widget.cc" line="706"/>
         <source>%1 of %2</source>
         <translation>%1 מתוך %2</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="916"/>
+        <location filename="../client/android/remote_widget.cc" line="770"/>
         <source>Desktop</source>
         <translation>שולחן עבודה</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="918"/>
+        <location filename="../client/android/remote_widget.cc" line="772"/>
         <source>File Transfer</source>
         <translation>העברת קבצים</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="920"/>
+        <location filename="../client/android/remote_widget.cc" line="774"/>
         <source>Chat</source>
         <translation>צ&apos;אט</translation>
     </message>
@@ -6651,27 +6544,27 @@ Credentials replaced: %2</source>
         <translation>כל סוגי ההפעלה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="282"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="281"/>
         <source>Save File</source>
         <translation>שמירת קובץ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="282"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="281"/>
         <source>JSON files (*.json)</source>
         <translation>קובצי JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="293"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="292"/>
         <source>Could not open file for writing.</source>
         <translation>לא ניתן לפתוח קובץ לכתיבה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="328"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="327"/>
         <source>Unable to write file.</source>
         <translation>לא ניתן לכתוב את הקובץ.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="538"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="537"/>
         <source>%n entry(s)</source>
         <translation>
             <numerusform>%n רשומה</numerusform>
@@ -6682,18 +6575,18 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterCard</name>
     <message>
-        <location filename="../client/android/router_card.cc" line="179"/>
-        <location filename="../client/android/router_card.cc" line="229"/>
+        <location filename="../client/android/router_card.cc" line="178"/>
+        <location filename="../client/android/router_card.cc" line="227"/>
         <source>Enter Code</source>
         <translation>הזן קוד</translation>
     </message>
     <message>
-        <location filename="../client/android/router_card.cc" line="227"/>
+        <location filename="../client/android/router_card.cc" line="225"/>
         <source>Blocked</source>
         <translation>חסום</translation>
     </message>
     <message>
-        <location filename="../client/android/router_card.cc" line="229"/>
+        <location filename="../client/android/router_card.cc" line="227"/>
         <source>Set Up</source>
         <translation>הגדר</translation>
     </message>
@@ -6776,249 +6669,102 @@ Credentials replaced: %2</source>
     </message>
 </context>
 <context>
-    <name>RouterConfig</name>
-    <message>
-        <location filename="../client/config.cc" line="133"/>
-        <source>&lt;unreadable router&gt;</source>
-        <translation>&lt;נתב שלא ניתן לקרוא&gt;</translation>
-    </message>
-</context>
-<context>
     <name>RouterController</name>
     <message>
-        <location filename="../client/router_controller.cc" line="216"/>
-        <location filename="../client/router_controller.cc" line="242"/>
-        <location filename="../client/router_controller.cc" line="442"/>
+        <location filename="../client/router/router_controller.cc" line="191"/>
+        <location filename="../client/router/router_controller.cc" line="216"/>
+        <location filename="../client/router/router_controller.cc" line="390"/>
         <source>Connecting to router %1...</source>
         <translation>מתחבר לנתב %1...</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="265"/>
+        <location filename="../client/router/router_controller.cc" line="235"/>
         <source>Event history cleared.</source>
         <translation>היסטוריית האירועים נוקתה.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="310"/>
+        <location filename="../client/router/router_controller.cc" line="278"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
         <translation>יותר מדי ניסיונות כושלים. הנתב %1 יקבל קודים שוב בעוד כ-%2 דק&apos;.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="318"/>
+        <location filename="../client/router/router_controller.cc" line="284"/>
         <source>The code was not accepted by router %1.</source>
         <translation>הקוד לא התקבל על-ידי הנתב %1.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="321"/>
+        <location filename="../client/router/router_controller.cc" line="286"/>
         <source>Router %1 is waiting for a two-factor code.</source>
         <translation>הנתב %1 ממתין לקוד אימות דו-שלבי.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="350"/>
+        <location filename="../client/router/router_controller.cc" line="309"/>
         <source>Connection to router %1 established.</source>
         <translation>החיבור לנתב %1 נוצר.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="395"/>
+        <location filename="../client/router/router_controller.cc" line="350"/>
         <source>Network error: %1</source>
         <translation>שגיאת רשת: %1</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="409"/>
+        <location filename="../client/router/router_controller.cc" line="364"/>
         <source>Disconnected from router %1.</source>
         <translation>החיבור לנתב %1 נותק.</translation>
     </message>
 </context>
 <context>
-    <name>RouterDialog</name>
-    <message>
-        <location filename="../client/desktop/router_dialog.ui" line="14"/>
-        <source>Router</source>
-        <translation>נתב</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.ui" line="25"/>
-        <source>Address:</source>
-        <translation>כתובת:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.ui" line="35"/>
-        <source>Host name or IP address</source>
-        <translation>שם מארח או כתובת IP</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.ui" line="42"/>
-        <source>Display Name:</source>
-        <translation>שם תצוגה:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.ui" line="52"/>
-        <source>Enter a name or leave the field empty</source>
-        <translation>הזן שם או השאר את השדה ריק</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.ui" line="59"/>
-        <source>Access Level:</source>
-        <translation>רמת גישה:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.ui" line="73"/>
-        <source>User Name:</source>
-        <translation>שם משתמש:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.ui" line="87"/>
-        <source>Password:</source>
-        <translation>סיסמה:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.ui" line="101"/>
-        <source>Use by default</source>
-        <translation>השתמש כברירת מחדל</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.cc" line="46"/>
-        <source>Administrator</source>
-        <translation>מנהל מערכת</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.cc" line="47"/>
-        <source>Manager</source>
-        <translation>מנהל</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.cc" line="48"/>
-        <source>Operator</source>
-        <translation>מפעיל</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/router_dialog.cc" line="80"/>
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
-            <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תו.</numerusform>
-            <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תווים.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.cc" line="92"/>
-        <source>An invalid router address was entered.</source>
-        <translation>הוזנה כתובת נתב שגויה.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.cc" line="102"/>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>שם המשתמש אינו יכול להיות ריק ויכול להכיל רק אותיות, ספרות ואת התווים: _, -, .</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.cc" line="113"/>
-        <source>Password cannot be empty.</source>
-        <translation>הסיסמה אינה יכולה להיות ריקה.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.cc" line="135"/>
-        <location filename="../client/desktop/router_dialog.cc" line="154"/>
-        <location filename="../client/desktop/router_dialog.cc" line="163"/>
-        <location filename="../client/desktop/router_dialog.cc" line="171"/>
-        <source>Failed to save the router.</source>
-        <translation>שמירת הנתב נכשלה.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.cc" line="201"/>
-        <source>Failed to read the router.</source>
-        <translation>קריאת הנתב נכשלה.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/router_dialog.cc" line="221"/>
-        <source>The data of the router is damaged. Enter it again.</source>
-        <translation>נתוני הנתב פגומים. הזן אותם מחדש.</translation>
-    </message>
-</context>
-<context>
     <name>RouterEditor</name>
     <message>
-        <location filename="../client/android/router_editor.cc" line="53"/>
-        <source>Use by default</source>
-        <translation>השתמש כברירת מחדל</translation>
+        <location filename="../client/android/router_editor.cc" line="51"/>
+        <source>Enabled</source>
+        <translation>מופעל</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="56"/>
-        <source>Name</source>
-        <translation>שם</translation>
-    </message>
-    <message>
-        <location filename="../client/android/router_editor.cc" line="57"/>
+        <location filename="../client/android/router_editor.cc" line="54"/>
         <source>Address</source>
         <translation>כתובת</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="58"/>
+        <location filename="../client/android/router_editor.cc" line="55"/>
         <source>User Name</source>
         <translation>שם משתמש</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="59"/>
+        <location filename="../client/android/router_editor.cc" line="56"/>
         <source>Password</source>
         <translation>סיסמה</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="68"/>
+        <location filename="../client/android/router_editor.cc" line="65"/>
         <source>Save</source>
         <translation>שמור</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="71"/>
-        <location filename="../client/android/router_editor.cc" line="251"/>
-        <source>Delete</source>
-        <translation>מחק</translation>
-    </message>
-    <message>
-        <location filename="../client/android/router_editor.cc" line="152"/>
+        <location filename="../client/android/router_editor.cc" line="127"/>
         <source>The data of the router is damaged. Enter it again.</source>
         <translation>נתוני הנתב פגומים. הזן אותם מחדש.</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../client/android/router_editor.cc" line="163"/>
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
-            <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תו.</numerusform>
-            <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תווים.</numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="174"/>
+        <location filename="../client/android/router_editor.cc" line="140"/>
         <source>An invalid router address was entered.</source>
         <translation>הוזנה כתובת נתב שגויה.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="183"/>
+        <location filename="../client/android/router_editor.cc" line="149"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>שם המשתמש אינו יכול להיות ריק ויכול להכיל רק אותיות, ספרות ואת התווים &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="193"/>
+        <location filename="../client/android/router_editor.cc" line="159"/>
         <source>Password cannot be empty.</source>
         <translation>הסיסמה אינה יכולה להיות ריקה.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="222"/>
-        <location filename="../client/android/router_editor.cc" line="232"/>
-        <location filename="../client/android/router_editor.cc" line="240"/>
+        <location filename="../client/android/router_editor.cc" line="184"/>
+        <location filename="../client/android/router_editor.cc" line="193"/>
         <source>Failed to save the router.</source>
         <translation>שמירת הנתב נכשלה.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/router_editor.cc" line="250"/>
-        <source>Delete Router</source>
-        <translation>מחיקת נתב</translation>
-    </message>
-    <message>
-        <location filename="../client/android/router_editor.cc" line="251"/>
-        <source>Delete the router &quot;%1&quot;?</source>
-        <translation>למחוק את הנתב &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <location filename="../client/android/router_editor.cc" line="258"/>
-        <source>Failed to delete the router.</source>
-        <translation>מחיקת הנתב נכשלה.</translation>
     </message>
 </context>
 <context>
@@ -7117,27 +6863,27 @@ Credentials replaced: %2</source>
         <translation>הערה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="48"/>
         <source>Edit Group</source>
         <translation>עריכת קבוצה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="48"/>
         <source>Add Group</source>
         <translation>הוספת קבוצה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="95"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="93"/>
         <source>Failed to get list of groups.</source>
         <translation>קבלת רשימת הקבוצות נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="177"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="175"/>
         <source>Unknown internal error.</source>
         <translation>שגיאה פנימית לא ידועה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_group_dialog.cc" line="161"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="159"/>
         <source>Group name cannot be empty.</source>
         <translation>שם הקבוצה אינו יכול להיות ריק.</translation>
     </message>
@@ -7145,7 +6891,7 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="428"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="425"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n מארח</numerusform>
@@ -7196,17 +6942,17 @@ Credentials replaced: %2</source>
         <translation>שם תצוגה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="70"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="84"/>
         <source>User Name:</source>
         <translation>שם משתמש:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="104"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="118"/>
         <source>The user name and the password are stored on this computer only and are not sent to the router.</source>
         <translation>שם המשתמש והסיסמה נשמרים במחשב זה בלבד ואינם נשלחים לנתב.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="80"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="94"/>
         <source>Password:</source>
         <translation>סיסמה:</translation>
     </message>
@@ -7216,17 +6962,17 @@ Credentials replaced: %2</source>
         <translation>מרחב:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="63"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="77"/>
         <source>Use saved credentials</source>
         <translation>השתמש בפרטי כניסה שמורים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="90"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="104"/>
         <source>Credentials:</source>
         <translation>פרטי כניסה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="114"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="63"/>
         <source>Profile:</source>
         <translation>פרופיל:</translation>
     </message>
@@ -7236,58 +6982,58 @@ Credentials replaced: %2</source>
         <translation>הערה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="140"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="139"/>
         <source>Failed to get list of spaces.</source>
         <translation>קבלת רשימת המרחבים נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="148"/>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="192"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="147"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="191"/>
         <source>Not assigned</source>
         <translation>ללא שיוך</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="177"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="176"/>
         <source>Failed to get list of groups.</source>
         <translation>קבלת רשימת הקבוצות נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="251"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="250"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>הזן גם שם משתמש וגם סיסמה, או השאר את שניהם ריקים.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="266"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="265"/>
         <source>Failed to save the credentials.</source>
         <translation>שמירת פרטי הכניסה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="272"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="271"/>
         <source>Failed to save the profile.</source>
         <translation>שמירת הפרופיל נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="298"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="297"/>
         <source>Failed to read the list of profiles.</source>
         <translation>קריאת רשימת הפרופילים נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="311"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="310"/>
         <source>Default</source>
         <translation>ברירת מחדל</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="325"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="324"/>
         <source>Failed to read the list of credentials.</source>
         <translation>קריאת רשימת פרטי הכניסה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="376"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="375"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>קריאת פרטי הכניסה של המארח נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="381"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="380"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>פרטי הכניסה של המארח פגומים. הזן אותם מחדש.</translation>
     </message>
@@ -7330,36 +7076,36 @@ Credentials replaced: %2</source>
         <translation>שמור</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="143"/>
-        <location filename="../client/android/router_host_editor.cc" line="175"/>
-        <location filename="../client/android/router_host_editor.cc" line="244"/>
-        <location filename="../client/android/router_host_editor.cc" line="281"/>
+        <location filename="../client/android/router_host_editor.cc" line="142"/>
+        <location filename="../client/android/router_host_editor.cc" line="174"/>
+        <location filename="../client/android/router_host_editor.cc" line="242"/>
+        <location filename="../client/android/router_host_editor.cc" line="279"/>
         <source>Failed to read data from the local database.</source>
         <translation>קריאת הנתונים ממסד הנתונים המקומי נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="149"/>
+        <location filename="../client/android/router_host_editor.cc" line="148"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>פרטי הכניסה של המארח פגומים. הזן אותם מחדש.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="197"/>
-        <location filename="../client/android/router_host_editor.cc" line="219"/>
+        <location filename="../client/android/router_host_editor.cc" line="196"/>
+        <location filename="../client/android/router_host_editor.cc" line="217"/>
         <source>Failed to save the credentials.</source>
         <translation>שמירת פרטי הכניסה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="226"/>
+        <location filename="../client/android/router_host_editor.cc" line="224"/>
         <source>Failed to save the profile.</source>
         <translation>שמירת הפרופיל נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="293"/>
+        <location filename="../client/android/router_host_editor.cc" line="291"/>
         <source>Default</source>
         <translation>ברירת מחדל</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="186"/>
+        <location filename="../client/android/router_host_editor.cc" line="185"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>הזן גם שם משתמש וגם סיסמה, או השאר את שניהם ריקים.</translation>
     </message>
@@ -7582,7 +7328,7 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterSession</name>
     <message>
-        <location filename="../client/router_session.cc" line="163"/>
+        <location filename="../client/router/router_session.cc" line="163"/>
         <source>The router accepted the new password, but the record was not updated.</source>
         <translation>הנתב קיבל את הסיסמה החדשה, אך הרשומה לא עודכנה.</translation>
     </message>
@@ -7591,13 +7337,13 @@ Credentials replaced: %2</source>
     <name>RouterStatusWidget</name>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="196"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="188"/>
         <source>The router is waiting for a two-factor code.</source>
         <translation>הנתב ממתין לקוד אימות דו-שלבי.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="197"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="189"/>
         <source>Enter Code</source>
         <translation>הזן קוד</translation>
     </message>
@@ -7612,17 +7358,17 @@ Credentials replaced: %2</source>
         <translation>אירוע</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="186"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="178"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
         <translation>האימות הדו-שלבי חסום לאחר יותר מדי ניסיונות כושלים.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="201"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="193"/>
         <source>Two-factor authentication has to be set up for this router.</source>
         <translation>יש להגדיר אימות דו-שלבי עבור נתב זה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="202"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="194"/>
         <source>Set Up</source>
         <translation>הגדר</translation>
     </message>
@@ -7759,57 +7505,57 @@ Credentials replaced: %2</source>
         <translation>נתק הכול</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="333"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="331"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>איפוס האימות הדו-שלבי ינתק משתמש זה מכל ההפעלות ויחייב אותו להירשם מחדש בכניסה הבאה. להמשיך?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="385"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="383"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>האם אתה בטוח שברצונך לנתק משתמש זה מהפעלה זו?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="410"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="408"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>האם אתה בטוח שברצונך לנתק משתמש זה מכל ההפעלות?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="524"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="522"/>
         <source>The passwords you entered do not match.</source>
         <translation>הסיסמאות שהזנת אינן תואמות.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="202"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="200"/>
         <source>Failed to get list of users.</source>
         <translation>קבלת רשימת המשתמשים נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="230"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="228"/>
         <source>The user was deleted from another console.</source>
         <translation>המשתמש נמחק ממסוף אחר.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="331"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="329"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
         <translation>איפוס האימות הדו-שלבי ינתק אותך מכל ההפעלות ויחייב אותך להירשם מחדש בכניסה הבאה. להמשיך?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="384"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="382"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
         <translation>זהו האסימון של ההפעלה הנוכחית שלך. ביטולו ינתק אותך. להמשיך?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="496"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="494"/>
         <source>The email address is invalid.</source>
         <translation>כתובת הדואר האלקטרוני אינה חוקית.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="511"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="509"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>שם המשתמש אינו יכול להיות ריק ויכול להכיל רק אותיות, ספרות ואת התווים _, -, ., @. הוא אינו יכול להיות מורכב מספרות בלבד.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="533"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יפחת מ-%n תו.</numerusform>
@@ -7817,7 +7563,7 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="536"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="534"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יחרוג מ-%n תו.</numerusform>
@@ -7825,12 +7571,12 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="547"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>הסיסמה שהזנת אינה עומדת בדרישות האבטחה!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="548"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="546"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>הסיסמה חייבת להכיל אותיות קטנות וגדולות ומספרים, ואורכה לא יפחת מ-%n תו.</numerusform>
@@ -7838,52 +7584,52 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="550"/>
         <source>Do you want to enter a different password?</source>
         <translation>האם ברצונך להזין סיסמה אחרת?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="555"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="553"/>
         <source>Warning</source>
         <translation>אזהרה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="575"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="573"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>שגיאה פנימית לא ידועה בעת יצירה או שינוי של משתמש.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="637"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="635"/>
         <source>The user name you entered already exists.</source>
         <translation>שם המשתמש שהזנת כבר קיים.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="719"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="717"/>
         <source>Double-click to change</source>
         <translation>לחיצה כפולה לשינוי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="772"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="770"/>
         <source>The token of your current session.</source>
         <translation>האסימון של ההפעלה הנוכחית שלך.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="805"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="803"/>
         <source>Administrator</source>
         <translation>מנהל מערכת</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="809"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="807"/>
         <source>Manager</source>
         <translation>מנהל</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="813"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="811"/>
         <source>Operator</source>
         <translation>מפעיל</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="831"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="829"/>
         <source>Never</source>
         <translation>אף פעם</translation>
     </message>
@@ -7937,6 +7683,34 @@ Credentials replaced: %2</source>
         <location filename="../client/desktop/management/router_users_widget.ui" line="106"/>
         <source>Items per page:</source>
         <translation>פריטים בעמוד:</translation>
+    </message>
+</context>
+<context>
+    <name>RouterWidget</name>
+    <message>
+        <location filename="../client/android/router_widget.cc" line="127"/>
+        <source>No router is set</source>
+        <translation>לא הוגדר נתב</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_widget.cc" line="168"/>
+        <source>Router</source>
+        <translation>נתב</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_widget.cc" line="171"/>
+        <source>%1 (disabled)</source>
+        <translation>%1 (מושבת)</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_widget.cc" line="205"/>
+        <source>Add Router</source>
+        <translation>הוספת נתב</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_widget.cc" line="234"/>
+        <source>Edit Router</source>
+        <translation>עריכת נתב</translation>
     </message>
 </context>
 <context>
@@ -8026,57 +7800,39 @@ Credentials replaced: %2</source>
         <translation>מארחים לא משויכים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="234"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="225"/>
         <source>Failed to get list of spaces.</source>
         <translation>קבלת רשימת המרחבים נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="261"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="252"/>
         <source>The space was deleted from another console.</source>
         <translation>המרחב נמחק ממסוף אחר.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="299"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="290"/>
         <source>Failed to get list of users.</source>
         <translation>קבלת רשימת המשתמשים נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="418"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="409"/>
         <source>The space was changed from another console. The lists are being refreshed - check the changes and save again.</source>
         <translation>המרחב שונה ממסוף אחר. הרשימות מתרעננות - בדוק את השינויים ושמור שוב.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="522"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
         <source>Are you sure you want to remove the host from the space?</source>
         <translation>האם אתה בטוח שברצונך להסיר את המארח מהמרחב?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="902"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="893"/>
         <source>Space name cannot be empty.</source>
         <translation>שם המרחב אינו יכול להיות ריק.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="913"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="904"/>
         <source>A space with the specified name already exists.</source>
         <translation>מרחב בשם שצוין כבר קיים.</translation>
-    </message>
-</context>
-<context>
-    <name>RoutersWidget</name>
-    <message>
-        <location filename="../client/android/routers_widget.cc" line="127"/>
-        <source>No routers added</source>
-        <translation>לא נוספו נתבים</translation>
-    </message>
-    <message>
-        <location filename="../client/android/routers_widget.cc" line="206"/>
-        <source>Add Router</source>
-        <translation>הוספת נתב</translation>
-    </message>
-    <message>
-        <location filename="../client/android/routers_widget.cc" line="243"/>
-        <source>Edit Router</source>
-        <translation>עריכת נתב</translation>
     </message>
 </context>
 <context>
@@ -8118,27 +7874,32 @@ Credentials replaced: %2</source>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="295"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="293"/>
         <source>Previous</source>
         <translation>הקודם</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="296"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="294"/>
         <source>Previous page</source>
         <translation>העמוד הקודם</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="303"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="301"/>
         <source>Next</source>
         <translation>הבא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="304"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
         <source>Next page</source>
         <translation>העמוד הבא</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/management/search_widget.cc" line="560"/>
+        <source>Router</source>
+        <translation>נתב</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/search_widget.cc" line="789"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="754"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>%n תוצאה</numerusform>
@@ -8322,411 +8083,412 @@ Credentials replaced: %2</source>
 <context>
     <name>SettingsTab</name>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="132"/>
+        <location filename="../client/desktop/settings_tab.ui" line="150"/>
         <source>Language:</source>
         <translation>שפה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="146"/>
+        <location filename="../client/desktop/settings_tab.ui" line="164"/>
         <source>Theme:</source>
         <translation>ערכת נושא:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="160"/>
+        <location filename="../client/desktop/settings_tab.ui" line="178"/>
         <source>Display name when connected:</source>
         <translation>שם תצוגה בעת חיבור:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="170"/>
+        <location filename="../client/desktop/settings_tab.ui" line="188"/>
         <source>Enter a name or leave the field empty</source>
         <translation>הזן שם או השאר את השדה ריק</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="177"/>
+        <location filename="../client/desktop/settings_tab.ui" line="195"/>
         <source>Ask for confirmation when closing the application</source>
         <translation>בקש אישור בעת סגירת היישום</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="187"/>
+        <location filename="../client/desktop/settings_tab.ui" line="366"/>
         <source>Backup</source>
         <translation>גיבוי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="193"/>
+        <location filename="../client/desktop/settings_tab.ui" line="372"/>
         <source>Create backups on application startup</source>
         <translation>צור גיבויים בעת הפעלת היישום</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="200"/>
+        <location filename="../client/desktop/settings_tab.ui" line="379"/>
         <source>Directory:</source>
         <translation>תיקייה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="210"/>
+        <location filename="../client/desktop/settings_tab.ui" line="389"/>
         <source>Browse...</source>
         <translation>עיון...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="217"/>
+        <location filename="../client/desktop/settings_tab.ui" line="396"/>
         <source>Keep backups for:</source>
         <translation>שמור גיבויים למשך:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="234"/>
+        <location filename="../client/desktop/settings_tab.ui" line="293"/>
         <source>Proxy</source>
         <translation>שרת פרוקסי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="240"/>
+        <location filename="../client/desktop/settings_tab.ui" line="299"/>
         <source>Type:</source>
         <translation>סוג:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="254"/>
+        <location filename="../client/desktop/settings_tab.ui" line="221"/>
+        <location filename="../client/desktop/settings_tab.ui" line="313"/>
         <source>Address:</source>
         <translation>כתובת:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="264"/>
+        <location filename="../client/desktop/settings_tab.ui" line="323"/>
         <source>Port:</source>
         <translation>פורט:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="284"/>
+        <location filename="../client/desktop/settings_tab.ui" line="252"/>
+        <location filename="../client/desktop/settings_tab.ui" line="343"/>
         <source>User Name:</source>
         <translation>שם משתמש:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="294"/>
+        <location filename="../client/desktop/settings_tab.ui" line="205"/>
+        <source>Router</source>
+        <translation>נתב</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="211"/>
+        <source>The data of the router is damaged. Enter it again.</source>
+        <translation>נתוני הנתב פגומים. הזן אותם מחדש.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="231"/>
+        <source>Host name or IP address</source>
+        <translation>שם מארח או כתובת IP</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="238"/>
+        <source>Access Level:</source>
+        <translation>רמת גישה:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="266"/>
+        <location filename="../client/desktop/settings_tab.ui" line="353"/>
         <source>Password:</source>
         <translation>סיסמה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="401"/>
-        <location filename="../client/desktop/settings_tab.ui" line="557"/>
+        <location filename="../client/desktop/settings_tab.ui" line="280"/>
+        <source>Enabled</source>
+        <translation>מופעל</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="523"/>
+        <source>Save Settings</source>
+        <translation>שמור הגדרות</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="592"/>
         <source>Add...</source>
         <translation>הוסף...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="570"/>
+        <location filename="../client/desktop/settings_tab.ui" line="605"/>
         <source>Rename...</source>
         <translation>שנה שם...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="415"/>
-        <location filename="../client/desktop/settings_tab.ui" line="583"/>
+        <location filename="../client/desktop/settings_tab.ui" line="618"/>
         <source>Delete</source>
         <translation>מחק</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="598"/>
+        <location filename="../client/desktop/settings_tab.ui" line="633"/>
         <source>Desktop Features</source>
         <translation>תכונות שולחן עבודה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="676"/>
+        <location filename="../client/desktop/settings_tab.ui" line="711"/>
         <source>Desktop Screen</source>
         <translation>מסך שולחן עבודה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="738"/>
+        <location filename="../client/desktop/settings_tab.ui" line="773"/>
         <source>Desktop Recording</source>
         <translation>הקלטת שולחן עבודה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="788"/>
+        <location filename="../client/desktop/settings_tab.ui" line="823"/>
         <source>UDP Connections</source>
         <translation>חיבורי UDP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="794"/>
+        <location filename="../client/desktop/settings_tab.ui" line="829"/>
         <source>Allow direct connections</source>
         <translation>אפשר חיבורים ישירים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="801"/>
+        <location filename="../client/desktop/settings_tab.ui" line="836"/>
         <source>Allow UDP Hole Punching</source>
         <translation>אפשר UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="808"/>
+        <location filename="../client/desktop/settings_tab.ui" line="843"/>
         <source>Allow PCP protocol</source>
         <translation>אפשר פרוטוקול PCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="815"/>
+        <location filename="../client/desktop/settings_tab.ui" line="850"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>אפשר פרוטוקול NAT-PMP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="822"/>
+        <location filename="../client/desktop/settings_tab.ui" line="857"/>
         <source>Allow UPnP protocol</source>
         <translation>אפשר פרוטוקול UPnP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="307"/>
+        <location filename="../client/desktop/settings_tab.ui" line="413"/>
         <source>Security</source>
         <translation>אבטחה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="313"/>
+        <location filename="../client/desktop/settings_tab.ui" line="419"/>
         <source>Lock after inactivity:</source>
         <translation>נעל לאחר חוסר פעילות:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="327"/>
+        <location filename="../client/desktop/settings_tab.ui" line="433"/>
         <source>Unlock automatically on startup</source>
         <translation>בטל נעילה באופן אוטומטי בעת ההפעלה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="334"/>
+        <location filename="../client/desktop/settings_tab.ui" line="440"/>
         <source>Change Master Password...</source>
         <translation>שנה סיסמה ראשית...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="408"/>
-        <source>Edit...</source>
-        <translation>ערוך...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.ui" line="456"/>
-        <source>Name</source>
-        <translation>שם</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.ui" line="461"/>
-        <source>Address</source>
-        <translation>כתובת</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.ui" line="466"/>
-        <source>User Name</source>
-        <translation>שם משתמש</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.ui" line="471"/>
-        <source>Access Level</source>
-        <translation>רמת גישה</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.ui" line="604"/>
+        <location filename="../client/desktop/settings_tab.ui" line="639"/>
         <source>Enable audio</source>
         <translation>הפעל שמע</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="611"/>
+        <location filename="../client/desktop/settings_tab.ui" line="646"/>
         <source>Enable clipboard</source>
         <translation>הפעל לוח</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="618"/>
+        <location filename="../client/desktop/settings_tab.ui" line="653"/>
         <source>Show shape of remote cursor</source>
         <translation>הצג את צורת הסמן המרוחק</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="625"/>
+        <location filename="../client/desktop/settings_tab.ui" line="660"/>
         <source>Show position of remote cursor</source>
         <translation>הצג את מיקום הסמן המרוחק</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="632"/>
+        <location filename="../client/desktop/settings_tab.ui" line="667"/>
         <source>Disable desktop effects</source>
         <translation>השבת אפקטים של שולחן העבודה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="639"/>
+        <location filename="../client/desktop/settings_tab.ui" line="674"/>
         <source>Disable desktop wallpaper</source>
         <translation>השבת טפט שולחן העבודה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="646"/>
+        <location filename="../client/desktop/settings_tab.ui" line="681"/>
         <source>Lock computer at disconnect</source>
         <translation>נעל את המחשב בעת ניתוק</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="653"/>
+        <location filename="../client/desktop/settings_tab.ui" line="688"/>
         <source>Block remote input</source>
         <translation>חסום קלט מרחוק</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="660"/>
+        <location filename="../client/desktop/settings_tab.ui" line="695"/>
         <source>Send key combinations</source>
         <translation>שלח צירופי מקשים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="682"/>
+        <location filename="../client/desktop/settings_tab.ui" line="717"/>
         <source>Preferred resolution:</source>
         <translation>רזולוציה מועדפת:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="702"/>
+        <location filename="../client/desktop/settings_tab.ui" line="737"/>
         <source>Quality:</source>
         <translation>איכות:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="722"/>
+        <location filename="../client/desktop/settings_tab.ui" line="757"/>
         <source>Scale image to window size on the host side</source>
         <translation>התאם את התמונה לגודל החלון בצד המארח</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="744"/>
+        <location filename="../client/desktop/settings_tab.ui" line="779"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>התחל הקלטת הפעלות אוטומטית בעת התחברות</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="753"/>
+        <location filename="../client/desktop/settings_tab.ui" line="788"/>
         <source>Write path:</source>
         <translation>נתיב כתיבה:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="893"/>
+        <location filename="../client/desktop/settings_tab.ui" line="928"/>
         <source>MCP Connector</source>
         <translation>מחבר MCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="899"/>
+        <location filename="../client/desktop/settings_tab.ui" line="934"/>
         <source>Allow the use of MCP</source>
         <translation>אפשר שימוש ב-MCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="906"/>
+        <location filename="../client/desktop/settings_tab.ui" line="941"/>
         <source>Add this command to the MCP servers of the AI application:</source>
         <translation>הוסף פקודה זו לשרתי ה-MCP של יישום הבינה המלאכותית:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="923"/>
+        <location filename="../client/desktop/settings_tab.ui" line="958"/>
         <source>Copy</source>
         <translation>העתק</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="939"/>
+        <location filename="../client/desktop/settings_tab.ui" line="974"/>
         <source>Allowed Session Types</source>
         <translation>סוגי הפעלה מורשים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="953"/>
+        <location filename="../client/desktop/settings_tab.ui" line="988"/>
         <source>Actions</source>
         <translation>פעולות</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="959"/>
+        <location filename="../client/desktop/settings_tab.ui" line="994"/>
         <source>Confirm actions automatically</source>
         <translation>אשר פעולות באופן אוטומטי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="966"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1001"/>
         <source>Allow signing in with saved credentials</source>
         <translation>אפשר כניסה עם פרטי כניסה שמורים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1037"/>
-        <location filename="../client/desktop/settings_tab.cc" line="149"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1072"/>
+        <location filename="../client/desktop/settings_tab.cc" line="148"/>
         <source>Update</source>
         <translation>עדכון</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1043"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1078"/>
         <source>Check for updates on startup</source>
         <translation>בדוק עדכונים בעת ההפעלה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1052"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1087"/>
         <source>Update channel:</source>
         <translation>ערוץ עדכונים:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1066"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1101"/>
         <source>Update server:</source>
         <translation>שרת עדכונים:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1080"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1115"/>
         <source>Public key:</source>
         <translation>מפתח ציבורי:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1098"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1133"/>
         <source>Change Update Server...</source>
         <translation>שנה שרת עדכונים...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1118"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1153"/>
         <source>Check for updates</source>
         <translation>בדוק עדכונים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="126"/>
+        <location filename="../client/desktop/settings_tab.ui" line="144"/>
         <location filename="../client/desktop/settings_tab.cc" line="145"/>
         <source>General</source>
         <translation>כללי</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="146"/>
-        <source>Routers</source>
-        <translation>נתבים</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.cc" line="147"/>
         <source>Profiles</source>
         <translation>פרופילים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="204"/>
+        <location filename="../client/desktop/settings_tab.cc" line="203"/>
         <source>1 week</source>
         <translation>שבוע אחד</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="205"/>
+        <location filename="../client/desktop/settings_tab.cc" line="204"/>
         <source>2 weeks</source>
         <translation>2 שבועות</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="206"/>
+        <location filename="../client/desktop/settings_tab.cc" line="205"/>
         <source>1 month</source>
         <translation>חודש אחד</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="207"/>
+        <location filename="../client/desktop/settings_tab.cc" line="206"/>
         <source>6 months</source>
         <translation>6 חודשים</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="208"/>
+        <location filename="../client/desktop/settings_tab.cc" line="207"/>
         <source>1 year</source>
         <translation>שנה אחת</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="212"/>
+        <location filename="../client/desktop/settings_tab.cc" line="221"/>
         <source>Do not lock</source>
         <translation>אל תנעל</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="213"/>
+        <location filename="../client/desktop/settings_tab.cc" line="222"/>
         <source>1 minute</source>
         <translation>דקה אחת</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="214"/>
+        <location filename="../client/desktop/settings_tab.cc" line="223"/>
         <source>5 minutes</source>
         <translation>5 דקות</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="215"/>
+        <location filename="../client/desktop/settings_tab.cc" line="224"/>
         <source>10 minutes</source>
         <translation>10 דקות</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="216"/>
+        <location filename="../client/desktop/settings_tab.cc" line="225"/>
         <source>30 minutes</source>
         <translation>30 דקות</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="217"/>
+        <location filename="../client/desktop/settings_tab.cc" line="226"/>
         <source>1 hour</source>
         <translation>שעה אחת</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="232"/>
+        <location filename="../client/desktop/settings_tab.cc" line="241"/>
         <source>No proxy</source>
         <translation>ללא שרת פרוקסי</translation>
     </message>
@@ -8771,79 +8533,74 @@ Credentials replaced: %2</source>
         <translation>אלפא</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="457"/>
+        <location filename="../client/desktop/settings_tab.cc" line="588"/>
+        <source>Failed to save the settings.</source>
+        <translation>שמירת ההגדרות נכשלה.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="605"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>השפה החדשה תוחל לאחר הפעלה מחדש של היישום.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="513"/>
-        <location filename="../client/desktop/settings_tab.cc" line="764"/>
+        <location filename="../client/desktop/settings_tab.cc" line="479"/>
+        <location filename="../client/desktop/settings_tab.cc" line="709"/>
         <source>Choose path</source>
         <translation>בחירת נתיב</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="645"/>
-        <source>Are you sure you want to delete router &quot;%1&quot;?</source>
-        <translation>האם אתה בטוח שברצונך למחוק את הנתב &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.cc" line="654"/>
-        <source>Unable to delete router.</source>
-        <translation>לא ניתן למחוק נתב.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.cc" line="675"/>
+        <location filename="../client/desktop/settings_tab.cc" line="620"/>
         <source>Add Profile</source>
         <translation>הוספת פרופיל</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="685"/>
+        <location filename="../client/desktop/settings_tab.cc" line="630"/>
         <source>Unable to add profile.</source>
         <translation>לא ניתן להוסיף פרופיל.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="706"/>
-        <location filename="../client/desktop/settings_tab.cc" line="1178"/>
+        <location filename="../client/desktop/settings_tab.cc" line="651"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1207"/>
         <source>Failed to read the profile.</source>
         <translation>קריאת הפרופיל נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="710"/>
+        <location filename="../client/desktop/settings_tab.cc" line="655"/>
         <source>Rename Profile</source>
         <translation>שינוי שם פרופיל</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="718"/>
+        <location filename="../client/desktop/settings_tab.cc" line="663"/>
         <source>Unable to rename profile.</source>
         <translation>לא ניתן לשנות את שם הפרופיל.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="735"/>
+        <location filename="../client/desktop/settings_tab.cc" line="680"/>
         <source>Are you sure you want to delete profile &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך למחוק את הפרופיל &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="743"/>
+        <location filename="../client/desktop/settings_tab.cc" line="688"/>
         <source>Unable to delete profile.</source>
         <translation>לא ניתן למחוק פרופיל.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="792"/>
+        <location filename="../client/desktop/settings_tab.cc" line="737"/>
         <source>The settings will be applied after the application is restarted.</source>
         <translation>ההגדרות יוחלו לאחר הפעלה מחדש של היישום.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="839"/>
+        <location filename="../client/desktop/settings_tab.cc" line="784"/>
         <source>Change Master Password</source>
         <translation>שינוי סיסמה ראשית</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="841"/>
+        <location filename="../client/desktop/settings_tab.cc" line="786"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>הזן את הסיסמה הנוכחית שלך ובחר סיסמה חדשה.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="849"/>
+        <location filename="../client/desktop/settings_tab.cc" line="794"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יפחת מ-%n תו.</numerusform>
@@ -8851,12 +8608,12 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="856"/>
+        <location filename="../client/desktop/settings_tab.cc" line="801"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>הסיסמה שהזנת אינה עומדת בדרישות האבטחה!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="857"/>
+        <location filename="../client/desktop/settings_tab.cc" line="802"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>הסיסמה חייבת להכיל אותיות קטנות וגדולות ומספרים, ואורכה לא יפחת מ-%n תו.</numerusform>
@@ -8864,118 +8621,134 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="860"/>
+        <location filename="../client/desktop/settings_tab.cc" line="805"/>
         <source>Do you want to enter a different password?</source>
         <translation>האם ברצונך להזין סיסמה אחרת?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="873"/>
+        <location filename="../client/desktop/settings_tab.cc" line="818"/>
         <source>Invalid current password.</source>
         <translation>הסיסמה הנוכחית שגויה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="877"/>
+        <location filename="../client/desktop/settings_tab.cc" line="822"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>חלק מרשומות מסד הנתונים פגומות. תקן או מחק אותן ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="881"/>
+        <location filename="../client/desktop/settings_tab.cc" line="826"/>
         <source>Unable to change the password.</source>
         <translation>לא ניתן לשנות את הסיסמה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="914"/>
+        <location filename="../client/desktop/settings_tab.cc" line="859"/>
         <source>Unable to read the proxy settings.</source>
         <translation>לא ניתן לקרוא את הגדרות שרת הפרוקסי.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1028"/>
+        <location filename="../client/desktop/settings_tab.cc" line="973"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>מפתח מסד הנתונים יישמר במחשב זה. כל תוכנית הפועלת תחת החשבון שלך תוכל לקרוא אותו, גם כאשר היישום אינו פועל.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1031"/>
+        <location filename="../client/desktop/settings_tab.cc" line="976"/>
         <source>Do you want to continue?</source>
         <translation>האם ברצונך להמשיך?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1042"/>
+        <location filename="../client/desktop/settings_tab.cc" line="987"/>
         <source>Unlock Automatically</source>
         <translation>ביטול נעילה אוטומטי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1044"/>
+        <location filename="../client/desktop/settings_tab.cc" line="989"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>הזן את הסיסמה הראשית כדי לבטל את נעילת היישום אוטומטית בעת ההפעלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1054"/>
+        <location filename="../client/desktop/settings_tab.cc" line="999"/>
         <source>Invalid master password.</source>
         <translation>הסיסמה הראשית שגויה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1058"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1003"/>
         <source>Unable to unlock the database.</source>
         <translation>לא ניתן לבטל את נעילת מסד הנתונים.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1072"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1017"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>לא ניתן להפעיל את ביטול הנעילה האוטומטי.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1085"/>
-        <source>Failed to read the list of routers.</source>
-        <translation>קריאת רשימת הנתבים נכשלה.</translation>
+        <location filename="../client/desktop/settings_tab.cc" line="1033"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1072"/>
+        <source>Failed to read the router.</source>
+        <translation>קריאת הנתב נכשלה.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="1081"/>
+        <source>An invalid router address was entered.</source>
+        <translation>הוזנה כתובת נתב שגויה.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="1089"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation>שם המשתמש אינו יכול להיות ריק ויכול להכיל רק אותיות, ספרות ואת התווים: _, -, .</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="1097"/>
+        <source>Password cannot be empty.</source>
+        <translation>הסיסמה אינה יכולה להיות ריקה.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="1123"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1133"/>
+        <source>Failed to save the router.</source>
+        <translation>שמירת הנתב נכשלה.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="211"/>
         <source>Administrator</source>
         <translation>מנהל מערכת</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1099"/>
+        <location filename="../client/desktop/settings_tab.cc" line="212"/>
         <source>Manager</source>
         <translation>מנהל</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1101"/>
+        <location filename="../client/desktop/settings_tab.cc" line="213"/>
         <source>Operator</source>
         <translation>מפעיל</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1110"/>
-        <source>Yes</source>
-        <translation>כן</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1124"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1153"/>
         <source>Failed to read the list of profiles.</source>
         <translation>קריאת רשימת הפרופילים נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="476"/>
-        <location filename="../client/desktop/settings_tab.cc" line="1135"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1164"/>
         <source>Default</source>
         <translation>ברירת מחדל</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1176"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1205"/>
         <source>The profile is damaged. Fix or delete it.</source>
         <translation>הפרופיל פגום. תקן או מחק אותו.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1278"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1307"/>
         <source>Name:</source>
         <translation>שם:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1289"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1318"/>
         <source>Name cannot be empty.</source>
         <translation>השם אינו יכול להיות ריק.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="1296"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1325"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תו.</numerusform>
@@ -8983,12 +8756,12 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1313"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1342"/>
         <source>A profile with this name already exists.</source>
         <translation>פרופיל בשם זה כבר קיים.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1344"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1373"/>
         <source>Unable to save profile.</source>
         <translation>לא ניתן לשמור פרופיל.</translation>
     </message>
@@ -9339,24 +9112,24 @@ Credentials replaced: %2</source>
     <name>Sidebar</name>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="115"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="154"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="145"/>
         <source>Local</source>
         <translation>מקומי</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="179"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="240"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="170"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="231"/>
         <location filename="../client/desktop/management/sidebar.cc" line="292"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>קריאת הנתונים נכשלה. ייתכן שהרשימה אינה מעודכנת.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="598"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="551"/>
         <source>Change Password</source>
         <translation>שינוי סיסמה</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="606"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="559"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יפחת מ-%n תו.</numerusform>
@@ -9364,7 +9137,7 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="607"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="560"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>אורך הסיסמה לא יחרוג מ-%n תו.</numerusform>
@@ -9372,12 +9145,12 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="615"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="568"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>הסיסמה שהזנת אינה עומדת בדרישות האבטחה!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="616"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="569"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>הסיסמה חייבת להכיל אותיות קטנות וגדולות ומספרים, ואורכה לא יפחת מ-%n תו.</numerusform>
@@ -9385,32 +9158,32 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="619"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="572"/>
         <source>Do you want to enter a different password?</source>
         <translation>האם ברצונך להזין סיסמה אחרת?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="642"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="595"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>משנה את הסיסמה. ממתין שההפעלה תתחבר מחדש...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="840"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="792"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך למחוק את הקבוצה &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="853"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="805"/>
         <source>Unable to remove group</source>
         <translation>לא ניתן להסיר קבוצה</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1443"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1383"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>קבוצה בשם זה כבר קיימת בקבוצת האב שנבחרה.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1550"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1490"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>%n מהמארחים שנבחרו לא הועבר מכיוון שמארח בשם זהה כבר קיים בקבוצה שנבחרה.</numerusform>
@@ -9418,8 +9191,8 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1558"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1758"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1498"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1687"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>העברת %n מהמארחים שנבחרו נכשלה.</numerusform>
@@ -9427,34 +9200,42 @@ Credentials replaced: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1433"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1452"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1655"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1373"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1392"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1590"/>
         <source>Failed to move the group.</source>
         <translation>העברת הקבוצה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1512"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1452"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>העברת המארחים לקבוצה שנבחרה נכשלה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1549"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1489"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>מארח בשם זה כבר קיים בקבוצה שנבחרה.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1511"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1557"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1757"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1451"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1497"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1686"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>העברת המארח לקבוצה שנבחרה נכשלה.</translation>
     </message>
 </context>
 <context>
+    <name>SidebarRouter</name>
+    <message>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="104"/>
+        <source>Router</source>
+        <translation>נתב</translation>
+    </message>
+</context>
+<context>
     <name>SidebarRouterAccessLog</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="216"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="193"/>
         <source>Access Log</source>
         <translation>יומן גישה</translation>
     </message>
@@ -9462,7 +9243,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouterClients</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="207"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="185"/>
         <source>Clients</source>
         <translation>לקוחות</translation>
     </message>
@@ -9470,7 +9251,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouterHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="189"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="169"/>
         <source>Approved Hosts</source>
         <translation>מארחים מאושרים</translation>
     </message>
@@ -9478,7 +9259,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouterQsHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="243"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="217"/>
         <source>Quick Support</source>
         <translation>Quick Support</translation>
     </message>
@@ -9486,7 +9267,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouterRelays</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="225"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="201"/>
         <source>Relays</source>
         <translation>ממסרים</translation>
     </message>
@@ -9494,7 +9275,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouterTempHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="234"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="209"/>
         <source>Unapproved Hosts</source>
         <translation>מארחים לא מאושרים</translation>
     </message>
@@ -9502,7 +9283,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouterUsers</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="198"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="177"/>
         <source>Users</source>
         <translation>משתמשים</translation>
     </message>
@@ -13893,6 +13674,170 @@ Credentials replaced: %2</source>
         <location filename="../common/desktop/two_factor_enroll_dialog.cc" line="87"/>
         <source>The previous code was not accepted.</source>
         <translation>הקוד הקודם לא התקבל.</translation>
+    </message>
+</context>
+<context>
+    <name>UnlockDialog</name>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.ui" line="23"/>
+        <source>Unlock</source>
+        <translation>בטל נעילה</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.ui" line="97"/>
+        <source>Create database</source>
+        <translation>צור מסד נתונים</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.ui" line="126"/>
+        <source>Rename database</source>
+        <translation>שנה שם מסד נתונים</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.ui" line="155"/>
+        <source>Delete database</source>
+        <translation>מחק מסד נתונים</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.ui" line="180"/>
+        <source>Name</source>
+        <translation>שם</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.ui" line="187"/>
+        <source>Password</source>
+        <translation>סיסמה</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.ui" line="194"/>
+        <source>Confirm password</source>
+        <translation>אימות סיסמה</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="49"/>
+        <source>Open Database</source>
+        <translation>פתח מסד נתונים</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="143"/>
+        <source>The database is already open.</source>
+        <translation>מסד הנתונים כבר פתוח.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="145"/>
+        <source>The master password of this database is not set.</source>
+        <translation>הסיסמה הראשית של מסד נתונים זה לא הוגדרה.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="170"/>
+        <source>The database is open in another window. Close it to rename the database.</source>
+        <translation>מסד הנתונים פתוח בחלון אחר. סגור אותו כדי לשנות את שם מסד הנתונים.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="178"/>
+        <source>Enter the new name of the database.</source>
+        <translation>הזן את השם החדש של מסד הנתונים.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="196"/>
+        <source>The database is open in another window. Close it to delete the database.</source>
+        <translation>מסד הנתונים פתוח בחלון אחר. סגור אותו כדי למחוק את מסד הנתונים.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="201"/>
+        <source>The database &quot;%1&quot; with all its records and settings will be deleted.
+Delete the database?</source>
+        <translation>מסד הנתונים &quot;%1&quot; יימחק עם כל הרשומות וההגדרות שלו.
+למחוק את מסד הנתונים?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="202"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="251"/>
+        <source>Unnamed database</source>
+        <translation>מסד נתונים ללא שם</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="209"/>
+        <source>Unable to move the database to the trash. Delete it permanently?</source>
+        <translation>לא ניתן להעביר את מסד הנתונים לאשפה. למחוק אותו לצמיתות?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="218"/>
+        <source>Unable to delete the database.</source>
+        <translation>לא ניתן למחוק את מסד הנתונים.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="256"/>
+        <source>%1 (open)</source>
+        <translation>%1 (פתוח)</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="277"/>
+        <source>Database #1</source>
+        <translation>מסד נתונים #1</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="318"/>
+        <source>Unable to open the database.</source>
+        <translation>לא ניתן לפתוח את מסד הנתונים.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="348"/>
+        <source>Invalid master password.</source>
+        <translation>הסיסמה הראשית שגויה.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="355"/>
+        <source>Unable to unlock the database.</source>
+        <translation>לא ניתן לבטל את נעילת מסד הנתונים.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="372"/>
+        <source>Passwords do not match.</source>
+        <translation>הסיסמאות אינן תואמות.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="397"/>
+        <source>Unable to create the database.</source>
+        <translation>לא ניתן ליצור את מסד הנתונים.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="426"/>
+        <source>Unable to rename the database.</source>
+        <translation>לא ניתן לשנות את שם מסד הנתונים.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="441"/>
+        <source>Name cannot be empty.</source>
+        <translation>השם אינו יכול להיות ריק.</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/unlock_dialog.cc" line="448"/>
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation>
+            <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תו.</numerusform>
+            <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תווים.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="456"/>
+        <source>A database with this name already exists.</source>
+        <translation>מסד נתונים בשם זה כבר קיים.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="494"/>
+        <source>Enter the name and the master password of the new database.</source>
+        <translation>הזן את השם ואת הסיסמה הראשית של מסד הנתונים החדש.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="520"/>
+        <source>Enter the master password to unlock the database.</source>
+        <translation>הזן את הסיסמה הראשית כדי לבטל את נעילת מסד הנתונים.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/unlock_dialog.cc" line="522"/>
+        <source>The master password of this database is remembered on this computer.</source>
+        <translation>הסיסמה הראשית של מסד נתונים זה נשמרת במחשב זה.</translation>
     </message>
 </context>
 <context>
