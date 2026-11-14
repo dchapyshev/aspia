@@ -129,6 +129,55 @@ public:
         return QProxyStyle::pixelMetric(metric, option, widget);
     }
 
+    QSize sizeFromContents(
+        ContentsType type, const QStyleOption* option, const QSize& size, const QWidget* widget) const final
+    {
+#if defined(Q_OS_MACOS)
+        QSize result = QProxyStyle::sizeFromContents(type, option, size, widget);
+
+        if (type == QStyle::CT_LineEdit)
+            result.rwidth() += 2 * kLineEditTextPadding;
+
+        return result;
+#else
+        if (type == QStyle::CT_ComboBox)
+        {
+            const QSize contents(size.width(), qMax(size.height(), small_icon_size_ + 2));
+            return QProxyStyle::sizeFromContents(type, option, contents, widget);
+        }
+
+        QSize result = QProxyStyle::sizeFromContents(type, option, size, widget);
+        bool as_tall_as_combo = type == QStyle::CT_PushButton;
+
+        if (type == QStyle::CT_LineEdit)
+        {
+            const QStyleOptionFrame* frame = qstyleoption_cast<const QStyleOptionFrame*>(option);
+            as_tall_as_combo = frame && frame->lineWidth > 0;
+        }
+        else if (type == QStyle::CT_SpinBox)
+        {
+            const QStyleOptionSpinBox* spin_box =
+                qstyleoption_cast<const QStyleOptionSpinBox*>(option);
+            as_tall_as_combo = spin_box && spin_box->frame;
+        }
+
+        if (as_tall_as_combo)
+        {
+            QStyleOptionComboBox combo;
+            combo.state = option->state;
+            combo.direction = option->direction;
+            combo.fontMetrics = option->fontMetrics;
+
+            const QSize combo_size = sizeFromContents(
+                QStyle::CT_ComboBox, &combo, QSize(0, option->fontMetrics.height() + 2), widget);
+
+            result.setHeight(qMax(result.height(), combo_size.height()));
+        }
+
+        return result;
+#endif // defined(Q_OS_MACOS)
+    }
+
 #if defined(Q_OS_MACOS)
     void drawControl(ControlElement element, const QStyleOption* option, QPainter* painter,
                      const QWidget* widget) const final
@@ -180,17 +229,6 @@ public:
         }
 
         return rect;
-    }
-
-    QSize sizeFromContents(
-        ContentsType type, const QStyleOption* option, const QSize& size, const QWidget* widget) const final
-    {
-        QSize result = QProxyStyle::sizeFromContents(type, option, size, widget);
-
-        if (type == QStyle::CT_LineEdit)
-            result.rwidth() += 2 * kLineEditTextPadding;
-
-        return result;
     }
 
     QRect subControlRect(
