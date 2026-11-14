@@ -467,6 +467,11 @@ void NotifierWindow::onUpdateWindowPosition()
     // window is expanded by the onShowNotifier() call above) to restore the designed proportions at
     // any DPI.
     setFixedSize(expanded_size_);
+    if (QWindow* handle = windowHandle())
+    {
+        handle->resize(expanded_size_);
+        update();
+    }
 
     QRect available_rect = currentAvailableRect();
     QSize window_size = frameSize();
