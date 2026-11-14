@@ -164,15 +164,6 @@ NotifierWindow::NotifierWindow(QWidget* parent)
         QTimer::singleShot(MilliSeconds(500), this, &NotifierWindow::onUpdateWindowPosition);
     });
 
-    // The display scale can be applied a moment after the session starts (and the window may have been
-    // laid out at the previous scale). Re-fit when the logical DPI changes so the window does not stay
-    // mis-sized.
-    connect(QApplication::primaryScreen(), &QScreen::logicalDotsPerInchChanged, this, [this]()
-    {
-        LOG(INFO) << "Screen DPI changed";
-        onUpdateWindowPosition();
-    });
-
     connect(ui->tree, &QTreeWidget::itemDoubleClicked,
             this, [](QTreeWidgetItem* item, int /* column */)
     {
@@ -342,6 +333,18 @@ void NotifierWindow::closeNotifier()
 {
     should_be_close_ = true;
     close();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool NotifierWindow::event(QEvent* event)
+{
+    if (event->type() == QEvent::DevicePixelRatioChange)
+    {
+        LOG(INFO) << "Device pixel ratio changed";
+        QTimer::singleShot(MilliSeconds(500), this, &NotifierWindow::onUpdateWindowPosition);
+    }
+
+    return QWidget::event(event);
 }
 
 //--------------------------------------------------------------------------------------------------
