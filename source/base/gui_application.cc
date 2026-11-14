@@ -174,6 +174,16 @@ public:
             result.setHeight(qMax(result.height(), combo_size.height()));
         }
 
+        if (type == QStyle::CT_PushButton)
+        {
+            const QStyleOptionButton* button = qstyleoption_cast<const QStyleOptionButton*>(option);
+            if (button && button->text.isEmpty() && !button->icon.isNull() &&
+                !(button->features & QStyleOptionButton::HasMenu))
+            {
+                result.setWidth(result.height());
+            }
+        }
+
         return result;
 #endif // defined(Q_OS_MACOS)
     }
