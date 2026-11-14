@@ -201,7 +201,7 @@ void UnlockDialog::onDelete()
         tr("The database \"%1\" with all its records and settings will be deleted.\nDelete the database?")
             .arg(info.name.isEmpty() ? tr("Unnamed database") : info.name);
 
-    if (MsgBox::importantQuestion(this, question, Seconds(30)) != MsgBox::Yes)
+    if (MsgBox::importantQuestion(this, question, Seconds(10)) != MsgBox::Yes)
         return;
 
     if (!Database::moveToTrash(info.id))
