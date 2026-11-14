@@ -62,6 +62,7 @@ public:
     virtual void restoreState(const QByteArray& state) = 0;
     virtual void activate() = 0;
     virtual void deactivate() = 0;
+    virtual bool confirmClose();
     virtual QString searchText() const;
     virtual void searchTextChanged(const QString& text);
 

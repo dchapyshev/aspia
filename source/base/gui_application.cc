@@ -147,7 +147,7 @@ public:
         }
 
         QSize result = QProxyStyle::sizeFromContents(type, option, size, widget);
-        bool as_tall_as_combo = type == QStyle::CT_PushButton;
+        bool as_tall_as_combo = false;
 
         if (type == QStyle::CT_LineEdit)
         {

@@ -605,7 +605,7 @@ void MainWindow::onCurrentTabChanged(int index)
 void MainWindow::onCloseTab(int index)
 {
     Tab* tab = tabAt(index);
-    if (!tab || !tab->isClosable())
+    if (!tab || !tab->isClosable() || !tab->confirmClose())
         return;
 
     if (tab == active_tab_)
@@ -618,7 +618,7 @@ void MainWindow::onCloseTab(int index)
     InstanceSettings settings;
     settings.setTabState(tab->objectName(), tab->saveState());
 
-    ui->tabs->removeTab(index);
+    ui->tabs->removeTab(ui->tabs->indexOf(tab));
     delete tab;
 }
 

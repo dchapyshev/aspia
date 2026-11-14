@@ -440,6 +440,22 @@ void SettingsTab::deactivate()
 }
 
 //--------------------------------------------------------------------------------------------------
+bool SettingsTab::confirmClose()
+{
+    if (!ui->button_save_general->isEnabled())
+        return true;
+
+    if (MsgBox::question(this,
+            tr("The settings have unsaved changes. Close the tab without saving?")) != MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Closing the settings rejected";
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 void SettingsTab::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::PaletteChange || event->type() == QEvent::StyleChange ||

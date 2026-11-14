@@ -45,6 +45,7 @@ public:
     void restoreState(const QByteArray& state) final;
     void activate() final;
     void deactivate() final;
+    bool confirmClose() final;
 
 signals:
     void sig_desktopConfigChanged();
