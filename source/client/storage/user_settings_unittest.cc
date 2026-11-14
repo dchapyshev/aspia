@@ -40,6 +40,79 @@ protected:
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
+TEST_F(UserSettingsTest, SessionTypeIsDesktopUntilChosen)
+{
+    EXPECT_EQ(UserSettings().sessionType(), proto::peer::SESSION_TYPE_DESKTOP);
+
+    UserSettings().setSessionType(proto::peer::SESSION_TYPE_TERMINAL);
+    EXPECT_EQ(UserSettings().sessionType(), proto::peer::SESSION_TYPE_TERMINAL);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(UserSettingsTest, OneTimePasswordIsNotCheckedUntilChosen)
+{
+    EXPECT_FALSE(UserSettings().isOneTimePasswordChecked());
+
+    UserSettings().setOneTimePasswordChecked(true);
+    EXPECT_TRUE(UserSettings().isOneTimePasswordChecked());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(UserSettingsTest, WindowIsPlacedByTheSystemUntilSaved)
+{
+    EXPECT_TRUE(UserSettings().windowGeometry().isEmpty());
+    EXPECT_TRUE(UserSettings().windowState().isEmpty());
+
+    UserSettings().setWindowGeometry("geometry");
+    UserSettings().setWindowState("state");
+
+    EXPECT_EQ(UserSettings().windowGeometry(), QByteArray("geometry"));
+    EXPECT_EQ(UserSettings().windowState(), QByteArray("state"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(UserSettingsTest, ToolBarIsShownWithSmallIconsUntilChosen)
+{
+    EXPECT_FALSE(UserSettings().largeIcons());
+    EXPECT_TRUE(UserSettings().isToolBarEnabled());
+    EXPECT_TRUE(UserSettings().isSearchFieldEnabled());
+
+    UserSettings().setLargeIcons(true);
+    UserSettings().setToolBarEnabled(false);
+    UserSettings().setSearchFieldEnabled(false);
+
+    EXPECT_TRUE(UserSettings().largeIcons());
+    EXPECT_FALSE(UserSettings().isToolBarEnabled());
+    EXPECT_FALSE(UserSettings().isSearchFieldEnabled());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(UserSettingsTest, SessionsOpenInTabsBelowOtherWindowsUntilChosen)
+{
+    EXPECT_FALSE(UserSettings().alwaysOnTop());
+    EXPECT_TRUE(UserSettings().openSessionsInTabs());
+
+    UserSettings().setAlwaysOnTop(true);
+    UserSettings().setOpenSessionsInTabs(false);
+
+    EXPECT_TRUE(UserSettings().alwaysOnTop());
+    EXPECT_FALSE(UserSettings().openSessionsInTabs());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(UserSettingsTest, OnlineIsCheckedWithNoDirectoryUntilChosen)
+{
+    EXPECT_TRUE(UserSettings().isOnlineCheckEnabled());
+    EXPECT_TRUE(UserSettings().lastDirectory().isEmpty());
+
+    UserSettings().setOnlineCheckEnabled(false);
+    UserSettings().setLastDirectory("C:/files");
+
+    EXPECT_FALSE(UserSettings().isOnlineCheckEnabled());
+    EXPECT_EQ(UserSettings().lastDirectory(), QString("C:/files"));
+}
+
+//--------------------------------------------------------------------------------------------------
 // The application closes without a question until the user turns it on.
 TEST_F(UserSettingsTest, CloseConfirmationIsOffUntilChosen)
 {

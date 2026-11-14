@@ -26,7 +26,6 @@
 #include "version.h"
 #include "base/logging.h"
 #include "base/files/base_paths.h"
-#include "proto/peer.h"
 
 namespace {
 
@@ -36,18 +35,7 @@ QString g_selected_id;
 const QString kDirectoryName = "client";
 
 const QString kVersionParam = "version";
-const QString kSessionTypeParam = "session_type";
-const QString kOneTimePasswordCheckedParam = "one_time_password_checked";
 const QString kQuickConnectStateParam = "quick_connect_state";
-const QString kWindowGeometryParam = "window_geometry";
-const QString kWindowStateParam = "window_state";
-const QString kLargeIconsParam = "large_icons";
-const QString kToolbarParam = "toolbar";
-const QString kSearchFieldParam = "search_field";
-const QString kOnlineCheckParam = "online_check";
-const QString kAlwaysOnTopParam = "always_on_top";
-const QString kOpenSessionsInTabsParam = "open_sessions_in_tabs";
-const QString kLastDirectoryParam = "last_directory";
 const QString kTabStateParam = "tab_state";
 const QString kDialogGeometryParam = "dialog_geometry";
 const QString kLocalGroupExpandedParam = "local_group_expanded";
@@ -137,31 +125,6 @@ void InstanceSettings::setFilePathForTesting(const QString& file_path)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::peer::SessionType InstanceSettings::sessionType() const
-{
-    return static_cast<proto::peer::SessionType>(
-        settings_.value(kSessionTypeParam, proto::peer::SESSION_TYPE_DESKTOP).toUInt());
-}
-
-//--------------------------------------------------------------------------------------------------
-void InstanceSettings::setSessionType(proto::peer::SessionType session_type)
-{
-    settings_.setValue(kSessionTypeParam, static_cast<quint32>(session_type));
-}
-
-//--------------------------------------------------------------------------------------------------
-bool InstanceSettings::isOneTimePasswordChecked() const
-{
-    return settings_.value(kOneTimePasswordCheckedParam, false).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void InstanceSettings::setOneTimePasswordChecked(bool check)
-{
-    settings_.setValue(kOneTimePasswordCheckedParam, check);
-}
-
-//--------------------------------------------------------------------------------------------------
 QByteArray InstanceSettings::quickConnectState() const
 {
     return settings_.value(kQuickConnectStateParam).toByteArray();
@@ -171,114 +134,6 @@ QByteArray InstanceSettings::quickConnectState() const
 void InstanceSettings::setQuickConnectState(const QByteArray& state)
 {
     settings_.setValue(kQuickConnectStateParam, state);
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray InstanceSettings::windowGeometry() const
-{
-    return settings_.value(kWindowGeometryParam).toByteArray();
-}
-
-//--------------------------------------------------------------------------------------------------
-void InstanceSettings::setWindowGeometry(const QByteArray& geometry)
-{
-    settings_.setValue(kWindowGeometryParam, geometry);
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray InstanceSettings::windowState() const
-{
-    return settings_.value(kWindowStateParam).toByteArray();
-}
-
-//--------------------------------------------------------------------------------------------------
-void InstanceSettings::setWindowState(const QByteArray& state)
-{
-    settings_.setValue(kWindowStateParam, state);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool InstanceSettings::largeIcons() const
-{
-    return settings_.value(kLargeIconsParam).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void InstanceSettings::setLargeIcons(bool enable)
-{
-    settings_.setValue(kLargeIconsParam, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool InstanceSettings::isToolBarEnabled() const
-{
-    return settings_.value(kToolbarParam, true).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void InstanceSettings::setToolBarEnabled(bool enable)
-{
-    settings_.setValue(kToolbarParam, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool InstanceSettings::isSearchFieldEnabled() const
-{
-    return settings_.value(kSearchFieldParam, true).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void InstanceSettings::setSearchFieldEnabled(bool enable)
-{
-    settings_.setValue(kSearchFieldParam, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool InstanceSettings::isOnlineCheckEnabled() const
-{
-    return settings_.value(kOnlineCheckParam, true).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void InstanceSettings::setOnlineCheckEnabled(bool enable)
-{
-    settings_.setValue(kOnlineCheckParam, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool InstanceSettings::alwaysOnTop() const
-{
-    return settings_.value(kAlwaysOnTopParam, false).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void InstanceSettings::setAlwaysOnTop(bool enable)
-{
-    settings_.setValue(kAlwaysOnTopParam, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool InstanceSettings::openSessionsInTabs() const
-{
-    return settings_.value(kOpenSessionsInTabsParam, true).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void InstanceSettings::setOpenSessionsInTabs(bool enable)
-{
-    settings_.setValue(kOpenSessionsInTabsParam, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString InstanceSettings::lastDirectory() const
-{
-    return settings_.value(kLastDirectoryParam).toString();
-}
-
-//--------------------------------------------------------------------------------------------------
-void InstanceSettings::setLastDirectory(const QString& path)
-{
-    settings_.setValue(kLastDirectoryParam, path);
 }
 
 //--------------------------------------------------------------------------------------------------

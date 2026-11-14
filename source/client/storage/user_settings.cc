@@ -28,6 +28,17 @@ namespace {
 const QString kLocaleParam = "locale";
 const QString kThemeParam = "theme";
 const QString kLastDatabaseParam = "last_database";
+const QString kSessionTypeParam = "session_type";
+const QString kOneTimePasswordCheckedParam = "one_time_password_checked";
+const QString kWindowGeometryParam = "window_geometry";
+const QString kWindowStateParam = "window_state";
+const QString kLargeIconsParam = "large_icons";
+const QString kToolbarParam = "toolbar";
+const QString kSearchFieldParam = "search_field";
+const QString kAlwaysOnTopParam = "always_on_top";
+const QString kOpenSessionsInTabsParam = "open_sessions_in_tabs";
+const QString kOnlineCheckParam = "online_check";
+const QString kLastDirectoryParam = "last_directory";
 const QString kConfirmCloseParam = "confirm_close";
 const QString kCheckUpdatesParam = "check_updates";
 const QString kUpdateChannelParam = "update_channel";
@@ -82,6 +93,139 @@ QString UserSettings::lastDatabase() const
 void UserSettings::setLastDatabase(const QString& id)
 {
     settings_.setValue(kLastDatabaseParam, id);
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::peer::SessionType UserSettings::sessionType() const
+{
+    return static_cast<proto::peer::SessionType>(
+        settings_.value(kSessionTypeParam, proto::peer::SESSION_TYPE_DESKTOP).toUInt());
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setSessionType(proto::peer::SessionType session_type)
+{
+    settings_.setValue(kSessionTypeParam, static_cast<quint32>(session_type));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool UserSettings::isOneTimePasswordChecked() const
+{
+    return settings_.value(kOneTimePasswordCheckedParam, false).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setOneTimePasswordChecked(bool check)
+{
+    settings_.setValue(kOneTimePasswordCheckedParam, check);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray UserSettings::windowGeometry() const
+{
+    return settings_.value(kWindowGeometryParam).toByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setWindowGeometry(const QByteArray& geometry)
+{
+    settings_.setValue(kWindowGeometryParam, geometry);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray UserSettings::windowState() const
+{
+    return settings_.value(kWindowStateParam).toByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setWindowState(const QByteArray& state)
+{
+    settings_.setValue(kWindowStateParam, state);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool UserSettings::largeIcons() const
+{
+    return settings_.value(kLargeIconsParam).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setLargeIcons(bool enable)
+{
+    settings_.setValue(kLargeIconsParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool UserSettings::isToolBarEnabled() const
+{
+    return settings_.value(kToolbarParam, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setToolBarEnabled(bool enable)
+{
+    settings_.setValue(kToolbarParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool UserSettings::isSearchFieldEnabled() const
+{
+    return settings_.value(kSearchFieldParam, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setSearchFieldEnabled(bool enable)
+{
+    settings_.setValue(kSearchFieldParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool UserSettings::alwaysOnTop() const
+{
+    return settings_.value(kAlwaysOnTopParam, false).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setAlwaysOnTop(bool enable)
+{
+    settings_.setValue(kAlwaysOnTopParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool UserSettings::openSessionsInTabs() const
+{
+    return settings_.value(kOpenSessionsInTabsParam, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setOpenSessionsInTabs(bool enable)
+{
+    settings_.setValue(kOpenSessionsInTabsParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool UserSettings::isOnlineCheckEnabled() const
+{
+    return settings_.value(kOnlineCheckParam, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setOnlineCheckEnabled(bool enable)
+{
+    settings_.setValue(kOnlineCheckParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString UserSettings::lastDirectory() const
+{
+    return settings_.value(kLastDirectoryParam).toString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setLastDirectory(const QString& path)
+{
+    settings_.setValue(kLastDirectoryParam, path);
 }
 
 //--------------------------------------------------------------------------------------------------

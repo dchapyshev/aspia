@@ -21,6 +21,10 @@
 
 #include <QSettings>
 
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
+
 // Settings of the user that are common to all databases.
 class UserSettings
 {
@@ -36,6 +40,39 @@ public:
 
     QString lastDatabase() const;
     void setLastDatabase(const QString& id);
+
+    proto::peer::SessionType sessionType() const;
+    void setSessionType(proto::peer::SessionType session_type);
+
+    bool isOneTimePasswordChecked() const;
+    void setOneTimePasswordChecked(bool check);
+
+    QByteArray windowGeometry() const;
+    void setWindowGeometry(const QByteArray& geometry);
+
+    QByteArray windowState() const;
+    void setWindowState(const QByteArray& state);
+
+    bool largeIcons() const;
+    void setLargeIcons(bool enable);
+
+    bool isToolBarEnabled() const;
+    void setToolBarEnabled(bool enable);
+
+    bool isSearchFieldEnabled() const;
+    void setSearchFieldEnabled(bool enable);
+
+    bool alwaysOnTop() const;
+    void setAlwaysOnTop(bool enable);
+
+    bool openSessionsInTabs() const;
+    void setOpenSessionsInTabs(bool enable);
+
+    bool isOnlineCheckEnabled() const;
+    void setOnlineCheckEnabled(bool enable);
+
+    QString lastDirectory() const;
+    void setLastDirectory(const QString& path);
 
     bool isConfirmCloseEnabled() const;
     void setConfirmCloseEnabled(bool enable);

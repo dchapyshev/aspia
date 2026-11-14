@@ -107,8 +107,6 @@ MainWindow::MainWindow(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
 
-    InstanceSettings settings;
-
     ui->setupUi(this);
 
     const QString database_name = Database::instance().name();
@@ -134,22 +132,24 @@ MainWindow::MainWindow(QWidget* parent)
     margin->setFixedWidth(kSearchFieldMarginPx);
     ui->toolbar->addWidget(margin);
 
-    bool search_field_enabled = settings.isSearchFieldEnabled();
+    UserSettings user_settings;
+
+    bool search_field_enabled = user_settings.isSearchFieldEnabled();
     ui->action_search_field->setChecked(search_field_enabled);
     search_action_->setVisible(search_field_enabled);
 
-    restoreGeometry(settings.windowGeometry());
-    restoreState(settings.windowState());
+    restoreGeometry(user_settings.windowGeometry());
+    restoreState(user_settings.windowState());
 
-    ui->action_toolbar->setChecked(settings.isToolBarEnabled());
+    ui->action_toolbar->setChecked(user_settings.isToolBarEnabled());
 
-    bool large_icons = settings.largeIcons();
+    bool large_icons = user_settings.largeIcons();
     ui->toolbar->setIconSize(large_icons ? QSize(32, 32) : QSize(24, 24));
     ui->action_large_icons->setChecked(large_icons);
 
-    ui->action_sessions_in_tabs->setChecked(settings.openSessionsInTabs());
+    ui->action_sessions_in_tabs->setChecked(user_settings.openSessionsInTabs());
 
-    const bool always_on_top = settings.alwaysOnTop();
+    const bool always_on_top = user_settings.alwaysOnTop();
     ui->action_always_on_top->setChecked(always_on_top);
     setWindowFlag(Qt::WindowStaysOnTopHint, always_on_top);
     connect(ui->action_always_on_top, &QAction::toggled, this, &MainWindow::onAlwaysOnTop);
@@ -931,15 +931,16 @@ void MainWindow::onLockRequested()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::saveWindowState()
 {
-    InstanceSettings settings;
-    settings.setWindowGeometry(saveGeometry());
-    settings.setWindowState(saveState());
-    settings.setToolBarEnabled(ui->action_toolbar->isChecked());
-    settings.setSearchFieldEnabled(ui->action_search_field->isChecked());
-    settings.setLargeIcons(ui->action_large_icons->isChecked());
-    settings.setOpenSessionsInTabs(ui->action_sessions_in_tabs->isChecked());
-    settings.setAlwaysOnTop(ui->action_always_on_top->isChecked());
+    UserSettings user_settings;
+    user_settings.setWindowGeometry(saveGeometry());
+    user_settings.setWindowState(saveState());
+    user_settings.setToolBarEnabled(ui->action_toolbar->isChecked());
+    user_settings.setSearchFieldEnabled(ui->action_search_field->isChecked());
+    user_settings.setLargeIcons(ui->action_large_icons->isChecked());
+    user_settings.setOpenSessionsInTabs(ui->action_sessions_in_tabs->isChecked());
+    user_settings.setAlwaysOnTop(ui->action_always_on_top->isChecked());
 
+    InstanceSettings settings;
     for (int i = 0; i < ui->tabs->count(); ++i)
     {
         Tab* tab = dynamic_cast<Tab*>(ui->tabs->widget(i));

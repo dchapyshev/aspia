@@ -21,10 +21,6 @@
 
 #include <QSettings>
 
-namespace proto::peer {
-enum SessionType : int;
-} // namespace proto::peer
-
 // Stores non-critical UI/preference settings.
 //
 // On application upgrade (when the stored version is older than the current one), all parameters
@@ -44,41 +40,8 @@ public:
     static QString filePath();
     static void setFilePathForTesting(const QString& file_path);
 
-    proto::peer::SessionType sessionType() const;
-    void setSessionType(proto::peer::SessionType session_type);
-
-    bool isOneTimePasswordChecked() const;
-    void setOneTimePasswordChecked(bool check);
-
     QByteArray quickConnectState() const;
     void setQuickConnectState(const QByteArray& state);
-
-    QByteArray windowGeometry() const;
-    void setWindowGeometry(const QByteArray& geometry);
-
-    QByteArray windowState() const;
-    void setWindowState(const QByteArray& state);
-
-    bool largeIcons() const;
-    void setLargeIcons(bool enable);
-
-    bool isToolBarEnabled() const;
-    void setToolBarEnabled(bool enable);
-
-    bool isSearchFieldEnabled() const;
-    void setSearchFieldEnabled(bool enable);
-
-    bool isOnlineCheckEnabled() const;
-    void setOnlineCheckEnabled(bool enable);
-
-    bool alwaysOnTop() const;
-    void setAlwaysOnTop(bool enable);
-
-    bool openSessionsInTabs() const;
-    void setOpenSessionsInTabs(bool enable);
-
-    QString lastDirectory() const;
-    void setLastDirectory(const QString& path);
 
     QByteArray tabState(const QString& name) const;
     void setTabState(const QString& name, const QByteArray& state);

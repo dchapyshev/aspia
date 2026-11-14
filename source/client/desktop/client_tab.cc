@@ -25,7 +25,7 @@
 #include <QVBoxLayout>
 
 #include "client/desktop/client_window.h"
-#include "client/storage/instance_settings.h"
+#include "client/storage/user_settings.h"
 
 namespace {
 
@@ -106,7 +106,7 @@ void ClientTab::detachToWindow()
 
     layout()->removeWidget(client_window_);
     client_window_->setParent(nullptr, Qt::Window);
-    client_window_->setWindowFlag(Qt::WindowStaysOnTopHint, InstanceSettings().alwaysOnTop());
+    client_window_->setWindowFlag(Qt::WindowStaysOnTopHint, UserSettings().alwaysOnTop());
     client_window_->show();
     client_window_->setTabbedMode(false);
 }
